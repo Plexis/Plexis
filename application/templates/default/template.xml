@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+    This file's purpose is to hold template author / copyright information.
+    It may also be used to hold other information in the future. Never leave
+    an option blank, if there is no information for that variable, place a "0" there.
+-->
+<template>
+    <name>Default</name>							<!-- Template Name -->
+    <author>eziCms</author>			                <!-- Template Author -->
+    <authorEmail>no@email.com</authorEmail>	        <!-- Author Email -->
+    <authorUrl>0</authorUrl>	                    <!-- Author URL -->
+    <copyright>0</copyright>                        <!-- Custom template copyright to display -->
+    <license>GNU/GPL</license>						<!-- Template license type -->
+    <version>1.0.0</version>						<!-- Template version -->
+    <helpers>0</helpers>		                    <!-- If using any helper, place the names here -->
+</template>

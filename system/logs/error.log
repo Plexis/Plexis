@@ -1,0 +1,18 @@
+| Logging started at: 2011-12-06 21:02:35
+| Error Level: Warning
+| Message: file_get_contents() [<a href='function.file-get-contents'>function.file-get-contents</a>]: php_network_getaddresses: getaddrinfo failed: This is usually a temporary error during hostname resolution and means that the local server did not receive a response from an authoritative server. 
+| Reporting File: C:\xampp\htdocs\Plexis\application\controllers\ajax.php
+| Error Line: 681
+| URL When Error Occured: http://127.0.0.1/Plexis/ajax/updates
+
+--------------------------------------------------------------------
+
+| Logging started at: 2011-12-06 21:03:06
+| Error Level: Warning
+| Message: file_get_contents() [<a href='function.file-get-contents'>function.file-get-contents</a>]: php_network_getaddresses: getaddrinfo failed: This is usually a temporary error during hostname resolution and means that the local server did not receive a response from an authoritative server. 
+| Reporting File: C:\xampp\htdocs\Plexis\application\controllers\ajax.php
+| Error Line: 681
+| URL When Error Occured: http://127.0.0.1/Plexis/ajax/updates
+
+--------------------------------------------------------------------
+

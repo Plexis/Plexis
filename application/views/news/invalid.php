@@ -1,0 +1,1 @@
+<center>Invalid News Id</center>

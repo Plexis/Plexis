@@ -1,0 +1,367 @@
+/*
+ * Grape - Professional & Flexible Admin Template
+ * by Stammi <http://themeforest.net/user/Stammi>
+ * 
+ * -----------------
+ * TABLE OF CONTENTS
+ * -----------------
+ * 
+ * 1) Generic
+ *   1.1) Links
+ *   1.2) Headlines
+ *   1.3) Paragraphs
+ * 2) Header
+ * 3) Breadcrumbs
+ * 4) Navigation
+ *   4.1) Login-Details
+ *   4.2) Navigation
+ *   4.3) Badges
+ * 5) Blocks
+ * 6) Forms
+ * 7) Tables
+ * 8) Tabs
+ * 9) Shortcut List
+ * 10) Toolbox
+ * 11) Overview-List
+ * 12) Error Page (404)
+ */
+
+/* ==================================================
+ * 1) Generic
+ * ================================================== */
+
+/*
+ * 1.1) Links
+ */
+
+a { color: #2d5672; text-decoration: none; }
+a:visited { color: #2d5672; }
+a:hover { color: #2f383e; text-decoration: underline; }
+
+
+/*
+ * 1.2) Headlines
+ */
+
+h1, h2, h3, h4, h5, h6 {
+	color: #475d68;
+	text-shadow: 0 1px 0 #fff;
+	line-height: 10px;
+}
+
+h1 { font-size: 22px; }
+h2 { font-size: 18px; }
+h3 { font-size: 16px; }
+h4 { font-size: 14px; }
+h5 { font-size: 13px; }
+h6 { font-size: 12px; }
+
+/*
+ * 1.3) Paragraphs
+ */
+
+p {
+	font-size: 12px;
+	color: #2a3640;
+}
+
+/* ==================================================
+ * 2) Header
+ * ================================================== */
+
+#header p {
+	color: #d9d9d9;
+}
+
+#header .messages a {
+	color: #ebebeb;
+	font-weight: 700;
+}
+
+#header .messages a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+
+
+
+
+/* ==================================================
+ * 3) Breadcrumbs
+ * ================================================== */
+
+#breadcrumbs a {
+	color: #515151;
+}
+
+#breadcrumbs a:hover {
+	color: #2e2e2e;
+}
+
+
+
+
+
+
+
+/* ==================================================
+ * 4) Navigation
+ * ================================================== */
+
+/*
+ * 4.1) Login-Details
+ */
+
+#login-details h2, #login-details h3, #login-details p {
+	text-shadow: 0 1px 0 #070f16;
+}
+
+#login-details h2, #login-details h2 a {
+	color: #e8e8e8;
+	font-size: 14px;
+}
+
+#login-details h2 a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+#login-details h3 {
+	color: #d4d4d4;
+	font-size: 12px;
+}
+
+#login-details p, #login-details .user-button a {
+	color: #e3e3e3;
+	float: left;
+}
+
+#login-details .user-button a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+
+/*
+ * 4.2) Navigation
+ */
+
+#container > #sidebar > #nav > .menu li a {
+	font-size: 13px;
+	color: #3b3b3b;
+}
+
+#container > #sidebar > #nav > .menu li a:hover {
+	color: #f4faff;
+}
+
+#container > #sidebar > #nav > .menu li ul li a {
+	color: #e5e5e5;
+}
+
+#container > #sidebar > #nav > .menu li ul li a:hover {
+	color: #fff;
+}
+
+/*
+ * 4.3) Badges
+ */
+
+.badge {
+	color: #ebebeb;
+}
+
+.badge.grey {
+	color: #6e6e6e;
+}
+
+
+
+/* ==================================================
+ * 5) Blocks
+ * ================================================== */
+
+.block-header h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 16px;
+	padding-left: 10px;
+	line-height: 37px;
+}
+
+.block-header.small h1 {
+	font-size: 13px;
+	line-height: 25px;
+}
+
+.block-content.dark-bg, .block-content.dark-bg p {
+	color: #f5f5f5 !important;
+}
+
+.block-content.dark-bg a {
+	color: #e2eaf1;
+}
+
+.block-content.dark-bg a:hover {
+	color: #f8fcff;
+}
+
+
+
+
+
+
+
+/* ==================================================
+ * 6) Forms
+ * ================================================== */
+
+.placeholder {
+  color: #909090 !important;
+}
+
+
+#search-form input[type="text"] {
+	color: #343434;
+}
+
+.form fieldset legend {
+	font-size: 13px;
+	color: #464646 !important;
+}
+
+.form label, .form .label {
+	font-size: 12px;
+	font-weight: 700;
+	color: #666666 !important;
+	text-shadow: 0 1px 0 #fff;
+}
+
+
+
+
+
+
+/* ==================================================
+ * 7) Tables
+ * ================================================== */
+
+.dataTables_wrapper {
+	text-shadow: 0 1px 0 #fff;
+	font-weight: 400;
+}
+
+.table thead th:hover {
+	color: #023a73;
+}
+
+.dataTables_wrapper .block-actions {
+	text-shadow: 0 1px 0 #000;
+	color: #f3f3f3;
+}
+
+.paginate_button, .paginate_active {
+	color: #373737;
+	text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.paginate_button_disabled {
+	color: #9f9f9f;
+}
+
+.paginate_active {
+	color: #fcfcfc;
+	text-shadow: 0 1px 0 #000;
+}
+
+
+
+
+
+
+/* ==================================================
+ * 8) Tabs
+ * ================================================== */
+
+ul.tabs li a:hover {
+	text-decoration: none;
+}
+
+
+
+
+
+
+
+/* ==================================================
+ * 9) Shortcut List
+ * ================================================== */
+
+ul.shortcut-list li a {
+	color: #515151;
+}
+
+
+
+
+
+
+/* ==================================================
+ * 10) Toolbox
+ * ================================================== */
+
+.toolbox-content p {
+	color: #2a3640 !important;
+}
+
+
+
+
+
+
+/* ==================================================
+ * 11) Overview-List
+ * ================================================== */
+
+
+ul.overview-list li a {
+	color: #6b6b6b;
+}
+
+ul.overview-list li a:hover {
+	color: #434343;
+}
+
+
+
+
+
+
+
+/* ==================================================
+ * 12) Error Page (404)
+ * ================================================== */
+
+#error-number h1 {
+	color:#FFFFFF;
+	font-size: 200px;
+	text-shadow: 0 1px 0 #ccc,
+	0 2px 0 #c9c9c9,
+	0 3px 0 #bbb,
+	0 4px 0 #b9b9b9,
+	0 5px 0 #aaa,
+	0 6px 1px rgba(0,0,0,.1),
+	0 0 5px rgba(0,0,0,.1),
+	0 1px 3px rgba(0,0,0,.3),
+	0 3px 5px rgba(0,0,0,.2),
+	0 5px 10px rgba(0,0,0,.25),
+	0 10px 10px rgba(0,0,0,.2),
+	0 20px 20px rgba(0,0,0,.15);
+}
+
+
+
+
+
+

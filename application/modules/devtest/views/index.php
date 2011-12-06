@@ -1,0 +1,1 @@
+<h2><center>This is a custom loaded page, normally loaded from the database!</center></h2>
