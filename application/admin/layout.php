@@ -39,9 +39,6 @@
             $g = TRUE;
             break;
     }
-    
-    // Get our realmlist
-    $realms = get_installed_realms();
 ?>
 <!doctype html>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -189,23 +186,12 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" <?php if($e == TRUE) echo 'class="current"'; ?>>
+                        <a href="{SITE_URL}/admin/realms" <?php if($e == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/chart.png">Realm Managment</a>
-                        <ul class="sub">
-                            <li><a href="{SITE_URL}/admin/realms/">Install Realms</a></li>
-                            <?php foreach($realms as $realm): ?>
-                                <li><a href="{SITE_URL}/admin/realms/edit/<?php echo $realm['id']; ?>"><?php echo $realm['name']; ?></a></li>
-                            <?php endforeach; ?>
-                        </ul>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" <?php if($f == TRUE) echo 'class="current"'; ?>>
+                        <a href="{SITE_URL}/admin/characters" <?php if($f == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/pencil.png">Character Editor</a>
-                        <ul class="sub">
-                            <li><a href="{SITE_URL}/admin/characters/1">Realm 1</a></li>
-                            <li><a href="{SITE_URL}/admin/characters/2">Realm 2</a></li>
-                            <li><a href="{SITE_URL}/admin/characters/3">Realm 3</a></li>
-                        </ul>
                     </li>
                     <li>
                         <a href="javascript:void(0);" <?php if($g == TRUE) echo 'class="current"'; ?>>

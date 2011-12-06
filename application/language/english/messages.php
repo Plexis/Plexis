@@ -35,6 +35,8 @@ return array(
     'realm_update_error' => 'There was an error updating the realm in the database. Please check your error logs',
     'realm_update_success' => '<strong>Success!</strong> Realm successfully updated',
     'realm_update_warning' => 'Realm updated successfully, but we were unable to connect to the World and Character databases.',
+    'realm_uninstall_error' => 'There was an error un-installing the realm in the database. Please check your error logs',
+    'realm_uninstall_success' => '<strong>Success!</strong> Realm successfully un-installed',
     'reg_failed_field_invalid' => "<strong>Registration Failed:</strong>One or more fileds were not filled correctly.",
     'reg_failed_ip_banned' => "<strong>Error:</strong>Your Ip is Banned. You are unauthorized to create anymore accounts.",
     'reg_failed_username_exists' => "<strong>Registration Failed:</strong>Username already exists, Please pick a different username and try again.",

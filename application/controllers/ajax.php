@@ -522,7 +522,7 @@ class Ajax extends Application\Core\Controller
                 if(in_array($id, $irealms))
                 {
                     $output['aaData'][$key][4] = "<font color='green'>Installed</font>";
-                    $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Edit</a> 
+                    $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a> 
                         - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
                 }
                 else

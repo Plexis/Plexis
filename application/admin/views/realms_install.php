@@ -166,6 +166,7 @@
         $('#install-form').ajaxForm({
             beforeSubmit: function (arr, data, options){
                 $('#js_message').attr('class', 'alert loading').html('Submitting Form...').slideDown(300);
+                $("html, body").animate({ scrollTop: 0 }, "slow");
                 return true;
             },
             success: result,

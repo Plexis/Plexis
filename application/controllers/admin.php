@@ -46,9 +46,9 @@ class Admin extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */ 
-    public function phpinfo($html = FALSE) 
+    public function phpinfo($plain = FALSE) 
     {
-        if($html == 'html')
+        if($plain == 'html')
         {
             echo phpinfo();
         }
@@ -318,10 +318,57 @@ class Admin extends Application\Core\Controller
                 $drivers = get_wowlib_drivers();
                 if($drivers == FALSE) $drivers = array();
                 
+                // Load our installed realm info
+                $realm = $this->DB->query("SELECT * FROM `pcms_realms` WHERE `id`=?", array($id))->fetch_row();
+                
+                
+                // Redirect if this realm doesnt exist / isnt installed
+                if($realm == FALSE) redirect('admin/realms');
+                
+                // Load the realm info from the realm itself
+                $this->load->realm();
+                $info = $this->realm->fetch_realm($id);
+                $realm['name'] = $info['name'];
+                
+                // load our DB and RA infomation into a readable array
+                $cdb = explode(';', $realm['char_db']);
+                $realm['cdb'] = array(
+                    'driver' => $cdb[0],
+                    'address' => $cdb[1],
+                    'port' => $cdb[2],
+                    'username' => $cdb[3],
+                    'password' => $cdb[4],
+                    'database' => $cdb[5]
+                );
+                unset($cdb, $realm['char_db']);
+                
+                // World DB
+                $wdb = explode(';', $realm['world_db']);
+                $realm['wdb'] = array(
+                    'driver' => $wdb[0],
+                    'address' => $wdb[1],
+                    'port' => $wdb[2],
+                    'username' => $wdb[3],
+                    'password' => $wdb[4],
+                    'database' => $wdb[5]
+                );
+                unset($wdb, $realm['world_db']);
+                
+                // Remote Access
+                $ra = explode(';', $realm['ra_info']);
+                $realm['ra'] = array(
+                    'type' => $ra[0],
+                    'port' => $ra[1],
+                    'username' => $ra[2],
+                    'password' => $ra[3]
+                );
+                unset($ra, $realm['ra_info']);
+                
                 // Build our page title / desc, then load the view
                 $data = array(
                     'page_title' => "Edit Realm",
                     'page_desc' => "Here you can change the DB settings for your realm, as well as the driver.",
+                    'realm' => $realm,
                     'drivers' => $drivers
                 );
                 $this->load->view('realms_edit', $data);

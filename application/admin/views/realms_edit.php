@@ -1,12 +1,13 @@
 <div class="grid_12">
     <div class="block-border">
         <div class="block-header">
-            <h1>Installing realm "{realm.name}"</h1>
+            <h1>Updating realm "{realm.name}"</h1>
         </div>
         
-        <form id="install-form" class="block-content form" action="{SITE_URL}/ajax/realms/install/{realm.id}" method="post">
-            <input type="hidden" name="action" value="install"/>
+        <form id="edit-form" class="block-content form" action="{SITE_URL}/ajax/realms" method="post">
+            <input type="hidden" name="action" value="edit"/>
             <input type="hidden" name="name" value="{realm.name}"/>
+            <input type="hidden" name="id" value="{realm.id}"/>
             
             <!-- Hidden Message -->
             <div id="js_message" style="display: none;"></div>
@@ -27,10 +28,10 @@
                         <label for="type">Realm Type</label>
                         <select id="type" name="type">
                             <option value="PvP" <?php if('{realm.type}' == 'PvP') echo "selected=\"selected\""; ?>>PvP</option>
-                            <option value="Normal" <?php if('{config.emulator}' == 'Normal') echo "selected=\"selected\""; ?>>Normal</option>
-                            <option value="RP" <?php if('{config.emulator}' == 'RP') echo "selected=\"selected\""; ?>>Role Playing</option>
-                            <option value="RPPvP" <?php if('{config.emulator}' == 'RPPvP') echo "selected=\"selected\""; ?>>Role Playing PvP</option>
-                            <option value="FFA_PvP" <?php if('{config.emulator}' == 'FFA_PvP') echo "selected=\"selected\""; ?>>Free For All</option>
+                            <option value="Normal" <?php if('{realm.type}' == 'Normal') echo "selected=\"selected\""; ?>>Normal</option>
+                            <option value="RP" <?php if('{realm.type}' == 'RP') echo "selected=\"selected\""; ?>>Role Playing</option>
+                            <option value="RPPvP" <?php if('{realm.type}' == 'RPPvP') echo "selected=\"selected\""; ?>>Role Playing PvP</option>
+                            <option value="FFA_PvP" <?php if('{realm.type}' == 'FFA_PvP') echo "selected=\"selected\""; ?>>Free For All</option>
                         </select>
                     </p>
                     <p>
@@ -57,23 +58,23 @@
                     </p>
                     <p>
                         <label for="c_address">Host / IP Address</label>
-                        <input id="c_address" name="c_address" class="required" type="text" value="{realm.address}"/>
+                        <input id="c_address" name="c_address" class="required" type="text" value="{realm.cdb.address}"/>
                     </p>
                     <p>
                         <label for="c_port">Port</label>
-                        <input id="c_port" name="c_port" class="required" type="text" value="3306"/>
+                        <input id="c_port" name="c_port" class="required" type="text" value="{realm.cdb.port}"/>
                     </p>
                     <p>
                         <label for="c_username">Username</label>
-                        <input id="c_username" name="c_username" class="required" type="text" value=""/>
+                        <input id="c_username" name="c_username" class="required" type="text" value="{realm.cdb.username}"/>
                     </p>
                     <p>
                         <label for="c_password">Password</label>
-                        <input id="c_password" name="c_password" class="required" type="password" value=""/>
+                        <input id="c_password" name="c_password" class="required" type="password" value="{realm.cdb.password}"/>
                     </p>
                     <p>
                         <label for="c_database">Database Name</label>
-                        <input id="c_database" name="c_database" class="required" type="text" value="characters"/>
+                        <input id="c_database" name="c_database" class="required" type="text" value="{realm.cdb.database}"/>
                     </p>
                 </div>
             </fieldset>
@@ -91,23 +92,23 @@
                     </p>
                     <p>
                         <label for="w_address">Host / IP Address</label>
-                        <input id="w_address" name="w_address" class="required" type="text" value="{realm.address}"/>
+                        <input id="w_address" name="w_address" class="required" type="text" value="{realm.wdb.address}"/>
                     </p>
                     <p>
                         <label for="w_port">Port</label>
-                        <input id="w_port" name="w_port" class="required" type="text" value="3306"/>
+                        <input id="w_port" name="w_port" class="required" type="text" value="{realm.wdb.port}"/>
                     </p>
                     <p>
                         <label for="w_username">Username</label>
-                        <input id="w_username" name="w_username" class="required" type="text" value=""/>
+                        <input id="w_username" name="w_username" class="required" type="text" value="{realm.wdb.username}"/>
                     </p>
                     <p>
                         <label for="w_password">Password</label>
-                        <input id="w_password" name="w_password" class="required" type="password" value=""/>
+                        <input id="w_password" name="w_password" class="required" type="password" value="{realm.wdb.password}"/>
                     </p>
                     <p>
                         <label for="w_database">Database Name</label>
-                        <input id="w_database" name="w_database" class="required" type="text" value="world"/>
+                        <input id="w_database" name="w_database" class="required" type="text" value="{realm.wdb.database}"/>
                     </p>
                 </div>
             </fieldset>
@@ -119,21 +120,21 @@
                     <p>
                         <label for="ra_type">Remote Access Type</label>
                         <select id="ra_type" name="ra_type" title="Warning: If you are using Trinity, SOAP probably will not work!">
-                            <option value="TELNET">Telnet</option>
-                            <option value="SOAP">SOAP</option>
+                            <option value="TELNET" <?php if('{realm.ra.type}' == 'TELNET') echo "selected=selected"; ?>>Telnet</option>
+                            <option value="SOAP" <?php if('{realm.ra.type}' == 'SOAP') echo "selected=selected"; ?>>SOAP</option>
                         </select>
                     </p>
                     <p>
                         <label for="ra_port">Port</label>
-                        <input id="ra_port" name="ra_port" type="text" value="3443"/>
+                        <input id="ra_port" name="ra_port" type="text" value="{realm.ra.port}"/>
                     </p>
                     <p>
                         <label for="ra_username">Username</label>
-                        <input id="ra_username" name="ra_username" type="text" title="This needs to be a level 3+ admin account on your server"/>
+                        <input id="ra_username" name="ra_username" type="text" value="{realm.ra.username}" title="This needs to be a level 3+ admin account on your server"/>
                     </p>
                     <p>
                         <label for="ra_password">Password</label>
-                        <input id="ra_password" name="ra_password" type="password" value=""/>
+                        <input id="ra_password" name="ra_password" type="password" value="{realm.ra.password}"/>
                     </p>
                 </div>
             </fieldset>
@@ -144,7 +145,7 @@
                     <li><a class="button red" href="{SITE_URL}/admin/realms">Cancel</a></li>
                 </ul>
                 <ul class="actions-right">
-                    <li><input type="submit" class="button" value="Install"></li>
+                    <li><input type="submit" class="button" value="Update"></li>
                 </ul>
             </div>
         </form>
@@ -158,13 +159,14 @@
         $('input[name=ra_username]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
         
         // Form validation
-        $("#install-form").validate();
+        $("#edit-form").validate();
         
         // ===============================================
-        // bind the Install form using 'ajaxForm' 
-        $('#install-form').ajaxForm({
+        // bind the Update form using 'ajaxForm' 
+        $('#edit-form').ajaxForm({
             beforeSubmit: function (arr, data, options){
                 $('#js_message').attr('class', 'alert loading').html('Submitting Form...').slideDown(300);
+                $("html, body").animate({ scrollTop: 0 }, "slow");
                 return true;
             },
             success: result,
@@ -177,7 +179,7 @@
             var result = jQuery.parseJSON(response);
             if (result.success == true){
                 // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#install-form').html('<div class="alert ' + result.type +'">' + result.message + '</div>');
+                $('#edit-form').html('<div class="alert ' + result.type +'">' + result.message + '. <a href="{SITE_URL}/admin/realms">Click here to return.</a></div>');
             }else{
                 $('#js_message').attr('class', 'alert ' + result.type).html(result.message);
             }
