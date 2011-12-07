@@ -37,7 +37,7 @@ CREATE TABLE `pcms_account_groups` (
 -- ----------------------------
 INSERT INTO `pcms_account_groups` VALUES ('0', 'Banned', '1', '0', '0', '0');
 INSERT INTO `pcms_account_groups` VALUES ('1', 'Guest', '0', '0', '0', '0');
-INSERT INTO `pcms_account_groups` VALUES ('2', 'User', '0', '1', '0', '0');
+INSERT INTO `pcms_account_groups` VALUES ('2', 'Member', '0', '1', '0', '0');
 INSERT INTO `pcms_account_groups` VALUES ('3', 'Admin', '0', '1', '1', '0');
 INSERT INTO `pcms_account_groups` VALUES ('4', 'Super Admin', '0', '1', '1', '1');
 
@@ -182,6 +182,22 @@ CREATE TABLE `pcms_realms` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `pcms_reg_keys`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_reg_keys`;
+CREATE TABLE `pcms_reg_keys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(40) NOT NULL,
+  `assigned` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'If set to 1, this key has already been giving away, and waiting to be used.',
+  `sponser` int(11) NOT NULL COMMENT 'Account ID of the sponser',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of pcms_reg_keys
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `pcms_sessions`
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_sessions`;
@@ -192,7 +208,7 @@ CREATE TABLE `pcms_sessions` (
   `last_seen` varchar(50) DEFAULT NULL,
   `user_data` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_sessions

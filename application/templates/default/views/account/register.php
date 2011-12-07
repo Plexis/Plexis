@@ -1,4 +1,5 @@
 <form method="post" action="{SITE_URL}/account/register">
+    <input type="hidden" name="action" value="register" />
 	<label for="username">Username: </label>
 	<input id="username" type="text" value="" name="username" tabindex="1" />
 

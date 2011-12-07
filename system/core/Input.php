@@ -132,7 +132,7 @@ class Input
 |
 | @Param: (String) $key - Name of the cookie
 | @Param: (Mixed) $val - Value of the cookie
-| @Param: (Int) $time - Cookie expire time from now in seconds
+| @Param: (Int) $time - Cookie expire time in Unix Timestamp
 | @Return (None)
 |
 */
