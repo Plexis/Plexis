@@ -22,7 +22,7 @@ class Account_Model extends System\Core\Model
 | Creates a verification key for an account
 |
 */    
-    public function create_key($email)
+    public function create_key($username)
     {
         Gen:
         {
@@ -37,7 +37,7 @@ class Account_Model extends System\Core\Model
         if($result !== FALSE) goto Gen;
         
         // Insert the key into the DB
-        $result = $this->DB->insert('pcms_account_keys', array('key' => $key, 'email' => $email));
+        $result = $this->DB->insert('pcms_account_keys', array('key' => $key, 'username' => $username));
         if($result == TRUE) return $key;
         
         // If we are here, there was a DB error
@@ -55,12 +55,11 @@ class Account_Model extends System\Core\Model
     public function verify_key($key)
     {
         // make sure this key doesnt already exist
-        $result = $this->DB->query("SELECT `email` FROM `pcms_account_keys` WHERE `key`=?", array($key))->fetch_column();
+        $result = $this->DB->query("SELECT `username` FROM `pcms_account_keys` WHERE `key`=?", array($key))->fetch_column();
         if($result !== FALSE)
         {
-            // Delete the account and return the email
-            $this->DB->delete('pcms_account_keys', '`key`="'.$key.'"');
-            return $email;
+            // Return the username
+            return $result;
         }
         // If we are here, there the key didnt exist
         return FALSE; 

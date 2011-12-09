@@ -175,7 +175,13 @@ class Auth
             // If the user doesnt exists in the table, we need to insert it
             if($result === FALSE)
             {
-                $data = array('username' => $username, 'id' => $account_id);
+                $r_data = $this->realm->fetch_account($account_id);
+                $data = array(
+                    'id' => $account_id, 
+                    'username' => $username, 
+                    'email' => $r_data['email'], 
+                    'verified' => 1
+                );
                 $this->DB->insert( 'pcms_accounts', $data );
                 $result = $this->DB->query( $query )->fetch_row();
                 
@@ -184,6 +190,13 @@ class Auth
                 {
                     show_error('fetal_error', FALSE, E_ERROR);
                 }
+            }
+            
+            // Make sure the account isnt locked due to verification
+            if($result['verified'] == FALSE && config('reg_email_verification') == TRUE)
+            {
+                output_message('warning', 'login_failed_email_unverified');
+                return FALSE;
             }
 
             // Set additionals, and return true

@@ -11,6 +11,7 @@ CREATE TABLE `pcms_accounts` (
   `group_id` int(3) NOT NULL DEFAULT '2',
   `registration_ip` varchar(24) NOT NULL DEFAULT '0.0.0.0',
   `selected_theme` varchar(50) DEFAULT NULL,
+  `verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Email verified',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -40,6 +41,21 @@ INSERT INTO `pcms_account_groups` VALUES ('1', 'Guest', '0', '0', '0', '0');
 INSERT INTO `pcms_account_groups` VALUES ('2', 'Member', '0', '1', '0', '0');
 INSERT INTO `pcms_account_groups` VALUES ('3', 'Admin', '0', '1', '1', '0');
 INSERT INTO `pcms_account_groups` VALUES ('4', 'Super Admin', '0', '1', '1', '1');
+
+-- ----------------------------
+-- Table structure for `pcms_account_keys`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_account_keys`;
+CREATE TABLE `pcms_account_keys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(50) NOT NULL,
+  `username` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT 'The username the key belongs too',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of pcms_account_keys
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `pcms_forum_categories`

@@ -232,6 +232,18 @@ class Account extends Application\Core\Controller
             // If everything passes validation, we are good to go
             if( $this->validation->validate() == TRUE )
             {
+                // Check for captcha validation
+                if( config('enable_captcha') == TRUE )
+                {
+                    $captcha = strtolower( $this->Input->post('captcha') );
+                    if($captcha != strtolower($_SESSION['Captcha']))
+                    {
+                        output_message('error', 'captcha_incorrect');
+                        $this->load->view('register');
+                        return;
+                    }
+                }
+            
                 // Use the XSS filter on these!
                 $username = $this->Input->post('username', TRUE);
                 $password = $this->Input->post('password', TRUE);
@@ -259,7 +271,7 @@ class Account extends Application\Core\Controller
                         $this->load->model('Account_model', 'account');
                         
                         // generate our random account verification code
-                        $genkey = $this->account->create_key($email);
+                        $genkey = $this->account->create_key($username);
                         $href = SITE_URL . "/account/verify/".$genkey;
                         $message = vsprintf( $lang['email_verify_message'], array( $site_title, $href, $href ) );
                         
@@ -315,18 +327,25 @@ class Account extends Application\Core\Controller
         // Make sure we have a key
         if($key == FALSE || strlen( trim($key) ) != 15) goto Invalid;
         
+        // Load the account model
+        $this->load->model('Account_model', 'account');
+        
         // Verify the key
-        $email = $this->DB->query("SELECT `email` FROM `pcms_account_keys` WHERE `key`=?", array($key))->fetch_column();
-        if($email == FALSE) goto Invalid;
+        $username = $this->account->verify_key($key);
+        if($username == FALSE) goto Invalid;
         
         // We have a valid key, no activate the account
-        $result = $this->DB->update('pcms_accounts', array('verified' => 1), "`email`='".$email."'");
+        $result = $this->DB->update('pcms_accounts', array('verified' => 1), "`username`='".$username."'");
         if($result == TRUE)
         {
             // Unlock account
             $this->load->realm();
-            $result = $this->DB->query("SELECT * FROM `pcms_accounts` WHERE `email`=?", array($email))->fetch_row();
-            $this->realm->unlock_account($result['id']);
+            $query = "SELECT `id` FROM `pcms_accounts` WHERE `username`=?";
+            $result = $this->DB->query( $query, array($username) )->fetch_column();
+            $this->realm->unlock_account($result);
+            
+            // Delete the key from the database
+            $this->DB->delete('pcms_account_keys', "`key`='".$key."'");
             
             // Output a success message
             output_message('success', 'account_verify_success');
@@ -342,7 +361,29 @@ class Account extends Application\Core\Controller
             return;
         }
     }
-    
+
+/*
+| ---------------------------------------------------------------
+| Captcha Image Page
+| ---------------------------------------------------------------
+|
+*/    
+    public function captcha()
+    {
+        // Load the captcha Library
+        $this->load->library('Captcha');
+        
+        // Set our content type to an image
+        header("Content-type: image/png");
+        
+        // Output the image
+        $this->Captcha->display(6, 25, 75, NULL, FALSE, TRUE, TRUE);
+
+        // Store the Captcha string into an array for verification later on.
+        $_SESSION['Captcha'] = $this->Captcha->get_string();
+    }
+
+// Test Page    
     function test()
     {
         // Setup our variables and load our extensions

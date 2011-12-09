@@ -203,6 +203,7 @@ class Mangos
 |   @Return = array(
 |       'id' => Account Unique ID
 |       'username' => Account Unsername
+|       'email' => Account email
 |       'gmlevel' => GM level, in ManGOS Format (1 -4, no A-Z shit here)
 |       'joindate' => When the user joined (Date formated!)
 |       'locked' => Is the account locked? (1 = yes, 0 = no)
@@ -224,6 +225,7 @@ class Mangos
             return array(
                 'id' => $temp['id'],
                 'username' => $temp['username'],
+                'email' => $temp['email'],
                 //'gmlevel' => $temp['gmlevel'],
                 'joindate' => $temp['joindate'],
                 'locked' => $temp['locked'],

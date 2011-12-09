@@ -11,4 +11,5 @@ $allow_registration = 1;
 $reg_email_verification = 1;
 $reg_registration_key = 0;
 $reg_unique_email = 0;
+$enable_captcha = 1;
 ?>
