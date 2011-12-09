@@ -1,0 +1,36 @@
+.alert {
+	border: 1px solid;
+	clear: both;
+	margin-bottom: 9px;
+	margin-top: 10px;
+	padding: 10px 10px 10px 35px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+}
+
+.alert.no-margin {
+	border-radius: 0 0 0 0;
+	margin-left: -10px;
+	margin-right: -10px;
+	border-width: 1px 0;
+}
+
+.alert.no-margin.top {
+	border-width: 0 0 1px 0;
+	margin-top: 0;
+}
+
+.alert.no-margin.bottom {
+	border-width: 1px 0 0px 0;
+	margin-bottom: 0;
+}
+
+.alert.success { background-image: url("../images/icons/tick-circle.png"); background-color: #d1e8d2; border-color: #339933; color: #00632E; }
+.alert.error { background-image: url("../images/icons/cross-circle.png"); background-color: #facfcf; border-color: #dc1c1c; color: #820101; }
+.alert.warning { background-image: url("../images/icons/exclamation.png"); background-color: #fdefbd; border-color: #d4b64b; color: #675100; }
+.alert.info { background-image: url("../images/icons/information.png"); background-color: #d8e7fa; border-color: #9DBFEA; color: #00357B; }
+.alert.note { background-image: url("../images/icons/notebook.png"); background-color: #f4f4f4; border-color: #bdbdbd; color: #4d4d4d; }
+.alert.loading { background-image: url("../images/icons/loading.gif"); background-color: #f4f4f4; border-color: #bdbdbd; color: #4d4d4d; }

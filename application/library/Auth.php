@@ -84,16 +84,19 @@ class Auth
         // if the Session isnt set or is false
         if( $session === NULL || $session['logged_in'] == FALSE ) 
         {
-            // Get guest privilages
-            $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=1";
-            
-            // Query our database set default guest information
-            $result = $this->DB->query( $query )->fetch_row();			
-            $result['username'] = "Guest";
-            $result['logged_in'] = FALSE;
-            
-            // Merge and set the data
-            $this->session->set('user', $result);
+            Guest:
+            {
+                // Get guest privilages
+                $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=1";
+                
+                // Query our database set default guest information
+                $result = $this->DB->query( $query )->fetch_row();			
+                $result['username'] = "Guest";
+                $result['logged_in'] = FALSE;
+                
+                // Merge and set the data
+                $this->session->set('user', $result);
+            }
         }
         
         // If the session time is expired
@@ -113,6 +116,11 @@ class Auth
             
             // Query our database and get the users information
             $result = $this->DB->query( $query )->fetch_row();
+            
+            // Make sure user wasnt deleted!
+            if($result == FALSE) goto Guest;
+            
+            // Set our users info up the the session and carry onwards :D
             $this->session->set('user', array_merge($session, $result));
         }
     }
@@ -246,11 +254,22 @@ class Auth
             // If insert into Realm Database is a success, move on
             if($id !== FALSE)
             {
+                // Default
+                $verified = 1;
+                
+                // Process account verification
+                if( config('reg_email_verification') )
+                {
+                    $this->realm->lock_account($id);
+                    $verified = 0;
+                }
+                
                 // Create our data array
                 $data = array(
                     'id' => $id,
                     'username' => $username,
                     'email' => $email,
+                    'verified' => $verified
                 );
                 
                 // Try and insert into pcms_accounts table

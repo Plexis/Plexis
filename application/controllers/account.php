@@ -73,9 +73,8 @@ class Account extends Application\Core\Controller
                 
                 if($this->Auth->login($username, $password))
                 {
-                    // Success, redirect in 4 secs and load the success message
-                    redirect('account', 3);
-                    $this->load->view('login_success');
+                    // Success
+                    (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : $this->load->view('login_success');
                 }
                 else
                 {
@@ -116,7 +115,7 @@ class Account extends Application\Core\Controller
         $this->Auth->logout();
         
         // Load the page, and we are done :)
-        $this->load->view('logout');
+        (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : $this->load->view('logout');
     }
 
 /*
@@ -248,10 +247,48 @@ class Account extends Application\Core\Controller
                         $this->DB->delete('pcms_reg_keys', "`key`='".$key."'");
                     }
                     
-                    // Log the user in, and redirect
-                    $this->Auth->login($username, $password);
-                    output_message('success', 'reg_success');
-                    $this->load->view('register_success', array('username' => $username) );
+                    // Check for email verification
+                    if( config('reg_email_verification') == TRUE )
+                    {
+                        // Setup our variables and load our extensions
+                        $site_title = config('site_title');
+                        $site_email = config('site_email');
+                        $lang = load_language_file('emails');
+                        $this->load->realm();
+                        $this->load->library('email');
+                        $this->load->model('Account_model', 'account');
+                        
+                        // generate our random account verification code
+                        $genkey = $this->account->create_key($email);
+                        $href = SITE_URL . "/account/verify/".$genkey;
+                        $message = vsprintf( $lang['email_verify_message'], array( $site_title, $href, $href ) );
+                        
+                        // Build the email
+                        $this->email->to($email, $username);
+                        $this->email->from( $site_email, $site_title );
+                        $this->email->subject( $lang['email_verify_subject'] );
+                        $this->email->message( $message );
+                        $sent = $this->email->send();
+                        
+                        // Check if our email sent correctly
+                        if($sent == TRUE)
+                        {
+                            output_message('success', 'reg_success_verfy_required');
+                            $this->load->view('blank');
+                        }
+                        else
+                        {
+                            output_message('warning', 'reg_success_email_error');
+                            $this->load->view('blank');
+                        }
+                    }
+                    else
+                    {
+                        // Log the user in, and redirect
+                        $this->Auth->login($username, $password);
+                        output_message('success', 'reg_success');
+                        $this->load->view('register_success', array('username' => $username) );
+                    }
                 }
                 else
                 {
@@ -264,6 +301,80 @@ class Account extends Application\Core\Controller
                 output_message('error', 'reg_failed_field_invalid');
                 $this->load->view('register');
             }
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Email Verification Page
+| ---------------------------------------------------------------
+|
+*/
+    public function verify($key = FALSE) 
+    {
+        // Make sure we have a key
+        if($key == FALSE || strlen( trim($key) ) != 15) goto Invalid;
+        
+        // Verify the key
+        $email = $this->DB->query("SELECT `email` FROM `pcms_account_keys` WHERE `key`=?", array($key))->fetch_column();
+        if($email == FALSE) goto Invalid;
+        
+        // We have a valid key, no activate the account
+        $result = $this->DB->update('pcms_accounts', array('verified' => 1), "`email`='".$email."'");
+        if($result == TRUE)
+        {
+            // Unlock account
+            $this->load->realm();
+            $result = $this->DB->query("SELECT * FROM `pcms_accounts` WHERE `email`=?", array($email))->fetch_row();
+            $this->realm->unlock_account($result['id']);
+            
+            // Output a success message
+            output_message('success', 'account_verify_success');
+            $this->load->view('blank');
+            return;
+        }
+        
+        // Process an invalid key
+        Invalid:
+        {
+            output_message('error', 'account_unable_to_verify_email');
+            $this->load->view('blank');
+            return;
+        }
+    }
+    
+    function test()
+    {
+        // Setup our variables and load our extensions
+        $site_title = config('site_title');
+        $site_email = config('site_email');
+        $lang = load_language_file('emails');
+        $this->load->realm();
+        $this->load->library('email');
+        $this->load->model('Account_model', 'account');
+        
+        // generate our random account verification code
+        $genkey = $this->account->create_key('wilson.steven10@yahoo.com');
+        $href = SITE_URL . "/account/verify/".$genkey;
+        $message = vsprintf( $lang['email_verify_message'], array( $site_title, $href, $href ) );
+        
+        // Build the email
+        $this->email->to('thasource.org@hotmail.com', 'Makaveli');
+        $this->email->from( $site_email, $site_title );
+        $this->email->subject( $lang['email_verify_subject'] );
+        $this->email->message( $message );
+        $sent = $this->email->send();
+        
+        // Check if our email sent correctly
+        if($sent == TRUE)
+        {
+            output_message('success', 'reg_success_verfy_required');
+            $this->load->view('blank');
+        }
+        else
+        {
+            output_message('warning', 'reg_success_email_error');
+            $this->load->view('blank');
         }
     }
 }

@@ -1,0 +1,521 @@
+body 
+{
+	background:url(../images/background.jpg) repeat-x #000;
+	margin:0;
+	padding:0;
+	font:12px Arial, Tahoma, Verdana;
+	line-height:18px;
+	color:#ccc;
+}
+#container 
+{
+	margin:0 auto;
+	width:964px;
+}
+ul,ol,p,h1,h2,h3,h4,blockquote,fieldset 
+{
+	margin:0;
+	padding:0;
+}
+a 
+{
+	text-decoration:none;
+	outline:none;
+	color:#77B6CD;
+}
+a:hover 
+{
+	color:#0D8AAA;
+}
+img 
+{
+	border:none;
+}
+.clearfix:after 
+{
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.left-img 
+{
+	float:left;
+	border:1px solid #000;
+	margin:4px 7px 0 0;
+}
+.right-img 
+{
+	float:right;
+	border:1px solid #000;
+	margin:5px 0 0 7px;
+}
+blockquote 
+{
+	background:url(../images/blockquote.gif) no-repeat top left;
+	padding:10px 0 0 40px;
+	font-style:italic;
+}
+
+/* -- [ hacks ] ------------------------ */
+
+.safari #navigation a 
+{
+	padding:16px 15px 18px 15px;
+}
+.safari #contactform .send 
+{
+	padding:9px 0 9px 0;
+}
+.ie6 #right 
+{
+	margin-right:-20px;
+}
+.ie6 .left-box-content 
+{
+	width:650px;
+}
+.ie6 .columns 
+{
+	width:650px;
+}
+.ie6 .box-column 
+{
+	margin-right:7px;
+	position:relative;
+}
+.ie6 #navigation a /*in here i gave a static width to nav buttons. because of display:block issue in ie6*/
+{
+	text-align:center;
+	height:1%;
+	width:80px;
+	text-align:center;
+	padding:16px 0 19px 0;
+}
+.ie6 #navigation a.selected 
+{
+	background:url(../images/nav-buttons.jpg) 0 -101px repeat-x;
+	border-right:1px solid #050505;
+	border-left:1px solid #050505;
+	border-bottom:1px solid #0d0d0d;
+	margin-bottom:-1px;
+	position:relative;
+}
+.ie6 #navigation ul li ul li 
+{
+	margin-bottom:-1px;
+}
+.ie6 #featured-tabs li a 
+{
+	background:url(../images/featured-dots.png) 0 -8px no-repeat;
+}
+.ie7 #main
+{
+	padding-bottom:15px;
+}
+.ie7 #navigation ul li ul li 
+{
+	border-bottom:1px solid #000;
+}
+.chrome #navigation a.selected 
+{
+	border-bottom:2px solid #0d0d0d;
+}
+.chrome #contactform .send 
+{
+	padding:7px 0 7px 0;
+}
+.opera #featured-tabs
+{
+	margin:-22px 0 0 475px;
+}
+
+/* -- [ header ] ------------------------ */
+
+#header 
+{
+	width:962px;
+	height:150px;
+}
+#logo 
+{
+	width:243px;
+	height:60px;
+	position:absolute;
+	margin-top:74px;
+}
+
+/* -- [ navigation ] ------------------------ */
+
+#navigation 
+{
+	width:962px;
+	height:49px;
+	padding-top:2px;
+	border-bottom:1px solid #050505;
+	background:url(../images/navigation.jpg) no-repeat;
+}
+#navigation ul 
+{
+	list-style:none;
+	margin-left:10px;
+}
+#navigation li 
+{
+	float:left;
+}
+#navigation a 
+{
+	display:block;
+	padding:16px 15px 19px 15px;
+	font:12px Verdana, Arial, Tahoma;
+	color:#bbb;
+}
+#navigation a:hover 
+{
+	background:url(../images/nav-buttons.jpg) 0 -51px repeat-x;
+}
+#navigation a.selected 
+{
+	background:url(../images/nav-buttons.jpg) 0 -101px repeat-x;
+	border-right:1px solid #050505;
+	border-left:1px solid #050505;
+	border-bottom:1px solid #0d0d0d;
+}
+
+/* -- [ navigation > dropdown ] ------------------------ */
+
+#navigation ul li ul
+{	
+	position: absolute;
+	display:none;
+	margin:0;
+	z-index:101;
+}
+#navigation ul li ul li
+{	
+	float: none;
+	display: block;
+	padding:0;
+}
+#navigation ul li ul li a
+{	
+	border:1px solid #000;
+	border-top:none;
+	width: auto;
+	background: #080808;
+	display: block;
+	padding:5px !important;
+}
+#navigation ul li ul li a:hover
+{	
+	background: #191919;
+}
+
+/* -- [ main content ] ------------------------ */
+
+#main 
+{
+	width:920px;
+	border-right:1px solid #000;
+	border-left:1px solid #000;
+	padding:20px 20px 0 20px;
+	background:#0D0D0D;
+}
+
+/* -- [ right menu ] ------------------------ */
+
+#right 
+{
+	width:220px;
+	float:right;
+	color:#999;
+}
+#right-btn 
+{
+	width:220px;
+
+}
+#right-btn a 
+{
+	background:url(../images/buttons.jpg) no-repeat;
+	display:block;
+	width:83px;
+	text-align:center;
+	padding:6px 0 6px 0;
+	text-transform:uppercase;
+	float:left;
+	color:#77B6CD;
+	margin-right:20px;
+	font-size:11px;
+}
+#right-btn a:hover 
+{
+	background:url(../images/buttons.jpg) 0 -30px no-repeat;
+}
+.right-box 
+{
+	margin-bottom:20px;
+    background:url(../images/rounded-small.jpg) bottom left no-repeat #141414;
+}
+.right-box p
+{
+	padding:5px;
+}
+.right-box h3
+{
+	background:url(../images/title-short.jpg) no-repeat;
+	width:220px;
+	padding:8px 0 7px 33px;
+	font:12px Arial, Tahoma, Verdana;
+	text-transform:uppercase;
+	color:#6ec2d1;
+}
+.right-box ul 
+{
+	list-style:none;
+	padding:10px;
+}
+.right-box li 
+{
+	padding:0 0 10px 0;
+	margin:0 0 10px 0;
+	border-bottom:1px solid #3B3B3B;
+}
+.right-box li:last-child 
+{
+	padding:0;
+	margin:0;
+	border-bottom:none;
+}
+.right-box a 
+{
+	display:block;
+	color:#999;
+}
+.right-box a:hover 
+{
+	color:#77B6CD;
+}
+.right-box span 
+{
+	display:block;
+	text-align:right;
+}
+.more-link 
+{
+	display:inline !important;
+	color:#77B6CD;
+}
+
+
+/* -- [ left part (content) ] ------------------------ */
+
+#left 
+{
+	float:left;
+	width:680px;
+	margin-right:20px;
+}
+#left p 
+{
+	margin-bottom:15px;
+}
+.left-box 
+{
+	background:url(../images/rounded-big.jpg) bottom left no-repeat #141414;
+	margin-bottom:20px;
+}
+.left-box h2 /*this is box's title*/ 
+{
+	background:url(../images/title-long.jpg) no-repeat;
+	width:677px;
+	padding:8px 0 7px 33px;
+	font:12px Arial, Tahoma, Verdana;
+	text-transform:uppercase;
+	color:#6ec2d1;
+}
+.left-box-content 
+{
+	padding:15px 15px 5px 15px;
+}
+.left-box-content h3 
+{
+	border-bottom:1px solid #333;
+	padding-bottom:2px;
+	margin-bottom:5px;
+	font:18px arial;
+}
+.left-box-content h4 
+{
+	border-bottom:1px solid #333;
+	padding-bottom:2px;
+	margin-bottom:5px;
+	font:16px arial;
+}
+.left-box-content h5 
+{
+	border-bottom:1px solid #333;
+	padding-bottom:2px;
+	margin-bottom:5px;
+	font:14px arial;
+}
+.left-box-content ul 
+{
+	margin:10px 0 10px 30px;
+	list-style:circle;
+}
+.left-box-content ol 
+{
+	margin:10px 0 10px 30px;
+}
+.work-image 
+{
+	border:1px solid #000;
+	display:block;
+	margin-bottom:15px;
+}
+
+/* -- [ featured ] ------------------------ */
+#featured 
+{
+	width:680px;
+	height:272px;
+	margin-bottom:20px;
+}
+.featured-images img 
+{
+	display:block;
+}
+.featured-images p 
+{
+	width:680px;
+	padding:11px 0 13px 15px;
+	position:absolute;
+	background:url(../images/featured-description.png) no-repeat;
+	color:#fff;
+	margin-top:-39px;
+}
+#featured-tabs 
+{
+	position:absolute;
+	margin:-42px 0 0 475px;
+	z-index:100;
+}
+#featured-tabs a 
+{
+	display:block;
+	text-indent:-9999pt;
+	background:url(../images/featured-dots.png) no-repeat;
+	width:8px;
+	height:8px;
+	float:left;
+	margin-right:3px;
+}
+#featured-tabs a:hover, .activeSlide 
+{
+	background:url(../images/featured-dots.png) 0 -8px no-repeat !important;
+}
+
+/* -- [ columns (in the index.html inside left-box) ] ------------------------ */
+
+.columns 
+{
+	width:665px;
+}
+.columns h3 
+{
+	font:12px Arial, Tahoma, Verdana;
+	text-transform:uppercase;
+	margin-bottom:5px;
+}
+.columns img 
+{
+	display:block;
+	margin-bottom:5px;
+}
+.box-column 
+{
+	width:205px;
+	float:left;
+	margin-right:15px;
+}
+
+/* -- [ contact form ] ------------------------ */
+
+#contactform fieldset 
+{
+	border:none;
+}
+#contactform textarea 
+{
+	border:1px solid #333;
+	background:#222;
+	font:12px Arial, Tahoma, Verdana;
+	padding:5px;
+	color:#bbb;
+	width:660px;
+	height:150px;
+}
+#contactform input 
+{
+	width:150px;
+	border:1px solid #333;
+	font:12px Arial, Tahoma, Verdana;
+	padding:5px;
+	background:#222;
+	margin-bottom:10px;
+	color:#bbb;
+	display:block;
+}
+#contactform label 
+{
+	margin-bottom:2px;
+	display:block;
+}
+#contactform input:focus, #contactform textarea:focus 
+{
+	border:1px solid #0F7393;
+}
+#contactform .send 
+{
+	font:11px Arial, Tahoma, Verdana;
+	padding:7px 0 7px 0;
+	text-align:center;
+	background:url(../images/buttons.jpg) no-repeat;
+	text-transform:uppercase;
+	margin-top:5px;
+	width:83px;
+	color:#77B6CD;
+	border:none;
+	cursor:pointer;
+}
+#contactform .send:hover 
+{
+	background:url(../images/buttons.jpg) 0 -30px no-repeat;
+}
+#contactform .send:focus 
+{
+	border:none;
+}
+
+/* -- [ footer ] ------------------------ */
+
+#footer 
+{
+	width:920px;
+	height:25px;
+	padding:15px 20px 10px 20px;
+	background:url(../images/footer.jpg) no-repeat;
+	margin-left:1px;
+	margin-bottom:30px !important;
+}
+#footer-left
+{
+	float:left;
+}
+#footer-right
+{
+	float:right;
+}
