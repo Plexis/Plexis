@@ -17,13 +17,13 @@
     <script type="text/javascript">
     <!--
         jQuery(function( $ ){
-            $('#featured') 
-            .after('<div id="featured-tabs">') 
+            $('#slide') 
+            .after('<div id="slide-tabs">') 
             .cycle({ 
                 fx:     'fade', 
                 speed:  'slow', 
-                timeout: 3500, 
-                pager:  '#featured-tabs'
+                timeout: 4500, 
+                pager:  '#slide-tabs'
             });
         });
     -->
@@ -38,16 +38,20 @@
         </div><!-- /header -->
 
         <div id="content-container">
-            <div id="navigation">
-                <ul>
+            <div id="nav">
+                <ul class="navigation">
                     <li><a href="{SITE_URL}">Home</a></li>
                     <li><a href="{SITE_URL}/forum">Forums</a></li>
                     <li><a href="{SITE_URL}/account/vote">Vote</a></li>
                     <li><a href="{SITE_URL}/account/donate">Donate</a></li>
                     <li><a href="{SITE_URL}/server">Server</a>
-                        <ul>
+                        <ul class="subnav">
                             <li><a href="{SITE_URL}/server/realmlist">Realmlist</a></li>
-                            <li><a href="{SITE_URL}/server/online">Players Online</a></li>
+                            <li><a href="{SITE_URL}/server/online">Players Online</a><span class="spmore"></span>
+                                <ul class="subnav-out">
+                                    <li><a href="#">Test</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     
@@ -57,7 +61,7 @@
                         
                     <?php else: ?>
                         <li><a href="#">Account</a>
-                        <ul>
+                        <ul class="subnav">
                             <li><a href="{SITE_URL}/account">Dashboard</a></li>
                             <li><a href="{SITE_URL}/account/logout">Logout</a></li>
                         </ul>
@@ -83,10 +87,18 @@
                             <h3>Login / Register</h3>
                             <p>
                                 <form method="post" action="{SITE_URL}/account/login" id="form">		
-                                    <fieldset>	
-                                        <label for="username">Username</label> <input type="text" name="username" id="username" value="" tabindex="1" />
-                                        <label for="password">Password</label> <input type="password" name="password" id="password" value="" tabindex="2" />
-                                        <input type="submit" name="submit" value="Login" class="send" tabindex="3" />
+                                    <fieldset class="login-right">	
+                                        <label for="username" class="top-label">Username:</label> 
+                                        <input type="text" name="username" id="username" value="" size="28" tabindex="10" />
+                                        
+                                        <label for="password" class="top-label">Password:</label> 
+                                        <input type="password" name="password" id="password" value="" size="28" tabindex="11" />
+                                        
+                                        <center>
+                                            <input type="submit" name="submit" value="Login" class="button" tabindex="12"/>
+                                            <input type="button" class ="button" name="register" value="Register" onClick="window.location='{SITE_URL}/account/register'" tabindex="13">
+                                            <small><a href="{SITE_URL}/account/recover">Recover lost password</a></small>
+                                        </center>
                                     </fieldset>
                                 </form>
                             </p>
@@ -101,7 +113,6 @@
                     <?php endif; ?>	
                     <!-- End Account Login -->
 
-
                     <div class="right-box">
                         <h3>Realm Status</h3>
                         <ul>
@@ -112,28 +123,34 @@
                     </div><!-- /right-box -->
                 </div><!-- /right -->
                 
+                <!-- MAIN CONTENT -->
                 <div id="left">
                     <?php if($GLOBALS['controller'] == 'welcome'): ?>
-                        <!-- Slide SHow -->
-                        <div id="featured">
-                            <div class="featured-images"><a href="portfolio.html"><img src="{TEMPLATE_URL}/images/pic1.jpg" alt="" /></a><p>Planet Earth: The Sky Html Template</p></div>
-                            <div class="featured-images"><a href="portfolio.html"><img src="{TEMPLATE_URL}/images/pic2.jpg" alt="" /></a><p>Domates One Page Portfolio Template</p></div>
-                            <div class="featured-images"><a href="portfolio.html"><img src="{TEMPLATE_URL}/images/pic3.jpg" alt="" /></a><p>Renkli WordPress Theme</p></div>
-                            <div class="featured-images"><a href="portfolio.html"><img src="{TEMPLATE_URL}/images/pic2.jpg" alt="" /></a><p>Domates One Page Portfolio Template</p></div>
-                        </div><!-- /featured -->
+                        <!-- Slide Show -->
+                        <div id="slide">
+                            <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/feature-1.jpg" alt="" /></a><p>Plexis, A Professional WoW CMS!</p></div>
+                            <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/feature-2.jpg" alt="" /></a><p>Awesome!</p></div>
+                            <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/feature-4.jpg" alt="" /></a></div>
+                        </div>
+                        <!-- /Slide -->
                     <?php endif; ?>
                     
                     {GLOBAL_MESSAGES}
                     {PAGE_CONTENTS}
-                </div><!-- /left -->
-                
-                
-            </div><!-- /main -->
+                </div>
+                <!-- /MAIN CONTENT -->
+
+            </div>
+            <!-- /main -->
+            
+            <!-- FOOTER -->
             <div id="footer">
                 <p id="footer-left">&copy; 2011 Plexis.</p>
                 <p id="footer-right">Page Rendered in {ELAPSED_TIME} seconds, Using {MEMORY_USAGE}</p>
             </div>
+            <!-- END FOOTER -->
         </div>
-    </div><!-- /container -->
+    </div>
+    <!-- /container -->
 </body>
 </html>

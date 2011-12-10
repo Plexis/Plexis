@@ -10,6 +10,10 @@ body
 	line-height:18px;
 	color:#ccc;
 }
+
+/* ==================================================
+ * 1) Main Container
+ * ================================================== */
 #container 
 {
 	margin:0 auto;
@@ -30,6 +34,10 @@ body
     -moz-border-radius-bottomleft: 5px;
     border-bottom-left-radius: 5px;
 }
+
+/* ==================================================
+ * 2) Baisc Styles
+ * ================================================== */
 ul,ol,p,h1,h2,h3,h4,blockquote,fieldset 
 {
 	margin:0;
@@ -76,80 +84,9 @@ blockquote
 	font-style:italic;
 }
 
-/* -- [ hacks ] ------------------------ */
-
-.safari #navigation a 
-{
-	padding:16px 15px 18px 15px;
-}
-.safari #form .send 
-{
-	padding:9px 0 9px 0;
-}
-.ie6 #right 
-{
-	margin-right:-20px;
-}
-.ie6 .left-box-content 
-{
-	width:510px;
-}
-.ie6 .columns 
-{
-	width:510px;
-}
-.ie6 .box-column 
-{
-	margin-right:7px;
-	position:relative;
-}
-.ie6 #navigation a /*in here i gave a static width to nav buttons. because of display:block issue in ie6*/
-{
-	text-align:center;
-	height:1%;
-	width:80px;
-	text-align:center;
-	padding:16px 0 19px 0;
-}
-.ie6 #navigation a.selected 
-{
-	background:url(../images/nav-buttons.jpg) 0 -101px repeat-x;
-	border-right:1px solid #050505;
-	border-left:1px solid #050505;
-	border-bottom:1px solid #0d0d0d;
-	margin-bottom:-1px;
-	position:relative;
-}
-.ie6 #navigation ul li ul li 
-{
-	margin-bottom:-1px;
-}
-.ie6 #featured-tabs li a 
-{
-	background:url(../images/featured-dots.png) 0 -8px no-repeat;
-}
-.ie7 #main
-{
-	padding-bottom:15px;
-}
-.ie7 #navigation ul li ul li 
-{
-	border-bottom:1px solid #000;
-}
-.chrome #navigation a.selected 
-{
-	border-bottom:2px solid #0d0d0d;
-}
-.chrome #form .send 
-{
-	padding:7px 0 7px 0;
-}
-.opera #featured-tabs
-{
-	margin:-22px 0 0 475px;
-}
-
-/* -- [ header ] ------------------------ */
+/* ==================================================
+ * 3) Header
+ * ================================================== */
 
 #header 
 {
@@ -164,78 +101,242 @@ blockquote
 	margin-top:74px;
 }
 
-/* -- [ navigation ] ------------------------ */
-
-#navigation 
-{
-	width:802px;
-	height:49px;
-	padding-top:2px;
-	border-bottom:1px solid #050505;
-	background:url(../images/navigation.png) no-repeat;
-    -moz-border-radius-topright: 5px;
-    border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    border-top-left-radius: 5px;
+/* ==================================================
+ * 4) Navigation
+ * ================================================== */
+div#nav {
+	width: 800px;
 }
-#navigation ul 
-{
-	list-style:none;
-	margin-left:10px;
+div#nav ul, li, p {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
 }
-#navigation li 
-{
-	float:left;
+/** Main navigation **/
+div#nav ul.navigation {
+	width: inherit;
+	height: 40px;
+	background: #222;
+	border-top: 1px solid #2E2E2E;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+	clear: both;
+	position: relative;
+    -webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
-#navigation a 
-{
-	display:block;
-	padding:16px 15px 19px 15px;
-	font:12px Verdana, Arial, Tahoma;
-	color:#bbb;
-}
-#navigation a:hover 
-{
-	background:url(../images/nav-buttons.jpg) 0 -51px repeat-x;
-}
-#navigation a.selected 
-{
-	background:url(../images/nav-buttons.jpg) 0 -101px repeat-x;
-	border-right:1px solid #050505;
-	border-left:1px solid #050505;
-	border-bottom:1px solid #0d0d0d;
-}
-
-/* -- [ navigation > dropdown ] ------------------------ */
-
-#navigation ul li ul
-{	
+/* Top 1px border above LI elements */
+div#nav ul.navigation:after {
+	content: '\00a0';
 	position: absolute;
-	display:none;
-	margin:0;
-	z-index:101;
-}
-#navigation ul li ul li
-{	
-	float: none;
 	display: block;
-	padding:0;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 20;
+	border-top: 1px solid #666;
+	background: transparent;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
-#navigation ul li ul li a
-{	
-	border:1px solid #000;
-	border-top:none;
-	width: auto;
-	background: #080808;
+/* Using box shadow to simulate gradient and hide part of LI borders */
+div#nav ul.navigation:before {
+	content: '\00a0';
+	position: absolute;
 	display: block;
-	padding:5px !important;
+	width: 100%;
+	height: 40px;
+	top: 0;
+	left: 0;
+	z-index: 40;
+	-webkit-border-radius: 0 0 4px 4px;
+	-moz-border-radius: 0 0 4px 4px;
+	border-radius: 0 0 4px 4px;
+	-webkit-box-shadow: inset 0 -20px 15px #0D0D0D;
+	-moz-box-shadow: inset 0 -20px 15px #0D0D0D;
+	box-shadow: inset 0 -20px 15px #0D0D0D;
 }
-#navigation ul li ul li a:hover
-{	
-	background: #191919;
+/* Main LI element style */
+div#nav ul.navigation li {
+	margin-top: 1px;
+	float: left;
+	border-right: 1px solid #0F7393;
+	border-left: 1px solid #222222;
+	position: relative;
+}
+div#nav ul.navigation li:first-child {
+	border-left: none;
+}
+div#nav ul.navigation li:last-child {
+	border-right: none;
+}
+/* Main link styling */
+div#nav ul.navigation li a {
+	display: block;
+	position: relative;
+	z-index: 999;
+	padding: 0 20px;
+	color: #DCDCDC;
+	font: normal 14px/39px 'Amaranth', sans-serif;
+
+	text-decoration: none;
+}
+div#nav ul.navigation li:hover a {
+	color: #777;
+    /* border-bottom: 1px solid #0F7393; */
 }
 
-/* -- [ main content ] ------------------------ */
+/** Sub navigation - level 1 **/
+div#nav ul.navigation li ul.subnav {
+	display: none;
+	background: #222;
+	width: 140px;
+	border: 1px solid #000;
+    z-index: 998;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+div#nav ul.navigation li:hover ul.subnav {
+	display: block;
+	position: absolute;
+	top: 49px;
+	left: 0;
+}
+/* Transparent div that is used to connect main and sub UL list so when mouse go over empty space sub menu doesn't close */
+div#nav ul.navigation li ul.subnav:after {
+	content: '\00a0';
+	position: absolute;
+	z-index: 50;
+	top: -11px;
+	left: 0;
+	width: 100%;
+	background: transparent;
+	display: block;
+}
+/* Using box-shaow to hide edges of LI borders in sub menu making soft edges */
+div#nav ul.navigation li ul.subnav:before, div#nav ul.navigation li ul.subnav li ul.subnav-out:before {
+    display: block;
+	content: '\00a0';
+	position: absolute;
+	z-index: 60;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: transparent;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+    
+    /* Main Sub Nav Inset Colors! #D8D8D8 */
+	-webkit-box-shadow: inset 30px 10px 30px #222, inset -30px 10px 30px #222;
+	-moz-box-shadow: inset 30px 10px 30px #222, inset -30px 10px 30px #222;
+	box-shadow: inset 30px 10px 30px #222, inset -30px 10px 30px #222;
+}
+/* Sub menu LI style */
+div#nav ul.navigation li ul.subnav li {
+	width: 138px;
+	position: relative;
+	margin: 0;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #333 transparent #222 transparent; /* Border color inside the Subnav */
+}
+
+/* Color of glow between links, in the subnav */
+div#nav ul.navigation li ul.subnav li:hover {
+	-webkit-box-shadow: inset 0 -5px 5px #555;
+	-moz-box-shadow: inset 0 -5px 5px #555;
+	box-shadow: inset 0 -5px 5px #555;
+}
+div#nav ul.navigation li ul.subnav li:first-child {
+	border-top: 0;
+}
+div#nav ul.navigation li ul.subnav li:last-child {
+	border-bottom: 0;
+}
+/* Sub menu link style */
+div#nav ul.navigation li ul.subnav li a {
+	display: block;
+	position: relative;
+	z-index: 80;
+	color: #DCDCDC;
+    border-bottom: none;
+	font: normal 14px/28px 'Amaranth', sans-serif;
+
+}
+div#nav ul.navigation li ul.subnav li:hover a {
+	color: #DCDCDC;
+}
+/* Circle span element that shows that sub LI element has another drop down option */
+div#nav ul.navigation li ul.subnav li span.spmore {
+	content: '';
+	position: absolute;
+	z-index: 999;
+	top: 10px;
+	right: 10px;
+	height: 8px;
+	width: 8px;
+    border: 1px solid #555;
+	background: #0F7393;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: inset 1px 1px 2px #000;
+	-moz-box-shadow: inset 1px 1px 2px #000;
+	box-shadow: inset 1px 1px 2px #000;
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding-box;
+	background-clip: padding-box;
+}
+/** Sub navigation - level 2 **/
+div#nav ul.navigation li ul.subnav li ul.subnav-out {
+	display: none;
+	background: #333;
+	width: 140px;
+	border: 1px solid #000;
+    z-index: 999;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+div#nav ul.navigation li ul.subnav li:hover ul.subnav-out {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 143px;
+}
+/* Transparent div that is used to connect sub and sub 2nd UL list so when mouse go over empty space sub menu doesn't close */
+div#nav ul.navigation li ul.subnav li ul.subnav-out:after {
+	content: '\00a0';
+	position: absolute;
+	z-index: 100;
+	top: 0;
+	left: -12px;
+	width: 12px;
+	height: 100%;
+	background: transparent;
+	display: block;
+}
+/* Sub 2nd menu link style */
+div#nav ul.navigation li ul.subnav li ul.subnav-out li a {
+	display: block;
+	position: relative;
+	z-index: 80;
+	color: #DCDCDC;
+	font: normal 14px/28px 'Amaranth', sans-serif;
+}
+div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
+	color: #DCDCDC;
+}
+
+/* ==================================================
+ * 5) Main Content Box
+ * ================================================== */
 
 #main 
 {
@@ -246,40 +347,23 @@ blockquote
 	background:#0D0D0D;
 }
 
-/* -- [ right menu ] ------------------------ */
-
+/* ==================================================
+ * 6) Right - Side Bars
+ * ================================================== */
 #right 
 {
 	width:200px;
 	float:right;
 	color:#999;
 }
-#right-btn 
-{
-	width:210px;
-
-}
-#right-btn a 
-{
-	background:url(../images/buttons.jpg) no-repeat;
-	display:block;
-	width:83px;
-	text-align:center;
-	padding:6px 0 6px 0;
-	text-transform:uppercase;
-	float:left;
-	color:#77B6CD;
-	margin-right:20px;
-	font-size:11px;
-}
-#right-btn a:hover 
-{
-	background:url(../images/buttons.jpg) 0 -30px no-repeat;
-}
 .right-box 
 {
 	margin-bottom:20px;
-    background:url(../images/rounded-small.jpg) bottom left no-repeat #141414;
+    background: #151515;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+    
 }
 .right-box p
 {
@@ -332,8 +416,9 @@ blockquote
 }
 
 
-/* -- [ left part (content) ] ------------------------ */
-
+/* ==================================================
+ * 7) Left - Main Content
+ * ================================================== */
 #left 
 {
 	float:left;
@@ -346,8 +431,11 @@ blockquote
 }
 .left-box 
 {
-	background:url(../images/rounded-big.jpg) bottom left no-repeat #141414;
 	margin-bottom:20px;
+	background: #151515;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
 }
 .left-box h2 /*this is box's title*/ 
 {
@@ -399,141 +487,19 @@ blockquote
 	margin-bottom:15px;
 }
 
-/* -- [ featured ] ------------------------ */
-#featured 
-{
-	width:540px;
-	height:272px;
-	margin-bottom:20px;
-}
-.featured-images img 
-{
-	display:block;
-}
-.featured-images p 
-{
-	width:540px;
-	padding:11px 0 13px 15px;
-	position:absolute;
-	background:url(../images/featured-description.png) no-repeat;
-	color:#fff;
-	margin-top:-39px;
-}
-#featured-tabs 
-{
-	position:absolute;
-	margin:-42px 0 0 475px;
-	z-index:100;
-}
-#featured-tabs a 
-{
-	display:block;
-	text-indent:-9999pt;
-	background:url(../images/featured-dots.png) no-repeat;
-	width:8px;
-	height:8px;
-	float:left;
-	margin-right:3px;
-}
-#featured-tabs a:hover, .activeSlide 
-{
-	background:url(../images/featured-dots.png) 0 -8px no-repeat !important;
-}
-
-/* -- [ columns (in the index.html inside left-box) ] ------------------------ */
-
-.columns 
-{
-	width:525px;
-}
-.columns h3 
-{
-	font:12px Arial, Tahoma, Verdana;
-	text-transform:uppercase;
-	margin-bottom:5px;
-}
-.columns img 
-{
-	display:block;
-	margin-bottom:5px;
-}
-.box-column 
-{
-	width:160px;
-	float:left;
-	margin-right:15px;
-}
-
-/* -- [ contact form ] ------------------------ */
-
-#form fieldset 
-{
-	border:none;
-}
-#form textarea 
-{
-	border:1px solid #333;
-	background:#222;
-	font:12px Arial, Tahoma, Verdana;
-	padding:5px;
-	color:#bbb;
-	width:500px;
-	height:150px;
-}
-#form input 
-{
-	width:150px;
-	border:1px solid #333;
-	font:12px Arial, Tahoma, Verdana;
-	padding:5px;
-	background:#222;
-	margin-bottom:10px;
-	color:#bbb;
-	display:block;
-}
-#form label 
-{
-	margin-bottom:2px;
-	display:block;
-}
-#form input:focus, #form textarea:focus 
-{
-    outline: none;
-	border:1px solid #0F7393;
-}
-#form .send 
-{
-	font:11px Arial, Tahoma, Verdana;
-	padding:7px 0 7px 0;
-	text-align:center;
-	background:url(../images/buttons.jpg) no-repeat;
-	text-transform:uppercase;
-	margin-top:5px;
-	width:83px;
-	color:#77B6CD;
-	border:none;
-	cursor:pointer;
-}
-#form .send:hover 
-{
-	background:url(../images/buttons.jpg) 0 -30px no-repeat;
-}
-#form .send:focus 
-{
-	border:none;
-}
-
-/* -- [ footer ] ------------------------ */
-
+/* ==================================================
+ * 8) Footer
+ * ================================================== */
 #footer 
 {
-	width:760px;
+    color: #999;
+	width:765px;
 	height:25px;
 	padding:15px 20px 10px 15px;
 	background:url(../images/footer.jpg) no-repeat #000;
     margin-bottom: 30px !important;
-    margin-left: 5px;
-
+    margin-left:1px;
+    margin-right: -15px;
 }
 #footer-left
 {
@@ -542,4 +508,308 @@ blockquote
 #footer-right
 {
 	float:right;
+}
+
+/* ==================================================
+ * 9) FrontPage Feature Slides
+ * ================================================== */
+#slide 
+{
+	width:540px;
+	height:272px;
+	margin-bottom:20px;
+}
+.slide-image img 
+{
+	display:block;
+}
+.slide-image p 
+{
+	width:540px;
+	padding:11px 0 13px 15px;
+	position:absolute;
+	background:url(../images/slide-description.png) no-repeat;
+	color:#fff;
+	margin-top:-39px;
+}
+#slide-tabs 
+{
+	position:absolute;
+	margin:-42px 0 0 475px;
+	z-index:100;
+}
+#slide-tabs a 
+{
+	display:block;
+	text-indent:-9999pt;
+	background:url(../images/slide-dots.png) no-repeat;
+	width:8px;
+	height:8px;
+	float:left;
+	margin-right:3px;
+}
+#slide-tabs a:hover, .activeSlide 
+{
+	background:url(../images/slide-dots.png) 0 -8px no-repeat !important;
+}
+
+/* ==================================================
+ * 10) Forms
+ * ================================================== */
+fieldset 
+{
+    border: 1px solid #222;
+    margin: 10px;
+    padding:10px 0;
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+}
+fieldset img
+{
+
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+legend
+{
+    padding: 0 10px;
+	line-height: 16px;
+	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+	border: 1px solid #222;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+}
+textarea 
+{
+    overflow: auto; 
+    vertical-align: top; 
+    resize: vertical;
+	font:12px Arial, Tahoma, Verdana;
+	width:300px;
+	height:150px;
+}
+input 
+{
+	font:12px Arial, Tahoma, Verdana;
+	display:block;
+}
+input[type="text"], input[type="password"], textarea 
+{
+	border:1px solid #333;
+    padding:5px;
+	background:#222;
+	margin-bottom:10px;
+	color:#bbb;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+	border-radius: 3px 3px 3px 3px;
+    -moz-box-shadow: inset 0 3px 10px 2px #111;
+    -webkit-box-shadow: inset 0 3px 10px 2px #111;
+    box-shadow: inset 0 3px 10px 2px #111;
+}
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus, select:hover
+{
+    outline: none;
+    -moz-box-shadow: 0 0 5px 1px #0F7393, inset 0 3px 10px 2px #111;
+    -webkit-box-shadow: 0 0 5px 1px#0F7393, inset 0 3px 10px 2px #111;
+    box-shadow: 0 0 5px 1px #0F7393, inset 0 3px 10px 2px #111;
+
+}
+label
+{
+    display: block;
+    width: 150px;
+    float: left;
+    margin: 2px 5px 6px 10px;
+    text-align: right;
+    cursor: pointer;
+}
+select {
+    outline: none;
+    background-color: #222;
+    color: #999;
+    border: 1px solid #333;
+}
+.top-label
+{
+    width: auto;
+    margin: 0 0 2px 0;
+	display:block;
+}
+
+
+/* ==================================================
+ * 11) Buttons
+ * ================================================== */
+.button 
+{
+    background:#082029;
+    border-color: #051219; 
+    display: inline-block;
+    position: relative;
+    outline:0;
+    text-decoration: none;
+    color: white;
+    font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", Tahoma, sans-serif;
+    font-size:11px;
+    white-space: pre;    
+    border: 1px solid black;
+    padding: 6px 12px 7px 12px;
+    margin-right: 5px;
+    min-height: 13px;
+    
+    /* Border Radius */
+    -moz-border-radius: 3px;
+    -webkit-border-radius:3px;    
+    border-radius: 3px;
+    
+    /* Background Clip Fix Some Pixels When Using Border Radius */
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+    
+    /* Transition */
+    -webkit-transition:All 0.3s ease;
+    -moz-transition:All 0.3s ease;
+    -o-transition:All 0.3s ease;
+    
+    /* Shadows */
+    -moz-box-shadow: 
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.1) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.02) ,
+        inset 0 8px 20px rgba(255,255,255,0.08) ,
+        inset 0 14px 0 rgba(255,255,255,0.02)    
+    ;
+    -webkit-box-shadow: 
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.1) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.02) ,
+        inset 0 8px 20px rgba(255,255,255,0.08) ,
+        inset 0 14px 0 rgba(255,255,255,0.02)    
+    ;    
+    box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.1) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.02) ,
+        inset 0 8px 20px rgba(255,255,255,0.08) ,
+        inset 0 14px 0 rgba(255,255,255,0.02)
+    ;                 
+}
+/* Fix FF inner focus */
+.button::-moz-focus-inner 
+{
+    border:0;
+    padding:0;
+    margin:0;
+}
+
+/* Button Hover & Focus */
+.button:hover,
+.button:focus 
+{
+    background: #071821;
+    cursor: pointer;
+    
+    /* Transition */
+    -webkit-transition:All 0.3s ease;
+    -moz-transition:All 0.3s ease;
+    -o-transition:All 0.3s ease;
+    
+    /* Shadows */
+    
+    -moz-box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ;
+    -webkit-box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ;
+    box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ; 
+}
+.buttons a 
+{
+	text-decoration:none;
+    color: #FFFFFF;
+    border:none;
+}
+.buttons a:hover 
+{
+	color:#FFFFFF;
+    border:none;
+}
+
+/* ==================================================
+ * 12) Misc.
+ * ================================================== */
+.div-center
+{
+    margin: 0 auto;
+}
+.no-border
+{
+    border: none;
+}
+.login-right
+{
+    padding: 2px 0;
+    margin: 0px 10px;
+    border: none;
+}
+
+/* ==================================================
+ * 13) Crappy IE Fixes
+ * ================================================== */
+ .ie .top-label
+{
+    text-align: left;
+    width: 100%;
+    margin: 0 0 2px 0;
+	display:block;
+}
+.ie6 #right 
+{
+	margin-right:-20px;
+}
+.ie6 .left-box-content 
+{
+	width:510px;
+}
+.ie6 #slide-tabs li a 
+{
+	background:url(../images/slide-dots.png) 0 -8px no-repeat;
+}
+.ie7 #main
+{
+	padding-bottom:15px;
+}
+.opera #slide-tabs
+{
+	margin:-22px 0 0 475px;
 }

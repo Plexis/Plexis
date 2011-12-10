@@ -226,6 +226,7 @@ class Account extends Application\Core\Controller
             $this->validation->set( array(
                 'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]', 
                 'password' => 'required|min[3]|max[24]',
+                'password2' => 'required|min[3]|max[24]',
                 'email' => 'required|email') 
             );
             
@@ -243,11 +244,34 @@ class Account extends Application\Core\Controller
                         return;
                     }
                 }
-            
+                
                 // Use the XSS filter on these!
                 $username = $this->Input->post('username', TRUE);
                 $password = $this->Input->post('password', TRUE);
+                $password2 = $this->Input->post('password2', TRUE);
                 $email = $this->Input->post('email', TRUE);
+                
+                // Check that the 2 passwords matched
+                if($password != $password2)
+                {
+                    output_message('error', 'reg_failed_passwords_different');
+                    $this->load->view('register');
+                    return;
+                }
+                
+                // Check if the email is already in use
+                if( config('reg_unique_email') == TRUE )
+                {
+                    // Check the DB for the email address
+                    $this->load->realm();
+                    $ee = $this->realm->email_exists($email);
+                    if($ee == TRUE)
+                    {
+                        output_message('error', 'reg_failed_email_exists');
+                        $this->load->view('register');
+                        return;
+                    }
+                }
                 
                 // Use the AUTH class to register the user officially
                 if( $this->Auth->register($username, $password, $email) == TRUE )
@@ -266,14 +290,13 @@ class Account extends Application\Core\Controller
                         $site_title = config('site_title');
                         $site_email = config('site_email');
                         $lang = load_language_file('emails');
-                        $this->load->realm();
                         $this->load->library('email');
                         $this->load->model('Account_model', 'account');
                         
                         // generate our random account verification code
                         $genkey = $this->account->create_key($username);
                         $href = SITE_URL . "/account/verify/".$genkey;
-                        $message = vsprintf( $lang['email_verify_message'], array( $site_title, $href, $href ) );
+                        $message = vsprintf( $lang['email_verify_message'], array( $username, $site_title, $href, $href ) );
                         
                         // Build the email
                         $this->email->to($email, $username);
@@ -397,7 +420,7 @@ class Account extends Application\Core\Controller
         // generate our random account verification code
         $genkey = $this->account->create_key('wilson.steven10@yahoo.com');
         $href = SITE_URL . "/account/verify/".$genkey;
-        $message = vsprintf( $lang['email_verify_message'], array( $site_title, $href, $href ) );
+        $message = vsprintf( $lang['email_verify_message'], array( 'Makaveli', $site_title, $href, $href ) );
         
         // Build the email
         $this->email->to('thasource.org@hotmail.com', 'Makaveli');

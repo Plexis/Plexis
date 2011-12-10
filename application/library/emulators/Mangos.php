@@ -289,6 +289,32 @@ class Mangos
         }
         return FALSE;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: email_exists()
+| ---------------------------------------------------------------
+|
+| This function queries the accounts table and finds if the given
+|   email exists.
+|
+| @Param: (String) $email - The email we are checking for
+| @Return (Bool) - TRUE if the id exists, FALSE otherwise
+|
+*/
+    public function email_exists($email)
+    {
+        // Check the Realm DB for this username
+        $query = "SELECT `username` FROM `account` WHERE `email` LIKE ?";
+        $res = $this->DB->query( $query, array($email) )->fetch_column();
+        
+        // If the result is NOT false, we have a match, username is taken
+        if($res !== FALSE)
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
 
 /*
 | ---------------------------------------------------------------

@@ -167,10 +167,10 @@ class Auth
             $query = "SELECT * FROM `pcms_accounts` 
                 INNER JOIN `pcms_account_groups` ON 
                 pcms_accounts.group_id = pcms_account_groups.group_id 
-                WHERE id = '".$account_id."'";
+                WHERE id = ?";
             
             // Query our database and get the users information
-            $result = $this->DB->query( $query )->fetch_row();
+            $result = $this->DB->query( $query, array($account_id) )->fetch_row();
             
             // If the user doesnt exists in the table, we need to insert it
             if($result === FALSE)
@@ -326,7 +326,7 @@ class Auth
 
     public function get_id($name)
     {
-        $this->DB->query("SELECT `id` FROM `pcms_accounts` WHERE `name` LIKE '".$name."' LIMIT 1");
+        $this->DB->query("SELECT `id` FROM `pcms_accounts` WHERE `username` LIKE :name LIMIT 1", array(':name' => $name));
         return $this->DB->fetch_column();
     }
 
@@ -344,7 +344,7 @@ class Auth
 
     public function get_profile($id)
     {
-        $this->DB->query("SELECT * FROM `pcms_accounts` WHERE `id`='".$id."'");
+        $this->DB->query("SELECT * FROM `pcms_accounts` WHERE `id`=?", array($id));
         return $this->DB->fetch_row();
     }
 }

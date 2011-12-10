@@ -5,6 +5,7 @@ return array(
 	'db_connect_error' => "Unable to connect to database '%s' from host: %s:%s!",
     'db_sqlite_connect_error' => "Unable to connect to SQLite database '%s'!",
 	'db_empty_query' => "Query was empty. Please build a query before calling the 'query' method!",
+    'db_improper_key_format' => 'Improper paramater key passed into query. Please make sure you are using a semi-colon ":" in your param keys.',
 	'db_key_not_found' => "Database connection info for key \"%s\" not found in the database configuration file.",
 	'db_select_error' => "Cant connect to database: %s",
 	'fetal_error' => 'Fetal Error! Please contact an administrator.',

@@ -97,41 +97,14 @@ class Driver extends \PDO
         
         // Set our sprints, and bindings to false
         $this->sprints = $sprints;
-        $bound = FALSE;
         
         // Prepare the statement
         $this->result = $this->prepare($query);
-        
-        // Process our sprints and bind parameters
-        if(is_array($sprints))
-        {
-            foreach($sprints as $key => $value)
-            {
-                // Kill the binding if we are using ?'s
-                if($key === 0) break;
-                
-                // Set that we are binding
-                $bound = TRUE;
-                
-                // Get our PDO param type
-                if($value == NULL)
-                {
-                    $type = \PDO::PARAM_NULL; 
-                }
-                else
-                {
-                    (is_int($value)) ? $type = \PDO::PARAM_INT : $type = \PDO::PARAM_STR;
-                }
-                
-                // Bind the param
-                $this->result->bindParam($key, $value, $type);
-            }
-        }
 
         // Time, and process our query
         $start = microtime(true);
         try {
-            ($bound == TRUE) ? $this->result->execute() : $this->result->execute($sprints);
+            $this->result->execute($sprints);
         }
         catch (\PDOException $e) { 
             $this->trigger_error();
