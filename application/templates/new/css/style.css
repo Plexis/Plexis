@@ -25,14 +25,10 @@ body
 	margin:0 auto;
 	width:804px;
     padding-left: 1px;
-    -moz-border-radius-topright: 5px;
-    border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    border-top-left-radius: 5px;
-    -moz-border-radius-bottomright: 5px;
-    border-bottom-right-radius: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    border-bottom-left-radius: 5px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
 }
 
 /* ==================================================
@@ -114,6 +110,7 @@ div#nav ul, li, p {
 }
 /** Main navigation **/
 div#nav ul.navigation {
+    text-align: center;
 	width: inherit;
 	height: 40px;
 	background: #222;
@@ -597,8 +594,9 @@ input
 	font:12px Arial, Tahoma, Verdana;
 	display:block;
 }
-input[type="text"], input[type="password"], textarea 
+input[type="text"], input[type="password"], textarea, select
 {
+    outline: none;
 	border:1px solid #333;
     padding:5px;
 	background:#222;
@@ -621,6 +619,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus, select:h
 }
 label
 {
+    padding-top: 2px;
     display: block;
     width: 150px;
     float: left;
@@ -629,13 +628,14 @@ label
     cursor: pointer;
 }
 select {
-    outline: none;
     background-color: #222;
     color: #999;
     border: 1px solid #333;
+    clear: right;
 }
 .top-label
 {
+    padding-top: 0px;
     width: auto;
     margin: 0 0 2px 0;
 	display:block;
@@ -766,7 +766,56 @@ select {
 }
 
 /* ==================================================
- * 12) Misc.
+ * 12) Breadcrums.
+ * ================================================== */
+#breadcrumb
+{
+    font: 11px Arial, Helvetica, sans-serif;
+    background-image:url('../images/bc_bg.png');
+    background-repeat:repeat-x;
+    height:30px;
+    line-height:30px;
+    color:#9b9b9b;
+    border:solid 1px #cacaca;
+    width:100%;
+    overflow:hidden;
+    margin:0px;
+    padding:0px;
+}
+#breadcrumb li
+{
+    list-style-type:none;
+    float:left;
+    padding-left:10px;
+}
+
+#breadcrumb a
+{
+    height:30px;
+    display:block;
+    background-image:url('../images/bc_separator.png');
+    background-repeat:no-repeat;
+    background-position:right;
+    padding-right: 15px;
+    text-decoration: none;
+    color:#454545;
+}
+
+#breadcrumb a:hover
+{
+    color:#35acc5;
+}
+
+.home
+{
+    border: none;
+    margin: 8px 0px;
+}
+
+
+
+/* ==================================================
+ * 13) Misc.
  * ================================================== */
 .div-center
 {
@@ -784,7 +833,7 @@ select {
 }
 
 /* ==================================================
- * 13) Crappy IE Fixes
+ * 14) Crappy IE Fixes
  * ================================================== */
  .ie .top-label
 {

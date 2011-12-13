@@ -1,5 +1,5 @@
 <?php
-class Ajax_Model extends System\Core\Model 
+class Ajax_Model extends Application\Core\Model 
 {
 
 /*
@@ -28,9 +28,6 @@ class Ajax_Model extends System\Core\Model
 */    
     public function process_datatables($aColumns, $sIndexColumn, $sTable, $dB_key = 'DB')
     {
-        // Init DB
-        $this->DB = $this->load->database( $dB_key );
-
         /* 
          * Paging
          */
@@ -107,13 +104,13 @@ class Ajax_Model extends System\Core\Model
          */
         $columns = str_replace(" , ", " ", implode(", ", $aColumns));
         $sQuery = "SELECT SQL_CALC_FOUND_ROWS {$columns} FROM {$sTable} {$sWhere} {$sOrder} {$sLimit}";
-        $rResult = $this->DB->query( $sQuery )->fetch_array('BOTH');
+        $rResult = $this->$dB_key->query( $sQuery )->fetch_array('BOTH');
         
         /* Data set length after filtering */
-        $iFilteredTotal = $this->DB->query( "SELECT FOUND_ROWS()" )->fetch_column();
+        $iFilteredTotal = $this->$dB_key->query( "SELECT FOUND_ROWS()" )->fetch_column();
         
         /* Total data set length */
-        $iTotal = $this->DB->query( "SELECT COUNT(".$sIndexColumn.") FROM   $sTable" )->fetch_column();
+        $iTotal = $this->$dB_key->query( "SELECT COUNT(".$sIndexColumn.") FROM   $sTable" )->fetch_column();
         
         
         /*

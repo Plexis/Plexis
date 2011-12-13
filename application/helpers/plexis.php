@@ -144,4 +144,46 @@
         }
         return $reallist;
     }
+
+/*
+| ---------------------------------------------------------------
+| Method: get_secret_questions()
+| ---------------------------------------------------------------
+|
+| This function is used to return an array of WoWLib drivers
+|
+| @Param: (String) $type: Either return as an 'array' or 'string'
+| @Param: (Bool) $notags: Return without option tags?
+| @Return: (Array / String) Array or String of quertions wrapped in option tags
+|
+*/    
+    function get_secret_questions($type = 'string', $notags = FALSE)
+    {
+        // create our return array and load the secret questions language file
+        ($type == 'string') ? $return = '' : $return = array();
+        $vars = load_language_file('secret_questions');
+        
+        // Add option tags
+        foreach($vars as $key => $q)
+        {
+            if($type == 'string')
+            {
+                $return .= "<option value='".$key."'>".$q."</option>\n";
+            }
+            else
+            {
+                if($notags == TRUE)
+                {
+                    $return[$key] = $q;
+                }
+                else
+                {
+                    $return[$key] = "<option value='".$key."'>".$q."</option>";
+                }
+            }
+        }
+        
+        // Return the questions
+        return $return;
+    }
 // EOF

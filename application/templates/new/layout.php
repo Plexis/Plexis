@@ -12,8 +12,8 @@
     <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/dialog.css" />
     
     <!-- Scripts -->
-    <script type="text/javascript" src="{TEMPLATE_URL}/scripts/jquery-1.3.2.min.js"></script>
-    <script type="text/javascript" src="{TEMPLATE_URL}/scripts/jquery.cycle.all.min.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.cycle.all.min.js"></script>
     <script type="text/javascript">
     <!--
         jQuery(function( $ ){
@@ -28,7 +28,7 @@
         });
     -->
     </script>
-    <script src="{TEMPLATE_URL}/scripts/dropdown.js" type="text/javascript"></script>
+    <script src="{TEMPLATE_URL}/js/dropdown.js" type="text/javascript"></script>
 </head>
 <body>
     <div id="container">
@@ -44,7 +44,7 @@
                     <li><a href="{SITE_URL}/forum">Forums</a></li>
                     <li><a href="{SITE_URL}/account/vote">Vote</a></li>
                     <li><a href="{SITE_URL}/account/donate">Donate</a></li>
-                    <li><a href="{SITE_URL}/server">Server</a>
+                    <li><a href="{SITE_URL}/support">Server</a>
                         <ul class="subnav">
                             <li><a href="{SITE_URL}/server/realmlist">Realmlist</a></li>
                             <li><a href="{SITE_URL}/server/online">Players Online</a><span class="spmore"></span>
@@ -54,6 +54,7 @@
                             </li>
                         </ul>
                     </li>
+                    <li><a href="{SITE_URL}/account/register">Support</a>
                     
                     <!-- Account Login -->
                     <?php if( $session['user']['logged_in'] == FALSE): ?>

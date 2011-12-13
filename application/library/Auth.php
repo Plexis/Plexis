@@ -120,6 +120,25 @@ class Auth
             // Make sure user wasnt deleted!
             if($result == FALSE) goto Guest;
             
+            // Custom variable for QA checking
+            $set = TRUE;
+            if($result['_account_recovery'] == NULL)
+            {
+                $set = FALSE;
+            }
+            
+            // Loop through and remove private columns (underscore as first character)
+            foreach($result as $key => $value)
+            {
+                if(!strncmp($key, "_", 1))
+                {
+                    unset($result[$key]);
+                }
+            }
+            
+            // Add back our account recovery stuff
+            $result['_account_recovery'] = $set;
+            
             // Set our users info up the the session and carry onwards :D
             $this->session->set('user', array_merge($session, $result));
         }
@@ -180,7 +199,7 @@ class Auth
                     'id' => $account_id, 
                     'username' => $username, 
                     'email' => $r_data['email'], 
-                    'verified' => 1
+                    'activated' => 1
                 );
                 $this->DB->insert( 'pcms_accounts', $data );
                 $result = $this->DB->query( $query )->fetch_row();
@@ -193,9 +212,9 @@ class Auth
             }
             
             // Make sure the account isnt locked due to verification
-            if($result['verified'] == FALSE && config('reg_email_verification') == TRUE)
+            if($result['activated'] == FALSE && config('reg_email_verification') == TRUE)
             {
-                output_message('warning', 'login_failed_email_unverified');
+                output_message('warning', 'login_failed_account_unactivated');
                 return FALSE;
             }
 
@@ -226,16 +245,19 @@ class Auth
 | @Param: (String) $username - The username logging in
 | @Param: (String) $password - The unencrypted password
 | @Param: (String) $email - The email
+| @Param: (Int) $sq - The secret Question ID
+| @Param: (String) $sa - The secret Question answer
 | @Return (Bool) True upon success, FALSE otherwise
 |
 */
 
-    public function register($username, $password, $email)
+    public function register($username, $password, $email, $sq = NULL, $sa = NULL)
     {
         // Remove white space in front and behind
         $username = trim($username);
         $password = trim($password);
         $email = trim($email);
+        $secret = NULL;
 
         // If the username, password, or email is empty, return FALSE
         if(empty($username) || empty($password) || empty($email))
@@ -268,13 +290,24 @@ class Auth
             if($id !== FALSE)
             {
                 // Default
-                $verified = 1;
+                $activated = 1;
                 
                 // Process account verification
                 if( config('reg_email_verification') )
                 {
                     $this->realm->lock_account($id);
-                    $verified = 0;
+                    $activated = 0;
+                }
+                
+                // Secret question / answer processing
+                if($sq != NULL && $sa != NULL)
+                {
+                    $array = array(
+                        'id' => $sq,
+                        'answer' => $sa,
+                        'email' => $email
+                    );
+                    $secret = base64_encode( serialize($array) );
                 }
                 
                 // Create our data array
@@ -282,7 +315,9 @@ class Auth
                     'id' => $id,
                     'username' => $username,
                     'email' => $email,
-                    'verified' => $verified
+                    'activated' => $activated,
+                    'registration_ip' => $this->remote_ip,
+                    '_account_recovery' => $secret
                 );
                 
                 // Try and insert into pcms_accounts table

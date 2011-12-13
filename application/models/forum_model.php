@@ -1,6 +1,6 @@
 <?php
 
-class Forum_Model extends System\Core\Model 
+class Forum_Model extends Application\Core\Model 
 {
 
 /*
@@ -12,7 +12,6 @@ class Forum_Model extends System\Core\Model
     public function __construct()
     {
         parent::__construct();
-        $this->DB = $this->load->database( 'DB' );
     }
 
 /*

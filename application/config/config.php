@@ -12,4 +12,5 @@ $reg_email_verification = 1;
 $reg_registration_key = 0;
 $reg_unique_email = 0;
 $enable_captcha = 1;
+$account_recover_email_pass = 1;
 ?>

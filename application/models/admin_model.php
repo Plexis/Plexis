@@ -1,5 +1,5 @@
 <?php
-class Admin_Model extends System\Core\Model 
+class Admin_Model extends Application\Core\Model 
 {
     // We want only admins to have access here
     protected $is_admin = TRUE;
@@ -13,7 +13,6 @@ class Admin_Model extends System\Core\Model
     {
         // Load required Libs
         parent::__construct();
-        $this->realm = $this->load->realm();
         $this->Session = $this->load->library('Session');
         
         // Init a session var

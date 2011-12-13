@@ -680,8 +680,15 @@ class Ajax extends Application\Core\Controller
         // Make sure we arent getting direct accessed, and the user has permission
         $this->check_access('a');
         
+        // Set out config to not log errors!
+        $old = config( 'log_errors', 'Core' );
+        config_set('log_errors', 0, 'Core');
+        
         // Build our headers
         $response = file_get_contents('http://wilson212.net/updates.php', false);
+        
+        // Set our loggin back
+        config_set('log_errors', $old, 'Core');
         
         // If we failed to open the URL, then we return that
         ($response === FALSE) ? $response = "-1" : '';

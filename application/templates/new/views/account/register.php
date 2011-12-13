@@ -18,13 +18,21 @@
                     <label for="email">Email:</label> 
                     <input type="text" name="email" id="email" value="" size="30" tabindex="4" />
                     
+                    <br />
+                    <label for="sq">Secret Question:</label> 
+                    <select name="sq">{secret_questions}</select>
+                    
+                    <label for="sa">Secret Answer:</label> 
+                    <input type="text" name="sa" id="sa" value="" size="30" tabindex="6" />
+                    
                     <?php if( config('enable_captcha') == TRUE ): ?>
+                        <br />
                         <center><img src="{SITE_URL}/account/captcha" alt="If you dont see an image, Then you have a problem!" /></center>
                         <label for="captcha">Captcha:</label> 
-                        <input type="text" name="captcha" id="captcha" value="" size="30" tabindex="5" />
+                        <input type="text" name="captcha" id="captcha" value="" size="30" tabindex="7" />
                     <?php endif; ?>
-                    
-                    <center><input type="submit" name="submit" value="Register" class="button" tabindex="6" /></center>
+                    <br />
+                    <center><input type="submit" name="submit" value="Register" class="button" tabindex="8" /></center>
                 </div>
             </fieldset>
         </form>

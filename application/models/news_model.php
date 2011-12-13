@@ -1,6 +1,6 @@
 <?php
 
-class News_Model extends System\Core\Model 
+class News_Model extends Application\Core\Model 
 {
 
 /*
@@ -12,7 +12,6 @@ class News_Model extends System\Core\Model
     function __construct()
     {
         parent::__construct();
-        $this->DB = $this->load->database( 'DB' );
     }
 
 /*
