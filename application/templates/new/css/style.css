@@ -190,7 +190,7 @@ div#nav ul.navigation li:hover a {
 div#nav ul.navigation li ul.subnav {
 	display: none;
 	background: #222;
-	width: 140px;
+	width: 160px;
 	border: 1px solid #000;
     z-index: 998;
 	-webkit-border-radius: 3px;
@@ -236,7 +236,7 @@ div#nav ul.navigation li ul.subnav:before, div#nav ul.navigation li ul.subnav li
 }
 /* Sub menu LI style */
 div#nav ul.navigation li ul.subnav li {
-	width: 138px;
+	width: 158px;
 	position: relative;
 	margin: 0;
 	border-width: 1px;
@@ -294,7 +294,7 @@ div#nav ul.navigation li ul.subnav li span.spmore {
 div#nav ul.navigation li ul.subnav li ul.subnav-out {
 	display: none;
 	background: #333;
-	width: 140px;
+	width: 160px;
 	border: 1px solid #000;
     z-index: 999;
 	-webkit-border-radius: 3px;
@@ -305,7 +305,7 @@ div#nav ul.navigation li ul.subnav li:hover ul.subnav-out {
 	display: block;
 	position: absolute;
 	top: 0px;
-	left: 143px;
+	left: 163px;
 }
 /* Transparent div that is used to connect sub and sub 2nd UL list so when mouse go over empty space sub menu doesn't close */
 div#nav ul.navigation li ul.subnav li ul.subnav-out:after {
@@ -651,11 +651,12 @@ select {
     border-color: #051219; 
     display: inline-block;
     position: relative;
-    outline:0;
-    text-decoration: none;
+    outline: none;
+    text-decoration: none !important; 
     color: white;
     font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", Tahoma, sans-serif;
     font-size:11px;
+    font-weight: none;
     white-space: pre;    
     border: 1px solid black;
     padding: 6px 12px 7px 12px;
@@ -717,6 +718,7 @@ select {
 {
     background: #071821;
     cursor: pointer;
+    color: #FFFFFF;
     
     /* Transition */
     -webkit-transition:All 0.3s ease;
@@ -752,6 +754,10 @@ select {
         inset 0 14px 0 rgba(255,255,255,0.02),
         0 0 3px rgba(0,0,0,0.2)
     ; 
+}
+.button:disabled,
+{
+    opacity:0.3;
 }
 .buttons a 
 {

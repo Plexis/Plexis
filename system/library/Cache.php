@@ -15,7 +15,7 @@ namespace System\Library;
 
 class Cache
 {
-    public $path;
+    protected $path;
 
 /*
 | ---------------------------------------------------------------

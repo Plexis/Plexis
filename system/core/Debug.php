@@ -25,22 +25,22 @@ class Debug
     private static $instance;
 
     // Error message,
-    var $ErrorMessage;
+    protected $ErrorMessage;
 
     // Error file.
-    var $ErrorFile;
+    protected $ErrorFile;
 
     // Error line.
-    var $ErrorLine;
+    protected $ErrorLine;
 
     // Error Level Text.
-    var $ErrorLevel;
+    protected $ErrorLevel;
 
     // Error Backtrace.
-    var $ErrorTrace;
+    protected $ErrorTrace;
 
     // Our current language
-    var $lang;
+    protected $lang;
 
 /*
 | ---------------------------------------------------------------

@@ -25,8 +25,8 @@ class Session
     protected $session_use_db;
     protected $session_db_id;
     protected $session_table_name;
-    public $session_cookie_name;
-    public $db_session_exists;
+    protected $session_cookie_name;
+    protected $db_session_exists;
 
     // Our DB connection
     protected $DB;
@@ -36,7 +36,7 @@ class Session
 | Constructer
 | ---------------------------------------------------------------
 */
-    function __construct()
+    public function __construct()
     {		
         // start the session
         $this->start_session();
@@ -131,8 +131,8 @@ class Session
         if($this->session_use_db == TRUE)
         {				
             // Get the database result
-            $query = "SELECT * FROM `". $this->session_table_name ."` WHERE `token` = '". $token ."'";
-            $result = $this->DB->query( $query )->fetch_row();
+            $query = "SELECT * FROM `". $this->session_table_name ."` WHERE `token` = ?";
+            $result = $this->DB->query( $query, array($token) )->fetch_row();
             
             // Unserialize the user_data array
             if($result !== FALSE)

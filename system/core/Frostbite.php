@@ -17,7 +17,7 @@ namespace System\Core;
 
 class Frostbite
 {
-    public $Router;
+    protected $Router;
     protected $dispatch;
 
 /*

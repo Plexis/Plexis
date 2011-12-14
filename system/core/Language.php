@@ -22,17 +22,17 @@ namespace System\Core;
 class Language
 {
     // Array of ur language variables
-    public $language_vars = array();
+    protected $language_vars = array();
 
     // An array of loaded language files
-    public $loaded_files = array();
+    protected $loaded_files = array();
 
 /*
 | ---------------------------------------------------------------
 | Constructer
 | ---------------------------------------------------------------
 */
-    function __construct()
+    public function __construct()
     {
         // Set the default Language
         $this->set_language( config('core_language', 'Core') );
@@ -49,7 +49,7 @@ class Language
 | @Return (None)
 |
 */
-    function set_language($lang)
+    public function set_language($lang)
     {
         // Set the default Language
         $this->Language = strtolower($lang);

@@ -22,10 +22,10 @@ namespace System\Library;
 class Validation
 {
     // Our fields
-    public $fields;
+    protected $fields;
 
     // Our field rules
-    public $field_rules;
+    protected $field_rules;
 
     // A bool of whether we are debugging
     protected $debug;
@@ -39,7 +39,7 @@ class Validation
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
         // Init the default values
         $this->fields = $_POST;

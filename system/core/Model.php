@@ -22,7 +22,7 @@ namespace System\Core;
 
 class Model
 {
-    function __construct() 
+    public function __construct() 
     {
         $this->load = load_class('Loader');
     }

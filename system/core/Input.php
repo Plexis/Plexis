@@ -24,17 +24,17 @@ class Input
 {
 
     // Cookie expire time
-    var $time;
+    protected $time;
 
     // Cookie path
-    var $cookie_path;
+    protected $cookie_path;
 
     // Cookie domain
-    var $cookie_domain;
+    protected $cookie_domain;
 
     // Users IP address and Browser info
-    var $user_agent = FALSE;
-    var $ip_address = FALSE;
+    protected $user_agent = FALSE;
+    protected $ip_address = FALSE;
 
     // Array of tags and attributes
     protected $tagsArray = array();

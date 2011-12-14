@@ -22,8 +22,8 @@ namespace System\Library;
 class Parser
 {
     protected $variables;
-    var $l_delim = '{';
-    var $r_delim = '}';
+    protected $l_delim = '{';
+    protected $r_delim = '}';
 
 /*
 | ---------------------------------------------------------------

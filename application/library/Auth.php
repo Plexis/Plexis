@@ -19,16 +19,16 @@ class Auth
     protected $load;
 
     // When the sessoin expires
-    public $expire_time;
-
-    // Clients IP address
-    public $remote_ip;
+    protected $expire_time;
 
     // The databases and realm
     protected $DB, $RDB, $realm;
 
     // The session class
     protected $session;
+    
+    // Clients IP address
+    public $remote_ip;
 
 /*
 | ---------------------------------------------------------------
@@ -119,6 +119,13 @@ class Auth
             
             // Make sure user wasnt deleted!
             if($result == FALSE) goto Guest;
+            
+            // Check that our session is not being used by another user
+            if($this->session->get('token') != $result['_session_id'])
+            {
+                $this->logout();
+                goto Guest;
+            }
             
             // Custom variable for QA checking
             $set = TRUE;
@@ -228,6 +235,10 @@ class Auth
             // We only want to save whats in the $data array to the session database.
             $this->session->set('user', $data);
             $this->session->save();
+            
+            // Update the sessions column to prevent more then 1 person logged in an account at a time
+            $token = $this->session->get('token');
+            $this->DB->update('pcms_accounts', array('_session_id' => $token), "`id`=".$data['id']);
             
             // Now add the rest of the users information
             $this->session->set('user', array_merge($result, $data));

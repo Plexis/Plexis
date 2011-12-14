@@ -21,17 +21,38 @@ namespace System\Library;
 
 class Email 
 {
-    var $to = '';
-    var $cc = array();
-    var $bcc = array();
-    var $subject = '';
-    var $message = '';
-    var $attachment = array();
-    var $charset = 'ISO-8859-1';
-    var $boundary = '';
-    var $header = '';
-    var $textheader = '';
-    var $errors = array();
+    // Our email recipient
+    protected $to = '';
+    
+    // An Array of carbon copy's
+    protected $cc = array();
+    
+    // An array of blind carbon copy's
+    protected $bcc = array();
+    
+    // Our email subjecy
+    protected $subject = '';
+    
+    // The email message
+    protected $message = '';
+    
+    // An array of attachment data
+    protected $attachment = array();
+    
+    // Email Character Set
+    protected $charset = 'ISO-8859-1';
+    
+    // Email Boundary
+    protected $boundary = '';
+    
+    // Email header data
+    protected $header = '';
+    
+    // For our message so we can combine text and html alternatives
+    protected $textheader = '';
+    
+    // An array of errors
+    public $errors = array();
 
 /*
 | ---------------------------------------------------------------
@@ -39,7 +60,7 @@ class Email
 | ---------------------------------------------------------------
 |
 */     
-    function __construct() 
+    public function __construct() 
     {
         // Set our email boundary
         $this->boundary = uniqid(time());

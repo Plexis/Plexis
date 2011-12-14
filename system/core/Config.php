@@ -26,7 +26,7 @@ class Config
     protected $data = array();
 
     // A list of our loaded config files
-    var $files = array();
+    protected $files = array();
 
 /*
 | ---------------------------------------------------------------

@@ -44,7 +44,7 @@
                     <li><a href="{SITE_URL}/forum">Forums</a></li>
                     <li><a href="{SITE_URL}/account/vote">Vote</a></li>
                     <li><a href="{SITE_URL}/account/donate">Donate</a></li>
-                    <li><a href="{SITE_URL}/support">Server</a>
+                    <li><a href="{SITE_URL}/server">Server</a>
                         <ul class="subnav">
                             <li><a href="{SITE_URL}/server/realmlist">Realmlist</a></li>
                             <li><a href="{SITE_URL}/server/online">Players Online</a><span class="spmore"></span>
@@ -54,7 +54,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="{SITE_URL}/account/register">Support</a>
+                    <li><a href="{SITE_URL}/account/support">Support</a>
                     
                     <!-- Account Login -->
                     <?php if( $session['user']['logged_in'] == FALSE): ?>
@@ -64,6 +64,8 @@
                         <li><a href="#">Account</a>
                         <ul class="subnav">
                             <li><a href="{SITE_URL}/account">Dashboard</a></li>
+                            <li><a href="{SITE_URL}/account/update/password">Change Password</a></li>
+                            <li><a href="{SITE_URL}/account/update/email">Update Email</a></li>
                             <li><a href="{SITE_URL}/account/logout">Logout</a></li>
                         </ul>
                     </li>

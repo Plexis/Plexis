@@ -323,6 +323,7 @@
         else
         {
             header("Location: ".$url);
+            die();
         }
     }
 // EOF

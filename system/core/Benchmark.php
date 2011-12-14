@@ -16,8 +16,8 @@ namespace System\Core;
 class Benchmark
 {
     // Start and stop timers
-    public $start = array(); 
-    public $stop = array();
+    protected $start = array(); 
+    protected $stop = array();
 
 /*
 | ---------------------------------------------------------------

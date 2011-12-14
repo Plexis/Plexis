@@ -23,13 +23,13 @@ namespace System\Core;
 class Router
 {
     // Our controller name
-    public $controler;
+    protected $controler;
 
     // Our action (sub page)
-    public $action;
+    protected $action;
 
     // The querystring
-    public $queryString;
+    protected $queryString;
 
 /*
 | ---------------------------------------------------------------

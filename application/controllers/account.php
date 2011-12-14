@@ -1,4 +1,25 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author: 		Steven Wilson
+| Copyright:	Copyright (c) 2011, Steven Wilson
+| License: 		GNU GPL v3
+|---------------------------------------------------------------
+|
+| Navigation. (user CTRL + f to move quickly)
+|---------------------------------------------------------------
+| P01 - Index Page
+| P02 - Login Page
+| P03 - Logout Page
+| P04 - Register Page
+| P05 - Account Activation Page
+| P06 - Account Recovery Page
+| P07 - Update (password / email) Page
+| P08 - Captcha Page
+|
+*/
 class Account extends Application\Core\Controller 
 {
 
@@ -13,13 +34,13 @@ class Account extends Application\Core\Controller
         // Build the Core Controller
         parent::__construct();
         
-        // Init a session var
+        // Make the user info a little easier to get
         $this->user = $this->Session->get('user');
     }
 
 /*
 | ---------------------------------------------------------------
-| Index Page
+| P01: Index Page
 | ---------------------------------------------------------------
 |
 */
@@ -48,7 +69,7 @@ class Account extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Login Page
+| P02: Login Page
 | ---------------------------------------------------------------
 |
 */
@@ -85,7 +106,7 @@ class Account extends Application\Core\Controller
                 if($this->Auth->login($username, $password))
                 {
                     // Success
-                    (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : $this->load->view('login_success');
+                    (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : redirect('account');
                 }
                 else
                 {
@@ -110,7 +131,7 @@ class Account extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Logout Page
+| P03: Logout Page
 | ---------------------------------------------------------------
 |
 */
@@ -126,12 +147,12 @@ class Account extends Application\Core\Controller
         $this->Auth->logout();
         
         // Load the page, and we are done :)
-        (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : $this->load->view('logout');
+        (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : redirect( SITE_URL );
     }
 
 /*
 | ---------------------------------------------------------------
-| Register Page
+| P04: Register Page
 | ---------------------------------------------------------------
 |
 */
@@ -272,7 +293,7 @@ class Account extends Application\Core\Controller
                 // Check that the 2 passwords matched
                 if($password != $password2)
                 {
-                    output_message('error', 'reg_failed_passwords_different');
+                    output_message('error', 'passwords_dont_match');
                     $this->load->view('register');
                     return;
                 }
@@ -358,7 +379,7 @@ class Account extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Email Verification Page
+| P05: Account Activation Page
 | ---------------------------------------------------------------
 |
 */
@@ -400,7 +421,7 @@ class Account extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Account Recovery
+| P06: Account Recovery
 | ---------------------------------------------------------------
 |
 */
@@ -657,10 +678,202 @@ class Account extends Application\Core\Controller
             }
         }
     }
+    
+/*
+| ---------------------------------------------------------------
+| P07: Account Update (password / email) Pages
+| ---------------------------------------------------------------
+|
+*/    
+    public function update($mode = NULL)
+    {
+        // Make sure we have a directive
+        if($mode == NULL) redirect('/');
+        
+        // Make sure we are logged in
+        if($this->user['logged_in'] == FALSE) redirect('/');
+        
+        // Check for POST data, if we have some skip to Process
+        if(isset($_POST['action'])) goto Process;
+        
+        // Load our page based off our current mode
+        switch($mode)
+        {
+            case "password":
+                $this->load->view('change_password');
+                return;
+                
+            case "email":
+                $this->load->view('change_email');
+                return;
+                
+            default:
+                show_404();
+        }
+        
+        // Main processing form
+        Process:
+        {
+            // Load our validation libray, and process out current action
+            $this->load->library('validation');
+            $action = $_POST['action'];
+            switch($action)
+            {
+                case "change-password":
+                    // Set our validation rules
+                    $this->validation->set( array(
+                        'password' => 'required|min[3]|max[24]',
+                        'password2' => 'required|min[3]|max[24]',
+                        'old-password' => 'required'
+                    ));
+                    
+                    // validate our post data was filled out correctly
+                    if($this->validation->validate() == TRUE)
+                    {
+                        // Load the Input class and run the XSS filter
+                        $this->Input = load_class('Input');
+                        $password = $this->Input->post('password', TRUE);
+                        $password2 = $this->Input->post('password2', TRUE);
+                        $oldpass = $this->Input->post('old-password', TRUE);
+                        
+                        // Make sure the new passwords match
+                        if($password != $password2)
+                        {
+                            output_message('error', 'passwords_dont_match');
+                            $this->load->view('change_password');
+                            return;
+                        }
+                        
+                        // Tell the realm to validate the provided password
+                        $valid = $this->realm->validate_login($this->user['username'], $oldpass);
+                        if(!$valid)
+                        {
+                            output_message('error', 'account_update_login_failed');
+                            $this->load->view('change_password');
+                            return;
+                        }
+                        
+                        // we are good, change the password
+                        $success = $this->realm->change_password($this->user['id'], $password);
+                        
+                        if($success == TRUE)
+                        {
+                            output_message('success', 'account_update_pass_success');
+                            $this->load->view('blank');
+                            return;
+                        }
+                        
+                        // Else we failed :(
+                        output_message('error', 'account_update_pass_failed');
+                        $this->load->view('blank');
+                        return;
+                    }
+                    else
+                    {
+                        // Form failed to validate :/
+                        output_message('error', 'form_validation_failed');
+                        $this->load->view('change_password');
+                        return;
+                    }
+                    break;
+                    
+                case "change-email":
+                    // Set our validation rules
+                    $this->validation->set( array(
+                        'password' => 'required|min[3]',
+                        'old-email' => 'required|email',
+                        'new-email' => 'required|email'
+                    ));
+                    
+                    // validate our post data was filled out correctly
+                    if($this->validation->validate() == TRUE)
+                    {
+                        // Load the Input class and run the XSS filter
+                        $this->Input = load_class('Input');
+                        $password = $this->Input->post('password', TRUE);
+                        $old = $this->Input->post('old-email', TRUE);
+                        $new = $this->Input->post('new-email', TRUE);
+
+                        // Tell the realm to validate the provided password
+                        $valid = $this->realm->validate_login($this->user['username'], $password);
+                        if(!$valid)
+                        {
+                            output_message('error', 'account_update_login_failed');
+                            $this->load->view('change_email');
+                            return;
+                        }
+                        
+                        // If the email didnt change, then say so
+                        if($old == $new)
+                        {
+                            output_message('warning', 'account_update_nochanges');
+                            $this->load->view('change_email');
+                            return;
+                        }
+                        
+                        // If an email wasnt set, the just set the damn thing
+                        $result = $this->DB->query('SELECT `email` FROM `pcms_accounts` WHERE `id`=?', array($this->user['id']))->fetch_column();
+                        if($result == NULL)
+                        {
+                            goto SetEmail;
+                        }
+                        
+                        // Verify the email addresses are the same
+                        if($old != $result)
+                        {
+                            output_message('error', 'account_update_email_invalid');
+                            $this->load->view('change_email');
+                            return;
+                        }
+                        
+                        // Our set email process
+                        SetEmail:
+                        {
+                            // Update the realm database with the new email
+                            $r = $this->realm->change_email($this->user['id'], $new);
+                            if($r == FALSE)
+                            {
+                                output_message('error', 'account_update_email_failed');
+                                $this->load->view('blank');
+                                return; 
+                            }
+                            
+                            // Now update the cms accounts table with the new email
+                            $r = $this->DB->update('pcms_accounts', array('email' => $new), "`id`=".$this->user['id']);
+                            if($r == FALSE)
+                            {
+                                output_message('error', 'account_update_email_failed');
+                                $this->load->view('blank');
+                                return; 
+                            }
+                            
+                            // If we are here, we have a success!
+                            output_message('success', 'account_update_email_success');
+                            $this->load->view('blank');
+                            return; 
+                        }
+
+                    }
+                    else
+                    {
+                        // For failed to validate
+                        output_message('error', 'form_validation_failed');
+                        $this->load->view('change_email');
+                        return;
+                    }
+                    break;
+                    
+                default:
+                    // By default, just reload the page
+                    $this->load->view('change_email');
+                    return;
+            }
+        }
+    }
 
 /*
 | ---------------------------------------------------------------
-| Captcha Image Page
+| P08: Captcha Image Page
 | ---------------------------------------------------------------
 |
 */    
@@ -682,35 +895,42 @@ class Account extends Application\Core\Controller
 // Test Page    
     function test()
     {
-        // Setup our variables and load our extensions
-        $site_title = config('site_title');
-        $site_email = config('site_email');
-        $lang = load_language_file('emails');
-        $this->load->library('email');
-        $this->load->model('Account_model', 'account');
+        // Make sure we have a directive
+        if($mode == NULL) redirect('account');
         
-        // generate our random account verification code
-        $genkey = $this->account->create_key('wilson.steven10@yahoo.com');
-        $href = SITE_URL . "/account/activate/".$genkey;
-        $message = vsprintf( $lang['email_activate_message'], array( 'Makaveli', $site_title, $href, $href ) );
+        // Check for POST data
+        if(isset($_POST['action'])) goto Process;
         
-        // Build the email
-        $this->email->to('thasource.org@hotmail.com', 'Makaveli');
-        $this->email->from( $site_email, $site_title );
-        $this->email->subject( $lang['email_activate_subject'] );
-        $this->email->message( $message );
-        $sent = $this->email->send();
-        
-        // Check if our email sent correctly
-        if($sent == TRUE)
+        switch($mode)
         {
-            output_message('success', 'reg_success_verfy_required');
-            $this->load->view('blank');
+            case "password":
+                $this->load->view('change_password');
+                break;
+                
+            case "email":
+                $this->load->view('change_password');
+                break;
+                
+            default:
+                show_404();
         }
-        else
+        
+        // Main processing form
+        Process:
         {
-            output_message('warning', 'reg_success_email_error');
-            $this->load->view('blank');
+            switch($mode)
+            {
+                case "password":
+                    $this->load->view('change_password');
+                    break;
+                    
+                case "email":
+                    $this->load->view('change_password');
+                    break;
+                    
+                default:
+                    show_404();
+            }
         }
     }
 }

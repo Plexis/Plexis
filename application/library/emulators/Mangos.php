@@ -192,6 +192,37 @@ class Mangos
     
 /*
 | ---------------------------------------------------------------
+| Method: change_email()
+| ---------------------------------------------------------------
+|
+| This function changes the email to an account
+|
+| @Param: (Int) $id - The account id
+| @Param: (String) $email - The new account email
+| @Return (Bool) - TRUE if the change is a success, FALSE otherwise
+|
+*/
+    public function change_email($id, $email)
+    {
+        // If didnt find the account, return FALSE
+        if($this->account_exists($id) == FALSE)
+        {
+            return FALSE;
+        }
+        
+        // Update account information
+        $this->DB->update("account", array('email' => $email), "`id`=".$id);
+        
+        // If we have an affected row, then we return TRUE
+        if($this->DB->num_rows() > 0)
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: fetch_account()
 | ---------------------------------------------------------------
 |
