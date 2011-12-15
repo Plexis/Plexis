@@ -9,13 +9,15 @@
     
     <!-- Style Sheet -->
     <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/dialog.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/alerts.css" />
     
     <!-- Scripts -->
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery-1.6.2.min.js"></script>
     <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.cycle.all.min.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.validate.min.js"></script>
     <script type="text/javascript">
     <!--
+        // Slide Show
         jQuery(function( $ ){
             $('#slide') 
             .after('<div id="slide-tabs">') 
@@ -26,9 +28,14 @@
                 pager:  '#slide-tabs'
             });
         });
+        
+        // Setup our form validator error style class
+        jQuery.validator.setDefaults({ 
+            errorClass: "input-error",
+        });
     -->
     </script>
-    <script src="{TEMPLATE_URL}/js/dropdown.js" type="text/javascript"></script>
+    {VIEW_JS}
 </head>
 <body>
     <div id="container">

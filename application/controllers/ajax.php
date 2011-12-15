@@ -575,7 +575,8 @@ class Ajax extends Application\Core\Controller
             );
             
             // Turn off all error reporting, since we use our own, this is easy
-            $Config->set(array('environment' => 1, 'log_errors' => 0), false, 'Core');
+            $debug = load_class('Debug');
+            $debug->error_reporting(FALSE);
             $good = TRUE;
 
             // Test our new connections before saving to config
@@ -607,7 +608,7 @@ class Ajax extends Application\Core\Controller
             }
             
             // Re-enable errors
-            $Config->set('log_errors', 1, 'Core');
+            $debug->error_reporting(TRUE);
             
             // Install our new stuffs
             $data = array(
@@ -680,18 +681,26 @@ class Ajax extends Application\Core\Controller
         // Make sure we arent getting direct accessed, and the user has permission
         $this->check_access('a');
         
-        // Set out config to not log errors!
-        $old = config( 'log_errors', 'Core' );
-        config_set('log_errors', 0, 'Core');
+        // Disable error reporting
+        $debug = load_class('Debug');
+        $debug->error_reporting(FALSE);
         
         // Build our headers
-        $response = file_get_contents('http://wilson212.net/updates.php', false);
+        $handle = fsockopen("www.wilson212.net/updates.php", 80, $errno, $errstr, 3);
+        if(!$handle)
+        {
+            $response = "-1";
+        }
+        else
+        {
+            fclose($handle);
+            $response = file_get_contents("http://wilson212.net/updates.php");
+        }
         
-        // Set our loggin back
-        config_set('log_errors', $old, 'Core');
+        // Set back our error reporting
+        $debug->error_reporting(TRUE);
         
-        // If we failed to open the URL, then we return that
-        ($response === FALSE) ? $response = "-1" : '';
+        // return the result
         echo $response;
     }
     

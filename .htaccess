@@ -1,14 +1,10 @@
 <IfModule mod_rewrite.c>
-RewriteEngine On
- 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
- 
-# Rewrite all other URLs to index.php/URL
-RewriteRule ^(.*)$ index.php?url=$1 [PT,L]
+    RewriteEngine On
 
+    # Dont redirect direct links to files or directories to the index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
 
-</IfModule>
-<IfModule !mod_rewrite.c>
-	ErrorDocument 404 index.php
+    # Rewrite all other URLs to index.php/URL
+    RewriteRule ^(.*)$ index.php?url=$1 [PT,L]
 </IfModule>

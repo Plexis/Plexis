@@ -6,7 +6,7 @@
             when you registered your account with us. If you were never prompted to enter a secret question and answer
             when you registered with us, Please contact an administrator.
         </p>
-        <form method="post" action="{SITE_URL}/account/recover">
+        <form method="post" action="{SITE_URL}/account/recover" id="recover-form">
             <input type="hidden" name="action" value="recover" />
             <input type="hidden" name="step" value="2" />
             <input type="hidden" name="username" value="{username}" />

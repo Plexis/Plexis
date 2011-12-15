@@ -38,9 +38,35 @@ class Debug
 
     // Error Backtrace.
     protected $ErrorTrace;
+    
+    // Do we log errors?.
+    protected $log_errors;
+    
+    // Our sites error level.
+    protected $Environment;
 
+    // Our original config settings.
+    protected $orig_settings;
+    
     // Our current language
     protected $lang;
+
+/*
+| ---------------------------------------------------------------
+| Constructer
+| ---------------------------------------------------------------
+|
+*/
+    public function __construct()
+    {
+        // Set our error reporting
+        $this->log_errors = config('log_errors', 'Core');
+        $this->Environment = config('environment', 'Core');
+        
+        // Save our original settings incase we change them midscript
+        $this->orig_settings['log_errors'] = $this->log_errors;
+        $this->orig_settings['Environment'] = $this->Environment;
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -67,7 +93,6 @@ class Debug
         $this->ErrorFile = $file; //str_replace(ROOT . DS, '', $file);
         $this->ErrorLine = $line;
         $this->ErrorTrace = $backtrace;
-        $this->Environment = config('environment', 'Core');
 
         // Get our level text
         switch($errno) 
@@ -114,7 +139,7 @@ class Debug
         }
         
         // log error if enabled
-        if( config('log_errors', 'Core') == 1 )
+        if( $this->log_errors == 1 )
         {
             $this->log_error();
         }
@@ -160,6 +185,78 @@ class Debug
 
 /*
 | ---------------------------------------------------------------
+| Function: log_error()
+| ---------------------------------------------------------------
+|
+| Logs the error message in the error log
+|
+*/
+    protected function log_error()
+    {
+        // Setup the url and remove html breaks in the log file
+        $url = (isset($_GET['url'])) ? $_GET['url'] : '';
+        
+        // Create our log message
+        $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') ."\n";
+        $err_message .= "| Error Level: ".$this->ErrorLevel ."\n";
+        $err_message .= "| Message: ".$this->ErrorMessage ."\n"; 
+        $err_message .= "| Reporting File: ".$this->ErrorFile."\n";
+        $err_message .= "| Error Line: ".$this->ErrorLine."\n";
+        $err_message .= "| URL When Error Occured: ".SITE_URL . "/". $url ."\n\n";
+        $err_message .= "--------------------------------------------------------------------\n\n";
+
+        // Write in the log file, the very long message we made
+        $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'error.log', 'a');
+        @fwrite($log, $err_message);
+        @fclose($log);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: log()
+| ---------------------------------------------------------------
+|
+| Logs a message in the debug.log
+|
+*/
+    public function log($message, $filename = 'debug.log')
+    {
+        // Create our log message
+        $log_message = "(".date('Y-m-d H:i:s') .") ".$message ."\n"; 
+
+        // Write in the log file, the very long message we made
+        $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . $filename, 'a');
+        @fwrite($log, $log_message);
+        @fclose($log);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: error_reporting()
+| ---------------------------------------------------------------
+|
+| Enable / disable error reporting (except for fetal errors)
+|
+*/
+    public function error_reporting($report = TRUE)
+    {
+        if($report == TRUE)
+        {
+            // Set our error reporting back to the original state
+            $this->log_errors = $this->orig_settings['log_errors'];
+            $this->Environment = $this->orig_settings['Environment'];
+        }
+        else
+        {
+            // Set our error reporting
+            $this->log_errors = 0;
+            $this->Environment = 0;
+        }
+        return TRUE;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Function: build_error_page()
 | ---------------------------------------------------------------
 |
@@ -171,7 +268,7 @@ class Debug
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_level() != 0) ob_end_clean();
         
-        // Capture the template using Output Buffering, file depends on Environment
+        // Capture the orig_settingslate using Output Buffering, file depends on Environment
         ob_start();
             if($this->Environment == 1)
             {
@@ -248,34 +345,6 @@ class Debug
         /* eval('?>'.$page.'<?'); */
         echo $page;
         die();
-    }
-
-/*
-| ---------------------------------------------------------------
-| Function: log_error()
-| ---------------------------------------------------------------
-|
-| Logs the error message in the error log
-|
-*/
-    function log_error()
-    {
-        // Setup the url and remove html breaks in the log file
-        $url = (isset($_GET['url'])) ? $_GET['url'] : '';
-        
-        // Create our log message
-        $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') ."\n";
-        $err_message .= "| Error Level: ".$this->ErrorLevel ."\n";
-        $err_message .= "| Message: ".$this->ErrorMessage ."\n"; 
-        $err_message .= "| Reporting File: ".$this->ErrorFile."\n";
-        $err_message .= "| Error Line: ".$this->ErrorLine."\n";
-        $err_message .= "| URL When Error Occured: ".SITE_URL . "/". $url ."\n\n";
-        $err_message .= "--------------------------------------------------------------------\n\n";
-
-        // Write in the log file, the very long message we made
-        $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'error.log', 'a');
-        @fwrite($log, $err_message);
-        @fclose($log);
     }
 
 /*
@@ -359,51 +428,6 @@ class Debug
 
         // Return our variable dump :D
         return $html;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Function: php_error_handler()
-| ---------------------------------------------------------------
-|
-| Php uses this error handle instead of the default one because
-| php calls this method statically
-|
-*/
-    public static function php_error_handler($errno, $errstr, $errfile, $errline)
-    {
-        if(!$errno) 
-        {
-            // This error code is not included in error_reporting
-            return;
-        }
-        
-        // Get singleton
-        $self = self::singleton();	
-        
-        // Trigger
-        $self->trigger_error($errno, $errstr, $errfile, $errline, debug_backtrace());
-
-        // Don't execute PHP internal error handler
-        return true;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: singlton()
-| ---------------------------------------------------------------
-|
-| Allows access to the none static methods in the class
-|
-*/ 
-
-    public static function singleton() 
-    {
-        if(!isset(self::$instance))
-        {
-            self::$instance = new self();
-        }
-        return self::$instance;
     }
 }
 // EOF

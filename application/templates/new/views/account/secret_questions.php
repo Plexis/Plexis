@@ -6,15 +6,15 @@
             you to access your account, we require you to set your account recovery secret question and answer. Please Note: Once you set
             your account security question / answer, you CANNOT change it, so make sure you answer correctly.
         </p>
-        <form method="post" action="{SITE_URL}/account/recover/set">
+        <form method="post" action="{SITE_URL}/account/recover/set" id="secret-form">
             <input type="hidden" name="action" value="set" />
             <fieldset>
                 <div class="div-center">
-                    <label for="sq">Secret Question:</label> 
-                    <select name="sq">{secret_questions}</select>
+                    <label for="question">Secret Question:</label> 
+                    <select name="question">{secret_questions}</select>
                     
-                    <label for="sa">Secret Answer:</label> 
-                    <input type="text" name="sa" id="sa" value="" size="30" tabindex="6" /><br />
+                    <label for="answer">Secret Answer:</label> 
+                    <input type="text" name="answer" id="answer" value="" size="30" tabindex="6" /><br />
                     
                     <center><input type="submit" name="submit" value="Submit" class="button" tabindex="8" /></center>
                 </div>

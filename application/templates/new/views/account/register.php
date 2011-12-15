@@ -1,7 +1,7 @@
 <div class="left-box">
     <h2>Registration</h2>
     <div class="left-box-content">
-        <form method="post" action="{SITE_URL}/account/register">
+        <form method="post" action="{SITE_URL}/account/register" id="register-form">
             <input type="hidden" name="action" value="register" />
             <fieldset>
                 <div class="div-center">
@@ -9,8 +9,8 @@
                     <label for="username">Username:</label> 
                     <input type="text" name="username" id="username" value="" size="30" tabindex="1" />
                     
-                    <label for="password">Password:</label> 
-                    <input type="password" name="password" id="password" value="" size="30" tabindex="2" />
+                    <label for="password1">Password:</label> 
+                    <input type="password" name="password1" id="password1" value="" size="30" tabindex="2" />
                     
                     <label for="password2">Repeat Password:</label> 
                     <input type="password" name="password2" id="password2" value="" size="30" tabindex="3" />

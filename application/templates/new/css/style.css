@@ -641,6 +641,23 @@ select {
 	display:block;
 }
 
+/* FORM VALIDATION */
+input[type="text"].input-error, input[type="password"].input-error, textarea.input-error, select.input-error 
+{
+    outline: none;
+    -moz-box-shadow: 0 0 5px 1px #bf0000, inset 0 3px 10px 2px #111;
+    -webkit-box-shadow: 0 0 5px 1px #bf0000, inset 0 3px 10px 2px #111;
+    box-shadow: 0 0 5px 1px #bf0000, inset 0 3px 10px 2px #111;
+}
+div.input-error 
+{
+	color: #bf0000;
+	font-weight: bold;
+    margin-top: -7px;
+    margin-left: 165px;
+    margin-bottom: 10px;
+}
+
 
 /* ==================================================
  * 11) Buttons

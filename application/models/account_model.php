@@ -120,5 +120,41 @@ class Account_Model extends Application\Core\Model
         output_message('success', 'account_recover_pass_success', array($password));
         return TRUE;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: get_id()
+| ---------------------------------------------------------------
+|
+|  Retrives the users id number using his account name
+|
+| @Param: (String) $name - The username you are getting the ID for
+| @Return (Int) Returns the account ID
+|
+*/
+
+    public function get_id($name)
+    {
+        $this->DB->query("SELECT `id` FROM `pcms_accounts` WHERE `username` LIKE :name LIMIT 1", array(':name' => $name));
+        return $this->DB->fetch_column();
+    }
+
+/*
+| ---------------------------------------------------------------
+| Function: get_profile()
+| ---------------------------------------------------------------
+|
+| Returns all the users information such as email, reg date etc etc
+|
+| @Param: (Int) $id - The account ID you are getting the info for
+| @Return (Array) An array of each column in the users table
+|
+*/
+
+    public function get_profile($id)
+    {
+        $this->DB->query("SELECT * FROM `pcms_accounts` WHERE `id`=?", array($id));
+        return $this->DB->fetch_row();
+    }
 }
 // EOF

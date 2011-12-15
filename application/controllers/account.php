@@ -490,8 +490,8 @@ class Account extends Application\Core\Controller
                     
                     // Load the input class and use the XSS filter on these!
                     $this->Input = load_class('Input');
-                    $sq = $this->Input->post('sq', TRUE);
-                    $sa = $this->Input->post('sa', TRUE);
+                    $sq = $this->Input->post('question', TRUE);
+                    $sa = $this->Input->post('answer', TRUE);
 
                     // Secret question / answer processing
                     if($sq != NULL && $sa != NULL)
@@ -608,6 +608,14 @@ class Account extends Application\Core\Controller
                                     // Make sure the user posted something!
                                     if($answer == NULL)
                                     {
+                                        // Load secret question
+                                        $query = 'SELECT `_account_recovery` FROM `pcms_accounts` WHERE `username` LIKE ?';
+                                        $info = $this->DB->query( $query, array($username))->fetch_column();
+                                        $data = unserialize( base64_decode($info) );
+                                        $questions = get_secret_questions('array', TRUE);
+                                        $question = $questions[ $data['id'] ];
+                                    
+                                        // Output the error message and request it again
                                         output_message('error', 'form_validation_failed');
                                         $data = array(
                                             'question' => $question,
@@ -722,9 +730,9 @@ class Account extends Application\Core\Controller
                 case "change-password":
                     // Set our validation rules
                     $this->validation->set( array(
-                        'password' => 'required|min[3]|max[24]',
+                        'password1' => 'required|min[3]|max[24]',
                         'password2' => 'required|min[3]|max[24]',
-                        'old-password' => 'required'
+                        'old_password' => 'required'
                     ));
                     
                     // validate our post data was filled out correctly
@@ -732,9 +740,9 @@ class Account extends Application\Core\Controller
                     {
                         // Load the Input class and run the XSS filter
                         $this->Input = load_class('Input');
-                        $password = $this->Input->post('password', TRUE);
+                        $password = $this->Input->post('password1', TRUE);
                         $password2 = $this->Input->post('password2', TRUE);
-                        $oldpass = $this->Input->post('old-password', TRUE);
+                        $oldpass = $this->Input->post('old_password', TRUE);
                         
                         // Make sure the new passwords match
                         if($password != $password2)
@@ -781,8 +789,8 @@ class Account extends Application\Core\Controller
                     // Set our validation rules
                     $this->validation->set( array(
                         'password' => 'required|min[3]',
-                        'old-email' => 'required|email',
-                        'new-email' => 'required|email'
+                        'old_email' => 'required|email',
+                        'new_email' => 'required|email'
                     ));
                     
                     // validate our post data was filled out correctly
@@ -791,8 +799,8 @@ class Account extends Application\Core\Controller
                         // Load the Input class and run the XSS filter
                         $this->Input = load_class('Input');
                         $password = $this->Input->post('password', TRUE);
-                        $old = $this->Input->post('old-email', TRUE);
-                        $new = $this->Input->post('new-email', TRUE);
+                        $old = $this->Input->post('old_email', TRUE);
+                        $new = $this->Input->post('new_email', TRUE);
 
                         // Tell the realm to validate the provided password
                         $valid = $this->realm->validate_login($this->user['username'], $password);
@@ -881,10 +889,10 @@ class Account extends Application\Core\Controller
     {
         // Load the captcha Library
         $this->load->library('Captcha');
-        
+
         // Set our content type to an image
         header("Content-type: image/png");
-        
+
         // Output the image
         $this->Captcha->display(6, 25, 75, NULL, FALSE, TRUE, TRUE);
 
@@ -895,8 +903,6 @@ class Account extends Application\Core\Controller
 // Test Page    
     function test()
     {
-        // Make sure we have a directive
-        if($mode == NULL) redirect('account');
         
         // Check for POST data
         if(isset($_POST['action'])) goto Process;

@@ -7,7 +7,7 @@
             by entering your Account Name and Email into the box below. If you've forgotten your Account Name or Email as well, You will need to contact
             an administrator.
         </p>
-        <form method="post" action="{SITE_URL}/account/recover">
+        <form method="post" action="{SITE_URL}/account/recover" id="recover-form">
             <input type="hidden" name="action" value="recover" />
             <input type="hidden" name="step" value="1" />
             <fieldset>

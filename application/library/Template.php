@@ -21,13 +21,28 @@ namespace Application\Library;
 
 class Template
 {
+    // An array of all template variables
     protected $variables = array();
-    var $template = array();
-    var $trigger = "Compiler";
-    var $l_delim = '{';
-    var $r_delim = '}';
-    var $type = "site";
+    
+    // Template information
+    protected $template = array();
+    
+    // Our Compiler trigger
+    protected $trigger = "Compiler";
+    
+    // Left and right variable delimiters
+    protected $l_delim = '{';
+    protected $r_delim = '}';
+    
+    // Our template type
+    protected $type = "site";
 
+/*
+| ---------------------------------------------------------------
+| Constructer
+| ---------------------------------------------------------------
+|
+*/   
     public function __construct() 
     {
         // Define defaults
@@ -52,7 +67,64 @@ class Template
     {
         $this->variables[$name] = $value;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: set_template()
+| ---------------------------------------------------------------
+|
+| Sets the template as a site template
+|
+| @Param: $name - The defined Template name
+|
+*/
+    public function set_template($name = "default") 
+    {
+        // Set out type as site template
+        $this->type = "site";
+        
+        // Set our actual template now
+        $this->template['name'] = $name;
+        $this->template['path'] = APP_PATH . DS . 'templates' . DS . $name;
+        $this->template['http_path'] = SITE_URL . "/application/templates/". $name;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: admin_template()
+| ---------------------------------------------------------------
+|
+| Sets the template as the admin template
+|
+*/
+    public function admin_template() 
+    {
+        // Set out type as site template
+        $this->type = "admin";
 
+        // Set paths
+        $this->template['path'] = APP_PATH . DS . 'admin';
+        $this->template['http_path'] = SITE_URL . "/application/admin";
+
+    }
+
+/*
+| ---------------------------------------------------------------
+| Function: set_delimiters()
+| ---------------------------------------------------------------
+|
+| Sets the template delimiters for psuedo blocks
+|
+| @Param: $l - The left delimiter
+| @Param: $r - The right delimiter
+|
+*/	
+    public function set_delimiters($l = '{', $r = '}')
+    {
+        $this->l_delim = $l;
+        $this->r_delim = $r;
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Function: load(path)
@@ -81,63 +153,6 @@ class Template
         // Get the file contents and return
         return file_get_contents($template_file);
     }
-    
-/*
-| ---------------------------------------------------------------
-| Function: set_template()
-| ---------------------------------------------------------------
-|
-| Sets the template
-|
-| @Param: $type - 'site' or 'admin'
-| @Param: $name - The defined Template name
-|
-*/
-    public function set_template($type, $name = "default") 
-    {
-        switch($type)
-        {
-            case "site":
-                $this->type = "site";
-                break;
-            case "admin":
-                $this->type = "admin";
-                break;
-            default:
-                $this->type = "site";
-                $name = $type;
-                break;
-        }
-        
-        // Set our actual template now
-        if($type == "site")
-        {
-            $this->template['path'] = APP_PATH . DS . 'templates' . DS . $name;
-            $this->template['http_path'] = SITE_URL . "/application/templates/". $name;
-        }
-        else
-        {
-            $this->template['path'] = APP_PATH . DS . 'admin';
-            $this->template['http_path'] = SITE_URL . "/application/admin";
-        }
-    }
-
-/*
-| ---------------------------------------------------------------
-| Function: set_delimiters()
-| ---------------------------------------------------------------
-|
-| Sets the template delimiters for psuedo blocks
-|
-| @Param: $l - The left delimiter
-| @Param: $r - The right delimiter
-|
-*/	
-    public function set_delimiters($l = '{', $r = '}')
-    {
-        $this->l_delim = $l;
-        $this->r_delim = $r;
-    }
 
 /*
 | ---------------------------------------------------------------
@@ -148,7 +163,7 @@ class Template
 | a custom view for the page we are viewing
 |
 */
-    public function load_view()
+    private function load_view()
     {
         // First we check to see if the template has a custom view for this page
         if($this->type !== 'admin')
@@ -241,6 +256,21 @@ class Template
         // Load page contents so they can be parsed as well!
         $source = str_replace("{PAGE_CONTENTS}", $this->load_view(), $source); 
         
+        // Add the page JS if it exists as well
+        if($this->type == 'site')
+        {
+            $file = $this->template['path'] . DS . 'views' . DS . $this->_controller . DS . 'js' . DS . $this->view_file . '.js';
+            if(file_exists( $file ))
+            {
+                $string = '<script type="text/javascript" src="{TEMPLATE_URL}/views/'. $this->_controller .'/js/'.$this->view_file.'.js"></script>';
+                $source = str_replace("{VIEW_JS}", $string, $source); 
+            }
+            else
+            {
+                $source = str_replace("{VIEW_JS}", '', $source); 
+            }
+        }
+        
         // Strip custom comment blocks
         while(preg_match('/<!--#.*#-->/iUs', $source, $replace)) 
         {
@@ -272,20 +302,6 @@ class Template
                         case "load":
                             $content = $this->load($exp[1]);
                             $content = $this->compiler_eval($content);
-                            break;
-                            
-                        case "template":
-                            switch($exp[1])
-                            {
-                                case "name":
-                                    $content = $this->template['name'];
-                                    break;
-                                    
-                                case "path":
-                                    $content = $this->template['path'];
-                                    break;
-                                    
-                            }
                             break;
                             
                         case "constant":
@@ -440,12 +456,13 @@ class Template
             // No default content encoding
             $encoding = false;
             
-            // If we havent sent headers yet, attempt to zip the contents
-            if( headers_sent() == FALSE )
+            // If we havent sent headers yet, and our client isnt the w3c validator, attempt to zip the contents
+            if( headers_sent() == FALSE && $_SERVER['HTTP_USER_AGENT'] != 'W3C_Validator' )
             {
                 if( strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false )
                 {
                     $encoding = 'x-gzip';
+                    log_message('Encoding in X-Gzip');
                 }
                 elseif( strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false )
                 {

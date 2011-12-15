@@ -41,6 +41,33 @@
 
 /*
 | ---------------------------------------------------------------
+| Function: php_error_handler()
+| ---------------------------------------------------------------
+|
+| Php uses this error handle instead of the default one because
+| php calls this method statically
+|
+*/
+    function php_error_handler($errno, $errstr, $errfile, $errline)
+    {
+        if(!$errno) 
+        {
+            // This error code is not included in error_reporting
+            return;
+        }
+        
+        // Get singleton
+        $Debug = load_class('Debug');	
+        
+        // Trigger
+        $Debug->trigger_error($errno, $errstr, $errfile, $errline, debug_backtrace());
+
+        // Don't execute PHP internal error handler
+        return true;
+    }
+
+/*
+| ---------------------------------------------------------------
 | Function: show_error()
 | ---------------------------------------------------------------
 |
@@ -77,8 +104,8 @@
         }
         
         // Init and spit the error
-        $E = new System\Core\Debug;
-        $E->trigger_error($lvl, $message, $calling['file'], $calling['line'], $backtrace);
+        $Debug = load_class('Debug');
+        $Debug->trigger_error($lvl, $message, $calling['file'], $calling['line'], $backtrace);
     }
 	
 /*
@@ -94,8 +121,25 @@
     function show_404()
     {		
         // Init and spit the error
-        $E = new System\Core\Debug;
-        $E->show_error(404);
+        $Debug = load_class('Debug');
+        $Debug->show_error(404);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: log_message()
+| ---------------------------------------------------------------
+|
+| Logs a message in the debug log, or specified file
+|
+| @Return: (None)
+|
+*/	
+    function log_message($message, $filename = 'debug.log')
+    {		
+        // Init and spit the error
+        $Debug = load_class('Debug');
+        $Debug->log($message, $filename);
     }
 
 /*
@@ -221,12 +265,6 @@
 */
     function load_class($className, $type = 'Core')
     {
-        // Make sure periods are replaced with slahes
-        if(strpos($className, '.'))
-        {
-            $className = str_replace('.', '\\', $className);
-        }
-
         // Now we need to make sure the user supplied some sort of path
         if(strpos($className, '\\') === FALSE)
         {
@@ -283,9 +321,7 @@
         // Include our file. If it doesnt exists, class is un-obtainable.
         require($file);
 
-        // -----------------------------------------
-        //  Initiate the new class into a variable |
-        // -----------------------------------------
+        //  Initiate the new class into a variable
         $dispatch = new $className();
 
         // Store this new object in the registery

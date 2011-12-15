@@ -50,7 +50,7 @@ class Controller extends \System\Core\Controller
         // Setup our template system
         if($this->controller == 'admin')
         {
-            $this->Template->set_template('admin');
+            $this->Template->admin_template();
         }
         else
         {
@@ -58,12 +58,12 @@ class Controller extends \System\Core\Controller
             $user = $this->Session->data['user'];
             if($user['logged_in'] == FALSE)
             {
-                $this->Template->set_template('site', config('default_template'));
+                $this->Template->set_template( config('default_template') );
             }
             else
             {
                 (!empty($user['selected_theme'])) ? $theme = $user['selected_theme'] : $theme = config('default_template');
-                $this->Template->set_template('site', $theme);
+                $this->Template->set_template($theme);
             }
         }
     }

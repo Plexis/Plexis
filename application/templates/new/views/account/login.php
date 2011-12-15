@@ -1,7 +1,7 @@
 <div class="left-box">
     <h2>Login</h2>
     <div class="left-box-content">
-        <form method="post" action="{SITE_URL}/account/login">		
+        <form method="post" action="{SITE_URL}/account/login" id="login-form">		
             <fieldset>
                 <div class="div-center">
                     <label for="username">Username</label> <input type="text" name="username" id="username" size="30" value="" tabindex="1" />
