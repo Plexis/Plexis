@@ -260,7 +260,7 @@ class Account extends Application\Core\Controller
             // as match a pattern. Same goes for the email field.
             $this->validation->set( array(
                 'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]', 
-                'password' => 'required|min[3]|max[24]',
+                'password1' => 'required|min[3]|max[24]',
                 'password2' => 'required|min[3]|max[24]',
                 'email' => 'required|email',
                 'sa' => 'required|min[3]|max[24]'
@@ -284,7 +284,7 @@ class Account extends Application\Core\Controller
                 
                 // Use the XSS filter on these!
                 $username = $this->Input->post('username', TRUE);
-                $password = $this->Input->post('password', TRUE);
+                $password = $this->Input->post('password1', TRUE);
                 $password2 = $this->Input->post('password2', TRUE);
                 $email = $this->Input->post('email', TRUE);
                 $sq = $this->Input->post('sq');

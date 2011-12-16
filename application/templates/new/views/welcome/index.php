@@ -4,5 +4,8 @@
         <div class="left-box-content">
             {body}
         </div>
+        <div class="left-news-foot">
+            <p style="text-align: right;">Written by: {author}, {posted}</p>
+        </div>
     </div>
 {/news}

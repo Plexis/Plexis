@@ -125,6 +125,70 @@
     
 /*
 | ---------------------------------------------------------------
+| Method: get_realm_status()
+| ---------------------------------------------------------------
+|
+| This function is used to return an array of site installed realms.
+|
+| @Param: (int) $id: The ID of the realm, 0 for an array or all
+| @Return: (Array) Array of installed realms
+|
+*/
+    function get_realm_status($id = 0)
+    {
+        // Check the cache to see if we recently got the results
+        $load = load_class('Loader');
+        $Cache = $load->library('Cache');
+        
+        // See if we have cached results
+        $result = $Cache->get('realm_status_'.$id);
+        if($result == FALSE)
+        {
+            // If we are here, then the cache results were expired
+            $Debug = load_class('Debug');
+            $DB = $load->database( 'DB' );
+            
+            // All realms?
+            if($id == 0)
+            {
+                // Build our query
+                $query = "SELECT `id`, `name`, `address`, `port` FROM `pcms_realms`";
+            }
+            else
+            {
+                $query = "SELECT `id`, `name`, `address`, `port` FROM `pcms_realms` WHERE `id`=?";
+            }
+            
+            // fetch the array of realms
+            $realms = $DB->query( $query )->fetch_array();
+            
+            // Dont log errors
+            $Debug->error_reporting(false);
+            
+            // Loop through each realm, and get its status
+            foreach($realms as $key => $realm)
+            {
+                $handle = fsockopen($realm['address'], $realm['port'], $errno, $errstr, 1);
+                if(!$handle)
+                {
+                    $realms[$key]['status'] = 0;
+                }
+                else
+                {
+                    $realms[$key]['status'] = 1;
+                }
+            }
+            
+            // Re-enable errors, and Cache the results for 5 minutes
+            $Debug->error_reporting(true);
+            $Cache->save('realm_status_'.$id, $realms, 300);
+            return $realms;
+        }
+        return $result;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: get_wowlib_drivers()
 | ---------------------------------------------------------------
 |

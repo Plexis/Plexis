@@ -1,5 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    
+    # Tell PHP that the mod_rewrite module is ENABLED.
+    SetEnv HTTP_MOD_REWRITE On
 
     # Dont redirect direct links to files or directories to the index.php
     RewriteCond %{REQUEST_FILENAME} !-f

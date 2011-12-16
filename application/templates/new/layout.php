@@ -107,6 +107,7 @@
                                         <center>
                                             <input type="submit" name="submit" value="Login" class="button" tabindex="12"/>
                                             <input type="button" class ="button" name="register" value="Register" onClick="window.location='{SITE_URL}/account/register'" tabindex="13">
+                                            <br />
                                             <small><a href="{SITE_URL}/account/recover">Recover lost password</a></small>
                                         </center>
                                     </fieldset>
@@ -126,9 +127,25 @@
                     <div class="right-box">
                         <h3>Realm Status</h3>
                         <ul>
-                            <li>Realm 1</li>
-                            <li>Realm 2</li>
-                            <li>Realm 3</li>
+                            <?php
+                                $realms = get_realm_status();
+                                foreach($realms as $r)
+                                {
+                                    if($r['status'] == 1)
+                                    {
+                                        $text = "<font color='green'>Online</font>";
+                                    }
+                                    else
+                                    {
+                                        $text = "<font color='red'>Offline</font>";
+                                    }
+                                    
+                                    // Echo out the information
+                                    echo '<li><center><b><a href="{SITE_URL}/server/realm/'.$r['id'].'">'.$r['name'].'</a> - '.$text.'</b></center></li>';
+                                    echo "<li><center><b>Trinity - <font color='green'>Online</font></b></center></li>";
+                                }
+                            ?>
+                            <li><center><small><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></small></center></li>
                         </ul>
                     </div><!-- /right-box -->
                 </div><!-- /right -->

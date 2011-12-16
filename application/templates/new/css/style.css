@@ -394,7 +394,7 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 }
 .right-box a 
 {
-	display:block;
+
 	color:#999;
 }
 .right-box a:hover 
@@ -477,11 +477,14 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 {
 	margin:10px 0 10px 30px;
 }
-.work-image 
+.left-news-foot 
 {
-	border:1px solid #000;
-	display:block;
-	margin-bottom:15px;
+    color:#6ec2d1;
+    text-align: right;
+    padding-right: 10px;
+    padding-top: 3px;
+	border-top:1px solid #111;
+    font-size: 11px;
 }
 
 /* ==================================================
@@ -844,6 +847,15 @@ div.input-error
 {
     margin: 0 auto;
 }
+.right
+{
+    float: right;
+    margin-right: 5px;
+}
+.left
+{
+    float: left;
+}
 .no-border
 {
     border: none;
@@ -853,6 +865,13 @@ div.input-error
     padding: 2px 0;
     margin: 0px 10px;
     border: none;
+}
+.realm-name
+{
+    margin-top: -2px;
+    margin-left: 20px;
+    font-weight: bold;
+
 }
 
 /* ==================================================
