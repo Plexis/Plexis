@@ -45,6 +45,12 @@ class Router
 
     // The querystring
     protected $queryString;
+    
+    public function __construct()
+    {
+        // Start off by routing this thing
+        $this->route_url();
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -57,7 +63,7 @@ class Router
 | @Return (Array) Returns an array of controller, action and queryString
 |
 */
-    public function route_url() 
+    protected function route_url() 
     {
         // Determine our http hostname, and site directory
         $this->http_host = rtrim($_SERVER['HTTP_HOST'], '/');
@@ -82,7 +88,7 @@ class Router
         
         // Build our Full URL
         $site_url = str_replace('//', '/', $this->http_host .'/'. $this->site_dir);
-        $this->site_url = $this->protocol .'://' . $site_url;
+        $this->site_url = $this->protocol .'://' . rtrim($site_url, '/');
 
         // Get our current url, which is passed on by the htaccess file
         $this->uri = (isset($_GET['url']) ? $_GET['url'] : '');
@@ -132,8 +138,6 @@ class Router
         $this->controller = $controller;
         $this->action = $action;
         $this->queryString = $queryString;
-        
-        return $this->get_url_info();
     }
 
 /*

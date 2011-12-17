@@ -48,6 +48,9 @@ class Debug
     // Our original config settings.
     protected $orig_settings;
     
+    // Our URL info
+    protected $url_info;
+    
     // Our current language
     protected $lang;
 
@@ -66,6 +69,9 @@ class Debug
         // Save our original settings incase we change them midscript
         $this->orig_settings['log_errors'] = $this->log_errors;
         $this->orig_settings['Environment'] = $this->Environment;
+        
+        // Get our URL info
+        $this->url_info = get_url_info();
     }
 
 /*
@@ -170,9 +176,8 @@ class Debug
         // Language setup
         $lang = strtolower( config('core_language', 'Core') );
         
-        // Setup the url
-        $url = load_class('Router')->route_url();
-        $site_url = $url['site_url'];
+        // Get our site url
+        $site_url = $this->url_info['site_url'];
         
         // See if there is a custom page in the app folder
         if(file_exists( APP_PATH . DS . 'pages' . DS . $this->lang . DS . $lang . DS . $type .'.php' ))
@@ -197,8 +202,8 @@ class Debug
 */
     protected function log_error()
     {
-        // Setup the url and remove html breaks in the log file
-        $url = load_class('Router')->route_url();
+        // Get our site url
+        $url = $this->url_info;
         
         // Create our log message
         $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') ."\n";
@@ -272,9 +277,8 @@ class Debug
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_level() != 0) ob_end_clean();
         
-        // Setup the url
-        $url = load_class('Router')->route_url();
-        $site_url = $url['site_url'];
+        // Get our site url
+        $site_url = $this->url_info['site_url'];
         
         // Capture the orig_settingslate using Output Buffering, file depends on Environment
         ob_start();

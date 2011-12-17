@@ -36,7 +36,7 @@ class Frostbite
         $this->Router = load_class('Router');
         
         // Tell the router to process the URL for us
-        $routes = $this->Router->route_url();
+        $routes = $this->Router->get_url_info();
         
         // Initialize some important routing variables
         $controller   = $GLOBALS['controller']   = $routes['controller'];
