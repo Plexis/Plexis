@@ -12,14 +12,6 @@
 |
 */
 
-/* 
-| Attempt to automatically determine our site URL and URI
-| If this is not working for your site. then you will need
-| to manually define the SITE_URL below. 
-*/
-define('SITE_DIR', dirname( $_SERVER['PHP_SELF'] ));
-define('SITE_URL', 'http://'. $_SERVER['HTTP_HOST'] . SITE_DIR);
-
 // Define a smaller Directory seperater and ROOT path
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__));

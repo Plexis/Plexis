@@ -170,6 +170,10 @@ class Debug
         // Language setup
         $lang = strtolower( config('core_language', 'Core') );
         
+        // Setup the url
+        $url = load_class('Router')->route_url();
+        $site_url = $url['site_url'];
+        
         // See if there is a custom page in the app folder
         if(file_exists( APP_PATH . DS . 'pages' . DS . $this->lang . DS . $lang . DS . $type .'.php' ))
         {
@@ -194,7 +198,7 @@ class Debug
     protected function log_error()
     {
         // Setup the url and remove html breaks in the log file
-        $url = (isset($_GET['url'])) ? $_GET['url'] : '';
+        $url = load_class('Router')->route_url();
         
         // Create our log message
         $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') ."\n";
@@ -202,7 +206,7 @@ class Debug
         $err_message .= "| Message: ".$this->ErrorMessage ."\n"; 
         $err_message .= "| Reporting File: ".$this->ErrorFile."\n";
         $err_message .= "| Error Line: ".$this->ErrorLine."\n";
-        $err_message .= "| URL When Error Occured: ".SITE_URL . "/". $url ."\n\n";
+        $err_message .= "| URL When Error Occured: ". $url['site_url'] ."/". $url['uri'] ."\n\n";
         $err_message .= "--------------------------------------------------------------------\n\n";
 
         // Write in the log file, the very long message we made
@@ -267,6 +271,10 @@ class Debug
     {
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_level() != 0) ob_end_clean();
+        
+        // Setup the url
+        $url = load_class('Router')->route_url();
+        $site_url = $url['site_url'];
         
         // Capture the orig_settingslate using Output Buffering, file depends on Environment
         ob_start();

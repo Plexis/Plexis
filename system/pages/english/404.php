@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<title><?php echo config('site_title'); ?> :: 404 - Not Found</title>
-	<link rel="stylesheet" href="<?php echo SITE_URL; ?>/system/pages/main.css" type="text/css"/>
+	<link rel="stylesheet" href="<?php echo $site_url; ?>/system/pages/main.css" type="text/css"/>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
 			server administrator.<br /><br />
 		</div>
 		<div class="links">
-			<a href='<?php echo SITE_URL; ?>'>Return to Index</a> | <a href='javascript: history.go(-1)'>Previous Page</a>
+			<a href='<?php echo $site_url; ?>'>Return to Index</a> | <a href='javascript: history.go(-1)'>Previous Page</a>
 		</div>
 	</div>
 </body>

@@ -372,7 +372,7 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 	width:200px;
 	padding:8px 0 7px 33px;
 	font:12px Arial, Tahoma, Verdana;
-	text-transform:uppercase;
+    font-weight: bold;
 	color:#6ec2d1;
 }
 .right-box ul 
@@ -440,7 +440,7 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 	width:507px;
 	padding:8px 0 7px 33px;
 	font:12px Arial, Tahoma, Verdana;
-	text-transform:uppercase;
+    font-weight: bold;
 	color:#6ec2d1;
 }
 .left-box-content 

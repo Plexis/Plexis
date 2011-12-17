@@ -247,6 +247,21 @@
             return FALSE;
         }
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: get_url_info()
+| ---------------------------------------------------------------
+|
+| Simple way of getting the site url and url information
+|
+| @Return: (Object) - Return the instnace of the Controller
+|
+*/	
+    function get_url_info()
+    {
+        return load_class('Router')->get_url_info();
+    }
 
 /*
 | ---------------------------------------------------------------

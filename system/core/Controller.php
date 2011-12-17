@@ -29,7 +29,7 @@ class Controller
     public $action;
     
     // Our queryString
-    public $queryString;
+    public $querystring;
 
     // The instance of this class
     private static $instance;
@@ -53,7 +53,7 @@ class Controller
         // Set our Controller and Action
         $this->controller = $GLOBALS['controller'];
         $this->action = $GLOBALS['action'];
-        $this->queryString = $GLOBALS['queryString'];
+        $this->querystring = $GLOBALS['querystring'];
         
         // Initiate the loader
         $this->load = load_class('Loader');

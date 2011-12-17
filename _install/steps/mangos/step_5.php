@@ -72,7 +72,7 @@ else
 <p>
     <?php if($return > 0)
     { ?>
-        Congradulations! Plexis is installed and ready for use! Please login and visit the admin panel to further configure the site!
+        Congratulations! Plexis is installed and ready for use! Please login and visit the admin panel to further configure the site!
         Also, you need to <u><b>DELETE the install folder! ("install/")</b></u> to prevent users from 
         hacking your site. <font color="red">You cannot visit the site till the install folder is deleted, </font>
         <br /><br /><a href="../index.php">Click Here</a> To go to your Plexis home page.

@@ -43,8 +43,31 @@ $config['log_errors'] = 1;
 $config['core_language'] = 'english';
 
 
+/*
+| ---------------------------------------------------------------
+| Default_controller
+| ---------------------------------------------------------------
+|
+| This is the default controller that loads when no path is givin
+|
+*/
 
-/// =====[ SimpleCMS Users ] DONOT Edit Below This Line! ===== ///
+$config['default_controller'] = 'welcome';
+
+
+/*
+| ---------------------------------------------------------------
+| Default_controller
+| ---------------------------------------------------------------
+|
+| This is the default action that loads when no action is givin
+|
+*/
+$config['default_action'] = 'index';
+
+
+
+/// =====[ PlexisCMS Users ] DONOT Edit Below This Line! ===== ///
 
 
 /*
