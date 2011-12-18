@@ -230,11 +230,16 @@ class Admin extends Application\Core\Controller
         // Load our config class
         $Config = load_class('Config');
         
+        // Use admin model to process and make our "select option" fields
+        $this->load->model('Admin_model', 'model');
+        $options = $this->model->site_settings_options();
+        
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Site Settings",
             'page_desc' => "Here you can manage the account of all your users.",
-            'config' => $Config->get_all('app')
+            'config' => $Config->get_all('app'),
+            'options' => $options
         );
         $this->load->view('site_settings', $data);
     }

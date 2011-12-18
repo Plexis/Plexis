@@ -126,6 +126,11 @@ class Parser
                         
                         // Check for a false reading
                         if($replacement === FALSE) $replacement = $match[0];
+                        
+                        // If our replacement is a array, it will cause an error, so just return "array"
+                        if(is_array($replacement)) $replacement = "array";
+                        
+                        // Main replacement
                         $source = str_replace($match[0], $replacement, $source);
                     }
                 }
@@ -240,8 +245,17 @@ class Parser
         // Process the block loop here, We need to process each array $val
         foreach($val as $key => $value)
         {
-            // Parse our block. This will catch nested blocks and arrays as well
-            $block = $this->parse($match, $value);
+            // if value isnt an array, then we just replace {value} with string
+            if(is_array($value))
+            {
+                // Parse our block. This will catch nested blocks and arrays as well
+                $block = $this->parse($match, $value);
+            }
+            else
+            {
+                // Just replace {value}, as we are dealing with a string
+                $block = str_replace('{value}', $value, $match);
+            }
             
             // Setup a few variables to tell what loop number we are on
             if(strpos($block, "{loop.") !== FALSE)

@@ -7,13 +7,16 @@
                 <li><a href="#tab-2">Advanced</a></li>
             </ul>
         </div>
+        
         <div class="block-content tab-container">
             <!-- Hidden Message -->
             <div id="js_message" style="display: none;"></div>
             
             <form id="config-form" class="form" action="{SITE_URL}/ajax/settings" method="post">
                 <input type="hidden" name="action" value="save"/>
-                <!-- Basic Settins -->
+                
+                
+                <!-- Basic Settins [ TAB 1 ] -->
                 <div id="tab-1" class="tab-content">
                     <!-- Basic Information Field Set -->
                     <fieldset>
@@ -47,7 +50,9 @@
                             <p>
                                 <label for="Language">Default Language</label>
                                 <select id="Language" name="cfg__default_language">
-                                    <option>{config.default_language}</option>
+                                    {options.languages}
+                                        {value}
+                                    {/options.languages}
                                 </select>
                             </p>
                         </div>
@@ -57,6 +62,10 @@
                     <fieldset>
                         <legend>WoW Settings</legend>
                         <div class="_50">
+                            <p>
+                                <label for="Site Email">Logon Server (Set Realmlist)</label>
+                                <input id="Site Email" name="cfg__logon_server" class="required" type="text" value="{config.logon_server}"/>
+                            </p>
                             <p>
                                 <label for="emu">Emulator</label>
                                 <select id="emu" name="cfg__emulator">
@@ -69,16 +78,37 @@
                             <p>
                                 <label for="Default Realm">Default Realm</label>
                                 <select id="Default Realm" name="cfg__default_realm_id">
-                                    <option value="1">No Realms Installed!</option>
+                                    {options.realms}
+                                        {value}
+                                    {/options.realms}
                                 </select>
                             </p>
                         </div>
                     </fieldset>
                 </div>
                 
-                <!-- More Tab -->
+                <!-- Advanced Settins [ TAB 2 ] -->
                 <div id="tab-2" class="tab-content">
-                    <p><div class="alert info">More to come!</div></p>
+                    <!-- Account Settings -->
+                    <fieldset>
+                        <legend>Account Settings</legend>
+                        <div class="_50">
+                            <p>
+                                <label for="Pass_recovery">Password Recovery via Email</label>
+                                <select id="Pass_recovery" name="cfg__account_recover_email_pass">
+                                    <option value="1" <?php if('{config.account_recover_email_pass}' == 1) echo "selected=\"selected\""; ?>>Enabled</option>
+                                    <option value="0" <?php if('{config.account_recover_email_pass}' == 0) echo "selected=\"selected\""; ?>>Disabled</option>
+                                </select>
+                            </p>
+                            <p>
+                                <label for="Pass_recovery">Send Email On Password Change</label>
+                                <select id="Pass_recovery" name="cfg__send_email_pass_change">
+                                    <option value="1" <?php if('{config.send_email_pass_change}' == 1) echo "selected=\"selected\""; ?>>Enabled</option>
+                                    <option value="0" <?php if('{config.send_email_pass_change}' == 0) echo "selected=\"selected\""; ?>>Disabled</option>
+                                </select>
+                            </p>
+                        </div>
+                    </fieldset>
                 </div>
                 
                 <div class="block-actions">

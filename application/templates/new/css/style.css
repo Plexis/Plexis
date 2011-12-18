@@ -468,13 +468,21 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 	margin-bottom:5px;
 	font:14px arial;
 }
-.left-box-content ul 
+.left-box-content ul
 {
 	margin:10px 0 10px 30px;
-	list-style:circle;
+}
+.left-box-content ul li 
+{
+	list-style:disc;
+}
+.left-box-content ol li 
+{
+	list-style:decimal;
 }
 .left-box-content ol 
 {
+    color: #fff;
 	margin:10px 0 10px 30px;
 }
 .left-news-foot 

@@ -61,21 +61,25 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="{SITE_URL}/account/support">Support</a>
+                    <li><a href="{SITE_URL}/support">Support</a>
+                        <ul class="subnav">
+                            <li><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></li>
+                        </ul>
+                    </li>
                     
                     <!-- Account Login -->
                     <?php if( $session['user']['logged_in'] == FALSE): ?>
-                        <li><a href="{SITE_URL}/account/register">Register</a>
+                        <li><a href="{SITE_URL}/account/register">Register</a></li>
                         
                     <?php else: ?>
                         <li><a href="#">Account</a>
-                        <ul class="subnav">
-                            <li><a href="{SITE_URL}/account">Dashboard</a></li>
-                            <li><a href="{SITE_URL}/account/update/password">Change Password</a></li>
-                            <li><a href="{SITE_URL}/account/update/email">Update Email</a></li>
-                            <li><a href="{SITE_URL}/account/logout">Logout</a></li>
-                        </ul>
-                    </li>
+                            <ul class="subnav">
+                                <li><a href="{SITE_URL}/account">Dashboard</a></li>
+                                <li><a href="{SITE_URL}/account/update/password">Change Password</a></li>
+                                <li><a href="{SITE_URL}/account/update/email">Update Email</a></li>
+                                <li><a href="{SITE_URL}/account/logout">Logout</a></li>
+                            </ul>
+                        </li>
                         
                     <?php endif; ?>	
                     <!-- End Account Login -->

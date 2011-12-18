@@ -29,12 +29,21 @@
                                 </select>
                             </p>
                             <p>
-                                <label for="Req Email" title="If Enabled, Requires users to validate thier email before being able to login and play">
-                                    Require Email Verification
+                                <label for="Req Email" title="If Enabled, Requires users to activate thier account via Email before being able to login and play">
+                                    Require Email Activation
                                 </label>
                                 <select id="Req Email" name="cfg__reg_email_verification">
                                     <option value="1" <?php if($config['reg_email_verification'] === 1) echo "selected=\"selected\""; ?>>Enabled</option>
                                     <option value="0" <?php if($config['reg_email_verification'] === 0) echo "selected=\"selected\""; ?>>Disabled</option>
+                                </select>
+                            </p>
+                            <p>
+                                <label for="Req Key" title="If enabled, Guests will need to enter a cpatcha.">
+                                    Enable Captcha
+                                </label>
+                                <select id="enable_captcha" name="cfg__enable_captcha">
+                                    <option value="1" <?php if($config['enable_captcha'] === 1) echo "selected=\"selected\""; ?>>Enabled</option>
+                                    <option value="0" <?php if($config['enable_captcha'] === 0) echo "selected=\"selected\""; ?>>Disabled</option>
                                 </select>
                             </p>
                         </div>
