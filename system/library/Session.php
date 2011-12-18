@@ -16,7 +16,7 @@ namespace System\Library;
 class Session
 {
     // Have we already started the session?
-    static $started = FALSE;
+    protected $started = FALSE;
 
     // Array of session data
     public $data = array();
@@ -48,10 +48,10 @@ class Session
         $this->session_cookie_name = config('session_cookie_name', 'Core');
         
         // Init the loader class
-        $this->load = load_class('Core\\Loader');
+        $this->load = load_class('Loader');
         
         // load the Input class
-        $this->input = load_class('Core\\Input');
+        $this->input = load_class('Input');
         
         // Are we storing session data in the database? If so, Load the DB connction
         if($this->session_use_db == TRUE)
@@ -82,10 +82,10 @@ class Session
 */
     protected function start_session()
     {
-        if(!self::$started)
+        if(!$this->started)
         {
             session_start();
-            self::$started = true;
+            $this->started = true;
         }
     }
 
@@ -197,7 +197,7 @@ class Session
         $this->input->set_cookie( $this->session_cookie_name, $cookie_data );
         
         // Create user data array
-        $data = array( 
+        $data = array(
             'token' => $this->data['token'],  
             'ip_address' => $this->input->ip_address(),
             'last_seen' => time(),
@@ -271,6 +271,7 @@ class Session
         
         // Remove session variables and cookeis
         $this->data = array();
+        $this->started = FALSE;
         session_destroy();
         
         // Start a new session

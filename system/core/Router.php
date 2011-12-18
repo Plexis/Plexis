@@ -45,7 +45,13 @@ class Router
 
     // The querystring
     protected $queryString;
-    
+ 
+/*
+| ---------------------------------------------------------------
+| Constructer
+| ---------------------------------------------------------------
+|
+*/ 
     public function __construct()
     {
         // Start off by routing this thing

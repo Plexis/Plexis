@@ -159,6 +159,6 @@ $config['session_table_name'] = 'pcms_sessions';
 |
 */
 
-$config['session_cookie_name'] = 'FB_session';
+$config['session_cookie_name'] = 'session';
 
 // EOF

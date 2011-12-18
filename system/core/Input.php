@@ -64,7 +64,7 @@ class Input
         // Set Cookie Defaults
         $this->time = ( time() + (60 * 60 * 24 * 365) );
         $this->cookie_path =  "/";
-        $this->cookie_domain = $_SERVER['HTTP_HOST'];
+        $this->cookie_domain = rtrim($_SERVER['HTTP_HOST'], '/');
     }
 
 /*
@@ -142,7 +142,8 @@ class Input
         {
             $time = $this->time;
         }
-        setcookie( $key, $val, $time, $this->cookie_path, $this->cookie_domain, false, true);
+        // setcookie( $key, $val, $time, $this->cookie_path, $this->cookie_domain, false, true);
+        setcookie( $key, $val, $time, $this->cookie_path );
     }
 
 /*
@@ -192,63 +193,6 @@ class Input
             }
         }
         return $this->ip_address;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: validate()
-| ---------------------------------------------------------------
-|
-| Returns TRUE if the given string is clean of xss, FALSE otherwise
-|
-| @Param: (Mixed) $txt - String to be tested
-| @Param: (String) $type - BASIC, DATE, or EMAIL
-| @Return (Bool) Returns True is the $txt passes as a clean string
-|
-*/
-    function validate($txt, $type = 'basic')
-    {
-        //clear of bad input
-        $validation = htmlentities($txt);
-        $type = strtoupper($type);
-        
-        // Make sure it isnt an empty string
-        if($validation != NULL)
-        {
-            switch($type)
-            {
-                case "BASIC":
-                    // If the given text is not numbers or letters, return FALSE
-                    if(!preg_match("([A-Za-z0-9])", $validation)) 
-                    {
-                        return FALSE;
-                    }
-                    return TRUE;
-                    break;
-                    
-                case "DATE":
-                    // Check for a valid date (e.g. 12/12/2012)
-                    if(!preg_match("(\d{1,2}\/\d{1,2}\/\d{4})", $validation))
-                    { 
-                        return FALSE;
-                    }
-                    return TRUE;
-                    break;
-                    
-                case "EMAIL":
-                    // Check for valid email structure
-                    if(!preg_match("(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})", $validation))
-                    { 
-                        return FALSE;
-                    }
-                    return TRUE;
-                    break;
-            }
-        }
-        else
-        {
-            return TRUE;
-        }
     }
 
 /*
