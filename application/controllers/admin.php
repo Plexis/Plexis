@@ -26,7 +26,6 @@ class Admin extends Application\Core\Controller
     public function index() 
     {
         // Get our PHP and DB versions
-        $this->load->database( 'DB' );
         $info = $this->DB->server_info();
         $data['driver'] = ucfirst( $info['driver'] );
         $data['php_version'] = phpversion();
@@ -128,9 +127,6 @@ class Admin extends Application\Core\Controller
         // We have a username, Load the user
         else
         {
-            // Load the database
-            $this->load->database( 'DB' );
-            
             // Get users information. We can use GET because the queries second param will be cleaned
             // by the PDO class when bound to the "?".
             $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 

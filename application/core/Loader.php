@@ -144,7 +144,7 @@ class Loader extends \System\Core\Loader
         {
             include_once $file;
             $name = "\\Application\\Library\\Wowlib\\". $class_name;
-            $class = new $name();
+            $class = new $name($id);
             
             // Store the class statically and return the class
             \Registry::singleton()->store($class_name, $class);
