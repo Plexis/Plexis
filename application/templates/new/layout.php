@@ -37,6 +37,27 @@
     </script>
     {VIEW_JS}
 </head>
+
+<!-- Thie template doesnt work for Internet Explorer, so we show a message to IE users -->
+<div style="position:fixed;background-color:#eee;width:100%;height:100%;z-index:99999;display:none;text-align:center;font-size:24px;color:#333;padding-top:10%" id="ie">
+	<h1 style="margin-bottom:5px;font-size:52px;">Dear Internet Explorer user...</h1>
+	<h2 style="font-size:40px; margin-top: 100px;">Your browser is not supported!</h2>
+	<h2 style="font-size:20px;margin-top:30px;">Please upgrade to a more modern browser. These are our recommendations:</h2>
+
+	<div style="margin-top:30px;">
+		<a href="http://www.google.com/chrome"><img src="{TEMPLATE_URL}/images/ie_splash/chrome.jpg" /></a>
+		<a href="http://www.mozilla.org/firefox/"><img src="{TEMPLATE_URL}/images/ie_splash/firefox.jpg" /></a>
+		<a href="http://www.apple.com/safari/"><img src="{TEMPLATE_URL}/images/ie_splash/safari.jpg" /></a>
+		<a href="http://www.opera.com/"><img src="{TEMPLATE_URL}/images/ie_splash/opera.jpg" /></a>
+	</div>
+</div>
+	
+<!--[if IE]>
+<script type="text/javascript">
+	$("#ie").show()
+</script>
+<![endif]-->
+
 <body>
     <div id="container">
 
@@ -54,10 +75,21 @@
                     <li><a href="{SITE_URL}/server">Server</a>
                         <ul class="subnav">
                             <li><a href="{SITE_URL}/server/realmlist">Realmlist</a></li>
-                            <li><a href="{SITE_URL}/server/online">Players Online</a><span class="spmore"></span>
-                                <ul class="subnav-out">
-                                    <li><a href="#">Test</a></li>
-                                </ul>
+                            <li><a href="{SITE_URL}/server/onlinelist">Players Online</a>
+                                <?php
+                                    $realms = get_installed_realms();
+                                    if( !empty($realms) )
+                                    {
+                                        echo '<span class="spmore"></span>';
+                                        echo '<ul class="subnav-out">';
+                                        foreach($realms as $realm)
+                                        {
+                                            echo '<li><a href="'.SITE_URL.'/server/onlinelist/'.$realm['id'].'">'.$realm['name'].'</a></li>';
+                                        }
+                                        echo '</ul>';
+                                    }
+                                ?>
+                            </li>
                             </li>
                         </ul>
                     </li>
@@ -146,7 +178,6 @@
                                     
                                     // Echo out the information
                                     echo '<li><center><b><a href="{SITE_URL}/server/realm/'.$r['id'].'">'.$r['name'].'</a> - '.$text.'</b></center></li>';
-                                    echo "<li><center><b>Trinity - <font color='green'>Online</font></b></center></li>";
                                 }
                             ?>
                             <li><center><small><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></small></center></li>

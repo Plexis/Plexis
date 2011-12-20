@@ -110,9 +110,7 @@ class Loader extends \System\Core\Loader
         // Get our realm id if none is provieded
         if($id === 0)
         {
-            // Load the session and get the users selected realm id
-            $session = $this->library('Session')->get('user');
-            $id = (isset($session['realm_id'])) ? $session['realm_id'] : config('default_realm_id');
+            $id = config('default_realm_id');
         }
         
         // Load our driver name
@@ -133,7 +131,7 @@ class Loader extends \System\Core\Loader
         $file = APP_PATH . DS . 'library' . DS . 'wowlib' . DS . $class_name . '.php';
         
         // Make sure we havent loaded the lib already
-        $Obj = \Registry::singleton()->load($class_name);
+        $Obj = \Registry::singleton()->load($class_name .'_r'.$id);
         if($Obj !== NULL)
         {
             return $Obj;
@@ -147,7 +145,7 @@ class Loader extends \System\Core\Loader
             $class = new $name($id);
             
             // Store the class statically and return the class
-            \Registry::singleton()->store($class_name, $class);
+            \Registry::singleton()->store($class_name .'_r'.$id, $class);
             
             // Check to see if the user wants to instance
             if($instance_as !== FALSE)

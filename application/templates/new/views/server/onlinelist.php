@@ -1,5 +1,5 @@
 <div class="left-box">
-    <h2>Test Module</h2>
+    <h2>Online List</h2>
     <div class="left-box-content">
         <table>
             <thead>

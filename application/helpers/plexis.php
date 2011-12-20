@@ -105,6 +105,43 @@
 
 /*
 | ---------------------------------------------------------------
+| Method: get_realm_cookie()
+| ---------------------------------------------------------------
+|
+| This function returns the users selected realm from his cookie
+|
+| @Return: (AInt) The Realm ID
+|
+*/    
+    function get_realm_cookie()
+    {
+        // Load the input class
+        $input = load_class('Input');
+        $return = $input->cookie('realm_id', TRUE);
+        if($return != FALSE)
+        {
+            // We need to make sure the realm is still installed
+            $DB = load_class('Loader')->database( 'DB' );
+            $query = "SELECT `name` FROM `pcms_realms` WHERE `id`=?";
+            $result = $DB->query( $query, array($return) )->fetch_column();
+            
+            //If false, we set a new cookie with the dealt ID
+            if($result == FALSE)
+            {
+                $return = config('default_realm_id');
+                $input->set_cookie('realm_id', $return);
+            } 
+        }
+        else
+        {
+            $return = config('default_realm_id');
+            $input->set_cookie('realm_id', $return);
+        }
+        return $return;
+    }
+
+/*
+| ---------------------------------------------------------------
 | Method: get_installed_realms()
 | ---------------------------------------------------------------
 |

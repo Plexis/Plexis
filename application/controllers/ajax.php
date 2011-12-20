@@ -462,6 +462,11 @@ class Ajax extends Application\Core\Controller
                 $action = "un-install";
                 break;
                 
+            case "make-default":
+                $this->check_access('a');
+                $action = "make-default";
+                break;
+                
             case "status":
                 break;
                 
@@ -511,8 +516,11 @@ class Ajax extends Application\Core\Controller
                 $irealms[] = $realm['id'];
             }
 
-            // We need to add a working "manage" link
+            // We need to add a working "manage", and "Make Default Link" link
             $key = 0;
+            $default = config('default_realm_id');
+            
+            // Loop, and add options
             foreach($output['aaData'] as $realm)
             {
                 // Easier to write
@@ -521,9 +529,20 @@ class Ajax extends Application\Core\Controller
                 // Create out action links for this realm
                 if(in_array($id, $irealms))
                 {
-                    $output['aaData'][$key][4] = "<font color='green'>Installed</font>";
-                    $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a> 
-                        - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                    // We CANNOT uninstall the default realm!
+                    if($id == $default)
+                    {
+                        $output['aaData'][$key][4] = "<font color='green'>Installed</font> - Default Realm";
+                        $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
+                            - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                    }
+                    else
+                    {
+                         $output['aaData'][$key][4] = "<font color='green'>Installed</font>";
+                        $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
+                            - <a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a>
+                            - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                    }
                 }
                 else
                 {
@@ -634,6 +653,13 @@ class Ajax extends Application\Core\Controller
                 }
                 else
                 {
+                    // Set as default realm if we dont have one
+                    if($Config->get('default_realm_id') == 0)
+                    {
+                        // Set the new default Realm
+                        $Config->set('default_realm_id', $data['id'], 'App');
+                        $Config->save('App');
+                    }
                     ($good == TRUE) ? $this->output(true, 'realm_install_success') : $this->output(true, 'realm_install_warning', 'warning');
                 }
             }
@@ -655,10 +681,52 @@ class Ajax extends Application\Core\Controller
         // Uninstalling
         elseif($action == 'un-install')
         {
+            // Load our config class
+            $Config = load_class('Config');
+            
+            // Get our realm ID and the default realm ID
             $id = $_POST['id'];
+            $default = $Config->get('default_realm_id');
+            
+            // Run the delete though the database
             $this->load->database( 'DB' );
             $result = $this->DB->delete('pcms_realms', '`id`='.$id.'');
+            
+            // If we are uninstalling the default Realm, we set a new one
+            if($id == $default)
+            {
+                // Get the new Default Realm
+                $installed = get_installed_realms();
+                
+                if($installed == FALSE || empty($installed))
+                {
+                    // Set the new default Realm
+                    $Config->set('default_realm_id', 0, 'App');
+                    $Config->save('App');
+                }
+                else
+                {
+                    // Set the new default Realm
+                    $Config->set('default_realm_id', $installed[0]['id'], 'App');
+                    $Config->save('App');
+                }
+            }
             ($result == TRUE) ? $this->output(true, 'realm_uninstall_success') : $this->output(false, 'realm_uninstall_failed', 'error');
+        }
+        
+        // Making default
+        elseif($action == 'make-default')
+        {
+            // Load our config class
+            $Config = load_class('Config');
+            
+            // Get our realm ID
+            $id = $_POST['id'];
+            
+            // Set the new default Realm
+            $Config->set('default_realm_id', $id, 'App');
+            $result = $Config->save('App');
+            ($result == TRUE) ? $this->output(true, 'realm_default_success') : $this->output(false, 'realm_default_failed', 'error');
         }
         
         // Nobody knows this requested action

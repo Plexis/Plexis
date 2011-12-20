@@ -194,7 +194,7 @@ class Template
             }
             if(!file_exists($file))
             {
-                show_error('missing_page_view');
+                show_error('missing_page_view', array( $this->_controller .'/'.$this->view_file .'.php' ));
             }
             return file_get_contents($file);
         }

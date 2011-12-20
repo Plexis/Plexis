@@ -72,5 +72,29 @@
                 );
             }
         });
+        
+        // ============================================
+        // Make Realm Default
+        $(".make-default").live('click', function(){
+            var r_id = $(this).attr('name');
+            
+            // Get our post
+            $.post("{SITE_URL}/ajax/realms", { action : 'make-default', id : r_id },
+                function(response){
+                    // Parse the JSON response
+                    var result = jQuery.parseJSON(response);
+                    if (result.success == true)
+                    {
+                        // Display our Success message, and ReDraw the table so we imediatly see our action
+                        $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
+                        realmtable.fnDraw();
+                    }
+                    else
+                    {
+                        $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                    }
+                }
+            );
+        });
     });
 </script>

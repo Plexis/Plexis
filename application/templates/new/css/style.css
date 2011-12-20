@@ -669,9 +669,40 @@ div.input-error
     margin-bottom: 10px;
 }
 
+/* ==================================================
+ * 11) Tables
+ * ================================================== */
+table
+{
+    width: 95%;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 15px;
+	border-collapse: collapse;
+	text-align: left;
+}
+th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #BBB;
+	padding: 10px 8px;
+	border-bottom: 2px solid #333;
+}
+td
+{
+	border-bottom: 1px solid #222;
+	color: #999;
+	padding: 5px 5px;
+}
+tbody tr:hover td
+{
+	color: #fff;
+}
+
 
 /* ==================================================
- * 11) Buttons
+ * 12) Buttons
  * ================================================== */
 .button 
 {
@@ -800,7 +831,7 @@ div.input-error
 }
 
 /* ==================================================
- * 12) Breadcrums.
+ * 13) Breadcrums.
  * ================================================== */
 #breadcrumb
 {
@@ -849,7 +880,7 @@ div.input-error
 
 
 /* ==================================================
- * 13) Misc.
+ * 14) Misc.
  * ================================================== */
 .div-center
 {
@@ -880,33 +911,6 @@ div.input-error
     margin-left: 20px;
     font-weight: bold;
 
-}
-
-/* ==================================================
- * 14) Crappy IE Fixes
- * ================================================== */
- .ie .top-label
-{
-    text-align: left;
-    width: 100%;
-    margin: 0 0 2px 0;
-	display:block;
-}
-.ie6 #right 
-{
-	margin-right:-20px;
-}
-.ie6 .left-box-content 
-{
-	width:510px;
-}
-.ie6 #slide-tabs li a 
-{
-	background:url(../images/slide-dots.png) 0 -8px no-repeat;
-}
-.ie7 #main
-{
-	padding-bottom:15px;
 }
 .opera #slide-tabs
 {
