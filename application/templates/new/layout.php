@@ -10,13 +10,20 @@
     <!-- Style Sheet -->
     <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/style.css" />
     <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/alerts.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/datatables.css" />	
     
-    <!-- Scripts -->
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery-1.6.2.min.js"></script>
+    <!-- Include Plexis Static JS Scripts -->
+    <script type="text/javascript" src="{SITE_URL}/application/static/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="{SITE_URL}/application/static/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="{SITE_URL}/application/static/js/jquery.dataTables.min.js"></script>
+    
+    <!-- Include Template Related JS Scripts -->
     <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.cycle.all.min.js"></script>
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.validate.min.js"></script>
     <script type="text/javascript">
     <!--
+        // THIS MUST BE SET! 
+        var url = '{SITE_URL}';
+        
         // Slide Show
         jQuery(function( $ ){
             $('#slide') 

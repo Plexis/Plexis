@@ -669,6 +669,7 @@ div.input-error
     margin-bottom: 10px;
 }
 
+
 /* ==================================================
  * 11) Tables
  * ================================================== */
@@ -699,7 +700,6 @@ tbody tr:hover td
 {
 	color: #fff;
 }
-
 
 /* ==================================================
  * 12) Buttons
@@ -830,6 +830,198 @@ tbody tr:hover td
     border:none;
 }
 
+
+
+
+/************ button-row **************/
+.button-row 
+{
+    width: 90%;
+    text-align:center;
+}
+.button-row , .button-row ul
+{
+    margin:0 auto;
+}
+.button-row ul
+{
+    display: inline-block;
+    margin-top: 25px;
+}
+
+.button-row ul li 
+{
+    display: inline-block;
+    float: left;
+    -moz-box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 0 8px rgba(0,0,0,0.2);    
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);       
+}
+
+/* button-row Button */
+.button-row ul li a
+ {
+    background:#082029;
+    border: 1px solid #051219;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    outline: 0;
+    margin: 0;
+    padding: 5px 12px 6px 12px;
+    border-left: 0;
+    cursor: pointer;    
+    color: white;
+    font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", Tahoma, sans-serif;
+    font-size:11px;
+    white-space: pre;
+    
+    /* Transition */
+    -webkit-transition:All 0.3s ease;
+    -moz-transition:All 0.3s ease;
+    -o-transition:All 0.3s ease;
+    
+    /* Background Clip Fix Some Pixels When Using Border Radius */
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;    
+    
+    /* Shadows */
+    -moz-box-shadow: 
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.1) ,
+        inset 0 -1px 0 rgba(255,255,255,0.02) ,
+        0 1px 0 rgba(255,255,255,0.02) ,
+        inset 0 8px 20px rgba(255,255,255,0.08) ,
+        inset 0 12px 0 rgba(255,255,255,0.03)
+    ;
+    -webkit-box-shadow: 
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.1) ,
+        inset 0 -1px 0 rgba(255,255,255,0.02) ,
+        0 1px 0 rgba(255,255,255,0.02) ,
+        inset 0 8px 20px rgba(255,255,255,0.08) ,
+        inset 0 12px 0 rgba(255,255,255,0.03)   
+    ;    
+    box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.1) ,
+        inset 0 -1px 0 rgba(255,255,255,0.02) ,
+        0 1px 0 rgba(255,255,255,0.02) ,
+        inset 0 8px 20px rgba(255,255,255,0.08) ,
+        inset 0 12px 0 rgba(255,255,255,0.03)
+    ;               
+}
+.button-row ul li a:hover
+ {
+    background: #071821;
+    cursor: pointer;
+    color: #FFFFFF;
+    
+    /* Transition */
+    -webkit-transition:All 0.3s ease;
+    -moz-transition:All 0.3s ease;
+    -o-transition:All 0.3s ease;
+    
+    /* Shadows */
+    -moz-box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ;
+    -webkit-box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ;
+    box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ; 
+}
+
+.button-row ul li a.current
+{
+    background: #071821;
+    cursor: pointer;
+    color: #FFFFFF;
+    
+    /* Transition */
+    -webkit-transition:All 0.3s ease;
+    -moz-transition:All 0.3s ease;
+    -o-transition:All 0.3s ease;
+    
+    /* Shadows */
+    -moz-box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ;
+    -webkit-box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ;
+    box-shadow:         
+        inset 0 0 1px rgba(255,255,255,0.1) ,
+        inset 0 1px 0 rgba(255,255,255,0.08) ,
+        inset 0 -1px 0 rgba(255,255,255,0.05) ,
+        0 1px 0 rgba(255,255,255,0.05) ,
+        inset 0 8px 20px rgba(255,255,255,0.06) ,
+        inset 0 14px 0 rgba(255,255,255,0.02),
+        0 0 3px rgba(0,0,0,0.2)
+    ; 
+}
+ 
+/* First button-row Button */
+.button-row ul li:first-child a
+ {
+    border-left: 1px solid #051219;
+    
+    /* Top-left & Bottom-left Border Radius */
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;    
+    border-radius: 3px 0 0 3px;    
+}
+/* Last button-row Button */
+.button-row ul li:last-child a
+{
+    border-left: 0;
+    
+    /* Top-right & Bottom-right Border Radius */
+    -moz-border-radius: 0 3px 3px 0;
+    -webkit-border-radius: 0 3px 3px 0;    
+    border-radius: 0 3px 3px 0;    
+}
+
+
+
+
+
+
+
+
 /* ==================================================
  * 13) Breadcrums.
  * ================================================== */
@@ -885,6 +1077,11 @@ tbody tr:hover td
 .div-center
 {
     margin: 0 auto;
+}
+.center
+{
+    margin-left: auto;
+    margin-right: auto;
 }
 .right
 {

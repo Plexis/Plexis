@@ -53,38 +53,9 @@ class Mangos_335a
         $realm = $this->DB->query( $query, array($realm_id))->fetch_row();
         
         // Turn our connection info into an array
-        $world = explode(';', $realm['world_db']);
-        $char = explode(';', $realm['char_db']);
-        $ra_info = explode(';', $realm['ra_info']);
-        
-        // Build the world connection array
-        $world = array(
-            'driver' => $world[0],
-            'host' => $world[1],
-            'port' => $world[2],
-            'username' => $world[3],
-            'password' => $world[4],
-            'database' => $world[5]
-        );
-        // Build the character conenction array
-        $char = array(
-            'driver' => $char[0],
-            'host' => $char[1],
-            'port' => $char[2],
-            'username' => $char[3],
-            'password' => $char[4],
-            'database' => $char[5]
-        );
-        // Build our Remote Access data
-        if(is_array($ra_info))
-        {
-            $this->ra_info = array(
-                'type' => $ra_info[0],
-                'port' => $ra_info[1],
-                'user' => $ra_info[2],
-                'pass' => $ra_info[3]
-            );
-        }
+        $world = unserialize($realm['world_db']);
+        $char = unserialize($realm['char_db']);
+        $ra_info = unserialize($realm['ra_info']);
         
         // Set the connections into the connection variables
         $this->CDB = $this->load->database($char);
@@ -470,6 +441,40 @@ class Mangos_335a
         
         // Return the query result
         return $this->CDB->query( $query )->fetch_array();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Funtion: get_online_list
+| ---------------------------------------------------------------
+|
+| This method returns a list of characters online
+|
+| @Param: (Int) $limit - The number of results we are recieveing
+| @Param: (Int) $start - The result we start from (example: $start = 50
+|   would return results 50-100)
+| @Param: (Int) $faction - Faction ID, 1 = Ally, 2 = Horde, 0 = Both
+| @Retrun: (Array): An array of characters
+|
+*/     
+    public function get_online_list_datatables()
+    {
+        $ajax = $this->load->model("Ajax_Model", "ajax");
+  
+        /* 
+        * Dwsc: Array of database columns which should be read and sent back to DataTables. 
+        * Format: id, name, character level, race ID, class ID, Gender ID, and Zone ID
+        */
+        $cols = array( 'guid', 'name', 'level', 'race', 'class', 'gender', 'zone' );
+        
+        /* Character ID column name */
+        $index = "guid";
+        
+        /* characters table name to use */
+        $table = "characters";
+        
+        /* Process the request */
+        return $ajax->get_characters_online($cols, $index, $table, $this->CDB);
     }
 
 /*

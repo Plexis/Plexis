@@ -569,29 +569,31 @@ class Ajax extends Application\Core\Controller
             $port = $_POST['port'];
             $type = $_POST['type'];
             $driver = $_POST['driver'];
-            $cs = $_POST['c_driver'].";".$_POST['c_address'].";".$_POST['c_port'].";".$_POST['c_username'].";".$_POST['c_password'].";".$_POST['c_database'];
-            $ws = $_POST['w_driver'].";".$_POST['w_address'].";".$_POST['w_port'].";".$_POST['w_username'].";".$_POST['w_password'].";".$_POST['w_database'];
-            $ra = $_POST['ra_type'].";".$_POST['ra_port'].";".$_POST['ra_username'].";".$_POST['ra_password'];
             
-            // See if we can establish a connection
-            $configs = array(
-                'CDB' => array(
-                    'driver'	   => $_POST['c_driver'],
-                    'host'         => $_POST['c_address'],
-                    'port'         => $_POST['c_port'],
-                    'username'     => $_POST['c_username'],
-                    'password'     => $_POST['c_password'],
-                    'database'     => $_POST['c_database']
-                ),
-                'WDB' => array(
-                    'driver'	   => $_POST['w_driver'],
-                    'host'         => $_POST['w_address'],
-                    'port'         => $_POST['w_port'],
-                    'username'     => $_POST['w_username'],
-                    'password'     => $_POST['w_password'],
-                    'database'     => $_POST['w_database']
-                )
+            // Build our DB Arrays
+            $cs = array(
+                'driver'	   => $_POST['c_driver'],
+                'host'         => $_POST['c_address'],
+                'port'         => $_POST['c_port'],
+                'username'     => $_POST['c_username'],
+                'password'     => $_POST['c_password'],
+                'database'     => $_POST['c_database']
             );
+            $ws = array(
+                'driver'	   => $_POST['w_driver'],
+                'host'         => $_POST['w_address'],
+                'port'         => $_POST['w_port'],
+                'username'     => $_POST['w_username'],
+                'password'     => $_POST['w_password'],
+                'database'     => $_POST['w_database']
+            );
+            $ra = array(
+                'type'         => $_POST['ra_type'],
+                'port'         => $_POST['ra_port'],
+                'username'     => $_POST['ra_username'],
+                'password'     => $_POST['ra_password']
+            );
+
             
             // Turn off all error reporting, since we use our own, this is easy
             $debug = load_class('Debug');
@@ -599,12 +601,11 @@ class Ajax extends Application\Core\Controller
             $good = TRUE;
 
             // Test our new connections before saving to config
-            $a = $configs['CDB'];
             try{
                 $dba = new \pdo( 
-                    $a['driver'].':host='.$a['host'].':'.$a['port'].';dbname='.$a['database'], 
-                    $a['username'], 
-                    $a['password'],
+                    $cs['driver'].':host='.$cs['host'].':'.$cs['port'].';dbname='.$cs['database'], 
+                    $cs['username'], 
+                    $cs['password'],
                     array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
                 );
             }
@@ -613,12 +614,11 @@ class Ajax extends Application\Core\Controller
             }
             
             // Test our new connection first
-            $a = $configs['WDB'];
             try{
                 $dba = new \pdo( 
-                    $a['driver'].':host='.$a['host'].':'.$a['port'].';dbname='.$a['database'], 
-                    $a['username'], 
-                    $a['password'],
+                    $ws['driver'].':host='.$ws['host'].':'.$ws['port'].';dbname='.$ws['database'], 
+                    $ws['username'], 
+                    $ws['password'],
                     array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
                 );
             }
@@ -636,9 +636,9 @@ class Ajax extends Application\Core\Controller
                 'address' => $address,
                 'port' => $port,
                 'type' => $type,
-                'char_db' => $cs,
-                'world_db' => $ws,
-                'ra_info' => $ra,
+                'char_db' => serialize($cs),
+                'world_db' => serialize($ws),
+                'ra_info' => serialize($ra),
                 'driver' => $driver
             );
             
@@ -665,6 +665,7 @@ class Ajax extends Application\Core\Controller
             }
             else
             {
+                // Update the realms table
                 $result = $this->DB->update('pcms_realms', $data, "`id`=".$id);
                 if($result === FALSE)
                 {
@@ -734,6 +735,37 @@ class Ajax extends Application\Core\Controller
         {
             $this->output(false, 'access_denied_privlages');
         }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: onlinelist()
+| ---------------------------------------------------------------
+|
+| This method is used for via Ajax to check for CMS updates
+*/    
+    public function onlinelist($realm = 0)
+    {
+        // Load the WoWLib
+        $this->load->wowlib($realm, 'wowlib');
+        $output = $this->wowlib->get_online_list_datatables();
+        
+        // Loop, and add options
+        foreach($output['aaData'] as $key => $value)
+        {
+            $g = $value[5];
+            $r = $value[3];
+            $race = $this->wowlib->race_to_text($r);
+            $class = $this->wowlib->class_to_text($value[4]);
+            $zone = $this->wowlib->zone_to_text($value[6]);
+            $output['aaData'][$key][3] = '<img src="'. SITE_URL .'/application/static/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'">';
+            $output['aaData'][$key][4] = '<img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'">';
+            $output['aaData'][$key][5] = $zone;
+            unset($output['aaData'][$key][6]);
+        }
+
+        // Push the output in json format
+        echo json_encode($output);
     }
  
 

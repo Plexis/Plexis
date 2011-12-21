@@ -58,7 +58,7 @@
                     </p>
                     <p>
                         <label for="c_address">Host / IP Address</label>
-                        <input id="c_address" name="c_address" class="required" type="text" value="{realm.cdb.address}"/>
+                        <input id="c_address" name="c_address" class="required" type="text" value="{realm.cdb.host}"/>
                     </p>
                     <p>
                         <label for="c_port">Port</label>
@@ -92,7 +92,7 @@
                     </p>
                     <p>
                         <label for="w_address">Host / IP Address</label>
-                        <input id="w_address" name="w_address" class="required" type="text" value="{realm.wdb.address}"/>
+                        <input id="w_address" name="w_address" class="required" type="text" value="{realm.wdb.host}"/>
                     </p>
                     <p>
                         <label for="w_port">Port</label>

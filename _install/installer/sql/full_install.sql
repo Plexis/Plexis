@@ -163,7 +163,7 @@ CREATE TABLE `pcms_news` (
 -- ----------------------------
 -- Records of pcms_news
 -- ----------------------------
-INSERT INTO `pcms_news` VALUES ('1', 'Test News Post', 'wilson212', '1315763413', '<p><strong>Everything</strong> seem to be working <span style=\"color: #339966;\">great</span>!!!</p>');
+INSERT INTO `pcms_news` VALUES ('1', 'Welcome to Plexis CMS!', 'wilson212', '1324062007', '<p>Thank you for downloading Plexis Cms. Plexis is a professional WoW pirvate server CMS with tons of tools. Since we are in the Alpha stages, your feedback is <span style=\"color: #ff0000;\"><strong>critical</strong></span>. Please note that i donot recomend this site going live because of the due fact that there are not alot of features available.</p>');
 
 -- ----------------------------
 -- Table structure for `pcms_realms`
@@ -175,9 +175,9 @@ CREATE TABLE `pcms_realms` (
   `address` varchar(50) NOT NULL,
   `port` int(7) NOT NULL,
   `type` varchar(50) NOT NULL COMMENT 'Icon',
-  `char_db` varchar(250) NOT NULL,
-  `world_db` varchar(250) NOT NULL,
-  `ra_info` varchar(250) DEFAULT NULL,
+  `char_db` text NOT NULL,
+  `world_db` text NOT NULL,
+  `ra_info` text,
   `driver` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
