@@ -1,9 +1,9 @@
 body 
 {
-	background:url(../images/background.jpg) #000;
+	background:url(../images/background.jpg) #0D0D0D;
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center; 
+    background-attachment:fixed;
+    background-position:top center; 
 	margin:0;
 	padding:0;
 	font:12px Arial, Tahoma, Verdana;
@@ -101,7 +101,7 @@ blockquote
  * 4) Navigation
  * ================================================== */
 div#nav {
-	width: 800px;
+	width: 802px;
 }
 div#nav ul, li, p {
 	padding: 0;
@@ -503,7 +503,7 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
     color: #999;
 	width:765px;
 	height:25px;
-	padding:15px 20px 10px 15px;
+	padding:15px 20px 7px 15px;
 	background:url(../images/footer.jpg) no-repeat #000;
     margin-bottom: 30px !important;
     margin-left:1px;

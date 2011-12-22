@@ -5,7 +5,7 @@
         function post_account_action(task){
             
             //use ajax to run the check
-            $.post("{SITE_URL}/ajax/account/{user.username}", { action : task },
+            $.post( url + "/ajax/account/{user.username}", { action : task },
                 function(response){
                 
                     // Parse the JSON response
@@ -68,7 +68,7 @@
                             if (result.success == true){
                                 // Delete successful
                                 alert( result.message );
-                                window.location = "{SITE_URL}/admin/users";
+                                window.location = url + "/admin/users";
                             }else{
                                 // Error
                                 alert( result.message );

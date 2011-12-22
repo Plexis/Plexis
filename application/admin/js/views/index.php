@@ -6,7 +6,7 @@ $(window).load(function() {
     function check_for_updates(){
 
         //use ajax to run the check
-        $.post("{SITE_URL}/ajax/updates", { action : "check"},
+        $.post( url + "/ajax/updates", { action : "check"},
             function(result){
                 // If the result is 1, we have updates!
                 if (result == 1){

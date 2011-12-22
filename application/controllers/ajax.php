@@ -742,10 +742,15 @@ class Ajax extends Application\Core\Controller
 | Method: onlinelist()
 | ---------------------------------------------------------------
 |
-| This method is used for via Ajax to check for CMS updates
+| This method is used for via Ajax to get the players online
 */    
     public function onlinelist($realm = 0)
     {
+        // check if the realm is installed
+        if($realm != 0 && realm_installed($realm) == FALSE)
+        {
+            $realm = get_realm_cookie();
+        }
         // Load the WoWLib
         $this->load->wowlib($realm, 'wowlib');
         $output = $this->wowlib->get_online_list_datatables();

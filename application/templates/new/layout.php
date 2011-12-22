@@ -2,9 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title> <?php echo config('site_title'); ?> </title>
-    <meta name="author" content="" />
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
+    <meta name="keywords" content="<?php echo config('meta_keywords'); ?>" />
+    <meta name="description" content="<?php echo config('meta_description'); ?>" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     
     <!-- Style Sheet -->
@@ -23,6 +22,7 @@
     <!--
         // THIS MUST BE SET! 
         var url = '{SITE_URL}';
+        var realm_id = <?php echo get_realm_cookie(); ?>;
         
         // Slide Show
         jQuery(function( $ ){
@@ -31,7 +31,7 @@
             .cycle({ 
                 fx:     'fade', 
                 speed:  'slow', 
-                timeout: 4500, 
+                timeout: 3500, 
                 pager:  '#slide-tabs'
             });
         });
@@ -69,7 +69,7 @@
     <div id="container">
 
         <div id="header">
-            <div id="logo"><a href="#"><img src="{TEMPLATE_URL}/images/logo.jpg" alt="Our Website" /></a></div>
+            <div id="logo"><a href="#"><img src="{TEMPLATE_URL}/images/logo.png" alt="Plexis CMS" /></a></div>
         </div><!-- /header -->
 
         <div id="content-container">

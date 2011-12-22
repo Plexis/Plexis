@@ -199,6 +199,38 @@ class Template
             return file_get_contents($file);
         }
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: view_js_string()
+| ---------------------------------------------------------------
+|
+| Loads the views JS string if there is on.
+|
+*/
+    private function view_js_string()
+    {
+        // Add the page JS if it exists as well
+        if($this->type == 'site')
+        {
+            // Build our custom view JS path, and Static View Paths
+            $t_file = $this->template['path'] . DS . 'views' . DS . $this->_controller . DS . 'js' . DS . $this->view_file . '.js';
+            $s_file = APP_PATH . DS . 'static'. DS .'js'. DS .'views'. DS . $this->_controller . DS .$this->view_file.'.js';
+            if(file_exists( $t_file ))
+            {
+                return '<script type="text/javascript" src="{TEMPLATE_URL}/views/'. $this->_controller .'/js/'.$this->view_file.'.js"></script>';
+            }
+            elseif(file_exists( $s_file ))
+            {
+                return '<script type="text/javascript" src="{SITE_URL}/application/static/js/views/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            }
+            else
+            {
+                return ''; 
+            }
+        }
+        return '';
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -257,19 +289,8 @@ class Template
         $source = str_replace("{PAGE_CONTENTS}", $this->load_view(), $source); 
         
         // Add the page JS if it exists as well
-        if($this->type == 'site')
-        {
-            $file = $this->template['path'] . DS . 'views' . DS . $this->_controller . DS . 'js' . DS . $this->view_file . '.js';
-            if(file_exists( $file ))
-            {
-                $string = '<script type="text/javascript" src="{TEMPLATE_URL}/views/'. $this->_controller .'/js/'.$this->view_file.'.js"></script>';
-                $source = str_replace("{VIEW_JS}", $string, $source); 
-            }
-            else
-            {
-                $source = str_replace("{VIEW_JS}", '', $source); 
-            }
-        }
+        $js = $this->view_js_string();
+        $source = str_replace("{VIEW_JS}", $js, $source);
         
         // Strip custom comment blocks
         while(preg_match('/<!--#.*#-->/iUs', $source, $replace)) 

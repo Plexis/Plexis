@@ -280,6 +280,11 @@
     <script src="{TEMPLATE_URL}/js/tiny_mce/jquery.tinymce.js"></script><!-- Load TinyMCE -->
     <script src="{TEMPLATE_URL}/js/common.js"></script> <!-- Generic functions -->
     <script src="{TEMPLATE_URL}/js/script.js"></script> <!-- Generic scripts -->
+    <script type="text/javascript">
+        // THIS MUST BE SET! 
+        var url = '{SITE_URL}';
+    </script>
+
     {Compiler:eval}
         <?php 
             // Include custom JS files for views

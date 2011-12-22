@@ -176,6 +176,7 @@ class Ajax_Model extends Application\Core\Model
         /*
          * Ordering
          */
+         $sOrder = "";
         if ( isset( $_POST['iSortCol_0'] ) )
         {
             $sOrder = "ORDER BY  ";
@@ -202,7 +203,7 @@ class Ajax_Model extends Application\Core\Model
          * on very large tables, and MySQL's regex functionality is very limited
          */
         $sWhere = "";
-        if ( $_POST['sSearch'] != "" )
+        if ( isset($_POST['sSearch']) &&  $_POST['sSearch'] != "" )
         {
             $sWhere = "WHERE (";
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -259,8 +260,9 @@ class Ajax_Model extends Application\Core\Model
         /*
          * Output
          */
+         $sEcho = (isset($_POST['sEcho'])) ? $_POST['sEcho'] : 1;
         $output = array(
-            "sEcho" => intval($_POST['sEcho']),
+            "sEcho" => intval($sEcho),
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()

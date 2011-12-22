@@ -128,14 +128,18 @@
             //If false, we set a new cookie with the dealt ID
             if($result == FALSE)
             {
+                // Hard set the cookie to default
                 $return = config('default_realm_id');
                 $input->set_cookie('realm_id', $return);
+                $_COOKIE['realm_id'] = $return;
             } 
         }
         else
         {
+            // Hard set the cookie to default
             $return = config('default_realm_id');
             $input->set_cookie('realm_id', $return);
+            $_COOKIE['realm_id'] = $return;
         }
         return $return;
     }
@@ -158,6 +162,60 @@
         // Build our query
         $query = "SELECT * FROM `pcms_realms`";
         return $DB->query( $query )->fetch_array();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: realm_installed()
+| ---------------------------------------------------------------
+|
+| This function is used to find out if a realm is installed based on ID
+|
+| @Return: (Bool) True if the realm is installed, FALSE otherwise
+|
+*/
+    function realm_installed($id)
+    {
+        $load = load_class('Loader');
+        $DB = $load->database( 'DB' );
+        
+        // Build our query
+        $query = "SELECT `name` FROM `pcms_realms` WHERE `id`=?";
+        $result = $DB->query( $query, array($id) )->fetch_column();
+        
+        // Make our return
+        if($result == FALSE)
+        {
+            return FALSE;
+        }
+        return TRUE;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: get_realm()
+| ---------------------------------------------------------------
+|
+| This function is used to fetch the realm info based on ID
+|
+| @Return: (Array) Array of Realm information, FALSE otherwise
+|
+*/
+    function get_realm($id)
+    {
+        $load = load_class('Loader');
+        $DB = $load->database( 'DB' );
+        
+        // Build our query
+        $query = "SELECT * FROM `pcms_realms` WHERE `id`=?";
+        $result = $DB->query( $query, array($id) )->fetch_row();
+        
+        // Make our return
+        if($result == FALSE)
+        {
+            return FALSE;
+        }
+        return $result;
     }
     
 /*

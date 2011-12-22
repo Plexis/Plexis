@@ -11,24 +11,38 @@ class Server extends Application\Core\Controller
         redirect('server/onlinelist');
     }
     
-    public function onlinelist($id = 0, $page = 1) 
+    public function onlinelist($id = 0) 
     {
+        // Get our users selected realm
+        $c = get_realm_cookie();
+        
         // Get our realm id if none is provieded
-        if($id == 0)
+        if($id == 0 && $c == 0)
         {
-            $id = get_realm_cookie();
-            
-            // If $id still equals 0, then no realms are installed!
-            if($id == 0)
-            {
-                output_message('info', 'no_realms_installed');
-                $this->load->view('blank');
-                return;
-            }
+            output_message('info', 'no_realms_installed');
+            $this->load->view('blank');
+            return;
+        }
+        
+        // Absolutly set our cookie realm IF the user selected a different realm
+        if($id != $c)
+        {
+            load_class('Input')->set_cookie('realm_id', $id);
+            $_COOKIE['realm_id'] = $id;
+        }
+        
+        // Build our realm select options
+        $data['realm_options'] = array();
+        $realms = get_installed_realms();
+        foreach($realms as $realm)
+        {
+            $selected = '';
+            if($id == $realm['id']) $selected = 'selected="selected" ';
+            $data['realm_options'][] = "<option value='".$realm['id']. "' ". $selected ."'>".$realm['name']."</option>";
         }
         
         // Load the view and call it a day!
-        $this->load->view('onlinelist', array('realm_id' => $id));
+        $this->load->view('onlinelist', $data);
     }
 
 }
