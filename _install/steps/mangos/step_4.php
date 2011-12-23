@@ -14,7 +14,7 @@ if (!$_POST['rdb_host'] | !$_POST['rdb_port'] | !$_POST['rdb_username'] | !$_POS
 }
 
 // == Check DB connections first! == //
-$connect = get_realm_connections();
+$connect = get_database_connections();
 $DB = $connect['plexis'];
 
 // Everthing should be fine, so first insert info into protected config file

@@ -43,13 +43,13 @@
  
 /*
 | ---------------------------------------------------------------
-| Function: get_realm_connections()
+| Function: get_database_connections()
 | ---------------------------------------------------------------
 |
 | Easy way to connect to the databases after step 2
 |
 */ 
-    function get_realm_connections()
+    function get_database_connections()
     {
         // Check if provided info is correct
         $Realm = new Database();

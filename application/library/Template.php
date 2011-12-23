@@ -483,7 +483,6 @@ class Template
                 if( strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false )
                 {
                     $encoding = 'x-gzip';
-                    log_message('Encoding in X-Gzip');
                 }
                 elseif( strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false )
                 {

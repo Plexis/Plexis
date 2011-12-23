@@ -24,7 +24,7 @@ if(strlen($_POST['pass']) < 4)
 }
 
 // == Check DB connections first! == //
-$connect = get_realm_connections();
+$connect = get_database_connections();
 $DB = $connect['plexis'];
 $Realm = $connect['realm'];
 
@@ -55,7 +55,7 @@ else
         $ac = array(
             'id' => $accountid, 
             'username' => $_POST['account'], 
-            'activate' => 1, 
+            'activated' => 1, 
             'registration_ip' => $_SERVER['REMOTE_ADDR'], 
             'group_id' => 4
         );

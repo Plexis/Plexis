@@ -85,7 +85,7 @@ class Session
         if(!$this->started)
         {
             session_start();
-            $this->started = true;
+            $this->started = TRUE;
         }
     }
 

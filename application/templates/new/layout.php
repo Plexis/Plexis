@@ -161,7 +161,10 @@
                         <div class="right-box">
                             <h3>Account</h3>
                             <p>
-                                <center>Welcome {session.user.username}!</center>
+                                <center>
+                                    Welcome {session.user.username}! <br /><br />
+                                    <a href="{SITE_URL}/account" class="button">Account Dashboard</a>
+                                </center>
                             </p>
                         </div><!-- /right-box -->
                     <?php endif; ?>	
