@@ -739,6 +739,138 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
+| Method: news()
+| ---------------------------------------------------------------
+|
+| This method is used to list news post via an Ajax request
+*/    
+    public function vote()
+    {
+        // Check for 'action' posts
+        if(isset($_POST['action']))
+        {
+            // Load the News Model
+            $this->load->model('Vote_Model', 'model');
+        
+            // Get our action type
+            switch($_POST['action']) 
+            {
+                // CREATING
+                case "create":
+                    // Make sure we arent getting direct accessed, and the user has permission
+                    $this->check_access('a');
+            
+                    // Load the Form Validation script
+                    $this->load->library('validation');
+                    
+                    // Tell the validator that the username and password must NOT be empty
+                    $this->validation->set( array(
+                        'honstname' => 'required', 
+                        'votelink' => 'required')
+                    );
+                    
+                    // If both the username and password pass validation
+                    if( $this->validation->validate() == TRUE )
+                    {
+                        $result = $this->model->create($_POST['hostname'], $_POST['votelink'], $_POST['image_url'], $_POST['points'], $_POST['reset_time']);
+                        ($result == TRUE) ? $this->output(true, 'votesite_created_successfully') : $this->output(false, 'votesite_create_failed');
+                    }
+                    
+                    // Validation failed
+                    else
+                    {
+                        $this->output(false, 'form_validation_failed');
+                    }
+                    break;
+                
+                // EDITING
+                case "edit":
+                    // Make sure we arent getting direct accessed, and the user has permission
+                    $this->check_access('a');
+            
+                    // Load the Form Validation script
+                    $this->load->library('validation');
+                    
+                    // Tell the validator that the username and password must NOT be empty
+                    $this->validation->set( array(
+                        'honstname' => 'required', 
+                        'votelink' => 'required')
+                    );
+                    
+                    // If both the username and password pass validation
+                    if( $this->validation->validate() == TRUE )
+                    {
+                        $result = $this->model->update($_POST['id'], $_POST['hostname'], $_POST['votelink'], $_POST['image_url'], $_POST['points'], $_POST['reset_time']);
+                        ($result == TRUE) ? $this->output(true, 'votesite_update_success') : $this->output(false, 'votesite_update_error', 'warning');
+                    }
+                    
+                    // Validation failed
+                    else
+                    {
+                        $this->output(false, 'form_validation_failed');
+                    }
+                    break;
+                    
+                // DELETING
+                case "delete":
+                    // Make sure we arent getting direct accessed, and the user has permission
+                    $this->check_access('a');
+                    $result = $this->model->delete($_POST['id']);
+                    ($result == TRUE) ? $this->output(true, 'votesite_delete_success') : $this->output(false, 'votesite_delete_error');
+                    break;
+                    
+                // VOTING
+                case "vote":
+                    $result = $this->model->submit($this->user['id'], $_POST['site_id']);
+                    ($result == TRUE) ? $this->output(true, 'vote_submit_success') : $this->output(false, 'vote_submit_error');
+                    break;
+                 
+                // STATUS
+                case "status":
+                    $site = $this->model->get_vote_site($_POST['site_id']);
+                    $result = get_port_status($site['hostname'], 80, 2);
+                    $this->output($result, $site['votelink']);
+                    break;
+            }
+        }
+        else
+        {
+            // Load the Ajax Model
+            $this->load->model("Ajax_Model", "ajax");
+            
+            /* 
+            * Array of database columns which should be read and sent back to DataTables. Use a space where
+            * you want to insert a non-database field (for example a counter or static image)
+            */
+            $cols = array( 'id', 'hostname', 'votelink', 'points', 'reset_time' );
+            
+            /* Indexed column (used for fast and accurate table cardinality) */
+            $index = "id";
+            
+            /* DB table to use */
+            $table = "pcms_vote_sites";
+            
+            /* Database to use */
+            $dB = "DB";
+            
+            /* Process the request */
+            $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+            
+            // We need to add a working "manage" link
+            foreach($output['aaData'] as $key => $value)
+            {
+                $output['aaData'][$key][4] = ($output['aaData'][$key][4] == 43200) ? "12 Hours" : "24 Hours";
+                $output['aaData'][$key][5] = '<a href="'. SITE_URL .'/admin/vote/edit/'.$value[0].'">Edit</a> 
+                    - <a class="delete" name="'.$value[0].'" href="javascript:void(0);">Delete</a>';
+            }
+            
+            // Push the output in json format
+            echo json_encode($output);
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: onlinelist()
 | ---------------------------------------------------------------
 |

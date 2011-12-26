@@ -351,7 +351,7 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 {
 	width:200px;
 	float:right;
-	color:#999;
+    color: #ccc;
 }
 .right-box 
 {
@@ -375,18 +375,23 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
     font-weight: bold;
 	color:#6ec2d1;
 }
-.right-box ul 
+.right-box ul.realm-status 
 {
 	list-style:none;
 	padding:10px;
 }
-.right-box li 
+.right-box ul.realm-status li 
 {
 	padding:0 0 10px 0;
 	margin:0 0 10px 0;
 	border-bottom:1px solid #3B3B3B;
 }
-.right-box li:last-child 
+.right-box ul.realm-status img
+{
+	vertical-align: -10%;
+    margin-right: 5px
+}
+.right-box ul.realm-status li:last-child 
 {
 	padding:0;
 	margin:0;
@@ -394,12 +399,15 @@ div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 }
 .right-box a 
 {
-
-	color:#999;
+	color:#ccc;
 }
 .right-box a:hover 
 {
 	color:#77B6CD;
+}
+.right-box a.button:hover 
+{
+	color:#0D8AAA;
 }
 .right-box span 
 {
@@ -777,7 +785,7 @@ tbody tr:hover td
 {
     background: #071821;
     cursor: pointer;
-    color: #FFFFFF;
+    color:#0D8AAA;
     
     /* Transition */
     -webkit-transition:All 0.3s ease;
@@ -814,10 +822,6 @@ tbody tr:hover td
         0 0 3px rgba(0,0,0,0.2)
     ; 
 }
-.button:disabled,
-{
-    opacity:0.3;
-}
 .buttons a 
 {
 	text-decoration:none;
@@ -829,7 +833,12 @@ tbody tr:hover td
 	color:#FFFFFF;
     border:none;
 }
-
+.button:disabled
+{
+    background:#082029;
+    color: white;
+    opacity:0.5;
+}
 
 
 
@@ -846,7 +855,7 @@ tbody tr:hover td
 .button-row ul
 {
     display: inline-block;
-    margin-top: 25px;
+    margin-top: 10px;
 }
 
 .button-row ul li 

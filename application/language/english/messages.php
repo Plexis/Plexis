@@ -57,7 +57,7 @@ return array(
     'realm_default_failed' => 'There was an error updating the config file! Please check your error log.',
     'realm_default_success' => 'Success! The default realm has been changed.',
     'realm_install_error' => 'There was an error installing the realm in the database. Please check your error logs',
-    'realm_install_success' => '<strong>Success!</strong> Realm successfully installed',
+    'realm_install_success' => 'Realm successfully installed',
     'realm_install_warning' => 'Realm installed successfully, but we were unable to connect to the World and Character databases.',
     'realm_update_error' => 'There was an error updating the realm in the database. Please check your error logs',
     'realm_update_success' => 'Realm successfully updated',
@@ -80,7 +80,13 @@ return array(
         <ol><li>You have selected the right Emulator in the site config</li><li>The account data for this account is in both the Realm and Plexis account tables.</li></ol>
         If neither of these are the issue, Contact a Plexis Web Developer.",
     'username_doesnt_exist' => 'Username doesnt exist',
-    'validation_failed' => 'Form submission cancelled, One or more fields are not filled in correctly', 
+    'validation_failed' => 'Form submission cancelled, One or more fields are not filled in correctly',
+    'votesite_create_failed' => "There was an error adding this votesite to the database. Please check your error logs",
+    'votesite_created_successfully' => "Vote site Successfully created!",
+    'votesite_delete_error' => "There was an error deleteing this votesite. Please check your error logs",
+    'votesite_delete_success' => "Votesite deleted successfully",
+    'votesite_update_error' => "There was an error updating this votesite. This can happen if no changes were made. If you did make changes, Please check your error logs",
+    'votesite_update_success' => "Votesite updated successfully",
     'wowlib_driver_doesnt_exist' => "WowLib driver '%s' does not exists in the 'application/library/WoWLib' folder",
     'wowlib_realm_doesnt_exist' => "WowLib library failed to load a realm with an id of  '%s'. Please make sure the realm is installed."
 );

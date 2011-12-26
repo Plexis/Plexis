@@ -7,6 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     
     <!-- Style Sheet -->
+    <link rel="shortcut icon" href="{TEMPLATE_URL}/images/favicon.gif"/>
     <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/style.css" />
     <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/alerts.css" />
     <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/datatables.css" />	
@@ -163,7 +164,14 @@
                             <p>
                                 <center>
                                     Welcome {session.user.username}! <br /><br />
-                                    <a href="{SITE_URL}/account" class="button">Account Dashboard</a>
+                                    Site Rank: {session.user.title}<br />
+                                    Web Points: {session.user.web_points}<br />
+                                    <div class="button-row">
+                                        <ul>
+                                            <li><a href="{SITE_URL}/account" class="button">Dashboard</a></li>
+                                            <li><a href="{SITE_URL}/account/logout" class="button">&nbsp; Logout &nbsp;&nbsp;</a></li>
+                                        </ul>
+                                    </div>
                                 </center>
                             </p>
                         </div><!-- /right-box -->
@@ -172,22 +180,25 @@
 
                     <div class="right-box">
                         <h3>Realm Status</h3>
-                        <ul>
+                        <ul class="realm-status">
                             <?php
                                 $realms = get_realm_status();
                                 foreach($realms as $r)
                                 {
                                     if($r['status'] == 1)
                                     {
-                                        $text = "<font color='green'>Online</font>";
+                                        $img = "<img src='{TEMPLATE_URL}/images/realm-1-small.png'>";
                                     }
                                     else
                                     {
-                                        $text = "<font color='red'>Offline</font>";
+                                        $img = "<img src='{TEMPLATE_URL}/images/realm-0-small.png'>";
                                     }
                                     
                                     // Echo out the information
-                                    echo '<li><center><b><a href="{SITE_URL}/server/realm/'.$r['id'].'">'.$r['name'].'</a> - '.$text.'</b></center></li>';
+                                    echo '<li>
+                                        <b>'. $img .' <a href="{SITE_URL}/server/realm/'.$r['id'].'">'.$r['name'].'</a></b><br />
+                                        <small>Online: 0, <br />Uptime: 0d, 14hrs, 56min</small>
+                                    </li>';
                                 }
                             ?>
                             <li><center><small><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></small></center></li>

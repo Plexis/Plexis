@@ -80,6 +80,30 @@
         return $array;	
     }
     
+/*
+| ---------------------------------------------------------------
+| Method: get_port_status()
+| ---------------------------------------------------------------
+|
+| This function is used to get the port status of a domain/port
+|
+| @Return: (Bool) Returns TRUE if the domain us up, FALSE otherwise
+|
+*/
+    function get_port_status($host, $port = 80, $timeout = 3)
+    {
+        // Load the debug class and disable error reporting
+        $Debug = load_class('Debug');
+        $Debug->error_reporting( FALSE );
+        
+        // OPen the connections
+        $handle = fsockopen($host, $port, $errno, $errstr, $timeout);
+        
+        // Restore error reporting
+        $Debug->error_reporting( TRUE );
+        return $handle;
+    }
+    
 
 /*
 | ---------------------------------------------------------------

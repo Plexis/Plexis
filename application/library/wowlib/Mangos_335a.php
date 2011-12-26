@@ -141,14 +141,14 @@ class Mangos_335a
     public function character_name_exists($name)
     {
         // Build our query
-        $query = "SELECT `id` FROM `characters` WHERE `name`=?";
+        $query = "SELECT `guid` FROM `characters` WHERE `name`=?";
         $exists = $this->CDB->query( $query, array($name) )->fetch_column();
-        if($exists == FALSE)
+        if($exists !== FALSE)
         {
             return TRUE;
         }
         
-        // If we are here, the name is unavailable
+        // If we are here, the name is available
         return FALSE;
     }
     

@@ -12,7 +12,7 @@ CREATE TABLE `pcms_accounts` (
   `group_id` int(3) NOT NULL DEFAULT '2',
   `registration_ip` varchar(24) NOT NULL DEFAULT '0.0.0.0',
   `selected_theme` varchar(50) DEFAULT NULL,
-  `vote_data` text,
+  `web_points` int(10) NOT NULL DEFAULT '0',
   `_session_id` varchar(50) DEFAULT '',
   `_account_recovery` text COMMENT '// Hashed account revcovery question and answer',
   `_activation_code` varchar(50) DEFAULT NULL,
@@ -45,107 +45,6 @@ INSERT INTO `pcms_account_groups` VALUES ('1', 'Guest', '0', '0', '0', '0');
 INSERT INTO `pcms_account_groups` VALUES ('2', 'Member', '0', '1', '0', '0');
 INSERT INTO `pcms_account_groups` VALUES ('3', 'Admin', '0', '1', '1', '0');
 INSERT INTO `pcms_account_groups` VALUES ('4', 'Super Admin', '0', '1', '1', '1');
-
--- ----------------------------
--- Table structure for `pcms_forum_categories`
--- ----------------------------
-DROP TABLE IF EXISTS `pcms_forum_categories`;
-CREATE TABLE `pcms_forum_categories` (
-  `cat_id` int(8) NOT NULL AUTO_INCREMENT,
-  `cat_name` varchar(255) NOT NULL,
-  `cat_privilages` varchar(255) NOT NULL,
-  PRIMARY KEY (`cat_id`),
-  UNIQUE KEY `cat_name_unique` (`cat_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of pcms_forum_categories
--- ----------------------------
-
--- ----------------------------
--- Table structure for `pcms_forum_forums`
--- ----------------------------
-DROP TABLE IF EXISTS `pcms_forum_forums`;
-CREATE TABLE `pcms_forum_forums` (
-  `forum_id` int(8) NOT NULL AUTO_INCREMENT,
-  `forum_name` varchar(255) NOT NULL DEFAULT 'Title Not Set!',
-  `forum_description` varchar(255) DEFAULT 'No Description',
-  `cat_id` int(8) NOT NULL DEFAULT '0' COMMENT 'The catagory ID this forum falls under',
-  `last_topic_id` int(24) NOT NULL DEFAULT '0',
-  `last_topic_title` varchar(255) DEFAULT NULL COMMENT 'Last forum topic title',
-  `last_post_id` int(24) NOT NULL DEFAULT '0',
-  `last_post_time` int(16) DEFAULT NULL COMMENT 'Last forum topic post time',
-  `last_post_poster` varchar(255) DEFAULT NULL COMMENT 'last forum topic poster, ie: username',
-  `total_topics` int(16) NOT NULL DEFAULT '0',
-  `total_posts` int(16) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`forum_id`),
-  UNIQUE KEY `cat_name_unique` (`forum_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of pcms_forum_forums
--- ----------------------------
-
--- ----------------------------
--- Table structure for `pcms_forum_posts`
--- ----------------------------
-DROP TABLE IF EXISTS `pcms_forum_posts`;
-CREATE TABLE `pcms_forum_posts` (
-  `post_id` int(8) NOT NULL AUTO_INCREMENT,
-  `post_content` text NOT NULL,
-  `post_by` varchar(255) NOT NULL,
-  `post_time` int(16) NOT NULL,
-  `post_topic` int(8) NOT NULL,
-  PRIMARY KEY (`post_id`),
-  KEY `post_topic` (`post_topic`),
-  KEY `post_by` (`post_by`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of pcms_forum_posts
--- ----------------------------
-
--- ----------------------------
--- Table structure for `pcms_forum_topics`
--- ----------------------------
-DROP TABLE IF EXISTS `pcms_forum_topics`;
-CREATE TABLE `pcms_forum_topics` (
-  `topic_id` int(8) NOT NULL AUTO_INCREMENT,
-  `topic_subject` varchar(255) NOT NULL,
-  `topic_by` varchar(255) NOT NULL,
-  `last_post_id` int(24) NOT NULL DEFAULT '0',
-  `last_post_by` varchar(255) DEFAULT NULL,
-  `last_post_time` int(16) NOT NULL DEFAULT '0',
-  `topic_forum` int(8) NOT NULL,
-  `topic_replies` int(5) NOT NULL DEFAULT '0',
-  `topic_views` int(8) NOT NULL DEFAULT '0',
-  `is_sticky` tinyint(4) NOT NULL DEFAULT '0',
-  `is_global` tinyint(4) NOT NULL DEFAULT '0',
-  `is_closed` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`topic_id`),
-  KEY `topic_cat` (`topic_forum`),
-  KEY `topic_by` (`topic_by`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of pcms_forum_topics
--- ----------------------------
-
--- ----------------------------
--- Table structure for `pcms_forum_unread`
--- ----------------------------
-DROP TABLE IF EXISTS `pcms_forum_unread`;
-CREATE TABLE `pcms_forum_unread` (
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `forum_id` int(11) NOT NULL DEFAULT '0',
-  `last_visit` int(16) NOT NULL DEFAULT '0',
-  `topics_unread` varchar(500) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of pcms_forum_unread
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for `pcms_news`
@@ -217,4 +116,37 @@ CREATE TABLE `pcms_sessions` (
 
 -- ----------------------------
 -- Records of pcms_sessions
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `pcms_vote_data`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_vote_data`;
+CREATE TABLE `pcms_vote_data` (
+  `account_id` int(11) DEFAULT NULL,
+  `ip_address` varchar(50) NOT NULL,
+  `data` text,
+  PRIMARY KEY (`ip_address`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of pcms_vote_data
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `pcms_vote_sites`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_vote_sites`;
+CREATE TABLE `pcms_vote_sites` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `hostname` varchar(100) NOT NULL,
+  `votelink` varchar(255) NOT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
+  `points` tinyint(3) NOT NULL DEFAULT '0',
+  `reset_time` int(11) NOT NULL DEFAULT '43200' COMMENT 'Default reset time on voting. Default 12 hours',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of pcms_vote_sites
 -- ----------------------------

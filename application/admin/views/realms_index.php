@@ -49,7 +49,7 @@
         
         // ============================================
         // Uninstall Realm
-        $(".un-install").live('click', function(){
+        $("#realm-table").delegate('.un-install', 'click', function(){
             var r_id = $(this).attr('name');
             
             if( confirm('Are you sure you want to uninstall realm #' + r_id) ){
@@ -75,7 +75,7 @@
         
         // ============================================
         // Make Realm Default
-        $(".make-default").live('click', function(){
+        $("#realm-table").delegate('.make-default', 'click', function(){
             var r_id = $(this).attr('name');
             
             // Get our post

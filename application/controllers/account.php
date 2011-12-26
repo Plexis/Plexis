@@ -899,11 +899,74 @@ class Account extends Application\Core\Controller
         // Store the Captcha string into an array for verification later on.
         $_SESSION['Captcha'] = $this->Captcha->get_string();
     }
+    
+/*
+| ---------------------------------------------------------------
+| P09: Vote
+| ---------------------------------------------------------------
+|
+*/    
+    public function vote($action = NULL, $id = 0)
+    {
+        // Make sure the user is logged in HERE!
+        if($this->user['logged_in'] == FALSE) redirect('account/login');
+        
+        // Load the vote model, and time helper
+        $this->load->model('Vote_Model', 'model');
+        $this->load->helper('Time');
+        
+        // See if we need redirecting!
+        if($action == 'out' && $id != 0)
+        {
+            $site = $this->model->get_vote_site($id);
+            redirect( $site['votelink'] );
+            die();
+        }
+        
+        // Load this users vote data
+        $vote_data = $this->model->get_data( $this->user['id'] );
+        
+        // Get all the vote sites information
+        $list = $this->model->get_vote_sites();
+        $sites = array();
+        
+        // Correct the array keys
+        foreach($list as $site)
+        {
+            $sites[ $site['id'] ] = $site;
+        }
+        
+        // Process the time left for each site
+        $time = time();
+        foreach($vote_data as $key => $value)
+        {
+            // Get our remaining time left
+            $left = $value - $time;
+            if($left > 0)
+            {
+                // Time left still, Let make a fancy time string!
+                $sites[$key]['disabled'] = 'disabled="disabled"';
+                $sites[$key]['time_left'] = sec2hms($left);
+            }
+            else
+            {
+                // expired time, Good to vote again
+                $sites[$key]['disabled'] = '';
+                $sites[$key]['time_left'] = "N/A";
+            }
+        }
+        
+        // Prepare for view
+        $data['sites'] = $sites;
+        $this->load->view('vote', $data);
+    }
 
 // Test Page    
     function test()
     {
-        
+        $this->load->model('Vote_Model', 'model');
+        $this->model->submit($this->user['id'], 2);
+        die(); 
         // Check for POST data
         if(isset($_POST['action'])) goto Process;
         

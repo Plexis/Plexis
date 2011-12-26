@@ -14,13 +14,13 @@
         case "settings":
         case "registration":
         case "language":
-        case "vote":
             $c = TRUE;
             break;
         case "news":
         case "database":
         case "modules":
         case "templates":
+        case "vote":
         case "donate":
         case "shop":
         case "support":
@@ -169,7 +169,6 @@
                         <ul class="sub">
                             <li><a href="{SITE_URL}/admin/settings">Site Settings</a></li>
                             <li><a href="{SITE_URL}/admin/registration">Registration Settings</a></li>
-                            <li><a href="{SITE_URL}/admin/vote">Vote System Settings</a></li>
                         </ul>
                     </li>
                     <li>
@@ -180,6 +179,7 @@
                             <li><a href="{SITE_URL}/admin/database">Database Operations</a></li>
                             <li><a href="{SITE_URL}/admin/modules">Modules</a></li>
                             <li><a href="{SITE_URL}/admin/templates">Templates</a></li>
+                            <li><a href="{SITE_URL}/admin/vote">Vote Sites</a></li>
                             <li><a href="{SITE_URL}/admin/donate">Donation Packages</a></li>
                             <li><a href="{SITE_URL}/admin/shop">Shop System Items</a></li>
                             <li><a href="{SITE_URL}/admin/support">Site Support</a></li>

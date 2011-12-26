@@ -125,7 +125,7 @@
 
         // ============================================
         // Delete News
-        $(".delete").live('click', function(){
+        $("#data-table").delegate('.delete', 'click', function(){
             var news_id = $(this).attr('name');
             
             if( confirm('Are you sure you want to delete news post #' + news_id) ){

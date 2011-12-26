@@ -82,15 +82,24 @@ class Loader extends \System\Core\Loader
 |
 | This method is used to load the view file and display it
 |
-| @Param: (String) $name - The name of the controllers view file
+| @Param: (String) $name - The name of the requested view file
 | @Param: (Array) $data - an array of variables to be extracted
+| @Param: (Bool) $skip - Skip the template system and use parent?
 |
 */
-    function view($name, $data = array(), $return = FALSE)
+    function view($name, $data = array(), $skip = FALSE)
     {
-        // We are just going to let the template engine handle this
-        $template = $this->library('Template');
-        $template->render($name, $data);
+        // If we are requesting to use the default render system
+        if($skip == TRUE)
+        {
+            parent::view($name, $data);
+        }
+        else
+        {
+            // We are just going to let the template engine handle this
+            $template = $this->library('Template');
+            $template->render($name, $data);
+        }
     }
 
 /*

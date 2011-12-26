@@ -204,7 +204,7 @@ class Auth
                 $r_data = $this->realm->fetch_account($account_id);
                 $data = array(
                     'id' => $account_id, 
-                    'username' => $username, 
+                    'username' => ucfirst(strtolower($username)), 
                     'email' => $r_data['email'], 
                     'activated' => 1
                 );
@@ -265,7 +265,7 @@ class Auth
     public function register($username, $password, $email, $sq = NULL, $sa = NULL)
     {
         // Remove white space in front and behind
-        $username = trim($username);
+        $username = trim(ucfirst(strtolower($username)));
         $password = trim($password);
         $email = trim($email);
         $secret = NULL;

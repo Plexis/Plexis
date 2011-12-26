@@ -411,14 +411,43 @@ class Admin extends Application\Core\Controller
         $this->load->view('under_construction', $data);
     }
     
-    function vote()
+/*
+| ---------------------------------------------------------------
+| Vote
+| ---------------------------------------------------------------
+|
+*/
+    public function vote($action = NULL, $id = NULL)
     {
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Vote System Settings",
-            'page_desc' => "Here you can setup your vote sites for users to vote on, and Create / Edit / Delete existing vote links.",
-        );
-        $this->load->view('under_construction', $data);
+        // Load the News Model
+        $this->load->model('Vote_Model', 'model');
+  
+        // No action? then load index screen
+        if($action == NULL)
+        {
+            // Build our page variable data
+            $data = array(
+                'page_title' => "Manage Vote Sites",
+                'page_desc' => "Create, Edit, or Delete vote sites that your users will use to vote for your server."
+            );
+            
+            // Load the view
+            $this->load->view('vote_index', $data);
+        }
+        else
+        {
+            
+            // Build our page variable data
+            $data = $this->model->get_vote_site($id);
+            if($data == FALSE) redirect('admin/vote');
+            
+            // Add page Title and Desc
+            $data['page_title'] = "Edit Vote Site";
+            $data['page_desc'] = "Editing vote site.";
+
+            // Load the view
+            $this->load->view('vote_edit', $data); 
+        }
     }
     
     function shop()
