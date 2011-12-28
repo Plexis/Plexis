@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <name>Default</name>                <!-- The Template Name -->
+	<author>Plexis</author>             <!-- Template author / creater -->
+    <coded_by>Plexis</coded_by>         <!-- Template coder -->
+    <date>December 27, 2011</date>      <!-- Creation data for the template -->
+	<license>GNU/GPL</license>          <!-- Template License -->
+    <copyright>Copyright Plexis 2012</copyright>
+    
+    <!-- 
+    IF you template requires helpers, format like so...
+    <helpers>
+        <helper>Form.php</helper>
+        <helper>Time.php</helper>
+    </helpers>
+    -->
+    <helpers></helpers>  
+</template> 

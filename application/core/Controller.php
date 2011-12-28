@@ -47,10 +47,23 @@ class Controller extends \System\Core\Controller
             load_module_config($GLOBALS['controller']);
         }
         
+        // Setup the template system
+        $this->_init_template();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Funtion: _init_template()
+| ---------------------------------------------------------------
+|
+*/
+    private function _init_template() 
+    {
         // Setup our template system
         if($this->controller == 'admin')
         {
-            $this->Template->admin_template();
+            $this->Template->set_template_path('admin');
+            $this->Template->config( array('controller_view_paths' => FALSE) );
         }
         else
         {
@@ -58,12 +71,26 @@ class Controller extends \System\Core\Controller
             $user = $this->Session->data['user'];
             if($user['logged_in'] == FALSE)
             {
-                $this->Template->set_template( config('default_template') );
+                // Set default template path
+                $this->Template->set_template_path('templates' . DS . config('default_template'));
             }
             else
             {
-                (!empty($user['selected_theme'])) ? $theme = $user['selected_theme'] : $theme = config('default_template');
-                $this->Template->set_template($theme);
+                if(!empty($user['selected_theme']))
+                {
+                    // Make sure the tempalate exists before setting the theme
+                    $query = "SELECT * FROM `pcms_templates` WHERE `name`=?";
+                    $template = $this->DB->query( $query, array($user['selected_theme']) )->fetch_row();
+                    
+                    // If the template exists, and is enabled for site use
+                    if($template != FALSE && $template['status'] == 1)
+                    {
+                        $this->Template->set_template_path('templates' . DS . $template['name']);
+                        return;
+                    }
+                }
+                // Set default template path if we are here
+                $this->Template->set_template_path('templates' . DS . config('default_template'));
             }
         }
     }

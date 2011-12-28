@@ -119,6 +119,23 @@ CREATE TABLE `pcms_sessions` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `pcms_templates`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_templates`;
+CREATE TABLE `pcms_templates` (
+  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `author` varchar(100) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT '0' COMMENT '1 = Installed, 0 = Not Installed',
+  PRIMARY KEY (`id`,`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of pcms_templates
+-- ----------------------------
+INSERT INTO `pcms_templates` VALUES ('1', 'default', null, '1');
+
+-- ----------------------------
 -- Table structure for `pcms_vote_data`
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_vote_data`;

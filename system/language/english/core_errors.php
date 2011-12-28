@@ -13,5 +13,6 @@ return array(
 	'none' => 'No Message Specifed',
 	'non_array' => "Variable \$%s passed in a non-array format in method %s",
 	'non_int' => "Variable \$%s passed in a non-integer format in method %s",
-	'non_string' => "Variable \$%s passed in a non-string format in method %s"
+	'non_string' => "Variable \$%s passed in a non-string format in method %s",
+    'parser_endless_loop' => "Template parser encountered a possible endless loop"
 );

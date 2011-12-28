@@ -288,7 +288,7 @@
     {Compiler:eval}
         <?php 
             // Include custom JS files for views
-            $file = TEMPLATE_PATH . DS . 'js'. DS .'views'. DS . $this->_action .'.php';
+            $file = $this->template['path'] . DS . 'js'. DS .'views'. DS . $this->_action .'.php';
             if(file_exists($file))
             {
                 include($file);

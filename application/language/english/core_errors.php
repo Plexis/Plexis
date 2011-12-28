@@ -14,6 +14,7 @@ return array(
 	'non_array' => "Variable \$%s passed in a non-array format in method %s",
 	'non_int' => "Variable \$%s passed in a non-integer format in method %s",
 	'non_string' => "Variable \$%s passed in a non-string format in method %s",
+    'parser_endless_loop' => "Template parser encountered a possible endless loop",
 	'template_doesnt_exist' => "Template \"%s\" does not exist in the \"%s\" folder, or is missing the \"layout.php\" file.",
 	'template_load_error' => "Unable to load template file \"%s\". This may be due to a non-existant file or template",
 	'unknown_template_command' => "Template compile error: Unknown template command \"%s\"",
