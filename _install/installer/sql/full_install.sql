@@ -91,9 +91,10 @@ CREATE TABLE `pcms_realms` (
 DROP TABLE IF EXISTS `pcms_reg_keys`;
 CREATE TABLE `pcms_reg_keys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `key` varchar(40) NOT NULL,
+  `key` varchar(128) NOT NULL,
   `assigned` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'If set to 1, this key has already been giving away, and waiting to be used.',
   `sponser` int(11) NOT NULL COMMENT 'Account ID of the sponser',
+  `usedby` int(11) NOT NULL COMMENT 'The account ID of the user who registered with this code (for stat tracking purposes).',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

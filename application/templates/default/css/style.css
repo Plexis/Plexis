@@ -34,6 +34,12 @@ body
 /* ==================================================
  * 2) Baisc Styles
  * ================================================== */
+hr
+{
+	border: 0;
+	height: 1px;
+	background: #0d0d0d;
+}
 ul,ol,p,h1,h2,h3,h4,blockquote,fieldset 
 {
 	margin:0;

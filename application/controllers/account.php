@@ -62,6 +62,10 @@ class Account extends Application\Core\Controller
         
         // Fetch account data from the realm
         $data = $this->realm->fetch_account($this->user['id']);
+		
+		//For allowing users to create their own registration keys.
+		$config = load_class("Config")->get_all("app");
+		$data['can_create_keys'] = $config["reg_user_key_creation"];
         
         // Load the page, and we are done :)
         $this->load->view('index', $data);
@@ -190,7 +194,7 @@ class Account extends Application\Core\Controller
                 {
                     // If key is posted, If so we must validate it
                     $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($_POST['key']))->fetch_row();
-                    if($result == FALSE)
+                    if($result == FALSE || $result['usedby'] >= 0) //'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
                     {
                         // Key form
                         output_message('error', 'reg_failed_invalid_key');
@@ -216,7 +220,7 @@ class Account extends Application\Core\Controller
             {
                 // Process if key is valid
                 $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($key))->fetch_row();
-                if($result == FALSE)
+                if($result == FALSE || $result['usedby'] >= 0) //'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
                 {
                     // Reset the Registration key and start over... load the Key form
                     $this->Input->set_cookie('reg_key', $key, (time() -1));
@@ -318,7 +322,15 @@ class Account extends Application\Core\Controller
                     if( config('reg_registration_key') == TRUE )
                     {
                         $this->Input->set_cookie('reg_key', $key, (time() -1));
-                        $this->DB->delete('pcms_reg_keys', "`key`='".$key."'");
+                        //$this->DB->delete('pcms_reg_keys', "`key`='".$key."'");
+						$id_query = $this->DB->query("SELECT MAX(`id`) AS 'id' FROM `pcms_accounts`;")->fetch_row(); //Grab the ID of the newly created user so we can set the 'usedby' field for the reg key.
+						
+						$key_data = array
+							(
+								'usedby' => $id_query['id'],
+							);
+							
+						$this->DB->update("pcms_reg_keys", $key_data, "`key` = '$key'");
                     }
                     
                     // Check for email verification
