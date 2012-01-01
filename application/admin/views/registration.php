@@ -29,15 +29,6 @@
                                 </select>
                             </p>
                             <p>
-                                <label for="Req Email" title="If Enabled, Requires users to activate thier account via Email before being able to login and play">
-                                    Require Email Activation
-                                </label>
-                                <select id="Req Email" name="cfg__reg_email_verification">
-                                    <option value="1" <?php if($config['reg_email_verification'] === 1) echo "selected=\"selected\""; ?>>Enabled</option>
-                                    <option value="0" <?php if($config['reg_email_verification'] === 0) echo "selected=\"selected\""; ?>>Disabled</option>
-                                </select>
-                            </p>
-                            <p>
                                 <label for="Req Key" title="If enabled, Guests will need to enter a cpatcha.">
                                     Enable Captcha
                                 </label>
@@ -48,6 +39,15 @@
                             </p>
                         </div>
                         <div class="_50">
+                            <p>
+                                <label for="Req Email" title="If Enabled, Requires users to activate thier account via Email before being able to login and play">
+                                    Require Email Activation
+                                </label>
+                                <select id="Req Email" name="cfg__reg_email_verification">
+                                    <option value="1" <?php if($config['reg_email_verification'] === 1) echo "selected=\"selected\""; ?>>Enabled</option>
+                                    <option value="0" <?php if($config['reg_email_verification'] === 0) echo "selected=\"selected\""; ?>>Disabled</option>
+                                </select>
+                            </p>
                             <p>
                                 <label for="Unique" title="If enabled, Users cannot create an account using an already used email address.">
                                     One Account per Email

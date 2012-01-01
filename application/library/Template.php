@@ -785,7 +785,17 @@ class Template
 
         // Add session data to our data array
         $data['session'] = $this->session->data;
-        $data['config'] = load_class('Config')->get_all('App');
+        
+        // Add the config...
+        $configs = load_class('Config')->get_all('App');
+        if(isset($data['config']))
+        {
+            $data['config'] = array_merge($configs, $data['config']);
+        }
+        else
+        {
+            $data['config'] = $configs;
+        }
         
         // Add the passed variables to the template variables list
         foreach($data as $key => $value)

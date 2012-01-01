@@ -63,9 +63,8 @@ class Account extends Application\Core\Controller
         // Fetch account data from the realm
         $data = $this->realm->fetch_account($this->user['id']);
 		
-		//For allowing users to create their own registration keys.
-		$config = load_class("Config")->get_all("app");
-		$data['can_create_keys'] = $config["reg_user_key_creation"];
+		// For allowing users to create their own registration keys.
+		$data['can_create_keys'] = config("reg_user_key_creation");
         
         // Load the page, and we are done :)
         $this->load->view('index', $data);
