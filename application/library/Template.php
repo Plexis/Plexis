@@ -83,12 +83,11 @@ class Template
              ->set_metadata('content-type', 'text/html; charset=UTF-8', 'http-equiv')
              ->set_metadata('cache-control', 'no-cache', 'http-equiv')
              ->set_metadata('expires', '-1', 'http-equiv')
-             ->set_metadata('base', SITE_URL .'/', 'base')
              ->append_metadata("") // Add whitespace
              ->append_metadata("<!-- Include Plexis Static JS Scripts -->")
-             ->append_metadata('<script type="text/javascript" src="application/static/js/jquery-1.6.2.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="application/static/js/jquery.validate.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="application/static/js/jquery.dataTables.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery-1.6.2.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery.validate.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')
              ->append_metadata('<script type="text/javascript">var url = "'. SITE_URL .'"; var realm_id = '. get_realm_cookie() .';</script>'
         );
     }
@@ -122,7 +121,7 @@ class Template
     public function set_template_path($path = 'templates') 
     {
         // Set template path
-        $this->template['http_path'] = "application/". str_replace( '\\', '/', $path );
+        $this->template['http_path'] = SITE_URL ."/application/". str_replace( '\\', '/', $path );
         $this->template['path'] = str_replace( array('/', '\\'), DS, $path );
         return $this;
     }
@@ -174,11 +173,11 @@ class Template
 | @Return (Object) $this
 |
 */
-	public function prepend_metadata($line)
-	{
-		array_unshift($this->_metadata, $line);
-		return $this;
-	}
+    public function prepend_metadata($line)
+    {
+        array_unshift($this->_metadata, $line);
+        return $this;
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -191,11 +190,11 @@ class Template
 | @Return (Object) $this
 |
 */
-	public function append_metadata($line)
-	{
-		$this->_metadata[] = $line;
-		return $this;
-	}
+    public function append_metadata($line)
+    {
+        $this->_metadata[] = $line;
+        return $this;
+    }
     
 /*
 | ---------------------------------------------------------------
@@ -211,35 +210,35 @@ class Template
 |
 */
     public function set_metadata($name, $content, $type = 'meta')
-	{
-		$name = htmlspecialchars(strip_tags($name));
-		$content = htmlspecialchars(strip_tags($content));
+    {
+        $name = htmlspecialchars(strip_tags($name));
+        $content = htmlspecialchars(strip_tags($content));
 
-		switch($type)
-		{
-			case 'meta':
-				$this->_metadata[$name] = '<meta name="'.$name.'" content="'.$content.'"/>';
-			break;
+        switch($type)
+        {
+            case 'meta':
+                $this->_metadata[$name] = '<meta name="'.$name.'" content="'.$content.'"/>';
+            break;
             
             case 'http-equiv':
-				$this->_metadata[$name] = '<meta http-equiv="'.$name.'" content="'.$content.'"/>';
-			break;
+                $this->_metadata[$name] = '<meta http-equiv="'.$name.'" content="'.$content.'"/>';
+            break;
 
-			case 'link':
-				$this->_metadata[$content] = '<link rel="'.$name.'" href="'.$content.'"/>';
-			break;
+            case 'link':
+                $this->_metadata[$content] = '<link rel="'.$name.'" href="'.$content.'"/>';
+            break;
             
             case 'title':
-				$this->_metadata['title'] = '<title>'.$content.'</title>';
-			break;
+                $this->_metadata['title'] = '<title>'.$content.'</title>';
+            break;
             
             case 'base':
-				$this->_metadata['base'] = '<base href="'.$content.'" target="_self"/>';
-			break;
-		}
+                $this->_metadata['base'] = '<base href="'.$content.'" target="_self"/>';
+            break;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
     
 /*
 | ---------------------------------------------------------------
@@ -604,7 +603,7 @@ class Template
         }
         elseif(file_exists( $s_file ))
         {
-            return '<script type="text/javascript" src="application/static/js/views/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            return '<script type="text/javascript" src="'. SITE_URL .'/application/static/js/views/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
         }
         else
         {

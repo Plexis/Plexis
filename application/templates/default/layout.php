@@ -57,13 +57,13 @@
             <div id="nav">
                 <ul class="navigation">
                     <li><a href="{SITE_URL}">Home</a></li>
-                    <li><a href="forum">Forums</a></li>
-                    <li><a href="account/vote">Vote</a></li>
-                    <li><a href="account/donate">Donate</a></li>
-                    <li><a href="server">Server</a>
+                    <li><a href="{SITE_URL}/forum">Forums</a></li>
+                    <li><a href="{SITE_URL}/account/vote">Vote</a></li>
+                    <li><a href="{SITE_URL}/account/donate">Donate</a></li>
+                    <li><a href="{SITE_URL}/server">Server</a>
                         <ul class="subnav">
-                            <li><a href="server/realmlist">Realmlist</a></li>
-                            <li><a href="server/onlinelist">Players Online</a>
+                            <li><a href="{SITE_URL}/server/realmlist">Realmlist</a></li>
+                            <li><a href="{SITE_URL}/server/onlinelist">Players Online</a>
                                 <?php
                                     $realms = get_installed_realms();
                                     if( !empty($realms) )
@@ -72,7 +72,7 @@
                                         echo '<ul class="subnav-out">';
                                         foreach($realms as $realm)
                                         {
-                                            echo '<li><a href="server/onlinelist/'.$realm['id'].'">'.$realm['name'].'</a></li>';
+                                            echo '<li><a href="{SITE_URL}/server/onlinelist/'.$realm['id'].'">'.$realm['name'].'</a></li>';
                                         }
                                         echo '</ul>';
                                     }
@@ -83,21 +83,21 @@
                     </li>
                     <li><a href="support">Support</a>
                         <ul class="subnav">
-                            <li><a href="support/howtoplay">Connection Guide</a></li>
+                            <li><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></li>
                         </ul>
                     </li>
                     
                     <!-- Account / Register link -->
                     <?php if( $session['user']['logged_in'] == FALSE): ?>
-                        <li><a href="account/register">Register</a></li>
+                        <li><a href="{SITE_URL}/account/register">Register</a></li>
                         
                     <?php else: ?>
                         <li><a href="#">Account</a>
                             <ul class="subnav">
-                                <li><a href="account">Dashboard</a></li>
-                                <li><a href="account/update/password">Change Password</a></li>
-                                <li><a href="account/update/email">Update Email</a></li>
-                                <li><a href="account/logout">Logout</a></li>
+                                <li><a href="{SITE_URL}/account">Dashboard</a></li>
+                                <li><a href="{SITE_URL}/account/update/password">Change Password</a></li>
+                                <li><a href="{SITE_URL}/account/update/email">Update Email</a></li>
+                                <li><a href="{SITE_URL}/account/logout">Logout</a></li>
                             </ul>
                         </li>
                         
@@ -120,7 +120,7 @@
                         <div class="right-box">
                             <h3>Login / Register</h3>
                             <p>
-                                <form method="post" action="account/login" id="form">		
+                                <form method="post" action="{SITE_URL}/account/login" id="form">		
                                     <fieldset class="login-right">	
                                         <label for="username" class="top-label">Username:</label> 
                                         <input type="text" name="username" id="username" value="" size="28" tabindex="10" />
@@ -130,9 +130,9 @@
                                         
                                         <center>
                                             <input type="submit" name="submit" value="Login" class="button" tabindex="12"/>
-                                            <input type="button" class ="button" name="register" value="Register" onClick="window.location='account/register'" tabindex="13">
+                                            <input type="button" class ="button" name="register" value="Register" onClick="window.location='{SITE_URL}/account/register'" tabindex="13">
                                             <br />
-                                            <small><a href="account/recover">Recover lost password</a></small>
+                                            <small><a href="{SITE_URL}/account/recover">Recover lost password</a></small>
                                         </center>
                                     </fieldset>
                                 </form>
@@ -148,8 +148,8 @@
                                     Web Points: {session.user.web_points}<br />
                                     <div class="button-row">
                                         <ul>
-                                            <li><a href="account" class="button">Dashboard</a></li>
-                                            <li><a href="account/logout" class="button">&nbsp; Logout &nbsp;&nbsp;</a></li>
+                                            <li><a href="{SITE_URL}/account" class="button">Dashboard</a></li>
+                                            <li><a href="{SITE_URL}/account/logout" class="button">&nbsp; Logout &nbsp;&nbsp;</a></li>
                                         </ul>
                                     </div>
                                 </center>
@@ -176,12 +176,12 @@
                                     
                                     // Echo out the information
                                     echo '<li>
-                                        <b>'. $img .' <a href="server/realm/'.$r['id'].'">'.$r['name'].'</a></b><br />
+                                        <b>'. $img .' <a href="{SITE_URL}/server/realm/'.$r['id'].'">'.$r['name'].'</a></b><br />
                                         <small>Online: 0, <br />Uptime: 0d, 14hrs, 56min</small>
                                     </li>';
                                 }
                             ?>
-                            <li><center><small><a href="support/howtoplay">Connection Guide</a></small></center></li>
+                            <li><center><small><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></small></center></li>
                         </ul>
                     </div><!-- /right-box -->
                 </div><!-- /right -->

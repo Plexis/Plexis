@@ -71,7 +71,7 @@
                 <div id="user-info">
                     <p>
                         <span class="messages">Hello <a href="javascript:void(0);"><?php echo ucfirst( strtolower('{session.user.username}')); ?></a></span>
-                        <a href="{SITE_URL}" class="button">Return To Site</a> <a href="account/logout" class="button red">Logout</a>
+                        <a href="{SITE_URL}" class="button">Return To Site</a> <a href="{SITE_URL}/account/logout" class="button red">Logout</a>
                     </p>
                 </div> 
                 <!--! end of #user-info -->
@@ -99,8 +99,8 @@
                 <h3>Logged in as</h3>
                 <h2><a class="user-button" href="javascript:void(0);"><?php echo ucfirst( strtolower('{session.user.username}')); ?>&nbsp;<span class="arrow-link-down"></span></a></h2>
                 <ul class="dropdown-username-menu">
-                    <li><a href="account">Manage Account</a></li>
-                    <li><a href="account/logout">Logout</a></li>
+                    <li><a href="{SITE_URL}/account">Manage Account</a></li>
+                    <li><a href="{SITE_URL}/account/logout">Logout</a></li>
                 </ul>
                 
                 <div class="clearfix"></div>
@@ -111,51 +111,51 @@
             <nav id="nav">
                 <ul class="menu collapsible shadow-bottom">
                     <li>
-                        <a href="admin" <?php if($a == TRUE) echo 'class="current"';?>>
+                        <a href="{SITE_URL}/admin" <?php if($a == TRUE) echo 'class="current"';?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/dashboard.png">Dashboard</a>
                     </li>
                     <li>
-                        <a href="admin/users" <?php if($b == TRUE) echo 'class="current"'; ?>>
+                        <a href="{SITE_URL}/admin/users" <?php if($b == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/user.png">Manage Users</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" <?php if($c == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/config.png">Configuration</a>
                         <ul class="sub">
-                            <li><a href="admin/settings">Site Settings</a></li>
-                            <li><a href="admin/registration">Registration Settings</a></li>
+                            <li><a href="{SITE_URL}/admin/settings">Site Settings</a></li>
+                            <li><a href="{SITE_URL}/admin/registration">Registration Settings</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="javascript:void(0);" <?php if($d == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/clipboard-list.png">Site Managment</a>
                         <ul class="sub">
-                            <li><a href="admin/news">News Posts</a></li>
-                            <li><a href="admin/database">Database Operations</a></li>
-                            <li><a href="admin/modules">Modules</a></li>
-                            <li><a href="admin/templates">Templates</a></li>
-                            <li><a href="admin/vote">Vote Sites</a></li>
-                            <li><a href="admin/donate">Donation Packages</a></li>
-                            <li><a href="admin/shop">Shop System Items</a></li>
-                            <li><a href="admin/support">Site Support</a></li>
+                            <li><a href="{SITE_URL}/admin/news">News Posts</a></li>
+                            <li><a href="{SITE_URL}/admin/database">Database Operations</a></li>
+                            <li><a href="{SITE_URL}/admin/modules">Modules</a></li>
+                            <li><a href="{SITE_URL}/admin/templates">Templates</a></li>
+                            <li><a href="{SITE_URL}/admin/vote">Vote Sites</a></li>
+                            <li><a href="{SITE_URL}/admin/donate">Donation Packages</a></li>
+                            <li><a href="{SITE_URL}/admin/shop">Shop System Items</a></li>
+                            <li><a href="{SITE_URL}/admin/support">Site Support</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="admin/realms" <?php if($e == TRUE) echo 'class="current"'; ?>>
+                        <a href="{SITE_URL}/admin/realms" <?php if($e == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/chart.png">Realm Managment</a>
                     </li>
                     <li>
-                        <a href="admin/characters" <?php if($f == TRUE) echo 'class="current"'; ?>>
+                        <a href="{SITE_URL}/admin/characters" <?php if($f == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/pencil.png">Character Editor</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" <?php if($g == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/system.png">System</a>
                         <ul class="sub">
-                            <li><a href="admin/statistics">View Site Statistics</a></li>
-                            <li><a href="admin/console">Console</a></li>
-                            <li><a href="admin/update">Check For Updates</a></li>
-                            <li><a href="admin/logs">View Logs</a></li>
+                            <li><a href="{SITE_URL}/admin/statistics">View Site Statistics</a></li>
+                            <li><a href="{SITE_URL}/admin/console">Console</a></li>
+                            <li><a href="{SITE_URL}/admin/update">Check For Updates</a></li>
+                            <li><a href="{SITE_URL}/admin/logs">View Logs</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -169,13 +169,13 @@
             <!-- Begin of titlebar/breadcrumbs -->
             <div id="title-bar">
                 <ul id="breadcrumbs">
-                    <li><a href="admin" title="Home"><span id="bc-home"></span></a></li>
+                    <li><a href="{SITE_URL}/admin" title="Home"><span id="bc-home"></span></a></li>
                     <?php
                         // Instead of making a custom one in every page, we make an automatic one here
                         if($GLOBALS['action'] == 'index'): 
                             echo '<li class="no-hover">Dashboard</li>';
                         elseif($GLOBALS['action'] !== 'index' && isset($GLOBALS['queryString'][0])): 
-                            echo '<li><a href="'.$GLOBALS['controller'].'/'.$GLOBALS['action'].'">'.ucfirst($GLOBALS['action']).'</a></li>';
+                            echo '<li><a href="{SITE_URL}/'.$GLOBALS['controller'].'/'.$GLOBALS['action'].'">'.ucfirst($GLOBALS['action']).'</a></li>';
                             echo '<li class="no-hover">'.ucfirst($GLOBALS['queryString'][0]).'</li>';
                         else:
                             echo '<li class="no-hover">'.ucfirst($GLOBALS['action']).'</li>';
@@ -233,7 +233,6 @@
     <script src="{TEMPLATE_URL}/js/tiny_mce/jquery.tinymce.js"></script><!-- Load TinyMCE -->
     <script src="{TEMPLATE_URL}/js/common.js"></script> <!-- Generic functions -->
     <script src="{TEMPLATE_URL}/js/script.js"></script> <!-- Generic scripts -->
-
     <pcms::eval>
         <?php 
             // Include custom JS files for views
