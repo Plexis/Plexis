@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
-    <name>Default</name>                <!-- The Template Name -->
-	<author>Plexis</author>             <!-- Template author / creater -->
-    <coded_by>Plexis</coded_by>         <!-- Template coder -->
-    <date>December 27, 2011</date>      <!-- Creation data for the template -->
-	<license>GNU/GPL</license>          <!-- Template License -->
-    <copyright>Copyright Plexis 2012</copyright>
+    <info>
+        <name>Default</name>                <!-- The Template Name -->
+        <author>Plexis</author>             <!-- Template author / creater -->
+        <coded_by>Plexis</coded_by>         <!-- Template coder -->
+        <date>December 27, 2011</date>      <!-- Creation data for the template -->
+        <license>GNU/GPL</license>          <!-- Template License -->
+        <copyright>Copyright Plexis 2012</copyright>
+    </info>
     
-    <!-- 
-    IF you template requires helpers, format like so...
-    <helpers>
-        <helper>Form.php</helper>
-        <helper>Time.php</helper>
-    </helpers>
-    -->
-    <helpers></helpers>  
+    <config>
+        <!-- 
+        IF you template requires helpers, format like so...
+        <helpers>
+            <file>Form.php</file>
+            <file>Time.php</file>
+        </helpers>
+        -->
+        <helpers></helpers>
+        
+        <!-- Head tags... 
+            This is a list of css / JS files to be included in the <head> tag when built
+            You can use:
+                <css> {relative_path} </css> :: Include css file.
+                <js> {relative_path} </js> :: Include Javascript file.
+                <favicon type="image/$image_type"> {relative path} </favicon> :: The image type is determined automatically
+                <meta {key}="{value}"> {content} </meta> :: Here you can set meta data, you can add as many "key=value"'s as you need
+                    You can overwrite default meta keys.. Ex: <meta http-equiv="Expires">5</meta> will overwrite the default -1 value with 5.
+            You may add comments by going <comment> content </comment>
+        -->
+        <head>
+            <comment>Include template CSS stylesheets</comment>
+            <favicon type="image/gif">images/favicon.gif</favicon>
+            <css>css/style.css</css>
+            <css>css/alerts.css</css>
+            <css>css/datatables.css</css>
+            <comment>Include feature slide script</comment>
+            <js>js/jquery.cycle.all.min.js</js>
+        </head>
+    </config>
 </template> 

@@ -1,30 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title> <?php echo config('site_title'); ?> </title>
-    <meta name="keywords" content="<?php echo config('meta_keywords'); ?>" />
-    <meta name="description" content="<?php echo config('meta_description'); ?>" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    
-    <!-- Style Sheet -->
-    <link rel="shortcut icon" href="{TEMPLATE_URL}/images/favicon.gif"/>
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/alerts.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/datatables.css" />	
-    
-    <!-- Include Plexis Static JS Scripts -->
-    <script type="text/javascript" src="{SITE_URL}/application/static/js/jquery-1.6.2.min.js"></script>
-    <script type="text/javascript" src="{SITE_URL}/application/static/js/jquery.validate.min.js"></script>
-    <script type="text/javascript" src="{SITE_URL}/application/static/js/jquery.dataTables.min.js"></script>
-    
-    <!-- Include Template Related JS Scripts -->
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.cycle.all.min.js"></script>
+    <!--# This is a template comment that will be removed when the page is rendered... Build the basic heading automatcially #-->
+    <pcms::head />
+
     <script type="text/javascript">
     <!--
-        // THIS MUST BE SET! 
-        var url = '{SITE_URL}';
-        var realm_id = <?php echo get_realm_cookie(); ?>;
-        
         // Slide Show
         jQuery(function( $ ){
             $('#slide') 
@@ -43,10 +24,9 @@
         });
     -->
     </script>
-    {VIEW_JS}
 </head>
 
-<!-- Thie template doesnt work for Internet Explorer, so we show a message to IE users -->
+<!-- This template doesnt work for Internet Explorer, so we show a message to IE users -->
 <div style="position:fixed;background-color:#eee;width:100%;height:100%;z-index:99999;display:none;text-align:center;font-size:24px;color:#333;padding-top:10%" id="ie">
 	<h1 style="margin-bottom:5px;font-size:52px;">Dear Internet Explorer user...</h1>
 	<h2 style="font-size:40px; margin-top: 100px;">Your browser is not supported!</h2>
@@ -77,13 +57,13 @@
             <div id="nav">
                 <ul class="navigation">
                     <li><a href="{SITE_URL}">Home</a></li>
-                    <li><a href="{SITE_URL}/forum">Forums</a></li>
-                    <li><a href="{SITE_URL}/account/vote">Vote</a></li>
-                    <li><a href="{SITE_URL}/account/donate">Donate</a></li>
-                    <li><a href="{SITE_URL}/server">Server</a>
+                    <li><a href="forum">Forums</a></li>
+                    <li><a href="account/vote">Vote</a></li>
+                    <li><a href="account/donate">Donate</a></li>
+                    <li><a href="server">Server</a>
                         <ul class="subnav">
-                            <li><a href="{SITE_URL}/server/realmlist">Realmlist</a></li>
-                            <li><a href="{SITE_URL}/server/onlinelist">Players Online</a>
+                            <li><a href="server/realmlist">Realmlist</a></li>
+                            <li><a href="server/onlinelist">Players Online</a>
                                 <?php
                                     $realms = get_installed_realms();
                                     if( !empty($realms) )
@@ -92,7 +72,7 @@
                                         echo '<ul class="subnav-out">';
                                         foreach($realms as $realm)
                                         {
-                                            echo '<li><a href="'.SITE_URL.'/server/onlinelist/'.$realm['id'].'">'.$realm['name'].'</a></li>';
+                                            echo '<li><a href="server/onlinelist/'.$realm['id'].'">'.$realm['name'].'</a></li>';
                                         }
                                         echo '</ul>';
                                     }
@@ -101,32 +81,32 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="{SITE_URL}/support">Support</a>
+                    <li><a href="support">Support</a>
                         <ul class="subnav">
-                            <li><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></li>
+                            <li><a href="support/howtoplay">Connection Guide</a></li>
                         </ul>
                     </li>
                     
-                    <!-- Account Login -->
+                    <!-- Account / Register link -->
                     <?php if( $session['user']['logged_in'] == FALSE): ?>
-                        <li><a href="{SITE_URL}/account/register">Register</a></li>
+                        <li><a href="account/register">Register</a></li>
                         
                     <?php else: ?>
                         <li><a href="#">Account</a>
                             <ul class="subnav">
-                                <li><a href="{SITE_URL}/account">Dashboard</a></li>
-                                <li><a href="{SITE_URL}/account/update/password">Change Password</a></li>
-                                <li><a href="{SITE_URL}/account/update/email">Update Email</a></li>
-                                <li><a href="{SITE_URL}/account/logout">Logout</a></li>
+                                <li><a href="account">Dashboard</a></li>
+                                <li><a href="account/update/password">Change Password</a></li>
+                                <li><a href="account/update/email">Update Email</a></li>
+                                <li><a href="account/logout">Logout</a></li>
                             </ul>
                         </li>
                         
                     <?php endif; ?>	
-                    <!-- End Account Login -->
+                    <!-- End Account / Register Link -->
                     
                     <!-- Admin -->
                     <?php if( $session['user']['is_admin'] == TRUE || $session['user']['is_super_admin'] == TRUE): ?>
-                        <li><a href="{SITE_URL}/admin">Admin Panel</a>
+                        <li><a href="admin">Admin Panel</a>
                     <?php endif; ?>
 
                 </ul>
@@ -140,7 +120,7 @@
                         <div class="right-box">
                             <h3>Login / Register</h3>
                             <p>
-                                <form method="post" action="{SITE_URL}/account/login" id="form">		
+                                <form method="post" action="account/login" id="form">		
                                     <fieldset class="login-right">	
                                         <label for="username" class="top-label">Username:</label> 
                                         <input type="text" name="username" id="username" value="" size="28" tabindex="10" />
@@ -150,9 +130,9 @@
                                         
                                         <center>
                                             <input type="submit" name="submit" value="Login" class="button" tabindex="12"/>
-                                            <input type="button" class ="button" name="register" value="Register" onClick="window.location='{SITE_URL}/account/register'" tabindex="13">
+                                            <input type="button" class ="button" name="register" value="Register" onClick="window.location='account/register'" tabindex="13">
                                             <br />
-                                            <small><a href="{SITE_URL}/account/recover">Recover lost password</a></small>
+                                            <small><a href="account/recover">Recover lost password</a></small>
                                         </center>
                                     </fieldset>
                                 </form>
@@ -168,8 +148,8 @@
                                     Web Points: {session.user.web_points}<br />
                                     <div class="button-row">
                                         <ul>
-                                            <li><a href="{SITE_URL}/account" class="button">Dashboard</a></li>
-                                            <li><a href="{SITE_URL}/account/logout" class="button">&nbsp; Logout &nbsp;&nbsp;</a></li>
+                                            <li><a href="account" class="button">Dashboard</a></li>
+                                            <li><a href="account/logout" class="button">&nbsp; Logout &nbsp;&nbsp;</a></li>
                                         </ul>
                                     </div>
                                 </center>
@@ -196,12 +176,12 @@
                                     
                                     // Echo out the information
                                     echo '<li>
-                                        <b>'. $img .' <a href="{SITE_URL}/server/realm/'.$r['id'].'">'.$r['name'].'</a></b><br />
+                                        <b>'. $img .' <a href="server/realm/'.$r['id'].'">'.$r['name'].'</a></b><br />
                                         <small>Online: 0, <br />Uptime: 0d, 14hrs, 56min</small>
                                     </li>';
                                 }
                             ?>
-                            <li><center><small><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></small></center></li>
+                            <li><center><small><a href="support/howtoplay">Connection Guide</a></small></center></li>
                         </ul>
                     </div><!-- /right-box -->
                 </div><!-- /right -->
@@ -211,15 +191,14 @@
                     <?php if($GLOBALS['controller'] == 'welcome'): ?>
                         <!-- Slide Show -->
                         <div id="slide">
-                            <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/feature-1.jpg" alt="" /></a><p>Plexis, A Professional WoW CMS!</p></div>
-                            <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/feature-2.jpg" alt="" /></a><p>Awesome!</p></div>
-                            <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/feature-4.jpg" alt="" /></a></div>
+                            <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/slide-1.jpg" alt="" /></a><p>Plexis, A Professional WoW CMS!</p></div>
                         </div>
                         <!-- /Slide -->
                     <?php endif; ?>
                     
-                    {GLOBAL_MESSAGES}
-                    {PAGE_CONTENTS}
+                    <!--# Here we tell our compile engine to replace these with messages and page content #-->
+                    <pcms::global_messages />
+                    <pcms::page_contents />
                 </div>
                 <!-- /MAIN CONTENT -->
 

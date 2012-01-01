@@ -47,6 +47,9 @@ class Controller extends \System\Core\Controller
             load_module_config($GLOBALS['controller']);
         }
         
+        // Setup the selected users language
+        $GLOBALS['language'] = selected_language();
+        
         // Setup the template system
         $this->_init_template();
     }

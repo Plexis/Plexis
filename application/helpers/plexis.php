@@ -31,6 +31,34 @@
         $GLOBALS['template_messages'][] = "<div class=\"alert ".$level."\">".$text."</div>";
         return;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: selected_language
+| ---------------------------------------------------------------
+|
+| This method returns the users selected language
+|
+| @Return (String) The language string
+|
+*/
+    function selected_language()
+    {
+        // Load language
+        $input = load_class('Input');
+        if(isset($_COOKIE['language']))
+        {
+            $language = $input->cookie('language', TRUE);
+        }
+        else
+        {
+            $language = config('default_language');
+            $input->set_cookie('language', $language);
+        }
+        
+        // Return the language string
+        return $language;	
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -47,17 +75,7 @@
     function load_language_file($file)
     {
         // Load language
-        if(isset($_COOKIE['language']))
-        {
-            $language = $_COOKIE['language'];
-        }
-        else
-        {
-            $language = config('default_language');
-            $input = load_class('Input');
-            $input->set_cookie('language', $language);
-            unset($input);
-        }
+        $language = selected_language();
         
         // Init the language class
         $lang = load_class('Language');

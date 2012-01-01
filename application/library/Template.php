@@ -24,8 +24,8 @@ class Template
     // An array of all template variables
     protected $variables = array();
     
-    // Are we intialized for render?
-    protected $initialized = FALSE;
+    // Meta data from the <head> tags
+    protected $_metadata = array();
     
     // Template information
     protected $template = array(
@@ -36,7 +36,7 @@ class Template
     
     // An array of template configs
     protected $config = array(
-        'trigger' => "Compiler",            // Our Compiler trigger
+        'trigger' => "pcms::",              // Our Compiler trigger
         'controller_view_paths' => TRUE,    // Add the controller name to the view paths? (views/<controller>/view.php)
         'l_delim' => '{',                   // Left variable delimeter    
         'r_delim' => '}'                    // Right variable delimeter   
@@ -67,6 +67,30 @@ class Template
         $this->load = load_class('Loader');
         $this->session = $this->load->library('Session');
         $this->parser = $this->load->library('Parser');
+        
+        // Build our custom keywords and description
+        $title = config('site_title');
+        $keywords = config('meta_keywords');
+        $desc = config('meta_description');
+        
+        // Setup the basic static headings
+        $this->append_metadata("<!-- Basic Headings -->")
+             ->set_metadata('title', $title, 'title')
+             ->set_metadata('keywords', $keywords)
+             ->set_metadata('description', $desc)
+             ->append_metadata("") // Added whitespace
+             ->append_metadata("<!-- Base URL, Content type, And cache control -->")
+             ->set_metadata('content-type', 'text/html; charset=UTF-8', 'http-equiv')
+             ->set_metadata('cache-control', 'no-cache', 'http-equiv')
+             ->set_metadata('expires', '-1', 'http-equiv')
+             ->set_metadata('base', SITE_URL .'/', 'base')
+             ->append_metadata("") // Add whitespace
+             ->append_metadata("<!-- Include Plexis Static JS Scripts -->")
+             ->append_metadata('<script type="text/javascript" src="application/static/js/jquery-1.6.2.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="application/static/js/jquery.validate.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="application/static/js/jquery.dataTables.min.js"></script>')
+             ->append_metadata('<script type="text/javascript">var url = "'. SITE_URL .'"; var realm_id = '. get_realm_cookie() .';</script>'
+        );
     }
 
 /*
@@ -84,6 +108,7 @@ class Template
     public function set($name, $value) 
     {
         $this->variables[$name] = $value;
+        return $this;
     }
     
 /*
@@ -97,8 +122,23 @@ class Template
     public function set_template_path($path = 'templates') 
     {
         // Set template path
-        $this->template['http_path'] = SITE_URL ."/application/". str_replace( '\\', '/', $path );
+        $this->template['http_path'] = "application/". str_replace( '\\', '/', $path );
         $this->template['path'] = str_replace( array('/', '\\'), DS, $path );
+        return $this;
+    }
+
+/*
+| ---------------------------------------------------------------
+| Function: set_layout()
+| ---------------------------------------------------------------
+|
+| Sets the specific layout file we are going to use
+|
+*/    
+    public function set_layout($layout)
+    {
+        $this->layout_file = str_replace( array('/', '\\'), DS, $layout);
+        return $this;
     }
 
 /*
@@ -120,7 +160,86 @@ class Template
                 $this->config[$key] = $value;
             }
         }
+        return $this;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: prepend_metadata()
+| ---------------------------------------------------------------
+|
+| This method adds a new line of JS | css | meta tags into the head data
+|
+| @Param: (String) $line - The new line to be prepended (added before)
+| @Return (Object) $this
+|
+*/
+	public function prepend_metadata($line)
+	{
+		array_unshift($this->_metadata, $line);
+		return $this;
+	}
+
+/*
+| ---------------------------------------------------------------
+| Function: append_metadata()
+| ---------------------------------------------------------------
+|
+| This method adds a new line of JS | css | meta tags into the head data
+|
+| @Param: (String) $line - The new line to be appended (added after)
+| @Return (Object) $this
+|
+*/
+	public function append_metadata($line)
+	{
+		$this->_metadata[] = $line;
+		return $this;
+	}
+    
+/*
+| ---------------------------------------------------------------
+| Function: set_metadata()
+| ---------------------------------------------------------------
+|
+| This method sets a specfic line of meta tags into the head data
+|
+| @Param: (String) $name - The name of the meta tag Ex: language
+| @Param: (String) $content - The content (value) of this tag
+| @Param: (String) $type - Type of tag we are setting
+| @Return (Object) $this
+|
+*/
+    public function set_metadata($name, $content, $type = 'meta')
+	{
+		$name = htmlspecialchars(strip_tags($name));
+		$content = htmlspecialchars(strip_tags($content));
+
+		switch($type)
+		{
+			case 'meta':
+				$this->_metadata[$name] = '<meta name="'.$name.'" content="'.$content.'"/>';
+			break;
+            
+            case 'http-equiv':
+				$this->_metadata[$name] = '<meta http-equiv="'.$name.'" content="'.$content.'"/>';
+			break;
+
+			case 'link':
+				$this->_metadata[$content] = '<link rel="'.$name.'" href="'.$content.'"/>';
+			break;
+            
+            case 'title':
+				$this->_metadata['title'] = '<title>'.$content.'</title>';
+			break;
+            
+            case 'base':
+				$this->_metadata['base'] = '<base href="'.$content.'" target="_self"/>';
+			break;
+		}
+
+		return $this;
+	}
     
 /*
 | ---------------------------------------------------------------
@@ -146,31 +265,42 @@ class Template
             $file = APP_PATH . DS . $path . DS .'template.xml';
         }
         
+        // Set our empty return data
+        $helpers = array();
+        $head = array();
+        $infos = array();
+        
         // Load the template xml fil if it exists
         if(file_exists( $file ))
         {
             $template = array();
             $Info = simplexml_load_file($file);
-            foreach( $Info->children() as $child )
+            
+            // Process the info child
+            foreach( $Info->info->children() as $child )
             {
-                // If the child is an array, parse then we create a sub level
-                if($child->count() > 0)
-                {
-                    $child2 = array();
-                    foreach($child->children() as $another)
-                    {
-                        $child2[] = $another;
-                    }
-                    $template[ $child->getName() ] = $child2;
-                }
-                else
-                {
-                    $template[ $child->getName() ] = $child;
-                }
+                $infos[ $child->getName() ] = $child;
             }
-            return $template;
+            
+            // Process helpers
+            foreach( $Info->config->helpers->children() as $helper )
+            {
+                $helpers = $helper;
+            }
+            
+            // Process head tags
+            foreach( $Info->config->head->children() as $child )
+            {
+                $attr = FALSE;
+                foreach( $child->attributes() as $key => $value )
+                {
+                    if($attr === FALSE) $attr = array();
+                    $attr[$key] = $value;
+                }
+                $head[] = array('type' => $child->getName(), 'value' => $child, 'attr' => $attr);
+            }
         }
-        return FALSE;
+        return array('info' => $infos, 'helpers' => $helpers, 'head' => $head);
     }
     
 /*
@@ -188,11 +318,11 @@ class Template
 |
 */
 
-    public function render($view_name, $data = array(), $layout = 'layout') 
+    public function render($view_name, $data = array(), $layout = NULL) 
     {
         // Define our view file name, and layout filename
         $this->view_file = str_replace( array('/', '\\'), DS, $view_name);
-        $this->layout_file = str_replace( array('/', '\\'), DS, $layout);
+        if($layout !== NULL) $this->set_layout($layout);
         
         // Compile all the variables into one array
         $this->_initialize($data);
@@ -275,68 +405,80 @@ class Template
     protected function compile() 
     {
         // Shorten up the text here
-        $l_delim = $this->config['l_delim'];
-        $r_delim = $this->config['r_delim'];
+        $l_delim = "<";
+        $r_delim = ">";
         $trigger = $this->config['trigger'];
         
         // Get our template layout file
-        if($this->layout_file != FALSE)
+        if($this->layout_file !== FALSE && !empty($this->layout_file))
         {
             $source = $this->load( $this->layout_file .'.php' );
             
-            // Load page contents so they can be parsed as well!
-            $source = str_replace("{PAGE_CONTENTS}", $this->load_view(), $source); 
+            // Load global page contents early so they can be parsed as well!
+            $source = str_replace($l_delim . $trigger ."page_contents /". $r_delim, $this->load_view(), $source); 
         }
         else
         {
             $source = $this->load_view();
         }
-        
-        // Strip custom comment blocks
-        while(preg_match('/<!--#.*#-->/iUs', $source, $replace)) 
-        {
-            $source = str_replace($replace[0], '', $source);
-        }
-        
-        // Search and process compiler:eval commands
+
+        // Search and process <trigger::eval> commands
         $source = $this->compiler_eval($source);
         
-        // Now, Loop through any remaining matchs of { TRIGGER : ... }
-        if(strpos($source, $l_delim . $trigger .":") !== FALSE)
+        // Now, Loop through any partial page includes
+        $search = $l_delim . $trigger ."include";
+        if(strpos($source, $search) !== FALSE)
         {
-            // Loop through each match of { TRIGGER : ... }
-            $regex = $l_delim . $trigger .":(.*)". $r_delim;
+            // Loop through each match of < TRIGGER ... />
+            $regex = $l_delim . $trigger ."include name=(.*) /". $r_delim;
             
             // Loop though each match and process accordingly
             while(preg_match("~". $regex  ."~iUs", $source, $replace))
             {
                 // Assign the matches as $main
-                $main = trim($replace[1]);
+                $main = trim($replace[1], "\"'");
+                $main = str_replace( array('\\', '/'), DS, $main );
+                $file = $this->template['path'] . DS . $main;
                 
-                // === Here we figure out what and how we are replacing === //
-                
-                    $exp = explode(":", $main);
-                    
-                    // Figure out what the task is Ex: load
-                    switch($exp[0])
-                    {
-                        case "load":
-                            $content = $this->load($exp[1]);
-                            $content = $this->compiler_eval($content);
-                            break;
-                            
-                        case "constant":
-                            ( defined($exp[1]) ) ? $content = constant($exp[1]) : $content = $l_delim . $exp[1] . $r_delim;
-                            break;
-                            
-                        default:
-                            show_error('unknown_template_command', array($exp[0]), E_ERROR);
-                            break;
-                    }
+                // Load the file, and eval it
+                $content = $this->load($file);
+                $content = $this->compiler_eval($content);
                 
                 // strip parsed Template block
                 $source = str_replace($replace[0], $content, $source);
             }
+        }
+        
+        // Build our header string
+        $search = $l_delim . $trigger ."head /" . $r_delim;
+        if(strpos($source, $search) !== FALSE)
+        {
+            $source = str_replace($search, $this->_build_header(), $source);
+        }
+        
+        // Find and replace our global message block!
+        $search = $l_delim . $trigger ."global_messages /" . $r_delim;
+
+        // Init our emtpy message block
+        $message_block = '';
+        
+        // If we have Global template messages
+        if(isset($GLOBALS['template_messages']))
+        {
+            // Loop through each message, and add it to the message blcok
+            foreach($GLOBALS['template_messages'] as $message)
+            {
+                $message_block .= $message;
+            }
+        }
+        
+        // Get our global messages in here
+        $source = str_replace($search, $message_block, $source);
+        
+        // Lastely, Strip template comment blocks
+        while(preg_match('/<!--#.*#-->/iUs', $source, $replace)) 
+        {
+            $source = str_replace($replace[0], '', $source);
         }
         
         $this->source = $source;
@@ -359,23 +501,6 @@ class Template
         // Shorten up the text here
         $l_delim = $this->config['l_delim'];
         $r_delim = $this->config['r_delim'];
-
-        // Init our emtpy message block
-        $message_block = '';
-        
-        // If we have Global template messages
-        if(isset($GLOBALS['template_messages']))
-        {
-            // Loop through each message, and add it to the message blcok
-            foreach($GLOBALS['template_messages'] as $message)
-            {
-                $message_block .= $message;
-            }
-        }
-        
-        // Replace Global template messages, and page JS string
-        $this->set('GLOBAL_MESSAGES', $message_block);
-        $this->set('VIEW_JS', $this->view_js_string());
 
         // Use the Parser
         $this->parser->set_delimiters($l_delim, $r_delim);
@@ -479,7 +604,7 @@ class Template
         }
         elseif(file_exists( $s_file ))
         {
-            return '<script type="text/javascript" src="{SITE_URL}/application/static/js/views/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            return '<script type="text/javascript" src="application/static/js/views/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
         }
         else
         {
@@ -501,15 +626,15 @@ class Template
     protected function compiler_eval($source) 
     {	
         // Shorten up the text here
-        $l_delim = $this->config['l_delim'];
-        $r_delim = $this->config['r_delim'];
+        $l_delim = "<";
+        $r_delim = ">";
         $trigger = $this->config['trigger'];
         
         // Look for Compiler eval Messages, We must process these first!
-        if(strpos($source, $l_delim . $trigger .":eval") !== FALSE)
+        if(strpos($source, $l_delim . $trigger ."eval") !== FALSE)
         {
             // Create our regex and fid all matches in the source
-            $regex = $l_delim . $trigger .":eval". $r_delim ."(.*)". $l_delim . "/". $trigger .":eval". $r_delim;
+            $regex = $l_delim . $trigger ."eval". $r_delim ."(.*)". $l_delim . "/". $trigger ."eval". $r_delim;
             preg_match_all("~". $regex  ."~iUs", $source, $matches, PREG_SET_ORDER);
             
             // Loop through each match and eval it
@@ -524,6 +649,109 @@ class Template
         }
         
         return $source;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: _append_template_metadata()
+| ---------------------------------------------------------------
+|
+| This method sets all the meta data from the template.xml
+|
+*/
+    protected function _append_template_metadata()
+	{
+		// Add the template.xml head data to the metadata
+        foreach($this->template['head'] as $head)
+        {
+            $path = $this->template['http_path'] . '/';
+            switch($head['type'])
+            {
+                case "comment":
+                    $this->append_metadata(''); // Add a space ontop
+                    $this->append_metadata('<!-- '. wordwrap($head['value'], 125) .' -->');
+                break;
+                
+                case "css":
+                    $this->set_metadata('stylesheet', $path . $head['value'], 'link');
+                break;
+                
+                case "js":
+                    $this->append_metadata('<script type="text/javascript" src="'. $path . $head['value'] .'"></script>');
+                break;
+                
+                case "favicon":
+                    // Check to see if we are generous enough to have a filetype
+                    if(isset($head['attr']['type']))
+                    {
+                        $ext = $head['attr']['type'];
+                    }
+                    else
+                    {
+                        // We need to manually get the image mime type :(
+                        $ext = pathinfo($this->template['path'] . DS . $head['value'], PATHINFO_EXTENSION);
+                        $ext = "image/".$ext;
+                    }
+                    $this->append_metadata('<link rel="icon" type="'. $ext .'" href="'. $path . $head['value'] .'" />');
+                break;
+                
+                case "meta":
+                    $attr = '';
+                    if($head['attr'] != FALSE)
+                    {
+                        $quit = FALSE;
+                        foreach($head['attr'] as $k => $v)
+                        {
+                            // Check to see if we are overwriting one thats set already
+                            if($k == 'name' || $k == 'http-equiv')
+                            {
+                                if($k == 'name') $this->set_metadata($v, $head['value']);
+                                if($k == 'http-equiv') $this->set_metadata($v, $head['value'], 'http-equiv');
+                                $quit = TRUE;
+                                break;
+                            }
+                            $attr .= $k .'="'.$v.'" ';
+                        }
+                        
+                        // IF quit is still false, we didnt overwright anything
+                        if($quit == FALSE) $this->append_metadata('<meta '.$attr.' content="'.$head['value'].'" />');
+                    }
+                break;
+            }
+        }
+	}
+    
+/*
+| ---------------------------------------------------------------
+| Function: _build_header()
+| ---------------------------------------------------------------
+|
+| This method fills the <head> tag with set meta data
+|
+| @Return (String) The formatted head string
+|
+*/
+    protected function _build_header()
+    {
+        // Append the template meta data
+        $this->_append_template_metadata();
+        
+        // Add the view if we have one
+        $line = $this->view_js_string();
+        if($line != '')
+        {
+            $this->append_metadata( '' );
+            $this->append_metadata( "<!-- Include the page view JS file -->" );
+            $this->append_metadata( $line );
+        }
+
+        // Now, we build the header into a string
+        $head = "";
+        foreach($this->_metadata as $data)
+        {
+            $head .= "\t". trim($data) . "\n";
+        }
+        return $head;
     }
 
 /*
@@ -545,12 +773,12 @@ class Template
         $this->template['path'] = APP_PATH . DS . $this->template['path'];
         
         // Load the template information
-        $this->template['info'] = $this->load_template_xml();
+        $this->template = array_merge($this->template, $this->load_template_xml());
         
         // Load template helpers if required
-        if(isset($this->template['info']['helpers']) && is_array($this->template['info']['helpers']))
+        if(count($this->template['helpers']) > 0)
         {
-            foreach($this->template['info']['helpers'] as $h)
+            foreach($this->template['helpers'] as $h)
             {
                 $this->load->helper($h);
             }
@@ -558,14 +786,12 @@ class Template
 
         // Add session data to our data array
         $data['session'] = $this->session->data;
+        $data['config'] = load_class('Config')->get_all('App');
         
         // Add the passed variables to the template variables list
-        if(count($data) > 0)
+        foreach($data as $key => $value)
         {
-            foreach($data as $key => $value)
-            {
-                $this->set($key, $value);
-            }
+            $this->set($key, $value);
         }
         unset($data);
         
@@ -579,7 +805,6 @@ class Template
         $this->set('TEMPLATE_COPYRIGHT', $this->template['info']['copyright']);
         
         // we are done
-        $this->initialized == TRUE;
         return;
     }
 }

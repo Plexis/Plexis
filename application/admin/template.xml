@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <info>
+        <name>Grape</name>                                      <!-- The Template Name -->
+        <author>Stammi</author>                                 <!-- Template author / creater -->
+        <coded_by>Stammi</coded_by>                             <!-- Template coder -->
+        <date>14 August 2011</date>                             <!-- Creation data for the template -->
+        <license>ThemeForest Regular Licence</license>          <!-- Template License -->
+        <copyright>All Rights Reserved Stammi</copyright>
+        <author_url>http://themeforest.net/user/Stammi</author_url>
+    </info>
+    
+    <config>
+        <!-- 
+        IF you template requires helpers, format like so...
+        <helpers>
+            <file>Form.php</file>
+            <file>Time.php</file>
+        </helpers>
+        -->
+        <helpers></helpers>
+        
+        <!-- Head tags... 
+            This is a list of css / JS files to be included in the <head> tag when built
+            You can use:
+                <css> {relative_path} </css> :: Include css file.
+                <js> {relative_path} </js> :: Include Javascript file.
+                <favicon type="image/$image_type"> {relative path} </favicon> :: The image type is determined automatically
+                <meta {key}="{value}"> {content} </meta> :: Here you can set meta data, you can add as many "key=value"'s as you need
+                    You can overwrite default meta keys.. Ex: <meta http-equiv="Expires">5</meta> will overwrite the default -1 value with 5.
+            You may add comments by going <comment> content </comment>
+        -->
+        <head>
+            <comment>Mobile viewport optimized: j.mp/bplateviewport</comment>
+            <meta name="viewport">width=device-width,initial-scale=1</meta>
+            <meta http-equiv="X-UA-Compatible">IE=edge,chrome=1</meta>
+            
+            <comment>Favicon</comment>
+            <favicon type="image/png">img/icons/favicon.png</favicon>
+            
+            <comment>CSS concatenated and minified via ant build script</comment>
+            <css>css/style.css</css>
+            <css>css/960.fluid.css</css>
+            <css>css/main.css</css>
+            <css>css/buttons.css</css>
+            <css>css/lists.css</css>
+            <css>css/typography.css</css>
+            <css>css/forms.css</css>
+            <css>css/tables.css</css>
+            <css>css/charts.css</css>
+            <css>css/jquery-ui-1.8.15.custom.css</css>
+            
+            <comment>All JavaScript at the bottom, except for Modernizr</comment>
+            <js>js/libs/modernizr-2.0.6.min.js</js>
+        </head>
+    </config>
+</template> 
