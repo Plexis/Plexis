@@ -170,5 +170,25 @@ class Router
         );
         return $array;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: get_uri_segement()
+| ---------------------------------------------------------------
+|
+| This method returns all the url information
+|
+| @Return (Array) Returns an array of all url related info
+|
+*/    
+    public function get_uri_segement($index)
+    {
+        // Return the queryStringURI
+        if(isset($this->uri[$index]))
+        {
+            return $this->uri[$index];
+        }
+        return FALSE;
+    }
 }
 // EOF

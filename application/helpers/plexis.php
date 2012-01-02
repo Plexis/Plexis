@@ -396,27 +396,14 @@
 | This function is used to exctract a specific piece of the url.
 |
 | @Param: (String) $index: The zero-based index of the url part to return.
-| @Return: (String / Null) String containing the specified url part, null if the index it out of bounds of the array.
+| @Return: (String / Null) String containing the specified url part, 
+|   null if the index it out of bounds of the array.
 |
 */
 
-	function uri_segment($index)
-	{
-		$url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-		
-		$base_dir = basename(ROOT); //The folder where index.php is located.
-		$start = stripos($url, $base_dir) + strlen($base_dir) + 1; //Starting just after the '/' after $base_dir.
-		$length = strlen($url) - 1; //The length of the string, minus one to represent the zero-based index of the last character in the string.
-		
-		//Get the query string ( in the format of <root>/controller/view/).
-		$query_string = substr($url, $start, $length);
-		$query_string = rtrim($query_string, "/");
-		
-		$parts = explode("/", $query_string);
-		
-		if( !array_key_exists($index, $parts) )
-			return null;
-		else
-			return $parts[$index];
-	}
+    function uri_segment($index)
+    {
+        $Router = load_class('Router');
+        return $Router->get_uri_segement($index);
+    }
 // EOF
