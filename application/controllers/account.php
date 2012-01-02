@@ -63,9 +63,6 @@ class Account extends Application\Core\Controller
         // Fetch account data from the realm
         $data = $this->realm->fetch_account($this->user['id']);
 		
-		// For allowing users to create their own registration keys.
-		$data['can_create_keys'] = config("reg_user_key_creation");
-        
         // Load the page, and we are done :)
         $this->load->view('index', $data);
     }
@@ -971,6 +968,86 @@ class Account extends Application\Core\Controller
         $data['sites'] = $sites;
         $this->load->view('vote', $data);
     }
+	
+/*
+| ---------------------------------------------------------------
+| P10: Invitation Keys
+| ---------------------------------------------------------------
+|
+*/  
+
+	function invite_keys($mode = null)
+	{
+		$can_create_keys = config("reg_user_key_creation");
+		$data["can_create_keys"] = $can_create_keys;
+		
+        if( $can_create_keys == 1)
+		{
+			//Process key creation first.
+			if( $mode == "create" )
+			{
+				//Let's generate the key.
+				$new_key = "";
+				
+				//Start by getting the username, all lowercase, alphanumeric only.
+				$username = $this->user['username'];
+				$username = strtolower($username);
+				$username = preg_replace("/[^a-z0-9]/i", "", $username);
+				
+				//Get a string containing the current IP address represented as a long integer
+				//and the current Unix timestamp with microsecond prescision.
+				$longid = sprintf("%u%d",
+									ip2long($_SERVER['REMOTE_ADDR']),
+									microtime(true)
+								);
+				
+				//Each invitation key consists of a SHA1 hash of the above 'longid' prepended with the user's name.
+				$new_key = $username . sha1($longid);
+				
+				$key_query_data = array
+					(
+						"key" => $new_key, 
+						"sponser" => $this->user['id']
+					);
+				
+				//Insert it into the pcms_reg_keys table.
+				$this->DB->insert("pcms_reg_keys", $key_query_data);
+				
+				//Redirect back to /account/invite_keys/ so that F5 won't resubmit the form.
+				redirect(SITE_URL . "/account/invite_keys");
+			}
+			
+			//Process key deletion next.
+			if( $mode == "delete" )
+			{
+				$key_id = uri_segment(3);
+				
+				if( preg_match("/[a-z0-9]{3,128}/i", $key_id) ) //Prevent possible SQLi vulnerability, we only continue processing if $key_id is strictly alpanumeric and between 3 and 128 characters long (inclusive).
+				{
+					$key_query = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key` = '$key_id';")->fetch_row(); //Get the key.
+					
+					if( $key_query != FALSE ) //Check to make sure the query didn't fail.
+					{
+						$sponsor = $key_query["sponser"];
+						
+						if( $sponsor == $this->user["id"] ) //Only allow the key to be deleted if it belongs to the currently logged in user.
+							$this->DB->delete("pcms_reg_keys", "`key` = '$key_id'");
+					}
+				}
+				
+				//Redirect back to /account/invite_keys/ so that F5 won't resubmit the form.
+				redirect(SITE_URL . "/account/invite_keys");
+			}
+			
+			$id = $this->user['id'];
+			$user_keys = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `sponser` = '$id' AND `usedby` < 0 AND `assigned` = 0;")->fetch_array();
+			
+			if( sizeof( $user_keys ) > 0 )
+				$data["keys"] = $user_keys;
+		}
+		
+		$this->load->view("reg_keys", $data);
+	}
 
 // Test Page    
     function test()

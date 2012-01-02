@@ -18,6 +18,9 @@
         <center>
             <a href="{SITE_URL}/account/update/password" class="button">Change Password</a>
             <a href="{SITE_URL}/account/update/email" class="button">Change Email</a>
+			<a href="{SITE_URL}/account/invite_keys" class="button">Invitation Keys</a>
+			<!--This is really just for aesthetics.-->
+			<div style="height: 11px; width: 0px; background: transparent;"></div>
         </center>
     </div>
 </div>
