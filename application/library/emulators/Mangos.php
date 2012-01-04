@@ -631,5 +631,92 @@ class Mangos
         $pass = strtoupper($pass);
         return SHA1($user.':'.$pass);
     }
+	
+/*
+| ---------------------------------------------------------------
+| Function: get_expansion_info()
+| ---------------------------------------------------------------
+|
+|  Gets information about account expansions.
+|
+| @Return (Array) Returns an array containing the expansions and all relevant information.
+|
+*/
+	
+	function get_expansion_info()
+	{
+		return array
+			(
+				//Expansion ID => Expansion Name
+				0  => "Classic",
+				1  => "The Burning Crusade",
+				2 => "Wrath of the Lich King"
+			);
+	}
+	
+/*
+| ---------------------------------------------------------------
+| Function: get_expansion_name()
+| ---------------------------------------------------------------
+|
+|  Returns the name of the expansion from the given ID.
+|
+| @Param: (Int) $id - The expansion number.
+| @Return (String) Returns the name of the expansion.
+|
+*/
+	
+	function get_expansion_name($id)
+	{
+		$expansions = $this->get_expansion_info();
+		
+		if( array_key_exists( $expansions, $id ) )
+			return $expansions[$id];
+		else
+			return "Unknown";
+	}
+	
+/*
+| ---------------------------------------------------------------
+| Function: get_expansion()
+| ---------------------------------------------------------------
+|
+|  Returns the name of the expansion from the given ID.
+|
+| @Param: (Int) $id - The account ID.
+| @Return (Bool) Returns the current expansion (ID number) on success, FALSE on failure.
+|
+*/
+	
+	function get_expansion($id)
+	{
+		$account = $this->fetch_account($id);
+		
+		if( !$account )
+			return FALSE;
+		
+		return $account['expansion'];
+	}
+	
+/*
+| ---------------------------------------------------------------
+| Function: update_expansion()
+| ---------------------------------------------------------------
+|
+|  Sets the expansion on the specified account.
+|
+| @Param: (Int) $id - The expansion ID.
+| @Param: (Int) $account - The account ID.
+| @Return (Bool) FALSE on failure, TRUE on success.
+|
+*/
+	
+	function update_expansion($id, $account)
+	{
+		if( !$this->account_exists($account) )
+			return FALSE;
+			
+		return $this->DB->update("account", array('expansion' => $id), "`id` = '$account'");
+	}
 }
 // EOF

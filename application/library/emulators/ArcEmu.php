@@ -359,7 +359,7 @@ class ArcEmu
 */
     public function account_banned($account_id)
     {
-		$query = "SELECT COUNT(*) FROM `accounts` WHERE `banned` = '1' AND `acct` = ?;";
+		$query = "SELECT COUNT(*) FROM `accounts` WHERE `banned` > 0 AND `acct` = ?;";
         $check = $this->DB->query( $query, array($account_id) )->fetch_column();
         if ($check !== FALSE && $check > 0)
         {
@@ -411,7 +411,7 @@ class ArcEmu
     {
         $query = "SELECT `banned` FROM `accounts` WHERE `acct`=?";
         $check = $this->DB->query( $query, array($account_id) )->fetch_column();
-        if($check !== FALSE && $check == 1)
+        if($check !== FALSE && $check > 1)
         {
             return TRUE; // Account is locked
         }
@@ -624,5 +624,94 @@ class ArcEmu
         $pass = strtoupper($pass);
         return SHA1($user.':'.$pass);
     }
+	
+/*
+| ---------------------------------------------------------------
+| Function: get_expansion_info()
+| ---------------------------------------------------------------
+|
+|  Gets information about account expansions.
+|
+| @Return (Array) Returns an array containing the expansions and all relevant information.
+|
+*/
+	
+	function get_expansion_info()
+	{
+		return array
+			(
+				//Expansion ID => Expansion Name
+				0  => "Classic",
+				8  => "The Burning Crusade",
+				16 => "Wrath of the Lich King", //Accounts that only have WotLK activated, not WotLK and TBC.
+				24 => "Wrath of the Lich King", //Wrath & TBC.
+				32 => "Cataclysm"
+			);
+	}
+	
+/*
+| ---------------------------------------------------------------
+| Function: get_expansion_name()
+| ---------------------------------------------------------------
+|
+|  Returns the name of the expansion from the given ID.
+|
+| @Param: (Int) $id - The expansion number.
+| @Return (String) Returns the name of the expansion.
+|
+*/
+	
+	function get_expansion_name($id)
+	{
+		$expansions = $this->get_expansion_info();
+		
+		if( array_key_exists( $expansions, $id ) )
+			return $expansions[$id];
+		else
+			return "Unknown";
+	}
+	
+/*
+| ---------------------------------------------------------------
+| Function: get_expansion()
+| ---------------------------------------------------------------
+|
+|  Returns the name of the expansion from the given ID.
+|
+| @Param: (Int) $id - The account ID.
+| @Return (Bool) Returns the current expansion (ID number) on success, FALSE on failure.
+|
+*/
+	
+	function get_expansion($id)
+	{
+		$account = $this->fetch_account($id);
+		
+		if( !$account )
+			return FALSE;
+		
+		return $account['expansion'];
+	}
+	
+/*
+| ---------------------------------------------------------------
+| Function: update_expansion()
+| ---------------------------------------------------------------
+|
+|  Sets the expansion on the specified account.
+|
+| @Param: (Int) $id - The expansion ID.
+| @Param: (Int) $account - The account ID.
+| @Return (Bool) FALSE on failure, TRUE on success.
+|
+*/
+	
+	function update_expansion($id, $account)
+	{
+		if( !$this->account_exists($account) )
+			return FALSE;
+			
+		return $this->DB->update("accounts", array('flags' => $id), "`acct` = '$account'");
+	}
 }
 // EOF
