@@ -64,7 +64,7 @@ class Vote_Model extends Application\Core\Model
         // If we have no results, return an empty array
         if($post == FALSE)
         {
-            return FALSE;
+            return array();
         }
         
         // Return Our Data

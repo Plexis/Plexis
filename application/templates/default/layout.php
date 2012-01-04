@@ -106,7 +106,7 @@
                     
                     <!-- Admin -->
                     <?php if( $session['user']['is_admin'] == TRUE || $session['user']['is_super_admin'] == TRUE): ?>
-                        <li><a href="admin">Admin Panel</a>
+                        <li><a href="{SITE_URL}/admin">Admin Panel</a>
                     <?php endif; ?>
 
                 </ul>

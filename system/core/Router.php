@@ -176,14 +176,14 @@ class Router
 | Method: get_uri_segement()
 | ---------------------------------------------------------------
 |
-| This method returns all the url information
+| This method returns the specified URI segement
 |
-| @Return (Array) Returns an array of all url related info
+| @Return (String) Returns the segement, or FALSE
 |
 */    
     public function get_uri_segement($index)
     {
-        // Return the queryStringURI
+        // Return the URI
         if(isset($this->uri[$index]))
         {
             return $this->uri[$index];
