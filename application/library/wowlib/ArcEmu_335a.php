@@ -6,14 +6,14 @@
 |
 | --------------------------------------------------------------
 |
-| Author:       Steven Wilson
+| Author:       Tony Hudgins
 | Copyright:    Copyright (c) 2011, Steven Wilson
 | License:      GNU GPL v3
 |
 */
 namespace Application\Library\Wowlib;
 
-class Mangos_335a
+class ArcEmu_335a
 {
     // Our DB Connections
     protected $DB;
@@ -91,7 +91,7 @@ class Mangos_335a
     public function list_characters($limit = 50, $start = 0)
     {
         // Build our query, and query the database
-        $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zone` FROM `characters` LIMIT ".$start.", ".$limit;
+        $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zoneId` FROM `characters` LIMIT ".$start.", ".$limit;
         $list = $this->CDB->query( $query )->fetch_array();
         
         // If we have a false return, then there was nothing to select
@@ -166,7 +166,7 @@ class Mangos_335a
     public function get_character_account_id($id)
     {
         // Build our query
-        $query = "SELECT `account` FROM `characters` WHERE `guid`=?";
+        $query = "SELECT `acct` FROM `characters` WHERE `guid`=?";
         $account = $this->CDB->query( $query, array($id) )->fetch_column();
         if($account == FALSE)
         {
@@ -356,7 +356,7 @@ class Mangos_335a
     public function get_character_gold($id)
     {
         // First we check to make sure the character exists!
-        $query = "SELECT `money` FROM `characters` WHERE `guid`=?";
+        $query = "SELECT `gold` FROM `characters` WHERE `guid`=?";
         $gold = $this->CDB->query( $query, array($id) )->fetch_column();
         if($gold == FALSE)
         {
@@ -422,21 +422,21 @@ class Mangos_335a
         // Alliance Only
         if($faction == 1)
         {
-            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' AND 
+            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zoneId`  FROM `characters` WHERE `online`='1' AND 
                 (`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11) LIMIT $start, $limit";
         }
         
         // Horde Only
         elseif($faction == 2)
         {
-            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' AND 
+            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zoneId`  FROM `characters` WHERE `online`='1' AND 
                 (`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10) LIMIT $start, $limit";
         }
         
         // Both factions
         else
         {
-            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' LIMIT $start, $limit";
+            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zoneId`  FROM `characters` WHERE `online`='1' LIMIT $start, $limit";
         }
         
         // Return the query result
@@ -465,7 +465,7 @@ class Mangos_335a
         * Dwsc: Array of database columns which should be read and sent back to DataTables. 
         * Format: id, name, character level, race ID, class ID, Gender ID, and Zone ID
         */
-        $cols = array( 'guid', 'name', 'level', 'race', 'class', 'gender', 'zone' );
+        $cols = array( 'guid', 'name', 'level', 'race', 'class', 'gender', 'zoneId' );
         
         /* Character ID column name */
         $index = "guid";
@@ -496,13 +496,13 @@ class Mangos_335a
 		// Alliance
 		if($faction == 1)
 		{			
-			$row = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level` FROM `characters` WHERE `totalkills` > 0 AND (
-				`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11) ORDER BY `totalkills` DESC LIMIT $start, $limit";
+			$row = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level` FROM `characters` WHERE `killsLifeTime` > 0 AND (
+				`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11) ORDER BY `killsLifeTime` DESC LIMIT $start, $limit";
 		}
 		else # Horde
 		{			
-			$row = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level` FROM `characters` WHERE `totalkills` > 0 AND (
-				`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10) ORDER BY `totalkills` DESC LIMIT $start, $limit";
+			$row = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level` FROM `characters` WHERE `killsLifeTime` > 0 AND (
+				`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10) ORDER BY `killsLifeTime` DESC LIMIT $start, $limit";
 		}
 		
         // Return the query result
@@ -607,7 +607,7 @@ class Mangos_335a
         else
         {
             // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
-            return $this->CDB->update('characters', array('account' => $account), "`guid`=".$id);
+            return $this->CDB->update('characters', array('acct' => $account), "`guid`=".$id);
         }
     }
     
@@ -657,7 +657,7 @@ class Mangos_335a
     public function adjust_character_gold($id, $mod)
     {
         // First we check to make sure the character exists!
-        $query = "SELECT `money` FROM `characters` WHERE `guid`=?";
+        $query = "SELECT `gold` FROM `characters` WHERE `guid`=?";
         $gold = $this->CDB->query( $query, array($id) )->fetch_column();
         if($gold == FALSE)
         {
@@ -669,7 +669,7 @@ class Mangos_335a
             $new = $gold + $mod;
 
             // Update the 'characters' table, SET 'level' => $new_level WHERE guid(id) => $id
-            return $this->CDB->update('characters', array('money' => $new), "`guid`=".$id);
+            return $this->CDB->update('characters', array('gold' => $new), "`guid`=".$id);
         }
     }
     
