@@ -50,7 +50,7 @@
             <!-- Site Settings Field Set -->
             <fieldset>
                 <legend>Account Settings</legend>
-                <div class="_100">
+                <div class="_50">
                     <p>
                         <label for="account level">Account Level</label>
                         <select id="account level" name="group_id">
@@ -70,6 +70,24 @@
                             ?>
                         </select>
                     </p>
+				</div>
+				<div class="_50">
+					<p>
+						<label for="expansion">Expansion</label>
+						<select id="expansion" name="expansion">
+							<?php
+								$current_expansion = intval("{user.expansion}");
+								
+								foreach( $expansion_data as $id => $name )
+								{
+									if( $id == $current_expansion )
+										print("<option value=\"$id\" selected=\"selected\">$name</option>");
+									else
+										print("<option value=\"$id\">$name</option>");
+								}
+							?>
+						</select>
+					</p>
                 </div>
             </fieldset>
             

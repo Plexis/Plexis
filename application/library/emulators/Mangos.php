@@ -643,7 +643,7 @@ class Mangos
 |
 */
 	
-	function get_expansion_info()
+	public function get_expansion_info()
 	{
 		return array
 			(
@@ -656,46 +656,35 @@ class Mangos
 	
 /*
 | ---------------------------------------------------------------
-| Function: get_expansion_name()
-| ---------------------------------------------------------------
-|
-|  Returns the name of the expansion from the given ID.
-|
-| @Param: (Int) $id - The expansion number.
-| @Return (String) Returns the name of the expansion.
-|
-*/
-	
-	function get_expansion_name($id)
-	{
-		$expansions = $this->get_expansion_info();
-		
-		if( array_key_exists( $expansions, $id ) )
-			return $expansions[$id];
-		else
-			return "Unknown";
-	}
-	
-/*
-| ---------------------------------------------------------------
 | Function: get_expansion()
 | ---------------------------------------------------------------
 |
 |  Returns the name of the expansion from the given ID.
 |
 | @Param: (Int) $id - The account ID.
-| @Return (Bool) Returns the current expansion (ID number) on success, FALSE on failure.
+| @Param: (Bool) $string - Whether or not to return the expansion ID as it in the accounts table, or the name of the expansion.
+| @Return (Mixed) Returns the current expansion (ID number or name) on success, FALSE on failure.
 |
 */
 	
-	function get_expansion($id)
+	public function get_expansion($id, $string = FALSE)
 	{
 		$account = $this->fetch_account($id);
 		
 		if( !$account )
 			return FALSE;
 		
-		return $account['expansion'];
+		if( !$string )
+			return $account['expansion'];
+		else
+		{
+			$expansion_data = $this->get_expansion_info();
+			
+			if( array_key_exists($expansion_data, $id) )
+				return $expansion_data[$id];
+			else
+				return FALSE;
+		}
 	}
 	
 /*
@@ -711,7 +700,7 @@ class Mangos
 |
 */
 	
-	function update_expansion($id, $account)
+	public function update_expansion($id, $account)
 	{
 		if( !$this->account_exists($account) )
 			return FALSE;

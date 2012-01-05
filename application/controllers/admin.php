@@ -151,9 +151,10 @@ class Admin extends Application\Core\Controller
             {
                 // Make sure we have our realm loaded
                 (!isset($this->realm)) ? $this->load->realm() : '';
-                
+				
                 // Use the realm database to grab user information first
                 $user2 = $this->realm->fetch_account($user['id']);
+				$data['expansion_data'] = $this->realm->get_expansion_info();
                 
                 // Use the additional inforamation from the realm DB
                 if($user2 !== FALSE)

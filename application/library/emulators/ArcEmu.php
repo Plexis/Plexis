@@ -309,7 +309,7 @@ class ArcEmu
     public function account_exists($id)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `login` FROM `account` WHERE `acct` LIKE ?";
+        $query = "SELECT `login` FROM `accounts` WHERE `acct` LIKE ?";
         $res = $this->DB->query( $query, array($id) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
@@ -636,39 +636,17 @@ class ArcEmu
 |
 */
 	
-	function get_expansion_info()
+	public function get_expansion_info()
 	{
 		return array
 			(
 				//Expansion ID => Expansion Name
 				0  => "Classic",
 				8  => "The Burning Crusade",
-				16 => "Wrath of the Lich King", //Accounts that only have WotLK activated, not WotLK and TBC.
-				24 => "Wrath of the Lich King", //Wrath & TBC.
+				16 => "Wrath of the Lich King Only", //Accounts that only have WotLK activated, not WotLK and TBC (largely unused, but ArcEmu does support it...)
+				24 => "Wrath of the Lich King and The Burning Crusade",
 				32 => "Cataclysm"
 			);
-	}
-	
-/*
-| ---------------------------------------------------------------
-| Function: get_expansion_name()
-| ---------------------------------------------------------------
-|
-|  Returns the name of the expansion from the given ID.
-|
-| @Param: (Int) $id - The expansion number.
-| @Return (String) Returns the name of the expansion.
-|
-*/
-	
-	function get_expansion_name($id)
-	{
-		$expansions = $this->get_expansion_info();
-		
-		if( array_key_exists( $expansions, $id ) )
-			return $expansions[$id];
-		else
-			return "Unknown";
 	}
 	
 /*
@@ -679,18 +657,29 @@ class ArcEmu
 |  Returns the name of the expansion from the given ID.
 |
 | @Param: (Int) $id - The account ID.
-| @Return (Bool) Returns the current expansion (ID number) on success, FALSE on failure.
+| @Param: (Bool) $string - Whether or not to return the expansion ID as it in the accounts table, or the name of the expansion.
+| @Return (Mixed) Returns the current expansion (ID number or name) on success, FALSE on failure.
 |
 */
 	
-	function get_expansion($id)
+	public function get_expansion($id, $string = FALSE)
 	{
 		$account = $this->fetch_account($id);
 		
 		if( !$account )
 			return FALSE;
 		
-		return $account['expansion'];
+		if( !$string )
+			return $account['expansion'];
+		else
+		{
+			$expansion_data = $this->get_expansion_info();
+			
+			if( array_key_exists($expansion_data, $id) )
+				return $expansion_data[$id];
+			else
+				return FALSE;
+		}
 	}
 	
 /*
@@ -706,7 +695,7 @@ class ArcEmu
 |
 */
 	
-	function update_expansion($id, $account)
+	public function update_expansion($id, $account)
 	{
 		if( !$this->account_exists($account) )
 			return FALSE;

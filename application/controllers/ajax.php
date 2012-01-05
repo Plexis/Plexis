@@ -988,65 +988,79 @@ class Ajax extends Application\Core\Controller
     {
         // Load our validation and Input library's
         $input = load_class('Input', 'Core');
-        
-        // Set our variables
+		
+		//Get the column that holds the expansion number.
+		
+		//Set up our variables.
         $update['email'] = $input->post('email', TRUE);
         $update['group_id'] = $input->post('group_id', TRUE);
-        $password1 = $input->post('password1', TRUE);
-        $password2 = $input->post('password2', TRUE);
+		$password = array( $input->post('password1', TRUE), $input->post('password2', TRUE) );
+		$expansion = $input->post('expansion', TRUE);
+		$game_account = $this->realm->fetch_account($id);
  
         // Load our DB connections
         $this->DB = $this->load->database('DB');
         $this->RDB = $this->load->database( 'RDB' );
+		
+		$changed = FALSE; //Have there been any changes to the data?
+		$game_changed = FALSE; //Whether or not the game account has some info edited.
+		
+		foreach( $update as $key => $value )
+		{
+			if( $user[$key] != $value )
+				$changed = true;
+			
+			if( !empty($password[0]) && !empty($password[1]) && !$game_changed )
+				$game_changed = true;
+				
+			if( $expansion != $game_account['expansion'] && !$game_changed )
+				$game_changed = true;
+		}
         
-        // See if our two arrays are different
-        $diff = FALSE;
-        foreach($update as $key => $value)
-        {
-            if($user[$key] != $value)
-            {
-                $diff = TRUE;
-            }
-        } 
-        
-        // Update only if needed
-        if($diff == TRUE)
-        {
-            // Do our account Updates
-            $result = $this->DB->update('pcms_accounts', $update, "`id`=".$id);
-            if( $result === FALSE )
-            {
-                $this->output(false, 'account_update_error');
-                return;
-            }
-            elseif(!empty($password1) && !empty($password2))
-            {
-                goto Password;
-            }
-            else
-            {
-                $this->output(true, 'account_update_success');
-                return;
-            }
-        }
-        
-        // Update pass if needed
-        Password:
-        {
-            if(!empty($password1) && !empty($password2))
-            {
-                if($password1 == $password2)
-                {
-                    $this->output(false, 'account_update_success');
-                    return;
-                }
-                else
-                {
-                    $this->output(false, 'account_update_error');
-                    return;
-                }
-            }  
-        }
+		if( $game_changed || $changed )
+		{
+			if( $changed )
+			{
+				$result = $this->DB->update("pcms_accounts", $update, "`id` = '$id'");
+				
+				if( $result === FALSE )
+				{
+					$this->output(false, 'account_update_error');
+					return;
+				}
+			}
+			
+			if( $game_changed )
+			{
+				if( !empty($password[0]) && !empty($password[1]) )
+				{
+					if( $password[0] == $password[1] )
+					{
+						$result = $this->realm->change_password($id, $password[0]);
+						
+						if( !$result )
+						{
+							$this->output(false, 'account_update_error');
+							return;
+						}
+					}
+				}
+				
+				if( $expansion != $game_account['expansion'] )
+				{
+					$result = $this->realm->update_expansion($expansion, $id);
+					
+					if( !$result )
+					{
+						$this->output(false, 'account_update_error');
+						return;
+					}
+				}
+			}
+			
+			$this->output(true, 'account_update_success');
+			return;
+		}
         
         // No updates
         $this->output(false, 'account_update_nochanges', 'warning');
