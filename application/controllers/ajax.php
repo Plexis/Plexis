@@ -989,8 +989,6 @@ class Ajax extends Application\Core\Controller
         // Load our validation and Input library's
         $input = load_class('Input', 'Core');
 		
-		//Get the column that holds the expansion number.
-		
 		//Set up our variables.
         $update['email'] = $input->post('email', TRUE);
         $update['group_id'] = $input->post('group_id', TRUE);
@@ -1043,6 +1041,11 @@ class Ajax extends Application\Core\Controller
 							$this->output(false, 'account_update_error');
 							return;
 						}
+					}
+					else
+					{
+						$this->output(false, 'account_update_error');
+						return;
 					}
 				}
 				

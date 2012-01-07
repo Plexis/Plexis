@@ -172,10 +172,7 @@ class ArcEmu
         // Build our tables and values for Database insertion
         $data = array(
             'password' => $password, 
-			'ecrypted_password' => $this->ecrypt_password($user['login'], $password),
-            'sessionkey' => NULL, 
-            'v' => NULL, 
-            's' => NULL
+			'encrypted_password' => $this->encrypt_password($user['login'], $password)
         );
         
         // Update account information
