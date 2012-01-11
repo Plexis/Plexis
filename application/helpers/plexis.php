@@ -348,6 +348,77 @@
 
 /*
 | ---------------------------------------------------------------
+| Method: get_modules()
+| ---------------------------------------------------------------
+|
+| This function is used to return an array of modules in the modules
+| folder
+|
+| @Return: (Array) Array of drivers
+|
+*/
+    function get_modules()
+    {
+        $reallist = array();
+        $list = scandir(APP_PATH . DS . 'modules');
+        foreach($list as $file)
+        {
+            if($file == "." || $file == ".." || !is_dir($file)) continue;
+            $reallist[] = $file;
+        }
+        return $reallist;
+    }
+
+/*
+| ---------------------------------------------------------------
+| Method: get_installed_modules()
+| ---------------------------------------------------------------
+|
+| This function is used to return an array of site installed modules.
+|
+| @Return: (Array) Array of installed realms
+|
+*/
+    function get_installed_modules()
+    {
+        $load = load_class('Loader');
+        $DB = $load->database( 'DB' );
+        
+        // Build our query
+        $query = "SELECT * FROM `pcms_modules`";
+        return $DB->query( $query )->fetch_array();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: module_installed()
+| ---------------------------------------------------------------
+|
+| This function is used to find out if a module is installed based 
+| on the module name
+|
+| @Return: (Bool) True if the realm is installed, FALSE otherwise
+|
+*/
+    function module_installed($name)
+    {
+        $load = load_class('Loader');
+        $DB = $load->database( 'DB' );
+        
+        // Build our query
+        $query = "SELECT `uri` FROM `pcms_realms` WHERE `name`=?";
+        $result = $DB->query( $query, array($name) )->fetch_column();
+        
+        // Make our return
+        if($result == FALSE)
+        {
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+/*
+| ---------------------------------------------------------------
 | Method: get_secret_questions()
 | ---------------------------------------------------------------
 |

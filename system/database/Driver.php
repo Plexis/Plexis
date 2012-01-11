@@ -86,11 +86,12 @@ class Driver extends \PDO
 | benchmarks times for each query, as well as stores the query
 | in the $sql array.
 |
-| @Param: $query - The full query statement
-| @Param: $sprints - An array or replacemtnts of (?)'s in the $query
+| @Param: (String) $query - The full query statement
+| @Param: (Array) $sprints - An array or replacemtnts of (?)'s in the $query
+| @Param: (Bool) $report_error - Trigger an error upon error?
 |
 */
-    public function query($query, $sprints = NULL)
+    public function query($query, $sprints = NULL, $report_error = TRUE)
     {
         // Add query to the last query and benchmark
         $bench['query'] = $this->last_query = $query;
@@ -105,17 +106,16 @@ class Driver extends \PDO
         $start = microtime(true);
         try {
             $this->result->execute($sprints);
+            $failed = FALSE;
         }
         catch (\PDOException $e) { 
-            $this->trigger_error();
+            if($report_error == TRUE) $this->trigger_error();
+            $failed = TRUE;
         }
         $end = microtime(true);
-
+        
         // Get our benchmark time
         $bench['time'] = round($end - $start, 5);
-        
-        // Get our number of rows
-        $this->num_rows = $this->result->rowCount();
 
         // Add the query to the list of queries
         $this->queries[] = $bench;
@@ -123,6 +123,19 @@ class Driver extends \PDO
         // Up our statistic count
         $this->statistics['total_queries']++;
         $this->statistics['total_time'] = ($this->statistics['total_time'] + $bench['time']);
+        
+        // Check for false return
+        if($failed == TRUE)
+        {
+            // Set our result to FALSE
+            $this->result = FALSE;
+            $this->num_rows = 0;
+        }
+        else
+        {
+            // Get our number of rows
+            $this->num_rows = $this->result->rowCount();
+        }
 
         // Return
         return $this;
@@ -136,10 +149,12 @@ class Driver extends \PDO
 | This method is the wrapper for PDO's exec method. We are intercepting
 | so we can add the query to our statistics, and catch errors
 |
-| @Param: $query - The full query statement
+| @Param: (String) $query - The full query statement
+| @Param: (Bool) $report_error - Trigger an error upon error?
+| @Return: (Mixed) FALSE on error, otherwise nuber of rows affected
 |
 */
-    public function exec($query)
+    public function exec($query, $report_error = TRUE)
     {
         // Add query to the last query and benchmark
         $bench['query'] = $this->last_query = $query;
@@ -148,9 +163,11 @@ class Driver extends \PDO
         $start = microtime(true);
         try {
             $result = parent::exec($query);
+            $failed = FALSE;
         }
         catch (\PDOException $e) { 
-            $this->trigger_error();
+            if($report_error == TRUE) $this->trigger_error();
+            $failed = TRUE;
         }
         $end = microtime(true);
 
@@ -163,6 +180,9 @@ class Driver extends \PDO
         // Up our statistic count
         $this->statistics['total_queries']++;
         $this->statistics['total_time'] = ($this->statistics['total_time'] + $bench['time']);
+        
+        // Just return an absolute false (bool) on error
+        if($failed == TRUE) return FALSE;
 
         // Return
         return $result;
@@ -517,6 +537,49 @@ class Driver extends \PDO
             'total_time'  => 0,
             'total_queries' => 0
         );
+    }
+
+/*
+| ---------------------------------------------------------------
+| Function: __get()
+| ---------------------------------------------------------------
+|
+| Magic method to load driver extensions
+|
+| @Return: (None)
+|
+*/    
+    public function __get($name)
+    {
+        // Just return the extension if it exists
+        if(isset($this->$name))
+        {
+            return $this->$name;
+        }
+        
+        // Check for the extension
+        if(file_exists(APP_PATH. DS . 'database' . DS . 'extensions' . DS . $name .'.php')) 
+        {
+            require_once(APP_PATH. DS . 'database' . DS . 'extensions' . DS . $name .'.php');
+            $prefix = "\\Application";
+        }
+        elseif(file_exists(SYSTEM_PATH. DS . 'database' . DS . 'extensions' . DS . $name .'.php'))
+        {
+            require_once(SYSTEM_PATH. DS . 'database' . DS . 'extensions' . DS . $name .'.php');
+            $prefix = "\\System";
+        }
+        else
+        {
+            // Extension doesnt exists :O
+            show_error('db_autoload_failed', array($name), E_ERROR);
+            return FALSE;
+        }
+        
+        // Load the class
+        $class = ucfirst($name);
+        $class = $prefix ."\\Database\\Extensions\\".$class;
+        $this->$name = new $class($this);
+        return $this->$name;
     }
 
 /*

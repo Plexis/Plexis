@@ -2,6 +2,7 @@
 return array(
 	'autoload_failed' => "Autoload failed to load class: %s",
 	'benchmark_key_not_found' => "Benchmark key \"%s\" does not exists. You must start timer timer before displaying it.",
+    'db_autoload_failed' => "Failed to autoload database extension \"%s\"",
 	'db_connect_error' => "Unable to connect to database '%s' from host: %s:%s!",
     'db_sqlite_connect_error' => "Unable to connect to SQLite database '%s'!",
 	'db_empty_query' => "Query was empty. Please build a query before calling the 'query' method!",
