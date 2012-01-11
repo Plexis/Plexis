@@ -571,7 +571,7 @@ class Account extends Application\Core\Controller
                                     $email = $this->Input->post('email', TRUE);
                                     
                                     // Load secret question
-                                    $query = 'SELECT `email`, `_account_recovery` FROM `pcms_accounts` WHERE `username` LIKE ?';
+                                    $query = 'SELECT `email`, `_account_recovery` FROM `pcms_accounts` WHERE `username`=?';
                                     $info = $this->DB->query( $query, array($username))->fetch_row();
                                     if(!$info)
                                     {

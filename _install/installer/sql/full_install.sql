@@ -47,17 +47,34 @@ INSERT INTO `pcms_account_groups` VALUES ('3', 'Admin', '0', '1', '1', '0');
 INSERT INTO `pcms_account_groups` VALUES ('4', 'Super Admin', '0', '1', '1', '1');
 
 -- ----------------------------
+-- Table structure for `pcms_modules`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_modules`;
+CREATE TABLE `pcms_modules` (
+  `uri` varchar(255) NOT NULL,
+  `name` varchar(255)  NOT NULL,
+  `method` varchar(255) NOT NULL DEFAULT 'index',
+  `has_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Has admin controller for this module',
+  PRIMARY KEY (`uri`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pcms_modules
+-- ----------------------------
+INSERT INTO `pcms_modules` VALUES ('devtest/index', 'Devtest', 'index', '0');
+
+-- ----------------------------
 -- Table structure for `pcms_news`
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_news`;
 CREATE TABLE `pcms_news` (
   `id` tinyint(3) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `author` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `posted` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `body` text CHARACTER SET utf8,
+  `title` varchar(255) NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `posted` varchar(255) NOT NULL,
+  `body` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_news
@@ -96,7 +113,7 @@ CREATE TABLE `pcms_reg_keys` (
   `sponser` int(11) NOT NULL COMMENT 'Account ID of the sponser',
   `usedby` int(11) NOT NULL COMMENT 'The account ID of the user who registered with this code (for stat tracking purposes).',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_reg_keys
@@ -129,7 +146,7 @@ CREATE TABLE `pcms_templates` (
   `author` varchar(100) DEFAULT NULL,
   `status` tinyint(1) DEFAULT '0' COMMENT '1 = Installed, 0 = Not Installed',
   PRIMARY KEY (`id`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_templates
@@ -145,7 +162,7 @@ CREATE TABLE `pcms_vote_data` (
   `ip_address` varchar(50) NOT NULL,
   `data` text,
   PRIMARY KEY (`ip_address`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_vote_data
@@ -163,7 +180,7 @@ CREATE TABLE `pcms_vote_sites` (
   `points` tinyint(3) NOT NULL DEFAULT '0',
   `reset_time` int(11) NOT NULL DEFAULT '43200' COMMENT 'Default reset time on voting. Default 12 hours',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_vote_sites

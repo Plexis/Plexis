@@ -19,6 +19,8 @@ class Frostbite
 {
     public $Router;
     protected $dispatch;
+    protected $controller;
+    protected $action;
 
 /*
 | ---------------------------------------------------------------
@@ -39,8 +41,8 @@ class Frostbite
         $routes = $this->Router->get_url_info();
         
         // Initialize some important routing variables
-        $controller   = $GLOBALS['controller']   = $routes['controller'];
-        $action       = $GLOBALS['action']       = $routes['action'];
+        $controller = $routes['controller'];
+        $action     = $routes['action'];
         $queryString  = $GLOBALS['querystring']  = $routes['querystring'];
         
         // Define our site url
@@ -49,7 +51,7 @@ class Frostbite
         // -----------------------------------------
         // Lets include the application controller.|
         // -----------------------------------------		
-        if( !$this->loadApplication() )
+        if( !$this->loadApplication($controller, $action) )
         {
             show_404();
         }
@@ -57,23 +59,23 @@ class Frostbite
         // -------------------------------------------------------------
         // Here we init the actual controller / action into a variable.|
         // -------------------------------------------------------------
-        $this->dispatch = new $controller();
+        $this->dispatch = new $this->controller();
         
         // After loading the controller, make sure the method exists, or we have a 404
-        if(method_exists($controller, $action)) 
+        if(method_exists($this->controller, $this->action)) 
         {
             // -------------------------------------------------------------------------
             // Here we call the contoller's before, requested, and after action methods.|
             // -------------------------------------------------------------------------
         
             // Call the beforeAction method in the controller.
-            $this->performAction($controller, "_beforeAction", $queryString);
+            $this->performAction($this->controller, "_beforeAction", $queryString);
             
             // HERE is where the magic begins... call the Main APP Controller and method
-            $this->performAction($controller, $action, $queryString);
+            $this->performAction($this->controller, $this->action, $queryString);
             
             // Call the afterAction method in the controller.
-            $this->performAction($controller, "_afterAction", $queryString);
+            $this->performAction($this->controller, "_afterAction", $queryString);
 
         } 
         else 
@@ -115,23 +117,42 @@ class Frostbite
 | @Return: (Bool) - If the controller exists, it returns TRUE
 |
 */
-    protected function loadApplication()
+    protected function loadApplication($controller, $action)
     {
         // Make this a bit easier
-        $name = strtolower($GLOBALS['controller']);
+        $name = strtolower($controller);
         
-        // Check the modules folder first for extension ability of a controller
-        if(file_exists(APP_PATH . DS . 'modules' . DS . $name . DS . 'controller.php'))
+        // Load the loader class and DB connection
+        $Load = load_class('Loader');
+        $DB = $Load->database('DB');
+        
+        // Build our array to get out current URI's module if one exists
+        $query = "SELECT * FROM `pcms_modules` WHERE `uri`=?";
+        $uri = $name .'/'. $action;
+        $result = $DB->query( $query, array($uri) )->fetch_row();
+        
+        // If our result is an array, we have a result
+        if(is_array($result))
         {
+            // Define out globals and this controller/action
             $GLOBALS['is_module'] = TRUE;
+            $this->controller  = $GLOBALS['controller'] = ucfirst($result['name']);
+            $this->action = $GLOBALS['action'] = $result['method'];
+            
+            // Include the module controller file
             include (APP_PATH . DS . 'modules' . DS . $name . DS . 'controller.php');
             return TRUE;
         }
         
         // Check the App controllers folder
-        if(file_exists(APP_PATH . DS . 'controllers' . DS . $name . '.php')) 
+        elseif(file_exists(APP_PATH . DS . 'controllers' . DS . $name . '.php')) 
         {
+            // Define out globals and this controller/action
             $GLOBALS['is_module'] = FALSE;
+            $this->controller  = $GLOBALS['controller'] = $controller;
+            $this->action = $GLOBALS['action'] = $action;
+            
+            // Include the controller file
             include (APP_PATH . DS . 'controllers' . DS . $name . '.php');
             return TRUE;
         }

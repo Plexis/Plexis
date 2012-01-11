@@ -33,7 +33,7 @@ class Captcha
 | Contructer
 | ---------------------------------------------------------------
 */
-    function __construct()
+    public function __construct()
     {
         // Define where out fonts are stored, and load them
         $this->fontpath = APP_PATH . DS . 'library/fonts/';      
@@ -49,14 +49,14 @@ class Captcha
     
 /*
 | ---------------------------------------------------------------
-| Function: load_fonts()
+| Function: is_compatible()
 | ---------------------------------------------------------------
 |
 | This Returns a bool based on if the library is compatible with
 |   this webserver... Should be used right after constructing
 |
 */
-    function is_compatible()
+    public function is_compatible()
     {
         return $this->is_compatible;
     }
