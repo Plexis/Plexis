@@ -17,14 +17,22 @@ namespace Application\Library;
 class Captcha
 {
     // Our catpcha string
-    var $CaptchaString;
+    protected $_string;
 
     // Path to our fonts
-    var $fontpath;
+    protected $fontpath;
 
     // An array of all our fonts
-    var $fonts;
+    protected $fonts;
+    
+    // Is compatible, meaning GD library is installed
+    protected $is_compatible = TRUE;
 
+/*
+| ---------------------------------------------------------------
+| Contructer
+| ---------------------------------------------------------------
+*/
     function __construct()
     {
         // Define where out fonts are stored, and load them
@@ -35,8 +43,22 @@ class Captcha
         if(!function_exists('imagettftext'))
         {
             log_message('imagettftext() not found. GD library must not be installed. Captcha failed to start.');
-            show_error('captcha_init_failed', FALSE, E_ERROR);
+            $this->is_compatible = FALSE;
         }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: load_fonts()
+| ---------------------------------------------------------------
+|
+| This Returns a bool based on if the library is compatible with
+|   this webserver... Should be used right after constructing
+|
+*/
+    function is_compatible()
+    {
+        return $this->is_compatible;
     }
 
 /*
@@ -124,9 +146,11 @@ class Captcha
         // Add letters and numbers randomly to the string
         for ($i = 0; $i < $length; $i++)
         {
-            $this->CaptchaString .= $list[mt_rand(0, $size)];
+            $this->_string .= $list[mt_rand(0, $size)];
         }
-
+        
+        // Return the string :p
+        return $this->_string;
     }
 
 /*
@@ -148,8 +172,7 @@ class Captcha
     public function display($length = 6, $fontsize = 25, $imageheight = 75, $imagelength = NULL, $lowercase = FALSE, $uppercase = TRUE, $numbers = TRUE)
     {
         // Generate a random string
-        $this->generate_string($length, $lowercase, $uppercase, $numbers);		
-        $string = $this->CaptchaString;
+        $string = $this->generate_string($length, $lowercase, $uppercase, $numbers);
         $string_length = strlen($string);
         
         // Create image sizes, Length extends with more letters
@@ -199,7 +222,7 @@ class Captcha
 */	
     public function get_string()
     {
-        return $this->CaptchaString;
+        return $this->_string;
     }
 	
 /*

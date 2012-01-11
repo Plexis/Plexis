@@ -123,10 +123,10 @@
                                 <form method="post" action="{SITE_URL}/account/login" id="form">		
                                     <fieldset class="login-right">	
                                         <label for="username" class="top-label">Username:</label> 
-                                        <input type="text" name="username" id="username" value="" size="28" tabindex="10" />
+                                        <input type="text" name="username" id="username" value="" size="32" tabindex="10" />
                                         
                                         <label for="password" class="top-label">Password:</label> 
-                                        <input type="password" name="password" id="password" value="" size="28" tabindex="11" />
+                                        <input type="password" name="password" id="password" value="" size="32" tabindex="11" />
                                         
                                         <center>
                                             <input type="submit" name="submit" value="Login" class="button" tabindex="12"/>

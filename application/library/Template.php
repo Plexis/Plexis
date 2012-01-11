@@ -79,7 +79,7 @@ class Template
              ->set_metadata('keywords', $keywords)
              ->set_metadata('description', $desc)
              ->append_metadata("") // Added whitespace
-             ->append_metadata("<!-- Base URL, Content type, And cache control -->")
+             ->append_metadata("<!-- Content type, And cache control -->")
              ->set_metadata('content-type', 'text/html; charset=UTF-8', 'http-equiv')
              ->set_metadata('cache-control', 'no-cache', 'http-equiv')
              ->set_metadata('expires', '-1', 'http-equiv')

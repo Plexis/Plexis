@@ -24,7 +24,7 @@
             You can use:
                 <css> {relative_path} </css> :: Include css file.
                 <js> {relative_path} </js> :: Include Javascript file.
-                <favicon type="image/$image_type"> {relative path} </favicon> :: The image type is determined automatically
+                <favicon type="image/$image_type"> {relative path} </favicon> :: The image type is determined automatically if not given (slow)
                 <meta {key}="{value}"> {content} </meta> :: Here you can set meta data, you can add as many "key=value"'s as you need
                     You can overwrite default meta keys.. Ex: <meta http-equiv="Expires">5</meta> will overwrite the default -1 value with 5.
             You may add comments by going <comment> content </comment>

@@ -172,6 +172,18 @@ class Account extends Application\Core\Controller
             return;
         }
         
+        // Do our captcha check
+        $enable_captcha = config('enable_captcha');
+        if( $enable_captcha == TRUE )
+        {
+            $Captcha = $this->load->library('Captcha');
+            if( $Captcha->is_compatible() == FALSE )
+            {
+                config_set('enable_captcha', false);
+            }
+            unset($Captcha);
+        }
+        
         // Load our secret questions
         $data['secret_questions'] = get_secret_questions();
         
@@ -258,20 +270,20 @@ class Account extends Application\Core\Controller
             
             // Tell the validator that the username and password must NOT be empty, as well
             // as match a pattern. Same goes for the email field.
+            ($enable_captcha == TRUE) ? $add = array('sa' => 'required|min[3]|max[24]') : $add = array();
             $this->validation->set( array(
                 'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]', 
                 'password1' => 'required|min[3]|max[24]',
                 'password2' => 'required|min[3]|max[24]',
-                'email' => 'required|email',
-                'sa' => 'required|min[3]|max[24]'
-                ) 
+                'email' => 'required|email'
+                ) + $add
             );
             
             // If everything passes validation, we are good to go
             if( $this->validation->validate() == TRUE )
             {
                 // Check for captcha validation
-                if( config('enable_captcha') == TRUE )
+                if( $enable_captcha == TRUE )
                 {
                     $captcha = strtolower( $this->Input->post('captcha') );
                     if($captcha != strtolower($_SESSION['Captcha']))
@@ -312,21 +324,17 @@ class Account extends Application\Core\Controller
                 }
                 
                 // Use the AUTH class to register the user officially
-                if( $this->Auth->register($username, $password, $email, $sq, $sa) == TRUE )
+                $id = $this->Auth->register($username, $password, $email, $sq, $sa);
+                if( $id == TRUE )
                 {
                     // Remove registration key IF enabled
                     if( config('reg_registration_key') == TRUE )
                     {
                         $this->Input->set_cookie('reg_key', $key, (time() -1));
                         //$this->DB->delete('pcms_reg_keys', "`key`='".$key."'");
-						$id_query = $this->DB->query("SELECT MAX(`id`) AS 'id' FROM `pcms_accounts`;")->fetch_row(); //Grab the ID of the newly created user so we can set the 'usedby' field for the reg key.
-						
-						$key_data = array
-							(
-								'usedby' => $id_query['id'],
-							);
-							
-						$this->DB->update("pcms_reg_keys", $key_data, "`key` = '$key'");
+                        
+                        // Set the 'usedby' field for the reg key.
+                        $this->DB->update("pcms_reg_keys", array('usedby' => $id), "`key` = '$key'");
                     }
                     
                     // Check for email verification

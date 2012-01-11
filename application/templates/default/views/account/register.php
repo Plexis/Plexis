@@ -27,7 +27,7 @@
                     
                     <?php if( config('enable_captcha') == TRUE ): ?>
                         <br />
-                        <center><img src="{SITE_URL}/account/captcha" alt="If you dont see an image, Then you have a problem!" /></center>
+                        <center><img src="{SITE_URL}/account/captcha" alt="If you dont see an image, Contact an administrator." style="margin-left: -35px;"/></center>
                         <label for="captcha">Captcha:</label> 
                         <input type="text" name="captcha" id="captcha" value="" size="30" tabindex="7" />
                     <?php endif; ?>

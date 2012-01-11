@@ -128,12 +128,8 @@ class Auth
             }
             
             // Custom variable for QA checking
-            $set = TRUE;
-            if($result['_account_recovery'] == NULL)
-            {
-                $set = FALSE;
-            }
-            
+            ($result['_account_recovery'] == NULL) ? $set = FALSE : $set = TRUE;
+          
             // Loop through and remove private columns (underscore as first character)
             foreach($result as $key => $value)
             {
@@ -258,7 +254,7 @@ class Auth
 | @Param: (String) $email - The email
 | @Param: (Int) $sq - The secret Question ID
 | @Param: (String) $sa - The secret Question answer
-| @Return (Bool) True upon success, FALSE otherwise
+| @Return (Int) Account ID upon success, FALSE otherwise
 |
 */
 
@@ -268,7 +264,6 @@ class Auth
         $username = trim(ucfirst(strtolower($username)));
         $password = trim($password);
         $email = trim($email);
-        $secret = NULL;
 
         // If the username, password, or email is empty, return FALSE
         if(empty($username) || empty($password) || empty($email))
@@ -300,8 +295,9 @@ class Auth
             // If insert into Realm Database is a success, move on
             if($id !== FALSE)
             {
-                // Default
+                // Defaults
                 $activated = 1;
+                $secret = NULL;
                 
                 // Process account verification
                 if( config('reg_email_verification') )
@@ -315,7 +311,7 @@ class Auth
                 {
                     $array = array(
                         'id' => $sq,
-                        'answer' => $sa,
+                        'answer' => trim($sa),
                         'email' => $email
                     );
                     $secret = base64_encode( serialize($array) );
@@ -334,7 +330,7 @@ class Auth
                 // Try and insert into pcms_accounts table
                 if($this->DB->insert('pcms_accounts', $data))
                 {
-                    return TRUE;
+                    return $id;
                 }
             }
             return FALSE;
