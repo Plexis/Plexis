@@ -36,7 +36,10 @@ class Modules_Model extends Application\Core\Model
             return FALSE;
         }
         require $file;
-        $module = new $name(FALSE);
+        
+        // Init the module into a variable
+        $class = ucfirst($name);
+        $module = new $class(FALSE);
         
         // Run the module installer
         $result = $module->_install();
@@ -51,7 +54,7 @@ class Modules_Model extends Application\Core\Model
         }
         
         // Build out insert data
-        $data['name'] = ucfirst($name);
+        $data['name'] = $name;
         $data['uri'] = $uri;
         $data['method'] = $method;
         $data['has_admin'] = $module->has_admin();
@@ -80,7 +83,10 @@ class Modules_Model extends Application\Core\Model
             return FALSE;
         }
         require $file;
-        $module = new $name(FALSE);
+        
+        // Init the module into a variable
+        $class = ucfirst($name);
+        $module = new $class(FALSE);
         
         // Run the module installer
         $result = $module->_uninstall();

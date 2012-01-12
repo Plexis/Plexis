@@ -12,7 +12,7 @@
                     <tr>
                         <th>Module Name</th>
                         <th>Uri</th>
-                        <th>Method</th>
+                        <th>Method(s)</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>

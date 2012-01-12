@@ -129,14 +129,37 @@ class Frostbite
         // Build our array to get out current URI's module if one exists
         $uri1 = $name .'/*';
         $uri2 = $name .'/'. $action;
+        
+        // Check to see if the URI belongs to a module
         $query = "SELECT * FROM `pcms_modules` WHERE `uri`=? OR `uri`=?";
         $result = $DB->query( $query, array($uri1, $uri2) )->fetch_row();
         
-        // If our result is an array, we have a result
+        // If our result is an array, Then we load it as a module
         if(is_array($result))
         {
             // Handle the method, if method is astricks, then the module will handle all requests
-            if($result['method'] == '*') $result['method'] = $action;
+            if($result['method'] == '*')
+            {
+                $result['method'] = $action;
+            }
+            
+            // If the method is an array (imploded with a comma), we see if the action is in the array
+            elseif(strpos($result['method'], ',') !== FALSE)
+            {
+                // Remove any spaces, and convert to an array
+                $uri = str_replace(" ", "", $result['method']);
+                $array = explode(',', $uri);
+                if(!in_array($action, $array))
+                {
+                    // The action IS NOT in the array, load default controller
+                    goto Skip;
+                }
+                else
+                {
+                    // The action is in the array, so we set it as that
+                    $result['method'] = $action;
+                }
+            }
 
             // Define out globals and this controller/action
             $GLOBALS['is_module'] = TRUE;
@@ -144,21 +167,27 @@ class Frostbite
             $this->action = $GLOBALS['action'] = $result['method'];
             
             // Include the module controller file
-            include (APP_PATH . DS . 'modules' . DS . $name . DS . 'controller.php');
+            include (APP_PATH . DS . 'modules' . DS . $result['name'] . DS . 'controller.php');
             return TRUE;
         }
         
         // Check the App controllers folder
-        elseif(file_exists(APP_PATH . DS . 'controllers' . DS . $name . '.php')) 
+        else 
         {
-            // Define out globals and this controller/action
-            $GLOBALS['is_module'] = FALSE;
-            $this->controller  = $GLOBALS['controller'] = $controller;
-            $this->action = $GLOBALS['action'] = $action;
-            
-            // Include the controller file
-            include (APP_PATH . DS . 'controllers' . DS . $name . '.php');
-            return TRUE;
+            Skip:
+            {
+                if(file_exists(APP_PATH . DS . 'controllers' . DS . $name . '.php'))
+                {
+                    // Define out globals and this controller/action
+                    $GLOBALS['is_module'] = FALSE;
+                    $this->controller  = $GLOBALS['controller'] = $controller;
+                    $this->action = $GLOBALS['action'] = $action;
+                    
+                    // Include the controller file
+                    include (APP_PATH . DS . 'controllers' . DS . $name . '.php');
+                    return TRUE;
+                }
+            }
         }
         
         // Neither exists, then no controller found.
