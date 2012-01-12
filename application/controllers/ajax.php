@@ -871,6 +871,124 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
+| Method: modules()
+| ---------------------------------------------------------------
+|
+*/    
+    public function modules()
+    {
+        // Check for 'action' posts
+        if(isset($_POST['action']))
+        {
+            // Get our action type
+            switch($_POST['action']) 
+            {
+                // CREATING
+                case "install":
+                    // Make sure we arent getting direct accessed, and the user has permission
+                    $this->check_access('a');
+                    
+                    // Load the Modules Model
+                    $this->load->model("Modules_Model", "model");
+            
+                    // Load the Form Validation script
+                    $this->load->library('validation');
+                    
+                    // Tell the validator that the username and password must NOT be empty
+                    $this->validation->set( array('uri' => 'required', 'function' => 'required', 'module' => 'required') );
+                    
+                    // If both the username and password pass validation
+                    if( $this->validation->validate() == TRUE )
+                    {
+                        $result = $this->model->install($_POST['module'], $_POST['uri'], $_POST['function']);
+                        ($result == TRUE) ? $this->output(true, 'module_install_success') : $this->output(false, 'module_install_error');
+                    }
+                    
+                    // Validation failed
+                    else
+                    {
+                        $this->output(false, 'form_validation_failed');
+                    }
+                    break;
+                
+                // UNINSTALL
+                case "un-install":
+                    // Make sure we arent getting direct accessed, and the user has permission
+                    $this->check_access('a');
+                    
+                    // Load the Modules Model
+                    $this->load->model("Modules_Model", "model");
+                    
+                    $result = $this->model->uninstall($_POST['name']);
+                    ($result == TRUE) ? $this->output(true, 'module_uninstall_success') : $this->output(false, 'module_uninstall_error');
+                    break;
+                    
+                case "getlist":
+                    // Load the Ajax Model
+                    $this->load->model("Ajax_Model", "ajax");
+                    
+                    /* 
+                    * Array of database columns which should be read and sent back to DataTables. Use a space where
+                    * you want to insert a non-database field (for example a counter or static image)
+                    */
+                    $cols = array( 'name', 'uri', 'method', 'has_admin' );
+                    
+                    /* Indexed column (used for fast and accurate table cardinality) */
+                    $index = "name";
+                    
+                    /* DB table to use */
+                    $table = "pcms_modules";
+                    
+                    /* Database to use */
+                    $dB = "DB";
+                    
+                    /* Process the request */
+                    $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+                    
+                    // Get our NON installed modules
+                    $mods = get_modules();
+
+                    // Loop, and add options
+                    foreach($output['aaData'] as $key => $module)
+                    {
+                        // Easier to write
+                        $name = $module[0];
+                        $key = array_search($name, $mods);
+                        unset( $mods[ $key ] );
+
+                        $output['aaData'][$key][3] = "<font color='green'>Installed</font>";
+                        $output['aaData'][$key][4] = "<a class=\"un-install\" name=\"".$name."\" href=\"javascript:void(0);\">Uninstall</a>";
+                        
+                        // Add admin link
+                        if($module[3] == TRUE) $output['aaData'][$key][4] .= " - <a href=\"". SITE_URL ."/admin/modules/manage/".$name."\">Configure</a>"; 
+                    }
+
+                    $i = 0;
+                    foreach($mods as $mod)
+                    {
+                        ++$i;
+                        $output['aaData'][] = array(
+                            0 => $mod,
+                            1 => "N/A",
+                            2 => "N/A",
+                            3 => "<font color='red'>Not Installed</font>",
+                            4 => "<a class=\"install\" name=\"".$mod."\" href=\"javascript:void(0);\">Install</a>"
+                        );
+                    }
+                    
+                    // add totals
+                    $output["iTotalRecords"] = $i + $output["iTotalRecords"];
+                    $output["iTotalDisplayRecords"] = $i + $output["iTotalDisplayRecords"];
+                    
+                    // Push the output in json format
+                    echo json_encode($output);
+                    break;
+            }
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: onlinelist()
 | ---------------------------------------------------------------
 |

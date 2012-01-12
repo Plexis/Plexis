@@ -16,7 +16,7 @@ namespace System\Database\Extensions;
 class Forge
 {
     protected $DB;
-	protected $cols = array();
+    protected $cols = array();
     protected $keys = array();
 
 /*

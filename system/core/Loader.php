@@ -51,7 +51,7 @@ class Loader
         }
         
         // Include the model page
-        require(APP_PATH . DS . 'models' . DS . $name .'.php');
+        require_once(APP_PATH . DS . 'models' . DS . $name .'.php');
         
         // Get our class into a variable
         $Obj = new $class();

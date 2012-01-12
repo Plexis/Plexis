@@ -68,6 +68,10 @@ class Controller extends \System\Core\Controller
             $this->Template->set_template_path('admin');
             $this->Template->config( array('controller_view_paths' => FALSE) );
         }
+        // elseif($this->controller == 'ajax')
+        // {
+            // return;
+        // }
         else
         {
             // Check if the user has a selected theme.

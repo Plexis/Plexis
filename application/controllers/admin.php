@@ -409,7 +409,7 @@ class Admin extends Application\Core\Controller
             'page_title' => "Module Managment",
             'page_desc' => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
         );
-        $this->load->view('under_construction', $data);
+        $this->load->view('module_index', $data);
     }
     
 /*

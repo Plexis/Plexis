@@ -127,13 +127,17 @@ class Frostbite
         $DB = $Load->database('DB');
         
         // Build our array to get out current URI's module if one exists
-        $query = "SELECT * FROM `pcms_modules` WHERE `uri`=?";
-        $uri = $name .'/'. $action;
-        $result = $DB->query( $query, array($uri) )->fetch_row();
+        $uri1 = $name .'/*';
+        $uri2 = $name .'/'. $action;
+        $query = "SELECT * FROM `pcms_modules` WHERE `uri`=? OR `uri`=?";
+        $result = $DB->query( $query, array($uri1, $uri2) )->fetch_row();
         
         // If our result is an array, we have a result
         if(is_array($result))
         {
+            // Handle the method, if method is astricks, then the module will handle all requests
+            if($result['method'] == '*') $result['method'] = $action;
+
             // Define out globals and this controller/action
             $GLOBALS['is_module'] = TRUE;
             $this->controller  = $GLOBALS['controller'] = ucfirst($result['name']);

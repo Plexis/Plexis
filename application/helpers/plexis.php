@@ -363,7 +363,7 @@
         $list = scandir(APP_PATH . DS . 'modules');
         foreach($list as $file)
         {
-            if($file == "." || $file == ".." || !is_dir($file)) continue;
+            if($file == "." || $file == ".." || $file == "index.html") continue;
             $reallist[] = $file;
         }
         return $reallist;
