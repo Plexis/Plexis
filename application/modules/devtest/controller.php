@@ -25,7 +25,7 @@ class Devtest extends \Application\Core\Controller
         $this->DB->forge->add_field('id');
         $this->DB->forge->add_field('test');
         $this->DB->forge->add_key('id');
-        return $this->DB->forge->create_table('test', FALSE);
+        return $this->DB->forge->create_table('test');
     }
     
     public function _uninstall()

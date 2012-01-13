@@ -44,7 +44,7 @@ return array(
     'invalid_realm_id' => 'The realm ID specified does not exist',
     'login_failed_field_invalid' => "<strong>Login Failed:</strong> One or more fileds were not filled correctly.",
     'login_failed_wrong_credentials' => "<strong>Login Failed:</strong> Username or password is incorrect. Please check your spelling",
-    'login_failed_account_unactivated' => "<strong>Login Failed:</strong> Your account has not been activated. Please click the link in your account acctivation email to enable access to your account.",
+    'login_failed_account_unactivated' => "<strong>Login Failed:</strong> Your account has not been activated. Please click the link in your account activation email to enable access to your account.",
     'module_install_error' => "There was an error installing this module. Please check your error / debug logs",
     'module_install_success' => "Module successfully installed",
     'module_uninstall_error' => "There was an error while Uninstalling this module. Please check your error / Degub log",

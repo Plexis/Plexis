@@ -13,7 +13,7 @@
 */
 namespace Application\Library\Emulators;
 
-class ArcEmu
+class Arcemu
 {
 
 /*
@@ -81,7 +81,7 @@ class ArcEmu
 | @Param: (String) $password - The new account (unencrypted) password
 | @Param: (String) $email - The new account email
 | @Param: (String) $ip - The Registeree's IP address
-| @Return (Mixed) - Returns Insert ID on success, FALSE otherwise
+| @Return: Returns the new Account ID on success, FALSE otherwise
 |
 */
     public function create_account($username, $password, $email = NULL, $ip = '0.0.0.0')
@@ -135,7 +135,7 @@ class ArcEmu
         }
         
         // Load the users info from the Realm DB
-        $query = "SELECT `acct`, `password` FROM `accounts` WHERE `login` LIKE ?";
+        $query = "SELECT `acct`, `password` FROM `accounts` WHERE `login`=?";
         $result = $this->DB->query( $query, array($username) )->fetch_row();
         
         // If the result was false, then username is no good. Also match passwords.
@@ -272,7 +272,7 @@ class ArcEmu
     public function username_exists($username)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `acct` FROM `accounts` WHERE `login` LIKE ?";
+        $query = "SELECT `acct` FROM `accounts` WHERE `login`=?";
         $res = $this->DB->query( $query, array($username) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
@@ -294,7 +294,7 @@ class ArcEmu
     public function account_exists($id)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `login` FROM `accounts` WHERE `acct` LIKE ?";
+        $query = "SELECT `login` FROM `accounts` WHERE `acct`=?";
         $res = $this->DB->query( $query, array($id) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
@@ -316,7 +316,7 @@ class ArcEmu
     public function email_exists($email)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `login` FROM `account` WHERE `email` LIKE ?";
+        $query = "SELECT `login` FROM `account` WHERE `email`=?";
         $res = $this->DB->query( $query, array($email) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
@@ -641,21 +641,27 @@ class ArcEmu
 	
 	public function get_expansion($id, $string = FALSE)
 	{
+        // Fetch account, if it doesnt exists, return FALSE
 		$account = $this->fetch_account($id);
+		if( !$account ) return FALSE;
 		
-		if( !$account )
-			return FALSE;
-		
+        // Do we return as a string, or expansion ID?
 		if( !$string )
+        {
 			return $account['expansion'];
+        }
 		else
 		{
+            // Get the expansion name string, and return it if it exists
 			$expansion_data = $this->get_expansion_info();
-			
 			if( array_key_exists($expansion_data, $id) )
+            {
 				return $expansion_data[$id];
+            }
 			else
+            {
 				return FALSE;
+            }
 		}
 	}
 	
@@ -674,9 +680,10 @@ class ArcEmu
 	
 	public function update_expansion($id, $account)
 	{
-		if( !$this->account_exists($account) )
-			return FALSE;
-			
+        // If the account doesnt exist, return FALSE
+		if( !$this->account_exists($account) ) return FALSE;
+
+        // Update the expansion
 		return $this->DB->update("accounts", array('flags' => $id), "`acct` = '$account'");
 	}
 }

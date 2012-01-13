@@ -340,7 +340,7 @@
         $list = scandir(APP_PATH . DS . 'library' . DS . 'wowlib');
         foreach($list as $file)
         {
-            if($file == "." || $file == ".." || $file == "index.html") continue;
+            if($file[0] == "." || $file == "index.html") continue;
             $reallist[] = str_replace(".php", '', $file);
         }
         return $reallist;
@@ -363,7 +363,7 @@
         $list = scandir(APP_PATH . DS . 'modules');
         foreach($list as $file)
         {
-            if($file == "." || $file == ".." || $file == "index.html") continue;
+            if($file[0] == "." || $file == "index.html") continue;
             $reallist[] = $file;
         }
         return $reallist;
@@ -408,13 +408,7 @@
         // Build our query
         $query = "SELECT `uri` FROM `pcms_realms` WHERE `name`=?";
         $result = $DB->query( $query, array($name) )->fetch_column();
-        
-        // Make our return
-        if($result == FALSE)
-        {
-            return FALSE;
-        }
-        return TRUE;
+        return ($result == FALSE) ? FALSE : TRUE;
     }
 
 /*
@@ -474,7 +468,6 @@
 
     function uri_segment($index)
     {
-        $Router = load_class('Router');
-        return $Router->get_uri_segement($index);
+        return load_class('Router')->get_uri_segement($index);
     }
 // EOF

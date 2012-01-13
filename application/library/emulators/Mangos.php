@@ -75,7 +75,7 @@ class Mangos
 | @Param: (String) $password - The new account (unencrypted) password
 | @Param: (String) $email - The new account email
 | @Param: (String) $ip - The Registeree's IP address
-| @Return (Mixed) - Returns Insert ID on success, FALSE otherwise
+| @Return (Mixed) - Returns the new Account ID on success, FALSE otherwise
 |
 */
     public function create_account($username, $password, $email = NULL, $ip = '0.0.0.0')
@@ -134,7 +134,7 @@ class Mangos
         $password = $this->encrypt_password($username, $password);
         
         // Load the users info from the Realm DB
-        $query = "SELECT `id`, `sha_pass_hash` FROM `account` WHERE `username` LIKE ?";
+        $query = "SELECT `id`, `sha_pass_hash` FROM `account` WHERE `username`=?";
         $result = $this->DB->query( $query, array($username) )->fetch_row();
         
         // If the result was false, then username is no good. Also match passwords.
@@ -276,7 +276,7 @@ class Mangos
     public function username_exists($username)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `id` FROM `account` WHERE `username` LIKE ?";
+        $query = "SELECT `id` FROM `account` WHERE `username`=?";
         $res = $this->DB->query( $query, array($username) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
@@ -298,7 +298,7 @@ class Mangos
     public function account_exists($id)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `username` FROM `account` WHERE `id` LIKE ?";
+        $query = "SELECT `username` FROM `account` WHERE `id`=?";
         $res = $this->DB->query( $query, array($id) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
@@ -320,11 +320,11 @@ class Mangos
     public function email_exists($email)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `username` FROM `account` WHERE `email` LIKE ?";
+        $query = "SELECT `username` FROM `account` WHERE `email`=?";
         $res = $this->DB->query( $query, array($email) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        if($res !== FALSE);
+        return ($res !== FALSE);
     }
 
 /*
@@ -649,21 +649,27 @@ class Mangos
 	
 	public function get_expansion($id, $string = FALSE)
 	{
+        // Fetch account, if it doesnt exists, return FALSE
 		$account = $this->fetch_account($id);
+		if( !$account ) return FALSE;
 		
-		if( !$account )
-			return FALSE;
-		
+        // Do we return as a string, or expansion ID?
 		if( !$string )
+        {
 			return $account['expansion'];
+        }
 		else
 		{
+            // Get the expansion name string, and return it if it exists
 			$expansion_data = $this->get_expansion_info();
-			
 			if( array_key_exists($expansion_data, $id) )
+            {
 				return $expansion_data[$id];
+            }
 			else
+            {
 				return FALSE;
+            }
 		}
 	}
 	
@@ -682,9 +688,10 @@ class Mangos
 	
 	public function update_expansion($id, $account)
 	{
-		if( !$this->account_exists($account) )
-			return FALSE;
-			
+        // If the account doesnt exist, return FALSE
+		if( !$this->account_exists($account) ) return FALSE;
+
+        // Update the account expansion
 		return $this->DB->update("account", array('expansion' => $id), "`id` = '$account'");
 	}
 }
