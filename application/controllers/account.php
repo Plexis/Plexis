@@ -580,7 +580,7 @@ class Account extends Application\Core\Controller
                                 if(!is_array($r_data))
                                 {
                                     // If false, User doesnt exists, else recovery data not set
-                                    if($r_data == FALSE)
+                                    if($r_data === FALSE)
                                     {
                                         output_message('error', 'username_doesnt_exist');
                                         goto Step1;
@@ -624,7 +624,7 @@ class Account extends Application\Core\Controller
                             if(!is_array($r_data))
                             {
                                 // If false, User doesnt exists, else recovery data not set
-                                if($r_data == FALSE)
+                                if($r_data === FALSE)
                                 {
                                     output_message('error', 'username_doesnt_exist');
                                     goto Step1;

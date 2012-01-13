@@ -72,9 +72,9 @@ class Account_Model extends Application\Core\Model
         $info = $this->DB->query( $query, array($username))->fetch_row();
         
         // See if the recovery data is NULL
-        if($info == FALSE || $info['_account_recovery'] == NULL)
+        if($info === FALSE || $info['_account_recovery'] == NULL)
         {
-            return ($info == FALSE) ? FALSE : NULL;
+            return ($info === FALSE) ? FALSE : NULL;
         }
         
         // Unserialize and decode out recoery data
@@ -103,7 +103,18 @@ class Account_Model extends Application\Core\Model
         $old = $this->get_recovery_data($username);
         
         // Make sure user exists!
-        if($old == FALSE) return FALSE;
+        if($old === FALSE) return FALSE;
+        
+        // If we have no previous data, then we need to create new
+        if($old == NULL)
+        {
+            $query = 'SELECT `id`, `email` FROM `pcms_accounts` WHERE `username`=?';
+            $old = $this->DB->query( $query, array($username))->fetch_row();
+            
+            log_message( serialize($old) );
+        }
+        
+        // Build our recovery data string
         $array = array(
             'id' => $qid,
             'answer' => $answer,
@@ -112,7 +123,7 @@ class Account_Model extends Application\Core\Model
         $secret = base64_encode( serialize($array) );
         
         // Update the DB
-        $input = $this->DB->update('pcms_accounts', array('_account_recovery' => $secret), "`id`='".$old['id']."'");
+        return $this->DB->update('pcms_accounts', array('_account_recovery' => $secret), "`username`='".$username."'");
     }
 
 /*
