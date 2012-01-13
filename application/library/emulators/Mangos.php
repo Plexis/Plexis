@@ -183,11 +183,7 @@ class Mangos
         $this->DB->update("account", $data, "`id`=".$id);
         
         // If we have an affected row, then we return TRUE
-        if($this->DB->num_rows() > 0)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        return ($this->DB->num_rows() > 0);
     }
     
 /*
@@ -214,11 +210,7 @@ class Mangos
         $this->DB->update("account", array('email' => $email), "`id`=".$id);
         
         // If we have an affected row, then we return TRUE
-        if($this->DB->num_rows() > 0)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        return ($this->DB->num_rows() > 0);
     }
     
 /*
@@ -288,11 +280,7 @@ class Mangos
         $res = $this->DB->query( $query, array($username) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        if($res !== FALSE)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        return ($res !== FALSE);
     }
     
 /*
@@ -314,11 +302,7 @@ class Mangos
         $res = $this->DB->query( $query, array($id) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        if($res !== FALSE)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        if($res !== FALSE);
     }
     
 /*
@@ -340,11 +324,7 @@ class Mangos
         $res = $this->DB->query( $query, array($email) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        if($res !== FALSE)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        if($res !== FALSE);
     }
 
 /*

@@ -179,11 +179,7 @@ class ArcEmu
         $this->DB->update("accounts", $data, "`acct`=".$id);
         
         // If we have an affected row, then we return TRUE
-        if($this->DB->num_rows() > 0)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        return ($this->DB->num_rows() > 0);
     }
     
 /*
@@ -210,11 +206,7 @@ class ArcEmu
         $this->DB->update("accounts", array('email' => $email), "`acct`=".$id);
         
         // If we have an affected row, then we return TRUE
-        if($this->DB->num_rows() > 0)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        return ($this->DB->num_rows() > 0);
     }
     
 /*
@@ -284,11 +276,7 @@ class ArcEmu
         $res = $this->DB->query( $query, array($username) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        if($res !== FALSE)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        return ($res !== FALSE);
     }
     
 /*
@@ -310,11 +298,7 @@ class ArcEmu
         $res = $this->DB->query( $query, array($id) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        if($res !== FALSE)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        return ($res !== FALSE);
     }
     
 /*
@@ -336,11 +320,7 @@ class ArcEmu
         $res = $this->DB->query( $query, array($email) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        if($res !== FALSE)
-        {
-            return TRUE;
-        }
-        return FALSE;
+        return ($res !== FALSE);
     }
 
 /*
