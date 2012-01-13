@@ -302,7 +302,7 @@ class Mangos
         $res = $this->DB->query( $query, array($id) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        if($res !== FALSE);
+        return ($res !== FALSE);
     }
     
 /*
