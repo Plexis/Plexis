@@ -428,13 +428,13 @@ class Mangos
 
         // Make sure our unbandate is set, 1 year default
         ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
-		$data = array(
-			'id' => $id,
-			'bandate' => time(), 
-			'unbandate' => $unbandate, 
-			'bannedby' => $bannedby, 
-			'banreason' => $banreason, 
-			'active' => 1
+        $data = array(
+            'id' => $id,
+            'bandate' => time(), 
+            'unbandate' => $unbandate, 
+            'bannedby' => $bannedby, 
+            'banreason' => $banreason, 
+            'active' => 1
         ); 
         $result = $this->DB->insert('account_banned', $data);
         
@@ -475,12 +475,12 @@ class Mangos
 
         // Make sure our unbandate is set, 1 year default
         ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
-		$data = array(
-			'ip' => $ip,
-			'bandate' => time(), 
-			'unbandate' => $unbandate, 
-			'bannedby' => $bannedby, 
-			'banreason' => $banreason, 
+        $data = array(
+            'ip' => $ip,
+            'bandate' => time(), 
+            'unbandate' => $unbandate, 
+            'bannedby' => $bannedby, 
+            'banreason' => $banreason, 
         ); 
         return $this->DB->insert('ip_banned', $data);
     }
@@ -611,7 +611,7 @@ class Mangos
         $pass = strtoupper($pass);
         return SHA1($user.':'.$pass);
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Function: get_expansion_info()
@@ -622,18 +622,18 @@ class Mangos
 | @Return (Array) Returns an array containing the expansions and all relevant information.
 |
 */
-	
-	public function get_expansion_info()
-	{
-		return array
-			(
-				//Expansion ID => Expansion Name
-				0  => "Classic",
-				1  => "The Burning Crusade",
-				2 => "Wrath of the Lich King"
-			);
-	}
-	
+    
+    public function get_expansion_info()
+    {
+        return array
+            (
+                //Expansion ID => Expansion Name
+                0  => "Classic",
+                1  => "The Burning Crusade",
+                2 => "Wrath of the Lich King"
+            );
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Function: get_expansion()
@@ -646,33 +646,33 @@ class Mangos
 | @Return (Mixed) Returns the current expansion (ID number or name) on success, FALSE on failure.
 |
 */
-	
-	public function get_expansion($id, $string = FALSE)
-	{
+    
+    public function get_expansion($id, $string = FALSE)
+    {
         // Fetch account, if it doesnt exists, return FALSE
-		$account = $this->fetch_account($id);
-		if( !$account ) return FALSE;
-		
+        $account = $this->fetch_account($id);
+        if( !$account ) return FALSE;
+        
         // Do we return as a string, or expansion ID?
-		if( !$string )
+        if( !$string )
         {
-			return $account['expansion'];
+            return $account['expansion'];
         }
-		else
-		{
+        else
+        {
             // Get the expansion name string, and return it if it exists
-			$expansion_data = $this->get_expansion_info();
-			if( array_key_exists($expansion_data, $id) )
+            $expansion_data = $this->get_expansion_info();
+            if( array_key_exists($expansion_data, $id) )
             {
-				return $expansion_data[$id];
+                return $expansion_data[$id];
             }
-			else
+            else
             {
-				return FALSE;
+                return FALSE;
             }
-		}
-	}
-	
+        }
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Function: update_expansion()
@@ -685,14 +685,14 @@ class Mangos
 | @Return (Bool) FALSE on failure, TRUE on success.
 |
 */
-	
-	public function update_expansion($id, $account)
-	{
+    
+    public function update_expansion($id, $account)
+    {
         // If the account doesnt exist, return FALSE
-		if( !$this->account_exists($account) ) return FALSE;
+        if( !$this->account_exists($account) ) return FALSE;
 
         // Update the account expansion
-		return $this->DB->update("account", array('expansion' => $id), "`id` = '$account'");
-	}
+        return $this->DB->update("account", array('expansion' => $id), "`id` = '$account'");
+    }
 }
 // EOF

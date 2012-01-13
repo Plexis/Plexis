@@ -43,9 +43,9 @@ class Arcemu
         // Grab Realms
         //$query = "SELECT * FROM `realmlist`";
         //return $this->DB->query( $query )->fetch_array();
-		
-		//This function doesn't return anything since ArcEmu doesn't store the realms in a data table.
-		return array();
+        
+        //This function doesn't return anything since ArcEmu doesn't store the realms in a data table.
+        return array();
     }
     
 /*
@@ -64,9 +64,9 @@ class Arcemu
         // Grab Realms
         //$query = "SELECT * FROM `realmlist` WHERE `id`=?";
         //return $this->DB->query( $query, array($id) )->fetch_row();
-		
-		//Again, doesn't return anything.
-		return array();
+        
+        //Again, doesn't return anything.
+        return array();
     }
     
 /*
@@ -96,7 +96,7 @@ class Arcemu
         $data = array(
             'login' => $username, 
             'password' => $password, 
-			'encrypted_password' => $this->encrypt_password($username, $password),
+            'encrypted_password' => $this->encrypt_password($username, $password),
             'email' => $email, 
             'lastip' => $ip
         );
@@ -172,7 +172,7 @@ class Arcemu
         // Build our tables and values for Database insertion
         $data = array(
             'password' => $password, 
-			'encrypted_password' => $this->encrypt_password($user['login'], $password)
+            'encrypted_password' => $this->encrypt_password($user['login'], $password)
         );
         
         // Update account information
@@ -336,7 +336,7 @@ class Arcemu
 */
     public function account_banned($account_id)
     {
-		$query = "SELECT COUNT(*) FROM `accounts` WHERE `banned` > 0 AND `acct` = ?;";
+        $query = "SELECT COUNT(*) FROM `accounts` WHERE `banned` > 0 AND `acct` = ?;";
         $check = $this->DB->query( $query, array($account_id) )->fetch_column();
         if ($check !== FALSE && $check > 0)
         {
@@ -424,9 +424,9 @@ class Arcemu
 
         // Make sure our unbandate is set, 1 year default
         ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
-		$data = array(
-			'banned' => $unbandate, 
-			'banreason' => $banreason
+        $data = array(
+            'banned' => $unbandate, 
+            'banreason' => $banreason
         ); 
         $result = $this->DB->update('accounts', $data, "`acct` = '$id'");
         
@@ -467,10 +467,10 @@ class Arcemu
 
         // Make sure our unbandate is set, 1 year default
         ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
-		$data = array(
-			'ip' => $ip,
-			'expire' => $unbandate,
-			'banreason' => $banreason, 
+        $data = array(
+            'ip' => $ip,
+            'expire' => $unbandate,
+            'banreason' => $banreason, 
         ); 
         return $this->DB->insert('ipbans', $data);
     }
@@ -601,7 +601,7 @@ class Arcemu
         $pass = strtoupper($pass);
         return SHA1($user.':'.$pass);
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Function: get_expansion_info()
@@ -612,20 +612,20 @@ class Arcemu
 | @Return (Array) Returns an array containing the expansions and all relevant information.
 |
 */
-	
-	public function get_expansion_info()
-	{
-		return array
-			(
-				//Expansion ID => Expansion Name
-				0  => "Classic",
-				8  => "The Burning Crusade",
-				16 => "Wrath of the Lich King Only", //Accounts that only have WotLK activated, not WotLK and TBC (largely unused, but ArcEmu does support it...)
-				24 => "Wrath of the Lich King and The Burning Crusade",
-				32 => "Cataclysm"
-			);
-	}
-	
+    
+    public function get_expansion_info()
+    {
+        return array
+            (
+                //Expansion ID => Expansion Name
+                0  => "Classic",
+                8  => "The Burning Crusade",
+                16 => "Wrath of the Lich King Only", //Accounts that only have WotLK activated, not WotLK and TBC (largely unused, but ArcEmu does support it...)
+                24 => "Wrath of the Lich King and The Burning Crusade",
+                32 => "Cataclysm"
+            );
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Function: get_expansion()
@@ -638,33 +638,33 @@ class Arcemu
 | @Return (Mixed) Returns the current expansion (ID number or name) on success, FALSE on failure.
 |
 */
-	
-	public function get_expansion($id, $string = FALSE)
-	{
+    
+    public function get_expansion($id, $string = FALSE)
+    {
         // Fetch account, if it doesnt exists, return FALSE
-		$account = $this->fetch_account($id);
-		if( !$account ) return FALSE;
-		
+        $account = $this->fetch_account($id);
+        if( !$account ) return FALSE;
+        
         // Do we return as a string, or expansion ID?
-		if( !$string )
+        if( !$string )
         {
-			return $account['expansion'];
+            return $account['expansion'];
         }
-		else
-		{
+        else
+        {
             // Get the expansion name string, and return it if it exists
-			$expansion_data = $this->get_expansion_info();
-			if( array_key_exists($expansion_data, $id) )
+            $expansion_data = $this->get_expansion_info();
+            if( array_key_exists($expansion_data, $id) )
             {
-				return $expansion_data[$id];
+                return $expansion_data[$id];
             }
-			else
+            else
             {
-				return FALSE;
+                return FALSE;
             }
-		}
-	}
-	
+        }
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Function: update_expansion()
@@ -677,14 +677,14 @@ class Arcemu
 | @Return (Bool) FALSE on failure, TRUE on success.
 |
 */
-	
-	public function update_expansion($id, $account)
-	{
+    
+    public function update_expansion($id, $account)
+    {
         // If the account doesnt exist, return FALSE
-		if( !$this->account_exists($account) ) return FALSE;
+        if( !$this->account_exists($account) ) return FALSE;
 
         // Update the expansion
-		return $this->DB->update("accounts", array('flags' => $id), "`acct` = '$account'");
-	}
+        return $this->DB->update("accounts", array('flags' => $id), "`acct` = '$account'");
+    }
 }
 // EOF
