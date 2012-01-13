@@ -56,6 +56,64 @@ class Account_Model extends Application\Core\Model
         // If we are here, there the key didnt exist
         return FALSE; 
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: get_recovery_data
+| ---------------------------------------------------------------
+|
+| The process decodes the account recovery data, and returns it
+|
+*/     
+    public function get_recovery_data($username)
+    {
+        // Build the query, and grab the data
+        $query = 'SELECT `id`, `email`, `_account_recovery` FROM `pcms_accounts` WHERE `username`=?';
+        $info = $this->DB->query( $query, array($username))->fetch_row();
+        
+        // See if the recovery data is NULL
+        if($info == FALSE || $info['_account_recovery'] == NULL)
+        {
+            return ($info == FALSE) ? FALSE : NULL;
+        }
+        
+        // Unserialize and decode out recoery data
+        $data = unserialize( base64_decode($info['_account_recovery']) );
+        $questions = get_secret_questions('array', TRUE);
+        return array(
+            'id' => $info['id'],
+            'email' => $info['email'],
+            'question' => $questions[ $data['id'] ], 
+            'answer' => $data['answer'],
+            'registration_email' => $data['email']
+        );
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: set_recovery_data
+| ---------------------------------------------------------------
+|
+| The process sets the account recovery info for an account
+|
+*/     
+    public function set_recovery_data($username, $qid, $answer)
+    {
+        // Build the query, and grab the data
+        $old = $this->get_recovery_data($username);
+        
+        // Make sure user exists!
+        if($old == FALSE) return FALSE;
+        $array = array(
+            'id' => $qid,
+            'answer' => $answer,
+            'email' => $old['email']
+        );
+        $secret = base64_encode( serialize($array) );
+        
+        // Update the DB
+        $input = $this->DB->update('pcms_accounts', array('_account_recovery' => $secret), "`id`='".$old['id']."'");
+    }
 
 /*
 | ---------------------------------------------------------------

@@ -62,7 +62,7 @@ class Account extends Application\Core\Controller
         
         // Fetch account data from the realm
         $data = $this->realm->fetch_account($this->user['id']);
-		
+        
         // Load the page, and we are done :)
         $this->load->view('index', $data);
     }
@@ -180,6 +180,7 @@ class Account extends Application\Core\Controller
             if( $Captcha->is_compatible() == FALSE )
             {
                 config_set('enable_captcha', false);
+                $enable_captcha = FALSE;
             }
             unset($Captcha);
         }
@@ -289,7 +290,7 @@ class Account extends Application\Core\Controller
                     if($captcha != strtolower($_SESSION['Captcha']))
                     {
                         output_message('error', 'captcha_incorrect');
-                        $this->load->view('register');
+                        $this->load->view('register', $data);
                         return;
                     }
                 }
@@ -318,7 +319,7 @@ class Account extends Application\Core\Controller
                     if($ee == TRUE)
                     {
                         output_message('error', 'reg_failed_email_exists');
-                        $this->load->view('register');
+                        $this->load->view('register', $data);
                         return;
                     }
                 }
@@ -450,16 +451,13 @@ class Account extends Application\Core\Controller
             {
                 case "set":
                     // Shouldnt be here if we arent logged in!
-                    if($this->user['logged_in'] == FALSE) goto Form;
+                    if($this->user['logged_in'] == FALSE) goto Step1;
                     
                     // Make sure Users QA isnt set.. If it is then he shouldnt be here!
                     if($this->user['_account_recovery'] == TRUE) redirect('account');
                     
                     // Check for posted data
-                    if(isset($_POST['action']))
-                    {
-                        goto Process;
-                    }
+                    if(isset($_POST['action'])) goto Process;
                     
                     // Get our questions and load the page
                     $data['secret_questions'] = get_secret_questions();
@@ -467,7 +465,7 @@ class Account extends Application\Core\Controller
                     break;
                 
                 default:
-                    if($this->user['logged_in'] == FALSE) goto Form;
+                    if($this->user['logged_in'] == FALSE) goto Step1;
                     redirect('account');
             }
             return;
@@ -481,24 +479,35 @@ class Account extends Application\Core\Controller
             }
         
             // Do we have login information?
-            if(isset($_POST['action']))
-            {
-                goto Process;
-            }
+            if(isset($_POST['action'])) goto Process;
         }
         
         
-        // Recovery Form
-        Form:
+        // Recovery Form, Step 1
+        Step1:
         {
             $this->load->view('recover');
+            return;
+        }
+        
+        // Recovery Form, Step 2
+        Step2:
+        {
+            $data = array(
+                'question' => $r_data['question'],
+                'username' => $username
+            );
+            $this->load->view('recover_step2', $data );
             return;
         }
         
         // Our process post processing
         Process:
         {
-            if(!isset($_POST['action'])) goto Form;
+            if(!isset($_POST['action'])) goto Step1;
+            
+            // Load the account Model
+            $this->load->model('account_model', 'account');
             
             switch($_POST['action'])
             {
@@ -508,33 +517,27 @@ class Account extends Application\Core\Controller
                     $this->Input = load_class('Input');
                     $sq = $this->Input->post('question', TRUE);
                     $sa = $this->Input->post('answer', TRUE);
+                    
+                    // Fetch account data from the realm
+                    $data = $this->realm->fetch_account($this->user['id']);
 
                     // Secret question / answer processing
                     if($sq != NULL && $sa != NULL)
                     {
-                        $array = array(
-                            'id' => $sq,
-                            'answer' => $sa,
-                            'email' => $this->user['email']
-                        );
-                        $secret = base64_encode( serialize($array) );
-                        
-                        // Update the DB
-                        $input = $this->DB->update('pcms_accounts', array('_account_recovery' => $secret), "`id`='".$this->user['id']."'");
+                        // Set recovery data
+                        $set = $this->account->set_recovery_data($data['username'], $sq, $sa);
                         
                         // Process the result
-                        if($input == TRUE)
+                        if($set == TRUE)
                         {
-                            // Fetch account data from the realm
-                            $data = $this->realm->fetch_account($this->user['id']);
-                            
-                            // Load the page, and we are done :)
+                            // Load the account dashboard, and we are done :)
                             output_message('success', 'account_recovery_set_success');
                             $this->load->view('index', $data);
                             return;
                         }
                         else
                         {
+                            // No recovery data means we cant do anything here
                             output_message('error', 'account_recovery_set_failed');
                             $this->load->view('blank');
                             return;
@@ -542,162 +545,125 @@ class Account extends Application\Core\Controller
                     }
                     else
                     {
+                        // Back to step 1 because fields were not filled correctly
                         output_message('error', 'submit_failed_fields_empty');
-                        goto Form;
+                        goto Step1;
                     }
                     break;
                     
                 case "recover":
                     // Get our current step
-                    if(isset($_POST['step']))
-                    {
-                        switch($_POST['step'])
-                        {
-                            case 1:
-                                // Load the validation script and set our rules
-                                $this->load->library('validation');
-                                $this->validation->set( array(
-                                    'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]', 
-                                    'email' => 'required|email'
-                                    ) 
-                                );
-                                
-                                // Check to make sure we pass validation
-                                if($this->validation->validate() == TRUE)
-                                {
-                                    // load the input class
-                                    $this->Input = load_class('Input');
-                                    $username = $this->Input->post('username', TRUE);
-                                    $email = $this->Input->post('email', TRUE);
-                                    
-                                    // Load secret question
-                                    $query = 'SELECT `email`, `_account_recovery` FROM `pcms_accounts` WHERE `username`=?';
-                                    $info = $this->DB->query( $query, array($username))->fetch_row();
-                                    if(!$info)
-                                    {
-                                        output_message('error', 'username_doesnt_exist');
-                                        goto Form;
-                                    }
-                                    
-                                    // Make sure the emails match!
-                                    if($info['email'] != $email)
-                                    {
-                                        output_message('error', 'account_recover_invalid_email');
-                                        goto Form;
-                                    }
-                                    
-                                    // Make sure that the account recover is set
-                                    if($info['_account_recovery'] == NULL)
-                                    {
-                                        output_message('error', 'account_recover_failed_not_set');
-                                        $this->load->view('blank');
-                                    }
-                                    
-                                    // Decrypt the recovery information, and request it
-                                    $data = unserialize( base64_decode($info['_account_recovery']) );
-                                    $questions = get_secret_questions('array', TRUE);
-                                    $question = $questions[ $data['id'] ];
-                                    
-                                    // Make our new page data and load the page
-                                    $data = array(
-                                        'question' => $question,
-                                        'username' => $username
-                                    );
-                                    $this->load->view('recover_step2', $data );
-                                }
-                                else
-                                {
-                                    output_message('error', 'form_validation_failed');
-                                    goto Form;
-                                }
-                                break;
+                    if( !isset($_POST['step']) ) goto Step1;
 
-                            case 2:
-                                    // Make sure we have post data
-                                    if(!isset($_POST['answer'])) goto Form;
-                                    
-                                    // load the input class
-                                    $this->Input = load_class('Input');
-                                    $username = $this->Input->post('username', TRUE);
-                                    $answer = $this->Input->post('answer', TRUE);
-                                    
-                                    // Make sure the user posted something!
-                                    if($answer == NULL)
-                                    {
-                                        // Load secret question
-                                        $query = 'SELECT `_account_recovery` FROM `pcms_accounts` WHERE `username` LIKE ?';
-                                        $info = $this->DB->query( $query, array($username))->fetch_column();
-                                        $data = unserialize( base64_decode($info) );
-                                        $questions = get_secret_questions('array', TRUE);
-                                        $question = $questions[ $data['id'] ];
-                                    
-                                        // Output the error message and request it again
-                                        output_message('error', 'form_validation_failed');
-                                        $data = array(
-                                            'question' => $question,
-                                            'username' => $username
-                                        );
-                                        $this->load->view('recover_step2', $data );
-                                        return;
-                                    }
-                                    
-                                    // Load secret question
-                                    $query = 'SELECT `id`, `email`, `_account_recovery` FROM `pcms_accounts` WHERE `username` LIKE ?';
-                                    $info = $this->DB->query( $query, array($username))->fetch_row();
-                                    if(!$info)
+                    // Porcess our step
+                    switch($_POST['step'])
+                    {
+                        case 1:
+                            // Load the validation script and set our rules
+                            $this->load->library('validation');
+                            $this->validation->set( array(
+                                'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]', 
+                                'email' => 'required|email'
+                                ) 
+                            );
+                            
+                            // Check to make sure we pass validation
+                            if($this->validation->validate() == TRUE)
+                            {
+                                // load the input class
+                                $this->Input = load_class('Input');
+                                $username = $this->Input->post('username', TRUE);
+                                $email = $this->Input->post('email', TRUE);
+                                
+                                // Load recovery data
+                                $r_data = $this->account->get_recovery_data($username);
+                                if(!is_array($r_data))
+                                {
+                                    // If false, User doesnt exists, else recovery data not set
+                                    if($r_data == FALSE)
                                     {
                                         output_message('error', 'username_doesnt_exist');
-                                        goto Form;
-                                    }
-                                    
-                                    // Make sure that the account recover is set
-                                    if($info['_account_recovery'] == NULL)
-                                    {
-                                        output_message('error', 'account_recover_failed_not_set');
-                                        $this->load->view('blank');
-                                    }
-                                    
-                                    // Decrypt the recovery information, and request it
-                                    $data = unserialize( base64_decode($info['_account_recovery']) );
-                                    
-                                    // Check that the secret answer was correct
-                                    if( trim( strtolower($answer) ) == trim( strtolower($data['answer']) ) )
-                                    {
-                                        // Load the account model as it holds the code to change the password etc
-                                        $this->load->model('account_model', 'account');
-                                        $result = $this->account->process_recovery($info['id'], $username, $info['email']);
-                                        
-                                        // The message will be there if we whether we failed or succeded
-                                        $this->load->view('blank');
-                                        return;
-                                        
+                                        goto Step1;
                                     }
                                     else
                                     {
-                                        output_message('error', 'account_recover_failed_wrong_answer');
-                                        $data = array(
-                                            'question' => $question,
-                                            'username' => $username
-                                        );
-                                        $this->load->view('recover_step2', $data );
-                                        return;
+                                        output_message('error', 'account_recover_failed_not_set');
+                                        $this->load->view('blank');
                                     }
-                                    break;
+                                }
                                 
-                            default:
-                                goto Form;
-                                break;
+                                // Make sure the emails match! Else, back to step 1
+                                if($r_data['email'] != $email)
+                                {
+                                    output_message('error', 'account_recover_invalid_email');
+                                    goto Step1;
+                                }
+                                
+                                // Good to go to step 2
+                                goto Step2;
+                            }
+                            else
+                            {
+                                // Form validation failed, back to step 1
+                                output_message('error', 'form_validation_failed');
+                                goto Step1;
+                            }
+                            break;
+
+                        case 2:
+                            // Make sure we have post data
+                            if(!isset($_POST['answer'])) goto Step1;
                             
-                        }
-                    }
-                    else
-                    {
-                        goto Form;
+                            // load the input class
+                            $this->Input = load_class('Input');
+                            $username = $this->Input->post('username', TRUE);
+                            $answer = $this->Input->post('answer', TRUE);
+                            
+                            // Load recovery data
+                            $r_data = $this->account->get_recovery_data($username);
+                            if(!is_array($r_data))
+                            {
+                                // If false, User doesnt exists, else recovery data not set
+                                if($r_data == FALSE)
+                                {
+                                    output_message('error', 'username_doesnt_exist');
+                                    goto Step1;
+                                }
+                                else
+                                {
+                                    output_message('error', 'account_recover_failed_not_set');
+                                    $this->load->view('blank');
+                                }
+                            }
+
+                            // Check that the secret answer was correct
+                            if( trim( strtolower($answer) ) == trim( strtolower($r_data['answer']) ) )
+                            {
+                                // Load the account model as it holds the code to change the password etc
+                                $result = $this->account->process_recovery($r_data['id'], $username, $r_data['email']);
+                                
+                                // The message will be there if we whether we failed or succeded
+                                $this->load->view('blank');
+                                return;
+                                
+                            }
+                            else
+                            {
+                                // Answer was incorrect, so back to step 2
+                                output_message('error', 'account_recover_failed_wrong_answer');
+                                goto Step2;
+                            }
+                            break;
+                            
+                        default:
+                            goto Step1;
+                            break;
+                        
                     }
                     break;
                     
                 default:
-                    goto Form;
+                    goto Step1;
                     break;
             }
         }
@@ -976,7 +942,7 @@ class Account extends Application\Core\Controller
         $data['sites'] = $sites;
         $this->load->view('vote', $data);
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | P10: Invitation Keys
