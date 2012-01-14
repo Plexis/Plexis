@@ -27,6 +27,9 @@ class Language
     // An array of loaded language files
     protected $loaded_files = array();
     
+    // Array of system and application languages
+    protected $languages = array();
+    
     // Our selected language
     public $language;
 
@@ -37,8 +40,11 @@ class Language
 */
     public function __construct()
     {
+        // Load our languages
+        $this->scan_language_dirs();
+
         // Set the default Language
-        $this->set_language( config('core_language', 'Core') );
+        $this->language = config('core_language', 'Core');
     }
 
 /*
@@ -54,8 +60,16 @@ class Language
 */
     public function set_language($lang)
     {
-        // Set the default Language
-        $this->language = strtolower($lang);
+        // Check if the language exists
+        $lang = strtolower($lang);
+        if( in_array($lang, $this->languages['application']) || in_array($lang, $this->languages['system']) )
+        {
+            $this->language = $lang;
+            return TRUE;
+        }
+
+        // If we are here, then langauge doesnt exist! set whatever we can
+        return FALSE;
     }
 
 /*
@@ -73,8 +87,11 @@ class Language
 */
     public function load($file, $lang = NULL)
     {
+        // Set the language if specified
+        if($lang != NULL) $this->set_language($lang);
+        
         // Add the extension, and create our tag
-        if($lang == NULL) $lang = $this->language;
+        $lang = $this->language;
         $key = $file .'_'. $lang;
         $file = $file . '.php';
 
@@ -147,6 +164,68 @@ class Language
         
         // We tried everything :(
         return FALSE;
+    }
+
+/*
+| ---------------------------------------------------------------
+| Function: get_languages()
+| ---------------------------------------------------------------
+|
+| Returns an array of found langauges in the language folders
+|
+| @Param: (String) $type - system, or application? NULL for both
+| @Return (Array) An array of found languages
+|
+*/    
+    public function get_languages($type = NULL)
+    {
+        // Type check!
+        if($type == 'system')
+        {
+            return $this->languages['system'];
+        }
+        elseif($type == 'application')
+        {
+            return $this->languages['application'];
+        }
+        
+        // Return both
+        return $this->languages;
+    }
+
+/*
+| ---------------------------------------------------------------
+| Function: scan_language_dirs()
+| ---------------------------------------------------------------
+|
+| Scans and finds all installed languages
+|
+*/
+    protected function scan_language_dirs()
+    {
+        // Load the system languages first
+        $path = SYSTEM_PATH . DS . 'language';
+        $list = opendir( $path );
+        while($file = readdir($list))
+        {
+            if($file[0] != "." && is_dir($path . DS . $file))
+            {
+                $this->languages['system'][] = $file;
+            }
+        }
+        closedir($list);
+        
+        // Finally, Load app languages
+        $path = APP_PATH . DS . 'language';
+        $list = opendir( $path );
+        while($file = readdir($list))
+        {
+            if($file[0] != "." && is_dir($path . DS . $file))
+            {
+                $this->languages['application'][] = $file;
+            }
+        }
+        closedir($list);
     }
 }
 // EOF
