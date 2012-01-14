@@ -110,8 +110,6 @@ class Account_Model extends Application\Core\Model
         {
             $query = 'SELECT `id`, `email` FROM `pcms_accounts` WHERE `username`=?';
             $old = $this->DB->query( $query, array($username))->fetch_row();
-            
-            log_message( serialize($old) );
         }
         
         // Build our recovery data string

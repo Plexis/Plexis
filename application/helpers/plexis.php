@@ -19,7 +19,7 @@
     {
         // Load language
         $lang = load_language_file( $file );
-        $text = (isset($lang[$message])) ? $lang[$message] : $message;
+        $text = ($lang == FALSE || !isset($lang[$message])) ? $message : $lang[$message];
 
         // do replacing
         if(is_array($args))
@@ -46,11 +46,10 @@
     {
         // Load language
         $input = load_class('Input');
-        if(isset($_COOKIE['language']))
-        {
-            $language = $input->cookie('language', TRUE);
-        }
-        else
+        $language = $input->cookie('language', TRUE);
+        
+        //Load the default language if the user hasnt selected a language yet
+        if($language == FALSE)
         {
             $language = config('default_language');
             $input->set_cookie('language', $language);
@@ -69,31 +68,24 @@
 | selected language.
 |
 | @Param: (String) $file - The language file we are loading
-| @Return (Array) An array of all the language vars
+| @Return (Array) An array of all the language vars, or FALSE
 |
 */
     function load_language_file($file)
     {
-        // Load language
+        // Load language, and Language class
         $language = selected_language();
-        
-        // Init the language class
         $lang = load_class('Language');
-        $lang->set_language( $language );
-        $array = $lang->load($file, $language, TRUE );
         
-        // If we got a false return from the language class, file was not found
-        if(!$array)
+        // Attempt to get the language file variables
+        $array = $lang->load($file, $language);
+        
+        // If we got a false or empty return from the language class, file was not found
+        if($array == FALSE)
         {
             // Try and load the default lanuage
-            $lang->set_language( $file, config('default_language') );
+            $lang->set_language( config('default_language') );
             $array = $lang->load($file);
-            
-            // If another false return, could not locate language file
-            if(!$array)
-            {
-                trigger_error('Unable to load the site default or requested language file: '.$language.'/'.$file);
-            }
         }
         return $array;	
     }
@@ -119,7 +111,7 @@
         
         // Restore error reporting
         $Debug->error_reporting( TRUE );
-        return $handle;
+        return ($handle == FALSE)? FALSE : TRUE;
     }
     
 
@@ -167,21 +159,18 @@
             $query = "SELECT `name` FROM `pcms_realms` WHERE `id`=?";
             $result = $DB->query( $query, array($return) )->fetch_column();
             
-            //If false, we set a new cookie with the dealt ID
-            if($result == FALSE)
+            // If false, Hard set the cookie to default
+            if($result == FALSE) goto SetDefault;
+        }
+        else
+        {
+            SetDefault:
             {
                 // Hard set the cookie to default
                 $return = config('default_realm_id');
                 $input->set_cookie('realm_id', $return);
                 $_COOKIE['realm_id'] = $return;
-            } 
-        }
-        else
-        {
-            // Hard set the cookie to default
-            $return = config('default_realm_id');
-            $input->set_cookie('realm_id', $return);
-            $_COOKIE['realm_id'] = $return;
+            }
         }
         return $return;
     }

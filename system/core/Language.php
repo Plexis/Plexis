@@ -26,6 +26,9 @@ class Language
 
     // An array of loaded language files
     protected $loaded_files = array();
+    
+    // Our selected language
+    public $language;
 
 /*
 | ---------------------------------------------------------------
@@ -52,7 +55,7 @@ class Language
     public function set_language($lang)
     {
         // Set the default Language
-        $this->Language = strtolower($lang);
+        $this->language = strtolower($lang);
     }
 
 /*
@@ -63,69 +66,51 @@ class Language
 | Loads the lanugage file
 |
 | @Param: (String) $file - Name of the language file, without the extension
-| @Param: (String) $lang - Language we are loading
 | @Param: (Bool) $return - Set to TRUE to return the $lang array, FALSE
 |       to just save the variables here.
 | @Return (Mixed) Depends on the $return variable
 |
 */
-    public function load($file, $return = FALSE)
+    public function load($file, $lang = NULL)
     {
-        // Add the extension
+        // Add the extension, and create our tag
+        if($lang == NULL) $lang = $this->language;
+        $key = $file .'_'. $lang;
         $file = $file . '.php';
-        
+
         // Make sure we havent loaded this already
-        if(isset($this->loaded_files[$file]))
+        if(isset($this->language_vars[$key]))
         {
-            return TRUE;
+            return $this->language_vars[$key];
         }
         
-        // Make this a bit easier to type
-        $lang = $this->Language;
-        
+        // Init our empty variable arrays
+        $vars = array();
+        $vars2 = array();
+
         // Load the core language file if it exists
-        if (file_exists(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file))
+        if(file_exists(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file))
         {
             $vars = include(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file);
+            if(!is_array($vars)) return FALSE;
         }
 
         // Next we load the application file, allows overriding of the core one
         if(file_exists(APP_PATH . DS .'language' . DS . $lang . DS . $file))
         {
-            if(isset($vars))
-            {
-                $vars2 = include(APP_PATH . DS .'language' . DS . $lang . DS . $file);
-            }
-            else
-            {
-                $vars = include(APP_PATH . DS .'language' . DS . $lang . DS . $file);
-            }
+            $vars2 = include(APP_PATH . DS .'language' . DS . $lang . DS . $file);
+            if(!is_array($vars2)) return FALSE;
         }
         
         // Merge if both the app and core had the same filename
-        if(isset($vars2))
-        {
-            $vars = array_merge($vars, $vars2);
-        }
-
-
-        // If the array "$language" is none existant in the language file, we have an error
-        if(!isset($vars) || !is_array($vars))
-        {
-            return FALSE;
-        }
-
-        // Do we return the array?
-        if($return == TRUE)
-        {
-            return $vars;
-        }
+        $vars = array_merge($vars, $vars2);
 
         // Without a return, we need to store what we have here.
         $this->loaded_files[] = $file;
-        $this->language_vars = array_merge($this->language_vars, $vars);
-        unset($vars);
-        return TRUE;
+        $this->language_vars[$key] = $vars;
+
+        // Init the return
+        return ( !empty($vars) ) ? $vars : FALSE;
     }
 
 /*
@@ -135,17 +120,32 @@ class Language
 |
 | Returns the variable from the config array
 |
-| @Param: (String) $var - the key of the lang array value, needed
-|   to be returned
-| @Return (Mixed) FALSE if the var is unset, or the Variable otherwise
+| @Param: (String) $var - the key of the lang array value
+| @Param: (String) $file - The filename the var belongs in (no Ext)
+| @Return (Mixed) FALSE if the var is unset, or the string otherwise
 |
 */
-    public function get($var)
+    public function get($var, $file = NULL)
     {
-        if(isset($this->language_vars[$var]))
+        // Check to see that we loaded something first
+        if(empty( $this->language_vars )) return FALSE;
+        
+        // Determine our language variable filename if not givin
+        if($file == NULL) $file = end( $this->loaded_files );
+        
+        // Build out lang var key
+        $key = $file .'_'. $this->language;
+        
+        // check to see if our var is set... if not, try to load it first
+        if( !isset($this->language_vars[$key]) ) $this->load($file);
+        
+        // Attempt to load the actual language var now
+        if(isset($this->language_vars[$key][$var]))
         {
-            return $this->language_vars[$var];
+            return $this->language_vars[$key][$var];
         }
+        
+        // We tried everything :(
         return FALSE;
     }
 }
