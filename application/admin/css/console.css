@@ -1,0 +1,36 @@
+#console{
+    height: 300px;
+    overflow: auto;
+    background-color: #000;
+    padding: 15px;
+    font-family: monospace;
+    font-size: 12px;
+    color: #FFF;
+}
+#command{
+    border: solid 1px #CCC;
+    padding: 5px 10px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    margin: 5px 0;
+    width: 98%;
+    height: 25px;
+}
+.c_selector
+{
+    width: 250px;
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+.c_prefix{
+    color: #0077E7;
+}
+.c_keyword{
+    color: #9eff63;
+}
+.c_error{
+    color: #FF0000;
+}

@@ -6,7 +6,7 @@ class Ajax extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Constructer
+| Constructor
 | ---------------------------------------------------------------
 |
 */    
@@ -25,7 +25,7 @@ class Ajax extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 | This method is used for certain Ajax pages to see if the requester
-|   has permission to recieve the request.
+|   has permission to receive the request.
 |
 | @Param: $lvl - The account level required (a = admin, u = user)
 */   
@@ -108,7 +108,7 @@ class Ajax extends Application\Core\Controller
         // Make sure we arent getting direct accessed, and the user has permission
         $this->check_access('a');
         
-        // If we recieved POST actions, then process it as ajax
+        // If we received POST actions, then process it as ajax
         if(isset($_POST['action']))
         {
             // Load the database
@@ -120,7 +120,7 @@ class Ajax extends Application\Core\Controller
             $user = $this->DB->query( $query, array($username) )->fetch_row();
             $id = $user['id'];
    
-            // Make sure the current user has privlages to execute an ajax
+            // Make sure the current user has privileges to execute an ajax
             if( (!$this->user['is_super_admin'] && $user['is_admin']) && $_POST['action'] !== 'account-status' )
             {
                 $this->output(false, 'access_denied_privlages');
@@ -1021,6 +1021,137 @@ class Ajax extends Application\Core\Controller
 
         // Push the output in json format
         echo json_encode($output);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: console()
+| ---------------------------------------------------------------
+|
+| This method is used for via Ajax to handle remote access commands
+*/    
+    public function console()
+    {
+        // Make sure there is post data!
+        if( !isset($_POST['action']) ) return;
+        
+        // Load the input cleaner
+        $this->input = load_class('Input');
+        $this->load->model('Ajax_Model', 'model');
+        
+        // Check Access
+        $this->check_access('a');
+        
+        // Defaults
+        $action = trim( $this->input->post('action', TRUE) );
+
+        // Proccess our action
+        if($action == 'init')
+        {
+            $output['status'] = 200;
+            $output['show'] = "<br /><center>---- WELCOME TO THE PLEXIS REMOTE ACCESS TERMINAL ----</center><br />";
+            $output['show'] .= "<span class=\"c_keyword\"> In this window, you are able to type in server commands which are sent directly to your server.</span><br />";
+            $output['show'] .= "<span class=\"c_keyword\"> Please login using your Remote Access Credentials before sending commands (See console commands)</span><br />";
+        }
+        elseif($action == 'command')
+        {
+            $overide = $this->input->post('overide', TRUE);
+            if( empty($overide) )
+            {
+                // Grab our real info
+                $id = $this->input->post('realm', TRUE);
+                $realm = get_realm($id);
+                if($realm == FALSE)
+                {
+                    $output = array(
+                        'status' => 300,
+                        'command' => NULL,
+                        'show' => 'This realm is not installed!'
+                    );
+                    goto Output;
+                }
+                
+                // Load out Remote access info's
+                $ra = unserialize($realm['ra_info']);
+                $port = $ra['port'];
+                $ra = ucfirst( strtolower($ra['type']) );
+                $user = $this->input->post('user', TRUE);
+                $pass = $this->input->post('pass', TRUE);
+                
+                // Load the RA class
+                $ra = $this->load->library( $ra );
+                
+                // Try and log the user in
+                $result = $ra->connect($realm['address'], $port, $user, $pass);
+            }
+            else
+            {
+                $info = explode(' ', $this->input->post('overide', TRUE));
+                $user = $this->input->post('user', TRUE);
+                $pass = $this->input->post('pass', TRUE);
+                $host = $info[0];
+                $port = $info[1];
+                $ra = ucfirst( strtolower($info[2]) );
+                
+                // Load the RA class
+                $ra = $this->load->library( $ra );
+                
+                // Try and log the user in
+                $result = $ra->connect($host, $port, $user, $pass);
+            }
+            
+            // Go no further if Auth failed
+            if($result == FALSE)
+            {
+                // Prepare output
+                $response = $ra->get_response();
+                $output['status'] = 300;
+                $output['command'] = $this->model->command_string($command, $type);
+                $output['show'] = $response;
+                
+                // Disconnect
+                $ra->disconnect();
+                goto Output;
+            }
+            
+            // Default vars
+            $command = trim( $this->input->post('command', TRUE) );
+            $command = ltrim($command, '.');
+            $comm = explode(' ', $command);
+            $type = trim($comm[0]);
+            
+            // Process
+            switch($type)
+            {
+                case "login":
+                    // If we are here, then we are good!
+                    $output['status'] = 200;
+                    $output['show'] = "Logged In Successfully";
+                    $output['command'] = $this->model->command_string($command, $type);
+                    break;
+                    
+                default:
+                    $send = $ra->send($command);
+                    ($send != FALSE) ? $output['status'] = 200 : $output['status'] = 400;
+                    $output['show'] = $ra->get_response();
+                    $output['command'] = $this->model->command_string($command, $type);
+                    break;
+            }
+            
+            // Disconnect
+            $ra->disconnect();
+        }
+        else
+        {
+            $output = array(
+                'status' => 100,
+                'command' => null,
+                'show' => 'Invalid POST Action'
+            );
+        }
+
+        // Push the output in json format
+        Output: { echo json_encode($output); }
     }
  
 

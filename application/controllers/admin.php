@@ -503,12 +503,28 @@ class Admin extends Application\Core\Controller
     
     function console()
     {
+        $realms = get_installed_realms();
+        $selector = "<select id=\"realm\" name=\"realm\">\n";
+        if( !empty($realms) )
+        {
+            foreach($realms as $realm)
+            {
+                $selector .= "\t<option value='". $realm['id'] ."'>". $realm['name'] ."</option>\n";
+            }
+        }
+        else
+        {
+            $selector .= "\t<option value='0'>No Realms Installed</option>\n";
+        }
+        $selector .= "</select>\n";
+
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Console",
             'page_desc' => "This page allows you to use a PHP / Ajax Command line console in which you can send commands to your server, or realms.",
+            'realm_selector' => $selector
         );
-        $this->load->view('under_construction', $data);
+        $this->load->view('console', $data);
     }
     
     function update()

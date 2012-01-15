@@ -12,6 +12,70 @@ class Ajax_Model extends Application\Core\Model
     {
         parent::__construct();
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: command_string
+| ---------------------------------------------------------------
+|
+*/
+    function command_string($command, $type)
+    {
+        $command = trim($command);
+        switch($type)
+        {
+            case "login":
+                $command = explode(' ', $command);
+                $command[0] = "<span class=\"c_keyword\">".$command[0]."</span>";
+                $chars = str_split($command[2]);
+                $command[2] = '';
+                
+                // Loop through each character in the pass and replace with "*"
+                foreach($chars as $l)
+                {
+                    $command[2] .= '*';
+                }
+                $return = implode(' ', $command);
+                break;
+                
+            case "send":
+            case "character":  
+            case "server":   
+            case "ticket":
+            case "unban":
+            case "ban":
+            case "banlist":
+            case "guild":
+            case "list":
+            case "lookup":
+            case "reset":
+                $command = explode(' ', $command);
+                $command[0] = "<span class=\"c_keyword\">".$command[0]."</span>";
+                $command[1] = "<span class=\"c_keyword\">".$command[1]."</span>";
+                $return = implode(' ', $command);
+                break;
+                
+            case "account":
+            case "reload":
+                $command = explode(' ', $command);
+                $command[0] = "<span class=\"c_keyword\">".$command[0]."</span>";
+                
+                if(isset($command[1]))
+                {
+                    if($command[1] == 'set' && isset($command[2])) $command[2] = "<span class=\"c_keyword\">".$command[2]."</span>";
+                    $command[1] = "<span class=\"c_keyword\">".$command[1]."</span>";
+                }
+                $return = implode(' ', $command);
+                break;
+                
+            default:
+                $command = explode(' ', $command);
+                $command[0] = "<span class=\"c_keyword\">".$command[0]."</span>";
+                $return = implode(' ', $command);
+        }
+        
+        return $return;
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -232,14 +296,14 @@ class Ajax_Model extends Application\Core\Model
         }
         
         // == EXTRA characters online processing! == //
-        // if($sWhere == '')
-        // {
-            // $sWhere = ' WHERE `online`=1';
-        // }
-        // else
-        // {
-            // $sWhere = ' AND `online`=1';
-        // }
+        if($sWhere == '')
+        {
+            $sWhere = ' WHERE `online`=1';
+        }
+        else
+        {
+            $sWhere = ' AND `online`=1';
+        }
         
         
         /*

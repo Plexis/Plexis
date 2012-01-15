@@ -242,10 +242,6 @@
         $result = $DB->query( $query, array($id) )->fetch_row();
         
         // Make our return
-        if($result == FALSE)
-        {
-            return FALSE;
-        }
         return $result;
     }
     
