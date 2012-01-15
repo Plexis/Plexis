@@ -46,16 +46,14 @@ function init_window()
             {
                 // Update the console Window
                 var text = "No Realms Installed. You will need to install at least 1 realm before being able to send server commands";
-                $("#console").html( $("#console").html() + "<br /><span class='c_keyword'>" + text + "</span>" );
-                return;
+                $("#console").html( $("#console").html() + "<br /><span class='c_keyword'>" + text + "</span>" ).focus();
             }
             else
             {
                 // Allow commands ;)
                 var text = " <span class='c_keyword'>Selected realm: " + $("#realm option[value='" + realm + "']").text() + "</span>";
-                $("#console").html( $("#console").html() + "<br />" + text + "<br />");
+                $("#console").html( $("#console").html() + "<br />" + text + "<br />").focus();
                 $("#command").attr('disabled', false);
-                $("#command").focus();
             }
         },
         error: function(request, status, err) 
@@ -113,8 +111,6 @@ function execute(field, event)
             {
                 $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">disconnect</span><br />");
                 $("#console").html( $("#console").html() + " <span class=\"c_error\">You must establish a connection before disconnecting.</span><br />");
-                scroll();
-                return;
             }
             else
             {
@@ -123,53 +119,55 @@ function execute(field, event)
                 pass = '';
                 $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">" + command + "</span><br />");
                 $("#console").html( $("#console").html() + " Success. You have also been logged out.<br />");
-                scroll();
-                return;
             }
+            scroll();
+            return;
         }
         
         // Next connect
         else if(command.indexOf("connect") != -1)
         {
-            // Turn to array
+            // Remove the connect prefix
             args = command.split(' ');
+            args.shift()
+            command = args.join(' ');
             
             // Make sure we have all arguments
-            if( 1 in args && 2 in args && 3 in args )
+            if( 0 in args && 1 in args && 2 in args )
             {
-                args.shift()
-                command = args.join(' ');
+                // Reset login information and set connection variable
                 connection = command;
+                user = '';
+                pass = '';
+                
+                // Update the window
                 $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">connect</span> " + command + "<br />");
-                $("#console").html( $("#console").html() + " Success. Please Login...<br />");
-                scroll();
+                $("#console").html( $("#console").html() + " Please Login...<br />");
             }
             else
             {
-                args.shift()
-                command = args.join(' ');
                 $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">connect</span> " + command + "<br />");
                 $("#console").html( $("#console").html() + " <span class=\"c_error\">Syntax error: Improper connection string format.</span><br />");
-                scroll();
             }
+            scroll();
             return;
         }
         
         // Check our command for a login command
         else if(command.indexOf("login") != -1)
         {
+            // Remove the login prefix
             args = command.split(' ');
+            args.shift();
             
             // Make sure we have all arguments
-            if( 1 in args && 2 in args )
+            if( 0 in args && 1 in args )
             {
-                args.shift()
                 user = args[0];
                 pass = args[1];
             }
             else
             {
-                args.shift()
                 command = args.join(' ');
                 $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">login</span> " + command + "<br />");
                 $("#console").html( $("#console").html() + " <span class=\"c_error\">Syntax error: Improper login string format.</span><br />");
@@ -200,12 +198,17 @@ function execute(field, event)
         }
 
         // Make sure we are logged in ^^
-        else if(user == '' || pass == '')
+        else if((user == '' || pass == '') && connection == '')
         {
             $("#console").html( $("#console").html() + "<br /><span class=\"c_error\">You must login into the remote server first! \"login username password\"</span><br />");
             scroll();
             return;
         }
+        
+        // Add our command to the window
+        highlighted = highlight_command( command );
+        $("#console").html( $("#console").html() + "<br />" + command_prefix + " " + highlighted).focus();
+        scroll();
         
         // Send our command
         $.ajax({
@@ -219,28 +222,24 @@ function execute(field, event)
                 switch(result.status)
                 {
                     case 200:
-                        com = (result.command == null) ? "" : command_prefix + ' ' + result.command + "<br />";
-                        show = (result.show == null) ? "Success <br />" : result.show + "<br />";
+                        show = result.show + "<br />";
                         break;
                         
                     case 300:
-                        com = (result.command == null) ? "" : command_prefix + ' ' + result.command + "<br />";
                         show = result.show + "<br />";
                         break;
                         
                     case 400:
-                        com = (result.command == null) ? "" : command_prefix + ' ' + result.command + "<br />";
-                        show = (result.show == null) ? "<span class=\"c_error\">Invalid Command</span><br />" : "<span class=\"c_error\">" + result.show + "</span><br />";
+                        show = "<span class=\"c_error\">" + result.show + "</span><br />";
                         break;
                         
                     default:
-                        com = (result.command == null) ? "" : command_prefix + ' ' + result.command + "<br />";
                         show = '<span class="c_error">' + result.show + "</span><br />";
                         break;
                 }
                 
                 // Update the console Window
-                $("#console").html( $("#console").html() + "<br />" + com  + show ).focus();
+                $("#console").html( $("#console").html() + "<br />" + show ).focus();
                 
                 // Keep to the bottom of the frame
                 scroll();
@@ -260,6 +259,60 @@ function execute(field, event)
     {
         return true;
     }
+}
+
+function highlight_command( command )
+{
+    // Trim and conver command into an array
+    command = $.trim(command);
+    command = command.split(' ');
+    
+    switch(command[0])
+    {
+        case "login":
+            command[0] = "<span class=\"c_keyword\">" + command[0] + "</span>";
+            chars = command[2].split();
+            length = command[2].length;
+            command[2] = '';
+            
+            // Loop through each character in the pass and replace with "*"
+            for (var i=0; i < length; i++) 
+            {
+                command[2] += '*';
+            }  
+            string = command.join(' ');
+            break;
+            
+        case "send":
+        case "character":  
+        case "server":   
+        case "ticket":
+        case "unban":
+        case "ban":
+        case "banlist":
+        case "guild":
+        case "list":
+        case "lookup":
+        case "reset":
+        case "account":
+        case "reload":
+            command[0] = "<span class=\"c_keyword\">" + command[0] + "</span>";
+            if(1 in command)
+            {
+                if(command[1] == 'set' && 2 in command)
+                {
+                    command[2] = "<span class=\"c_keyword\">" + command[2] + "</span>";
+                }
+                command[1] = "<span class=\"c_keyword\">" + command[1] + "</span>";
+            }
+            string = command.join(' ');
+            break;
+            
+        default:
+            command[0] = "<span class=\"c_keyword\">" + command[0] + "</span>";
+            string = command.join(' ');
+    }
+    return string;
 }
 
 function scroll()

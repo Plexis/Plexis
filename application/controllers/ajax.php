@@ -1037,7 +1037,6 @@ class Ajax extends Application\Core\Controller
         
         // Load the input cleaner
         $this->input = load_class('Input');
-        $this->load->model('Ajax_Model', 'model');
         
         // Check Access
         $this->check_access('a');
@@ -1065,7 +1064,6 @@ class Ajax extends Application\Core\Controller
                 {
                     $output = array(
                         'status' => 300,
-                        'command' => NULL,
                         'show' => 'This realm is not installed!'
                     );
                     goto Output;
@@ -1074,15 +1072,10 @@ class Ajax extends Application\Core\Controller
                 // Load out Remote access info's
                 $ra = unserialize($realm['ra_info']);
                 $port = $ra['port'];
-                $ra = ucfirst( strtolower($ra['type']) );
+                $type = ucfirst( strtolower($ra['type']) );
                 $user = $this->input->post('user', TRUE);
                 $pass = $this->input->post('pass', TRUE);
-                
-                // Load the RA class
-                $ra = $this->load->library( $ra );
-                
-                // Try and log the user in
-                $result = $ra->connect($realm['address'], $port, $user, $pass);
+                $host = $realm['address'];
             }
             else
             {
@@ -1091,14 +1084,14 @@ class Ajax extends Application\Core\Controller
                 $pass = $this->input->post('pass', TRUE);
                 $host = $info[0];
                 $port = $info[1];
-                $ra = ucfirst( strtolower($info[2]) );
-                
-                // Load the RA class
-                $ra = $this->load->library( $ra );
-                
-                // Try and log the user in
-                $result = $ra->connect($host, $port, $user, $pass);
+                $type = ucfirst( strtolower($info[2]) );
             }
+            
+            // Load the RA class
+            $ra = $this->load->library( $type );
+            
+            // Try and log the user in
+            $result = $ra->connect($host, $port, $user, $pass);
             
             // Go no further if Auth failed
             if($result == FALSE)
@@ -1106,7 +1099,6 @@ class Ajax extends Application\Core\Controller
                 // Prepare output
                 $response = $ra->get_response();
                 $output['status'] = 300;
-                $output['command'] = $this->model->command_string($command, $type);
                 $output['show'] = $response;
                 
                 // Disconnect
@@ -1127,14 +1119,12 @@ class Ajax extends Application\Core\Controller
                     // If we are here, then we are good!
                     $output['status'] = 200;
                     $output['show'] = "Logged In Successfully";
-                    $output['command'] = $this->model->command_string($command, $type);
                     break;
                     
                 default:
                     $send = $ra->send($command);
                     ($send != FALSE) ? $output['status'] = 200 : $output['status'] = 400;
                     $output['show'] = $ra->get_response();
-                    $output['command'] = $this->model->command_string($command, $type);
                     break;
             }
             
@@ -1145,7 +1135,6 @@ class Ajax extends Application\Core\Controller
         {
             $output = array(
                 'status' => 100,
-                'command' => null,
                 'show' => 'Invalid POST Action'
             );
         }
