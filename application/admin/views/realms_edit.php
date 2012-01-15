@@ -136,6 +136,10 @@
                         <label for="ra_password">Password</label>
                         <input id="ra_password" name="ra_password" type="password" value="{realm.ra.password}"/>
                     </p>
+                    <p>
+                        <label for="ra_urn">Urn / Uri</label>
+                        <input id="ra_urn" name="ra_urn" type="text" value="" title="Soap Only. Custom server urn/uri. Leave blank if you are unsure."/>
+                    </p>
                 </div>
             </fieldset>
 
@@ -157,6 +161,7 @@
         $('select[name=driver]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
         $('select[name=ra_type]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
         $('input[name=ra_username]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
+        $('input[name=ra_urn]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
         
         // Form validation
         $("#edit-form").validate();

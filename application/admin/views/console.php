@@ -39,7 +39,7 @@
                     </tr>
                     <tr>
                         <td>Custom Connection:</td>
-                        <td>connect #host #port #ra_type(soap or telnet)</td>
+                        <td>connect #host #port #ra_type(soap or telnet) #urn (Soap only and Optional)</td>
                     </tr>
                     <tr>
                         <td>Disconnect (custom):</td>

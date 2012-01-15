@@ -45,7 +45,8 @@ function init_window()
             if(realm == 0)
             {
                 // Update the console Window
-                var text = "No Realms Installed. You will need to install at least 1 realm before being able to send server commands";
+                var text = "No Realms Installed. You will need to install at least 1 realm before being able to send server commands"
+                    + "<br />You may also create a custom connection by going \"connect #host #port #type (Telnet or Soap)\" <br />";
                 $("#console").html( $("#console").html() + "<br /><span class='c_keyword'>" + text + "</span>" ).focus();
             }
             else
@@ -53,8 +54,8 @@ function init_window()
                 // Allow commands ;)
                 var text = " <span class='c_keyword'>Selected realm: " + $("#realm option[value='" + realm + "']").text() + "</span>";
                 $("#console").html( $("#console").html() + "<br />" + text + "<br />").focus();
-                $("#command").attr('disabled', false);
             }
+            $("#command").attr('disabled', false);
         },
         error: function(request, status, err) 
         {
@@ -91,7 +92,7 @@ function execute(field, event)
         realm = $('#realm').val();
         
         // return if there is no realms installed and no custom connect
-        if( realm == 0 && command.indexOf("connect") == -1 )
+        if( realm == 0 && command.indexOf("connect") == -1 && connection == '')
         {
             return;
         }

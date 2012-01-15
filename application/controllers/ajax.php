@@ -591,7 +591,8 @@ class Ajax extends Application\Core\Controller
                 'type'         => $_POST['ra_type'],
                 'port'         => $_POST['ra_port'],
                 'username'     => $_POST['ra_username'],
-                'password'     => $_POST['ra_password']
+                'password'     => $_POST['ra_password'],
+                'urn'          => $_POST['ra_urn']
             );
 
             
@@ -1076,6 +1077,7 @@ class Ajax extends Application\Core\Controller
                 $user = $this->input->post('user', TRUE);
                 $pass = $this->input->post('pass', TRUE);
                 $host = $realm['address'];
+                $uri = ( !empty($ra['urn']) ) ? $ra['urn'] : NULL;
             }
             else
             {
@@ -1085,13 +1087,14 @@ class Ajax extends Application\Core\Controller
                 $host = $info[0];
                 $port = $info[1];
                 $type = ucfirst( strtolower($info[2]) );
+                (isset($info[3]) && strlen( trim($info[3]) ) > 1) ? $uri = trim($info[3]) : $uri = NULL;
             }
             
             // Load the RA class
             $ra = $this->load->library( $type );
             
             // Try and log the user in
-            $result = $ra->connect($host, $port, $user, $pass);
+            $result = $ra->connect($host, $port, $user, $pass, $uri);
             
             // Go no further if Auth failed
             if($result == FALSE)
