@@ -384,33 +384,6 @@ class Admin extends Application\Core\Controller
                 break;
         }
     }
- 
-/*
-| ---------------------------------------------------------------
-| UNFINISHED PAGES
-| ---------------------------------------------------------------
-|
-*/
-    
-    function characters()
-    {
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Character Editor",
-            'page_desc' => "This page allows you to edit character information, and preform actions such as transfering to another realm.",
-        );
-        $this->load->view('under_construction', $data);
-    }
-    
-    function modules()
-    {
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Module Managment",
-            'page_desc' => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
-        );
-        $this->load->view('module_index', $data);
-    }
     
 /*
 | ---------------------------------------------------------------
@@ -449,6 +422,65 @@ class Admin extends Application\Core\Controller
             // Load the view
             $this->load->view('vote_edit', $data); 
         }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Console
+| ---------------------------------------------------------------
+|
+*/    
+    function console()
+    {
+        $realms = get_installed_realms();
+        $selector = "<select id=\"realm\" name=\"realm\">\n";
+        if( !empty($realms) )
+        {
+            foreach($realms as $realm)
+            {
+                $selector .= "\t<option value='". $realm['id'] ."'>". $realm['name'] ."</option>\n";
+            }
+        }
+        else
+        {
+            $selector .= "\t<option value='0'>No Realms Installed</option>\n";
+        }
+        $selector .= "</select>\n";
+
+        // Build our page title / desc, then load the view
+        $data = array(
+            'page_title' => "Console",
+            'page_desc' => "This page allows you to use a PHP / Ajax Command line console in which you can send commands to your server, or realms.",
+            'realm_selector' => $selector
+        );
+        $this->load->view('console', $data);
+    }
+ 
+/*
+| ---------------------------------------------------------------
+| UNFINISHED PAGES
+| ---------------------------------------------------------------
+|
+*/
+    
+    function characters()
+    {
+        // Build our page title / desc, then load the view
+        $data = array(
+            'page_title' => "Character Editor",
+            'page_desc' => "This page allows you to edit character information, and preform actions such as transfering to another realm.",
+        );
+        $this->load->view('under_construction', $data);
+    }
+    
+    function modules()
+    {
+        // Build our page title / desc, then load the view
+        $data = array(
+            'page_title' => "Module Managment",
+            'page_desc' => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
+        );
+        $this->load->view('module_index', $data);
     }
     
     function shop()
@@ -499,32 +531,6 @@ class Admin extends Application\Core\Controller
             'page_desc' => "This page allows you to manage your templates, which includes uploading, installation, and un-installation.",
         );
         $this->load->view('under_construction', $data);
-    }
-    
-    function console()
-    {
-        $realms = get_installed_realms();
-        $selector = "<select id=\"realm\" name=\"realm\">\n";
-        if( !empty($realms) )
-        {
-            foreach($realms as $realm)
-            {
-                $selector .= "\t<option value='". $realm['id'] ."'>". $realm['name'] ."</option>\n";
-            }
-        }
-        else
-        {
-            $selector .= "\t<option value='0'>No Realms Installed</option>\n";
-        }
-        $selector .= "</select>\n";
-
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Console",
-            'page_desc' => "This page allows you to use a PHP / Ajax Command line console in which you can send commands to your server, or realms.",
-            'realm_selector' => $selector
-        );
-        $this->load->view('console', $data);
     }
     
     function update()

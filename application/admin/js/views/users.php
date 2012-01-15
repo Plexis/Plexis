@@ -2,12 +2,12 @@
     $().ready(function() {
     
         // Main Ajax posting function for this page.
-        function post_account_action(task){
-            
+        function post_account_action(task)
+        {
             //use ajax to run the check
             $.post( url + "/ajax/account/{user.username}", { action : task },
-                function(response){
-                
+                function(response)
+                {
                     // Parse the JSON response
                     var result = jQuery.parseJSON(response);
                     
@@ -79,10 +79,12 @@
         }
 
         // Callback function for the Ban ajaxForm 
-        function ban_result(response, statusText, xhr, $form)  { 
+        function ban_result(response, statusText, xhr, $form)  
+        { 
             // Parse the JSON response
             var result = jQuery.parseJSON(response);
-            if (result.success == true){
+            if (result.success == true)
+            {
                 // Show that there are updates
                 $('#account-ban-button').html('UnBan Account');
                 $('#account-ban-button').attr('name', 'unban');
@@ -90,21 +92,27 @@
                 // Update our status
                 post_account_action('account-status');
                 $('#js_ban_message').attr('class', 'alert success').html( result.message );
-            }else{
+            }
+            else
+            {
                 $('#js_ban_message').attr('class', 'alert error').html( result.message );
             }
         }
         
         // Callback function for the update profile ajaxForm 
-        function update_account_result(response, statusText, xhr, $form)  { 
+        function update_account_result(response, statusText, xhr, $form)  
+        { 
             // Parse the JSON response
             var result = jQuery.parseJSON(response);
-            if (result.success == true){
+            if (result.success == true)
+            {
                 // Account updated successfully
                 $('#js_profile_message').attr('class', 'alert success').html(result.message);
                 $('#password1').attr('value', '');
                 $('#password2').attr('value', '');
-            }else{
+            }
+            else
+            {
                 // General errors
                 $('#js_profile_message').attr('class', 'alert ' + result.type).html(result.message);
             }
@@ -114,11 +122,14 @@
         // Ban button
 		$("#account-ban-button").click(function() {
             var current = $('#account-ban-button').attr('name');
-            if (current == 'ban'){
+            if (current == 'ban')
+            {
                 $('#ban-form').dialog({ modal: true, height: 460, width: 600 });
                 $('#ban').attr('style', '');
                 $('#js_ban_message').attr('style', 'display: none');
-            }else{
+            }
+            else
+            {
                 // Start our loading message
                 $('#js_message').attr('class', 'alert loading no-margin top').html('Submitting action...').slideDown(400);
                 post_account_action('unban-account');
@@ -131,16 +142,20 @@
             
             // Start our loading message
             $('#js_message').attr('class', 'alert loading no-margin top').html('Submitting action...').slideDown(400);
-            if (current == 'lock'){
+            if (current == 'lock')
+            {
                 post_account_action('lock-account');
-            }else if (current == 'unlock'){
+            }
+            else if (current == 'unlock')
+            {
                 post_account_action('unlock-account');
             }
 		});
         
         // Delete button
 		$("#account-delete-button").click(function() {
-            if ( confirm('Are you sure you want to delete account: {user.username} (#{user.id})?') ){
+            if ( confirm('Are you sure you want to delete account: {user.username} (#{user.id})?') )
+            {
                 post_account_action('delete-account');
             }
 		});
@@ -165,7 +180,8 @@
         
         // bind the Ban form using 'ajaxForm' 
         $('#ban').ajaxForm({
-            beforeSubmit: function (arr, data, options){
+            beforeSubmit: function (arr, data, options)
+            {
                 $('#ban').attr('style', 'display: none');
                 $('#js_ban_message').attr('class', 'alert loading no-margin top').html('Submitting Form...').slideDown(300);
             },
@@ -181,11 +197,14 @@
                 var is_super = '{session.user.is_super_admin}';
                 
                 // Do some simple validation checks
-                if(form.group_id.value >= level && is_super != 1) {
+                if(form.group_id.value >= level && is_super != 1) 
+                {
                     $('#js_profile_message').attr('class', 'alert error').html('You cannot set this users account level higher / equivalent to yourself.');
                     $('#js_profile_message').slideDown(600).delay(4000).slideUp(600);
                     return false;
-                }else{
+                }
+                else
+                {
                     $('#js_profile_message').attr('class', 'alert loading').html('Submitting Form').slideDown(300);
                     return true;
                 }
@@ -196,6 +215,5 @@
         
         // Date picker for the ban form
 		$( "#unbandate" ).datepicker();
-
     });
 </script>

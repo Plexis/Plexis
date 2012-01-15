@@ -45,6 +45,10 @@
                         <td>Disconnect (custom):</td>
                         <td>disconnect</td>
                     </tr>
+                    <tr>
+                        <td>Scroll commands:</td>
+                        <td>Up and Down arrow keys</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -7,7 +7,7 @@
  * 400: Command problem or invalid command
  */
 // Variables
-var command_prefix = '<span class="c_prefix">$</span>';
+var command_prefix = '<span class="c_prefix">$</span> ';
 var commands_array = Array();
 var command_position = 0;
 var post_url = url + "/ajax/console";
@@ -15,18 +15,20 @@ var user = '';
 var pass = '';
 var connection = '';
 
+// Send our Init. command on page load
 $(document).ready(function() {
-    // Send our Init. command
-    init_window()
+    init_window();
 });
 
+// Process all changes to the realm selector
 $('#realm').change(function() {
-    // select realm
+    // get our selected realm id
     realm = $('#realm').val();
     text = " <span class='c_keyword'>Setting realm: " + $("#realm option[value='" + realm + "']").text() + "</span>";
     $("#console").html( $("#console").html() + "<br />" + text + "<br />");
 });
 
+// Clears the console and loads the default welcome message
 function init_window()
 {
     // Send our Init. command
@@ -47,12 +49,12 @@ function init_window()
                 // Update the console Window
                 var text = "No Realms Installed. You will need to install at least 1 realm before being able to send server commands"
                     + "<br />You may also create a custom connection by going \"connect #host #port #type (Telnet or Soap)\" <br />";
-                $("#console").html( $("#console").html() + "<br /><span class='c_keyword'>" + text + "</span>" ).focus();
+                $("#console").html( $("#console").html() + "<br /><span class=\"c_keyword\">" + text + "</span>" ).focus();
             }
             else
             {
                 // Allow commands ;)
-                var text = " <span class='c_keyword'>Selected realm: " + $("#realm option[value='" + realm + "']").text() + "</span>";
+                var text = " <span class=\"c_keyword\">Selected realm: " + $("#realm option[value='" + realm + "']").text() + "</span>";
                 $("#console").html( $("#console").html() + "<br />" + text + "<br />").focus();
             }
             $("#command").attr('disabled', false);
@@ -65,27 +67,30 @@ function init_window()
     });
 }
 
+// Execute the command on a key press event
 function execute(field, event) 
 {
     // Get the keycode
-    var theCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+    var key_code = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
     
-    // Arrow Up
-    if(theCode == 38)
+    // Arrow Up Key
+    if(key_code == 38)
     {
+        // Go up one command, and update the command input value
         if(command_position > 0) command_position--;
         $("#command").val(commands_array[command_position]);
     }
     
-    // Arrow Down
-    else if(theCode == 40)
+    // Arrow Down Key
+    else if(key_code == 40)
     {
+        // Go down one command, and update the command input value
         if(command_position < (commands_array.length-1)) command_position++;
         $("#command").val(commands_array[command_position]);
     }
     
-    // Enter
-    else if (theCode == 13)
+    // User presses Enter
+    if (key_code == 13)
     {
         // Get the inputed command and Realm
         var command = $("#command").val();
@@ -97,10 +102,10 @@ function execute(field, event)
             return;
         }
 
-        // Reset the command value
+        // Reset the command input value
         $("#command").val('');
 
-        // Add command to stack and update position
+        // Add command to the commands stack and add the new position of this command
         commands_array.push( command );
         command_position = (commands_array.length);
         
@@ -110,15 +115,16 @@ function execute(field, event)
             // Show error if there is no connection!
             if(connection == '')
             {
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">disconnect</span><br />");
+                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">disconnect</span><br />");
                 $("#console").html( $("#console").html() + " <span class=\"c_error\">You must establish a connection before disconnecting.</span><br />");
             }
             else
             {
+                // Reset the login and connection variables
                 connection = '';
                 user = '';
                 pass = '';
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">" + command + "</span><br />");
+                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">" + command + "</span><br />");
                 $("#console").html( $("#console").html() + " Success. You have also been logged out.<br />");
             }
             scroll();
@@ -142,12 +148,12 @@ function execute(field, event)
                 pass = '';
                 
                 // Update the window
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">connect</span> " + command + "<br />");
+                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">connect</span> " + command + "<br />");
                 $("#console").html( $("#console").html() + " Please Login...<br />");
             }
             else
             {
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">connect</span> " + command + "<br />");
+                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">connect</span> " + command + "<br />");
                 $("#console").html( $("#console").html() + " <span class=\"c_error\">Syntax error: Improper connection string format.</span><br />");
             }
             scroll();
@@ -170,7 +176,7 @@ function execute(field, event)
             else
             {
                 command = args.join(' ');
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + " <span class=\"c_keyword\">login</span> " + command + "<br />");
+                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">login</span> " + command + "<br />");
                 $("#console").html( $("#console").html() + " <span class=\"c_error\">Syntax error: Improper login string format.</span><br />");
                 scroll();
                 return;
@@ -191,10 +197,6 @@ function execute(field, event)
         else if(command == "clear")
         {
             init_window();
-            
-            // Reset our commands
-            commands_array = Array();
-            command_position = 0;
             return;
         }
 
@@ -208,7 +210,7 @@ function execute(field, event)
         
         // Add our command to the window
         highlighted = highlight_command( command );
-        $("#console").html( $("#console").html() + "<br />" + command_prefix + " " + highlighted).focus();
+        $("#console").html( $("#console").html() + "<br />" + command_prefix +  highlighted).focus();
         scroll();
         
         // Send our command
@@ -262,6 +264,7 @@ function execute(field, event)
     }
 }
 
+// Nifty method of highlighting key command words
 function highlight_command( command )
 {
     // Trim and conver command into an array
@@ -271,6 +274,7 @@ function highlight_command( command )
     switch(command[0])
     {
         case "login":
+            // Login is special, we have to hide the password
             command[0] = "<span class=\"c_keyword\">" + command[0] + "</span>";
             chars = command[2].split();
             length = command[2].length;
@@ -297,6 +301,7 @@ function highlight_command( command )
         case "reset":
         case "account":
         case "reload":
+            // Process commands that have 2 - 3 parts
             command[0] = "<span class=\"c_keyword\">" + command[0] + "</span>";
             if(1 in command)
             {
@@ -310,15 +315,16 @@ function highlight_command( command )
             break;
             
         default:
+            // Just 1 part commands
             command[0] = "<span class=\"c_keyword\">" + command[0] + "</span>";
             string = command.join(' ');
     }
     return string;
 }
 
+// Used to keep the command window at the bottom
 function scroll()
 {
-    // Keep to the bottom of the frame
     div = document.getElementById('console');
     div.scrollTop = div.scrollHeight;
 }

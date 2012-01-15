@@ -32,10 +32,13 @@ class Ajax extends Application\Core\Controller
     protected function check_access($lvl = 'a')
     {
         // Make sure the user has admin access'
-        if($lvl == 'a' && ($this->user['is_admin'] != 1 || $this->user['is_super_admin'] != 1))
+        if($lvl == 'a' && $this->user['is_admin'] != 1)
         {
-            echo "403";
-            die();
+            if($this->user['is_super_admin'] != 1)
+            {
+                echo "403";
+                die();
+            }
         }
         elseif($lvl == 'u' && !$this->user['is_loggedin'])
         {
@@ -116,12 +119,16 @@ class Ajax extends Application\Core\Controller
             
             // Get users information. We can use GET because the queries second param will be cleaned
             // by the PDO class when bound to the "?".
-            $query = "SELECT * FROM `pcms_accounts` WHERE `username` LIKE ?";
+            // Build our query
+            $query = "SELECT * FROM `pcms_accounts` 
+                INNER JOIN `pcms_account_groups` ON 
+                pcms_accounts.group_id = pcms_account_groups.group_id 
+                WHERE username = '".$username."'";
             $user = $this->DB->query( $query, array($username) )->fetch_row();
             $id = $user['id'];
    
             // Make sure the current user has privileges to execute an ajax
-            if( (!$this->user['is_super_admin'] && $user['is_admin']) && $_POST['action'] !== 'account-status' )
+            if( ($user['is_admin'] && !$this->user['is_super_admin']) && $_POST['action'] !== 'account-status' )
             {
                 $this->output(false, 'access_denied_privlages');
                 return;
@@ -193,7 +200,8 @@ class Ajax extends Application\Core\Controller
                     break;
                     
                 case "update-account":
-                    $this->update_account($id, $user);
+                    $this->load->model('Ajax_Model', 'model');
+                    $this->model->admin_update_account($id, $user);
                     break;  
             }
             return;
@@ -1058,7 +1066,7 @@ class Ajax extends Application\Core\Controller
             $overide = $this->input->post('overide', TRUE);
             if( empty($overide) )
             {
-                // Grab our real info
+                // Grab our realm info
                 $id = $this->input->post('realm', TRUE);
                 $realm = get_realm($id);
                 if($realm == FALSE)
@@ -1190,7 +1198,7 @@ class Ajax extends Application\Core\Controller
 | This method is used for via Ajax to echo out the result of an
 |   action
 */    
-    private function output($success, $message, $type = 'error')
+    public function output($success, $message, $type = 'error')
     {
         // Load language
         $lang = load_language_file( 'messages' );
@@ -1215,100 +1223,6 @@ class Ajax extends Application\Core\Controller
         }
         
         echo json_encode($return);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: update_account()
-| ---------------------------------------------------------------
-|
-| Bans a user account
-|
-*/    
-    private function update_account($id, $user)
-    {
-        // Load our validation and Input library's
-        $input = load_class('Input', 'Core');
-		
-		//Set up our variables.
-        $update['email'] = $input->post('email', TRUE);
-        $update['group_id'] = $input->post('group_id', TRUE);
-		$password = array( $input->post('password1', TRUE), $input->post('password2', TRUE) );
-		$expansion = $input->post('expansion', TRUE);
-		$game_account = $this->realm->fetch_account($id);
- 
-        // Load our DB connections
-        $this->DB = $this->load->database('DB');
-        $this->RDB = $this->load->database( 'RDB' );
-		
-		$changed = FALSE; //Have there been any changes to the data?
-		$game_changed = FALSE; //Whether or not the game account has some info edited.
-		
-		foreach( $update as $key => $value )
-		{
-			if( $user[$key] != $value )
-				$changed = true;
-			
-			if( !empty($password[0]) && !empty($password[1]) && !$game_changed )
-				$game_changed = true;
-				
-			if( $expansion != $game_account['expansion'] && !$game_changed )
-				$game_changed = true;
-		}
-        
-		if( $game_changed || $changed )
-		{
-			if( $changed )
-			{
-				$result = $this->DB->update("pcms_accounts", $update, "`id` = '$id'");
-				
-				if( $result === FALSE )
-				{
-					$this->output(false, 'account_update_error');
-					return;
-				}
-			}
-			
-			if( $game_changed )
-			{
-				if( !empty($password[0]) && !empty($password[1]) )
-				{
-					if( $password[0] == $password[1] )
-					{
-						$result = $this->realm->change_password($id, $password[0]);
-						
-						if( !$result )
-						{
-							$this->output(false, 'account_update_error');
-							return;
-						}
-					}
-					else
-					{
-						$this->output(false, 'account_update_error');
-						return;
-					}
-				}
-				
-				if( $expansion != $game_account['expansion'] )
-				{
-					$result = $this->realm->update_expansion($expansion, $id);
-					
-					if( !$result )
-					{
-						$this->output(false, 'account_update_error');
-						return;
-					}
-				}
-			}
-			
-			$this->output(true, 'account_update_success');
-			return;
-		}
-        
-        // No updates
-        $this->output(false, 'account_update_nochanges', 'warning');
-        return;
     }
 }
 ?>

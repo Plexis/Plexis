@@ -12,6 +12,99 @@ class Ajax_Model extends Application\Core\Model
     {
         parent::__construct();
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: update_account()
+| ---------------------------------------------------------------
+|
+| Bans a user account
+|
+*/    
+    public function admin_update_account($id, $user)
+    {
+        // Load our Input library and Ajax controller
+        $input = load_class('Input');
+        $Ajax = get_instance();
+        
+        // Init a session var
+        $this->user = $Ajax->Session->get('user');
+        if($this->user['is_admin'] != 1 || $this->user['is_super_admin'] != 1)
+        {
+            return FALSE;
+        }
+		
+		//Set up our variables.
+        $data = array();
+        $changes = FALSE; 
+        
+        // Grab all POST fields
+        $update['email'] = $input->post('email', TRUE);
+        $update['group_id'] = $input->post('group_id', TRUE);
+        $expansion = $input->post('expansion', TRUE);
+		$password = array( $input->post('password1', TRUE), $input->post('password2', TRUE) );
+        
+        // Grab the user account
+        $account = $this->realm->fetch_account($id);
+
+        // Update password if there was a change
+        if(!empty($password[0]) && !empty($password[1]))
+        {
+            if( $password[0] == $password[1] )
+            {
+                $changes = TRUE;
+                $result = $this->realm->change_password($id, $password[0]);
+                if( $result === FALSE )
+                {
+                    $Ajax->output(false, 'account_update_error');
+                    return;
+                }
+            }
+            else
+            {
+                $Ajax->output(false, 'account_update_error');
+                return;
+            }
+        }	
+        
+        // Update expansion
+        if( $expansion != $account['expansion'])
+        {
+            $changes = TRUE;
+            $result = $this->realm->update_expansion($expansion, $id);
+            if( $result === FALSE )
+            {
+                $Ajax->output(false, 'account_update_error');
+                return;
+            }
+        }
+        
+        // Check for pcms_accounts changed data
+        foreach($update as $key => $value)
+        {
+            if($user[$key] != $value)
+            {
+                $changes = TRUE;
+                $data[$key] = $value;
+            }
+        }
+        
+        // If we have updates for the plexis DB, make them
+        if(!empty($data))
+        {
+            $changes = TRUE;
+            $result = $this->DB->update('pcms_accounts', $data, '`id`='.$id);
+            if( $result === FALSE )
+            {
+                $Ajax->output(false, 'account_update_error');
+                return;
+            }
+        }
+        
+        // No updates
+        ($changes == TRUE) ? $Ajax->output(true, 'account_update_success') : $Ajax->output(false, 'account_update_nochanges', 'warning');
+        return;
+    }
 
 /*
 | ---------------------------------------------------------------
