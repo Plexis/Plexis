@@ -1,12 +1,12 @@
 <div class="grid_12">
     <div class="block-border">
         <div class="block-header">
-            <h1>Installing realm "{realm.name}"</h1>
+            <h1>Installing realm</h1>
         </div>
         
         <form id="install-form" class="block-content form" action="{SITE_URL}/ajax/realms" method="post">
-            <input type="hidden" name="action" value="install"/>
-            <input type="hidden" name="id" value="{realm.id}"/>
+            <input type="hidden" name="action" value="manual-install"/>
+            <input type="hidden" name="id" value="0"/>
             
             <!-- Hidden Message -->
             <div id="js_message" style="display: none;"></div>
@@ -17,15 +17,15 @@
                 <div class="_50">
                     <p>
                         <label for="name">Realm Name</label>
-                        <input id="name" name="name" class="required" type="text" readonly="readonly" value="{realm.name}"/>
+                        <input id="name" name="name" class="required" type="text" value=""/>
                     </p>
                     <p>
                         <label for="address">Realm IP Address</label>
-                        <input id="address" name="address" class="required" type="text" value="{realm.address}"/>
+                        <input id="address" name="address" class="required" type="text" value=""/>
                     </p>
                     <p>
                         <label for="port">Realm Port #</label>
-                        <input id="port" name="port" class="required" type="text" value="{realm.port}"/>
+                        <input id="port" name="port" class="required" type="text" value=""/>
                     </p>
                     <p>
                         <label for="type">Realm Type</label>
@@ -61,7 +61,7 @@
                     </p>
                     <p>
                         <label for="c_address">Host / IP Address</label>
-                        <input id="c_address" name="c_address" class="required" type="text" value="{realm.address}"/>
+                        <input id="c_address" name="c_address" class="required" type="text" value=""/>
                     </p>
                     <p>
                         <label for="c_port">Port</label>
@@ -95,7 +95,7 @@
                     </p>
                     <p>
                         <label for="w_address">Host / IP Address</label>
-                        <input id="w_address" name="w_address" class="required" type="text" value="{realm.address}"/>
+                        <input id="w_address" name="w_address" class="required" type="text" value=""/>
                     </p>
                     <p>
                         <label for="w_port">Port</label>

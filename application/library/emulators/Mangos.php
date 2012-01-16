@@ -41,7 +41,7 @@ class Mangos
     public function realmlist()
     {
         // Grab Realms
-        $query = "SELECT * FROM `realmlist`";
+        $query = "SELECT * FROM `realmlist` ORDER BY `id`";
         return $this->DB->query( $query )->fetch_array();
     }
     

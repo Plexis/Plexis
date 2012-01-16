@@ -758,9 +758,9 @@ class Template
         if($this->xml == NULL) $this->load_template_xml();
         
         // Load template helpers if required
-        if( $this->xml->config->helpers )
+        if( $this->xml->helpers )
         {
-            foreach($this->xml->config->helpers->children() as $helper)
+            foreach($this->xml->helpers->children() as $helper)
             {
                 $this->load->helper($helper);
             }

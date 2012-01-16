@@ -460,6 +460,11 @@ class Ajax extends Application\Core\Controller
                 $action = "install";
                 break;
                 
+            case "manual-install":
+                $this->check_access('a');
+                $action = "manual-install";
+                break;
+                
             case "edit":
                 $this->check_access('a');
                 $action = "edit";
@@ -525,14 +530,16 @@ class Ajax extends Application\Core\Controller
             }
 
             // We need to add a working "manage", and "Make Default Link" link
+            $aa = array();
             $key = 0;
             $default = config('default_realm_id');
             
-            // Loop, and add options
+            // Loop, and add options for each realm
             foreach($output['aaData'] as $realm)
             {
                 // Easier to write
                 $id = $realm[0];
+                $aa[] = $id;
                 
                 // Create out action links for this realm
                 if(in_array($id, $irealms))
@@ -546,7 +553,7 @@ class Ajax extends Application\Core\Controller
                     }
                     else
                     {
-                         $output['aaData'][$key][4] = "<font color='green'>Installed</font>";
+                        $output['aaData'][$key][4] = "<font color='green'>Installed</font>";
                         $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
                             - <a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a>
                             - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
@@ -559,13 +566,44 @@ class Ajax extends Application\Core\Controller
                 }
                 ++$key;
             }
+            
+            // For cores that dont have a realmist in the DB, we need to manually add these
+            foreach($installed as $realm)
+            {
+                $id = $realm['id'];
+                if(!in_array($id, $aa))
+                {
+                    ++$output["iTotalRecords"];
+                    ++$output["iTotalDisplayRecords"];
+                    $data[0] = $id;
+                    $data[1] = $realm['name'];
+                    $data[2] = $realm['address'];
+                    $data[3] = $realm['port'];
+                    
+                    // We CANNOT uninstall the default realm!
+                    if($id == $default)
+                    {
+                        $data[4] = "<font color='green'>Installed</font> - Default Realm";
+                        $data[5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
+                            - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                    }
+                    else
+                    {
+                        $data[4] = "<font color='green'>Installed</font>";
+                        $data[5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
+                            - <a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a>
+                            - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                    }
+                    $output['aaData'][] = $data;
+                }
+            }
 
             // Push the output in json format
             echo json_encode($output);
         }
         
         // Installing / Editing
-        elseif($action == 'install' || $action == 'edit')
+        elseif($action == 'install' || $action == 'edit' || $action == 'manual-install')
         {
             // Load our config class
             $Config = load_class('Config');
@@ -637,6 +675,30 @@ class Ajax extends Application\Core\Controller
             
             // Re-enable errors
             $debug->error_reporting(TRUE);
+
+            // If manually installing, lets get our unique id
+            if($action == 'manual-install')
+            {
+                $result = $this->realm->realmlist();
+                $installed = get_installed_realms();
+                if( !empty($result) )
+                {
+                    $highest = end($result);
+                    if( empty($installed) )
+                    {
+                        $id = $highest['id'] + 1;
+                    }
+                    else
+                    {
+                        $high2 = end($installed);
+                        ($highest['id'] > $high2['id']) ? $id = $highest['id'] + 1 : $id = $high2['id'] + 1;
+                    }
+                }
+                else
+                {
+                    ( !empty($installed) ) ? $id = $high2['id'] + 1 : $id = 1;
+                }
+            }
             
             // Install our new stuffs
             $data = array(
@@ -652,7 +714,7 @@ class Ajax extends Application\Core\Controller
             );
             
             // Process our return message
-            if($action == 'install')
+            if($action == 'install' || $action == 'manual-install')
             {
                 $result = $this->DB->insert('pcms_realms', $data);
                 if($result == FALSE)

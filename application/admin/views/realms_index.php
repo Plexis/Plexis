@@ -1,4 +1,8 @@
 <div class="grid_12">
+    <!-- Button -->
+    <div>
+        <a href="{SITE_URL}/admin/realms/install" class="button">Add Realm</a>
+    </div>
 
     <!-- RealmList Table -->
     <div class="block-border">

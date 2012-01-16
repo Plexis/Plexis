@@ -316,14 +316,16 @@ class Admin extends Application\Core\Controller
             
             // EDITING
             case "edit":
+                // Make sure we have an id!
+                if($id === NULL || !is_numeric($id)) redirect('admin/realms');
+
                 // Load installed drivers
                 $drivers = get_wowlib_drivers();
                 if($drivers == FALSE) $drivers = array();
                 
                 // Load our installed realm info
                 $realm = $this->DB->query("SELECT * FROM `pcms_realms` WHERE `id`=?", array($id))->fetch_row();
-                
-                
+
                 // Redirect if this realm doesnt exist / isnt installed
                 if($realm == FALSE) redirect('admin/realms');
                 
@@ -348,35 +350,43 @@ class Admin extends Application\Core\Controller
             
             // INSTALL
             case "install":
-                if($id === NULL || !is_numeric($id)) redirect('admin/realms');
-                
-                // Make sure the realm isnt already installed
-                $installed = get_installed_realms();
-                $irealms = array();
-                
-                // Build an array of installed IDs
-                foreach($installed as $realm)
-                {
-                    $irealms[] = $realm['id'];
-                }
-                if(in_array($id, $irealms)) redirect('admin/realms/edit/'.$id);
-                
-                // Get realm information
-                $realm = $this->realm->fetch_realm($id);
-                
                 // Load installed drivers
                 $drivers = get_wowlib_drivers();
                 if($drivers == FALSE) $drivers = array();
                 
-                // Build our page title / desc, then load the view
+                // Build our page title / desc
                 $data = array(
                     'page_title' => "Realm Installation",
                     'page_desc' => "On this page you will be able to install a new realm for use on the site. Installing a realm allows you as well as users to 
                         see statistics about the realm, view online characters, and user character tools such as Character Rename.",
-                    'realm' => $realm,
                     'drivers' => $drivers
                 );
-                $this->load->view('realms_install', $data);
+                
+                // check for an existing install
+                if($id != NULL)
+                {
+                    // Make sure the realm isnt already installed
+                    $installed = get_installed_realms();
+                    $irealms = array();
+                    
+                    // Build an array of installed IDs
+                    foreach($installed as $realm)
+                    {
+                        $irealms[] = $realm['id'];
+                    }
+                    if(in_array($id, $irealms)) redirect('admin/realms/edit/'.$id);
+                    
+                    // Get realm information
+                    $realm = $this->realm->fetch_realm($id);
+                    
+                    // Load the view
+                    $data = $data + array('realm' => $realm);
+                    $this->load->view('realms_install', $data);
+                }
+                else
+                {
+                    $this->load->view('realms_install_manual', $data);
+                }
                 break;
                 
             default:
@@ -430,7 +440,7 @@ class Admin extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */    
-    function console()
+    public function console()
     {
         $realms = get_installed_realms();
         $selector = "<select id=\"realm\" name=\"realm\">\n";
