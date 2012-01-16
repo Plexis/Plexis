@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
+
+    <!-- START REQUIRED -->
     <info>
         <name>Default</name>                <!-- The Template Name -->
         <author>Plexis</author>             <!-- Template author / creater -->
@@ -10,33 +12,57 @@
     </info>
     
     <config>
-        <!-- 
-        IF you template requires helpers, format like so...
-        <helpers>
-            <file>Form.php</file>
-            <file>Time.php</file>
-        </helpers>
-        -->
-        <helpers></helpers>
+        <!-- Use controller view paths? ( <template>/views/ {controller} / viewfile ) ? true : false -->
+        <controller_view_paths>true</controller_view_paths>
         
-        <!-- Head tags... 
-            This is a list of css / JS files to be included in the <head> tag when built
-            You can use:
-                <css> {relative_path} </css> :: Include css file.
-                <js> {relative_path} </js> :: Include Javascript file.
-                <favicon type="image/$image_type"> {relative path} </favicon> :: The image type is determined automatically if not given (slow)
-                <meta {key}="{value}"> {content} </meta> :: Here you can set meta data, you can add as many "key=value"'s as you need
-                    You can overwrite default meta keys.. Ex: <meta http-equiv="Expires">5</meta> will overwrite the default -1 value with 5.
-            You may add comments by going <comment> content </comment>
-        -->
-        <head>
-            <comment>Include template CSS stylesheets</comment>
-            <favicon type="image/gif">images/favicon.gif</favicon>
-            <css>css/style.css</css>
-            <css>css/alerts.css</css>
-            <css>css/datatables.css</css>
-            <comment>Include feature slide script</comment>
-            <js>js/jquery.cycle.all.min.js</js>
-        </head>
+        <!-- Default layout filename (no extension) -->
+        <default_layout>layout</default_layout>
     </config>
+    <!-- END REQUIRED -->
+    
+    <!-- START OPTIONAL -->
+    
+    <!-- Head tags... 
+        This is a list of meta data that can be included in the <head> tag when built
+        Example:
+        <head>
+            <comment>This is a comment in the head tag</comment>
+            <css> {relative_path} </css> :: Include css file.
+            <js> {relative_path} </js> :: Include Javascript file.
+            <favicon type="image/{image_type}"> {relative path} </favicon> :: The image type is determined automatically if not given (slow)
+            <meta {key}="{value}"> {content} </meta> :: Here you can set meta data, you can add as many "key=value"'s as you need
+                You can overwrite default meta keys.. Ex: <meta http-equiv="Expires">5</meta> will overwrite the default -1 value with 5.
+        </head>
+    -->
+    <head>
+        <comment>Include template CSS stylesheets</comment>
+        <favicon type="image/gif">images/favicon.gif</favicon>
+        <css>css/style.css</css>
+        <css>css/alerts.css</css>
+        <css>css/datatables.css</css>
+        <comment>Include feature slide script</comment>
+        <js>js/jquery.cycle.all.min.js</js>
+    </head>
+    
+    <!-- 
+    IF you template requires helpers, format like so...
+    <helpers>
+        <name>helper1</name>
+        <name>helper2</name>
+    </helpers>
+    -->
+    <helpers></helpers>
+    
+    <!-- 
+    It is possible to load different layout files based on the url request. In the example below,
+    we are going to load "layout2" when the welcome controller, index action is called.
+    <layouts>
+        <welcome>
+            <index>layout2</index>
+        </welcome>
+    </layouts>
+    -->
+    <layouts></layouts>
+    
+    <!-- END OPTIONAL -->
 </template> 

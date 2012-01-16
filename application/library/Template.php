@@ -31,21 +31,21 @@ class Template
     protected $template = array(
         'path' => NULL,                     // Our template path
         'http_path' => NULL,                // Our template HTTP path including site URL
-        'info' => array()                   // Array of info from the template.xml file
     );
+    
+    // Our template xml file contents
+    public $xml = NULL;
     
     // An array of template configs
     protected $config = array(
         'trigger' => "pcms::",              // Our Compiler trigger
-        'controller_view_paths' => TRUE,    // Add the controller name to the view paths? (views/<controller>/view.php)
         'module_view_paths' => TRUE,        // If using a modules, use the module/views folder for view paths? FALSE is default paths
         'l_delim' => '{',                   // Left variable delimeter    
         'r_delim' => '}'                    // Right variable delimeter   
     );
     
-    // Our viewname and layout name
+    // Our viewname
     protected $view_file;
-    protected $layout_file;
     
     // Our loader and Session
     protected $load;
@@ -124,20 +124,6 @@ class Template
         // Set template path
         $this->template['http_path'] = SITE_URL ."/application/". str_replace( '\\', '/', $path );
         $this->template['path'] = str_replace( array('/', '\\'), DS, $path );
-        return $this;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Function: set_layout()
-| ---------------------------------------------------------------
-|
-| Sets the specific layout file we are going to use
-|
-*/    
-    public function set_layout($layout)
-    {
-        $this->layout_file = str_replace( array('/', '\\'), DS, $layout);
         return $this;
     }
 
@@ -265,42 +251,30 @@ class Template
             $file = APP_PATH . DS . $path . DS .'template.xml';
         }
         
-        // Set our empty return data
-        $helpers = array();
-        $head = array();
-        $infos = array();
-        
         // Load the template xml fil if it exists
         if(file_exists( $file ))
         {
-            $template = array();
-            $Info = simplexml_load_file($file);
-            
-            // Process the info child
-            foreach( $Info->info->children() as $child )
+            if($path == NULL)
             {
-                $infos[ $child->getName() ] = $child;
+                $this->xml = simplexml_load_file($file);
             }
-            
-            // Process helpers
-            foreach( $Info->config->helpers->children() as $helper )
+            else
             {
-                $helpers = $helper;
-            }
-            
-            // Process head tags
-            foreach( $Info->config->head->children() as $child )
-            {
-                $attr = FALSE;
-                foreach( $child->attributes() as $key => $value )
-                {
-                    if($attr === FALSE) $attr = array();
-                    $attr[$key] = $value;
-                }
-                $head[] = array('type' => $child->getName(), 'value' => $child, 'attr' => $attr);
+                return simplexml_load_file($file);
             }
         }
-        return array('info' => $infos, 'helpers' => $helpers, 'head' => $head);
+        else
+        {
+            if($path == NULL)
+            {
+                show_error('Unable to load the template.xml');
+            }
+            else
+            {
+                return FALSE;
+            }
+        }
+        return;
     }
     
 /*
@@ -318,11 +292,10 @@ class Template
 |
 */
 
-    public function render($view_name, $data = array(), $layout = NULL) 
+    public function render($view_name, $data = array()) 
     {
         // Define our view file name, and layout filename
         $this->view_file = str_replace( array('/', '\\'), DS, $view_name);
-        if($layout !== NULL) $this->set_layout($layout);
         
         // Compile all the variables into one array
         $this->_initialize($data);
@@ -410,16 +383,21 @@ class Template
         $trigger = $this->config['trigger'];
         
         // Get our template layout file
-        if($this->layout_file !== FALSE && !empty($this->layout_file))
+        $c = $this->_controller;
+        $a = $this->_action;
+        $name = eval('if( $this->xml->layouts && $this->xml->layouts->'.$c.'->'.$a.' ) return $this->xml->layouts->'.$c.'->'.$a.'; return FALSE; ');
+        if( !$name )
         {
-            $source = $this->load( $this->layout_file .'.php' );
-            
-            // Load global page contents early so they can be parsed as well!
-            $source = str_replace($l_delim . $trigger ."page_contents /". $r_delim, $this->load_view(), $source); 
+            $name = $this->xml->config->default_layout;
         }
-        else
+        
+        // load the layout
+        $source = trim( $this->load( $name .'.php' ) );
+        
+        // Load global page contents early so they can be parsed as well!
+        if(strpos( $source, $l_delim . $trigger ."page_contents /". $r_delim ))
         {
-            $source = $this->load_view();
+            $source = str_replace($l_delim . $trigger ."page_contents /". $r_delim, $this->load_view(), $source); 
         }
 
         // Search and process <trigger::eval> commands
@@ -552,13 +530,21 @@ class Template
     {
         // First we check to see if the template has a custom view for this page
         $ext = NULL;
-        if( $this->config['controller_view_paths'] )
-        {
-            $ext = $this->_controller . DS;
-        }
         
-        // Build our template view path
-        $file = $this->template['path'] . DS . 'views' . DS . $ext . $this->view_file .'.php';
+        // Determine our path
+        if($this->_is_module && $this->config['module_view_paths'])
+        {
+            $file = APP_PATH . DS . 'modules' . DS . $this->_controller . DS . 'views' . DS . $this->view_file .'.php';
+        }
+        else
+        {
+            if( $this->xml->config->controller_view_paths == "true" && !$this->_is_module)
+            {
+                $ext = $this->_controller . DS;
+            }
+            // Build our template view path
+            $file = $this->template['path'] . DS . 'views' . DS . $ext . $this->view_file .'.php';
+        }
         
         // Check if the file exists
         if(file_exists($file))
@@ -567,22 +553,17 @@ class Template
         }
         
         // No template custom view, load default
-        else
+        elseif( !$this->is_module )
         {
-            if($this->_is_module && $this->config['module_view_paths'])
+            $file = APP_PATH . DS . 'views' . DS . $ext . $this->view_file .'.php';
+            if(file_exists($file))
             {
-                $file = APP_PATH . DS . 'modules' . DS . $this->_controller . DS . 'views' . DS . $this->view_file .'.php';
+                return file_get_contents($file);
             }
-            else
-            {
-                $file = APP_PATH . DS . 'views' . DS . $ext . $this->view_file .'.php';
-            }
-            if(!file_exists($file))
-            {
-                show_error('missing_page_view', array( $this->view_file .'.php' ));
-            }
-            return file_get_contents($file);
         }
+
+        // If we are here, we have no view to load
+        show_error('missing_page_view', array( $this->view_file .'.php' ));
     }
     
 /*
@@ -662,61 +643,62 @@ class Template
     protected function _append_template_metadata()
 	{
 		// Add the template.xml head data to the metadata
-        foreach($this->template['head'] as $head)
+        if( $this->xml->head )
         {
-            $path = $this->template['http_path'] . '/';
-            switch($head['type'])
+            foreach($this->xml->head->children() as $head)
             {
-                case "comment":
-                    $this->append_metadata(''); // Add a space ontop
-                    $this->append_metadata('<!-- '. wordwrap($head['value'], 125) .' -->');
-                break;
-                
-                case "css":
-                    $this->set_metadata('stylesheet', $path . $head['value'], 'link');
-                break;
-                
-                case "js":
-                    $this->append_metadata('<script type="text/javascript" src="'. $path . $head['value'] .'"></script>');
-                break;
-                
-                case "favicon":
-                    // Check to see if we are generous enough to have a filetype
-                    if(isset($head['attr']['type']))
-                    {
-                        $ext = $head['attr']['type'];
-                    }
-                    else
-                    {
-                        // We need to manually get the image mime type :(
-                        $ext = pathinfo($this->template['path'] . DS . $head['value'], PATHINFO_EXTENSION);
-                        $ext = "image/".$ext;
-                    }
-                    $this->append_metadata('<link rel="icon" type="'. $ext .'" href="'. $path . $head['value'] .'" />');
-                break;
-                
-                case "meta":
-                    $attr = '';
-                    if($head['attr'] != FALSE)
-                    {
+                $path = $this->template['http_path'] . '/';
+                switch( $head->getName() )
+                {
+                    case "comment":
+                        $this->append_metadata(''); // Add a space ontop
+                        $this->append_metadata('<!-- '. wordwrap($head, 125) .' -->');
+                    break;
+                    
+                    case "css":
+                        $this->set_metadata('stylesheet', $path . $head, 'link');
+                    break;
+                    
+                    case "js":
+                        $this->append_metadata('<script type="text/javascript" src="'. $path . $head .'"></script>');
+                    break;
+                    
+                    case "favicon":
+                        // Check to see if we are generous enough to have a filetype
+                        if(isset($head['type']))
+                        {
+                            $ext = $head['type'];
+                        }
+                        else
+                        {
+                            // We need to manually get the image mime type :(
+                            $ext = pathinfo($this->template['path'] . DS . $head, PATHINFO_EXTENSION);
+                            $ext = "image/".$ext;
+                        }
+                        $this->append_metadata('<link rel="icon" type="'. $ext .'" href="'. $path . $head .'" />');
+                    break;
+                    
+                    case "meta":
                         $quit = FALSE;
-                        foreach($head['attr'] as $k => $v)
+                        $i = 0;
+                        foreach( $head->attributes() as $k => $v )
                         {
                             // Check to see if we are overwriting one thats set already
                             if($k == 'name' || $k == 'http-equiv')
                             {
-                                if($k == 'name') $this->set_metadata($v, $head['value']);
-                                if($k == 'http-equiv') $this->set_metadata($v, $head['value'], 'http-equiv');
+                                if($k == 'name') $this->set_metadata($v, $head);
+                                if($k == 'http-equiv') $this->set_metadata($v, $head, 'http-equiv');
                                 $quit = TRUE;
                                 break;
                             }
                             $attr .= $k .'="'.$v.'" ';
+                            ++$i;
                         }
                         
                         // IF quit is still false, we didnt overwright anything
-                        if($quit == FALSE) $this->append_metadata('<meta '.$attr.' content="'.$head['value'].'" />');
-                    }
-                break;
+                        if($quit == FALSE && $i > 0) $this->append_metadata('<meta '.$attr.' content="'.$head.'" />');
+                    break;
+                }
             }
         }
 	}
@@ -773,14 +755,14 @@ class Template
         $this->template['path'] = APP_PATH . DS . $this->template['path'];
         
         // Load the template information
-        $this->template = array_merge($this->template, $this->load_template_xml());
+        if($this->xml == NULL) $this->load_template_xml();
         
         // Load template helpers if required
-        if(count($this->template['helpers']) > 0)
+        if( $this->xml->config->helpers )
         {
-            foreach($this->template['helpers'] as $h)
+            foreach($this->xml->config->helpers->children() as $helper)
             {
-                $this->load->helper($h);
+                $this->load->helper($helper);
             }
         }
 
@@ -809,10 +791,10 @@ class Template
         $this->set('SITE_URL', SITE_URL);
         $this->set('TEMPLATE_URL', $this->template['http_path']);
         $this->set('TEMPLATE_PATH', $this->template['path']);
-        $this->set('TEMPLATE_NAME', $this->template['info']['name']);
-        $this->set('TEMPLATE_AUTHOR', $this->template['info']['author']);
-        $this->set('TEMPLATE_CODED_BY', $this->template['info']['coded_by']);
-        $this->set('TEMPLATE_COPYRIGHT', $this->template['info']['copyright']);
+        $this->set('TEMPLATE_NAME', $this->xml->info->name);
+        $this->set('TEMPLATE_AUTHOR', $this->xml->info->author);
+        $this->set('TEMPLATE_CODED_BY', $this->xml->info->coded_by);
+        $this->set('TEMPLATE_COPYRIGHT', $this->xml->info->copyright);
         
         // we are done
         return;

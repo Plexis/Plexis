@@ -84,11 +84,10 @@ class Loader extends \System\Core\Loader
 |
 | @Param: (String) $name - The name of the requested view file
 | @Param: (Array) $data - an array of variables to be extracted
-| @Param: (String) $layout - The name of the layout file
 | @Param: (Bool) $skip - Skip the template system and use parent?
 |
 */
-    function view($name, $data = array(), $layout = "layout", $skip = FALSE)
+    function view($name, $data = array(), $skip = FALSE)
     {
         // If we are requesting to use the default render system
         if($skip == TRUE)
@@ -99,7 +98,7 @@ class Loader extends \System\Core\Loader
         {
             // We are just going to let the template engine handle this
             $template = $this->library('Template');
-            $template->render($name, $data, $layout);
+            $template->render($name, $data);
         }
     }
 
