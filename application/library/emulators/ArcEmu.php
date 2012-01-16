@@ -71,6 +71,22 @@ class Arcemu
     
 /*
 | ---------------------------------------------------------------
+| Method: uptime()
+| ---------------------------------------------------------------
+|
+| This function gets the realms $id uptime
+|
+| @Param: (Int) $id - The realm ID we are requesting the information from
+| @Return (Int) Time string of FALSE if unavailable
+|
+*/
+    public function uptime($id)
+    {
+        return FALSE;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: create_account()
 | ---------------------------------------------------------------
 |

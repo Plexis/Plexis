@@ -11,7 +11,7 @@
 | @Return (String) The array of data
 |
 */
-    function sec2hms ($sec, $padHours = false) 
+    function sec2hms($sec, $padHours = true) 
     {
         // start with a blank string
         $hms = "";

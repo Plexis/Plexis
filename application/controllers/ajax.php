@@ -481,14 +481,12 @@ class Ajax extends Application\Core\Controller
                 break;
                 
             case "status":
+                $action = "status";
                 break;
                 
             case "admin":
                 $this->check_access('a');
                 $action = "admin";
-                break;
-                
-            case "info":
                 break;
         }
 
@@ -600,6 +598,88 @@ class Ajax extends Application\Core\Controller
 
             // Push the output in json format
             echo json_encode($output);
+        }
+        
+        // status
+        elseif($action == 'status')
+        {
+            $Cache = $this->load->library('Cache');
+            
+            // See if we have cached results
+            $result = $Cache->get('ajax_realm_status');
+            if($result == FALSE)
+            {
+                // Set to array
+                $result = array();
+
+                // If we are here, then the cache results were expired
+                $Debug = load_class('Debug');
+                $this->load->helper('Time');
+                
+                // Build our query
+                $query = "SELECT `id`, `name`, `address`, `port` FROM `pcms_realms`";
+                
+                // fetch the array of realms
+                $realms = $this->DB->query( $query )->fetch_array();
+                
+                // Dont log errors
+                $Debug->error_reporting(false);
+                
+                // Loop through each realm, and get its status
+                foreach($realms as $key => $realm)
+                {
+                    $handle = fsockopen($realm['address'], $realm['port'], $errno, $errstr, 1);
+                    if(!$handle)
+                    {
+                        $status = 0;
+                    }
+                    else
+                    {
+                        $status = 1;
+                    }
+                    
+                    // Load the wowlib for this realm
+                    $wowlib = $this->load->wowlib($realm['id']);
+
+                    // Build our realms return
+                    if($status == 1)
+                    {
+                        $uptime = $this->realm->uptime( $realm['id'] );
+                        ($uptime == FALSE) ? $uptime = 'Unavailable' : $uptime = sec2hms($uptime, false);
+                        
+                        $result[] = array(
+                            'id' => $realm['id'],
+                            'name' => $realm['name'],
+                            'type' => $realm['type'],
+                            'status' => $status,
+                            'online' => $wowlib->get_online_count(0),
+                            'alliance' => $wowlib->get_online_count(1),
+                            'horde' => $wowlib->get_online_count(2),
+                            'uptime' => $uptime
+                        );
+                    }
+                    else
+                    {
+                        $result[] = array(
+                            'id' => $realm['id'],
+                            'name' => $realm['name'],
+                            'type' => $realm['type'],
+                            'status' => $status,
+                            'online' => 0,
+                            'alliance' => 0,
+                            'horde' => 0,
+                            'uptime' => 'Offline'
+                        );
+                    }
+                }
+                
+                // Re-enable errors, and Cache the results for 5 minutes
+                $Debug->error_reporting(true);
+                $Cache->save('ajax_realm_status', $result, 60);
+            }
+            
+            // Push the output in json format
+            echo json_encode($result);
         }
         
         // Installing / Editing

@@ -65,6 +65,25 @@ class Mangos
     
 /*
 | ---------------------------------------------------------------
+| Method: uptime()
+| ---------------------------------------------------------------
+|
+| This function gets the realms $id uptime
+|
+| @Param: (Int) $id - The realm ID we are requesting the information from
+| @Return (Int) Time string of FALSE if unavailable
+|
+*/
+    public function uptime($id)
+    {
+        // Grab Realms
+        $query = "SELECT MAX(`starttime`) FROM `uptime` WHERE `realmid`=?";
+        $result = $this->DB->query( $query, array($id) )->fetch_column();
+        return (time() - $result);
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: create_account()
 | ---------------------------------------------------------------
 |

@@ -22,6 +22,12 @@
         jQuery.validator.setDefaults({ 
             errorClass: "input-error",
         });
+        
+        $().ready(function() {
+            // Load the realm status Ajax reuqests
+            // @Param1: id of the "loop block", @Param2: the loading gif div id.
+            ajax_realm_status('#ajax_realm,', '#ajax_loading');
+        });
     -->
     </script>
 </head>
@@ -161,26 +167,19 @@
                     <div class="right-box">
                         <h3>Realm Status</h3>
                         <ul class="realm-status">
-                            <?php
-                                $realms = get_realm_status();
-                                foreach($realms as $r)
-                                {
-                                    if($r['status'] == 1)
-                                    {
-                                        $img = "<img src='{TEMPLATE_URL}/images/realm-1-small.png'>";
-                                    }
-                                    else
-                                    {
-                                        $img = "<img src='{TEMPLATE_URL}/images/realm-0-small.png'>";
-                                    }
-                                    
-                                    // Echo out the information
-                                    echo '<li>
-                                        <b>'. $img .' <a href="{SITE_URL}/server/realm/'.$r['id'].'">'.$r['name'].'</a></b><br />
-                                        <small>Online: 0, <br />Uptime: 0d, 14hrs, 56min</small>
-                                    </li>';
-                                }
-                            ?>
+                            <div id="ajax_loading">Loading</div>
+                            
+                            <!-- Ajax Realmlist Loop Box -->
+                            <li id="ajax_realm">
+                                <b>
+                                <img src='{TEMPLATE_URL}/images/realm-@status-small.png'>
+                                <a href="{SITE_URL}/server/realm/@id">@name</a>
+                                </b>
+                                <br />
+                                <small>Online: @online, <br />Uptime: @uptime</small>
+                            </li>
+                            <!-- END Ajax Realm -->
+                            
                             <li><center><small><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></small></center></li>
                         </ul>
                     </div><!-- /right-box -->
