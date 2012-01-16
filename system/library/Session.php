@@ -99,8 +99,10 @@ class Session
 */
     protected function create()
     {
+        // Generate a completely random session id
         $time = microtime(1);
-        $this->data['token'] = sha1(base64_encode(pack("H*", md5(utf8_encode( $time )))));
+        $string = sha1(base64_encode(md5(utf8_encode( $time ))));
+        $this->data['token'] = substr($string, 0, 20);
     }
 
 /*
@@ -153,7 +155,7 @@ class Session
         if($result !== FALSE)
         {
             // check users IP address to prevent cookie stealing
-            if($result['ip_address'] == $this->input->ip_address() )
+            if( $result['ip_address'] == $this->input->ip_address() )
             {	
                 $this->data['token'] = $result['token'];
             

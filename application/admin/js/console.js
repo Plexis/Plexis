@@ -18,15 +18,16 @@ var connection = '';
 // Send our Init. command on page load
 $(document).ready(function() {
     init_window();
+    
+    // Process all changes to the realm selector
+    $('#realm').change(function() {
+        // get our selected realm id
+        realm = $('#realm').val();
+        text = " <span class='c_keyword'>Setting realm: " + $("#realm option[value='" + realm + "']").text() + "</span>";
+        $("#console").html( $("#console").html() + "<br />" + text + "<br />");
+    });
 });
 
-// Process all changes to the realm selector
-$('#realm').change(function() {
-    // get our selected realm id
-    realm = $('#realm').val();
-    text = " <span class='c_keyword'>Setting realm: " + $("#realm option[value='" + realm + "']").text() + "</span>";
-    $("#console").html( $("#console").html() + "<br />" + text + "<br />");
-});
 
 // Clears the console and loads the default welcome message
 function init_window()
@@ -40,6 +41,7 @@ function init_window()
         timeout: 5000, // in milliseconds
         success: function(result) 
         {
+            // Clear the console and present the welcome message
             $("#console").html( result.show );
         
             // Get our realm ID
@@ -49,20 +51,21 @@ function init_window()
                 // Update the console Window
                 var text = "No Realms Installed. You will need to install at least 1 realm before being able to send server commands"
                     + "<br />You may also create a custom connection by going \"connect #host #port #type (Telnet or Soap)\" <br />";
-                $("#console").html( $("#console").html() + "<br /><span class=\"c_keyword\">" + text + "</span>" ).focus();
+                $("#console").html( $("#console").html() + "<br /><span class=\"c_keyword\">" + text + "</span>" );
             }
             else
             {
                 // Allow commands ;)
                 var text = " <span class=\"c_keyword\">Selected realm: " + $("#realm option[value='" + realm + "']").text() + "</span>";
-                $("#console").html( $("#console").html() + "<br />" + text + "<br />").focus();
+                $("#console").html( $("#console").html() + "<br />" + text + "<br />");
             }
-            $("#command").attr('disabled', false);
+            $("#command").attr('disabled', false).focus();
         },
         error: function(request, status, err) 
         {
             // Update the console Window
-            $("#console").html( $("#console").html() + "<br /><span class=\"c_error\">There was an error loading the command window</span><br />").focus();
+            text = "<br /><span class=\"c_error\">There was an error loading the command window</span><br />";
+            $("#console").html( $("#console").html() + text);
         }
     });
 }
@@ -97,7 +100,7 @@ function execute(field, event)
         realm = $('#realm').val();
         
         // return if there is no realms installed and no custom connect
-        if( realm == 0 && command.indexOf("connect") == -1 && connection == '')
+        if( command == '' || (realm == 0 && command.indexOf("connect") == -1 && connection == ''))
         {
             return;
         }
@@ -115,8 +118,10 @@ function execute(field, event)
             // Show error if there is no connection!
             if(connection == '')
             {
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">disconnect</span><br />");
-                $("#console").html( $("#console").html() + " <span class=\"c_error\">You must establish a connection before disconnecting.</span><br />");
+                text = "<br />" + command_prefix + "<span class=\"c_keyword\">disconnect</span><br />";
+                text += " <span class=\"c_error\">You must establish a connection before disconnecting.</span><br />";
+                $("#console").html( $("#console").html() + text);
+                $("#command").focus();
             }
             else
             {
@@ -124,8 +129,12 @@ function execute(field, event)
                 connection = '';
                 user = '';
                 pass = '';
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">" + command + "</span><br />");
-                $("#console").html( $("#console").html() + " Success. You have also been logged out.<br />");
+                
+                // Update the console window
+                text = "<br />" + command_prefix + "<span class=\"c_keyword\">" + command + 
+                    "</span><br /> Success. You have also been logged out.<br />";
+                $("#console").html( $("#console").html() + text);
+                $("#command").focus();
             }
             scroll();
             return;
@@ -148,13 +157,17 @@ function execute(field, event)
                 pass = '';
                 
                 // Update the window
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">connect</span> " + command + "<br />");
-                $("#console").html( $("#console").html() + " Please Login...<br />");
+                text = "<br />" + command_prefix + "<span class=\"c_keyword\">connect</span> " + command + 
+                    "<br /> Please Login...<br />";
+                $("#console").html( $("#console").html() + text);
+                $("#command").focus();
             }
             else
             {
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">connect</span> " + command + "<br />");
-                $("#console").html( $("#console").html() + " <span class=\"c_error\">Syntax error: Improper connection string format.</span><br />");
+                text = "<br />" + command_prefix + "<span class=\"c_keyword\">connect</span> " + command + "<br />";
+                text += " <span class=\"c_error\">Syntax error: Improper connection string format.</span><br />";
+                $("#console").html( $("#console").html() + text);
+                $("#command").focus();
             }
             scroll();
             return;
@@ -176,19 +189,23 @@ function execute(field, event)
             else
             {
                 command = args.join(' ');
-                $("#console").html( $("#console").html() + "<br />" + command_prefix + "<span class=\"c_keyword\">login</span> " + command + "<br />");
-                $("#console").html( $("#console").html() + " <span class=\"c_error\">Syntax error: Improper login string format.</span><br />");
+                text = "<br />" + command_prefix + "<span class=\"c_keyword\">login</span> " + command + "<br />";
+                text += " <span class=\"c_error\">Syntax error: Improper login string format.</span><br />";
+                $("#console").html( $("#console").html() + text);
+                $("#command").focus();
                 scroll();
                 return;
             }
         }
         
         // Check our command for a logout command
-        else if(command.indexOf("logout") != -1)
+        else if(command == "logout")
         {
             user = '';
             pass = '';
-            $("#console").html( $("#console").html() + "<br /><span class=\"c_keyword\"> Logged Out Successfully</span><br />");
+            text = "<span class=\"c_keyword\">logout</span><br />Logged out successfully.<br />";
+            $("#console").html( $("#console").html() + "<br />" + command_prefix + text);
+            $("#command").focus();
             scroll();
             return;
         }
@@ -197,20 +214,24 @@ function execute(field, event)
         else if(command == "clear")
         {
             init_window();
+            $("#command").focus();
             return;
         }
 
         // Make sure we are logged in ^^
         else if((user == '' || pass == '') && connection == '')
         {
-            $("#console").html( $("#console").html() + "<br /><span class=\"c_error\">You must login into the remote server first! \"login username password\"</span><br />");
+            text = "<br /><span class=\"c_error\">You must login into the remote server first! \"login username password\"</span><br />";
+            $("#console").html( $("#console").html() + text);
+            $("#command").focus();
             scroll();
             return;
         }
         
         // Add our command to the window
         highlighted = highlight_command( command );
-        $("#console").html( $("#console").html() + "<br />" + command_prefix +  highlighted).focus();
+        $("#console").html( $("#console").html() + "<br />" + command_prefix +  highlighted + "<br />");
+        $("#command").focus();
         scroll();
         
         // Send our command
@@ -225,24 +246,16 @@ function execute(field, event)
                 switch(result.status)
                 {
                     case 200:
-                        show = result.show + "<br />";
+                        show = result.show;
                         break;
-                        
-                    case 300:
-                        show = result.show + "<br />";
-                        break;
-                        
-                    case 400:
-                        show = "<span class=\"c_error\">" + result.show + "</span><br />";
-                        break;
-                        
+
                     default:
-                        show = '<span class="c_error">' + result.show + "</span><br />";
+                        show = '<span class="c_error">' + result.show + "</span>";
                         break;
                 }
                 
                 // Update the console Window
-                $("#console").html( $("#console").html() + "<br />" + show ).focus();
+                $("#console").html( $("#console").html()  + show + "<br />").focus();
                 
                 // Keep to the bottom of the frame
                 scroll();
@@ -253,7 +266,8 @@ function execute(field, event)
             error: function(request, status, err) 
             {
                 // Update the console Window
-                $("#console").html( $("#console").html() + "<br /><span class=\"c_error\">Connection Timed out</span><br />").focus();
+                $("#console").html( $("#console").html() + "<span class=\"c_error\">Connection Timed out</span><br />");
+                $("#command").focus();
             }
         });
         return false;

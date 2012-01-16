@@ -130,7 +130,7 @@ class Admin extends Application\Core\Controller
             // Get users information. We can use GET because the queries second param will be cleaned
             // by the PDO class when bound to the "?".
             $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 
-                pcms_accounts.group_id = pcms_account_groups.group_id WHERE `username` LIKE ?";
+                pcms_accounts.group_id = pcms_account_groups.group_id WHERE `username` = ?";
             $user = $this->DB->query( $query, array($username) )->fetch_row();
             
             // If $user isnt an array, we failed to load the user

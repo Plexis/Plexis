@@ -38,6 +38,7 @@ class Template
     protected $config = array(
         'trigger' => "pcms::",              // Our Compiler trigger
         'controller_view_paths' => TRUE,    // Add the controller name to the view paths? (views/<controller>/view.php)
+        'module_view_paths' => TRUE,        // If using a modules, use the module/views folder for view paths? FALSE is default paths
         'l_delim' => '{',                   // Left variable delimeter    
         'r_delim' => '}'                    // Right variable delimeter   
     );
@@ -551,7 +552,7 @@ class Template
     {
         // First we check to see if the template has a custom view for this page
         $ext = NULL;
-        if($this->config['controller_view_paths'] == TRUE)
+        if( $this->config['controller_view_paths'] )
         {
             $ext = $this->_controller . DS;
         }
@@ -568,7 +569,7 @@ class Template
         // No template custom view, load default
         else
         {
-            if($this->_is_module == TRUE)
+            if($this->_is_module && $this->config['module_view_paths'])
             {
                 $file = APP_PATH . DS . 'modules' . DS . $this->_controller . DS . 'views' . DS . $this->view_file .'.php';
             }
