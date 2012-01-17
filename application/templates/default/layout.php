@@ -166,20 +166,23 @@
 
                     <div class="right-box">
                         <h3>Realm Status</h3>
+                        <div id="ajax_loading">
+                            <center><br /><img src='{TEMPLATE_URL}/images/loading.gif'></center>
+                        </div>
                         <ul class="realm-status">
-                            <div id="ajax_loading">Loading</div>
-                            
                             <!-- Ajax Realmlist Loop Box -->
-                            <li id="ajax_realm">
-                                <b>
-                                <img src='{TEMPLATE_URL}/images/realm-@status-small.png'>
-                                <a href="{SITE_URL}/server/realm/@id">@name</a>
-                                </b>
-                                <br />
-                                <small>Online: @online, <br />Uptime: @uptime</small>
-                            </li>
+                            <div id="ajax_realm">
+                                <li>
+                                    <b>
+                                    <img src='{TEMPLATE_URL}/images/realm-@status-small.png'>
+                                    <a href="{SITE_URL}/server/realm/@id">@name</a>
+                                    </b>
+                                    <br />
+                                    <small>Online: @online, <br />Uptime: @uptime</small>
+                                </li>
+                            </div>
                             <!-- END Ajax Realm -->
-                            
+                            <li></li>
                             <li><center><small><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></small></center></li>
                         </ul>
                     </div><!-- /right-box -->

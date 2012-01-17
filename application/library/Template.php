@@ -86,10 +86,10 @@ class Template
              ->set_metadata('expires', '-1', 'http-equiv')
              ->append_metadata("") // Add whitespace
              ->append_metadata("<!-- Include Plexis Static JS Scripts -->")
+             ->append_metadata('<script type="text/javascript">var url = "'. SITE_URL .'"; var realm_id = '. get_realm_cookie() .';</script>')
              ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery-1.6.2.min.js"></script>')
              ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery.validate.min.js"></script>')
              ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')
-             ->append_metadata('<script type="text/javascript">var url = "'. SITE_URL .'"; var realm_id = '. get_realm_cookie() .';</script>')
              ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/plexis.js"></script>'
         );
     }

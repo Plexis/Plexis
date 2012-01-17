@@ -628,7 +628,7 @@ class Ajax extends Application\Core\Controller
                 // Loop through each realm, and get its status
                 foreach($realms as $key => $realm)
                 {
-                    $handle = fsockopen($realm['address'], $realm['port'], $errno, $errstr, 1);
+                    $handle = @fsockopen($realm['address'], $realm['port'], $errno, $errstr, 1.5);
                     if(!$handle)
                     {
                         $status = 0;
@@ -673,11 +673,11 @@ class Ajax extends Application\Core\Controller
                     }
                 }
                 
-                // Re-enable errors, and Cache the results for 5 minutes
+                // Re-enable errors, and Cache the results for 2 minutes
                 $Debug->error_reporting(true);
-                $Cache->save('ajax_realm_status', $result, 60);
+                $Cache->save('ajax_realm_status', $result, 120);
             }
-            
+
             // Push the output in json format
             echo json_encode($result);
         }
