@@ -540,7 +540,38 @@ class Admin extends Application\Core\Controller
             'page_title' => "Template Manager",
             'page_desc' => "This page allows you to manage your templates, which includes uploading, installation, and un-installation.",
         );
-        $this->load->view('under_construction', $data);
+        
+        // Get installed templates
+        $query = "SELECT * FROM `pcms_templates` WHERE `type`='site'";
+        $templates = $this->DB->query( $query )->fetch_array();
+        foreach($templates as $t)
+        {
+            $aa[] = $t['name'];
+        }
+        
+        // Scan and get a list of all templates
+        $list = scandir(APP_PATH . DS . 'templates');
+        foreach($list as $file)
+        {
+            if($file[0] == "." || $file == "index.html") continue;
+            if(!in_array($file, $aa))
+            {
+                $xml = APP_PATH . DS . 'templates' . DS . $file . DS .'template.xml';
+                if(file_exists($xml))
+                {
+                    $xml = simplexml_load_file($xml);
+                    $insert = array(
+                        'name' => $file,
+                        'type' => 'site',
+                        'author' => $xml->info->author,
+                        'status' => 0
+                    );
+                    $this->DB->insert('pcms_templates', $insert);
+                }
+            }
+        }
+        
+        $this->load->view('templates', $data);
     }
     
     function update()

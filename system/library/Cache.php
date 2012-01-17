@@ -24,7 +24,7 @@ class Cache
 */
     public function __construct()
     {
-        $this->path = SYSTEM_PATH . DS . 'temp' . DS . 'cache';
+        $this->path = APP_PATH . DS . 'cache';
     }
 
 /*
@@ -153,7 +153,7 @@ class Cache
             $file = $this->path . DS . $file;
         
             // We only want to delete the the cache files, not subfolders
-            if(is_file($file) && $file != 'index.html')
+            if($file[0] != "." && $file != 'index.html')
             {
                 unlink($file); #Remove file
             }

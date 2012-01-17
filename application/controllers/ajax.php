@@ -890,7 +890,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: news()
+| Method: vote()
 | ---------------------------------------------------------------
 |
 | This method is used to list news post via an Ajax request
@@ -1040,7 +1040,7 @@ class Ajax extends Application\Core\Controller
                     $this->check_access('a');
                     
                     // Load the Modules Model
-                    $this->load->model("Modules_Model", "model");
+                    $this->load->model("Admin_Model", "model");
             
                     // Load the Form Validation script
                     $this->load->library('validation');
@@ -1051,7 +1051,7 @@ class Ajax extends Application\Core\Controller
                     // If both the username and password pass validation
                     if( $this->validation->validate() == TRUE )
                     {
-                        $result = $this->model->install($_POST['module'], $_POST['uri'], $_POST['function']);
+                        $result = $this->model->install_module($_POST['module'], $_POST['uri'], $_POST['function']);
                         ($result == TRUE) ? $this->output(true, 'module_install_success') : $this->output(false, 'module_install_error');
                     }
                     
@@ -1068,9 +1068,9 @@ class Ajax extends Application\Core\Controller
                     $this->check_access('a');
                     
                     // Load the Modules Model
-                    $this->load->model("Modules_Model", "model");
+                    $this->load->model("Admin_Model", "model");
                     
-                    $result = $this->model->uninstall($_POST['name']);
+                    $result = $this->model->uninstall_module($_POST['name']);
                     ($result == TRUE) ? $this->output(true, 'module_uninstall_success') : $this->output(false, 'module_uninstall_error');
                     break;
                     
@@ -1131,6 +1131,168 @@ class Ajax extends Application\Core\Controller
                     $output["iTotalRecords"] = $i + $output["iTotalRecords"];
                     $output["iTotalDisplayRecords"] = $i + $output["iTotalDisplayRecords"];
                     
+                    // Push the output in json format
+                    echo json_encode($output);
+                    break;
+            }
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: templates()
+| ---------------------------------------------------------------
+|
+*/    
+    public function templates()
+    {
+        // Load the input class
+        if(!isset($this->input)) $this->input = load_class('Input');
+
+        // Check for 'action' posts
+        if(isset($_POST['action']))
+        {
+            // Get our template id
+            $id = $this->input->post('id', TRUE);
+            
+            // Get our action type
+            switch($_POST['action']) 
+            {
+                // INSTALLING
+                case "install":
+                    // Make sure we arent getting direct accessed, and the user has permission
+                    $this->check_access('a');
+                    
+                    // Make sure we are using an ID here
+                    if(!is_numeric($id)) return;
+                    
+                    // Load the Templates Model
+                    $this->load->model("Admin_Model", "model");
+
+                    $result = $this->model->install_template($id);
+                    ($result == TRUE) ? $this->output(true, 'template_install_success') : $this->output(false, 'template_install_error');
+                    break;
+                
+                // UNINSTALL
+                case "un-install":
+                    // Make sure we arent getting direct accessed, and the user has permission
+                    $this->check_access('a');
+                    
+                    // Make sure we are using an ID here
+                    if(!is_numeric($id)) return;
+                    
+                    // Get our default Template ID
+                    $default = config('default_template');
+                    
+                    // Dont allow the default template to be uninstalled!
+                    $query = "SELECT `name` FROM `pcms_templates` WHERE `id`=?";
+                    $name = $this->DB->query( $query, array($id) )->fetch_column();
+                    if($default == $default)
+                    {
+                        $this->output(false, 'template_uninstall_default_warning', 'warning');
+                        return;
+                    }
+                    
+                    // Load the Templates Model
+                    $this->load->model("Admin_Model", "model");
+                    
+                    $result = $this->model->uninstall_template($id);
+                    ($result == TRUE) ? $this->output(true, 'template_uninstall_success') : $this->output(false, 'template_uninstall_error');
+                    break;
+                    
+                case "make-default":
+                    // Load our config class
+                    $Config = load_class('Config');
+                    
+                    // Make sure we are using an ID here
+                    if(!is_numeric($id)) return;
+                    
+                    // Get the template name
+                    $query = "SELECT `name` FROM `pcms_templates` WHERE `id`=?";
+                    $name = $this->DB->query( $query, array($id) )->fetch_column();
+                    
+                    // Set the new default Realm
+                    $Config->set('default_template', $name, 'App');
+                    $result = $Config->save('App');
+                    ($result == TRUE) ? $this->output(true, 'template_default_success') : $this->output(false, 'template_default_failed', 'error');
+                    break;
+                    
+                case "getlist":
+                    // Load the Ajax Model
+                    $this->load->model("Ajax_Model", "ajax");
+                    
+                    /* 
+                    * Array of database columns which should be read and sent back to DataTables. Use a space where
+                    * you want to insert a non-database field (for example a counter or static image)
+                    */
+                    $cols = array( 'name', 'type', 'author', 'status', 'id' );
+                    
+                    /* Indexed column (used for fast and accurate table cardinality) */
+                    $index = "name";
+                    
+                    /* DB table to use */
+                    $table = "pcms_templates";
+                    
+                    /* Database to use */
+                    $dB = "DB";
+                    
+                    /* Process the request */
+                    $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+                    
+                    // Get our default Template ID
+                    $default = config('default_template');
+                    
+                    // Get a list of all template folders
+                    $list = scandir( APP_PATH . DS . 'templates' );
+
+                    // Loop, and add options
+                    foreach($output['aaData'] as $key => $value)
+                    {
+                        // Easier to write
+                        $id = $value[4];
+                        $output['aaData'][$key][4] = "";
+                        
+                        // Make sure the template still exists
+                        if(!in_array($value[0], $list))
+                        {
+                            $this->DB->delete('pcms_templates', "`id`=$id");
+                            unset($output['aaData'][$key]);
+                            --$output["iTotalRecords"];
+                            --$output["iTotalDisplayRecords"];
+                            continue;
+                        }
+
+                        // Check for default template
+                        if($default == $value[0])
+                        {
+                            // Default?
+                            if($value[3] == 1)
+                            {
+                                $output['aaData'][$key][3] = "<font color='green'>Installed</font> - Default Template";
+                                $output['aaData'][$key][4] .= "<a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                            }
+                            else
+                            {
+                                $output['aaData'][$key][3] = "<font color='red'>Not Installed</font>";
+                                $output['aaData'][$key][4] .= "<a class=\"install\" name=\"".$id."\" href=\"javascript:void(0);\">Install</a>";
+                            }
+                        }
+                        else
+                        {
+                            // Default?
+                            if($value[3] == 1)
+                            {
+                                $output['aaData'][$key][4] .= "<a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a> - ";
+                                $output['aaData'][$key][4] .= "<a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                            }
+                            else
+                            {
+                                $output['aaData'][$key][3] = "<font color='red'>Not Installed</font>";
+                                $output['aaData'][$key][4] .= "<a class=\"install\" name=\"".$id."\" href=\"javascript:void(0);\">Install</a>";
+                            }
+                        }
+                    }
+
                     // Push the output in json format
                     echo json_encode($output);
                     break;

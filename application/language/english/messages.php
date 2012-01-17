@@ -79,6 +79,13 @@ return array(
     'reg_success_email_error' => "Your account was created successfully, but we unfortunately are unable to send your verification email. Please contact an administrator.",
     'reg_success_activation_required' => 'Account Created Successfully! You will need to activate your account via email before you can login and play on our servers.',
     'submit_failed_fields_empty' => 'One or more fields where left empty. Please try again',
+    'template_default_failed' => 'There was an error updating the config file! Please check your error log.',
+    'template_default_success' => 'Success! The default template has been changed.',
+    'template_install_error' => 'There was an error installing this template. Please check your error logs',
+    'template_install_success' => 'Template successfully installed',
+    'template_uninstall_default_warning' => 'Action cancelled. You cannot uninstall the default template.',
+    'template_uninstall_error' => 'There was an error un-installing this template. Please check your error logs',
+    'template_uninstall_success' => 'Template successfully un-installed',
     'user_not_found_1' => "Error: Invalid Username or ID.",
     'user_not_found_2' => "Invalid Username or ID. Please make sure: 
         <ol><li>You have selected the right Emulator in the site config</li><li>The account data for this account is in both the Realm and Plexis account tables.</li></ol>
