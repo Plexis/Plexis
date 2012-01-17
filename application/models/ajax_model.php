@@ -176,7 +176,7 @@ class Ajax_Model extends Application\Core\Model
         /* Individual column filtering */
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
         {
-            if ( $_POST['bSearchable_'.$i] == "true" && $_POST['sSearch_'.$i] != '' )
+            if ( isset($_POST['bSearchable_'.$i]) && $_POST['bSearchable_'.$i] == "true" && $_POST['sSearch_'.$i] != '' )
             {
                 if ( $sWhere == "" )
                 {

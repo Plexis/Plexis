@@ -17,7 +17,7 @@
             $c = TRUE;
             break;
         case "news":
-        case "database":
+        case "groups":
         case "modules":
         case "templates":
         case "vote":
@@ -131,7 +131,7 @@
                         <img src="{TEMPLATE_URL}/img/icons/small/clipboard-list.png">Site Managment</a>
                         <ul class="sub">
                             <li><a href="{SITE_URL}/admin/news">News Posts</a></li>
-                            <li><a href="{SITE_URL}/admin/database">Database Operations</a></li>
+                            <li><a href="{SITE_URL}/admin/groups">User Groups</a></li>
                             <li><a href="{SITE_URL}/admin/modules">Modules</a></li>
                             <li><a href="{SITE_URL}/admin/templates">Templates</a></li>
                             <li><a href="{SITE_URL}/admin/vote">Vote Sites</a></li>

@@ -1,10 +1,11 @@
 /**
  * Plexis Core JS
  * Author: Steven Wilson
+ * Cookie functions from QuirksMode
  */
 
     // Callback function for the Install ajaxForm 
-    function ajax_realm_status(div_id, loading_id)  
+    function ajax_realm_status(div_id, loading_id)
     { 
         var post_url = url + "/ajax/realms/";
         $( div_id ).hide();
@@ -49,3 +50,40 @@
         }
         return finished;
     }
+    
+    function setCookie(name, value, days) 
+    {
+        if( days )
+        {
+            var date = new Date();
+            date.setTime( date.getTime() + (days * 24 * 60 * 60 * 1000) );
+            var expires = "; expires=" + date.toGMTString();
+        }
+        else
+        {
+            var expires = "";
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    function getCookie(c_name) 
+    {
+        var name = c_name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) 
+        {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(name) == 0)
+            {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return null;
+    }
+
+    function deleteCookie(name) 
+    {
+        setCookie(name, "", -1);
+    }
+

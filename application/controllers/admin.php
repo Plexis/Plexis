@@ -243,11 +243,11 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Database Operations and Config
+| User Groups and Permissions
 | ---------------------------------------------------------------
 |
 */     
-    function database()
+    function groups()
     {
         // Load our config class
         $Config = load_class('Config');
@@ -267,11 +267,10 @@ class Admin extends Application\Core\Controller
         {
             // Build our page title / desc, then load the view
             $data = array(
-                'page_title' => "Database Config & Operations",
-                'page_desc' => "On this page, you can adjust your database configuration options, Backup, and optimize your tables. Only users with the \"Super Admin\" privliage can access this page.",
-                'config' => $Config->get_all('DB')
+                'page_title' => "User Groups & Permissions",
+                'page_desc' => "On this page, you can Create / Delete user groups and ajust site permission on a group basis."
             );
-            $this->load->view('database', $data);
+            $this->load->view('groups', $data);
         }
     }
 

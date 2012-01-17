@@ -207,6 +207,85 @@ class Ajax extends Application\Core\Controller
             return;
         }
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: groups()
+| ---------------------------------------------------------------
+|
+| This method is used for via Ajax to modify account groups
+*/  
+    public function groups()
+    {
+        // Make sure we arent getting direct accessed, and the user has permission
+        $this->check_access('a');
+        
+        // Check for 'action' posts
+        if(isset($_POST['action']))
+        {
+            // Get our action type
+            switch($_POST['action']) 
+            {
+                case "getlist":
+                    // Load the Ajax Model
+                    $this->load->model("Ajax_Model", "ajax");
+                    
+                    /* 
+                    * Array of database columns which should be read and sent back to DataTables. Use a space where
+                    * you want to insert a non-database field (for example a counter or static image)
+                    */
+                    $cols = array( 'title', 'is_banned', 'is_user', 'is_admin', 'is_super_admin', 'group_id' );
+                    
+                    /* Indexed column (used for fast and accurate table cardinality) */
+                    $index = "title";
+                    
+                    /* DB table to use */
+                    $table = "pcms_account_groups";
+                    
+                    /* Database to use */
+                    $dB = "DB";
+                    
+                    /* Process the request */
+                    $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+                    
+                    // We need to add a working "manage" link
+                    foreach($output['aaData'] as $key => $value)
+                    {
+                        if($value[4] == 1)
+                        {
+                            $type = "Super Admin";
+                        }
+                        elseif($value[3] == 1)
+                        {
+                            $type = "Admin";
+                        }
+                        elseif($value[2] == 1)
+                        {
+                            $type = "Member";
+                        }
+                        elseif($value[1] == 1)
+                        {
+                            $type = "Banned";
+                        }
+                        else
+                        {
+                            $type = "Guest";
+                        }
+                        
+                        // Build our new output
+                        $array = array(
+                            0 => $value[0],
+                            1 => $type,
+                            2 => '<a href="'. SITE_URL .'/admin/groups/edit/'.$value[5].'">Edit Group</a> --  
+                                  <a href="'. SITE_URL .'/admin/groups/permissions/'.$value[5].'">Manage Permissions</a>'
+                        );
+                        $output['aaData'][$key] = $array;
+                    }
+                    break;
+            }
+            echo json_encode($output);
+        }
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -351,94 +430,6 @@ class Ajax extends Application\Core\Controller
             
             // Determine if our save is a success
             $result = $Config->save($type);
-            ($result == TRUE) ? $this->output(true, 'config_save_success') : $this->output(false, 'config_save_error');
-        }
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: database()
-| ---------------------------------------------------------------
-|
-| This method is used for via Ajax for the database operations
-*/      
-    function database()
-    {
-        // Do we have POST action?
-        if(isset($_POST['action']) && $_POST['action'] == 'save')
-        {
-            // Load our config class
-            $Config = load_class('Config');
-        
-            // Make sure user is super admin for ajax
-            if($this->user['is_super_admin'] != 1)
-            {
-                $this->output(false, 'access_denied_privlages');
-                return;
-            }
-            
-            // Build our new config settings
-            $configs = array(
-                'DB' => array(
-                    'driver'	   => $_POST['cms_db_driver'],
-                    'host'         => $_POST['cms_db_host'],
-                    'port'         => $_POST['cms_db_port'],
-                    'username'     => $_POST['cms_db_username'],
-                    'password'     => $_POST['cms_db_password'],
-                    'database'     => $_POST['cms_db_database']
-                ),
-                'RDB' => array(
-                    'driver'	   => $_POST['cms_rdb_driver'],
-                    'host'         => $_POST['cms_rdb_host'],
-                    'port'         => $_POST['cms_rdb_port'],
-                    'username'     => $_POST['cms_rdb_username'],
-                    'password'     => $_POST['cms_rdb_password'],
-                    'database'     => $_POST['cms_rdb_database']
-                )
-            );
-            
-            // Turn off all error reporting, since we use our own, this is easy
-            $old = $Config->get_all('Core');
-            $Config->set(array('environment' => 1, 'log_errors' => 0), false, 'Core');
-
-            // Test our new connections before saving to config
-            $a = $configs['DB'];
-            try{
-                $dba = new \pdo( 
-                    $a['driver'].':host='.$a['host'].':'.$a['port'].';dbname='.$a['database'], 
-                    $a['username'], 
-                    $a['password'],
-                    array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
-                );
-            }
-            catch(\PDOException $e){
-                $this->output(false, '<strong>Connection Error:</strong> '. $e->getMessage());
-                return;
-            }
-            
-            // Test our new connection first
-            $a = $configs['RDB'];
-            try{
-                $dba = new \pdo( 
-                    $a['driver'].':host='.$a['host'].':'.$a['port'].';dbname='.$a['database'], 
-                    $a['username'], 
-                    $a['password'],
-                    array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
-                );
-            }
-            catch(\PDOException $e){
-                $this->output(false, '<strong>Connection Error:</strong> '. $e->getMessage());
-                return;
-            }
-            
-            // Re-enable errors
-            $Config->set(array('log_errors' => $old['log_errors'], 'environment' => $old['environment']), NULL, 'Core');
-
-            // Set our configs
-            $Config->set($configs, false, 'DB');
-            
-            // Determine if our save is a success
-            $result = $Config->save('DB');
             ($result == TRUE) ? $this->output(true, 'config_save_success') : $this->output(false, 'config_save_error');
         }
     }
