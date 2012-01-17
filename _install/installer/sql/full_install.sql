@@ -143,15 +143,16 @@ DROP TABLE IF EXISTS `pcms_templates`;
 CREATE TABLE `pcms_templates` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
+  `type` varchar(50) NOT NULL DEFAULT 'site' COMMENT 'site, forum, admin? Ability to assign types for templates',
   `author` varchar(100) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT '0' COMMENT '1 = Installed, 0 = Not Installed',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1 = Installed, 0 = Not Installed',
   PRIMARY KEY (`id`,`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_templates
 -- ----------------------------
-INSERT INTO `pcms_templates` VALUES ('1', 'default', null, '1');
+INSERT INTO `pcms_templates` VALUES ('1', 'default', 'site', 'test', '1');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`

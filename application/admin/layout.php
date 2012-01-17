@@ -233,16 +233,6 @@
     <script src="{TEMPLATE_URL}/js/tiny_mce/jquery.tinymce.js"></script><!-- Load TinyMCE -->
     <script src="{TEMPLATE_URL}/js/common.js"></script> <!-- Generic functions -->
     <script src="{TEMPLATE_URL}/js/script.js"></script> <!-- Generic scripts -->
-    <pcms::eval>
-        <?php 
-            // Include custom JS files for views
-            $file = $this->template['path'] . DS . 'js'. DS .'views'. DS . $this->_action .'.php';
-            if(file_exists($file))
-            {
-                include($file);
-            }
-        ?>
-    </pcms::eval>
     <!-- End scripts -->
 </body>
 </html>

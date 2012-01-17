@@ -1,25 +1,3 @@
-<script type="text/javascript">
-    $().ready(function() {
-        /*
-         * DataTables
-         */
-        $('#data-table').dataTable({
-            "bServerSide": true,
-            "bSortClasses": false,
-            "sAjaxSource": "{SITE_URL}/ajax/users",
-            "fnServerData": function ( sSource, aoData, fnCallback ) {
-                $.ajax( {
-                    "dataType": 'json', 
-                    "type": "POST", 
-                    "url": sSource, 
-                    "data": aoData, 
-                    "success": fnCallback
-                } );
-            }
-        });
-    })
-</script>
-
 <div class="grid_12">
     <div class="block-border">
         <div class="block-header">

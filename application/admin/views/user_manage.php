@@ -186,3 +186,9 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    var username = '{user.username}';
+    var userid = '{user.id}';
+    var level = '{session.user.group_id}';
+    var is_super = '{session.user.is_super_admin}';
+</script>

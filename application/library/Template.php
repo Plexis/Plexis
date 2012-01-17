@@ -578,15 +578,15 @@ class Template
     protected function view_js_string()
     {
         // Build our custom view JS path, and Static View Paths
-        $t_file = $this->template['path'] . DS . 'js'. DS .'views'. DS . $this->_controller . DS . $this->view_file .'.js';
-        $s_file = APP_PATH . DS . 'static'. DS . 'js'. DS .'views'. DS . $this->_controller . DS . $this->view_file .'.js';
+        $t_file = $this->template['path'] . DS . 'js'. DS . $this->_controller . DS . $this->view_file .'.js';
+        $s_file = APP_PATH . DS . 'static'. DS . 'js'. DS . $this->_controller . DS . $this->view_file .'.js';
         if(file_exists( $t_file ))
         {
-            return '<script type="text/javascript" src="{TEMPLATE_URL}/js/views/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            return '<script type="text/javascript" src="{TEMPLATE_URL}/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
         }
         elseif(file_exists( $s_file ))
         {
-            return '<script type="text/javascript" src="'. SITE_URL .'/application/static/js/views/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            return '<script type="text/javascript" src="'. SITE_URL .'/application/static/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
         }
         else
         {

@@ -59,8 +59,7 @@
 <pcms::eval>
     <?php
         $this->append_metadata('');
-        $this->append_metadata('<!-- Include console scripts and css files -->');
+        $this->append_metadata('<!-- Include console css file -->');
         $this->append_metadata('<link rel="stylesheet" href="'. SITE_URL .'/application/admin/css/console.css"/>'); 
-        $this->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/admin/js/console.js"/></script>');
     ?>
 </pcms::eval>

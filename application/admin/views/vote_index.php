@@ -70,95 +70,11 @@
     </form>
 </div>
 
-<!-- DataTables for Ajax loading -->
-<script src="{TEMPLATE_URL}/js/mylibs/jquery.form.js"></script>
-<script type="text/javascript">
-    $().ready(function() {
-        /*
-         * DataTables
-         */
-        var votetable = $('#data-table').dataTable({
-            "bServerSide": true,
-            "bSortClasses": false,
-            "sAjaxSource": url + "/ajax/vote",
-            "fnServerData": function ( sSource, aoData, fnCallback ) {
-                $.ajax( {
-                    "dataType": 'json', 
-                    "type": "POST", 
-                    "url": sSource, 
-                    "data": aoData, 
-                    "success": fnCallback
-                } );
-            }
-        });
-        
-        
-        /*
-         * Form Validation and Posting
-         */
-        var validateform = $("#vote").validate();
-        $("#reset-form").click(function() {
-            validateform.resetForm();
-        });
-        
-        // ============================================
-        // Create Vote Site
-		$("#create").click(function() {
-            // Show form, and hide any previous messages
-            $('#vote-form').dialog({ modal: true, height: 420, width: 500 });
-            $('#js_news_message').attr('style', 'display: none;');
-            $('#vote').attr('style', '');
-		});
-
-        // ============================================
-        // Delete Vote Site
-        $("#data-table").delegate('.delete', 'click', function(){
-            var vote_id = $(this).attr('name');
-            
-            if( confirm('Are you sure you want to delete vote site #' + vote_id) ){
-                // Get our post
-                $.post(url + "/ajax/vote", { action : 'delete', id : vote_id },
-                    function(response){
-                        // Parse the JSON response
-                        var result = jQuery.parseJSON(response);
-                        if (result.success == true)
-                        {
-                            // Display our Success message, and ReDraw the table so we imediatly see our action
-                            $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
-                            votetable.fnDraw();
-                        }
-                        else
-                        {
-                            $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
-                        }
-                    }
-                );
-            }
-        });
-        
-        // ===============================================
-        // bind the News form using 'ajaxForm' 
-        $('#vote').ajaxForm({
-            beforeSubmit: function (arr, data, options){
-                $('#vote').attr('style', 'display: none');
-                $('#js_news_message').attr('class', 'alert loading').html('Submitting Form...').slideDown(300);
-            },
-            success: post_result,
-            clearForm: true,
-            timeout: 5000 
-        });
-
-        // Callback function for the News ajaxForm 
-        function post_result(response, statusText, xhr, $form)  {
-            // Parse the JSON response
-            var result = jQuery.parseJSON(response);
-            if (result.success == true){
-                // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#js_news_message').attr('class', 'alert success').html(result.message);
-                votetable.fnDraw();
-            }else{
-                $('#js_news_message').attr('class', 'alert ' + result.type).html(result.message);
-            }
-        }
-    })
-</script>
+<!--# Ajax Form for Models #-->
+<pcms::eval>
+    <?php
+        $this->append_metadata('');
+        $this->append_metadata('<!-- Include jQuery Form css file -->');
+        $this->append_metadata('<link type="text/javascript" src="'. SITE_URL .'/application/admin/js/mylibs/jquery.form.js"/>'); 
+    ?>
+</pcms::eval>
