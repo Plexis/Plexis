@@ -1,7 +1,6 @@
 $().ready(function() {
     /* Tabs */
     $("#tab-panel-1").createTabs();
-    $("#tab-panel-2").createTabs();
     
     /* Form validation */
     var validateform = $("#config-form").validate();

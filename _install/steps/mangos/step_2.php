@@ -36,7 +36,7 @@ else
 }
 
 // Cache Writable
-if(is_writable('../system/temp/cache') == TRUE)
+if(is_writable('../application/cache') == TRUE)
 {
     $cache_writable = "<img src='installer/images/check.png' height='18px' width='18px' />";
 }
@@ -98,7 +98,7 @@ else
                 <td><?php echo $database_config_writable; ?></td>
             </tr>
             <tr>
-                <td>Cache ("system/temp/cache/") Writable by Webserver </td>
+                <td>Cache ("application/cache/") Writable by Webserver </td>
                 <td><?php echo $cache_writable; ?></td>
             </tr>
             <tr>

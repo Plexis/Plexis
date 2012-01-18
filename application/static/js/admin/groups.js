@@ -1,9 +1,10 @@
 $().ready(function() {
     var post_url = url + "/ajax/groups";
 
-    /**
-     * DataTables
-     */
+    /* Tabs */
+    $("#tab-panel-1").createTabs();
+
+    /** DataTables */
     var table = $('#groups').dataTable({
         "bServerSide": true,
         "bSortClasses": false,
@@ -20,20 +21,20 @@ $().ready(function() {
         }
     });
     
-    /* Form validation */
+    /** Form validation */
     var validateform = $("#form").validate();
     
-    // ============================================
-    // Create Group
+
+    /** Create Group Button (Modal popup) */
     $("#create").click(function() {
         // Show form, and hide any previous messages
-        $('#form').dialog({ modal: true, height: 400, width: 500 });
+        $('#create-form').dialog({ modal: true, height: 400, width: 500 });
         $('#js_modal_message').attr('style', 'display: none;');
-        $('#form').attr('style', '');
+        $('#create-form').attr('style', '');
     });
+
     
-    // ===============================================
-    // bind the Model form using 'ajaxForm' 
+    /** bind the Model form using 'ajaxForm' */
     $('#create-form').ajaxForm({
         beforeSubmit: function (arr, data, options)
         {
@@ -45,7 +46,7 @@ $().ready(function() {
         timeout: 5000 
     });
 
-    // Callback function for the Add New ajaxForm 
+    /** Callback function for the Add New ajaxForm */
     function save_result(response, statusText, xhr, $form)  
     { 
         // Parse the JSON response

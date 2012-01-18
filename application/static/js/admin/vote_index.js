@@ -1,8 +1,7 @@
 $().ready(function() {
     var post_url = url + "/ajax/vote";
-    /**
-     * DataTables
-     */
+    
+    /** DataTables */
     var votetable = $('#data-table').dataTable({
         "bServerSide": true,
         "bSortClasses": false,
@@ -19,16 +18,14 @@ $().ready(function() {
     });
     
     
-    /*
-     * Form Validation and Posting
-     */
+    /** Form Validation and Posting */
     var validateform = $("#vote").validate();
     $("#reset-form").click(function() {
         validateform.resetForm();
     });
     
-    // ============================================
-    // Create Vote Site
+
+    /** Create Vote Site */
     $("#create").click(function() {
         // Show form, and hide any previous messages
         $('#vote-form').dialog({ modal: true, height: 420, width: 500 });
@@ -36,8 +33,8 @@ $().ready(function() {
         $('#vote').attr('style', '');
     });
 
-    // ============================================
-    // Delete Vote Site
+
+    /** Delete Vote Site */
     $("#data-table").delegate('.delete', 'click', function(){
         var vote_id = $(this).attr('name');
         
@@ -71,8 +68,8 @@ $().ready(function() {
         }
     });
     
-    // ===============================================
-    // bind the Vote form using 'ajaxForm' 
+
+    /** bind the Vote form using 'ajaxForm' */
     $('#vote').ajaxForm({
         beforeSubmit: function (arr, data, options)
         {
@@ -84,7 +81,7 @@ $().ready(function() {
         timeout: 5000 
     });
 
-    // Callback function for the Vote ajaxForm 
+    /** Callback function for the Vote ajaxForm */
     function post_result(response, statusText, xhr, $form)  
     {
         // Parse the JSON response
