@@ -34,17 +34,18 @@ CREATE TABLE `pcms_account_groups` (
   `is_user` tinyint(1) NOT NULL DEFAULT '0',
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
   `is_super_admin` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`group_id`)
+  `permissions` text COMMENT 'seriazlized array of permissions',
+  PRIMARY KEY (`group_id`,`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_account_groups
 -- ----------------------------
-INSERT INTO `pcms_account_groups` VALUES ('0', 'Banned', '1', '0', '0', '0');
-INSERT INTO `pcms_account_groups` VALUES ('1', 'Guest', '0', '0', '0', '0');
-INSERT INTO `pcms_account_groups` VALUES ('2', 'Member', '0', '1', '0', '0');
-INSERT INTO `pcms_account_groups` VALUES ('3', 'Admin', '0', '1', '1', '0');
-INSERT INTO `pcms_account_groups` VALUES ('4', 'Super Admin', '0', '1', '1', '1');
+INSERT INTO `pcms_account_groups` VALUES ('0', 'Banned', '1', '0', '0', '0', null);
+INSERT INTO `pcms_account_groups` VALUES ('1', 'Guest', '0', '0', '0', '0', null);
+INSERT INTO `pcms_account_groups` VALUES ('2', 'Member', '0', '1', '0', '0', null);
+INSERT INTO `pcms_account_groups` VALUES ('3', 'Admin', '0', '1', '1', '0', null);
+INSERT INTO `pcms_account_groups` VALUES ('4', 'Super Admin', '0', '1', '1', '1', null);
 
 -- ----------------------------
 -- Table structure for `pcms_modules`
@@ -80,6 +81,22 @@ CREATE TABLE `pcms_news` (
 -- Records of pcms_news
 -- ----------------------------
 INSERT INTO `pcms_news` VALUES ('1', 'Welcome to Plexis CMS!', 'wilson212', '1324062007', '<p>Thank you for downloading Plexis Cms. Plexis is a professional WoW pirvate server CMS with tons of tools. Since we are in the Alpha stages, your feedback is <span style=\"color: #ff0000;\"><strong>critical</strong></span>. Please note that i donot recomend this site going live because of the due fact that there are not alot of features available.</p>');
+
+-- ----------------------------
+-- Table structure for `pcms_permissions`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_permissions`;
+CREATE TABLE `pcms_permissions` (
+  `key` varchar(25) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `module` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pcms_permissions
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `pcms_realms`

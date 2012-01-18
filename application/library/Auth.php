@@ -27,6 +27,9 @@ class Auth
     // The session class
     protected $session;
     
+    // Users access permission
+    protected $permissions;
+    
     // Clients IP address
     public $remote_ip;
 
@@ -94,6 +97,10 @@ class Auth
                 $result['username'] = "Guest";
                 $result['logged_in'] = FALSE;
                 
+                // Load our perms into a different var and unset
+                $perms = unserialize( $result['permissions'] );
+                unset( $result['permissions'] );
+                
                 // Merge and set the data
                 $this->session->set('user', $result);
             }
@@ -103,6 +110,7 @@ class Auth
         elseif($session['expire_time'] < time() - $this->expire_time) 
         {
             $this->logout();
+            return;
         }
         
         // Everything is good, user is valid, but we need to load his information
@@ -127,6 +135,10 @@ class Auth
                 goto Guest;
             }
             
+            // Load our perms into a different var and unset
+            $perms = unserialize( $result['permissions'] );
+            unset( $result['permissions'] );
+            
             // Custom variable for QA checking
             ($result['_account_recovery'] == NULL) ? $set = FALSE : $set = TRUE;
           
@@ -145,6 +157,9 @@ class Auth
             // Set our users info up the the session and carry onwards :D
             $this->session->set('user', array_merge($session, $result));
         }
+        
+        // Load the permissions
+        $this->load_permissions( $result['group_id'], $perms );
     }
 
 /*
@@ -335,6 +350,68 @@ class Auth
             }
             return FALSE;
         }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: load_permissions()
+| ---------------------------------------------------------------
+|
+| Loads the permissions specific to this user
+|
+| @Return (None)
+|
+*/
+
+    protected function load_permissions($gid, $perms)
+    {
+        // set to empty array if false
+        if($perms == FALSE) $perms = array();
+        
+        // Get alist of all permissions
+        $query = "SELECT `key` FROM `pcms_permissions`";
+        $all = $this->DB->query( $query )->fetch_array();
+        
+        // Unset old perms that dont exist anymore
+        $dif = FALSE;
+        foreach($perms as $id => $key)
+        {
+            if( !in_array($key, $all) )
+            {
+                $dif = TRUE;
+                unset($perms[ $id ]);
+            }
+        }
+        
+        // Update the DB if there are any changes
+        if($dif)
+        {
+            $p = serialize($perms);
+            $this->DB->update('pcms_account_groups', array('permissions' => $p), "`group_id`=".$gid);
+        }
+        
+        // Set this users permissions
+        $this->permissions = $perms;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: load_permissions()
+| ---------------------------------------------------------------
+|
+| Loads the permissions specific to this user
+|
+| @Return (Int) 1 if the user has permission, else 0
+|
+*/
+
+    public function has_permission($key)
+    {
+        if(array_key_exists($key, $this->permissions))
+        {
+            return $this->permissions[$key];
+        }
+        return 0;
     }
 
 /*
