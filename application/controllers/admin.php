@@ -328,10 +328,6 @@ class Admin extends Application\Core\Controller
                 // Redirect if this realm doesnt exist / isnt installed
                 if($realm == FALSE) redirect('admin/realms');
                 
-                // Load the realm info from the realm itself
-                $info = $this->realm->fetch_realm($id);
-                $realm['name'] = $info['name'];
-                
                 // Unserialize our DB realms connection information
                 $realm['cdb'] = unserialize($realm['char_db']);
                 $realm['wdb'] = unserialize($realm['world_db']);

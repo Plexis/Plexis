@@ -3,15 +3,15 @@
 $nogood = 0;
 
 // PHP version check
-if(phpversion() < 5.3)
-{
-    $phpver = "<img src='installer/images/x.png' height='18px' width='18px' />";
-    $nogood++;
-}
-else
+if(strnatcmp(get_real_phpversion(),'5.3.0') >= 0)
 {
     $phpver = "<img src='installer/images/check.png' height='18px' width='18px' />";
 }
+else
+{
+    $phpver = "<img src='installer/images/x.png' height='18px' width='18px' />";
+    $nogood++;
+} 
 
 // Config Writable
 if(is_writable('../application/config/config.php') == TRUE)
@@ -86,7 +86,7 @@ else
         contacting your webhost.<br /><br />
         <table>
             <tr>
-                <td>PHP Version 5.3 or newer <?php echo " (".phpversion() .")"; ?> </td>
+                <td>PHP Version 5.3 or newer <?php echo " (". get_real_phpversion() .")"; ?> </td>
                 <td><?php echo $phpver; ?></td>
             </tr>
             <tr>

@@ -40,6 +40,26 @@
         $pass = strtoupper($pass);
         return SHA1($user.':'.$pass);
     }
+
+/*
+| ---------------------------------------------------------------
+| Function: get_real_phpversion()
+| ---------------------------------------------------------------
+|
+| A function that returns the absolute php version
+|
+*/    
+    function get_real_phpversion()
+    {
+        if(strpos(phpversion(), "-"))
+        {
+            return substr(phpversion(), 0, strpos(phpversion(), '-'));
+        }
+        else
+        {
+            return phpversion();
+        }
+    }
  
 /*
 | ---------------------------------------------------------------
