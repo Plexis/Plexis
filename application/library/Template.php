@@ -86,11 +86,11 @@ class Template
              ->set_metadata('expires', '-1', 'http-equiv')
              ->append_metadata("") // Add whitespace
              ->append_metadata("<!-- Include Plexis Static JS Scripts -->")
-             ->append_metadata('<script type="text/javascript">var url = "'. SITE_URL .'"; var realm_id = '. get_realm_cookie() .';</script>')
-             ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery-1.6.2.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery.validate.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. SITE_URL .'/application/static/js/plexis.js"></script>'
+             ->append_metadata('<script type="text/javascript">var url = "'. BASE_URL .'"; var realm_id = '. get_realm_cookie() .';</script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery-1.6.2.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.validate.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/plexis.js"></script>'
         );
     }
 
@@ -123,7 +123,7 @@ class Template
     public function set_template_path($path = 'templates') 
     {
         // Set template path
-        $this->template['http_path'] = SITE_URL ."/application/". str_replace( '\\', '/', $path );
+        $this->template['http_path'] = BASE_URL ."/application/". str_replace( '\\', '/', $path );
         $this->template['path'] = str_replace( array('/', '\\'), DS, $path );
         return $this;
     }
@@ -586,7 +586,7 @@ class Template
         }
         elseif(file_exists( $s_file ))
         {
-            return '<script type="text/javascript" src="'. SITE_URL .'/application/static/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            return '<script type="text/javascript" src="'. BASE_URL .'/application/static/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
         }
         else
         {
@@ -789,6 +789,7 @@ class Template
         unset($data);
         
         // Set all the template data LAST! Also squeeze the site url in there
+        $this->set('BASE_URL', BASE_URL);
         $this->set('SITE_URL', SITE_URL);
         $this->set('TEMPLATE_URL', $this->template['http_path']);
         $this->set('TEMPLATE_PATH', $this->template['path']);

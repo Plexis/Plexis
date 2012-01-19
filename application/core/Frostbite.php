@@ -46,7 +46,15 @@ class Frostbite
         $queryString  = $GLOBALS['querystring']  = $routes['querystring'];
         
         // Define our site url
-        define('SITE_URL', $routes['site_url']);
+        define('BASE_URL', $routes['site_url']);
+        if( isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'On' )
+        {
+            define('SITE_URL', $routes['site_url']);
+        }
+        else
+        {
+            define('SITE_URL', $routes['site_url'] . '/?url=');
+        }
 
         // -----------------------------------------
         // Lets include the application controller.|

@@ -94,6 +94,34 @@ class Input
         }
         return FALSE;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: get()
+| ---------------------------------------------------------------
+|
+| Returns a $_GET variable
+|
+| @Param: (String) $var - variable name to be returned
+| @Param: (Bool) $xss - Check for XSS ?
+| @Return (Mixed) Returns the value of $_GET[$var]
+|
+*/
+    public function get($var, $xss = FALSE)
+    {
+        if(isset($_GET[$var]))
+        {
+            if($xss == FALSE)
+            {
+                return $_GET[$var];
+            }
+            else
+            {
+                return $this->clean($_GET[$var]);
+            }
+        }
+        return FALSE;
+    }
 
 /*
 | ---------------------------------------------------------------

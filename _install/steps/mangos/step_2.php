@@ -46,26 +46,6 @@ else
     $nogood++;
 }
 
-// Mod rewrite checker
-if(function_exists('apache_get_modules')) 
-{
-    $modules = apache_get_modules();
-    $mod_rewrite = in_array('mod_rewrite', $modules);
-} 
-else 
-{
-    $mod_rewrite =  getenv('HTTP_MOD_REWRITE') == 'On' ? true : false ;
-}
-if($mod_rewrite == TRUE)
-{
-    $mod_rewrite = "<img src='installer/images/check.png' height='18px' width='18px' />";
-}
-else
-{
-    $mod_rewrite = "<img src='installer/images/x.png' height='18px' width='18px' />";
-    $nogood++;
-}
-
 // Fsockopen check
 if(function_exists("fsockopen")) 
 {
@@ -100,10 +80,6 @@ else
             <tr>
                 <td>Cache ("application/cache/") Writable by Webserver </td>
                 <td><?php echo $cache_writable; ?></td>
-            </tr>
-            <tr>
-                <td>Apache Mod_Rewrite enabled </td>
-                <td><?php echo $mod_rewrite; ?></td>
             </tr>
             <tr>
                 <td>Fsockopen Enabled </td>
