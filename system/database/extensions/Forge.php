@@ -16,8 +16,11 @@ namespace System\Database\Extensions;
 class Forge
 {
     protected $DB;
-    protected $cols = array();
+    protected $lines = array();
     protected $keys = array();
+    protected $table = '';
+    protected $table_options = array();
+    protected $mode = '';
 
 /*
 | ---------------------------------------------------------------
@@ -34,75 +37,127 @@ class Forge
 
 /*
 | ---------------------------------------------------------------
-| Function: add_field()
+| Function: add_column()
 | ---------------------------------------------------------------
 |
 | The method is adds a column for the new table
 |
 | @Param: (String) $name - The name of the column
-| @Param: (String) $type - The column type (Ex: INT, TEXT, VARCHAR)
-| @Param: (Int) $size - The size constraint on the new field
-| @Param: (Mixed) $default - The default value of the column
-| @Param: (Bool) $auto - Auto Increment column?
-| @Param: (Bool) $allow_null - Allow null value in col. ?
-| @Param: (String) $comment - The Comment of the column
+| @Param: (String) $type - The column type (Ex: int, text, varchar)
+| @Param: (Int) $length - The size constraint on the new field
+| @Param: (Array) $options - additional options for the table:
+|   'allow_null' - (Bool) Allow the field to be null?
+|   'default' - (String) The default value of the column if nothing exists
+|   'comment' - (String) The comment of the column
+|   'increments' - (Bool) & Int only - Does the value increment?
+|   'primary_key' - (Bool) is this column a primary key?
+|   'unique' - (Bool) Make the fields contents unique to the other rows?
+|   'unsigned' - (Bool) & Int only - Column unsigned?
 |
 */
-    public function add_field($name, $type = NULL, $size = NULL, $default = NULL, $auto = FALSE, $allow_null = TRUE, $comment = NULL)
+    public function add_column($name, $type, $length = NULL, $options = array())
     {
-        // Set the ID field always
-        if($name == 'id')
+        // Build our row sql
+        if($this->mode == 'alter')
         {
-            // Set defaults if they were not specified
-            if($size == NULL && $type == NULL) $auto = TRUE;
-            if($type == NULL) $type = 'int';
-            if($size == NULL) $size = 9;
-            if($default == NULL) $default = 0;
-            
-            // Build our column array
-            $col = array(
-                'type' => $type,
-                'size' => $size,
-                'default' => $default,
-                'auto_increment' => $auto,
-                'allow_null' => $allow_null,
-                'comment' => $comment
-            );
+            $sql = "ADD `$name` ";
         }
         else
         {
-            // Set defaults if they were not specified
-            if($type == NULL) $type = 'varchar';
-            if($size == NULL) $size = 255;
-            if($type != 'int' && $type != 'tinyint' && $type != 'smallint') $auto = FALSE;
-            
-            // Build our comlumn array
-            $col = array(
-                'type' => $type,
-                'size' => $size,
-                'default' => $default,
-                'auto_increment' => $auto,
-                'allow_null' => $allow_null,
-                'comment' => $comment
-            );
+            $sql = "`$name` ";
         }
-        $this->cols[$name] = $col;
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: add_key()
-| ---------------------------------------------------------------
-|
-| The method is adds a column key for the new table
-|
-| @Param: (String) $name - The name of the column
-| @Param: (Bool) $primary - Is this a primary key?
-|
-*/
-    public function add_key($name)
-    {
-        $this->keys[] = $name;
+        
+        // Process our column definition
+        switch($type)
+        {
+            case "string":
+            case "varchar":
+                // Build the SQL
+                $len = ( !is_null($length)) ?  $length  : 255;
+                $sql .= "varchar(". $len .")";
+                break;
+                
+            case "int":
+            case "integer":
+                // Build the SQL
+                $len = ( !is_null($length)) ?  $length  : 11;
+                $sql .= "int(". $len .")";
+                $type = 'int';
+                break;
+                
+            case "float":
+                // Build the SQL
+                $len = ( !is_null($length)) ?  $length  : 11;
+                $sql .= "float(". $len .")";
+                break;
+                
+            case "text":
+                // Build the SQL
+                $sql = "text";
+                break;
+                
+            case "timestamp":
+                $sql .= "timestamp";
+                if( !isset($options['default'])) $options['default'] = "CURRENT_TIMESTAMP";
+                break;
+                
+            default:
+                return FALSE;
+                break;
+        }
+        
+        // Set binary / unsigned
+        if($type == 'int' && isset($options['unsigned']) && $options['unsigned'] == TRUE)
+        {
+            $sql .= " unsigned";
+        }
+        
+        // Set allow Null
+        if(isset($options['allow_null']) && $options['allow_null'] == FALSE)
+        {
+            $sql .= " NOT NULL";
+        }
+        
+        // Add default, use array_key_exists in case of NULL
+        if(array_key_exists('default', $options))
+        {
+            if($options['default'] == NULL)
+            {
+                (isset($options['allow_null']) && $options['allow_null'] == FALSE) ? $d = "''" : $d = 'NULL';
+            }
+            else
+            {
+                $d = "'". $options['default'] ."'";
+            }
+            $sql .= " DEFAULT ". $d;
+        }
+        
+        // Auto increment
+        if($type == 'int' && isset($options['increments']) && $options['increments'] == TRUE)
+        {
+            $sql .= " AUTO_INCREMENT";
+        }
+        
+        // Add unique
+        if(isset($options['unique']) && $options['unique'] == TRUE)
+        {
+            $sql .= " UNIQUE";
+        }
+        
+        // Add comment if one exists
+        if(isset($options['comment']))
+        {
+            $sql .= " COMMENT '". $options['comment'] ."'";
+        }
+        
+        // Add keys
+        if(isset($options['primary']) && $options['primary'] == TRUE)
+        {
+            $this->keys[] = $name;
+        }
+        
+        $this->lines[] = $sql;
+        return $this;
     }
 
  
@@ -111,80 +166,53 @@ class Forge
 | Function: create_table()
 | ---------------------------------------------------------------
 |
-| The method is used to create new tables in the database
+| The method is used to create new tables in the database. You
+| need to add columns first but using the "add_columns" function
 |
 | @Param: (String) $name - The name of the table
+| @Param: (Array) $options - an array of table options:
+|   'engine' - Can specify DB engine (MyISAM, InnoDB)
+|   'charset' - The table character set
+|   'collate' - characterset collation
+|   'row_format' - the row fomat
 | @Param: (Bool) $if_not_exists - Only create table if it doesnt exist
 |
 */
-    public function create_table($name, $if_not_exists = TRUE, $charset = "utf8")
+    public function create_table($name, $options = array(), $if_not_exists = TRUE)
     {
-        if( empty($this->cols) || empty($this->keys) )
+        // Set mode to create
+        $this->mode = 'create';
+        $this->table = $name;
+        $this->table_options = array('if_not_exists' => $if_not_exists) + $options;
+        return $this;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: alter_table
+| ---------------------------------------------------------------
+|
+| The method is used to add columns to a  table or alter it. If
+| you add columns first (using the "add_columns" function), then
+| running the function with no custom alter will add cols. to your
+| selected table
+|
+| @Param: (String) $name - The name of the table
+| @Param: (String) $custom - Custom alteration string
+|
+*/
+    public function alter_table($name, $custom = FALSE)
+    {
+        // If passing custom alter data, add it
+        if(is_string($custom))
         {
-            show_error('You must first add columns and keys before creating a table', FALSE, E_ERROR);
-            return FALSE;
+            $this->lines[] = $custom;
         }
-        
-        // NOW, we can continue with creating the table
-        $sql = 'CREATE TABLE ';
 
-        // Add IF NOT EXISTS if set to true
-        if($if_not_exists == TRUE)
-        {
-            $sql .= 'IF NOT EXISTS ';
-        }
-        
-        // Add the table name
-        $sql .= "`$name` (". PHP_EOL;
-        
-        // Loop through and add each column to the sql
-        foreach($this->cols as $name => $col)
-        {
-            if($col['type'] != 'text')
-            {
-                $sql .= "\t`$name` ". strtolower($col['type']) ."(". $col['size'] .")";
-            }
-            else
-            {
-                $sql .= "\t`$name` text";
-            }
-            
-            // Set allow Null
-            if($col['allow_null'] == FALSE || $col['auto_increment'] == TRUE || $col['default'] != NULL)
-            {
-                $sql .= " NOT NULL";
-            }
-            
-            // Set auto increment
-            if($col['auto_increment'] == TRUE)
-            {
-                $sql .= " AUTO_INCREMENT";
-            }
-            
-            // Add default
-            else
-            {
-                ($col['default'] === NULL) ? $d = 'NULL' : $d = "'". $col['default'] ."'";
-                $sql .= " DEFAULT ". $d;
-            }
-            
-            // Add comment if one exists
-            if($col['comment'] != NULL)
-            {
-                $sql .= " COMMENT '". $col['comment'] ."'";
-            }
-            
-            // Add ending
-            $sql .= ",". PHP_EOL;
-        }
-        
-        // Add primary keys
-        $sql .= "\tPRIMARY KEY (`". implode('`, `', $this->keys) ."`)". PHP_EOL;
-        
-        // Finish
-        $sql .= ") DEFAULT CHARSET=". strtolower($charset) .";";
-        $result = $this->DB->exec( $sql, FALSE );
-        return ($result === FALSE) ? FALSE : TRUE;
+        // Set mode to alter
+        $this->mode = 'alter';
+        $this->table = $name;
+        return $this;
     }
 
 /*
@@ -224,86 +252,125 @@ class Forge
 
 /*
 | ---------------------------------------------------------------
-| Function: add_column()
-| ---------------------------------------------------------------
-|
-| The method is used to add columns to a  table
-|
-| @Param: (String) $name - The name of the table
-| @Param: (String) $col_name - The name of the new column
-| @Param: (String) $type - The column type (Ex: INT, TEXT, VARCHAR)
-| @Param: (Int) $size - The size constraint on the new field
-| @Param: (Mixed) $default - The default value of the column
-| @Param: (Bool) $auto - Auto Increment column?
-| @Param: (Bool) $allow_null - Allow null value in col. ?
-| @Param: (String) $comment - The Comment of the column
-|
-*/
-    public function add_column($name, $col_name, $type = 'varchar', $size = 255, $default = NULL, $auto = FALSE, $allow_null = TRUE, $comment = NULL)
-    {
-        // Prevent a syntax error here
-        if($type != 'int' && $type != 'tinyint' && $type != 'smallint') $auto = FALSE;
-
-        // Prefix
-        $sql = "ALTER TABLE `$name` ADD ";
-
-        // Loop through and add each column to the sql
-
-        if($type != 'text')
-        {
-            $sql .= "\t`$col_name` ". strtolower($type) ."(". $size .")";
-        }
-        else
-        {
-            $sql .= "\t`$col_name` text";
-        }
-        
-        // Set allow Null
-        if($allow_null == FALSE || $auto == TRUE || $default != NULL)
-        {
-            $sql .= " NOT NULL";
-        }
-        
-        // Set auto increment
-        if($auto == TRUE)
-        {
-            $sql .= " AUTO_INCREMENT";
-        }
-        
-        // Add default
-        else
-        {
-            ($default === NULL) ? $d = 'NULL' : $d = "'". $default ."'";
-            $sql .= " DEFAULT ". $d;
-        }
-        
-        // Add comment if one exists
-        if($comment != NULL)
-        {
-            $sql .= " COMMENT '". $comment ."'";
-        }
-        
-        // Add ending
-        $sql .= ";";
-
-        $result = $this->DB->exec( $sql, FALSE );
-        return ($result === FALSE) ? FALSE : TRUE;
-    }
-
-/*
-| ---------------------------------------------------------------
 | Function: drop_column()
 | ---------------------------------------------------------------
 |
 | The method is used to drop columns out of a  table
 |
-| @Param: (String) $name - The name of the table
-| @Param: (String) $col_name - The name of the column
+| @Param: (String) $name - The name of the column
 |
 */
-    public function drop_column($name, $col_name)
+    public function drop_column($name)
     {
-        $sql = "ALTER TABLE `$name` DROP COLUMN `$col_name`";
+        if($this->mode == 'alter')
+        {
+            $this->lines[] = "DROP COLUMN `$name`";
+            return $this;
+        }
+        return FALSE;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: execute()
+| ---------------------------------------------------------------
+|
+| This method is used to finalize and execute any added / droped
+| coloumns made by the other functions, such as create_table().
+|
+*/
+    public function execute()
+    {
+        if($this->mode == '' || empty($this->lines))
+        {
+            show_error('You cannot call this method without first selecting a mode and table, and adding columns or dropping them.', FALSE, E_ERROR);
+            return FALSE;
+        }
+        
+        switch($this->mode)
+        {
+            case "create":
+                // Make sure we have a primary key
+                if(empty($this->keys))
+                {
+                    show_error('You must first add a primary key before creating a table', FALSE, E_ERROR);
+                    return FALSE;
+                }
+                
+                // NOW, we can continue with creating the table
+                $sql = 'CREATE TABLE ';
+
+                // Add IF NOT EXISTS if set to true
+                if($this->table_options['if_not_exists'] == TRUE) $sql .= 'IF NOT EXISTS ';
+                
+                // Add the table name
+                $sql .= "`$this->table` (". PHP_EOL;
+                
+                // Loop through and add each column to the sql
+                foreach($this->lines as $line)
+                {
+                    // Add this row to the sql
+                    $sql .= "\t". $line .",". PHP_EOL;
+                }
+                
+                // Add primary keys
+                $sql .= "\tPRIMARY KEY (`". implode('`, `', $this->keys) ."`)". PHP_EOL . ")";
+                
+                // Finish
+                if( !empty($this->table_options))
+                {
+                    // Check for a givin engine
+                    if(isset($this->table_options['engine']))
+                    {
+                        $sql .= "ENGINE=". $this->table_options['engine'] ." ";
+                    }
+                    
+                    // Check for charset
+                    if(isset($this->table_options['charset']))
+                    {
+                        $sql .= "DEFAULT CHARSET=". $this->table_options['charset'] ." ";
+                    }
+                    
+                    // Check forcollate
+                    if(isset($this->table_options['collate']))
+                    {
+                        $sql .= "COLLATE=". $this->table_options['collate'] ." ";
+                    }
+                    
+                    // Check for charset
+                    if(isset($this->table_options['row_format']))
+                    {
+                        $sql .= "ROW_FORMAT=". $this->table_options['row_format'] ." ";
+                    }
+                }
+                break;
+                
+            case "alter":
+                // Start things off
+                $sql = "ALTER TABLE `$this->table`". PHP_EOL;
+
+                // Loop through and add each column to the sql
+                $i = 1;
+                $total = count($this->lines);
+                foreach($this->lines as $line)
+                {
+                    // Add this row to the sql
+                    $sql .= $line;
+                    if($i != $total)  $sql .= ",". PHP_EOL;
+                    ++$i;
+                }
+                break;
+                
+        }
+        
+        // Remove extra whitespace and close
+        $sql = trim($sql);
+        $sql .= ";";
+        
+        // Unset the keys and columns for the next one
+        $this->reset();
+        
+        // Send the sql and return the result
         $result = $this->DB->exec( $sql, FALSE );
         return ($result === FALSE) ? FALSE : TRUE;
     }
@@ -319,8 +386,11 @@ class Forge
     public function reset()
     {
         // Reset all vars
-        $this->cols = array();
+        $this->lines = array();
         $this->keys = array();
+        $this->mode = '';
+        $this->table = '';
+        $this->table_options = '';
     }
 }
 // EOF

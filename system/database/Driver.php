@@ -15,6 +15,9 @@ namespace System\Database;
 
 class Driver extends \PDO
 {
+    // Driver
+    protected $driver;
+    
     // The most recen query
     protected $last_query = '';
 
@@ -49,11 +52,11 @@ class Driver extends \PDO
         // Create our DSN based off our driver
         if($i['driver'] == 'sqlite')
         {
-            $dsn = 'sqlite:dbname='. ROOT . DS . $i['database'];
+            $dsn = 'sqlite:dbname='. $i['database'];
         }
         else
         {
-            $dsn = $i['driver'] .':dbname='.$i['database'] .';host='.$i['host'] .';port='.$i['port'];
+            $dsn = $i['driver'] .':host='.$i['host'] .';port='.$i['port'] .';dbname='.$i['database'];
         }
         
         // Try and Connect to the database
@@ -61,19 +64,14 @@ class Driver extends \PDO
         {
             // Connect using the PDO constructer
             parent::__construct($dsn, $i['username'], $i['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+            $return = TRUE;
         }
         catch (\PDOException $e)
         {
-            // So we caught an error, depending on our driver, is the info we spit out
-            if($i['driver'] == 'sqlite')
-            {
-                show_error('db_sqlite_connect_error', array( $dsn ), E_ERROR);
-            }
-            else
-            {
-                show_error('db_connect_error', array( $i['database'], $i['host'], $i['port'] ), E_ERROR);
-            }
+            $return = FALSE;
         }
+        
+        return $return;
     }
 
  

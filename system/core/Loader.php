@@ -175,7 +175,7 @@ class Loader
 | @Return: (Object) Returns the database object / connection
 |
 */
-    public function database($args, $instance = TRUE)
+    public function database($args, $instance = TRUE, $report_error = TRUE)
     {
         // Load our connection settings. We can allow custom connection arguments
         if(!is_array($args))
@@ -212,6 +212,7 @@ class Loader
         }
         
         // Check for a DB class in the Application, and system core folder
+        $info['driver'] = strtolower($info['driver']);
         if(file_exists(APP_PATH. DS . 'database' . DS . 'Driver.php')) 
         {
             require_once(APP_PATH. DS . 'database' . DS . 'Driver.php');
@@ -226,6 +227,12 @@ class Loader
         // Not in the registry, so istablish a new connection
         $dispatch = $first ."Database\\Driver";
         $Obj = new $dispatch( $info );
+        
+        // Check for connection error
+        if($Obj == FALSE && $report_error == TRUE)
+        {
+            show_error('db_connect_error', array( $info['database'], $info['host'], $info['port'] ), E_ERROR);
+        }
         
         // Store the connection in the registry
         \Registry::singleton()->store("DBC_".$args, $Obj);		

@@ -44,8 +44,8 @@ class Mangos_335a
         $this->load = load_class('Loader');
         
         // Load the Database and Realm database connections
-        $this->DB = $this->load->database( 'DB' );
-        $this->RDB = $this->load->database( 'RDB' );
+        $this->DB = $this->load->database('DB');
+        $this->RDB = $this->load->database('RDB');
         $this->realm = $this->load->realm();
         
         // Get our DB info
@@ -55,11 +55,14 @@ class Mangos_335a
         // Turn our connection info into an array
         $world = unserialize($realm['world_db']);
         $char = unserialize($realm['char_db']);
-        $ra_info = unserialize($realm['ra_info']);
         
         // Set the connections into the connection variables
-        $this->CDB = $this->load->database($char);
-        $this->WDB = $this->load->database($world);
+        $this->CDB = $this->load->database($char, FALSE, FALSE);
+        $this->WDB = $this->load->database($world, FALSE, FALSE);
+        if(!$this->CDB ||!$this->WDB)
+        {
+            return FALSE;
+        }
         
         // Finally set our class realm variable
         $this->realm_info = $realm;
@@ -89,7 +92,7 @@ class Mangos_335a
 |
 */
     public function list_characters($limit = 50, $start = 0)
-    {
+    {        
         // Build our query, and query the database
         $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zone` FROM `characters` LIMIT ".$start.", ".$limit;
         $list = $this->CDB->query( $query )->fetch_array();

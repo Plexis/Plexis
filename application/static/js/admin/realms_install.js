@@ -5,6 +5,9 @@ $().ready(function() {
     $('input[name=ra_username]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
     $('input[name=ra_urn]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
     
+    /* Tabs */
+    $("#tab-panel-1").createTabs();
+    
     // Form validation
     $("#install-form").validate();
     

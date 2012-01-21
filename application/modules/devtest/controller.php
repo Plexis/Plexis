@@ -22,10 +22,10 @@ class Devtest extends \Application\Core\Controller
 */
     public function _install()
     {
-        $this->DB->forge->add_field('id');
-        $this->DB->forge->add_field('test');
-        $this->DB->forge->add_key('id');
-        return $this->DB->forge->create_table('test');
+        $table = $this->DB->forge->create_table('test');
+        $table->add_column('id', 'int', 15, array('primary' => TRUE, 'increments' => TRUE, 'unsigned' => TRUE));
+        $table->add_column('test', 'string', 100, array('default' => 'test'));
+        return $table->execute();
     }
     
     public function _uninstall()
@@ -56,33 +56,38 @@ class Devtest extends \Application\Core\Controller
         if($mode == 2)
         {
             echo "Task: Rename Table `test` to `works`<br />Result: ";
-            print_r( (int)$this->DB->forge->rename_table('test', 'works') );
+            echo ($this->DB->forge->rename_table('test', 'works') == TRUE) ? 'Success' : 'Failed';
         }
         elseif($mode == 3)
         {
+            $table = $this->DB->forge->alter_table('works');
+            $table->add_column('worked', 'string', 255, array('default' => 'alter add works!'));
             echo "Task: Add column `worked` to  Table `works`<br />Result: ";
-            print_r( (int)$this->DB->forge->add_column('works', 'worked', 'int', '5') );
+            echo ($table->execute() == TRUE) ? 'Success' : 'Failed';
         }
         elseif($mode == 4)
         {
+            $table = $this->DB->forge->alter_table('works');
+            $table->drop_column('test2');
             echo "Task: Drop column `worked` to  Table `works`<br />Result: ";
-            print_r( (int)$this->DB->forge->drop_column('works', 'worked') );
+            echo ($table->execute() == TRUE) ? 'Success' : 'Failed';
         }
         elseif($mode == 5)
         {
             echo "Task: Drop Table `works`<br />Result: ";
-            print_r( (int)$this->DB->forge->drop_table('works') );
+            echo ($this->DB->forge->drop_table('works') == TRUE) ? 'Success' : 'Failed';
         }
         else
         {
+            $table = $this->DB->forge->create_table('test');
+            $table->add_column('id', 'int', 15, array('primary' => TRUE, 'increments' => TRUE, 'unsigned' => TRUE));
+            $table->add_column('test', 'string', 100, array('default' => 'test'));
             echo "Task: Add Table `test`<br />Result: ";
-            $this->DB->forge->add_field('id');
-            $this->DB->forge->add_field('test');
-            $this->DB->forge->add_key('id');
-            print_r( (int)$this->DB->forge->create_table('test', FALSE) );
+            echo ($table->execute() == TRUE) ? 'Success' : 'Failed';
         }
+        
         $url = SITE_URL ."/devtest/index";
-        echo "<br /><br />Go to step <a href='$url/2'>2</a> - <a href='$url/3'>3</a> - <a href='$url/4'>4</a> - <a href='$url/5'>5</a> - <a href='$url/1'>1</a>";
+        echo "<br /><br />Go to step <a href='$url/2'>2</a> - <a href='$url/3'>3</a> - <a href='$url/4'>4</a> - <a href='$url/5'>5</a> - <a href='$url/1'>Back to Start</a>";
         //$this->load->view('index');
     }
     

@@ -93,7 +93,7 @@ class Language
         // Add the extension, and create our tag
         $lang = $this->language;
         $key = $file .'_'. $lang;
-        $file = $file . '.php';
+        $file_ext = $file . '.php';
 
         // Make sure we havent loaded this already
         if(isset($this->language_vars[$key]))
@@ -106,16 +106,16 @@ class Language
         $vars2 = array();
 
         // Load the core language file if it exists
-        if(file_exists(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file))
+        if(file_exists(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file_ext))
         {
-            $vars = include(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file);
+            $vars = include(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file_ext);
             if(!is_array($vars)) return FALSE;
         }
 
         // Next we load the application file, allows overriding of the core one
-        if(file_exists(APP_PATH . DS .'language' . DS . $lang . DS . $file))
+        if(file_exists(APP_PATH . DS .'language' . DS . $lang . DS . $file_ext))
         {
-            $vars2 = include(APP_PATH . DS .'language' . DS . $lang . DS . $file);
+            $vars2 = include(APP_PATH . DS .'language' . DS . $lang . DS . $file_ext);
             if(!is_array($vars2)) return FALSE;
         }
         
@@ -149,13 +149,13 @@ class Language
         
         // Determine our language variable filename if not givin
         if($file == NULL) $file = end( $this->loaded_files );
-        
+
         // Build out lang var key
         $key = $file .'_'. $this->language;
         
         // check to see if our var is set... if not, try to load it first
         if( !isset($this->language_vars[$key]) ) $this->load($file);
-        
+
         // Attempt to load the actual language var now
         if(isset($this->language_vars[$key][$var]))
         {

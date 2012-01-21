@@ -97,7 +97,7 @@ class Router
         
         // Build our Full Base URL
         $site_url = str_replace('//', '/', $this->http_host .'/'. $this->site_dir);
-        $this->site_url = $this->protocol .'://' . rtrim($site_url, '/');
+        $this->site_url = str_replace( '\\', '', $this->protocol .'://' . rtrim($site_url, '/') );
 
         // Process the site URI
         if( !config('enable_query_strings', 'Core'))

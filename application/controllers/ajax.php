@@ -633,7 +633,7 @@ class Ajax extends Application\Core\Controller
                     $wowlib = $this->load->wowlib($realm['id']);
 
                     // Build our realms return
-                    if($status == 1)
+                    if($status == 1 && $wowlib != FALSE)
                     {
                         $uptime = $this->realm->uptime( $realm['id'] );
                         ($uptime == FALSE) ? $uptime = 'Unavailable' : $uptime = sec2hms($uptime, false);
@@ -719,30 +719,8 @@ class Ajax extends Application\Core\Controller
             $good = TRUE;
 
             // Test our new connections before saving to config
-            try{
-                $dba = new \pdo( 
-                    $cs['driver'].':host='.$cs['host'].':'.$cs['port'].';dbname='.$cs['database'], 
-                    $cs['username'], 
-                    $cs['password'],
-                    array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
-                );
-            }
-            catch(\PDOException $e){
-                $good = FALSE;
-            }
-            
-            // Test our new connection first
-            try{
-                $dba = new \pdo( 
-                    $ws['driver'].':host='.$ws['host'].':'.$ws['port'].';dbname='.$ws['database'], 
-                    $ws['username'], 
-                    $ws['password'],
-                    array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
-                );
-            }
-            catch(\PDOException $e){
-                $good = FALSE;
-            }
+            if( !$this->load->database($cs, FALSE, FALSE) ) $good = FALSE;
+            if( !$this->load->database($ws, FALSE, FALSE) ) $good = FALSE;
             
             // Re-enable errors
             $debug->error_reporting(TRUE);
