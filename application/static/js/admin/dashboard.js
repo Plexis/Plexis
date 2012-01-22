@@ -17,6 +17,7 @@ function check_for_updates()
             p = /([0-9]+)/;
             update = p.exec(message);
             
+            // If the update is null, then we cant get a good read
             if(update == null)
             {
                 // Show that there was an error
@@ -24,8 +25,9 @@ function check_for_updates()
             }
             else
             {
+                // Compare the current build with the update
                 newest = update[0];
-                if(newest != Plexis['version'])
+                if(newest != Plexis['build'])
                 {
                     // Show that there are updates
                     $('#update').html('<font color="green">Updates are Available! <a id="update_link" href="javascript:void(0);"'
