@@ -64,14 +64,11 @@ class Driver extends \PDO
         {
             // Connect using the PDO constructer
             parent::__construct($dsn, $i['username'], $i['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
-            $return = TRUE;
         }
         catch (\PDOException $e)
         {
-            $return = FALSE;
+            throw new \Exception( $e->getMessage() );
         }
-        
-        return $return;
     }
 
  

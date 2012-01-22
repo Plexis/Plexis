@@ -2,6 +2,7 @@
 return array(
 	'autoload_failed' => "Autoload failed to load class: %s",
 	'benchmark_key_not_found' => "Benchmark key \"%s\" does not exists. You must start timer timer before displaying it.",
+    'class_init_failed' => "Failed to initialize class \"%s\": %s",
     'db_autoload_failed' => "Failed to autoload database extension \"%s\"",
 	'db_connect_error' => "Unable to connect to database '%s' from host: %s:%s!",
     'db_sqlite_connect_error' => "Unable to connect to SQLite database '%s'!",

@@ -149,9 +149,17 @@ class Loader extends \System\Core\Loader
         // Load the lib file
         elseif(file_exists($file))
         {
-            include_once $file;
+            // Include the wowlib file
+            require_once($file);
             $name = "\\Application\\Library\\Wowlib\\". $class_name;
-            $class = new $name($id);
+            
+            // Try to init the class
+            try{
+                $class = new $name($id);
+            }
+            catch(\Exception $e){
+                $class = FALSE;
+            }
             
             // Store the class statically and return the class
             \Registry::singleton()->store($class_name .'_r'.$id, $class);

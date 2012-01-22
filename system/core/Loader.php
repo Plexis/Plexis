@@ -175,7 +175,7 @@ class Loader
 | @Return: (Object) Returns the database object / connection
 |
 */
-    public function database($args, $instance = TRUE, $report_error = TRUE)
+    public function database($args, $instance = TRUE)
     {
         // Load our connection settings. We can allow custom connection arguments
         if(!is_array($args))
@@ -226,12 +226,12 @@ class Loader
         
         // Not in the registry, so istablish a new connection
         $dispatch = $first ."Database\\Driver";
-        $Obj = new $dispatch( $info );
-        
-        // Check for connection error
-        if($Obj == FALSE && $report_error == TRUE)
-        {
+        try{
+            $Obj = new $dispatch( $info );
+        }
+        catch(\Exception $e) {
             show_error('db_connect_error', array( $info['database'], $info['host'], $info['port'] ), E_ERROR);
+            $Obj = FALSE;
         }
         
         // Store the connection in the registry

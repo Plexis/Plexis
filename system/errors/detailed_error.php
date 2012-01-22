@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<title>Frostbite :: {ERROR_LEVEL}</title>
-	<link rel="stylesheet" href="<?php echo $site_url; ?>/system/pages/main.css" type="text/css"/>
+	<link rel="stylesheet" href="<?php echo $site_url; ?>/system/errors/main.css" type="text/css"/>
 </head>
 
 <body>

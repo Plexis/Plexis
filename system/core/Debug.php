@@ -21,9 +21,6 @@ namespace System\Core;
 
 class Debug
 {
-    // The instance of this class 
-    private static $instance;
-
     // Error message,
     protected $ErrorMessage;
 
@@ -45,8 +42,8 @@ class Debug
     // Our sites error level.
     protected $Environment;
 
-    // Our original config settings.
-    protected $orig_settings;
+    // Silent Mode
+    protected $silence = FALSE;
     
     // Our URL info
     protected $url_info;
@@ -65,10 +62,6 @@ class Debug
         // Set our error reporting
         $this->log_errors = config('log_errors', 'Core');
         $this->Environment = config('environment', 'Core');
-        
-        // Save our original settings incase we change them midscript
-        $this->orig_settings['log_errors'] = $this->log_errors;
-        $this->orig_settings['Environment'] = $this->Environment;
         
         // Get our URL info
         $this->url_info = get_url_info();
@@ -101,7 +94,7 @@ class Debug
         $this->ErrorTrace = $backtrace;
 
         // Get our level text
-        switch($errno) 
+        switch($errno)
         {
             case E_USER_ERROR:
                 $this->ErrorLevel = 'Error';
@@ -139,22 +132,26 @@ class Debug
                 break;
 
             default:
-                $this->ErrorLevel = 'Error Code: '.$errno;
-                $severity = 2;
+                $this->ErrorLevel = 'Fetal Error: ('.$errno.')';
+                $severity = 3;
                 break;
         }
         
-        // log error if enabled
-        if( $this->log_errors == 1 )
+        // If we are silent, then be silent
+        if($severity == 3 || !$this->silence)
         {
-            $this->log_error();
-        }
-        
-        // Only build the error page when its fetal, or a development Env.
-        if( $this->Environment == 2 || $severity == 2 )
-        {
-            // build nice error page
-            $this->build_error_page();
+            // log error if enabled
+            if( $this->log_errors == 1 )
+            {
+                $this->log_error();
+            }
+            
+            // Only build the error page when its fetal, or a development Env.
+            if( $this->Environment == 2 || $severity > 1 )
+            {
+                // build nice error page
+                $this->build_error_page();
+            }
         }
     }
     
@@ -172,24 +169,23 @@ class Debug
     {
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_level() != 0) ob_end_clean();
-        
-        // Language setup
-        $lang = strtolower( config('core_language', 'Core') );
-        
+
         // Get our site url
         $site_url = $this->url_info['site_url'];
         
         // See if there is a custom page in the app folder
-        if(file_exists( APP_PATH . DS . 'pages' . DS . $this->lang . DS . $lang . DS . $type .'.php' ))
+        $file = APP_PATH . DS . 'errors' . DS . $type .'.php';
+        if(file_exists( $file ))
         {
-            include(APP_PATH . DS . 'pages' . DS . $this->lang . DS . $lang . DS . $type .'.php');
-            die();
+            include($file);
         }
         else
         {
-            include(SYSTEM_PATH . DS . 'pages' . DS . $this->lang . DS . $lang . DS . $type .'.php');
-            die();
+            include(SYSTEM_PATH . DS . 'errors' . DS . $type .'.php');
         }
+        
+        // Kill the script
+        die();
     }
 
 /*
@@ -206,13 +202,13 @@ class Debug
         $url = $this->url_info;
         
         // Create our log message
-        $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') ."\n";
-        $err_message .= "| Error Level: ".$this->ErrorLevel ."\n";
-        $err_message .= "| Message: ".$this->ErrorMessage ."\n"; 
-        $err_message .= "| Reporting File: ".$this->ErrorFile."\n";
-        $err_message .= "| Error Line: ".$this->ErrorLine."\n";
-        $err_message .= "| URL When Error Occured: ". $url['site_url'] ."/". $url['uri'] ."\n\n";
-        $err_message .= "--------------------------------------------------------------------\n\n";
+        $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') . PHP_EOL;
+        $err_message .= "| Error Level: ".$this->ErrorLevel . PHP_EOL;
+        $err_message .= "| Message: ".$this->ErrorMessage . PHP_EOL; 
+        $err_message .= "| Reporting File: ".$this->ErrorFile . PHP_EOL;
+        $err_message .= "| Error Line: ".$this->ErrorLine . PHP_EOL;
+        $err_message .= "| URL When Error Occured: ". $url['site_url'] ."/". $url['uri'] . PHP_EOL;
+        $err_message .= "--------------------------------------------------------------------". PHP_EOL . PHP_EOL;
 
         // Write in the log file, the very long message we made
         $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'error.log', 'a');
@@ -241,26 +237,15 @@ class Debug
     
 /*
 | ---------------------------------------------------------------
-| Function: error_reporting()
+| Function: silent_mode()
 | ---------------------------------------------------------------
 |
 | Enable / disable error reporting (except for fetal errors)
 |
 */
-    public function error_reporting($report = TRUE)
+    public function silent_mode($silent = TRUE)
     {
-        if($report == TRUE)
-        {
-            // Set our error reporting back to the original state
-            $this->log_errors = $this->orig_settings['log_errors'];
-            $this->Environment = $this->orig_settings['Environment'];
-        }
-        else
-        {
-            // Set our error reporting
-            $this->log_errors = 0;
-            $this->Environment = 0;
-        }
+        $this->silence = $silent;
         return TRUE;
     }
     
@@ -284,11 +269,27 @@ class Debug
         ob_start();
             if($this->Environment == 1)
             {
-                include(SYSTEM_PATH . DS . 'pages' . DS . $this->lang . DS . 'error.php');
+                $file = APP_PATH . DS . 'errors' . DS . 'basic_error.php';
+                if(file_exists($file))
+                {
+                    include($file);
+                }
+                else
+                {
+                    include(SYSTEM_PATH . DS . 'pages' . DS . 'basic_error.php');
+                }
             }
             else
             {
-                include(SYSTEM_PATH . DS . 'pages' . DS . $this->lang . DS . 'debug_error.php');
+                $file = APP_PATH . DS . 'errors' . DS . 'detailed_error.php';
+                if(file_exists($file))
+                {
+                    include($file);
+                }
+                else
+                {
+                    include(SYSTEM_PATH . DS . 'errors' . DS . 'detailed_error.php');
+                }
             }
             $page = ob_get_contents();
         @ob_end_clean();
@@ -298,7 +299,7 @@ class Debug
         {
             // Create the regex, and search for it
             $regex = "{DEBUG}(.*){/DEBUG}";
-            while(preg_match("~". $regex ."~iUs", $page, $match))
+            if(preg_match("~". $regex ."~iUs", $page, $match))
             {
                 $blocks = ''; // Each block of backtrace will be added here
                 
@@ -336,7 +337,7 @@ class Debug
                         $blocks .= $block;
                         
                         // We only want to do this no more then 3 times
-                        if($i == 2) { break; }
+                        if($i == 2) break;
                         $i++;
                     }
                 }
@@ -354,7 +355,6 @@ class Debug
         $page = preg_replace('~{(.*)}~', '', $page);
         
         // Spit the page out
-        /* eval('?>'.$page.'<?'); */
         echo $page;
         die();
     }

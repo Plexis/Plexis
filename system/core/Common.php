@@ -292,10 +292,7 @@
 
         // Check the registry for the class, If its there, then return the class
         $loaded = \Registry::singleton()->load($store_name);
-        if($loaded !== NULL)
-        {
-            return $loaded;
-        }
+        if($loaded !== NULL) return $loaded;
 
         // ---------------------------------------------------------
         // Class not in Registry, So we load it manually and then  |
@@ -337,13 +334,19 @@
         require($file);
 
         //  Initiate the new class into a variable
-        $dispatch = new $className();
+        try{
+            $Obj = new $className();
+        }
+        catch(\Exception $e) {
+            show_error('class_init_failed', array($className, $e->getMessage()), E_ERROR);
+            $Obj = FALSE;
+        }
 
         // Store this new object in the registery
-        \Registry::singleton()->store($store_name, $dispatch); 
+        \Registry::singleton()->store($store_name, $Obj); 
 
-        // return dispatched class.
-        return $dispatch;
+        // return the object.
+        return $Obj;
     }
 
 /*

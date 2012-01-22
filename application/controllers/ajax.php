@@ -608,26 +608,22 @@ class Ajax extends Application\Core\Controller
                 $this->load->helper('Time');
                 
                 // Build our query
-                $query = "SELECT `id`, `name`, `address`, `port` FROM `pcms_realms`";
+                $query = "SELECT `id`, `name`, `type`, `address`, `port` FROM `pcms_realms`";
                 
                 // fetch the array of realms
                 $realms = $this->DB->query( $query )->fetch_array();
                 
-                // Dont log errors
-                $Debug->error_reporting(false);
-                
                 // Loop through each realm, and get its status
                 foreach($realms as $key => $realm)
                 {
+
+                    // Dont show errors errors
+                    $Debug->silent_mode(true);
                     $handle = @fsockopen($realm['address'], $realm['port'], $errno, $errstr, 1.5);
-                    if(!$handle)
-                    {
-                        $status = 0;
-                    }
-                    else
-                    {
-                        $status = 1;
-                    }
+                    $Debug->silent_mode(false);
+                    
+                    // Set our status var
+                    ($handle == FALSE) ? $status = 0 : $status = 1;
                     
                     // Load the wowlib for this realm
                     $wowlib = $this->load->wowlib($realm['id']);
@@ -664,8 +660,7 @@ class Ajax extends Application\Core\Controller
                     }
                 }
                 
-                // Re-enable errors, and Cache the results for 2 minutes
-                $Debug->error_reporting(true);
+                // Cache the results for 2 minutes
                 $Cache->save('ajax_realm_status', $result, 120);
             }
 
@@ -715,15 +710,15 @@ class Ajax extends Application\Core\Controller
             
             // Turn off all error reporting, since we use our own, this is easy
             $debug = load_class('Debug');
-            $debug->error_reporting(FALSE);
+            $debug->silent_mode(true);
             $good = TRUE;
 
             // Test our new connections before saving to config
-            if( !$this->load->database($cs, FALSE, FALSE) ) $good = FALSE;
-            if( !$this->load->database($ws, FALSE, FALSE) ) $good = FALSE;
+            if( !$this->load->database($cs, FALSE) ) $good = FALSE;
+            if( !$this->load->database($ws, FALSE) ) $good = FALSE;
             
             // Re-enable errors
-            $debug->error_reporting(TRUE);
+            $debug->silent_mode(false);
 
             // If manually installing, lets get our unique id
             if($action == 'manual-install')
@@ -1442,7 +1437,7 @@ class Ajax extends Application\Core\Controller
         
         // Disable error reporting
         $debug = load_class('Debug');
-        $debug->error_reporting(FALSE);
+        $debug->silent_mode(true);
         
         // Build our headers
         $handle = fsockopen("www.wilson212.net/updates.php", 80, $errno, $errstr, 3);
@@ -1457,7 +1452,7 @@ class Ajax extends Application\Core\Controller
         }
         
         // Set back our error reporting
-        $debug->error_reporting(TRUE);
+        $debug->silent_mode(false);
         
         // return the result
         echo $response;

@@ -56,12 +56,19 @@ class Mangos_335a
         $world = unserialize($realm['world_db']);
         $char = unserialize($realm['char_db']);
         
+        // Disable error reporting
+        load_class('Debug')->silent_mode(true);
+        
         // Set the connections into the connection variables
-        $this->CDB = $this->load->database($char, FALSE, FALSE);
-        $this->WDB = $this->load->database($world, FALSE, FALSE);
+        $this->CDB = $this->load->database($char);
+        $this->WDB = $this->load->database($world);
+        
+        // Restore error reporting
+        load_class('Debug')->silent_mode(false);
         if(!$this->CDB ||!$this->WDB)
         {
-            return FALSE;
+            throw new \Exception('Failed to load database connections.');
+            return;
         }
         
         // Finally set our class realm variable
