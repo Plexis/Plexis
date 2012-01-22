@@ -6,33 +6,47 @@ $().ready(function() {
 function check_for_updates()
 {
     $.ajax({
-        type: "POST",
-        url: url + "/ajax/updates",
-        data: {action: 'check'},
+        type: "GET",
+        url: "https://api.github.com/repos/Plexis/Plexis/commits",
         dataType: "json",
         timeout: 5000, // in milliseconds
         success: function(result) 
         {
-            // If the result is 1, we have updates!
-            if (result == 1)
+            // Get the current update rev number
+            var message = result[0]['commit']['message'];
+            p = /([0-9]+)/;
+            update = p.exec(message);
+            
+            if(update == null)
             {
-                // Show that there are updates
-                $('#update').html('<font color="green">Updates are Available! <a href="admin/update">Click Here</a> to update the CMS.</font>');
-            }
-            else if (result == -1)
-            {
-                // Show that there we cant connect to the update server
-                $('#update').html('<font color="orange">Unable to connect to update server.</font>');
+                // Show that there was an error
+                $('#update').html('<font color="orange">Error fetching newest build number</font>');
             }
             else
             {
-                // Show that there are NO updates
-                $('#update').html('Your CMS is up to date!');
+                newest = update[0];
+                if(newest != Plexis['version'])
+                {
+                    // Show that there are updates
+                    $('#update').html('<font color="green">Updates are Available! <a id="update_link" href="javascript:void(0);"'
+                        + 'onclick="$(\'#update_info\').dialog({ modal: true, width: 500 });">Click Here</a> for more info</font>');
+                    block = $('#update_info').html();
+                    block = block.replace(/\@build/i, newest);
+                    block = block.replace(/\@current/i, Plexis['build']);
+                    block = block.replace(/\@message/i, message);
+                    block = block.replace(/\@author/i, result[0]['commit']['author']['name']);
+                    $('#update_info').html( block );
+                }
+                else
+                {
+                    $('#update').html('Your CMS is up to date!');
+                }
             }
         },
         error: function(request, status, err) 
         {
-            $('#update').html('Unable to connect to update server.');
+            // Show that there we cant connect to the update server
+            $('#update').html('<font color="orange">Unable to connect to update server.</font>');
         }
     });
 }

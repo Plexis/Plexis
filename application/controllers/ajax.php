@@ -1422,42 +1422,6 @@ class Ajax extends Application\Core\Controller
         Output: { echo json_encode($output); }
     }
  
-
-/*
-| ---------------------------------------------------------------
-| Method: updates()
-| ---------------------------------------------------------------
-|
-| This method is used for via Ajax to check for CMS updates
-*/    
-    public function updates()
-    {
-        // Make sure we arent getting direct accessed, and the user has permission
-        $this->check_access('a');
-        
-        // Disable error reporting
-        $debug = load_class('Debug');
-        $debug->silent_mode(true);
-        
-        // Build our headers
-        $handle = fsockopen("www.wilson212.net/updates.php", 80, $errno, $errstr, 3);
-        if(!$handle)
-        {
-            $response = "-1";
-        }
-        else
-        {
-            fclose($handle);
-            $response = file_get_contents("http://wilson212.net/updates.php");
-        }
-        
-        // Set back our error reporting
-        $debug->silent_mode(false);
-        
-        // return the result
-        echo $response;
-    }
-    
 /*
 | ---------------------------------------------------------------
 | Method: output()

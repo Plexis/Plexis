@@ -131,7 +131,7 @@ class Database extends \PDO
             $result = parent::exec($query);
         }
         catch (\PDOException $e) { 
-            $this->trigger_error();
+            $result = FALSE;
         }
 
         // Return
@@ -412,6 +412,66 @@ class Database extends \PDO
             }
         }
         return $this->num_rows;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: run_sql_file()
+| ---------------------------------------------------------------
+|
+| Runs a sql file on the database
+|
+*/
+    public function run_sql_file($file)
+    {
+        // Open the sql file, and add each line to an array
+        $handle = @fopen($file, "r");
+        if($handle) 
+        {
+            while(!feof($handle)) 
+            {
+                $queries[] = fgets($handle);
+            }
+            fclose($handle);
+        }
+        else 
+        {
+            return FALSE;
+        }
+        
+        // loop through each line and process it
+        foreach ($queries as $key => $aquery) 
+        {
+            // If the line is empty or a comment, unset it
+            if (trim($aquery) == "" || strpos ($aquery, "--") === 0 || strpos ($aquery, "#") === 0) 
+            {
+                unset($queries[$key]);
+                continue;
+            }
+            
+            // Check to see if the query is more then 1 line
+            $aquery = rtrim($aquery);
+            $compare = rtrim($aquery, ";");
+            if($compare != $aquery) 
+            {
+                $queries[$key] = $compare . "|br3ak|";
+            }
+        }
+
+        // Combine the query's array into a string, 
+        // and explode it back into an array seperating each query
+        $queries = implode($queries);
+        $queries = explode("|br3ak|", $queries);
+
+        // Process each query
+        foreach ($queries as $query) 
+        {
+            // Dont query if the query is empty
+            if(empty($query)) continue;
+            $result = $this->exec($query);
+            if($result === FALSE) return FALSE;
+        }
+        return TRUE;
     }
 
 /*

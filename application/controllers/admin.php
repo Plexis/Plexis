@@ -27,13 +27,20 @@ class Admin extends Application\Core\Controller
     {
         // Get our PHP and DB versions
         $info = $this->DB->server_info();
-        $data['driver'] = ucfirst( $info['driver'] );
-        $data['php_version'] = phpversion();
-        $data['database_version'] = $info['version'];
+        $rewrite = (isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'On') ? 'On' : 'Off';
         
-        // Set our page title and desc
-        $data['page_title'] = "Dashboard";
-        $data['page_desc'] = "Here you have a quick overview of some features";
+        // Set our page data
+        $data = array(
+            'page_title' => "Dashboard",
+            'page_desc' => "Here you have a quick overview of some features",
+            'driver' => ucfirst( $info['driver'] ),
+            'php_version' => phpversion(),
+            'mod_rewrite' => $rewrite,
+            'database_version' => $info['version'],
+            'CMS_VERSION' => CMS_VERSION,
+            'CMS_BUILD' => CMS_BUILD,
+            'CMS_DB_VERSION' => CMS_DB_VERSION
+        );
         
         // Load the page, and we are done :)
         $this->load->view('dashboard', $data);

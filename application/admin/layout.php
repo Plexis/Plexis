@@ -67,6 +67,20 @@
                     <p>Plexis &copy; 2011, ArchDev Team</p>
                 </div>
                 
+                <!-- Update Panel -->
+                <div id="update_info" title="Update Information" style="display: none;">
+                    <p> 
+                        <b>Current Build:</b> @current <br />
+                        <b>Lastest Build:</b> @build <br />
+                        <b>Commit Mesage:</b> @message <br />
+                        <b>Author:</b> @author <br />
+                    </p>
+                    <br />
+                    <div>
+                        <center> <a href="https://github.com/Plexis/Plexis/zipball/master" class="button">Download Update</a> </center>
+                    </div>
+                </div>
+                
                 <!-- Begin of #user-info -->
                 <div id="user-info">
                     <p>

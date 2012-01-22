@@ -2,15 +2,21 @@
 /* 
 | --------------------------------------------------------------
 | 
-| Plexis, Professional WoW CMS
+| Plexis CMS
 |
 | --------------------------------------------------------------
 |
-| Author: 		Steven Wilson
-| Copyright:	Copyright (c) 2011, Steven Wilson
-| License: 		GNU GPL v3
+| Author:       Steven (Wilson212)
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
+| License:      GNU GPL v3
 |
 */
+
+// Define CMS versions
+define('CMS_VERSION', '0.1.0');
+define('CMS_BUILD', 66);
+define('CMS_DB_VERSION', '0.1');
 
 // Define a smaller Directory seperater and ROOT path
 define('DS', DIRECTORY_SEPARATOR);
@@ -28,7 +34,7 @@ require (SYSTEM_PATH . DS . 'core' . DS . 'Common.php');
 require (SYSTEM_PATH . DS . 'core' . DS . 'Registry.php');
  
 // Register the Core to process errors with the custom_error_handler method
-set_error_handler( 'php_error_handler' , E_ALL | E_STRICT );
+set_error_handler('php_error_handler', E_ALL | E_STRICT);
 
 // Initiate the system start time
 $Benchmark = load_class('Benchmark');

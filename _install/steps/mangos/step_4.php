@@ -57,52 +57,15 @@ else
 if(!isset($_POST['skip']))
 {
     // Dealing with the full install sql file
-    $sqlopen = @fopen("installer/sql/full_install.sql", "r");
-    if ($sqlopen) 
+    $install = $DB->run_sql_file("installer/sql/full_install.sql");
+    if($install)
     {
-        while (!feof($sqlopen)) 
-        {
-            $queries[] = fgets($sqlopen);
-        }
-        fclose($sqlopen);
+        output_message('success', 'Plexis database installed');
     }
-    else 
+    else
     {
-        show_error('Couldn\'t open file full_install.sql. Check if it\'s presented in install/sql/ and if it\'s readable by webserver!');
-        exit();
+        output_message('error', 'There was an error installing the Plexis DB');
     }
-    foreach ($queries as $key => $aquery) 
-    {
-        if (trim($aquery) == "" || strpos ($aquery, "--") === 0 || strpos ($aquery, "#") === 0) 
-        {
-            unset($queries[$key]);
-        }
-    }
-    unset($key, $aquery);
-
-    foreach ($queries as $key => $aquery) 
-    {
-        $aquery = rtrim($aquery);
-        $compare = rtrim($aquery, ";");
-        if ($compare != $aquery) 
-        {
-            $queries[$key] = $compare . "|br3ak|";
-        }
-    }
-    unset($key, $aquery);
-
-    $queries = implode($queries);
-    $queries = explode("|br3ak|", $queries);
-
-    // Sql injection
-    foreach ($queries as $query) 
-    {
-        // Dont query if the query is empty
-        if(empty($query)) continue;
-        $DB->query($query);
-    }
-    
-    output_message('success', 'Plexis database installed');
 }
 ?>
 <!-- STEP 4 -->
