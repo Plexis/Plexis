@@ -132,7 +132,6 @@ $().ready(function() {
         {
             $('#js_create_message').attr('class', 'alert ' + result.type).html(result.message);
         }
-        $('#js_create_message').delay(7500).slideUp(300);
     }
     
     /** Callback function for the Edit Group ajaxForm */
@@ -150,6 +149,5 @@ $().ready(function() {
         {
             $('#js_edit_message').attr('class', 'alert ' + result.type).html(result.message);
         }
-        $('#js_edit_message').delay(7500).slideUp(300);
     }
 });
