@@ -46,6 +46,26 @@ class Ajax extends Application\Core\Controller
             die();
         }
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: check_permission()
+| ---------------------------------------------------------------
+|
+| This method is used for certain Ajax pages to see if the requester
+|   has permission to process the request.
+|
+| @Param: $perm - The name of the permission
+*/   
+    protected function check_permission($perm)
+    {
+        // Make sure the user has admin access'
+        if( !$this->Auth->has_permission($perm))
+        {
+            $this->output(false, 'access_denied_privlages');
+            die();
+        }
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -57,7 +77,7 @@ class Ajax extends Application\Core\Controller
     public function users()
     {
         // Make sure we arent getting direct accessed, and the user has permission
-        $this->check_access('a');
+        $this->check_permission('manage_users');
         
         // Load the Ajax Model
         $this->load->model("Ajax_Model", "ajax");
@@ -81,8 +101,7 @@ class Ajax extends Application\Core\Controller
         $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
         
         // Get our user groups
-        $DB = $this->load->database('DB');
-        $Groups = $DB->query("SELECT `group_id`,`title` FROM `pcms_account_groups`")->fetch_array();
+        $Groups = $this->DB->query("SELECT `group_id`,`title` FROM `pcms_account_groups`")->fetch_array();
         foreach($Groups as $value)
         {
             $groups[ $value['group_id'] ] = $value['title'];
@@ -106,32 +125,27 @@ class Ajax extends Application\Core\Controller
 |
 | This method is used for an Ajax request to list users
 */    
-    public function account($username)
+    public function account($username = NULL)
     {
         // Make sure we arent getting direct accessed, and the user has permission
-        $this->check_access('a');
+        $this->check_permission('manage_users');
         
         // If we received POST actions, then process it as ajax
         if(isset($_POST['action']))
         {
-            // Load the database
-            $this->load->database( 'DB' );
-            
             // Get users information. We can use GET because the queries second param will be cleaned
-            // by the PDO class when bound to the "?".
-            // Build our query
+            // by the PDO class when bound to the "?". Build our query
             $query = "SELECT * FROM `pcms_accounts` 
                 INNER JOIN `pcms_account_groups` ON 
                 pcms_accounts.group_id = pcms_account_groups.group_id 
-                WHERE username = '".$username."'";
+                WHERE username = ?";
             $user = $this->DB->query( $query, array($username) )->fetch_row();
             $id = $user['id'];
    
             // Make sure the current user has privileges to execute an ajax
-            if( ($user['is_admin'] && !$this->user['is_super_admin']) && $_POST['action'] !== 'account-status' )
+            if($user['is_admin'] && $_POST['action'] !== 'account-status')
             {
-                $this->output(false, 'access_denied_privlages');
-                return;
+                $this->check_permission('manage_admins');
             }
   
            // Get our post action
@@ -218,7 +232,7 @@ class Ajax extends Application\Core\Controller
     public function groups()
     {
         // Make sure we arent getting direct accessed, and the user has permission
-        $this->check_access('a');
+        $this->check_access('sa');
         
         // Check for 'action' posts
         if(isset($_POST['action']))
@@ -423,7 +437,7 @@ class Ajax extends Application\Core\Controller
     public function permissions()
     {
         // Make sure we arent getting direct accessed, and the user has permission
-        $this->check_access('a');
+        $this->check_access('sa');
         
         // Load the input class
         $Input = load_class('Input');
@@ -436,7 +450,7 @@ class Ajax extends Application\Core\Controller
             foreach($_POST as $item => $val) 
             {
                 $key = explode('__', $item);
-                if($key[0] == 'perm') 
+                if($key[0] == 'perm' && $val != 0) 
                 {
                     $i[ $key[1] ] = $val;
                 }
@@ -460,12 +474,12 @@ class Ajax extends Application\Core\Controller
 */    
     public function news()
     {
+        // Make sure we arent getting direct accessed, and the user has permission
+        $this->check_permission('manage_news');
+ 
         // Check for 'action' posts
         if(isset($_POST['action']))
         {
-            // Make sure we arent getting direct accessed, and the user has permission
-            $this->check_access('a');
-        
             // Load the News Model
             $this->load->model('News_Model');
         
@@ -575,7 +589,7 @@ class Ajax extends Application\Core\Controller
     public function settings($type = 'App')
     {
         // Make sure we arent getting direct accessed, and the user has permission
-        $this->check_access('a');
+        $this->check_permission('manage_site_config');
         
         // Load our config class
         $Config = load_class('Config');
@@ -611,27 +625,27 @@ class Ajax extends Application\Core\Controller
         switch($_POST['action'])
         {
             case "install":
-                $this->check_access('a');
+                $this->check_permission('manage_realms');
                 $action = "install";
                 break;
                 
             case "manual-install":
-                $this->check_access('a');
+                $this->check_permission('manage_realms');
                 $action = "manual-install";
                 break;
                 
             case "edit":
-                $this->check_access('a');
+                $this->check_permission('manage_realms');
                 $action = "edit";
                 break;
                 
             case "un-install":
-                $this->check_access('a');
+                $this->check_permission('manage_realms');
                 $action = "un-install";
                 break;
                 
             case "make-default":
-                $this->check_access('a');
+                $this->check_permission('manage_realms');
                 $action = "make-default";
                 break;
                 
@@ -640,7 +654,7 @@ class Ajax extends Application\Core\Controller
                 break;
                 
             case "admin":
-                $this->check_access('a');
+                $this->check_permission('manage_realms');
                 $action = "admin";
                 break;
         }
@@ -1025,6 +1039,9 @@ class Ajax extends Application\Core\Controller
 */    
     public function vote()
     {
+        // Make sure we arent getting direct accessed, and the user has permission
+        $this->check_permission('manage_votesites');
+        
         // Check for 'action' posts
         if(isset($_POST['action']))
         {
@@ -1156,6 +1173,9 @@ class Ajax extends Application\Core\Controller
 */    
     public function modules()
     {
+        // Make sure we arent getting direct accessed, and the user has permission
+        $this->check_permission('manage_modules');
+
         // Check for 'action' posts
         if(isset($_POST['action']))
         {
@@ -1164,9 +1184,6 @@ class Ajax extends Application\Core\Controller
             {
                 // CREATING
                 case "install":
-                    // Make sure we arent getting direct accessed, and the user has permission
-                    $this->check_access('a');
-                    
                     // Load the Modules Model
                     $this->load->model("Admin_Model", "model");
             
@@ -1192,9 +1209,6 @@ class Ajax extends Application\Core\Controller
                 
                 // UNINSTALL
                 case "un-install":
-                    // Make sure we arent getting direct accessed, and the user has permission
-                    $this->check_access('a');
-                    
                     // Load the Modules Model
                     $this->load->model("Admin_Model", "model");
                     
@@ -1274,6 +1288,9 @@ class Ajax extends Application\Core\Controller
 */    
     public function templates()
     {
+        // Make sure we arent getting direct accessed, and the user has permission
+        $this->check_permission('manage_templates');
+        
         // Load the input class
         if(!isset($this->input)) $this->input = load_class('Input');
 
@@ -1473,6 +1490,9 @@ class Ajax extends Application\Core\Controller
 */    
     public function console()
     {
+        // Check access
+        $this->check_permission('send_console_commands');
+
         // Make sure there is post data!
         if( !isset($_POST['action']) ) return;
         

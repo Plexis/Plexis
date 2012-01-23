@@ -16,6 +16,41 @@ class Admin extends Application\Core\Controller
             die();
         }
     }
+ 
+/*
+| ---------------------------------------------------------------
+| Method: check_access
+| ---------------------------------------------------------------
+|
+| Displays a 403 if the user doesnt have access to this page
+| @Param: (Bool) $s403 - Show 403?
+|
+*/ 
+    protected function check_access($perm, $s403 = TRUE)
+    {
+        if( !$this->Auth->has_permission($perm))
+        {
+            if($s403) $this->show_403();
+            return FALSE;
+        }
+        return TRUE;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| 403 Page
+| ---------------------------------------------------------------
+|
+*/ 
+    protected function show_403()
+    {
+        // Set our page title and desc
+        $data['page_title'] = "Access Denied";
+        $data['page_desc'] = "Your account does not have sufficient rights to view this page.";
+        
+        // Load the page, and we are done :)
+        $this->load->view('blank', $data);
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -77,6 +112,9 @@ class Admin extends Application\Core\Controller
 */ 
     public function news($action = NULL, $id = NULL)
     {
+        // Make sure the user can view this page
+        if( !$this->check_access('manage_news')) return;
+
         // Load the News Model
         $this->load->model('News_Model');
   
@@ -120,6 +158,9 @@ class Admin extends Application\Core\Controller
 */    
     public function users($username = NULL)
     {
+        // Make sure the user can view this page
+        if( !$this->check_access('manage_users')) return;
+
         // No Username, Build the index page
         if($username == NULL)
         {
@@ -231,6 +272,9 @@ class Admin extends Application\Core\Controller
 */    
     public function settings()
     {
+        // Make sure the user can view this page
+        if( !$this->check_access('manage_site_config')) return;
+
         // Load our config class
         $Config = load_class('Config');
         
@@ -263,13 +307,7 @@ class Admin extends Application\Core\Controller
         // Make sure user is super admin for ajax
         if($this->user['is_super_admin'] != 1)
         {
-            // Build our page title / desc, then load the view
-            $data = array(
-                'page_title' => "Access Denied",
-                'page_desc' => "Insufficient Rights"
-            );
-            output_message('error', 'access_denied_privlages');
-            $this->load->view('blank', $data);
+            $this->show_403();
             return;
         }
         
@@ -323,7 +361,13 @@ class Admin extends Application\Core\Controller
                     // Update as need be
                     if($changed == TRUE)
                     {
-                        $i['permissions'] = serialize($perms);
+                        // Only insert values of 1
+                        $update = array();
+                        foreach($perms as $key => $value)
+                        {
+                            if($value == 1) $update[$key] = $value;
+                        }
+                        $i['permissions'] = serialize($update);
                         $this->DB->update('pcms_account_groups', $i, "`group_id`=$id");
                     }
                     
@@ -358,6 +402,9 @@ class Admin extends Application\Core\Controller
 */    
     public function registration()
     {
+        // Make sure the user can view this page
+        if( !$this->check_access('manage_site_config')) return;
+
         // Load our config class
         $Config = load_class('Config');
         
@@ -378,6 +425,10 @@ class Admin extends Application\Core\Controller
 */    
     public function realms($subpage = 'index', $id = NULL)
     {
+        // Make sure the user can view this page
+        if( !$this->check_access('manage_realms')) return;
+
+        // Process our page
         switch($subpage)
         {
             case "index":
@@ -474,6 +525,9 @@ class Admin extends Application\Core\Controller
 */
     public function vote($action = NULL, $id = NULL)
     {
+        // Make sure the user can view this page
+        if( !$this->check_access('manage_votesites')) return;
+
         // Load the News Model
         $this->load->model('Vote_Model', 'model');
   
@@ -504,6 +558,75 @@ class Admin extends Application\Core\Controller
             $this->load->view('vote_edit', $data); 
         }
     }
+
+/*
+| ---------------------------------------------------------------
+| Modules
+| ---------------------------------------------------------------
+|
+*/    
+    public function modules()
+    {
+        // Make sure the user can view this page
+        if( !$this->check_access('manage_modules')) return;
+
+        // Build our page title / desc, then load the view
+        $data = array(
+            'page_title' => "Module Managment",
+            'page_desc' => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
+        );
+        $this->load->view('module_index', $data);
+    }
+
+/*
+| ---------------------------------------------------------------
+| Templates
+| ---------------------------------------------------------------
+|
+*/     
+    public function templates()
+    {
+        // Make sure the user can view this page
+        if( !$this->check_access('manage_templates')) return;
+
+        // Build our page title / desc, then load the view
+        $data = array(
+            'page_title' => "Template Manager",
+            'page_desc' => "This page allows you to manage your templates, which includes uploading, installation, and un-installation.",
+        );
+        
+        // Get installed templates
+        $query = "SELECT * FROM `pcms_templates` WHERE `type`='site'";
+        $templates = $this->DB->query( $query )->fetch_array();
+        foreach($templates as $t)
+        {
+            $aa[] = $t['name'];
+        }
+        
+        // Scan and get a list of all templates
+        $list = scandir(APP_PATH . DS . 'templates');
+        foreach($list as $file)
+        {
+            if($file[0] == "." || $file == "index.html") continue;
+            if(!in_array($file, $aa))
+            {
+                $xml = APP_PATH . DS . 'templates' . DS . $file . DS .'template.xml';
+                if(file_exists($xml))
+                {
+                    $xml = simplexml_load_file($xml);
+                    $insert = array(
+                        'name' => $file,
+                        'type' => 'site',
+                        'author' => $xml->info->author,
+                        'status' => 0
+                    );
+                    $this->DB->insert('pcms_templates', $insert);
+                }
+            }
+        }
+        
+        $this->load->view('templates', $data);
+    }
     
 /*
 | ---------------------------------------------------------------
@@ -513,6 +636,9 @@ class Admin extends Application\Core\Controller
 */    
     public function console()
     {
+        // Make sure the user can view this page
+        if( !$this->check_access('send_console_commands')) return;
+
         $realms = get_installed_realms();
         $selector = "<select id=\"realm\" name=\"realm\">\n";
         if( !empty($realms) )
@@ -554,16 +680,6 @@ class Admin extends Application\Core\Controller
         $this->load->view('under_construction', $data);
     }
     
-    function modules()
-    {
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Module Managment",
-            'page_desc' => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
-        );
-        $this->load->view('module_index', $data);
-    }
-    
     function shop()
     {
         // Build our page title / desc, then load the view
@@ -602,47 +718,6 @@ class Admin extends Application\Core\Controller
             'page_desc' => "Here you can manage the support page as well as the FAQ's",
         );
         $this->load->view('under_construction', $data);
-    }
-    
-    function templates()
-    {
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Template Manager",
-            'page_desc' => "This page allows you to manage your templates, which includes uploading, installation, and un-installation.",
-        );
-        
-        // Get installed templates
-        $query = "SELECT * FROM `pcms_templates` WHERE `type`='site'";
-        $templates = $this->DB->query( $query )->fetch_array();
-        foreach($templates as $t)
-        {
-            $aa[] = $t['name'];
-        }
-        
-        // Scan and get a list of all templates
-        $list = scandir(APP_PATH . DS . 'templates');
-        foreach($list as $file)
-        {
-            if($file[0] == "." || $file == "index.html") continue;
-            if(!in_array($file, $aa))
-            {
-                $xml = APP_PATH . DS . 'templates' . DS . $file . DS .'template.xml';
-                if(file_exists($xml))
-                {
-                    $xml = simplexml_load_file($xml);
-                    $insert = array(
-                        'name' => $file,
-                        'type' => 'site',
-                        'author' => $xml->info->author,
-                        'status' => 0
-                    );
-                    $this->DB->insert('pcms_templates', $insert);
-                }
-            }
-        }
-        
-        $this->load->view('templates', $data);
     }
     
     function update()

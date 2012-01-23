@@ -1,5 +1,6 @@
 <?php
 return array(
+    'account_access_denied' => "Access to this account has been suspended.",
     'access_denied_privlages' => 'Your account level does not have sufficient privileges to preform this action.',
     'account_ban_success' => 'Account successfully banned.',
     'account_ban_error' => 'Account ban was unsuccessful! Please check your error logs.',

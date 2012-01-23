@@ -27,13 +27,14 @@
                             foreach($permissions[$field] as $key => $value)
                             {
                                 echo '
-                                    <label for="'. $key .'">'. $list[$key]['name'] .'</label>
-                                    <select id="'. $key .'" name="perm__'. $key .'">
-                                        <option value="0"'; if($value == 0) echo " selected=\"selected\""; echo '>Disallow</option>
-                                        <option value="1"'; if($value == 1) echo " selected=\"selected\""; echo '>Allow</option>
-                                    </select>
+                                    <p>
+                                        <label for="'. $key .'">'. $list[$key]['name'] .'</label>
+                                        <select id="'. $key .'" name="perm__'. $key .'">
+                                            <option value="0"'; if($value == 0) echo " selected=\"selected\""; echo '>Disallow</option>
+                                            <option value="1"'; if($value == 1) echo " selected=\"selected\""; echo '>Allow</option>
+                                        </select>
+                                    </p>
                                 </div>
-                                <br />
                                 <div class="_50">';
                             }
                         echo'

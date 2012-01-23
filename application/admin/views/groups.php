@@ -10,7 +10,7 @@
             <h1>User Groups</h1>
             <ul class="tabs">
                 <li><a href="#tab-1">User Groups</a></li>
-                <li><a href="#tab-2">Permissions</a></li>
+                <li><a href="#tab-2">Custom Permissions</a></li>
             </ul>
         </div>
         <div class="block-content tab-container">

@@ -226,8 +226,22 @@ class Auth
                 if($result === FALSE)
                 {
                     show_error('fetal_error', FALSE, E_ERROR);
+                    return FALSE;
                 }
             }
+            
+            // Load permissions
+            $perms = unserialize($result['permissions']);
+            
+            // Make sure we have access to our account, we have to do this after saving the session unfortunatly
+            if( (!isset($perms['account_access']) || $perms['account_access'] == 0) && $result['is_super_admin'] == 0)
+            {
+                output_message('warning', 'account_access_denied');
+                return FALSE;
+            }
+            
+            // We are good, save permissions for this user
+            $this->load_permissions($result['group_id'], $perms);
             
             // Make sure the account isnt locked due to verification
             if($result['activated'] == FALSE && config('reg_email_verification') == TRUE)
@@ -376,7 +390,7 @@ class Auth
         // Fix array keys
         foreach($r as $p)
         {
-            $list[] = $p['key'];
+            $list[ $p['key'] ] = $p;
         }
         unset($r);
         
@@ -384,20 +398,10 @@ class Auth
         $dif = FALSE;
         foreach($perms as $key => $value)
         {
-            if( !in_array($key, $list) )
+            if( !isset($list[ $key ]) )
             {
                 $dif = TRUE;
                 unset($perms[ $key ]);
-            }
-        }
-
-        // Add new permissions since last udate
-        foreach($list as $key)
-        {
-            if( !isset($perms[$key]) )
-            {
-                $dif = TRUE;
-                $perms[$key] = 0;
             }
         }
         
