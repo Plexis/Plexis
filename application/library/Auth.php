@@ -365,21 +365,39 @@ class Auth
 
     protected function load_permissions($gid, $perms)
     {
+
         // set to empty array if false
         if($perms == FALSE) $perms = array();
         
         // Get alist of all permissions
         $query = "SELECT `key` FROM `pcms_permissions`";
-        $all = $this->DB->query( $query )->fetch_array();
+        $r = $this->DB->query( $query )->fetch_array();
+        
+        // Fix array keys
+        foreach($r as $p)
+        {
+            $list[] = $p['key'];
+        }
+        unset($r);
         
         // Unset old perms that dont exist anymore
         $dif = FALSE;
-        foreach($perms as $id => $key)
+        foreach($perms as $key => $value)
         {
-            if( !in_array($key, $all) )
+            if( !in_array($key, $list) )
             {
                 $dif = TRUE;
-                unset($perms[ $id ]);
+                unset($perms[ $key ]);
+            }
+        }
+
+        // Add new permissions since last udate
+        foreach($list as $key)
+        {
+            if( !isset($perms[$key]) )
+            {
+                $dif = TRUE;
+                $perms[$key] = 0;
             }
         }
         
@@ -407,6 +425,11 @@ class Auth
 
     public function has_permission($key)
     {
+        // Super admin always wins
+        $user = $this->session->get('user');
+        if($user['is_super_admin']) return 1;
+        
+        // Not a super admin, continue
         if(array_key_exists($key, $this->permissions))
         {
             return $this->permissions[$key];

@@ -10,7 +10,7 @@ class Admin extends Application\Core\Controller
         $this->user = $this->Session->get('user');
         
         // Make sure the user has admin access'
-        if( !($this->user['is_admin'] == 1 || $this->user['is_super_admin'] == 1) )
+        if( !$this->Auth->has_permission('admin_access') )
         {
             redirect( SITE_URL );
             die();
@@ -254,10 +254,11 @@ class Admin extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */     
-    function groups()
+    public function groups($sub1 = NULL, $id = NULL)
     {
-        // Load our config class
+        // Load our config & Input class
         $Config = load_class('Config');
+        $Input = load_class('Input');
 
         // Make sure user is super admin for ajax
         if($this->user['is_super_admin'] != 1)
@@ -269,16 +270,87 @@ class Admin extends Application\Core\Controller
             );
             output_message('error', 'access_denied_privlages');
             $this->load->view('blank', $data);
+            return;
         }
-        else
+        
+        if($sub1 != NULL && $id != NULL)
         {
-            // Build our page title / desc, then load the view
-            $data = array(
-                'page_title' => "User Groups & Permissions",
-                'page_desc' => "On this page, you can Create / Delete user groups and ajust site permission on a group basis."
-            );
-            $this->load->view('groups', $data);
+            // Clean the ID
+            $id = $Input->clean($id);
+            switch($sub1)
+            {
+                case "permissions":
+                    
+                    // Load the perms for this group
+                    $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=?";
+                    $group = $this->DB->query( $query, array($id) )->fetch_row();
+                    $perms = unserialize($group['permissions']);
+                    unset($group['permissions']); 
+                    if($perms == FALSE) $perms = array();
+                    
+                    // Get all permissions
+                    $query = "SELECT * FROM `pcms_permissions`";
+                    $array = $this->DB->query( $query, array($id) )->fetch_array();
+                    $changed = FALSE;
+                    $list = array();
+                    foreach($array as $key => $p)
+                    {
+                        if( !isset($perms[$p['key']]) )
+                        {
+                            $changed = TRUE;
+                            $perms[$p['key']] = 0;
+                        }
+                        $list[$p['key']] = $p;
+                    }
+                    unset($array);
+                    
+                    // For ordering purposes
+                    $permissions = array('admin' => array(), 'core' => array());
+                    $sections = array('admin', 'core');
+                    foreach($perms as $key => $p)
+                    {
+                        if(!isset($list[$key]))
+                        {
+                            $changed = TRUE;
+                            unset($perms[$key]); 
+                            continue;
+                        }
+                        $g = $list[$key]['module'];
+                        $permissions[$g][$key] = $p;
+                        if(!in_array($g, $sections)) $sections[] = $g;
+                    }
+                    
+                    // Update as need be
+                    if($changed == TRUE)
+                    {
+                        $i['permissions'] = serialize($perms);
+                        $this->DB->update('pcms_account_groups', $i, "`group_id`=$id");
+                    }
+                    
+                    // Build our page title / desc, then load the view
+                    $data = array(
+                        'page_title' => "Group Permissions",
+                        'page_desc' => "Editting Permissions",
+                        'group' => $group,
+                        'permissions' => $permissions,
+                        'list' => $list,
+                        'sections' => $sections
+                    );
+                    $this->load->view('group_permissions', $data);
+                    break;
+                    
+                case "edit":
+                    break;
+            }
+            return;
         }
+
+        // Build our page title / desc, then load the view
+        $data = array(
+            'page_title' => "User Groups & Permissions",
+            'page_desc' => "On this page, you can Create / Delete user groups and ajust site permission on a group basis."
+        );
+        $this->load->view('groups', $data);
     }
 
 /*
@@ -287,7 +359,7 @@ class Admin extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */    
-    function registration()
+    public function registration()
     {
         // Load our config class
         $Config = load_class('Config');
@@ -307,7 +379,7 @@ class Admin extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */    
-    function realms($subpage = 'index', $id = NULL)
+    public function realms($subpage = 'index', $id = NULL)
     {
         switch($subpage)
         {

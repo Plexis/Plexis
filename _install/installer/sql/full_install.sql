@@ -97,6 +97,7 @@ CREATE TABLE `pcms_permissions` (
 -- ----------------------------
 -- Records of pcms_permissions
 -- ----------------------------
+INSERT INTO `pcms_permissions` VALUES ('admin_access', 'Admin Panel Access', 'Allow this user access to the admin panel?', 'admin');
 
 -- ----------------------------
 -- Table structure for `pcms_realms`

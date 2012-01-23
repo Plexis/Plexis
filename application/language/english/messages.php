@@ -74,6 +74,8 @@ return array(
     'reg_failed_ip_banned' => "Your Ip is Banned. You are unauthorized to create anymore accounts.",
     'reg_failed_invalid_key' => 'The registration key entered is invalid. If you continue to see this error, please notify an administrator',
     'passwords_dont_match' => 'Passwords did not match. Please try again.',
+    'permissions_save_success' => "Permissions successfully saved.",
+    'permissions_save_error' => "An error was encountered while updating the permissions for this group. Please check you error logs.",
     'reg_failed_username_exists' => "Username already exists, Please pick a different username and try again.",
     'reg_success' => "Account Created Successfully!",
     'reg_success_email_error' => "Your account was created successfully, but we unfortunately are unable to send your verification email. Please contact an administrator.",

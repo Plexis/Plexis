@@ -286,6 +286,44 @@ class Ajax extends Application\Core\Controller
             echo json_encode($output);
         }
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: permissions()
+| ---------------------------------------------------------------
+|
+| This method is used for via Ajax to save permissions for groups
+*/  
+    public function permissions()
+    {
+        // Make sure we arent getting direct accessed, and the user has permission
+        $this->check_access('a');
+        
+        // Load the input class
+        $Input = load_class('Input');
+        $id = $Input->post('id', TRUE);
+        
+        // Do we have POST action?
+        if(isset($_POST['action']) && $_POST['action'] == 'save')
+        {
+            $i = array();
+            foreach($_POST as $item => $val) 
+            {
+                $key = explode('__', $item);
+                if($key[0] == 'perm') 
+                {
+                    $i[ $key[1] ] = $val;
+                }
+            }
+            
+            // Serialize the data
+            $up['permissions'] = serialize($i);
+            
+            // Determine if our save is a success
+            $result = $this->DB->update('pcms_account_groups', $up, "`group_id`=$id");
+            ($result === TRUE) ? $this->output(false, 'permissions_save_error') : $this->output(true, 'permissions_save_success');
+        }
+    }
 
 /*
 | ---------------------------------------------------------------
