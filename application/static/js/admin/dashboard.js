@@ -29,6 +29,10 @@ function check_for_updates()
                 newest = update[0];
                 if(newest != Plexis['build'])
                 {
+                    // Define some vars
+                    var author = result[0]['commit']['author']['name'];
+                    message = message.replace('[' + newest + ']', '')
+                    
                     // Show that there are updates
                     $('#update').html('<font color="green">Updates are Available! <a id="update_link" href="javascript:void(0);"'
                         + 'onclick="$(\'#update_info\').dialog({ modal: true, width: 500 });">Click Here</a> for more info</font>');
@@ -36,7 +40,7 @@ function check_for_updates()
                     block = block.replace(/\@build/i, newest);
                     block = block.replace(/\@current/i, Plexis['build']);
                     block = block.replace(/\@message/i, message);
-                    block = block.replace(/\@author/i, result[0]['commit']['author']['name']);
+                    block = block.replace(/\@author/i, author);
                     $('#update_info').html( block );
                 }
                 else

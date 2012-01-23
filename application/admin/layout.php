@@ -71,8 +71,8 @@
                 <div id="update_info" title="Update Information" style="display: none;">
                     <p> 
                         <b>Current Build:</b> @current <br />
-                        <b>Lastest Build:</b> @build <br />
-                        <b>Commit Mesage:</b> @message <br />
+                        <b>Lastest Build:</b> @build <br /><br />
+                        <b>Latest Commit Message:</b><br />@message<br /><br />
                         <b>Author:</b> @author <br />
                     </p>
                     <br />
