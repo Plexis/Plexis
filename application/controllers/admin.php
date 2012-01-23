@@ -337,10 +337,7 @@ class Admin extends Application\Core\Controller
                         'sections' => $sections
                     );
                     $this->load->view('group_permissions', $data);
-                    break;
-                    
-                case "edit":
-                    break;
+                break;
             }
             return;
         }

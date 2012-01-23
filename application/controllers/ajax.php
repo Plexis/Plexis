@@ -223,6 +223,9 @@ class Ajax extends Application\Core\Controller
         // Check for 'action' posts
         if(isset($_POST['action']))
         {
+            // Get input class
+            $this->input = load_class('Input');
+            
             // Get our action type
             switch($_POST['action']) 
             {
@@ -234,10 +237,10 @@ class Ajax extends Application\Core\Controller
                     * Array of database columns which should be read and sent back to DataTables. Use a space where
                     * you want to insert a non-database field (for example a counter or static image)
                     */
-                    $cols = array( 'title', 'is_banned', 'is_user', 'is_admin', 'is_super_admin', 'group_id' );
+                    $cols = array( 'group_id', 'title', 'is_banned', 'is_user', 'is_admin', 'is_super_admin' );
                     
                     /* Indexed column (used for fast and accurate table cardinality) */
-                    $index = "title";
+                    $index = "group_id";
                     
                     /* DB table to use */
                     $table = "pcms_account_groups";
@@ -251,19 +254,19 @@ class Ajax extends Application\Core\Controller
                     // We need to add a working "manage" link
                     foreach($output['aaData'] as $key => $value)
                     {
-                        if($value[4] == 1)
+                        if($value[5] == 1)
                         {
                             $type = "Super Admin";
                         }
-                        elseif($value[3] == 1)
+                        elseif($value[4] == 1)
                         {
                             $type = "Admin";
                         }
-                        elseif($value[2] == 1)
+                        elseif($value[3] == 1)
                         {
                             $type = "Member";
                         }
-                        elseif($value[1] == 1)
+                        elseif($value[2] == 1)
                         {
                             $type = "Banned";
                         }
@@ -275,12 +278,135 @@ class Ajax extends Application\Core\Controller
                         // Build our new output
                         $array = array(
                             0 => $value[0],
-                            1 => $type,
-                            2 => '<a href="'. SITE_URL .'/admin/groups/edit/'.$value[5].'">Edit Group</a> --  
-                                  <a href="'. SITE_URL .'/admin/groups/permissions/'.$value[5].'">Manage Permissions</a>'
+                            1 => $value[1],
+                            2 => $type,
+                            3 => '<a class="edit-button" href="javascript:void(0);" name="'.$value[0].'">Edit Group</a> --  
+                                  <a href="'. SITE_URL .'/admin/groups/permissions/'.$value[0].'">Manage Permissions</a>'
                         );
+                        
+                        // Only allow editing of non super admins
+                        if($value[5] == 1) $array[3] = '';
+                        
+                        // We dont allow deleting of default gruops!
+                        if($value[0] > 5) $array[3] .= ' -- <a class="delete-button" href="javascript:void(0);" name="'.$value[0].'">Delete Group</a>';
                         $output['aaData'][$key] = $array;
                     }
+                    break;
+                    
+                case "getgroup":
+                    // Load the group
+                    $id = $this->input->post('id', TRUE);
+                    $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=?";
+                    $group = $this->DB->query( $query, array($id) )->fetch_row();
+                    unset($group['permissions']);
+                    
+                    // Get our group type
+                    $type = 1;
+                    if($group['is_admin'])
+                    {
+                        $type = 3;
+                    }
+                    elseif($group['is_user'])
+                    {
+                        $type = 2;
+                    }
+                    elseif($group['is_banned'])
+                    {
+                        $type = 0;
+                    }
+                    
+                    $output = array(
+                        'id' => $id,
+                        'type' => $type,
+                        'group' => $group
+                    );
+                    break;
+                    
+                case "edit":
+                    // Load the group
+                    $id = $this->input->post('id', TRUE);
+                    $title = $this->input->post('title', TRUE);
+                    $type = $this->input->post('group_type', TRUE);
+                    
+                    // Defaults
+                    $a = 1;
+                    $u = 1;
+                    $b = 0;
+                    
+                    // Process group type
+                    if($type == 2)
+                    {
+                        $a = 0;
+                    }
+                    elseif($type == 1)
+                    {
+                        $a = 0;
+                        $u = 0;
+                    }
+                    elseif($type == 0)
+                    {
+                        $a = 0;
+                        $u = 0;
+                        $b = 1;
+                    }
+                    
+                    $data = array(
+                        'title' => $title,
+                        'is_banned' => $b,
+                        'is_user' => $u,
+                        'is_admin' => $a,
+                    );
+                    
+                    $result = $this->DB->update("pcms_account_groups", $data, "`group_id`=".$id);
+                    ($result == TRUE) ? $this->output(true, 'group_update_success') : $this->output(false, 'group_update_error');
+                    return;
+                    break;
+                    
+                case "create":
+                    // Load POSTS
+                    $title = $this->input->post('title', TRUE);
+                    $type = $this->input->post('group_type', TRUE);
+                    
+                    // Defaults
+                    $a = 1;
+                    $u = 1;
+                    $b = 0;
+                    
+                    // Process group type
+                    if($type == 2)
+                    {
+                        $a = 0;
+                    }
+                    elseif($type == 1)
+                    {
+                        $a = 0;
+                        $u = 0;
+                    }
+                    elseif($type == 0)
+                    {
+                        $a = 0;
+                        $u = 0;
+                        $b = 1;
+                    }
+                    
+                    $data = array(
+                        'title' => $title,
+                        'is_banned' => $b,
+                        'is_user' => $u,
+                        'is_admin' => $a,
+                        'is_super_admin' => 0
+                    );
+                    
+                    $result = $this->DB->insert("pcms_account_groups", $data);
+                    ($result == TRUE) ? $this->output(true, 'group_create_success') : $this->output(false, 'group_create_error');
+                    return;
+                    break;
+                
+                case "deletegroup":
+                    $id = $this->input->post('id', TRUE);
+                    $result = $this->DB->delete("pcms_account_groups", "`group_id`=$id");
+                    ($result == TRUE) ? $this->output(true, 'group_delete_success') : $this->output(false, 'group_delete_error');
+                    return;
                     break;
             }
             echo json_encode($output);
