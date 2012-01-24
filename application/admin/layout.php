@@ -77,7 +77,10 @@
                     </p>
                     <br />
                     <div>
-                        <center> <a href="https://github.com/Plexis/Plexis/zipball/master" class="button">Download Update</a> </center>
+                        <center> 
+                            <a href="https://github.com/Plexis/Plexis/zipball/master" class="button">Download Zip</a>&nbsp;&nbsp;&nbsp;
+                            <a href="{SITE_URL}/admin/update" class="button">Remote Updater</a> 
+                        </center>
                     </div>
                 </div>
                 

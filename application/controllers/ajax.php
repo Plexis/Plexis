@@ -1605,6 +1605,98 @@ class Ajax extends Application\Core\Controller
         // Push the output in json format
         Output: { echo json_encode($output); }
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: update()
+| ---------------------------------------------------------------
+|
+| This method is used for via Ajax to update the cms
+*/    
+    public function update()
+    {
+        // Make sure we arent directly accessed and the user has perms
+        $this->check_access('sa');
+        
+        $this->input = load_class('input');
+        $type = trim( $this->input->post('status') );
+        $url = trim( $this->input->post('raw_url') );
+        $file = trim( $this->input->post('filename') );
+        $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
+        
+        // Build our default Json return
+        $return = array();
+        $success = TRUE;
+        
+        // Get file contents
+        // $contents = file_get_contents($url, false);
+        
+        load_class('Debug')->silent_mode(true);
+        switch($type)
+        {
+            case "added":
+                $dirname = dirname($filename);
+                if(!is_dir($dirname))
+                {
+                    $create = @mkdir($dirname, 0755, true);
+                    if(!$create && !is_dir($dirname))
+                    {
+                        $success = FALSE;
+                        $text = 'Error creating directory "'. $dirname .'"';
+                        goto Output;
+                    }
+                }
+            case "modified":
+                $handle = @fopen($filename, 'w+');
+                if($handle)
+                {
+                    $write = @fwrite($handle, $contents);
+                    if(!$fwrite)
+                    {
+                        $success = FALSE;
+                        $text = 'Error writing to file "'. $file .'"';
+                        goto Output;
+                    }
+                    @fclose($handle);
+                }
+                else
+                {
+                    $success = FALSE;
+                    $text = 'Error opening / creating file "'. $file .'"';
+                    goto Output;
+                }
+                break;
+                
+            case "renamed":
+                $success = FALSE;
+                $text = 'File renaming / moved files isnt supported yet. Please manually update from here <a href="https://github.com/Plexis/Plexis/zipball/master">Github</a>';
+                goto Output;
+                break;
+                
+            case "removed":
+                unlink($filename);
+                break;
+        }
+        
+        // Output goto
+        Output:
+        {
+            load_class('Debug')->silent_mode(false);
+            if($success == TRUE)
+            {
+                // Remove error tag on success, but allow warnings
+                ($type == 'error') ? $type = 'success' : '';
+                $return['success'] = true;
+            }
+            else
+            {
+                $return['success'] = false;
+                $return['message'] = $text;
+            }
+            
+            echo json_encode($return);
+        }
+    }
  
 /*
 | ---------------------------------------------------------------

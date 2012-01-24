@@ -662,6 +662,119 @@ class Admin extends Application\Core\Controller
         );
         $this->load->view('console', $data);
     }
+
+/*
+| ---------------------------------------------------------------
+| Update
+| ---------------------------------------------------------------
+|
+*/     
+    public function update()
+    {
+        // Build our page title / desc, then load the view
+        $data = array(
+            'page_title' => "Remote Updater",
+            'page_desc' => "This script allows you to update your CMS with just a click of a button.",
+        );
+        
+        // Make sure the Openssl extension is loaded
+        if(!extension_loaded('openssl'))
+        {
+            $message = 'Openssl extension not found. Please enable the openssl extension in your php.ini file (extension=php_openssl.dll).'.
+                'You must enable openssl before using the remote updater';
+            output_message('warning', $message);
+            $this->load->view('blank', $data);
+            return;
+        }
+        
+        // Check for https support
+        if(!in_array('https', stream_get_wrappers()))
+        {
+            output_message('warning', 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?');
+            $this->load->view('blank', $data);
+            return;
+        }
+        
+        // Make sure the client server allows fopen of urls
+        if(ini_get('allow_url_fopen') == 1)
+        {
+            // Get the file changes from github
+            $start = microtime(1);
+            load_class('Debug')->silent_mode(true);
+            $page = file_get_contents('https://api.github.com/repos/Plexis/Plexis/commits', false);
+            load_class('Debug')->silent_mode(false);
+            $stop = microtime(1);
+            
+            // Granted we have page contents
+            if($page)
+            {
+                // Decode the results
+                $commits = json_decode($page, TRUE);
+                
+                // Defaults
+                $count = 0;
+                $latest = 0;
+                
+                // Get the latest build
+                $message = $commits[0]['commit']['message'];
+                if(preg_match('/([0-9]+)/', $message, $latest))
+                {
+                    $latest = $latest[0];
+                    if(CMS_BUILD < $latest)
+                    {
+                        $count = ($latest - CMS_BUILD);
+                    }
+                }
+                else
+                {
+                    output_message('warning', 'Unable to determine latest build');
+                    $this->load->view('blank', $data);
+                    return;
+                }
+
+                // Simple
+                ($count == 0) ? $next = $commits[0] : $next = $commits[$count-1];
+                // $date = explode('T', $next['commit']['author']['date']);
+                // $time = strtotime($date[0] .' '. $date[1]);
+                // $date = date('M j, Y  g:i a', $time);
+                
+                // Build our page data
+                $data['time'] = round($stop - $start, 5);
+                $data['count'] = $count;
+                $data['latest'] = $latest;
+                $data['message'] = $next['commit']['message'];
+                $data['date'] = $next['commit']['author']['date'];
+                $data['author'] = $next['commit']['author']['name'];
+                $data['sha'] = $next['sha'];
+                $data['json_data_url'] = $next['url'];
+                $data['more_info'] = "https://github.com/Plexis/Plexis/commit/". $next['sha'];
+                $data['CMS_BUILD'] = CMS_BUILD;
+                unset($commits);
+                
+                // No updates has a different view
+                if($count == 0)
+                {
+                    $this->load->view('no_updates', $data);
+                }
+                else
+                {
+                    $this->load->view('updates', $data);
+                }
+            }
+            else
+            {
+                output_message('warning', 'Unable to fetch updates from Github.');
+                $this->load->view('blank', $data);
+                return;
+            }
+        }
+        else
+        {
+            output_message('warning', 'allow_url_fopen is not enabled in the php.ini file. Unable to continue.');
+            $this->load->view('blank', $data);
+            return;
+        }
+    }
  
 /*
 | ---------------------------------------------------------------
@@ -718,16 +831,6 @@ class Admin extends Application\Core\Controller
             'page_desc' => "Here you can manage the support page as well as the FAQ's",
         );
         $this->load->view('under_construction', $data);
-    }
-    
-    function update()
-    {
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Remote Updater",
-            'page_desc' => "This script allows you to update your CMS with just a click of a button.",
-        );
-        $this->load->view('update', $data);
     }
     
     function logs()
