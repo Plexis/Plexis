@@ -50,6 +50,9 @@ class Controller extends \System\Core\Controller
         // Setup the selected users language
         $GLOBALS['language'] = selected_language();
         
+        // Process DB updates
+        $this->_process_db();
+        
         // Setup the template system
         $this->_init_template();
     }
@@ -98,6 +101,56 @@ class Controller extends \System\Core\Controller
                 }
                 // Set default template path if we are here
                 $this->Template->set_template_path('templates' . DS . config('default_template'));
+            }
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Funtion: _process_db() 
+| ---------------------------------------------------------------
+|
+*/
+    private function _process_db() 
+    {
+        // Foir starts, get our current database version
+        $query = "SELECT `value` FROM `pcms_versions` WHERE `key`='database'";
+        $version = $this->DB->query( $query )->fetch_column();
+        if($version < CMS_DB_VERSION)
+        {
+            $updates = array();
+            $path = ROOT . DS . '__updates';
+            
+            // Open the __updates directory and scan all updates
+            $list = @opendir( $path );
+            if($list)
+            {
+                while($file = readdir($list))
+                {
+                    if($file[0] != "." && is_file($path . DS . $file))
+                    {
+                        // Format should be like so "update_#.sql
+                        $names = explode('_', $file);
+                        if($names[1] > $version)
+                        {
+                            $updates[] = $file;
+                        }
+                    }
+                }
+                @closedir($list);
+            }
+            
+            // If we have updates
+            if(!empty($updates))
+            {
+                // Order them by rev
+                sort($updates);
+
+                // Process updates
+                foreach($updates as $file)
+                {
+                    $this->DB->utilities->run_sql_file($path . DS . $file);
+                }
             }
         }
     }

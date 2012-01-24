@@ -183,6 +183,21 @@ CREATE TABLE `pcms_templates` (
 INSERT INTO `pcms_templates` VALUES ('1', 'default', 'site', 'test', '1');
 
 -- ----------------------------
+-- Table structure for `pcms_versions`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_versions`;
+CREATE TABLE `pcms_versions` (
+  `key` varchar(50) NOT NULL,
+  `value` varchar(50) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pcms_versions
+-- ----------------------------
+INSERT INTO `pcms_versions` VALUES ('database', '0.1');
+
+-- ----------------------------
 -- Table structure for `pcms_vote_data`
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_vote_data`;
