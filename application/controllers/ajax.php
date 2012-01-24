@@ -1629,7 +1629,7 @@ class Ajax extends Application\Core\Controller
         $success = TRUE;
         
         // Get file contents
-        // $contents = file_get_contents($url, false);
+        $contents = file_get_contents($url, false);
         
         load_class('Debug')->silent_mode(true);
         switch($type)
