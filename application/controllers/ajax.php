@@ -1650,8 +1650,8 @@ class Ajax extends Application\Core\Controller
                 $handle = @fopen($filename, 'w+');
                 if($handle)
                 {
-                    $write = @fwrite($handle, $contents);
-                    if(!$fwrite)
+                    $fwrite = @fwrite($handle, $contents);
+                    if($fwrite === FALSE)
                     {
                         $success = FALSE;
                         $text = 'Error writing to file "'. $file .'"';
