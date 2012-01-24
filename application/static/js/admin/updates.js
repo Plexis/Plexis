@@ -28,6 +28,16 @@ function process()
             $('#update').show();
             $('#details').hide();
             
+            // Set the site up for maintenace
+            $.ajax({
+                type: "POST",
+                url: url + '/ajax/settings',
+                data: { action: 'save', cfg__site_maintenance: 1 },
+                dataType: "json",
+                timeout: 5000, // in milliseconds
+                success: function(result) {}
+            });
+            
             // Get the current update rev number
             $.each(result['files'], function(key, value){
                 res = $.ajax({
@@ -60,6 +70,16 @@ function process()
                         update_message = 'Server is taking too long to respond';
                         return false;
                     }
+                });
+                
+                // Set the site up for maintenace to false
+                $.ajax({
+                    type: "POST",
+                    url: url + '/ajax/settings',
+                    data: { action: 'save', cfg__site_maintenance: 0 },
+                    dataType: "json",
+                    timeout: 5000, // in milliseconds
+                    success: function(result) {}
                 });
                 
                 // Stop the loop!

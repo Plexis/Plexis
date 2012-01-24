@@ -29,7 +29,7 @@ class Controller extends \System\Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    public function __construct() 
+    public function __construct($process_db = TRUE, $init_template = TRUE) 
     {
         // Check if the install folder is still local
         if(file_exists( ROOT . DS . 'install/index.php'))
@@ -37,6 +37,10 @@ class Controller extends \System\Core\Controller
             redirect('install/index.php');
             die();
         }
+        
+        // Check for site maintanence
+        if($GLOBALS['controller'] != 'ajax' && config('site_maintenance')) 
+            die('Site Down for maintenance. Be back soon.');
         
         // Build the Core Controller
         parent::__construct();
@@ -51,10 +55,10 @@ class Controller extends \System\Core\Controller
         $GLOBALS['language'] = selected_language();
         
         // Process DB updates
-        $this->_process_db();
+        if($process_db == TRUE) $this->_process_db();
         
         // Setup the template system
-        $this->_init_template();
+        if($init_template == TRUE) $this->_init_template();
     }
     
 /*
