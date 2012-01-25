@@ -33,7 +33,7 @@ function check_for_updates()
                     if(newest != Plexis['build'])
                     {
                         // Define some vars
-                        var author = result['message'][0]['commit']['author']['name'];
+                        var author = result['message'][0]['author']['login'];
                         message = message.replace('[' + newest + ']', '')
                         
                         // Show that there are updates

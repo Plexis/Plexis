@@ -725,7 +725,7 @@ class Admin extends Application\Core\Controller
                         $count = ($latest - CMS_BUILD);
                         if($count > 29)
                         {
-                            output_message('warning', 'Your cms is out of date by more the 30 updates. You will need to manually update.');
+                            output_message('warning', 'Your cms is out of date by more than 30 updates. You will need to manually update.');
                             $this->load->view('blank', $data);
                             return;
                         }
@@ -740,17 +740,17 @@ class Admin extends Application\Core\Controller
 
                 // Simple
                 ($count == 0) ? $next = $commits[0] : $next = $commits[$count-1];
-                // $date = explode('T', $next['commit']['author']['date']);
-                // $time = strtotime($date[0] .' '. $date[1]);
-                // $date = date('M j, Y  g:i a', $time);
+                $d = new DateTime($next['commit']['author']['date']);
+                $date = $d->format("M j, Y - H:i a");
+
                 
                 // Build our page data
                 $data['time'] = round($stop - $start, 5);
                 $data['count'] = $count;
                 $data['latest'] = $latest;
-                $data['message'] = $next['commit']['message'];
-                $data['date'] = $next['commit']['author']['date'];
-                $data['author'] = $next['commit']['author']['name'];
+                $data['message'] = preg_replace('/([\[0-9\]]+)/', '', $next['commit']['message'], 1);
+                $data['date'] = $date;
+                $data['author'] = ucfirst($next['author']['login']);
                 $data['sha'] = $next['sha'];
                 $data['json_data_url'] = $next['url'];
                 $data['more_info'] = "https://github.com/Plexis/Plexis/commit/". $next['sha'];
