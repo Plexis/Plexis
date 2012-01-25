@@ -41,8 +41,10 @@ function process()
             
             // Get the current update rev number
             $.each(result['files'], function(key, value){
+                // Update the update status texts
                 current = (key+1);
-                $('update-state').html('<center><img src="' + image_url + '"/>Progress: '+ running +'%... Current file: ' + value['filename'] +' ('+ current +' / '+ count +')</center>');
+                tmp = parseFloat(running);
+                $('#update-state').html('<center>Progress: '+ tmp.toFixed(1) +'%<br />Current file: "' + value['filename'] +'" ('+ current +' / '+ count +')</center>');
                 
                 res = $.ajax({
                     type: "POST",
@@ -76,18 +78,18 @@ function process()
                     }
                 });
                 
-                // Set the site up for maintenace to false
-                $.ajax({
-                    type: "POST",
-                    url: url + '/ajax/settings',
-                    data: { action: 'save', cfg__site_updating: 0 },
-                    dataType: "json",
-                    timeout: 5000, // in milliseconds
-                    success: function(result) {}
-                });
-                
                 // Stop the loop!
                 if(res == false) return false;
+            });
+            
+            // Set the site up for maintenace to false
+            $.ajax({
+                type: "POST",
+                url: url + '/ajax/settings',
+                data: { action: 'save', cfg__site_updating: 0 },
+                dataType: "json",
+                timeout: 5000, // in milliseconds
+                success: function(result) {}
             });
             
             // Process out message back to the user based on if we had errors
