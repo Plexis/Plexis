@@ -1618,26 +1618,50 @@ class Ajax extends Application\Core\Controller
         // Make sure we arent directly accessed and the user has perms
         $this->check_access('sa');
         
+        // Grab POSTS
         $this->input = load_class('input');
         $type = trim( $this->input->post('status') );
+        $sha = trim( $this->input->post('sha') );
         $url = trim( $this->input->post('raw_url') );
         $file = trim( $this->input->post('filename') );
         $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
+        $dirname = dirname($filename);
         
         // Build our default Json return
         $return = array();
         $success = TRUE;
+        $removed = FALSE;
         
         // Get file contents
         $contents = file_get_contents($url, false);
         
+        // Hush errors
         load_class('Debug')->silent_mode(true);
         switch($type)
         {
+            case "renamed":
+                // We need to get the old filename, unfortunatly, github API doesnt supply a way to do this
+                $hurl = "https://github.com/Plexis/Plexis/commits/".$sha."/".$file;
+                $src = preg_replace( "#[\r\n\t\s]#", "", file_get_contents( $hurl, false ) );
+                $reg = "#Filerenamedfrom\<code\>\<ahref=\"(.*?)\"\>(.*?)\</a\>\</code\>#i";
+                $count = preg_match_all( $reg, $src, $matches, PREG_SET_ORDER );
+                if($count)
+                {
+                    $removed = TRUE;
+                    $old_file = ROOT . DS . str_replace(array('/','\\'), DS, $matches[0][2]);
+                    unlink($old_file);
+                }
+                else
+                {
+                    $success = FALSE;
+                    $text = 'Error moving/renaming file "'. $file .'"';
+                    goto Output;
+                }
+                // Do not Break!
             case "added":
-                $dirname = dirname($filename);
                 if(!is_dir($dirname))
                 {
+                    // Create the directory for the new file if it doesnt exist
                     $create = @mkdir($dirname, 0755, true);
                     if(!$create && !is_dir($dirname))
                     {
@@ -1646,10 +1670,12 @@ class Ajax extends Application\Core\Controller
                         goto Output;
                     }
                 }
+                // Do not Break!
             case "modified":
                 $handle = @fopen($filename, 'w+');
                 if($handle)
                 {
+                    // Write the new file contents to the file
                     $fwrite = @fwrite($handle, $contents);
                     if($fwrite === FALSE)
                     {
@@ -1667,15 +1693,48 @@ class Ajax extends Application\Core\Controller
                 }
                 break;
                 
-            case "renamed":
-                $success = FALSE;
-                $text = 'File renaming / moved files isnt supported yet. Please manually update from here <a href="https://github.com/Plexis/Plexis/zipball/master">Github</a>';
-                goto Output;
-                break;
-                
             case "removed":
+                $removed = TRUE;
                 unlink($filename);
                 break;
+        }
+        
+        // Removed empty dirs
+        if($removed == TRUE)
+        {
+            $handle = @opendir($dirname);
+            if($handle)
+            {
+                $files = array();
+                $empty = TRUE;
+                
+                // Run each file / dir to determine if empty
+                while($file = readdir($handle))
+                {
+                    $files[] = $file;
+                    if($file[0] != ".")
+                    {
+                        if(is_file($path . DS . $file) || is_dir($path . DS . $file))
+                        {
+                            $empty = FALSE;
+                            break;
+                        }
+                    }
+                }
+                @closedir($handle);
+                
+                // If empty, delete .DS / .htaccess files and remove dir!
+                if($empty)
+                {
+                    foreach($files as $file)
+                    {
+                        // Removed .DS && .htaccess files
+                        if($file == "." || $file == "..") continue;
+                        unlink($file);
+                    }
+                    @rmdir($dirname);
+                }
+            }
         }
         
         // Output goto

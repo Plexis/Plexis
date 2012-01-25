@@ -38,8 +38,8 @@ class Controller extends \System\Core\Controller
             die();
         }
         
-        // Check for site maintanence
-        if($GLOBALS['controller'] != 'ajax' && config('site_maintenance')) 
+        // If site is updating, only allow Ajax requests
+        if($GLOBALS['controller'] != 'ajax' && config('site_updating')) 
             die('Site Down for maintenance. Be back soon.');
         
         // Build the Core Controller

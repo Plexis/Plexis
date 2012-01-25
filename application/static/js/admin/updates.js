@@ -23,6 +23,7 @@ function process()
             // Globals
             var update_error = false;
             var update_message = '';
+            var image_url = url + '/application/admin/img/icons/small/loading.gif';
             
             // show progress bar
             $('#update').show();
@@ -32,7 +33,7 @@ function process()
             $.ajax({
                 type: "POST",
                 url: url + '/ajax/settings',
-                data: { action: 'save', cfg__site_maintenance: 1 },
+                data: { action: 'save', cfg__site_updating: 1 },
                 dataType: "json",
                 timeout: 5000, // in milliseconds
                 success: function(result) {}
@@ -40,10 +41,13 @@ function process()
             
             // Get the current update rev number
             $.each(result['files'], function(key, value){
+                current = (key+1);
+                $('update-state').html('<center><img src="' + image_url + '"/>Progress: '+ running +'%... Current file: ' + value['filename'] +' ('+ current +' / '+ count +')</center>');
+                
                 res = $.ajax({
                     type: "POST",
                     url: url + '/ajax/update',
-                    data: { status: value['status'], raw_url: value['raw_url'], filename: value['filename'] },
+                    data: { status: value['status'], sha: value['sha'], raw_url: value['raw_url'], filename: value['filename'] },
                     dataType: "json",
                     async: false,
                     timeout: 7000, // in milliseconds
@@ -76,7 +80,7 @@ function process()
                 $.ajax({
                     type: "POST",
                     url: url + '/ajax/settings',
-                    data: { action: 'save', cfg__site_maintenance: 0 },
+                    data: { action: 'save', cfg__site_updating: 0 },
                     dataType: "json",
                     timeout: 5000, // in milliseconds
                     success: function(result) {}

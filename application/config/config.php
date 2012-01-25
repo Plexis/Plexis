@@ -4,6 +4,7 @@ $site_email = 'wilson.steven10@yahoo.com';
 $meta_keywords = 'Site Keywords';
 $meta_description = 'Site Description';
 $site_maintenance = 0;
+$site_updating = 0;
 $default_template = 'default';
 $default_language = 'english';
 $emulator = 'mangos';

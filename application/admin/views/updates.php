@@ -10,6 +10,8 @@
             <div id="update" style="display: none; padding: 25px;">
                 <p><center>Updating... Please do not refresh the screen!</center></p>
                 <div id="progressbar"></div>
+                <br />
+                <div id="update-state"></div>
             </div>
             
             <!-- Update details -->
