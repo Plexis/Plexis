@@ -9,12 +9,24 @@ $().ready(function() {
 function process()
 {
     $.ajax({
-        type: "GET",
-        url: update_url,
+        type: "POST",
+        url: url + "/ajax/update",
+        data: {action: "next", url: update_url},
         dataType: "json",
         timeout: 5000, // in milliseconds
-        success: function(result) 
+        success: function(data) 
         {
+            // Make sure we have the update!
+            if(data.success == false)
+            {
+                throw 'Error: ' + data.data;
+                return false;
+            }
+            else
+            {
+                result = data['data'];
+            }
+
             // For progress bar!
             var count = result['files'].length;
             var add = (100 / count);
@@ -23,7 +35,6 @@ function process()
             // Globals
             var update_error = false;
             var update_message = '';
-            var image_url = url + '/application/admin/img/icons/small/loading.gif';
             
             // show progress bar
             $('#update').show();
@@ -49,7 +60,7 @@ function process()
                 res = $.ajax({
                     type: "POST",
                     url: url + '/ajax/update',
-                    data: { status: value['status'], sha: value['sha'], raw_url: value['raw_url'], filename: value['filename'] },
+                    data: { action: "update", status: value['status'], sha: value['sha'], raw_url: value['raw_url'], filename: value['filename'] },
                     dataType: "json",
                     async: false,
                     timeout: 7000, // in milliseconds

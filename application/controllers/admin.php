@@ -701,7 +701,7 @@ class Admin extends Application\Core\Controller
             // Get the file changes from github
             $start = microtime(1);
             load_class('Debug')->silent_mode(true);
-            $page = file_get_contents('https://api.github.com/repos/Plexis/Plexis/commits', false);
+            $page = file_get_contents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30', false);
             load_class('Debug')->silent_mode(false);
             $stop = microtime(1);
             
@@ -723,6 +723,12 @@ class Admin extends Application\Core\Controller
                     if(CMS_BUILD < $latest)
                     {
                         $count = ($latest - CMS_BUILD);
+                        if($count > 29)
+                        {
+                            output_message('warning', 'Your cms is out of date by more the 30 updates. You will need to manually update.');
+                            $this->load->view('blank', $data);
+                            return;
+                        }
                     }
                 }
                 else

@@ -1618,142 +1618,219 @@ class Ajax extends Application\Core\Controller
         // Make sure we arent directly accessed and the user has perms
         $this->check_access('sa');
         
-        // Grab POSTS
-        $this->input = load_class('input');
-        $type = trim( $this->input->post('status') );
-        $sha = trim( $this->input->post('sha') );
-        $url = trim( $this->input->post('raw_url') );
-        $file = trim( $this->input->post('filename') );
-        $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
-        $dirname = dirname($filename);
-        
-        // Build our default Json return
-        $return = array();
-        $success = TRUE;
-        $removed = FALSE;
-        
-        // Get file contents
-        $contents = file_get_contents($url, false);
-        
-        // Hush errors
-        load_class('Debug')->silent_mode(true);
-        switch($type)
+        if(isset($_POST['action']))
         {
-            case "renamed":
-                // We need to get the old filename, unfortunatly, github API doesnt supply a way to do this
-                $hurl = "https://github.com/Plexis/Plexis/commits/".$sha."/".$file;
-                $src = preg_replace( "#[\r\n\t\s]#", "", file_get_contents( $hurl, false ) );
-                $reg = "#Filerenamedfrom\<code\>\<ahref=\"(.*?)\"\>(.*?)\</a\>\</code\>#i";
-                $count = preg_match_all( $reg, $src, $matches, PREG_SET_ORDER );
-                if($count)
-                {
-                    $removed = TRUE;
-                    $old_file = ROOT . DS . str_replace(array('/','\\'), DS, $matches[0][2]);
-                    unlink($old_file);
-                }
-                else
-                {
-                    $success = FALSE;
-                    $text = 'Error moving/renaming file "'. $file .'"';
-                    goto Output;
-                }
-                // Do not Break!
-            case "added":
-                if(!is_dir($dirname))
-                {
-                    // Create the directory for the new file if it doesnt exist
-                    $create = @mkdir($dirname, 0755, true);
-                    if(!$create && !is_dir($dirname))
-                    {
-                        $success = FALSE;
-                        $text = 'Error creating directory "'. $dirname .'"';
-                        goto Output;
-                    }
-                }
-                // Do not Break!
-            case "modified":
-                $handle = @fopen($filename, 'w+');
-                if($handle)
-                {
-                    // Write the new file contents to the file
-                    $fwrite = @fwrite($handle, $contents);
-                    if($fwrite === FALSE)
-                    {
-                        $success = FALSE;
-                        $text = 'Error writing to file "'. $file .'"';
-                        goto Output;
-                    }
-                    @fclose($handle);
-                }
-                else
-                {
-                    $success = FALSE;
-                    $text = 'Error opening / creating file "'. $file .'"';
-                    goto Output;
-                }
-                break;
-                
-            case "removed":
-                $removed = TRUE;
-                unlink($filename);
-                break;
-        }
-        
-        // Removed empty dirs
-        if($removed == TRUE)
-        {
-            $handle = @opendir($dirname);
-            if($handle)
+            $this->input = load_class('input');
+            $action = $type = trim( $this->input->post('action') );
+            
+            if($action == 'get_lastest')
             {
-                $files = array();
-                $empty = TRUE;
-                
-                // Run each file / dir to determine if empty
-                while($file = readdir($handle))
+                // Make sure the Openssl extension is loaded
+                if(!extension_loaded('openssl'))
                 {
-                    $files[] = $file;
-                    if($file[0] != ".")
+                    echo json_encode( array('success' => false, 'message' => 'Openssl extension not found. Please enable the openssl extension in your php.ini file') );
+                    return;
+                }
+                
+                // Check for https support
+                if(!in_array('https', stream_get_wrappers()))
+                {
+                    echo json_encode( array('success' => false, 'message' => 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?') );
+                    return;
+                }
+                
+                // Make sure the client server allows fopen of urls
+                if(ini_get('allow_url_fopen') == 1)
+                {
+                    // Get the file changes from github
+                    $start = microtime(1);
+                    load_class('Debug')->silent_mode(true);
+                    $page = trim( file_get_contents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=1', false) );
+                    load_class('Debug')->silent_mode(false);
+                    $stop = microtime(1);
+                    
+                    if($page == FALSE || empty($page))
                     {
-                        if(is_file($path . DS . $file) || is_dir($path . DS . $file))
+                        echo json_encode( array('success' => false, 'message' => 'Unable to connect to the update server') );
+                        return;
+                    }
+                    
+                    // Decode the results
+                    $commits = json_decode($page, TRUE);
+                    
+                    // Defaults
+                    $count = 0;
+                    $latest = 0;
+
+                    echo json_encode( array('success' => true, 'message' => $commits) );
+                    return;
+                }
+                else
+                {
+                    echo json_encode( array('success' => false, 'message' => 'allow_url_fopen not enabled in php.ini') );
+                    return;
+                }
+                
+            }
+            elseif($action == 'next')
+            {
+                $url = $type = trim( $this->input->post('url') );
+                
+                // Get the file changes from github
+                $start = microtime(1);
+                load_class('Debug')->silent_mode(true);
+                $page = trim( file_get_contents($url, false) );
+                load_class('Debug')->silent_mode(false);
+                $stop = microtime(1);
+                
+                if($page == FALSE || empty($page))
+                {
+                    echo json_encode( array('success' => false, 'data' => 'Error fetching updates') );
+                    return;
+                }
+                
+                echo json_encode( array('success' => true, 'data' => json_decode($page)) );
+            }
+            elseif($action == 'update')
+            {
+        
+                // Grab POSTS
+                $type = trim( $this->input->post('status') );
+                $sha = trim( $this->input->post('sha') );
+                $url = trim( $this->input->post('raw_url') );
+                $file = trim( $this->input->post('filename') );
+                $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
+                $dirname = dirname($filename);
+                
+                // Build our default Json return
+                $return = array();
+                $success = TRUE;
+                $removed = FALSE;
+                
+                // Get file contents
+                $contents = file_get_contents($url, false);
+                
+                // Hush errors
+                load_class('Debug')->silent_mode(true);
+                switch($type)
+                {
+                    case "renamed":
+                        // We need to get the old filename, unfortunatly, github API doesnt supply a way to do this
+                        $hurl = "https://github.com/Plexis/Plexis/commits/".$sha."/".$file;
+                        $src = preg_replace( "#[\r\n\t\s]#", "", file_get_contents( $hurl, false ) );
+                        $reg = "#Filerenamedfrom\<code\>\<ahref=\"(.*?)\"\>(.*?)\</a\>\</code\>#i";
+                        $count = preg_match_all( $reg, $src, $matches, PREG_SET_ORDER );
+                        if($count)
                         {
-                            $empty = FALSE;
-                            break;
+                            $removed = TRUE;
+                            $old_file = ROOT . DS . str_replace(array('/','\\'), DS, $matches[0][2]);
+                            unlink($old_file);
+                        }
+                        else
+                        {
+                            $success = FALSE;
+                            $text = 'Error moving/renaming file "'. $file .'"';
+                            goto Output;
+                        }
+                        // Do not Break!
+                    case "added":
+                        if(!is_dir($dirname))
+                        {
+                            // Create the directory for the new file if it doesnt exist
+                            $create = @mkdir($dirname, 0755, true);
+                            if(!$create && !is_dir($dirname))
+                            {
+                                $success = FALSE;
+                                $text = 'Error creating directory "'. $dirname .'"';
+                                goto Output;
+                            }
+                        }
+                        // Do not Break!
+                    case "modified":
+                        $handle = @fopen($filename, 'w+');
+                        if($handle)
+                        {
+                            // Write the new file contents to the file
+                            $fwrite = @fwrite($handle, $contents);
+                            if($fwrite === FALSE)
+                            {
+                                $success = FALSE;
+                                $text = 'Error writing to file "'. $file .'"';
+                                goto Output;
+                            }
+                            @fclose($handle);
+                        }
+                        else
+                        {
+                            $success = FALSE;
+                            $text = 'Error opening / creating file "'. $file .'"';
+                            goto Output;
+                        }
+                        break;
+                        
+                    case "removed":
+                        $removed = TRUE;
+                        unlink($filename);
+                        break;
+                }
+                
+                // Removed empty dirs
+                if($removed == TRUE)
+                {
+                    $handle = @opendir($dirname);
+                    if($handle)
+                    {
+                        $files = array();
+                        $empty = TRUE;
+                        
+                        // Run each file / dir to determine if empty
+                        while($file = readdir($handle))
+                        {
+                            $files[] = $file;
+                            if($file[0] != ".")
+                            {
+                                if(is_file($path . DS . $file) || is_dir($path . DS . $file))
+                                {
+                                    $empty = FALSE;
+                                    break;
+                                }
+                            }
+                        }
+                        @closedir($handle);
+                        
+                        // If empty, delete .DS / .htaccess files and remove dir!
+                        if($empty)
+                        {
+                            foreach($files as $file)
+                            {
+                                // Removed .DS && .htaccess files
+                                if($file == "." || $file == "..") continue;
+                                unlink($file);
+                            }
+                            @rmdir($dirname);
                         }
                     }
                 }
-                @closedir($handle);
                 
-                // If empty, delete .DS / .htaccess files and remove dir!
-                if($empty)
+                // Output goto
+                Output:
                 {
-                    foreach($files as $file)
+                    load_class('Debug')->silent_mode(false);
+                    if($success == TRUE)
                     {
-                        // Removed .DS && .htaccess files
-                        if($file == "." || $file == "..") continue;
-                        unlink($file);
+                        // Remove error tag on success, but allow warnings
+                        ($type == 'error') ? $type = 'success' : '';
+                        $return['success'] = true;
                     }
-                    @rmdir($dirname);
+                    else
+                    {
+                        $return['success'] = false;
+                        $return['message'] = $text;
+                    }
+                    
+                    echo json_encode($return);
                 }
             }
-        }
-        
-        // Output goto
-        Output:
-        {
-            load_class('Debug')->silent_mode(false);
-            if($success == TRUE)
-            {
-                // Remove error tag on success, but allow warnings
-                ($type == 'error') ? $type = 'success' : '';
-                $return['success'] = true;
-            }
-            else
-            {
-                $return['success'] = false;
-                $return['message'] = $text;
-            }
-            
-            echo json_encode($return);
         }
     }
  
