@@ -1,14 +1,17 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
 | Plexis
-|
 | --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Soap()
+| ---------------------------------------------------------------
 |
-| Author: 		Steven Wilson
-| Copyright:	Copyright (c) 2011, Steven Wilson
-| License: 		GNU GPL v3
+| A soap connection wrapper for Plexis CMS
 |
 */
 namespace Application\Library;

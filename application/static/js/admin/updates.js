@@ -43,8 +43,8 @@ function process()
             // Set the site up for maintenace
             $.ajax({
                 type: "POST",
-                url: url + '/ajax/settings',
-                data: { action: 'save', cfg__site_updating: 1 },
+                url: url + '/ajax/update',
+                data: { action: 'init' },
                 dataType: "json",
                 timeout: 5000, // in milliseconds
                 success: function(result) {}
@@ -104,8 +104,8 @@ function process()
             // Set the site up for maintenace to false
             $.ajax({
                 type: "POST",
-                url: url + '/ajax/settings',
-                data: { action: 'save', cfg__site_updating: 0 },
+                url: url + '/ajax/update',
+                data: { action: 'finish' },
                 dataType: "json",
                 timeout: 5000, // in milliseconds
                 success: function(result) {}

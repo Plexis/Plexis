@@ -1,5 +1,19 @@
 <?php
-
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: News_Model()
+| ---------------------------------------------------------------
+|
+| Model for the News / Admin::news() controller
+|
+*/
 class News_Model extends Application\Core\Model 
 {
 
@@ -9,7 +23,7 @@ class News_Model extends Application\Core\Model
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }

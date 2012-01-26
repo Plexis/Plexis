@@ -1,13 +1,11 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
-| Frostbite Framework
-|
+| Plexis
 | --------------------------------------------------------------
-|
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
 |
 | * USE THIS FILE AS THE BOOTSTRAP *

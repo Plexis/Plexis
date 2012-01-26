@@ -1,4 +1,20 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+|---------------------------------------------------------------
+|
+| Navigation. (user CTRL + f to move quickly)
+|---------------------------------------------------------------
+| P01 - Index support Page
+| P02 - View Single Post
+|
+*/
 class News extends Application\Core\Controller 
 {
 
@@ -18,7 +34,7 @@ class News extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Index Page
+| P01: Index Page
 | ---------------------------------------------------------------
 |
 */
@@ -37,7 +53,7 @@ class News extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| View News Post Page
+| P02: View News Post Page
 | ---------------------------------------------------------------
 |
 */

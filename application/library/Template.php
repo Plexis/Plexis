@@ -1,20 +1,17 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
-| Plexis Template Engine
-|
+| Plexis
 | --------------------------------------------------------------
-|
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
-|
 | ---------------------------------------------------------------
-| Class: Template
+| Class: Template()
 | ---------------------------------------------------------------
 |
-| Main template parsing / output file.
+| The cms' template engine
 |
 */
 namespace Application\Library;
@@ -86,7 +83,11 @@ class Template
              ->set_metadata('expires', '-1', 'http-equiv')
              ->append_metadata("") // Add whitespace
              ->append_metadata("<!-- Include Plexis Static JS Scripts -->")
-             ->append_metadata('<script type="text/javascript">var url = "'. BASE_URL .'"; var realm_id = '. get_realm_cookie() .';</script>')
+             ->append_metadata(
+             '<script type="text/javascript">
+            var url = "'. SITE_URL .'"; 
+            var realm_id = '. get_realm_cookie() .';
+        </script>')
              ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery-1.6.2.min.js"></script>')
              ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.validate.min.js"></script>')
              ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')

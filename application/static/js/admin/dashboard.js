@@ -9,7 +9,7 @@ function check_for_updates()
         type: "POST",
         url: url + "/ajax/update",
         dataType: "json",
-        data: { action: "get_lastest" },
+        data: { action: "get_latest" },
         timeout: 5000, // in milliseconds
         success: function(result) 
         {
@@ -63,16 +63,4 @@ function check_for_updates()
             $('#update').html('<font color="orange">Unable to connect to update server.</font>');
         }
     });
-}
-
-function getParameterByName(name)
-{
-  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-  var regexS = "[\\?&]" + name + "=([^&#]*)";
-  var regex = new RegExp(regexS);
-  var results = regex.exec(window.location.href);
-  if(results == null)
-    return "";
-  else
-    return decodeURIComponent(results[1].replace(/\+/g, " "));
 }

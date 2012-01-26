@@ -1,22 +1,40 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+|---------------------------------------------------------------
+|
+| Navigation. (user CTRL + f to move quickly)
+|---------------------------------------------------------------
+| P01 - Index page (Frontpage)
+|
+*/
 class Welcome extends Application\Core\Controller 
 {
-    function __construct()
+
+/*
+| ---------------------------------------------------------------
+| Constructer
+| ---------------------------------------------------------------
+|
+*/
+    public function __construct()
     {
         parent::__construct();
     }
 
-    function _beforeAction() 
-    {
-        /*
-        | You can call before and after actions, sorta like mini hooks
-        | They arent nessesary, but convenient not having to make a full hook
-        | Since they are loaded in the main controller, you dont need to 
-        | include these functions at all in your controller.
-        */
-    }
-
-    function index() 
+/*
+| ---------------------------------------------------------------
+| P01: Index Page
+| ---------------------------------------------------------------
+|
+*/
+    public function index() 
     {
         // Load a Welcome Model
         $this->load->model('News_Model');
@@ -33,11 +51,6 @@ class Welcome extends Application\Core\Controller
         
         // Load the page, and we are done :)
         $this->load->view('index', $data);
-    }
-
-    function _afterAction() 
-    {
-        // And here is an after action
     }
 }
 // EOF

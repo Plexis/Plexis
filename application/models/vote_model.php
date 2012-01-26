@@ -1,5 +1,19 @@
 <?php
-
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Vote_Model()
+| ---------------------------------------------------------------
+|
+| Model for the Account::vote / Admin controller
+|
+*/
 class Vote_Model extends Application\Core\Model 
 {
     // IP address of our voter
@@ -11,7 +25,7 @@ class Vote_Model extends Application\Core\Model
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }

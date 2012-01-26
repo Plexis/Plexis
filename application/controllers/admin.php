@@ -1,4 +1,31 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+|---------------------------------------------------------------
+|
+| Navigation. (user CTRL + f to move quickly)
+|---------------------------------------------------------------
+| P01 - Dashboard
+| P02 - Php Info Page
+| P03 - News Managment
+| P04 - Manage Accounts
+| P05 - Site Settings
+| P06 - Groups and Permissions
+| P07 - Registration Settings
+| P08 - Realm Management
+| P09 - Vote
+| P10 - Modules
+| P11 - Templates
+| P12 - Console
+| P13 - Update
+|
+*/
 class Admin extends Application\Core\Controller 
 {
     public function __construct()
@@ -16,45 +43,10 @@ class Admin extends Application\Core\Controller
             die();
         }
     }
- 
-/*
-| ---------------------------------------------------------------
-| Method: check_access
-| ---------------------------------------------------------------
-|
-| Displays a 403 if the user doesnt have access to this page
-| @Param: (Bool) $s403 - Show 403?
-|
-*/ 
-    protected function check_access($perm, $s403 = TRUE)
-    {
-        if( !$this->Auth->has_permission($perm))
-        {
-            if($s403) $this->show_403();
-            return FALSE;
-        }
-        return TRUE;
-    }
-    
-/*
-| ---------------------------------------------------------------
-| 403 Page
-| ---------------------------------------------------------------
-|
-*/ 
-    protected function show_403()
-    {
-        // Set our page title and desc
-        $data['page_title'] = "Access Denied";
-        $data['page_desc'] = "Your account does not have sufficient rights to view this page.";
-        
-        // Load the page, and we are done :)
-        $this->load->view('blank', $data);
-    }
 
 /*
 | ---------------------------------------------------------------
-| Dashboard
+| P01: Dashboard
 | ---------------------------------------------------------------
 |
 */
@@ -83,7 +75,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| PHPinfo Page
+| P02: PHPinfo Page
 | ---------------------------------------------------------------
 |
 */ 
@@ -106,7 +98,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| News Managment Page
+| P03: News Managment Page
 | ---------------------------------------------------------------
 |
 */ 
@@ -152,7 +144,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Manage Users
+| P04: Manage Users
 | ---------------------------------------------------------------
 |
 */    
@@ -197,9 +189,6 @@ class Admin extends Application\Core\Controller
             }
             else
             {
-                // Make sure we have our realm loaded
-                (!isset($this->realm)) ? $this->load->realm() : '';
-				
                 // Use the realm database to grab user information first
                 $user2 = $this->realm->fetch_account($user['id']);
 				$data['expansion_data'] = $this->realm->get_expansion_info();
@@ -266,7 +255,7 @@ class Admin extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Site Settings
+| P05: Site Settings
 | ---------------------------------------------------------------
 |
 */    
@@ -294,7 +283,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| User Groups and Permissions
+| P06: User Groups and Permissions
 | ---------------------------------------------------------------
 |
 */     
@@ -396,7 +385,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Registration Settigns
+| P07: Registration Settigns
 | ---------------------------------------------------------------
 |
 */    
@@ -419,7 +408,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Realm Managment
+| P08: Realm Managment
 | ---------------------------------------------------------------
 |
 */    
@@ -519,7 +508,7 @@ class Admin extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Vote
+| P09: Vote
 | ---------------------------------------------------------------
 |
 */
@@ -545,7 +534,6 @@ class Admin extends Application\Core\Controller
         }
         else
         {
-            
             // Build our page variable data
             $data = $this->model->get_vote_site($id);
             if($data == FALSE) redirect('admin/vote');
@@ -561,7 +549,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Modules
+| P10: Modules
 | ---------------------------------------------------------------
 |
 */    
@@ -580,7 +568,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Templates
+| P11: Templates
 | ---------------------------------------------------------------
 |
 */     
@@ -630,7 +618,7 @@ class Admin extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Console
+| P12: Console
 | ---------------------------------------------------------------
 |
 */    
@@ -665,7 +653,7 @@ class Admin extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Update
+| P13: Update
 | ---------------------------------------------------------------
 |
 */     
@@ -847,6 +835,47 @@ class Admin extends Application\Core\Controller
             'page_desc' => "Here you can view debug and error logs generated by the cms.",
         );
         $this->load->view('under_construction', $data);
+    }
+
+/*
+| ---------------------------------------------------------------
+| METHODS
+| ---------------------------------------------------------------
+*/
+    
+/*
+| ---------------------------------------------------------------
+| Method: check_access
+| ---------------------------------------------------------------
+|
+| Displays a 403 if the user doesnt have access to this page
+| @Param: (Bool) $s403 - Show 403?
+|
+*/ 
+    protected function check_access($perm, $s403 = TRUE)
+    {
+        if( !$this->Auth->has_permission($perm))
+        {
+            if($s403) $this->show_403();
+            return FALSE;
+        }
+        return TRUE;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| 403 Page
+| ---------------------------------------------------------------
+|
+*/ 
+    protected function show_403()
+    {
+        // Set our page title and desc
+        $data['page_title'] = "Access Denied";
+        $data['page_desc'] = "Your account does not have sufficient rights to view this page.";
+        
+        // Load the page, and we are done :)
+        $this->load->view('blank', $data);
     }
 }
 // EOF

@@ -1,15 +1,16 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
-| Captcha Code
-|
+| Plexis
 | --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Copyright:    Copyright (c) 2011-2012, Steven Wilson
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Captcha()
+| ---------------------------------------------------------------
 |
-| Author: 		Steven Wilson
-| Copyright:	Copyright (c) 2011, Steven Wilson
-|
-| Description: An easy to use captcha class.
+| Easy to use captcha image generator
 |
 */
 namespace Application\Library;

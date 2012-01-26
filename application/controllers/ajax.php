@@ -1,4 +1,31 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+|---------------------------------------------------------------
+|
+| Navigation. (user CTRL + f to move quickly)
+|---------------------------------------------------------------
+| A01 - Users
+| A02 - Account
+| A03 - Groups
+| A04 - Permissions
+| A05 - News
+| A06 - Settings
+| A07 - Realms
+| A08 - Vote
+| A09 - Modules
+| A10 - Templates
+| A11 - Onlinelist
+| A12 - Console
+| A13 - Update
+|
+*/
 class Ajax extends Application\Core\Controller 
 {
     // Our user
@@ -18,58 +45,10 @@ class Ajax extends Application\Core\Controller
         // Init a session var
         $this->user = $this->Session->get('user');
     }
-    
-/*
-| ---------------------------------------------------------------
-| Method: check_access()
-| ---------------------------------------------------------------
-|
-| This method is used for certain Ajax pages to see if the requester
-|   has permission to receive the request.
-|
-| @Param: $lvl - The account level required (a = admin, u = user)
-*/   
-    protected function check_access($lvl = 'a')
-    {
-        // Make sure the user has admin access'
-        if($lvl == 'a' && $this->user['is_admin'] != 1)
-        {
-            if($this->user['is_super_admin'] != 1)
-            {
-                echo "403";
-                die();
-            }
-        }
-        elseif($lvl == 'u' && !$this->user['is_loggedin'])
-        {
-            echo "403";
-            die();
-        }
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: check_permission()
-| ---------------------------------------------------------------
-|
-| This method is used for certain Ajax pages to see if the requester
-|   has permission to process the request.
-|
-| @Param: $perm - The name of the permission
-*/   
-    protected function check_permission($perm)
-    {
-        // Make sure the user has admin access'
-        if( !$this->Auth->has_permission($perm))
-        {
-            $this->output(false, 'access_denied_privlages');
-            die();
-        }
-    }
 
 /*
 | ---------------------------------------------------------------
-| Method: users()
+| A01: users()
 | ---------------------------------------------------------------
 |
 | This method is used for an Ajax request to list users
@@ -120,7 +99,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: users()
+| A02: account()
 | ---------------------------------------------------------------
 |
 | This method is used for an Ajax request to list users
@@ -224,7 +203,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: groups()
+| A03: groups()
 | ---------------------------------------------------------------
 |
 | This method is used for via Ajax to modify account groups
@@ -429,7 +408,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: permissions()
+| A04: permissions()
 | ---------------------------------------------------------------
 |
 | This method is used for via Ajax to save permissions for groups
@@ -467,7 +446,7 @@ class Ajax extends Application\Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Method: news()
+| A05: news()
 | ---------------------------------------------------------------
 |
 | This method is used to list news post via an Ajax request
@@ -581,7 +560,7 @@ class Ajax extends Application\Core\Controller
  
 /*
 | ---------------------------------------------------------------
-| Method: settings()
+| A06: settings()
 | ---------------------------------------------------------------
 |
 | This method is used for via Ajax to save config files
@@ -614,7 +593,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: realms()
+| A07: realms()
 | ---------------------------------------------------------------
 |
 | This method is used to update / install realms via Ajax
@@ -1032,16 +1011,13 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: vote()
+| A08: vote()
 | ---------------------------------------------------------------
 |
 | This method is used to list news post via an Ajax request
 */    
     public function vote()
     {
-        // Make sure we arent getting direct accessed, and the user has permission
-        $this->check_permission('manage_votesites');
-        
         // Check for 'action' posts
         if(isset($_POST['action']))
         {
@@ -1054,8 +1030,8 @@ class Ajax extends Application\Core\Controller
                 // CREATING
                 case "create":
                     // Make sure we arent getting direct accessed, and the user has permission
-                    $this->check_access('a');
-            
+                    $this->check_permission('manage_votesites');
+        
                     // Load the Form Validation script
                     $this->load->library('validation');
                     
@@ -1082,8 +1058,8 @@ class Ajax extends Application\Core\Controller
                 // EDITING
                 case "edit":
                     // Make sure we arent getting direct accessed, and the user has permission
-                    $this->check_access('a');
-            
+                    $this->check_permission('manage_votesites');
+
                     // Load the Form Validation script
                     $this->load->library('validation');
                     
@@ -1110,7 +1086,8 @@ class Ajax extends Application\Core\Controller
                 // DELETING
                 case "delete":
                     // Make sure we arent getting direct accessed, and the user has permission
-                    $this->check_access('a');
+                    $this->check_permission('manage_votesites');
+
                     $result = $this->model->delete($_POST['id']);
                     ($result == TRUE) ? $this->output(true, 'votesite_delete_success') : $this->output(false, 'votesite_delete_error');
                     break;
@@ -1131,6 +1108,9 @@ class Ajax extends Application\Core\Controller
         }
         else
         {
+            // Make sure we arent getting direct accessed, and the user has permission
+            $this->check_permission('manage_votesites');
+  
             // Load the Ajax Model
             $this->load->model("Ajax_Model", "ajax");
             
@@ -1167,7 +1147,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: modules()
+| A09: modules()
 | ---------------------------------------------------------------
 |
 */    
@@ -1282,7 +1262,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: templates()
+| A10: templates()
 | ---------------------------------------------------------------
 |
 */    
@@ -1305,9 +1285,6 @@ class Ajax extends Application\Core\Controller
             {
                 // INSTALLING
                 case "install":
-                    // Make sure we arent getting direct accessed, and the user has permission
-                    $this->check_access('a');
-                    
                     // Make sure we are using an ID here
                     if(!is_numeric($id)) return;
                     
@@ -1320,9 +1297,6 @@ class Ajax extends Application\Core\Controller
                 
                 // UNINSTALL
                 case "un-install":
-                    // Make sure we arent getting direct accessed, and the user has permission
-                    $this->check_access('a');
-                    
                     // Make sure we are using an ID here
                     if(!is_numeric($id)) return;
                     
@@ -1447,7 +1421,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: onlinelist()
+| A11: onlinelist()
 | ---------------------------------------------------------------
 |
 | This method is used for via Ajax to get the players online
@@ -1459,6 +1433,7 @@ class Ajax extends Application\Core\Controller
         {
             $realm = get_realm_cookie();
         }
+
         // Load the WoWLib
         $this->load->wowlib($realm, 'wowlib');
         $output = $this->wowlib->get_online_list_datatables();
@@ -1483,7 +1458,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: console()
+| A12: console()
 | ---------------------------------------------------------------
 |
 | This method is used for via Ajax to handle remote access commands
@@ -1498,9 +1473,6 @@ class Ajax extends Application\Core\Controller
         
         // Load the input cleaner
         $this->input = load_class('Input');
-        
-        // Check Access
-        $this->check_access('a');
         
         // Defaults
         $action = trim( $this->input->post('action', TRUE) );
@@ -1608,7 +1580,7 @@ class Ajax extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: update()
+| A13: update()
 | ---------------------------------------------------------------
 |
 | This method is used for via Ajax to update the cms
@@ -1621,237 +1593,303 @@ class Ajax extends Application\Core\Controller
         if(isset($_POST['action']))
         {
             $this->input = load_class('input');
-            $action = $type = trim( $this->input->post('action') );
+            $action = trim( $this->input->post('action') );
             
-            if($action == 'get_lastest')
+            switch($action)
             {
-                // Make sure the Openssl extension is loaded
-                if(!extension_loaded('openssl'))
-                {
-                    echo json_encode( array('success' => false, 'message' => 'Openssl extension not found. Please enable the openssl extension in your php.ini file') );
-                    return;
-                }
+                case "get_latest":
+                    // Make sure the Openssl extension is loaded
+                    if(!extension_loaded('openssl'))
+                    {
+                        echo json_encode( array('success' => false, 'message' => 'Openssl extension not found. Please enable the openssl extension in your php.ini file') );
+                        return;
+                    }
+                    
+                    // Check for https support
+                    if(!in_array('https', stream_get_wrappers()))
+                    {
+                        echo json_encode( array('success' => false, 'message' => 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?') );
+                        return;
+                    }
+                    
+                    // Make sure the client server allows fopen of urls
+                    if(ini_get('allow_url_fopen') == 1)
+                    {
+                        // Get the file changes from github
+                        $start = microtime(1);
+                        load_class('Debug')->silent_mode(true);
+                        $page = trim( file_get_contents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=1', false) );
+                        load_class('Debug')->silent_mode(false);
+                        $stop = microtime(1);
+                        
+                        if($page == FALSE || empty($page))
+                        {
+                            echo json_encode( array('success' => false, 'message' => 'Unable to connect to the update server') );
+                            return;
+                        }
+                        
+                        // Decode the results
+                        $commits = json_decode($page, TRUE);
+                        
+                        // Defaults
+                        $count = 0;
+                        $latest = 0;
+
+                        echo json_encode( array('success' => true, 'message' => $commits) );
+                        return;
+                    }
+                    else
+                    {
+                        echo json_encode( array('success' => false, 'message' => 'allow_url_fopen not enabled in php.ini') );
+                        return;
+                    }
+                    break;
+                    
+                case "init":
+                    config_set('site_updating', 1);
+                    config_save('app');
+                    break;
+                    
+                case "finish":
+                    config_set('site_updating', 0);
+                    config_save('app');
+                    break;
+                    
+                case "next":
+                    $url = $type = trim( $this->input->post('url') );
                 
-                // Check for https support
-                if(!in_array('https', stream_get_wrappers()))
-                {
-                    echo json_encode( array('success' => false, 'message' => 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?') );
-                    return;
-                }
-                
-                // Make sure the client server allows fopen of urls
-                if(ini_get('allow_url_fopen') == 1)
-                {
                     // Get the file changes from github
                     $start = microtime(1);
                     load_class('Debug')->silent_mode(true);
-                    $page = trim( file_get_contents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=1', false) );
+                    $page = trim( file_get_contents($url, false) );
                     load_class('Debug')->silent_mode(false);
                     $stop = microtime(1);
                     
                     if($page == FALSE || empty($page))
                     {
-                        echo json_encode( array('success' => false, 'message' => 'Unable to connect to the update server') );
+                        echo json_encode( array('success' => false, 'data' => 'Error fetching updates') );
                         return;
                     }
                     
-                    // Decode the results
-                    $commits = json_decode($page, TRUE);
+                    echo json_encode( array('success' => true, 'data' => json_decode($page)) );
+                    break;
+                
+                case "update":
+                    // Grab POSTS
+                    $type = trim( $this->input->post('status') );
+                    $sha = trim( $this->input->post('sha') );
+                    $url = trim( $this->input->post('raw_url') );
+                    $file = trim( $this->input->post('filename') );
+                    $adds = trim( $this->input->post('additions') );
+                    $dels = trim( $this->input->post('deletions') );
+                    $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
+                    $dirname = dirname($filename);
                     
-                    // Defaults
-                    $count = 0;
-                    $latest = 0;
-
-                    echo json_encode( array('success' => true, 'message' => $commits) );
-                    return;
-                }
-                else
-                {
-                    echo json_encode( array('success' => false, 'message' => 'allow_url_fopen not enabled in php.ini') );
-                    return;
-                }
-                
-            }
-            elseif($action == 'next')
-            {
-                $url = $type = trim( $this->input->post('url') );
-                
-                // Get the file changes from github
-                $start = microtime(1);
-                load_class('Debug')->silent_mode(true);
-                $page = trim( file_get_contents($url, false) );
-                load_class('Debug')->silent_mode(false);
-                $stop = microtime(1);
-                
-                if($page == FALSE || empty($page))
-                {
-                    echo json_encode( array('success' => false, 'data' => 'Error fetching updates') );
-                    return;
-                }
-                
-                echo json_encode( array('success' => true, 'data' => json_decode($page)) );
-            }
-            elseif($action == 'update')
-            {
-        
-                // Grab POSTS
-                $type = trim( $this->input->post('status') );
-                $sha = trim( $this->input->post('sha') );
-                $url = trim( $this->input->post('raw_url') );
-                $file = trim( $this->input->post('filename') );
-                $adds = trim( $this->input->post('additions') );
-                $dels = trim( $this->input->post('deletions') );
-                $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
-                $dirname = dirname($filename);
-                
-                // Build our default Json return
-                $return = array();
-                $success = TRUE;
-                $removed = FALSE;
-                
-                // Get file contents
-                $contents = file_get_contents($url, false);
-                
-                // Hush errors
-                load_class('Debug')->silent_mode(true);
-                switch($type)
-                {
-                    case "renamed":
-                        // We need to get the old filename, unfortunatly, github API doesnt supply a way to do this
-                        $hurl = "https://github.com/Plexis/Plexis/commits/".$sha."/".$file;
-                        $src = preg_replace( "#[\r\n\t\s]#", "", file_get_contents( $hurl, false ) );
-                        $reg = "#Filerenamedfrom\<code\>\<ahref=\"(.*?)\"\>(.*?)\</a\>\</code\>#i";
-                        $count = preg_match_all( $reg, $src, $matches, PREG_SET_ORDER );
-                        if($count)
-                        {
-                            $removed = TRUE;
-                            $old_file = ROOT . DS . str_replace(array('/','\\'), DS, $matches[0][2]);
-                            unlink($old_file);
-                        }
-                        else
-                        {
-                            $success = FALSE;
-                            $text = 'Error moving/renaming file "'. $file .'"';
-                            goto Output;
-                        }
-                        // Do not Break!
-                    case "added":
-
-                        // We need to check for a soft file rename( file "added", no additions, no files removed )
-                        if($adds == 0 && $dels == 0)
-                        {
-                            // File sha probably is different then the commit sha
-                            if(preg_match( "#/([0-9a-z]{40})/#i", $url, $matches))
+                    // Build our default Json return
+                    $return = array();
+                    $success = TRUE;
+                    $removed = FALSE;
+                    
+                    // Get file contents
+                    $contents = file_get_contents($url, false);
+                    
+                    // Hush errors
+                    load_class('Debug')->silent_mode(true);
+                    switch($type)
+                    {
+                        case "renamed":
+                            // We need to get the old filename, unfortunatly, github API doesnt supply a way to do this
+                            $hurl = "https://github.com/Plexis/Plexis/commits/".$sha."/".$file;
+                            $src = preg_replace( "#[\r\n\t\s]#", "", file_get_contents( $hurl, false ) );
+                            $reg = "#Filerenamedfrom\<code\>\<ahref=\"(.*?)\"\>(.*?)\</a\>\</code\>#i";
+                            $count = preg_match_all( $reg, $src, $matches, PREG_SET_ORDER );
+                            if($count)
                             {
-                                $parts = explode($matches[1], $url);
-                                $parts[1] = trim($parts[1], '/');
-                                if($parts[1] != $file)
-                                {
-                                    // Soft rename indeed.. remove the old damn file >:(
-                                    unlink(ROOT . DS . $parts[1]);
-                                    $removed = TRUE;
-                                }
+                                $removed = TRUE;
+                                $old_file = ROOT . DS . str_replace(array('/','\\'), DS, $matches[0][2]);
+                                unlink($old_file);
                             }
-                        }
-                        
-                        // Continue as normal
-                        if(!is_dir($dirname))
-                        {
-                            // Create the directory for the new file if it doesnt exist
-                            $create = @mkdir($dirname, 0755, true);
-                            if(!$create && !is_dir($dirname))
+                            else
                             {
                                 $success = FALSE;
-                                $text = 'Error creating directory "'. $dirname .'"';
+                                $text = 'Error moving/renaming file "'. $file .'"';
                                 goto Output;
                             }
-                        }
-                        // Do not Break!
-                    case "modified":
-                        $handle = @fopen($filename, 'w+');
+                            // Do not Break!
+                        case "added":
+
+                            // We need to check for a soft file rename( file "added", no additions, no files removed )
+                            if($adds == 0 && $dels == 0)
+                            {
+                                // File sha probably is different then the commit sha
+                                if(preg_match( "#/([0-9a-z]{40})/#i", $url, $matches))
+                                {
+                                    $parts = explode($matches[1], $url);
+                                    $parts[1] = trim($parts[1], '/');
+                                    if($parts[1] != $file)
+                                    {
+                                        // Soft rename indeed.. remove the old damn file >:(
+                                        unlink(ROOT . DS . $parts[1]);
+                                        $removed = TRUE;
+                                    }
+                                }
+                            }
+                            
+                            // Continue as normal
+                            if(!is_dir($dirname))
+                            {
+                                // Create the directory for the new file if it doesnt exist
+                                $create = @mkdir($dirname, 0755, true);
+                                if(!$create && !is_dir($dirname))
+                                {
+                                    $success = FALSE;
+                                    $text = 'Error creating directory "'. $dirname .'"';
+                                    goto Output;
+                                }
+                            }
+                            // Do not Break!
+                        case "modified":
+                            $handle = @fopen($filename, 'w+');
+                            if($handle)
+                            {
+                                // Write the new file contents to the file
+                                $fwrite = @fwrite($handle, $contents);
+                                if($fwrite === FALSE)
+                                {
+                                    $success = FALSE;
+                                    $text = 'Error writing to file "'. $file .'"';
+                                    goto Output;
+                                }
+                                @fclose($handle);
+                            }
+                            else
+                            {
+                                $success = FALSE;
+                                $text = 'Error opening / creating file "'. $file .'"';
+                                goto Output;
+                            }
+                            break;
+                            
+                        case "removed":
+                            $removed = TRUE;
+                            unlink($filename);
+                            break;
+                    } // End witch type
+                    
+                    // Removed empty dirs
+                    if($removed == TRUE)
+                    {
+                        $handle = @opendir($dirname);
                         if($handle)
                         {
-                            // Write the new file contents to the file
-                            $fwrite = @fwrite($handle, $contents);
-                            if($fwrite === FALSE)
+                            $files = array();
+                            $empty = TRUE;
+                            
+                            // Run each file / dir to determine if empty
+                            while($file = readdir($handle))
                             {
-                                $success = FALSE;
-                                $text = 'Error writing to file "'. $file .'"';
-                                goto Output;
+                                $files[] = $file;
+                                if($file[0] != ".")
+                                {
+                                    if(is_file($path . DS . $file) || is_dir($path . DS . $file))
+                                    {
+                                        $empty = FALSE;
+                                        break;
+                                    }
+                                }
                             }
-                            @fclose($handle);
+                            @closedir($handle);
+                            
+                            // If empty, delete .DS / .htaccess files and remove dir!
+                            if($empty)
+                            {
+                                foreach($files as $file)
+                                {
+                                    // Removed .DS && .htaccess files
+                                    if($file == "." || $file == "..") continue;
+                                    unlink($file);
+                                }
+                                @rmdir($dirname);
+                            }
+                        }
+                    }
+                    
+                    // Output goto
+                    Output:
+                    {
+                        load_class('Debug')->silent_mode(false);
+                        if($success == TRUE)
+                        {
+                            // Remove error tag on success, but allow warnings
+                            ($type == 'error') ? $type = 'success' : '';
+                            $return['success'] = true;
                         }
                         else
                         {
-                            $success = FALSE;
-                            $text = 'Error opening / creating file "'. $file .'"';
-                            goto Output;
+                            $return['success'] = false;
+                            $return['message'] = $text;
                         }
-                        break;
                         
-                    case "removed":
-                        $removed = TRUE;
-                        unlink($filename);
-                        break;
-                }
-                
-                // Removed empty dirs
-                if($removed == TRUE)
-                {
-                    $handle = @opendir($dirname);
-                    if($handle)
-                    {
-                        $files = array();
-                        $empty = TRUE;
-                        
-                        // Run each file / dir to determine if empty
-                        while($file = readdir($handle))
-                        {
-                            $files[] = $file;
-                            if($file[0] != ".")
-                            {
-                                if(is_file($path . DS . $file) || is_dir($path . DS . $file))
-                                {
-                                    $empty = FALSE;
-                                    break;
-                                }
-                            }
-                        }
-                        @closedir($handle);
-                        
-                        // If empty, delete .DS / .htaccess files and remove dir!
-                        if($empty)
-                        {
-                            foreach($files as $file)
-                            {
-                                // Removed .DS && .htaccess files
-                                if($file == "." || $file == "..") continue;
-                                unlink($file);
-                            }
-                            @rmdir($dirname);
-                        }
+                        echo json_encode($return);
                     }
-                }
-                
-                // Output goto
-                Output:
-                {
-                    load_class('Debug')->silent_mode(false);
-                    if($success == TRUE)
-                    {
-                        // Remove error tag on success, but allow warnings
-                        ($type == 'error') ? $type = 'success' : '';
-                        $return['success'] = true;
-                    }
-                    else
-                    {
-                        $return['success'] = false;
-                        $return['message'] = $text;
-                    }
-                    
-                    echo json_encode($return);
-                }
+                break;
+
+            } // End Swicth $action
+        }
+        echo "no action";
+    }
+    
+/*
+| ---------------------------------------------------------------
+| METHODS
+| ---------------------------------------------------------------
+*/
+    
+/*
+| ---------------------------------------------------------------
+| Method: check_access()
+| ---------------------------------------------------------------
+|
+| This method is used for certain Ajax pages to see if the requester
+|   has permission to receive the request.
+|
+| @Param: $lvl - The account level required (a = admin, u = user)
+*/   
+    protected function check_access($lvl = 'a')
+    {
+        // Make sure the user has admin access'
+        if(($lvl == 'a' || $lvl == 'sa') && $this->user['is_admin'] != 1)
+        {
+            if($this->user['is_super_admin'] != 1)
+            {
+                $this->output(false, 'access_denied_privlages');
+                die();
             }
+        }
+        elseif($lvl == 'u' && !$this->user['is_loggedin'])
+        {
+            $this->output(false, 'access_denied_privlages');
+            die();
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: check_permission()
+| ---------------------------------------------------------------
+|
+| This method is used for certain Ajax pages to see if the requester
+|   has permission to process the request.
+|
+| @Param: $perm - The name of the permission
+*/   
+    protected function check_permission($perm)
+    {
+        // Make sure the user has admin access'
+        if( !$this->Auth->has_permission($perm))
+        {
+            $this->output(false, 'access_denied_privlages');
+            die();
         }
     }
  
@@ -1875,7 +1913,7 @@ class Ajax extends Application\Core\Controller
         if($success == TRUE)
         {
             // Remove error tag on success, but allow warnings
-            ($type == 'error') ? $type = 'success' : '';
+            if($type == 'error') $type = 'success';
             $return['success'] = true;
             $return['message'] = $text;
             $return['type'] = $type;

@@ -3,9 +3,10 @@
 | --------------------------------------------------------------
 | Plexis
 | --------------------------------------------------------------
-| Author: 		Steven Wilson
-| Copyright:	Copyright (c) 2011, Steven Wilson
-| License: 		GNU GPL v3
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
 |---------------------------------------------------------------
 |
 | Navigation. (user CTRL + f to move quickly)

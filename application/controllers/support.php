@@ -1,7 +1,30 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+|---------------------------------------------------------------
+|
+| Navigation. (user CTRL + f to move quickly)
+|---------------------------------------------------------------
+| P01 - Index support Page
+| P02 - How To Play
+|
+*/
 class Support extends Application\Core\Controller 
 {
-    function __construct()
+
+/*
+| ---------------------------------------------------------------
+| Constructer
+| ---------------------------------------------------------------
+|
+*/
+    public function __construct()
     {
         parent::__construct();
     }
@@ -12,7 +35,7 @@ class Support extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    function index() 
+    public function index() 
     {
         redirect('support/howtoplay');
     }
@@ -23,7 +46,7 @@ class Support extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    function howtoplay() 
+    public function howtoplay() 
     {
         // Get our current language
         $this->Input = load_class('Input');

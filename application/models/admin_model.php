@@ -1,15 +1,29 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Admin_Model()
+| ---------------------------------------------------------------
+|
+| Model for the Admin controller
+|
+*/
 class Admin_Model extends Application\Core\Model 
 {
-    // We want only admins to have access here
-    protected $is_admin = TRUE;
+
 /*
 | ---------------------------------------------------------------
 | Constructer
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
         // Load required Libs
         parent::__construct();
@@ -21,11 +35,20 @@ class Admin_Model extends Application\Core\Model
         // Make sure the user has admin access'
         if( !($this->user['is_admin'] == 1 || $this->user['is_super_admin'] == 1) )
         {
-            $this->is_admin == FALSE;
-            die();
+            // Throwing an exception will cause the class init to fail ;)
+            throw new Exception('Must be an admin');
+            return FALSE;
         }
     }
-    
+
+/*
+| ---------------------------------------------------------------
+| Method: site_settings_options()
+| ---------------------------------------------------------------
+|
+| Generates the select options in the site settings screen
+|
+*/    
     public function site_settings_options()
     {
         // Process installed realms

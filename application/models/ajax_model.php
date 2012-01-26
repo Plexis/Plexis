@@ -1,4 +1,19 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Ajax_Model()
+| ---------------------------------------------------------------
+|
+| Model for the Ajax controller
+|
+*/
 class Ajax_Model extends Application\Core\Model 
 {
 
@@ -8,7 +23,7 @@ class Ajax_Model extends Application\Core\Model
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }

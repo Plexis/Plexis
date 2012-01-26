@@ -1,4 +1,19 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Account_Model()
+| ---------------------------------------------------------------
+|
+| Model for the Account controller
+|
+*/
 class Account_Model extends Application\Core\Model 
 {
 
@@ -8,7 +23,7 @@ class Account_Model extends Application\Core\Model
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
@@ -199,7 +214,6 @@ class Account_Model extends Application\Core\Model
 | @Return (Int) Returns the account ID
 |
 */
-
     public function get_id($name)
     {
         $this->DB->query("SELECT `id` FROM `pcms_accounts` WHERE `username` LIKE :name LIMIT 1", array(':name' => $name));
@@ -217,7 +231,6 @@ class Account_Model extends Application\Core\Model
 | @Return (Array) An array of each column in the users table
 |
 */
-
     public function get_profile($id)
     {
         $this->DB->query("SELECT * FROM `pcms_accounts` WHERE `id`=?", array($id));

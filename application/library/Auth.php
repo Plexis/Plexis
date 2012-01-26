@@ -1,14 +1,18 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
 | Plexis
-|
 | --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Auth()
+| ---------------------------------------------------------------
 |
-| Author: 		Steven Wilson
-| Copyright:	Copyright (c) 2011, Steven Wilson
-| License: 		GNU GPL v3
+| This class sets up the user, and processes permissions, logins,
+| logouts, and registration.
 |
 */
 namespace Application\Library;
