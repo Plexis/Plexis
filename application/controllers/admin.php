@@ -741,7 +741,7 @@ class Admin extends Application\Core\Controller
                 // Simple
                 ($count == 0) ? $next = $commits[0] : $next = $commits[$count-1];
                 $d = new DateTime($next['commit']['author']['date']);
-                $date = $d->format("M j, Y - H:i a");
+                $date = $d->format("M j, Y - g:i a");
 
                 
                 // Build our page data
