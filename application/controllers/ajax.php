@@ -1699,6 +1699,8 @@ class Ajax extends Application\Core\Controller
                 $sha = trim( $this->input->post('sha') );
                 $url = trim( $this->input->post('raw_url') );
                 $file = trim( $this->input->post('filename') );
+                $adds = trim( $this->input->post('additions') );
+                $dels = trim( $this->input->post('deletions') );
                 $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
                 $dirname = dirname($filename);
                 
@@ -1734,6 +1736,25 @@ class Ajax extends Application\Core\Controller
                         }
                         // Do not Break!
                     case "added":
+
+                        // We need to check for a soft file rename( file "added", no additions, no files removed )
+                        if($adds == 0 && $dels == 0)
+                        {
+                            // File sha probably is different then the commit sha
+                            if(preg_match( "#/([0-9a-z]{40})/#i", $url, $matches))
+                            {
+                                $parts = explode($matches[1], $url);
+                                $parts[1] = trim($parts[1], '/');
+                                if($parts[1] != $file)
+                                {
+                                    // Soft rename indeed.. remove the old damn file >:(
+                                    unlink(ROOT . DS . $parts[1]);
+                                    $removed = TRUE;
+                                }
+                            }
+                        }
+                        
+                        // Continue as normal
                         if(!is_dir($dirname))
                         {
                             // Create the directory for the new file if it doesnt exist

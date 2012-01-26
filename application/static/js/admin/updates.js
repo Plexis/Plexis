@@ -60,7 +60,15 @@ function process()
                 res = $.ajax({
                     type: "POST",
                     url: url + '/ajax/update',
-                    data: { action: "update", status: value['status'], sha: value['sha'], raw_url: value['raw_url'], filename: value['filename'] },
+                    data: { 
+                        action: "update", 
+                        status: value['status'], 
+                        sha: value['sha'], 
+                        raw_url: value['raw_url'], 
+                        filename: value['filename'],
+                        additions: value['additions'],
+                        detetions: value['detetions']
+                    },
                     dataType: "json",
                     async: false,
                     timeout: 7000, // in milliseconds
