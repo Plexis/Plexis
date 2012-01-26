@@ -1836,7 +1836,10 @@ class Ajax extends Application\Core\Controller
 
             } // End Swicth $action
         }
-        echo "no action";
+        else
+        {
+            echo json_encode( array('success' => false, 'message' => "no action") );
+        }
     }
     
 /*
