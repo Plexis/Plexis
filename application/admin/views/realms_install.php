@@ -110,8 +110,8 @@
                                 </select>
                             </p>
                             <p>
-                                <label for="rates_money">Money Rates</label>
-                                <select id="rates_money" name="rates_money">
+                                <label for="rates_gold">Money Rates</label>
+                                <select id="rates_gold" name="rates_gold">
                                     <option value="1">Blizzlike</option>
                                     <option value="2">2x Blizzlike</option>
                                     <option value="3">3x Blizzlike</option>
@@ -132,8 +132,8 @@
                         
                         <div class="_50">
                             <p>
-                                <label for="rates_profession">Profession Rates</label>
-                                <select id="rates_profession" name="rates_profession">
+                                <label for="rates_professions">Profession Rates</label>
+                                <select id="rates_professions" name="rates_professions">
                                     <option value="1">Blizzlike</option>
                                     <option value="2">2x Blizzlike</option>
                                     <option value="3">3x Blizzlike</option>
@@ -151,8 +151,8 @@
                                 </select>
                             </p>
                             <p>
-                                <label for="rates_rep">Reputation Rates</label>
-                                <select id="rates_rep" name="rates_rep">
+                                <label for="rates_reputation">Reputation Rates</label>
+                                <select id="rates_reputation" name="rates_reputation">
                                     <option value="1">Blizzlike</option>
                                     <option value="2">2x Blizzlike</option>
                                     <option value="3">3x Blizzlike</option>
@@ -189,7 +189,7 @@
                                 </select>
                             </p>
                         </div>
-                    </fieldset> 
+                    </fieldset>  
                     <div class="alert info">Please see second tab</div>
                 </div>
                 

@@ -119,11 +119,12 @@ CREATE TABLE `pcms_realms` (
   `address` varchar(50) NOT NULL,
   `port` int(7) NOT NULL,
   `type` varchar(50) NOT NULL COMMENT 'Icon',
+  `driver` varchar(100) NOT NULL,
+  `rates` text,
   `char_db` text NOT NULL,
   `world_db` text NOT NULL,
-  `ra_info` text,
-  `driver` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  `ra_info` text NOT NULL,
+  PRIMARY KEY (`id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -195,7 +196,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.1');
+INSERT INTO `pcms_versions` VALUES ('database', '0.2');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`

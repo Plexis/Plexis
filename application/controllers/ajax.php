@@ -600,412 +600,153 @@ class Ajax extends Application\Core\Controller
 */    
     public function realms()
     {
+        // Load the ajax model and action
+        $this->load->model('Ajax_Model', 'model');
+        $action = load_class('Input')->post('action');
+
         // Find out what we are doing here by our requested action
-        switch($_POST['action'])
+        switch($action)
         {
-            case "install":
-                $this->check_permission('manage_realms');
-                $action = "install";
+            case "status":
+                $this->model->realm_status();
                 break;
-                
+
+            case "install": 
             case "manual-install":
-                $this->check_permission('manage_realms');
-                $action = "manual-install";
-                break;
-                
             case "edit":
                 $this->check_permission('manage_realms');
-                $action = "edit";
+                $this->model->process_realm($action);
                 break;
                 
             case "un-install":
                 $this->check_permission('manage_realms');
-                $action = "un-install";
+                $this->model->uninstall_realm();
                 break;
                 
             case "make-default":
                 $this->check_permission('manage_realms');
-                $action = "make-default";
-                break;
                 
-            case "status":
-                $action = "status";
+                // Load our config class
+                $Config = load_class('Config');
+                
+                // Get our realm ID
+                $id = $_POST['id'];
+                
+                // Set the new default Realm
+                $Config->set('default_realm_id', $id, 'App');
+                $result = $Config->save('App');
+                ($result == TRUE) ? $this->output(true, 'realm_default_success') : $this->output(false, 'realm_default_failed', 'error');
                 break;
                 
             case "admin":
                 $this->check_permission('manage_realms');
-                $action = "admin";
-                break;
-        }
-
-        
-        // Process our action
-        if($action == 'admin')
-        {
-            // Load the Ajax Model
-            $this->load->model("Ajax_Model", "ajax");
-            
-            /* 
-            * Array of database columns which should be read and sent back to DataTables. Use a space where
-            * you want to insert a non-database field (for example a counter or static image)
-            */
-            $cols = array( 'id', 'name', 'address', 'port' );
-            
-            /* Indexed column (used for fast and accurate table cardinality) */
-            $index = "id";
-            
-            /* DB table to use */
-            $table = "realmlist";
-            
-            /* Database to use */
-            $dB = "RDB";
-            
-            /* Process the request */
-            $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
-            
-            
-            // Get our installed realms
-            $realms = $output['aaData'];
-            $installed = get_installed_realms();
-            $irealms = array();
-            
-            // Build an array of installed IDs
-            foreach($installed as $realm)
-            {
-                $irealms[] = $realm['id'];
-            }
-
-            // We need to add a working "manage", and "Make Default Link" link
-            $aa = array();
-            $key = 0;
-            $default = config('default_realm_id');
-            
-            // Loop, and add options for each realm
-            foreach($output['aaData'] as $realm)
-            {
-                // Easier to write
-                $id = $realm[0];
-                $aa[] = $id;
                 
-                // Create out action links for this realm
-                if(in_array($id, $irealms))
+                /* 
+                * Array of database columns which should be read and sent back to DataTables. Use a space where
+                * you want to insert a non-database field (for example a counter or static image)
+                */
+                $cols = array( 'id', 'name', 'address', 'port' );
+                
+                /* Indexed column (used for fast and accurate table cardinality) */
+                $index = "id";
+                
+                /* DB table to use */
+                $table = "realmlist";
+                
+                /* Database to use */
+                $dB = "RDB";
+                
+                /* Process the request */
+                $output = $this->model->process_datatables($cols, $index, $table, $dB);
+                
+                
+                // Get our installed realms
+                $realms = $output['aaData'];
+                $installed = get_installed_realms();
+                $irealms = array();
+                
+                // Build an array of installed IDs
+                foreach($installed as $realm)
                 {
-                    // We CANNOT uninstall the default realm!
-                    if($id == $default)
+                    $irealms[] = $realm['id'];
+                }
+
+                // We need to add a working "manage", and "Make Default Link" link
+                $aa = array();
+                $key = 0;
+                $default = config('default_realm_id');
+                
+                // Loop, and add options for each realm
+                foreach($output['aaData'] as $realm)
+                {
+                    // Easier to write
+                    $id = $realm[0];
+                    $aa[] = $id;
+                    
+                    // Create out action links for this realm
+                    if(in_array($id, $irealms))
                     {
-                        $output['aaData'][$key][4] = "<font color='green'>Installed</font> - Default Realm";
-                        $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
-                            - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                        // We CANNOT uninstall the default realm!
+                        if($id == $default)
+                        {
+                            $output['aaData'][$key][4] = "<font color='green'>Installed</font> - Default Realm";
+                            $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
+                                - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                        }
+                        else
+                        {
+                            $output['aaData'][$key][4] = "<font color='green'>Installed</font>";
+                            $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
+                                - <a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a>
+                                - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                        }
                     }
                     else
                     {
-                        $output['aaData'][$key][4] = "<font color='green'>Installed</font>";
-                        $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
-                            - <a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a>
-                            - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                        $output['aaData'][$key][4] = "<font color='red'>Not Installed</font>";
+                        $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/install/".$id."\">Install Realm</a>";
                     }
+                    ++$key;
                 }
-                else
-                {
-                    $output['aaData'][$key][4] = "<font color='red'>Not Installed</font>";
-                    $output['aaData'][$key][5] = "<a href=\"". SITE_URL ."/admin/realms/install/".$id."\">Install Realm</a>";
-                }
-                ++$key;
-            }
-            
-            // For cores that dont have a realmist in the DB, we need to manually add these
-            foreach($installed as $realm)
-            {
-                $id = $realm['id'];
-                if(!in_array($id, $aa))
-                {
-                    ++$output["iTotalRecords"];
-                    ++$output["iTotalDisplayRecords"];
-                    $data[0] = $id;
-                    $data[1] = $realm['name'];
-                    $data[2] = $realm['address'];
-                    $data[3] = $realm['port'];
-                    
-                    // We CANNOT uninstall the default realm!
-                    if($id == $default)
-                    {
-                        $data[4] = "<font color='green'>Installed</font> - Default Realm";
-                        $data[5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
-                            - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
-                    }
-                    else
-                    {
-                        $data[4] = "<font color='green'>Installed</font>";
-                        $data[5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
-                            - <a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a>
-                            - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
-                    }
-                    $output['aaData'][] = $data;
-                }
-            }
-
-            // Push the output in json format
-            echo json_encode($output);
-        }
-        
-        // status
-        elseif($action == 'status')
-        {
-            $Cache = $this->load->library('Cache');
-            
-            // See if we have cached results
-            $result = $Cache->get('ajax_realm_status');
-            if($result == FALSE)
-            {
-                // Set to array
-                $result = array();
-
-                // If we are here, then the cache results were expired
-                $Debug = load_class('Debug');
-                $this->load->helper('Time');
                 
-                // Build our query
-                $query = "SELECT `id`, `name`, `type`, `address`, `port` FROM `pcms_realms`";
-                
-                // fetch the array of realms
-                $realms = $this->DB->query( $query )->fetch_array();
-                
-                // Loop through each realm, and get its status
-                foreach($realms as $key => $realm)
+                // For cores that dont have a realmist in the DB, we need to manually add these
+                foreach($installed as $realm)
                 {
-
-                    // Dont show errors errors
-                    $Debug->silent_mode(true);
-                    $handle = @fsockopen($realm['address'], $realm['port'], $errno, $errstr, 1.5);
-                    $Debug->silent_mode(false);
-                    
-                    // Set our status var
-                    ($handle == FALSE) ? $status = 0 : $status = 1;
-                    
-                    // Load the wowlib for this realm
-                    $wowlib = $this->load->wowlib($realm['id']);
-
-                    // Build our realms return
-                    if($status == 1 && $wowlib != FALSE)
+                    $id = $realm['id'];
+                    if(!in_array($id, $aa))
                     {
-                        $uptime = $this->realm->uptime( $realm['id'] );
-                        ($uptime == FALSE) ? $uptime = 'Unavailable' : $uptime = sec2hms($uptime, false);
+                        ++$output["iTotalRecords"];
+                        ++$output["iTotalDisplayRecords"];
+                        $data[0] = $id;
+                        $data[1] = $realm['name'];
+                        $data[2] = $realm['address'];
+                        $data[3] = $realm['port'];
                         
-                        $result[] = array(
-                            'id' => $realm['id'],
-                            'name' => $realm['name'],
-                            'type' => $realm['type'],
-                            'status' => $status,
-                            'online' => $wowlib->get_online_count(0),
-                            'alliance' => $wowlib->get_online_count(1),
-                            'horde' => $wowlib->get_online_count(2),
-                            'uptime' => $uptime
-                        );
-                    }
-                    else
-                    {
-                        $result[] = array(
-                            'id' => $realm['id'],
-                            'name' => $realm['name'],
-                            'type' => $realm['type'],
-                            'status' => $status,
-                            'online' => 0,
-                            'alliance' => 0,
-                            'horde' => 0,
-                            'uptime' => 'Offline'
-                        );
+                        // We CANNOT uninstall the default realm!
+                        if($id == $default)
+                        {
+                            $data[4] = "<font color='green'>Installed</font> - Default Realm";
+                            $data[5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
+                                - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                        }
+                        else
+                        {
+                            $data[4] = "<font color='green'>Installed</font>";
+                            $data[5] = "<a href=\"". SITE_URL ."/admin/realms/edit/".$id."\">Update</a>
+                                - <a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a>
+                                - <a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
+                        }
+                        $output['aaData'][] = $data;
                     }
                 }
+
+                // Push the output in json format
+                echo json_encode($output);
+                break;
                 
-                // Cache the results for 2 minutes
-                $Cache->save('ajax_realm_status', $result, 120);
-            }
-
-            // Push the output in json format
-            echo json_encode($result);
-        }
-        
-        // Installing / Editing
-        elseif($action == 'install' || $action == 'edit' || $action == 'manual-install')
-        {
-            // Load our config class
-            $Config = load_class('Config');
-    
-            // Get our posted information
-            $id = $_POST['id'];
-            $name = $_POST['name'];
-            $address = $_POST['address'];
-            $port = $_POST['port'];
-            $type = $_POST['type'];
-            $driver = $_POST['driver'];
-            
-            // Build our DB Arrays
-            $cs = array(
-                'driver'	   => $_POST['c_driver'],
-                'host'         => $_POST['c_address'],
-                'port'         => $_POST['c_port'],
-                'username'     => $_POST['c_username'],
-                'password'     => $_POST['c_password'],
-                'database'     => $_POST['c_database']
-            );
-            $ws = array(
-                'driver'	   => $_POST['w_driver'],
-                'host'         => $_POST['w_address'],
-                'port'         => $_POST['w_port'],
-                'username'     => $_POST['w_username'],
-                'password'     => $_POST['w_password'],
-                'database'     => $_POST['w_database']
-            );
-            $ra = array(
-                'type'         => $_POST['ra_type'],
-                'port'         => $_POST['ra_port'],
-                'username'     => $_POST['ra_username'],
-                'password'     => $_POST['ra_password'],
-                'urn'          => $_POST['ra_urn']
-            );
-
-            
-            // Turn off all error reporting, since we use our own, this is easy
-            $debug = load_class('Debug');
-            $debug->silent_mode(true);
-            $good = TRUE;
-
-            // Test our new connections before saving to config
-            if( !$this->load->database($cs, FALSE) ) $good = FALSE;
-            if( !$this->load->database($ws, FALSE) ) $good = FALSE;
-            
-            // Re-enable errors
-            $debug->silent_mode(false);
-
-            // If manually installing, lets get our unique id
-            if($action == 'manual-install')
-            {
-                $result = $this->realm->realmlist();
-                $installed = get_installed_realms();
-                if( !empty($result) )
-                {
-                    $highest = end($result);
-                    if( empty($installed) )
-                    {
-                        $id = $highest['id'] + 1;
-                    }
-                    else
-                    {
-                        $high2 = end($installed);
-                        ($highest['id'] > $high2['id']) ? $id = $highest['id'] + 1 : $id = $high2['id'] + 1;
-                    }
-                }
-                else
-                {
-                    ( !empty($installed) ) ? $id = $high2['id'] + 1 : $id = 1;
-                }
-            }
-            
-            // Install our new stuffs
-            $data = array(
-                'id' => $id,
-                'name' => $name,
-                'address' => $address,
-                'port' => $port,
-                'type' => $type,
-                'char_db' => serialize($cs),
-                'world_db' => serialize($ws),
-                'ra_info' => serialize($ra),
-                'driver' => $driver
-            );
-            
-            // Process our return message
-            if($action == 'install' || $action == 'manual-install')
-            {
-                $result = $this->DB->insert('pcms_realms', $data);
-                if($result == FALSE)
-                {
-                    $this->output(false, 'realm_install_error');
-                    return;
-                }
-                else
-                {
-                    // Set as default realm if we dont have one
-                    if($Config->get('default_realm_id') == 0)
-                    {
-                        // Set the new default Realm
-                        $Config->set('default_realm_id', $data['id'], 'App');
-                        $Config->save('App');
-                    }
-                    ($good == TRUE) ? $this->output(true, 'realm_install_success') : $this->output(true, 'realm_install_warning', 'warning');
-                }
-            }
-            else
-            {
-                // Update the realms table
-                $result = $this->DB->update('pcms_realms', $data, "`id`=".$id);
-                if($result === FALSE)
-                {
-                    $this->output(false, 'realm_update_error');
-                    return;
-                }
-                else
-                {
-                    ($good == TRUE) ? $this->output(true, 'realm_update_success') : $this->output(true, 'realm_update_warning', 'warning');
-                }
-            }
-        }
-        
-        // Uninstalling
-        elseif($action == 'un-install')
-        {
-            // Load our config class
-            $Config = load_class('Config');
-            
-            // Get our realm ID and the default realm ID
-            $id = $_POST['id'];
-            $default = $Config->get('default_realm_id');
-            
-            // Run the delete though the database
-            $this->load->database( 'DB' );
-            $result = $this->DB->delete('pcms_realms', '`id`='.$id.'');
-            
-            // If we are uninstalling the default Realm, we set a new one
-            if($id == $default)
-            {
-                // Get the new Default Realm
-                $installed = get_installed_realms();
-                
-                if($installed == FALSE || empty($installed))
-                {
-                    // Set the new default Realm
-                    $Config->set('default_realm_id', 0, 'App');
-                    $Config->save('App');
-                }
-                else
-                {
-                    // Set the new default Realm
-                    $Config->set('default_realm_id', $installed[0]['id'], 'App');
-                    $Config->save('App');
-                }
-            }
-            ($result == TRUE) ? $this->output(true, 'realm_uninstall_success') : $this->output(false, 'realm_uninstall_failed', 'error');
-        }
-        
-        // Making default
-        elseif($action == 'make-default')
-        {
-            // Load our config class
-            $Config = load_class('Config');
-            
-            // Get our realm ID
-            $id = $_POST['id'];
-            
-            // Set the new default Realm
-            $Config->set('default_realm_id', $id, 'App');
-            $result = $Config->save('App');
-            ($result == TRUE) ? $this->output(true, 'realm_default_success') : $this->output(false, 'realm_default_failed', 'error');
-        }
-        
-        // Nobody knows this requested action
-        else
-        {
-            $this->output(false, 'access_denied_privlages');
+            default:
+                $this->output(false, "Unknown Action");
+                break;
         }
     }
     

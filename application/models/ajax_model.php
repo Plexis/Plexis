@@ -120,10 +120,288 @@ class Ajax_Model extends Application\Core\Model
         ($changes == TRUE) ? $Ajax->output(true, 'account_update_success') : $Ajax->output(false, 'account_update_nochanges', 'warning');
         return;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: process_realm()
+| ---------------------------------------------------------------
+|
+| Adds a new realm to the database and installs it
+|
+| @Param: (String) $action - The mode
+|
+*/
+    public function process_realm($action)
+    {
+        // Load our config class
+        $Config = load_class('Config');
+        $Debug = load_class('Debug');
+        $Ajax = get_instance();
+
+        // Get our posted information
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $port = $_POST['port'];
+        $type = $_POST['type'];
+        $driver = $_POST['driver'];
+        
+        // Build our DB Arrays
+        $cs = array(
+            'driver'	   => $_POST['c_driver'],
+            'host'         => $_POST['c_address'],
+            'port'         => $_POST['c_port'],
+            'username'     => $_POST['c_username'],
+            'password'     => $_POST['c_password'],
+            'database'     => $_POST['c_database']
+        );
+        $ws = array(
+            'driver'	   => $_POST['w_driver'],
+            'host'         => $_POST['w_address'],
+            'port'         => $_POST['w_port'],
+            'username'     => $_POST['w_username'],
+            'password'     => $_POST['w_password'],
+            'database'     => $_POST['w_database']
+        );
+        $ra = array(
+            'type'         => $_POST['ra_type'],
+            'port'         => $_POST['ra_port'],
+            'username'     => $_POST['ra_username'],
+            'password'     => $_POST['ra_password'],
+            'urn'          => $_POST['ra_urn']
+        );
+        $rates = array(
+            'description'   => $_POST['rates_desc'],
+            'xp'            => $_POST['rates_xp'],
+            'drop'          => $_POST['rates_drop'],
+            'gold'          => $_POST['rates_gold'],
+            'professions'   => $_POST['rates_professions'],
+            'reputation'    => $_POST['rates_reputation'],
+            'honor'         => $_POST['rates_honor']
+        );
+
+        
+        // Turn off all error reporting, since we use our own, this is easy
+        $Debug->silent_mode(true);
+        $good = TRUE;
+
+        // Test our new connections before saving to config
+        if( !$this->load->database($cs, FALSE) ) $good = FALSE;
+        if( !$this->load->database($ws, FALSE) ) $good = FALSE;
+        
+        // Re-enable errors
+        $Debug->silent_mode(false);
+
+        // If manually installing, lets get our unique id
+        if($action == 'manual-install')
+        {
+            $result = $this->realm->realmlist();
+            $installed = get_installed_realms();
+            if( !empty($result) )
+            {
+                $highest = end($result);
+                if( empty($installed) )
+                {
+                    $id = $highest['id'] + 1;
+                }
+                else
+                {
+                    $high2 = end($installed);
+                    ($highest['id'] > $high2['id']) ? $id = $highest['id'] + 1 : $id = $high2['id'] + 1;
+                }
+            }
+            else
+            {
+                ( !empty($installed) ) ? $id = $high2['id'] + 1 : $id = 1;
+            }
+        }
+        
+        // Install our new stuffs
+        $data = array(
+            'id' => $id,
+            'name' => $name,
+            'address' => $address,
+            'port' => $port,
+            'type' => $type,
+            'char_db' => serialize($cs),
+            'world_db' => serialize($ws),
+            'ra_info' => serialize($ra),
+            'driver' => $driver,
+            'rates' => serialize($rates)
+        );
+        
+        // Process our return message
+        if($action == 'install' || $action == 'manual-install')
+        {
+            $result = $this->DB->insert('pcms_realms', $data);
+            if($result == FALSE)
+            {
+                $Ajax->output(false, 'realm_install_error');
+                return;
+            }
+            else
+            {
+                // Set as default realm if we dont have one
+                if($Config->get('default_realm_id') == 0)
+                {
+                    // Set the new default Realm
+                    $Config->set('default_realm_id', $data['id'], 'App');
+                    $Config->save('App');
+                }
+                ($good == TRUE) ? $Ajax->output(true, 'realm_install_success') : $Ajax->output(true, 'realm_install_warning', 'warning');
+            }
+        }
+        else
+        {
+            // Update the realms table
+            $result = $this->DB->update('pcms_realms', $data, "`id`=".$id);
+            if($result === FALSE)
+            {
+                $Ajax->output(false, 'realm_update_error');
+                return;
+            }
+            else
+            {
+                ($good == TRUE) ? $Ajax->output(true, 'realm_update_success') : $Ajax->output(true, 'realm_update_warning', 'warning');
+            }
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: uninstall_realm()
+| ---------------------------------------------------------------
+|
+| Removes a realm from the installed realms list
+|
+|
+*/
+    public function uninstall_realm()
+    {
+        // Load our config class
+        $Config = load_class('Config');
+        $Ajax = get_instance();
+        
+        // Get our realm ID and the default realm ID
+        $id = $_POST['id'];
+        $default = $Config->get('default_realm_id');
+        
+        // Run the delete though the database
+        $result = $this->DB->delete('pcms_realms', '`id`='.$id.'');
+        
+        // If we are uninstalling the default Realm, we set a new one
+        if($id == $default)
+        {
+            // Get the new Default Realm
+            $installed = get_installed_realms();
+            
+            if($installed == FALSE || empty($installed))
+            {
+                // Set the new default Realm
+                $Config->set('default_realm_id', 0, 'App');
+                $Config->save('App');
+            }
+            else
+            {
+                // Set the new default Realm
+                $Config->set('default_realm_id', $installed[0]['id'], 'App');
+                $Config->save('App');
+            }
+        }
+        ($result == TRUE) ? $Ajax->output(true, 'realm_uninstall_success') : $Ajax->output(false, 'realm_uninstall_failed', 'error');
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: realm_status()
+| ---------------------------------------------------------------
+|
+| Echos the realm status of each realm is Json
+|
+*/
+    public function realm_status()
+    {
+        // Load our config class
+        $Config = load_class('Config');
+        $Cache = $this->load->library('Cache');
+        $Ajax = get_instance();
+ 
+        // See if we have cached results
+        $result = $Cache->get('ajax_realm_status');
+        if($result == FALSE)
+        {
+            // Set to array
+            $result = array();
+
+            // If we are here, then the cache results were expired
+            $Debug = load_class('Debug');
+            $this->load->helper('Time');
+            
+            // Build our query
+            $query = "SELECT `id`, `name`, `type`, `address`, `port` FROM `pcms_realms`";
+            
+            // fetch the array of realms
+            $realms = $this->DB->query( $query )->fetch_array();
+            if($realms == FALSE) $realms = array();
+            
+            // Loop through each realm, and get its status
+            foreach($realms as $key => $realm)
+            {
+
+                // Dont show errors errors
+                $Debug->silent_mode(true);
+                $handle = @fsockopen($realm['address'], $realm['port'], $errno, $errstr, 1.5);
+                $Debug->silent_mode(false);
+                
+                // Set our status var
+                ($handle == FALSE) ? $status = 0 : $status = 1;
+                
+                // Load the wowlib for this realm
+                $wowlib = $this->load->wowlib($realm['id']);
+
+                // Build our realms return
+                if($status == 1 && $wowlib != FALSE)
+                {
+                    $uptime = $this->realm->uptime( $realm['id'] );
+                    ($uptime == FALSE) ? $uptime = 'Unavailable' : $uptime = sec2hms($uptime, false);
+                    
+                    $result[] = array(
+                        'id' => $realm['id'],
+                        'name' => $realm['name'],
+                        'type' => $realm['type'],
+                        'status' => $status,
+                        'online' => $wowlib->get_online_count(0),
+                        'alliance' => $wowlib->get_online_count(1),
+                        'horde' => $wowlib->get_online_count(2),
+                        'uptime' => $uptime
+                    );
+                }
+                else
+                {
+                    $result[] = array(
+                        'id' => $realm['id'],
+                        'name' => $realm['name'],
+                        'type' => $realm['type'],
+                        'status' => $status,
+                        'online' => 0,
+                        'alliance' => 0,
+                        'horde' => 0,
+                        'uptime' => 'Offline'
+                    );
+                }
+            }
+            
+            // Cache the results for 2 minutes
+            $Cache->save('ajax_realm_status', $result, 120);
+        }
+
+        // Push the output in json format
+        echo json_encode($result);
+    }
 
 /*
 | ---------------------------------------------------------------
-| Method: process()
+| Method: process_datatables()
 | ---------------------------------------------------------------
 |
 | Returns an array for the DataTables JS script
@@ -255,10 +533,10 @@ class Ajax_Model extends Application\Core\Model
     
 /*
 | ---------------------------------------------------------------
-| Method: process()
+| Method: get_characters online()
 | ---------------------------------------------------------------
 |
-| Returns an array for the DataTables JS script
+| Returns an array of online character for the DataTables JS script
 |
 | @Param: (Array) $aColumns - The array of DB columns to process
 | @Param: (Array) $sIndexColumn - The index column such as "id"
