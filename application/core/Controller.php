@@ -116,7 +116,7 @@ class Controller extends \System\Core\Controller
     {
         // Foir starts, get our current database version
         $query = "SELECT `value` FROM `pcms_versions` WHERE `key`='database'";
-        $version = $this->DB->query( $query )->fetch_column();
+        $version = (float) $this->DB->query( $query )->fetch_column();
         if($version < CMS_DB_VERSION)
         {
             $updates = array();

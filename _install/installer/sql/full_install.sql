@@ -48,6 +48,59 @@ INSERT INTO `pcms_account_groups` VALUES ('4', 'Super Admin', '0', '1', '1', '1'
 INSERT INTO `pcms_account_groups` VALUES ('5', 'Banned', '1', '0', '0', '0', 'a:0:{}');
 
 -- ----------------------------
+-- Table structure for `pcms_admin_logs`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_admin_logs`;
+CREATE TABLE `pcms_admin_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(128) NOT NULL,
+  `desc` text,
+  `time` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pcms_admin_logs
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `pcms_account_logs`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_account_logs`;
+CREATE TABLE `pcms_account_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(128) NOT NULL,
+  `desc` text,
+  `time` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pcms_account_logs
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `pcms_error_logs`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_error_logs`;
+CREATE TABLE `pcms_error_logs` (
+  `id` int(6) NOT NULL AUTO_INCREMENT,
+  `level` int(4) NOT NULL,
+  `string` text NOT NULL,
+  `file` text NOT NULL,
+  `line` int(5) NOT NULL,
+  `url` varchar(512) DEFAULT NULL,
+  `remote_ip` varchar(128) DEFAULT NULL,
+  `time` int(11) NOT NULL,
+  `backtrace` text,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pcms_error_logs
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `pcms_modules`
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_modules`;
@@ -196,7 +249,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.2');
+INSERT INTO `pcms_versions` VALUES ('database', '0.3');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`
