@@ -1,0 +1,3 @@
+application/cache/*.cache
+application/config/database.config.php
+system/logs/*.log

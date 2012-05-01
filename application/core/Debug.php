@@ -134,6 +134,13 @@ class Debug extends \System\Core\Debug
         $url = $this->url_info;
         $DB = load_class('Loader')->database('DB');
         
+        // Make neat the error trace ;)
+        $trace = array();
+        foreach($this->ErrorTrace as $t)
+        {
+            $trace[] = print_r( $t, true )
+        }
+        
         // Attempt to insert the error in the database
         $data = array(
             'level' => $this->ErrorNo,
@@ -143,7 +150,7 @@ class Debug extends \System\Core\Debug
             'url' => $url['site_url'] ."/". $url['uri'],
             'remote_ip' => $_SERVER['REMOTE_ADDR'],
             'time' => time(),
-            'backtrace' => serialize( $this->ErrorTrace )
+            'backtrace' => serialize( $trace )
         );
         $DB->insert('pcms_error_logs', $data);
         
