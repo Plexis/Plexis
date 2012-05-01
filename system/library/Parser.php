@@ -96,7 +96,7 @@ class Parser
                             $replacement = $this->parse_pair($match[1], $value);
                             
                             // Check for a parser false
-                            if($replacement == "_PARSER_FALSE_") continue;
+                            if($replacement === "_PARSER_FALSE_") continue;
                             
                             // Main replacement
                             $source = str_replace($match[0], $replacement, $source);
@@ -125,7 +125,7 @@ class Parser
                             $replacement = $this->parse_pair($match[2], $array);
                             
                             // Check for a parser false
-                            if($replacement == "_PARSER_FALSE_") continue;
+                            if($replacement === "_PARSER_FALSE_") continue;
                             
                             // Check for a false reading
                             $source = str_replace($match[0], $replacement, $source);
@@ -148,7 +148,7 @@ class Parser
                             $replacement = $this->parse_array($match[1], $value);
                             
                             // If we got a false array parse, then skip the rest of this loop
-                            if($replacement == "_PARSER_FALSE_") continue;
+                            if($replacement === "_PARSER_FALSE_") continue;
                             
                             // If our replacement is a array, it will cause an error, so just return "array"
                             if(is_array($replacement)) $replacement = "array";
@@ -207,31 +207,33 @@ class Parser
         if(strpos($key, '.') !== false)
         {
             $args = explode('.', $key);
+            $count = count($args);
+            $last = $count - 1;
             $s_key = '';
             
             // Loop though each level (period or "element")
-            foreach($args as $arg)
+            for($i = 0; $i < $last; $i++)
             {
                 // add quotes if the argument is a string
-                if(!is_numeric($arg))
+                if(!is_numeric($args[$i]))
                 {
-                    $s_key .= "['$arg']";
+                    $s_key .= "['$args[$i]']";
                 }
                 else
                 {
-                    $s_key .= "[$arg]";
+                    $s_key .= "[$args[$i]]";
                 }
             }
             
             // Check if variable exists in $val
-            return eval('if(isset($array'. $s_key .')) return $array'. $s_key .'; return "_PARSER_FALSE_";');
+            return eval('if(array_key_exists($args[$last], $array'. $s_key .')) return $array'. $s_key .'[$args[$last]]; return "_PARSER_FALSE_";');
         }
         
         // Just a simple 1 stack array
         else
-        {	
+        {
             // Check if variable exists in $array
-            if(isset($array[$key]))
+            if(array_key_exists($key, $array))
             {
                 return $array[$key];
             }
