@@ -126,6 +126,16 @@ class Debug
                 $severity = 1;
                 break;
                 
+            case E_PARSE:
+                $this->ErrorLevel = 'Parse Error';
+                $severity = 3;
+                break;
+                
+            case E_DEPRECATED:
+                $this->ErrorLevel = 'Deprecated';
+                $severity = 1;
+                break;
+
             case E_STRICT:
                 $this->ErrorLevel = 'Strict';
                 $severity = 1;

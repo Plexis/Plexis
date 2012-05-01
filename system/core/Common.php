@@ -65,6 +65,31 @@
         // Don't execute PHP internal error handler
         return true;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: shutdown()
+| ---------------------------------------------------------------
+|
+| Method for catching fetal and parse errors
+|
+*/
+    function shutdown()
+    {
+        $error = error_get_last();
+        if(is_array($error) && config('catch_fetal_errors', 'Core') == 1)
+        {
+            if($error['type'] == E_ERROR || $error['type'] == E_PARSE)
+            {
+                // Get singleton
+                $Debug = load_class('Debug');	
+            
+                // Trigger
+                $Debug->trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
+            }
+            // Otherwise ignore
+        }
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -380,4 +405,8 @@
             die();
         }
     }
+
+// Register the Core to process errors with the custom_error_handler method
+set_error_handler('php_error_handler', E_ALL | E_STRICT);
+register_shutdown_function('shutdown');
 // EOF

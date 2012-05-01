@@ -91,6 +91,16 @@ class Debug extends \System\Core\Debug
                 $severity = 1;
                 break;
                 
+            case E_PARSE:
+                $this->ErrorLevel = 'Parse Error';
+                $severity = 3;
+                break;
+                
+            case E_DEPRECATED:
+                $this->ErrorLevel = 'Deprecated';
+                $severity = 1;
+                break;
+
             case E_STRICT:
                 $this->ErrorLevel = 'Strict';
                 $severity = 1;
@@ -136,8 +146,10 @@ class Debug extends \System\Core\Debug
         
         // Make neat the error trace ;)
         $trace = array();
-        foreach($this->ErrorTrace as $t)
+        foreach($this->ErrorTrace as $key => $t)
         {
+            if($key == 0) continue; 
+            unset($t['object']);
             $trace[] = print_r( $t, true );
         }
         
@@ -153,9 +165,6 @@ class Debug extends \System\Core\Debug
             'backtrace' => serialize( $trace )
         );
         $DB->insert('pcms_error_logs', $data);
-        
-        // Create our log message
-        parent::log_error();
     }
 }
 // EOF

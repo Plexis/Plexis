@@ -29,6 +29,18 @@ $config['environment'] = 2;
 
 $config['log_errors'] = 1;
 
+/*
+| ---------------------------------------------------------------
+| Catch_fetal_errors
+| ---------------------------------------------------------------
+|
+| Set to 1 to catch fetal errors and parse errors. Best to disable
+| if already using a special debugger such as Xdebug
+|
+*/
+
+$config['catch_fetal_errors'] = 1;
+
 
 /*
 | ---------------------------------------------------------------
