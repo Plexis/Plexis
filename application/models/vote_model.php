@@ -202,7 +202,7 @@ class Vote_Model extends Application\Core\Model
         if(config('web_points_enabled') == TRUE)
         {
             $query = "UPDATE `pcms_accounts` SET `web_points` = (`web_points` + ".$site['points'].") WHERE `id`=".$id;
-            return $this->DB->query( $query )->num_rows();
+            return $this->DB->query( $query );
         }
         
         // Return TRUE if we made it this far

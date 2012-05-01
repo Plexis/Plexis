@@ -40,6 +40,7 @@
         <css>css/style.css</css>
         <css>css/alerts.css</css>
         <css>css/datatables.css</css>
+        <css>css/jquery-ui-1.8.20.custom.css</css>
         <comment>Include feature slide script</comment>
         <js>js/jquery.cycle.all.min.js</js>
     </head>

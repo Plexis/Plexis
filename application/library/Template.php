@@ -89,6 +89,7 @@ class Template
         var realm_id = '. get_realm_cookie() .';
     </script>')
              ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery-ui-1.8.20.custom.min.js"></script>')
              ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.validate.min.js"></script>')
              ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')
              ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/plexis.js"></script>'

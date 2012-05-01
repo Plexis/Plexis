@@ -19,11 +19,14 @@
                         <?php if(config('web_points_enabled')): ?>
                             <td>{points}</td>
                         <?php endif; ?>
-                        <td>{time_left}</ta>
+                        <td>{time_left}</td>
                         <td><button id="vote" name="{id}" class="button" {disabled}>Vote</button></td>
                     </tr>
                 {/sites}
             </tbody>
         </table>
+        
+        <!-- Hidden Vote Window Lock Div -->
+        <div id="vote-window">Locked until voting is complete, Please do not Close or Refresh this window.</div>
     </div>
 </div>

@@ -1,47 +1,46 @@
-(function($) 
-{
-	$.extend(
-    { 
-		uiLock: function(content)
-        {
-			if(content == 'undefined') content = '';
-
-			$('<div></div>').attr('id', 'uiLockId').css({
-				'position': 'absolute',
-				'top': 0,
-				'left': 0,
-				'z-index': 9999,
-				'opacity': 0.6,
-				'width':'100%',
-				'height':'100%',
-				'color':'white',
-                'text-align':'center',
-				'background-color':'black'
-			}).html(content).appendTo('body');
-		},
-		uiUnlock: function()
-        {
-			$('#uiLockId').remove();
-		}
-	});
-})(jQuery);
-
-
 $().ready(function() 
 {
+    var timeout = 7000;
+    var vote_window_html = $("#vote-window").html();
+    
+    // Create our base loading modal
+	Modal = $("#vote-window").dialog({
+		autoOpen: false, 
+		title: "Waiting for Vote Verification", 
+		modal: true, 
+		width: "500",
+		buttons: [{
+			text: "Close Window", 
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}]
+	});
+    
     $("#vote").click(function() 
     {
         // Start by getting out ID out of the button name
         var id = $(this).attr('name');
-        var timeout = 7000;
+        
+        // Open the Modal Window
+		Modal.dialog("option", {
+			modal: true, 
+			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+			closeOnEscape: false, 
+			draggable: false,
+			resizable: false
+		}).dialog("open");
+        
+        // Hide our close window button from view unless needed
+        Modal.parent().find(".ui-dialog-buttonset").hide();
+        
+        // Reset our vote-window div html
+        $("#vote-window").html( vote_window_html );
 
         // If the vote site is online, Lock the UI and open a new tab!
-        $.uiLock('Locked until voting is complete, Please do not close or fresh this window.');
         childWindow = window.open( url + "/account/vote/out/" + id);
         setTimeout(function() 
         {
-            $('#uiLockId').remove();
-        
             // Check to make sure the vote window is still open
             if(childWindow && !childWindow.closed)
             {
@@ -54,10 +53,12 @@ $().ready(function()
                         if (result.success == false)
                         {
                             // Display our Success message, and ReDraw the table so we imediatly see our action
-                            alert('There was an error processing your vote. Please contact an administrator');
+                            $("#vote-window").html('<p><div class="alert error">There was an error processing your vote. Please contact an administrator</div></p>');
+                            Modal.parent().find(".ui-dialog-buttonset").show();
                         }
                         else
                         {
+                            Modal.dialog('close');
                             location.reload();
                         }
                     }
@@ -65,7 +66,8 @@ $().ready(function()
             }
             else
             {
-                alert('Vote window closed prematurely. Unable to verify vote status');
+                $("#vote-window").html('<p><div class="alert error">Vote window closed prematurely. Unable to verify vote status</div></p>');
+                Modal.parent().find(".ui-dialog-buttonset").show();
             }
         }, timeout);
     });
