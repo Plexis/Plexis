@@ -70,7 +70,6 @@ class Controller extends \System\Core\Controller
         if($this->controller == 'admin')
         {
             $this->Template->set_template_path('admin');
-            $this->Template->config( array('controller_view_paths' => FALSE) );
         }
         // elseif($this->controller == 'ajax')
         // {
@@ -132,7 +131,8 @@ class Controller extends \System\Core\Controller
                     {
                         // Format should be like so "update_#.sql
                         $names = explode('_', $file);
-                        if($names[1] > $version)
+                        $update = str_replace('.sql', '', $names[1]);
+                        if($update > $version)
                         {
                             $updates[] = $file;
                         }
