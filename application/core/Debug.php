@@ -138,7 +138,7 @@ class Debug extends \System\Core\Debug
         $trace = array();
         foreach($this->ErrorTrace as $t)
         {
-            $trace[] = print_r( $t, true )
+            $trace[] = print_r( $t, true );
         }
         
         // Attempt to insert the error in the database
