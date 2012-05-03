@@ -1,6 +1,7 @@
 <?php
 $site_title = 'Plexis';
 $site_email = 'wilson.steven10@yahoo.com';
+$site_support_email = 'support@yahoo.com';
 $meta_keywords = 'Site Keywords';
 $meta_description = 'Site Description';
 $site_maintenance = 0;

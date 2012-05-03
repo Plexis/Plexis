@@ -125,6 +125,13 @@ class Admin extends Application\Core\Controller
         }
         else
         {
+            // Make sure we have an ID and its numeric!
+            if( !is_numeric($id) )
+            {
+                redirect('admin/news');
+                die();
+            }
+            
             // Get our post
             $post = $this->News_Model->get_news_post($id);
             $post['body'] = stripslashes($post['body']);
@@ -554,10 +561,51 @@ class Admin extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */    
-    public function modules()
+    public function modules($name = null, $subpage = null)
     {
         // Make sure the user can view this page
         if( !$this->check_access('manage_modules')) return;
+        
+        if($name != null)
+        {
+            // Make sure the module is installed!
+            if( module_installed($name) )
+            {
+                // Load the module controller
+                $file = APP_PATH . DS . 'modules' . DS . $name . DS .'controller.php';
+                if(file_exists($file))
+                {
+                    // Load the file
+                    include $file;
+
+                    // Init the module into a variable
+                    $class = ucfirst($name);
+                    $module = new $class( true );
+                    
+                    // Correct the module view path'
+                    $this->Template->set_controller($class, true);
+
+                    // Build our page title / desc, then load the view
+                    $this->Template->set( 'page_title', $class ." Config");
+                    $this->Template->set( 'page_desc', "On this page, you can configure this module.");
+                    
+                    // Run the module installer
+                    $result = $module->__admin( $this, $subpage );
+                    if($result == TRUE) die();
+                    
+                    // We have an error!
+                    
+                    // Correct the module view path'
+                    $this->Template->set_controller('Admin', false);
+                    
+                    // Build our page title / desc, then load the view
+                    $this->Template->set( 'page_title', "Error Loading Module");
+                    $this->Template->set( 'page_desc', "");
+                    $this->load->view('module_load_error', $data);
+                    return;
+                }
+            }
+        }
 
         // Build our page title / desc, then load the view
         $data = array(

@@ -80,17 +80,27 @@ class Admin_Model extends Application\Core\Model
         
         
         // Process installed templates
-        
+        $default = config('default_templates');
+        $list = get_installed_templates();
+        foreach($list as $file)
+        {
+            // Get our selected option
+            $selected = '';
+            $name = $file['name'];
+            if($default == $name)
+            {
+                $selected = 'selected="selected" ';
+            }
+            
+            // Add the language folder to the array
+            $templates[] = '<option value="'.$name.'" '. $selected .'>'.$name.'</option>';
+        }
         
         // Process languages
         $default = config('default_language');
-        $list = scandir(APP_PATH . DS . 'language');
+        $list = get_languages();
         foreach($list as $file)
         {
-            // Dont include files or ".." / "."
-            if($file == "." || $file == "..") continue;
-            if(is_file($file)) continue;
-            
             // Get our selected option
             $selected = '';
             if($default == $file)
@@ -99,10 +109,14 @@ class Admin_Model extends Application\Core\Model
             }
             
             // Add the language folder to the array
-            $languages[] = '<option value="'.$file.'" '. $selected .'>'.$file.'</option>';
+            $languages[] = '<option value="'.$file.'" '. $selected .'>'. ucfirst($file).'</option>';
         }
         
-        return array('realms' => $realms, 'languages' => $languages);
+        return array(
+            'realms' => $realms,
+            'templates' => $templates,
+            'languages' => $languages
+        );
     }
     
 /*
@@ -130,10 +144,10 @@ class Admin_Model extends Application\Core\Model
         
         // Init the module into a variable
         $class = ucfirst($name);
-        $module = new $class(FALSE);
+        $module = new $class( true );
         
         // Run the module installer
-        $result = $module->_install();
+        $result = $module->__install();
         if($result == FALSE) return FALSE;
         
         // Make sure we have a fixed URI
@@ -148,7 +162,7 @@ class Admin_Model extends Application\Core\Model
         $data['name'] = $name;
         $data['uri'] = $uri;
         $data['method'] = $method;
-        $data['has_admin'] = $module->has_admin();
+        $data['has_admin'] = $module->__has_admin();
         
         // Insert our post
         return $this->DB->insert('pcms_modules', $data);
@@ -177,10 +191,10 @@ class Admin_Model extends Application\Core\Model
         
         // Init the module into a variable
         $class = ucfirst($name);
-        $module = new $class(FALSE);
+        $module = new $class( true );
         
         // Run the module installer
-        $result = $module->_uninstall();
+        $result = $module->__uninstall();
         if($result == FALSE) return FALSE;
         
         // Delete our post and return the result

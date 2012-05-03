@@ -974,7 +974,7 @@ class Ajax extends Application\Core\Controller
                         $output['aaData'][$key][4] = "<a class=\"un-install\" name=\"".$name."\" href=\"javascript:void(0);\">Uninstall</a>";
                         
                         // Add admin link
-                        if($module[3] == TRUE) $output['aaData'][$key][4] .= " - <a href=\"". SITE_URL ."/admin/modules/manage/".$name."\">Configure</a>"; 
+                        if($module[3] == TRUE) $output['aaData'][$key][4] .= " - <a href=\"". SITE_URL ."/admin/modules/".$name."\">Configure</a>"; 
                     }
 
                     $i = 0;

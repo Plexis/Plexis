@@ -189,14 +189,34 @@
                     <li><a href="{SITE_URL}/admin" title="Home"><span id="bc-home"></span></a></li>
                     <?php
                         // Instead of making a custom one in every page, we make an automatic one here
-                        if($GLOBALS['action'] == 'index'): 
+                        if($GLOBALS['action'] == 'index')
+                        {
                             echo '<li class="no-hover">Dashboard</li>';
-                        elseif($GLOBALS['action'] !== 'index' && isset($GLOBALS['queryString'][0])): 
+                        }
+                        elseif($GLOBALS['action'] !== 'index' && isset($GLOBALS['querystring'][0]))
+                        {
                             echo '<li><a href="{SITE_URL}/'.$GLOBALS['controller'].'/'.$GLOBALS['action'].'">'.ucfirst($GLOBALS['action']).'</a></li>';
-                            echo '<li class="no-hover">'.ucfirst($GLOBALS['queryString'][0]).'</li>';
-                        else:
+                            $__count = count($GLOBALS['querystring']) - 1;
+                            foreach($GLOBALS['querystring'] as $k => $qs)
+                            {
+                                if($__count == $k) {
+                                    echo '<li class="no-hover">'.ucfirst($qs).'</li>';
+                                }
+                                else
+                                {
+                                    $__string = '<li><a href="{SITE_URL}/'.$GLOBALS['controller'].'/'.$GLOBALS['action'];
+                                    for($i = 0; $i <= $k; $i++)
+                                    {
+                                        $__string .= '/'. $GLOBALS['querystring'][$i];
+                                    }
+                                    echo $__string .'">'.ucfirst($qs).'</a></li>';
+                                }
+                            }
+                        }
+                        else
+                        {
                             echo '<li class="no-hover">'.ucfirst($GLOBALS['action']).'</li>';
-                        endif;
+                        }
                     ?>
                 </ul>
             </div> 

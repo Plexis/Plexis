@@ -30,6 +30,10 @@
                                 <label for="Site Desc">Site Description</label>
                                 <input id="Site Desc" name="cfg__meta_description" type="text" value="{config.meta_description}"/>
                             </p>
+                            <p>
+                                <label for="Site Key">Site Keywords</label>
+                                <input id="Site Key" name="cfg__meta_keywords" type="text" value="{config.meta_keywords}"/>
+                            </p>
                         </div>
                     </fieldset>
                     
@@ -38,13 +42,19 @@
                         <legend>Site Settings</legend>
                         <div class="_100">
                             <p>
-                                <label for="Site Email">Site Email</label>
+                                <label for="Site Email">Site Owner Email</label>
                                 <input id="Site Email" name="cfg__site_email" class="required" type="text" value="{config.site_email}"/>
+                            </p>
+                            <p>
+                                <label for="Site SEmail">Site Support Email</label>
+                                <input id="Site SEmail" name="cfg__site_support_email" class="required" type="text" value="{config.site_support_email}"/>
                             </p>
                             <p>
                                 <label for="theme">Default Template</label>
                                 <select id="theme" name="cfg__default_template">
-                                    <option>{config.default_template}</option>
+                                    {options.templates}
+                                        {value}
+                                    {/options.templates}
                                 </select>
                             </p>
                             <p>

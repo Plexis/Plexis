@@ -120,6 +120,23 @@ class Template
         $this->template['path'] = str_replace( array('/', '\\'), DS, $path );
         return $this;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: set_controller()
+| ---------------------------------------------------------------
+|
+| This method is used by the admin panel to soft set the module
+| view path to true
+|
+*/
+
+    public function set_controller($controller, $module = false) 
+    {
+        $this->_controller = $controller;
+        $this->_is_module = $module;
+
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -131,13 +148,23 @@ class Template
 | @Param: $params - An array of template config options
 |
 */	
-    public function config($params)
+    public function config($params, $value = null)
     {
-        foreach($params as $key => $value)
+        if(is_array($params))
         {
-            if(isset($this->config[$key]))
+            foreach($params as $key => $v)
             {
-                $this->config[$key] = $value;
+                if(isset($this->config[$key]))
+                {
+                    $this->config[$key] = $v;
+                }
+            }
+        }
+        else
+        {
+            if(isset($this->config[$params]))
+            {
+                $this->config[$params] = $value;
             }
         }
         return $this;
@@ -547,7 +574,7 @@ class Template
         }
         
         // No template custom view, load default
-        elseif( !$this->is_module )
+        elseif( !$this->_is_module )
         {
             $file = APP_PATH . DS . 'views' . DS . $ext . $this->view_file .'.php';
             if(file_exists($file))

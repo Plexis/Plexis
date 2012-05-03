@@ -92,6 +92,28 @@
     
 /*
 | ---------------------------------------------------------------
+| Method: get_languages()
+| ---------------------------------------------------------------
+|
+| This function is used to return an array of languages in the 
+|   languages folder
+|
+| @Return: (Array) Array of drivers
+|
+*/
+    function get_languages()
+    {
+        $reallist = array();
+        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'language');
+        foreach($list as $file)
+        {
+            $reallist[] = $file;
+        }
+        return $reallist;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: get_port_status()
 | ---------------------------------------------------------------
 |
@@ -111,30 +133,7 @@
         
         // Restore error reporting
         $Debug->error_reporting( TRUE );
-        return ($handle == FALSE)? FALSE : TRUE;
-    }
-    
-
-/*
-| ---------------------------------------------------------------
-| Method: load_module_config()
-| ---------------------------------------------------------------
-|
-| This function is used to load a modules config file, and add
-| those config values to the site config.
-|
-| @Param: (String) $module - Name of the module
-| @Param: (String) $filename - name of the file if not 'config.php'
-| @Param: (String) $array - If the config vars are stored in an array, whats
-|	the array variable name?
-| @Return: (None)
-|
-*/
-    function load_module_config($module, $filename = 'config.php', $array = FALSE)
-    {	
-        // Get our filename and use the load_config method
-        $file = APP_PATH . DS .'modules' . DS . $module . DS . 'config' . DS . $filename;
-        load_config($file, 'mod', $array);
+        return ($handle == FALSE) ? FALSE : TRUE;
     }
 
 /*
@@ -256,7 +255,7 @@
 | @Return: (Array) Array of installed realms
 |
 */
-    function get_realm_status($id = 0)
+    function get_realm_status($id = 0, $cache_time = 300)
     {
         // Check the cache to see if we recently got the results
         $load = load_class('Loader');
@@ -303,7 +302,7 @@
             
             // Re-enable errors, and Cache the results for 5 minutes
             $Debug->error_reporting(true);
-            $Cache->save('realm_status_'.$id, $realms, 300);
+            $Cache->save('realm_status_'.$id, $realms, $cache_time);
             return $realms;
         }
         return $result;
@@ -330,6 +329,29 @@
         }
         return $reallist;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: load_module_config()
+| ---------------------------------------------------------------
+|
+| This function is used to load a modules config file, and add
+| those config values to the site config.
+|
+| @Param: (String) $module - Name of the module
+| @Param: (String) $name - Name of the config array key for this
+| @Param: (String) $filename - name of the file if not 'config.php'
+| @Param: (String) $array - If the config vars are stored in an array, whats
+|	the array variable name?
+| @Return: (None)
+|
+*/
+    function load_module_config($module, $name = 'mod', $filename = 'config.php', $array = FALSE)
+    {	
+        // Get our filename and use the load_config method
+        $file = APP_PATH . DS .'modules' . DS . $module . DS . 'config' . DS . $filename;
+        load_config($file, $name, $array);
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -345,10 +367,9 @@
     function get_modules()
     {
         $reallist = array();
-        $list = scandir(APP_PATH . DS . 'modules');
+        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'modules');
         foreach($list as $file)
         {
-            if($file[0] == "." || $file == "index.html") continue;
             $reallist[] = $file;
         }
         return $reallist;
@@ -382,7 +403,7 @@
 | This function is used to find out if a module is installed based 
 | on the module name
 |
-| @Return: (Bool) True if the realm is installed, FALSE otherwise
+| @Return: (Bool) True if the rmodule is installed, FALSE otherwise
 |
 */
     function module_installed($name)
@@ -391,7 +412,71 @@
         $DB = $load->database( 'DB' );
         
         // Build our query
-        $query = "SELECT `uri` FROM `pcms_realms` WHERE `name`=?";
+        $query = "SELECT `uri` FROM `pcms_modules` WHERE `name`=?";
+        $result = $DB->query( $query, array($name) )->fetch_column();
+        return ($result == FALSE) ? FALSE : TRUE;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: get_templates()
+| ---------------------------------------------------------------
+|
+| This function is used to return an array of template fodlers 
+|   in the templates folder
+|
+| @Return: (Array) Array of template names
+|
+*/
+    function get_templates()
+    {
+        $reallist = array();
+        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'templates');
+        foreach($list as $file)
+        {
+            $reallist[] = $file;
+        }
+        return $reallist;
+    }
+
+/*
+| ---------------------------------------------------------------
+| Method: get_installed_templates()
+| ---------------------------------------------------------------
+|
+| This function is used to return an array of site installed templates.
+|
+| @Return: (Array) Array of installed realms
+|
+*/
+    function get_installed_templates()
+    {
+        $load = load_class('Loader');
+        $DB = $load->database( 'DB' );
+        
+        // Build our query
+        $query = "SELECT * FROM `pcms_templates` WHERE `status` = 1";
+        return $DB->query( $query )->fetch_array();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: template_installed()
+| ---------------------------------------------------------------
+|
+| This function is used to find out if a templates is installed based 
+| on the templates name
+|
+| @Return: (Bool) True if the template is installed, FALSE otherwise
+|
+*/
+    function template_installed($name)
+    {
+        $load = load_class('Loader');
+        $DB = $load->database( 'DB' );
+        
+        // Build our query
+        $query = "SELECT `status` FROM `pcms_templates` WHERE `name`=?";
         $result = $DB->query( $query, array($name) )->fetch_column();
         return ($result == FALSE) ? FALSE : TRUE;
     }
