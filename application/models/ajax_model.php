@@ -363,7 +363,7 @@ class Ajax_Model extends Application\Core\Model
                 if($status == 1 && $wowlib != FALSE)
                 {
                     $uptime = $this->realm->uptime( $realm['id'] );
-                    ($uptime == FALSE) ? $uptime = 'Unavailable' : $uptime = sec2hms($uptime, false);
+                    ($uptime == FALSE) ? $uptime = 'Unavailable' : $uptime = format_time($uptime);
                     
                     $result[] = array(
                         'id' => $realm['id'],

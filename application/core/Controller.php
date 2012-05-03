@@ -42,12 +42,6 @@ class Controller extends \System\Core\Controller
         // Build the Core Controller
         parent::__construct();
         
-        // load module config file if there is one
-        if($GLOBALS['is_module'] == TRUE)
-        {
-            load_module_config($GLOBALS['controller']);
-        }
-        
         // Setup the selected users language
         $GLOBALS['language'] = selected_language();
         
@@ -66,15 +60,11 @@ class Controller extends \System\Core\Controller
 */
     private function _init_template() 
     {
-        // Setup our template system
+        // Set our template path based on the users selected template
         if($this->controller == 'admin')
         {
             $this->Template->set_template_path('admin');
         }
-        // elseif($this->controller == 'ajax')
-        // {
-            // return;
-        // }
         else
         {
             // Check if the user has a selected theme.
@@ -125,7 +115,7 @@ class Controller extends \System\Core\Controller
             $list = @opendir( $path );
             if($list)
             {
-                while($file = readdir($list))
+                while(false !== ($file = readdir($list)))
                 {
                     if($file[0] != "." && is_file($path . DS . $file))
                     {

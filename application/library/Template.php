@@ -20,6 +20,7 @@ class Template
 {
     // An array of all template variables
     protected $variables = array();
+    protected $jsvars = array();
     
     // Meta data from the <head> tags
     protected $_metadata = array();
@@ -65,35 +66,6 @@ class Template
         $this->load = load_class('Loader');
         $this->session = $this->load->library('Session');
         $this->parser = $this->load->library('Parser');
-        
-        // Build our custom keywords and description
-        $title = config('site_title');
-        $keywords = config('meta_keywords');
-        $desc = config('meta_description');
-        
-        // Setup the basic static headings
-        $this->append_metadata("<!-- Basic Headings -->")
-             ->set_metadata('title', $title, 'title')
-             ->set_metadata('keywords', $keywords)
-             ->set_metadata('description', $desc)
-             ->append_metadata("") // Added whitespace
-             ->append_metadata("<!-- Content type, And cache control -->")
-             ->set_metadata('content-type', 'text/html; charset=UTF-8', 'http-equiv')
-             ->set_metadata('cache-control', 'no-cache', 'http-equiv')
-             ->set_metadata('expires', '-1', 'http-equiv')
-             ->append_metadata("") // Add whitespace
-             ->append_metadata("<!-- Include Plexis Static JS Scripts -->")
-             ->append_metadata(
-    '<script type="text/javascript">
-        var url = "'. SITE_URL .'"; 
-        var realm_id = '. get_realm_cookie() .';
-    </script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery-ui-1.8.20.custom.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.validate.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/plexis.js"></script>'
-        );
     }
 
 /*
@@ -111,6 +83,25 @@ class Template
     public function set($name, $value) 
     {
         $this->variables[$name] = $value;
+        return $this;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: setjs()
+| ---------------------------------------------------------------
+|
+| This method sets javascript variables to be replace in the 
+|   template system header
+|
+| @Param: $name - Name of the variable to be set
+| @Param: $value - The value of the variable
+|
+*/
+
+    public function setjs($name, $value) 
+    {
+        $this->jsvars[$name] = $value;
         return $this;
     }
     
@@ -718,6 +709,49 @@ class Template
 */
     protected function _build_header()
     {
+        // Add our static JS vars
+        $this->setjs('url', SITE_URL);
+        $this->setjs('realm_id', get_realm_cookie());
+        
+        // Convert our JS vars into a string :)
+        $string = '';
+        foreach($this->jsvars as $key => $val)
+        {
+            // Format the var based on type
+            $val = (is_numeric($val)) ? $val : '"'. $val .'"';
+            $string .= "       var ". $key ." = ". $val .";\n";
+        }
+        
+        // Remove last whitespace
+        $string = rtrim($string);
+        
+        // Setup the basic static headings
+        $this->append_metadata("<!-- Basic Headings -->")
+             ->set_metadata('title', config('site_title'), 'title')
+             ->set_metadata('keywords', config('meta_keywords'))
+             ->set_metadata('description', config('meta_description'))
+             ->set_metadata('generator', 'Plexis')
+             ->append_metadata("") // Added whitespace
+             ->append_metadata("<!-- Content type, And cache control -->")
+             ->set_metadata('content-type', 'text/html; charset=UTF-8', 'http-equiv')
+             ->set_metadata('cache-control', 'no-cache', 'http-equiv')
+             ->set_metadata('expires', '-1', 'http-equiv')
+             ->append_metadata("") // Add whitespace
+             ->append_metadata("<!-- Include jQuery Scripts -->")
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery-ui-1.8.20.custom.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.validate.min.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')
+             ->append_metadata("") // Add whitespace
+             ->append_metadata("<!-- Define Global Vars and Include Plexis Static JS Scripts -->")
+             ->append_metadata(
+    '<script type="text/javascript">
+'. $string .'
+    </script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/plexis.js"></script>'
+        );
+        
+        
         // Append the template meta data
         $this->_append_template_metadata();
         

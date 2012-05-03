@@ -35,14 +35,14 @@ class Filesystem
 | @Return: (Bool) TRUE or FALSE
 |
 */
-	public function is_writable($path) 
-	{
+    public function is_writable($path) 
+    {
         // Correct path
         $path = str_replace(array('/', '\\'), DS, $path);
         
         // Check if givin param is a path
-		if(is_dir($path))
-		{
+        if(is_dir($path))
+        {
             // Fix path, and Create a tmp file
             if($path[strlen($path)-1] != DS) $path = $path . DS;
             $file = $path . uniqid(mt_rand()) .'.tmp';
@@ -69,7 +69,7 @@ class Filesystem
             fclose($handle);
             return true;
         }
-	}
+    }
   
 /*
 | ---------------------------------------------------------------
@@ -84,15 +84,15 @@ class Filesystem
 |
 */  
     public function is_readable($path) 
-	{
+    {
         // Correct path
         $path = str_replace(array('/', '\\'), DS, $path);
         
         // Check if givin param is a path
-		if(is_dir($path))
-		{
+        if(is_dir($path))
+        {
             // Open the dir, and base read off of that
-			$handle = @opendir($path);
+            $handle = @opendir($path);
             if($handle === false)
             {
                 return false;
@@ -101,7 +101,7 @@ class Filesystem
             // Close the dir, and return true
             closedir($handle);
             return true;
-		}
+        }
         else
         {
             // Make sure the file exists
@@ -118,7 +118,7 @@ class Filesystem
             fclose($handle);
             return true;
         }
-	}
+    }
 
 /*
 | ---------------------------------------------------------------
