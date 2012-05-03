@@ -15,7 +15,7 @@
 
 // Define CMS versions
 define('CMS_VERSION', '0.2.0');
-define('CMS_BUILD', 97);
+define('CMS_BUILD', 98);
 define('CMS_DB_VERSION', '0.3');
 
 // Define a smaller Directory seperater and ROOT path

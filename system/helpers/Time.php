@@ -43,4 +43,60 @@
         return $hms;
     }
     
+/*
+| ---------------------------------------------------------------
+| Function: format_time()
+| ---------------------------------------------------------------
+|
+| Converts seconds to a human readable time format
+|
+| @Param: (Int) $sec - The timestamp or seconds
+| @Return (String) The array of data
+|
+*/
+	function format_time($seconds)
+	{
+		// Get our seconds to hours:minutes:seconds
+		$time = sec2hms($seconds, false);
+		
+		// Explode the time
+		$time = explode(':', $time);
+		
+		// Hour corrections
+		$set = '';
+		if($time[0] > 0)
+		{
+			// Set days if viable
+			if($time[0] > 23)
+			{
+				$days = floor($time[0] / 24);
+				$time[0] = $time[0] - ($days * 24);
+				$set .= ($days > 1) ? $days .' Days' : $days .' Day';
+				if($time[0] > 0) $set .= ',';
+			}
+			$set .= ($time[0] > 1) ? $time[0] .' Hours' : $time[0] .' Hour';
+		}
+		if($time[1] > 0)
+		{
+			$set .= ($time[0] > 0) ? ', ' : '';
+			$set .= ($time[1] > 1) ? $time[1] .' Minutes' : $time[1] .' Minute';
+		}
+		
+		return $set;
+	}
+    
+/*
+| ---------------------------------------------------------------
+| Function: microtime_float()
+| ---------------------------------------------------------------
+|
+| Returns the absolute microtime in a float
+|
+*/
+	function microtime_float() 
+	{
+		list($usec, $sec) = explode(" ", microtime());
+		return ((float)$usec + (float)$sec);
+	}
+    
 // EOF

@@ -1426,6 +1426,9 @@ class Ajax extends Application\Core\Controller
                     $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
                     $dirname = dirname($filename);
                     
+                    // Load our Filesystem Class
+                    $Fs = $this->load->library('Filesystem');
+                    
                     // Build our default Json return
                     $return = array();
                     $success = TRUE;
@@ -1448,7 +1451,7 @@ class Ajax extends Application\Core\Controller
                             {
                                 $removed = TRUE;
                                 $old_file = ROOT . DS . str_replace(array('/','\\'), DS, $matches[0][2]);
-                                unlink($old_file);
+                                $Fs->delete($old_file);
                             }
                             else
                             {
@@ -1470,7 +1473,7 @@ class Ajax extends Application\Core\Controller
                                     if($parts[1] != $file)
                                     {
                                         // Soft rename indeed.. remove the old damn file >:(
-                                        unlink(ROOT . DS . $parts[1]);
+                                        $Fs->delete(ROOT . DS . $parts[1]);
                                         $removed = TRUE;
                                     }
                                 }
@@ -1480,8 +1483,7 @@ class Ajax extends Application\Core\Controller
                             if(!is_dir($dirname))
                             {
                                 // Create the directory for the new file if it doesnt exist
-                                $create = @mkdir($dirname, 0755, true);
-                                if(!$create && !is_dir($dirname))
+                                if( !$Fs->create_dir($dirname) )
                                 {
                                     $success = FALSE;
                                     $text = 'Error creating directory "'. $dirname .'"';
@@ -1513,45 +1515,21 @@ class Ajax extends Application\Core\Controller
                             
                         case "removed":
                             $removed = TRUE;
-                            unlink($filename);
+                            $Fs->delete($filename);
                             break;
                     } // End witch type
                     
                     // Removed empty dirs
                     if($removed == TRUE)
                     {
-                        $handle = @opendir($dirname);
-                        if($handle)
+                        // Re-read the directory
+                        clearstatcache();
+                        $files = $Fs->read_dir($dirname);
+
+                        // If empty, delete .DS / .htaccess files and remove dir!
+                        if(empty($files) || (sizeof($files) == 1 && $files[0] == '.htaccess'))
                         {
-                            $files = array();
-                            $empty = TRUE;
-                            
-                            // Run each file / dir to determine if empty
-                            while($file = readdir($handle))
-                            {
-                                $files[] = $file;
-                                if($file[0] != ".")
-                                {
-                                    if(is_file($path . DS . $file) || is_dir($path . DS . $file))
-                                    {
-                                        $empty = FALSE;
-                                        break;
-                                    }
-                                }
-                            }
-                            @closedir($handle);
-                            
-                            // If empty, delete .DS / .htaccess files and remove dir!
-                            if($empty)
-                            {
-                                foreach($files as $file)
-                                {
-                                    // Removed .DS && .htaccess files
-                                    if($file == "." || $file == "..") continue;
-                                    unlink($file);
-                                }
-                                @rmdir($dirname);
-                            }
+                            $Fs->remove_dir($dirname);
                         }
                     }
                     
