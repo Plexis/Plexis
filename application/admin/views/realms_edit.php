@@ -45,7 +45,7 @@
                                 <label for="type">WoWLib Driver</label>
                                 <select id="driver" name="driver" title="This is the WoWLib file that best suites your current realm version. Please visit the forums if you are still unclear here.">
                                     <?php foreach($drivers as $driver): ?>
-                                        <option value="<?php echo $driver; ?>"><?php echo $driver; ?></option>
+                                        <option value="<?php echo $driver; ?>" <?php if($driver == '{realm.driver}') echo 'selected="selected"'; ?>><?php echo $driver; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </p>

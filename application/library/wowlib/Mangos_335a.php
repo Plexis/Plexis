@@ -86,7 +86,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: list_characters
+| Method: list_characters
 | ---------------------------------------------------------------
 |
 | This method is used to list all the characters from the characters
@@ -114,7 +114,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: character_online
+| Method: character_online
 | ---------------------------------------------------------------
 |
 | This method is used to determine if a character is online or not
@@ -139,7 +139,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: character_name_exists
+| Method: character_name_exists
 | ---------------------------------------------------------------
 |
 | This method is used to determine if a character name is available
@@ -164,7 +164,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: get_character_account_id
+| Method: get_character_account_id
 | ---------------------------------------------------------------
 |
 | This method is used to get the account id tied to the character
@@ -189,7 +189,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: get_character_name
+| Method: get_character_name
 | ---------------------------------------------------------------
 |
 | This method is used to get the characters name
@@ -214,7 +214,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: get_character_level
+| Method: get_character_level
 | ---------------------------------------------------------------
 |
 | This method is used to get the level of a character
@@ -239,7 +239,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: get_character_race
+| Method: get_character_race
 | ---------------------------------------------------------------
 |
 | This method is used to get the race ID of a character
@@ -264,7 +264,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: get_character_class
+| Method: get_character_class
 | ---------------------------------------------------------------
 |
 | This method is used to get the class ID of a character
@@ -289,7 +289,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: get_character_gender
+| Method: get_character_gender
 | ---------------------------------------------------------------
 |
 | This method is used to get the gender of a character
@@ -315,7 +315,7 @@ class Mangos_335a
 
 /*
 | ---------------------------------------------------------------
-| Funtion: get_character_faction
+| Method: get_character_faction
 | ---------------------------------------------------------------
 |
 | Gets the faction for character id.
@@ -354,7 +354,7 @@ class Mangos_335a
 
 /*
 | ---------------------------------------------------------------
-| Funtion: get_character_gold
+| Method: get_character_gold
 | ---------------------------------------------------------------
 |
 | Returns the amount of gold a character has.
@@ -380,7 +380,7 @@ class Mangos_335a
 
 /*
 | ---------------------------------------------------------------
-| Funtion: get_online_count
+| Method: get_online_count
 | ---------------------------------------------------------------
 |
 | Returns the amount of characters currently online
@@ -415,7 +415,7 @@ class Mangos_335a
 
 /*
 | ---------------------------------------------------------------
-| Funtion: get_online_list
+| Method: get_online_list
 | ---------------------------------------------------------------
 |
 | This method returns a list of characters online
@@ -455,15 +455,11 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: get_online_list
+| Method: get_online_list
 | ---------------------------------------------------------------
 |
 | This method returns a list of characters online
 |
-| @Param: (Int) $limit - The number of results we are recieveing
-| @Param: (Int) $start - The result we start from (example: $start = 50
-|   would return results 50-100)
-| @Param: (Int) $faction - Faction ID, 1 = Ally, 2 = Horde, 0 = Both
 | @Retrun: (Array): An array of characters
 |
 */     
@@ -483,13 +479,49 @@ class Mangos_335a
         /* characters table name to use */
         $table = "characters";
         
+        /* add where */
+        $where = '`online` = 1';
+        
         /* Process the request */
-        return $ajax->get_characters_online($cols, $index, $table, $this->CDB);
+        return $ajax->process_datatables($cols, $index, $table, $where, $this->CDB);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: get_character_list_datatables
+| ---------------------------------------------------------------
+|
+| This method returns a list of characters
+
+| @Retrun: (Array): An array of characters
+|
+*/     
+    public function get_character_list_datatables()
+    {
+        $ajax = $this->load->model("Ajax_Model", "ajax");
+  
+        /* 
+        * Dwsc: Array of database columns which should be read and sent back to DataTables. 
+        * Format: id, name, character level, race ID, class ID, Gender ID, and Zone ID
+        */
+        $cols = array( 'guid', 'name', 'level', 'race', 'class', 'gender', 'zone', 'account' );
+        
+        /* Character ID column name */
+        $index = "guid";
+        
+        /* characters table name to use */
+        $table = "characters";
+        
+        /* where statment */
+        $where = '';
+        
+        /* Process the request */
+        return $ajax->process_datatables($cols, $index, $table, $where, $this->CDB);
     }
 
 /*
 | ---------------------------------------------------------------
-| Funtion: get_faction_top_kills
+| Method: get_faction_top_kills
 | ---------------------------------------------------------------
 |
 | This method returns a list of the top chacters with kills
@@ -521,7 +553,7 @@ class Mangos_335a
 
 /*
 | ---------------------------------------------------------------
-| Funtion: set_character_level
+| Method: set_character_level
 | ---------------------------------------------------------------
 |
 | This method is used to set a characters level
@@ -555,7 +587,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: set_character_name
+| Method: set_character_name
 | ---------------------------------------------------------------
 |
 | This method is used to set a characters name
@@ -589,7 +621,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: set_character_name
+| Method: set_character_name
 | ---------------------------------------------------------------
 |
 | This method is used to set a characters account ID
@@ -623,7 +655,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Funtion: adjust_character_level
+| Method: adjust_character_level
 | ---------------------------------------------------------------
 |
 | This method is used to adjust a characters level by the $mod
@@ -654,7 +686,7 @@ class Mangos_335a
 
 /*
 | ---------------------------------------------------------------
-| Funtion: adjust_character_gold
+| Method: adjust_character_gold
 | ---------------------------------------------------------------
 |
 | This method is used to adjust a characters gold by the $mod

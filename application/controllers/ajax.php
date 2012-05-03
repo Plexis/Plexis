@@ -73,11 +73,14 @@ class Ajax extends Application\Core\Controller
         /* DB table to use */
         $table = "pcms_accounts";
         
+        /* where statment */
+        $where = '';
+        
         /* Database to use */
         $dB = "DB";
         
         /* Process the request */
-        $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+        $output = $this->ajax->process_datatables($cols, $index, $table, $where, $dB);
         
         // Get our user groups
         $Groups = $this->DB->query("SELECT `group_id`,`title` FROM `pcms_account_groups`")->fetch_array();
@@ -238,11 +241,14 @@ class Ajax extends Application\Core\Controller
                     /* DB table to use */
                     $table = "pcms_account_groups";
                     
+                    /* where statment */
+                    $where = '';
+                    
                     /* Database to use */
                     $dB = "DB";
                     
                     /* Process the request */
-                    $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+                    $output = $this->ajax->process_datatables($cols, $index, $table, $where, $dB);
                     
                     // We need to add a working "manage" link
                     foreach($output['aaData'] as $key => $value)
@@ -539,11 +545,14 @@ class Ajax extends Application\Core\Controller
             /* DB table to use */
             $table = "pcms_news";
             
+            /* where statment */
+            $where = '';
+            
             /* Database to use */
             $dB = "DB";
             
             /* Process the request */
-            $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+            $output = $this->ajax->process_datatables($cols, $index, $table, $where, $dB);
             
             // We need to add a working "manage" link
             foreach($output['aaData'] as $key => $value)
@@ -589,6 +598,45 @@ class Ajax extends Application\Core\Controller
             $result = $Config->save($type);
             ($result == TRUE) ? $this->output(true, 'config_save_success') : $this->output(false, 'config_save_error');
         }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| A11: characters()
+| ---------------------------------------------------------------
+|
+| This method is used for via Ajax to get the players online
+*/    
+    public function characters($realm = 0)
+    {
+        // check if the realm is installed
+        if($realm != 0 && !realm_installed($realm))
+        {
+            $realm = get_realm_cookie();
+        }
+
+        // Load the WoWLib
+        $this->load->wowlib($realm, 'wowlib');
+        $output = $this->wowlib->get_character_list_datatables();
+        
+        // Loop, and add options
+        foreach($output['aaData'] as $key => $value)
+        {
+            $u = $this->realm->fetch_account($value[7]);
+            $g = $value[5];
+            $r = $value[3];
+            $race = $this->wowlib->race_to_text($r);
+            $class = $this->wowlib->class_to_text($value[4]);
+            $zone = $this->wowlib->zone_to_text($value[6]);
+            $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/application/static/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
+            $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
+            $output['aaData'][$key][5] = $zone;
+            $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
+            $output['aaData'][$key][7] = '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
+        }
+
+        // Push the output in json format
+        echo json_encode($output);
     }
     
 /*
@@ -653,11 +701,14 @@ class Ajax extends Application\Core\Controller
                 /* DB table to use */
                 $table = "realmlist";
                 
+                /* where statment */
+                $where = '';
+                
                 /* Database to use */
                 $dB = "RDB";
                 
                 /* Process the request */
-                $output = $this->model->process_datatables($cols, $index, $table, $dB);
+                $output = $this->model->process_datatables($cols, $index, $table, $where, $dB);
                 
                 
                 // Get our installed realms
@@ -867,11 +918,14 @@ class Ajax extends Application\Core\Controller
             /* DB table to use */
             $table = "pcms_vote_sites";
             
+            /* where statment */
+            $where = '';
+            
             /* Database to use */
             $dB = "DB";
             
             /* Process the request */
-            $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+            $output = $this->ajax->process_datatables($cols, $index, $table, $where, $dB);
             
             // We need to add a working "manage" link
             foreach($output['aaData'] as $key => $value)
@@ -953,11 +1007,14 @@ class Ajax extends Application\Core\Controller
                     /* DB table to use */
                     $table = "pcms_modules";
                     
+                    /* where statment */
+                    $where = '';
+                    
                     /* Database to use */
                     $dB = "DB";
                     
                     /* Process the request */
-                    $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+                    $output = $this->ajax->process_datatables($cols, $index, $table, $where, $dB);
                     
                     // Get our NON installed modules
                     $mods = get_modules();
@@ -1093,11 +1150,14 @@ class Ajax extends Application\Core\Controller
                     /* DB table to use */
                     $table = "pcms_templates";
                     
+                    /* where statment */
+                    $where = '';
+                    
                     /* Database to use */
                     $dB = "DB";
                     
                     /* Process the request */
-                    $output = $this->ajax->process_datatables($cols, $index, $table, $dB);
+                    $output = $this->ajax->process_datatables($cols, $index, $table, $where, $dB);
                     
                     // Get our default Template ID
                     $default = config('default_template');

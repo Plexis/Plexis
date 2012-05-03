@@ -842,14 +842,61 @@ class Admin extends Application\Core\Controller
 |
 */
     
-    function characters()
+    function characters($realmid = 0, $character = 0)
     {
+        // Set new realm
+        if( $realmid != 0 && realm_installed($realmid) )
+        {
+            $current = $realmid;
+        }
+        else
+        {
+            $current = get_realm_cookie();
+        }
+
+        // Get our installed realms
+        $realms = get_installed_realms();
+        
+        // If no realms installed, display a message instead
+        if(empty($realms))
+        {
+            // Build our page title / desc, then load the view
+            $data = array(
+                'page_title' => "Character Editor",
+                'page_desc' => "This page allows you to edit character information, and preform actions such as transfering to another realm.",
+            );
+            $this->load->view('no_realms', $data);
+            return;
+        }
+        
+        // Editing a character?
+        if($character != 0)
+        {
+            return;
+        }
+        
+        // Otherwise, list
+        $array = array();
+        $set = false;
+        foreach($realms as $realm)
+        {
+            $selected = '';
+            if($realm['id'] == $current)
+            {
+                $selected = 'selected="selected" ';
+            }
+            
+            // Add the language folder to the array
+            $array[] = '<option value="'.$realm['id'].'" '. $selected .'>'.$realm['name'].'</option>';
+        }
+        
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Character Editor",
             'page_desc' => "This page allows you to edit character information, and preform actions such as transfering to another realm.",
+            'realms' => $array
         );
-        $this->load->view('under_construction', $data);
+        $this->load->view('characters', $data);
     }
     
     function shop()
