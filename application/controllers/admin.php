@@ -834,15 +834,14 @@ class Admin extends Application\Core\Controller
         );
         $this->load->view('logs', $data);
     }
- 
+    
 /*
 | ---------------------------------------------------------------
-| UNFINISHED PAGES
+| P15: Characters
 | ---------------------------------------------------------------
 |
-*/
-    
-    function characters($realmid = 0, $character = 0)
+*/ 
+    public function characters($realmid = 0, $character = 0)
     {
         // Set new realm
         if( $realmid != 0 && realm_installed($realmid) )
@@ -899,6 +898,72 @@ class Admin extends Application\Core\Controller
         $this->load->view('characters', $data);
     }
     
+/*
+| ---------------------------------------------------------------
+| P16: Statistics
+| ---------------------------------------------------------------
+|
+*/ 
+    public function statistics()
+    {
+        // Add visualize
+        $this->Template->add_script( BASE_URL . '/application/admin/js/libs/jquery.visualize.js' );
+        
+        // Array of months
+        $months = array('January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+        
+        // Get current month and year
+        $date = date('n-Y');
+        list($data['month'], $data['year']) = explode('-', $date);
+        $month = $data['month'] - 1;
+        $results = array();
+        
+        // Start back 5 months, and get stats for that month
+        for($i = 5; $i >= 0; $i--)
+        {
+            // Establich this month / year and next
+            $m = $month - $i;
+            $y = $data['year'];
+            $nm = $m + 1;
+            $ny = $y;
+            
+            // If month is negative, add 12 months and subtract a year
+            if($m < 0)
+            {
+                $m = $m + 12;
+                --$y;
+            }
+            
+            // Next month is 13? add a year and make the month january
+            if($nm == 13)
+            {
+                $nm = 1;
+                ++$ny;
+            }
+            
+            // Get our stats for this month
+            $query = "SELECT COUNT(id) AS `count` FROM `pcms_accounts` WHERE `registered` BETWEEN '$y-$m-00 00:00:00' AND '$ny-$nm-00 00:00:00'";
+            $array = $this->DB->query( $query )->fetch_row();
+            $results[] = array('name' => $months[$m], 'value' => $array['count']);
+        }
+        
+        // Build our page title / desc, then load the view
+        $data = array(
+            'page_title' => "Statistics",
+            'page_desc' => "This page allows you to see various statistics about page views and user accounts.",
+            'months' => $results
+        );
+        $this->load->view('stats', $data);
+    }
+ 
+/*
+| ---------------------------------------------------------------
+| UNFINISHED PAGES
+| ---------------------------------------------------------------
+|
+*/
+    
+    
     function shop()
     {
         // Build our page title / desc, then load the view
@@ -915,16 +980,6 @@ class Admin extends Application\Core\Controller
         $data = array(
             'page_title' => "Donation Managment",
             'page_desc' => "This page allows you to see all the donations your server has earned, as well as create and edit donation packages for users to buy.",
-        );
-        $this->load->view('under_construction', $data);
-    }
-    
-    function statistics()
-    {
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Statistics",
-            'page_desc' => "This page allows you to see various statistics about page views and user accounts.",
         );
         $this->load->view('under_construction', $data);
     }

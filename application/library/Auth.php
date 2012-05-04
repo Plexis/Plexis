@@ -139,6 +139,12 @@ class Auth
                 goto Guest;
             }
             
+            // Good to go, Update the last seen if its more then 5 minutes ago
+            if((strtotime($result['last_seen']) + 300) < time())
+            {
+                $this->DB->query("UPDATE `pcms_accounts` SET `last_seen` = NOW() WHERE `id`=".$session['id']);
+            }
+            
             // Load our perms into a different var and unset
             $perms = unserialize( $result['permissions'] );
             unset( $result['permissions'] );

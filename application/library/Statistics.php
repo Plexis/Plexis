@@ -47,11 +47,9 @@ class Statistics
     {
         // Get IP address and URL info
         $Ip = ip2long( $this->get_ip() );
-        $url = $this->Router->get_url_info();
-        $page = $url['uri'] .'/';
 
         // Only add hit if the IP is valid
-        if( $Ip !== false && $Ip !== -1 )
+        if( $Ip != false && $Ip != -1 )
         {
             $Ip = sprintf("%u", $Ip);
             
@@ -68,63 +66,9 @@ class Statistics
             }
         
             // Update hit count
-            $query = "INSERT INTO pcms_hits(ip, page_url, hits) VALUES('$Ip', '$page', 1) ON DUPLICATE KEY UPDATE `hits` = (`hits` +1)";
+            $query = "INSERT INTO pcms_hits(ip, hits) VALUES('$Ip', 1) ON DUPLICATE KEY UPDATE `hits` = (`hits` +1)";
             $this->DB->query( $query )->num_rows();           
         }
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: get_popular_pages()
-| ---------------------------------------------------------------
-|
-| This method returns the total hits, and unique hits for all
-| previously viewed pages
-|
-| @Param: $limit - Number of max results to return
-|
-*/
-    public function get_popular_pages($limit = 100)
-    {
-        // First, get a list of distinct page names
-        $query = "SELECT DISTINCT `page_url` FROM `pcms_hits` ORDER BY `hits` DESC LIMIT $limit";
-        $results = $this->DB->query( $query )->fetch_array();
-        
-        // No pages in the database :O
-        if(!$results) return array();
-        
-        // build our return array and loop through each page
-        $return = array();
-        foreach($results as $page)
-        {
-            // Get the total page views and unique hits
-            $page = $page['page_url'];
-            $query = "SELECT SUM(hits) AS `total`, COUNT(ip) AS `unique` FROM `pcms_hits` WHERE `page_url` = '$page'";
-            $array = $this->DB->query( $query )->fetch_row();
-            $return[] = array('page' => $page, 'total' => (int)$array['total'], 'unique' => (int)$array['unique']);
-        }
-        
-        // Return the results :)
-        return $return;
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: get_stats_by_page()
-| ---------------------------------------------------------------
-|
-| This method returns the total hits and unique hits by page URI.
-|
-| @Param: $page - the URI (controller/action/qs)
-|
-*/
-    public function get_stats_by_page($page)
-    {
-        $query = "SELECT SUM(hits) AS `total`, COUNT(ip) AS `unique` FROM `pcms_hits` WHERE `page_url` = '$page'";
-        $array = $this->DB->query( $query )->fetch_row();
-        
-        // Return the results :)
-        return $array;
     }
     
 /*

@@ -130,7 +130,7 @@
                     </tr>
                     <tr>
                         <td>Last Activity (Site):</td>
-                        <td> ... </td>
+                        <td>{user.last_seen}</td>
                     </tr>
                 </tbody>
             </table>
