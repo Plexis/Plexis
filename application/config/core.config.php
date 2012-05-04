@@ -113,7 +113,7 @@ $config['action_param'] = 'm';
 |
 */
 
-$config['autoload_libraries'] = array('Auth', 'Template');
+$config['autoload_libraries'] = array('Auth', 'Template', 'Statistics');
 
 
 /*

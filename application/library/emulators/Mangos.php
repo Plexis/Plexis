@@ -247,12 +247,14 @@ class Mangos
 |       'username' => Account Unsername
 |       'email' => Account email
 |       'gmlevel' => GM level, in ManGOS Format (1 -4, no A-Z shit here)
-|       'joindate' => When the user joined (Date formated!)
+|       'joindate' => When the user joined***
 |       'locked' => Is the account locked? (1 = yes, 0 = no)
-|       'last_login' => Users last login (Date Formated!)
+|       'last_login' => Users last login***
 |       'last_ip' => Users last seen IP
 |       'Expansion' => Expansion ID
 |   );
+|
+|   *** Date formated as so! (mysql timestamp) = date("Y-m-d H:i:s", $timestamp)
 |
 */
     public function fetch_account($id)

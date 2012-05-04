@@ -22,6 +22,10 @@ class Template
     protected $variables = array();
     protected $jsvars = array();
     
+    // Array of custom css and JS files
+    protected $jsfiles = array();
+    protected $cssfiles = array();
+    
     // Meta data from the <head> tags
     protected $_metadata = array();
     
@@ -37,9 +41,10 @@ class Template
     // An array of template configs
     protected $config = array(
         'trigger' => "pcms::",              // Our Compiler trigger
-        'module_view_paths' => TRUE,        // If using a modules, use the module/views folder for view paths? FALSE is default paths
         'l_delim' => '{',                   // Left variable delimeter    
-        'r_delim' => '}'                    // Right variable delimeter   
+        'r_delim' => '}',                   // Right variable delimeter
+        'module_view_paths' => TRUE,        // If using a modules, use the module/views folder for view paths? FALSE is default paths
+        'load_view_js' => TRUE              // Load the view js file        
     );
     
     // Our viewname
@@ -55,7 +60,7 @@ class Template
 | ---------------------------------------------------------------
 |
 */   
-    public function __construct() 
+    public function __construct()
     {
         // Define defaults
         $this->_controller = $GLOBALS['controller'];
@@ -167,6 +172,44 @@ class Template
                 $this->config[$params] = $value;
             }
         }
+        return $this;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: add_script()
+| ---------------------------------------------------------------
+|
+| This method adds a JS scr to the header
+|
+| @Param: $path - The path to the JS files. Must be from the 
+|   cms root folder... (Ex: "application/static/js/file.js")
+|   of a full http path
+|
+*/
+
+    public function add_script($path)
+    {
+        $this->jsfiles[] = $path;
+        return $this;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: add_css()
+| ---------------------------------------------------------------
+|
+| This method adds a CSS scr to the header
+|
+| @Param: $path - The path to the JS files. Must be from the 
+|   cms root folder... (Ex: "application/static/js/file.js")
+|   of a full http path
+|
+*/
+
+    public function add_css($path)
+    {
+        $this->cssfiles[] = $path;
         return $this;
     }
     
@@ -598,20 +641,20 @@ class Template
     protected function view_js_string()
     {
         // Build our custom view JS path, and Static View Paths
-        $t_file = $this->template['path'] . DS . 'js'. DS . $this->_controller . DS . $this->view_file .'.js';
-        $s_file = APP_PATH . DS . 'static'. DS . 'js'. DS . $this->_controller . DS . $this->view_file .'.js';
-        if(file_exists( $t_file ))
+        if( $this->config['load_view_js'] )
         {
-            return '<script type="text/javascript" src="{TEMPLATE_URL}/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            $t_file = $this->template['path'] . DS . 'js'. DS . $this->_controller . DS . $this->view_file .'.js';
+            $s_file = APP_PATH . DS . 'static'. DS . 'js'. DS . $this->_controller . DS . $this->view_file .'.js';
+            if(file_exists( $t_file ))
+            {
+                return '<script type="text/javascript" src="{TEMPLATE_URL}/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            }
+            elseif(file_exists( $s_file ))
+            {
+                return '<script type="text/javascript" src="'. BASE_URL .'/application/static/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+            }
         }
-        elseif(file_exists( $s_file ))
-        {
-            return '<script type="text/javascript" src="'. BASE_URL .'/application/static/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
-        }
-        else
-        {
-            return ''; 
-        }
+        return false; 
     }
 
 /*
@@ -782,9 +825,31 @@ class Template
         // Append the template meta data
         $this->_append_template_metadata();
         
+        // Append loaded css files
+        if( !empty($this->cssfiles) )
+        {
+            $this->append_metadata(""); // Add whitespace
+            $this->append_metadata("<!-- Include Controller Defined Css Files -->");
+            foreach($this->cssfiles as $f)
+            {
+                $this->set_metadata('stylesheet', $f, 'link');
+            }
+        }
+        
+        // Append loaded js files
+        if( !empty($this->jsfiles) )
+        {
+            $this->append_metadata(""); // Add whitespace
+            $this->append_metadata("<!-- Include Controller Defined JS Files -->");
+            foreach($this->jsfiles as $j)
+            {
+                $this->append_metadata('<script type="text/javascript" src="'. $j .'"></script>');
+            }
+        }
+        
         // Add the view if we have one
         $line = $this->view_js_string();
-        if($line != '')
+        if($line != false)
         {
             $this->append_metadata( '' );
             $this->append_metadata( "<!-- Include the page view JS file -->" );

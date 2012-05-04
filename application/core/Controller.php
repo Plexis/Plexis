@@ -19,6 +19,20 @@ namespace Application\Core;
 
 class Controller extends \System\Core\Controller
 {
+    // Out session
+    public $Session;
+    
+    // Our auth class
+    public $Auth;
+    
+    // Template Class
+    public $Template;
+    
+    // Database functions
+    public $DB, $RDB;
+    
+    // Stats Class
+    public $Statistics;
 
 /*
 | ---------------------------------------------------------------
@@ -41,6 +55,12 @@ class Controller extends \System\Core\Controller
         
         // Build the Core Controller
         parent::__construct();
+        
+        // Process stats
+        if($GLOBALS['controller'] != 'ajax')
+        {
+            $this->Statistics->add_hit();
+        }
         
         // Setup the selected users language
         $GLOBALS['language'] = selected_language();

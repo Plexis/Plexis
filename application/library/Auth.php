@@ -221,7 +221,8 @@ class Auth
                     'id' => $account_id, 
                     'username' => ucfirst(strtolower($username)), 
                     'email' => $r_data['email'], 
-                    'activated' => 1
+                    'activated' => 1,
+                    'registered' => $r_data['joindate']
                 );
                 $this->DB->insert( 'pcms_accounts', $data );
                 $result = $this->DB->query( $query )->fetch_row();
