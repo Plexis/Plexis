@@ -1,7 +1,7 @@
 $().ready(function() {
-    var post_url = url + "/ajax/templates";
+    var post_url = Plexis.url + "/ajax/templates";
     
-    /*
+    /**
      * DataTables
      */
     var table = $('#templates-table').dataTable({
@@ -22,8 +22,8 @@ $().ready(function() {
     
     // ============================================
     // Install
-    $("#templates-table").delegate('.install', 'click', function(){
-        var name = $(this).attr('name');
+    $("#templates-table").on('click', '.install', function(){
+        var name = this.name;
         
         // Send our Install command
         $.ajax({
@@ -34,15 +34,11 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
+                // Display our Success message, and ReDraw the table so we imediatly see our action
+                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 if (result.success == true)
                 {
-                    // Display our Success message, and ReDraw the table so we imediatly see our action
-                    $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
                     table.fnDraw();
-                }
-                else
-                {
-                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 }
             },
             error: function(request, status, err) 
@@ -54,8 +50,8 @@ $().ready(function() {
     
     // ============================================
     // Uninstall
-    $("#templates-table").delegate('.un-install', 'click', function(){
-        var name = $(this).attr('name');
+    $("#templates-table").on('click', '.un-install', function(){
+        var name = this.name;
 
         // Send our Uninstall command
         $.ajax({
@@ -66,15 +62,11 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
+                // Display our Success message, and ReDraw the table so we imediatly see our action
+                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 if (result.success == true)
                 {
-                    // Display our Success message, and ReDraw the table so we imediatly see our action
-                    $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
                     table.fnDraw();
-                }
-                else
-                {
-                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 }
             },
             error: function(request, status, err) 
@@ -86,8 +78,8 @@ $().ready(function() {
     
     // ============================================
     // Make Default
-    $("#templates-table").delegate('.make-default', 'click', function(){
-        var name = $(this).attr('name');
+    $("#templates-table").on('click', '.make-default', function(){
+        var name = this.name;
         
         // Send our Install command
         $.ajax({
@@ -98,15 +90,11 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
+                // Display our Success message, and ReDraw the table so we imediatly see our action
+                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 if (result.success == true)
                 {
-                    // Display our Success message, and ReDraw the table so we imediatly see our action
-                    $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
                     table.fnDraw();
-                }
-                else
-                {
-                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 }
             },
             error: function(request, status, err) 

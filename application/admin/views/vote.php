@@ -30,7 +30,8 @@
 <div id="vote-form" title="Create Vote Site" style="display: none;">
     <div id="js_news_message" style="display: none;"></div>
     <form id="vote" class="form" action="{SITE_URL}/ajax/vote" method="post">
-        <input type="hidden" name="action" value="create">
+        <input id="formtype" type="hidden" name="action" value="create">
+        <input id="vote_id" type="hidden" name="id" value="0">
         <div class="_100">
             <p>
                 <label for="hostname">Hostname</label>
@@ -64,17 +65,8 @@
         </div>
 
         <div class="_100">
-            <input id="submit" type="submit" class="button" style="width: 150px; text-align: center; margin: 10px 150px; " value="Submit">
+            <center><input id="form-submit" type="submit" class="button" style="width: 150px; text-align: center;" value="Submit"></center>
         </div>
 
     </form>
 </div>
-
-<!--# Ajax Form for Models #-->
-<pcms::eval>
-    <?php
-        $this->append_metadata('');
-        $this->append_metadata('<!-- Include jQuery Form css file -->');
-        $this->append_metadata('<link type="text/javascript" src="'. SITE_URL .'/application/admin/js/mylibs/jquery.form.js"/>'); 
-    ?>
-</pcms::eval>

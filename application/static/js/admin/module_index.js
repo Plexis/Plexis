@@ -1,5 +1,5 @@
 $().ready(function() {
-    var post_url = url + "/ajax/modules";
+    var post_url = Plexis.url + "/ajax/modules";
     
     /**
      * DataTables
@@ -20,25 +20,50 @@ $().ready(function() {
         }
     });
     
+    /** Create our vote form modal */
+	var Modal = $("#install-modal").dialog({
+		autoOpen: false,  
+		modal: true, 
+		width: 600,
+        resizable: false,
+		buttons: [{
+			text: "Close", 
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}]
+	});
+    
+    /**
+     * Form Validation and Posting
+     */
+    $("#install-form").validate();
+    
     // ============================================
     // Install Module
-    $("#module-table").delegate('.install', 'click', function(){
-        var name = $(this).attr('name');
+    $("#module-table").on('click', '.install', function(){
+        var name = this.name;
         
         // Show form, and hide any previous messages
-        $('#install-form').dialog({ modal: true, height: 300, width: 500 });
-        $('#install').removeAttr( "style" );
-        $('#js_install_message').attr('style', 'display: none;');
+        $('#js_install_message').hide();
+        $('#install-form').show();
         $('input[name=module]').val( name );
         $('input[name=function]').val( 'index' );
         $('input[name=uri]').val( 'seg1/seg2' );
         
+        // Open the Modal Window
+		Modal.dialog("option", {
+			title: "Install Module"
+		}).dialog("open");
+        
+        // Hide our close window button from view unless needed
+        Modal.parent().find(".ui-dialog-buttonset").hide(); 
     });
     
     // ============================================
     // Uninstall Module
-    $("#module-table").delegate('.un-install', 'click', function(){
-        var name = $(this).attr('name');
+    $("#module-table").on('click', '.un-install', function(){
+        var name = this.name;
         
         if( confirm('Are you sure you want to uninstall Module "' + name + '"?') )
         {
@@ -51,15 +76,11 @@ $().ready(function() {
                 timeout: 5000, // in milliseconds
                 success: function(result) 
                 {
+                    // Display our Success message, and ReDraw the table so we imediatly see our action
+                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                     if (result.success == true)
                     {
-                        // Display our Success message, and ReDraw the table so we imediatly see our action
-                        $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
                         modtable.fnDraw();
-                    }
-                    else
-                    {
-                        $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                     }
                 },
                 error: function(request, status, err) 
@@ -72,12 +93,11 @@ $().ready(function() {
     
     // ===============================================
     // bind the Install form using 'ajaxForm' 
-    $('#install').ajaxForm({
+    $('#install-form').ajaxForm({
         beforeSubmit: function (arr, data, options)
         {
-            $('#install').attr('style', 'display: none');
+            $('#install-form').hide();
             $('#js_install_message').attr('class', 'alert loading').html('Submitting Form...').slideDown(300);
-            $( "#install-form" ).dialog( "option", "height", 150 );
         },
         success: install_result,
         clearForm: true,
@@ -89,15 +109,15 @@ $().ready(function() {
     {
         // Parse the JSON response
         var result = jQuery.parseJSON(response);
+        
+        // Display our Success message, and ReDraw the table so we imediatly see our action
+        $('#js_install_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
         if (result.success == true)
         {
-            // Display our Success message, and ReDraw the table so we imediatly see our action
-            $('#js_install_message').attr('class', 'alert success').html(result.message);
             modtable.fnDraw();
         }
-        else
-        {
-            $('#js_install_message').attr('class', 'alert ' + result.type).html(result.message);
-        }
+        
+        // Show close button
+        Modal.parent().find(".ui-dialog-buttonset").show();
     }
 });

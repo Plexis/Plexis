@@ -1,13 +1,8 @@
 $().ready(function() {
-    check_for_updates();
-});
-
-// Function used to check for updates
-function check_for_updates()
-{
+    // Check for updates
     $.ajax({
         type: "POST",
-        url: url + "/ajax/update",
+        url: Plexis.url + "/ajax/update",
         dataType: "json",
         data: { action: "get_latest" },
         timeout: 5000, // in milliseconds
@@ -30,7 +25,7 @@ function check_for_updates()
                 {
                     // Compare the current build with the update
                     newest = update[0];
-                    if(newest != Plexis['build'])
+                    if(newest != Build)
                     {
                         // Define some vars
                         var author = result['message'][0]['author']['login'];
@@ -63,4 +58,4 @@ function check_for_updates()
             $('#update').html('<font color="orange">Unable to connect to update server.</font>');
         }
     });
-}
+});

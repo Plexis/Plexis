@@ -359,7 +359,6 @@ class Ajax extends Application\Core\Controller
                     $result = $this->DB->update("pcms_account_groups", $data, "`group_id`=".$id);
                     ($result == TRUE) ? $this->output(true, 'group_update_success') : $this->output(false, 'group_update_error');
                     return;
-                    break;
                     
                 case "create":
                     // Load POSTS
@@ -399,14 +398,12 @@ class Ajax extends Application\Core\Controller
                     $result = $this->DB->insert("pcms_account_groups", $data);
                     ($result == TRUE) ? $this->output(true, 'group_create_success') : $this->output(false, 'group_create_error');
                     return;
-                    break;
                 
                 case "deletegroup":
                     $id = $this->input->post('id', TRUE);
                     $result = $this->DB->delete("pcms_account_groups", "`group_id`=$id");
                     ($result == TRUE) ? $this->output(true, 'group_delete_success') : $this->output(false, 'group_delete_error');
                     return;
-                    break;
             }
             echo json_encode($output);
         }
@@ -495,6 +492,20 @@ class Ajax extends Application\Core\Controller
                         $this->output(false, 'news_validation_error');
                     }
                     break;
+                    
+                // FETCHING
+                case "get":
+                    $result = $this->News_Model->get_news_post($_POST['id']);
+                    if($result == FALSE)
+                    {
+                        $this->output(false, 'News Item Doesnt Exist!');
+                        die();
+                    }
+                    
+                    // Fix body!
+                    $result['body'] = stripslashes($result['body']);
+                    $this->output(true, $result);
+                    break;
                 
                 // EDITING
                 case "edit":
@@ -558,7 +569,7 @@ class Ajax extends Application\Core\Controller
             foreach($output['aaData'] as $key => $value)
             {
                 $output['aaData'][$key][3] = date("F j, Y, g:i a", $output['aaData'][$key][3]);
-                $output['aaData'][$key][4] = '<a href="'. SITE_URL .'/admin/news/edit/'.$value[0].'">Edit</a> 
+                $output['aaData'][$key][4] = '<a class="edit" name="'.$value[0].'" href="javascript:void(0);">Edit</a>
                     - <a class="delete" name="'.$value[0].'" href="javascript:void(0);">Delete</a>';
             }
             
@@ -847,6 +858,16 @@ class Ajax extends Application\Core\Controller
                     }
                     break;
                 
+                // FETCHING
+                case "get":
+                    // Make sure we arent getting direct accessed, and the user has permission
+                    $this->check_permission('manage_votesites');
+                    
+                    // Get our votesite
+                    $data = $this->model->get_vote_site($_POST['id']);
+                    ( $data == false ) ? $this->output(false, 'Votesite Doesnt Exist!') : $this->output(true, $data);
+                    break;
+                
                 // EDITING
                 case "edit":
                     // Make sure we arent getting direct accessed, and the user has permission
@@ -931,7 +952,7 @@ class Ajax extends Application\Core\Controller
             foreach($output['aaData'] as $key => $value)
             {
                 $output['aaData'][$key][4] = ($output['aaData'][$key][4] == 43200) ? "12 Hours" : "24 Hours";
-                $output['aaData'][$key][5] = '<a href="'. SITE_URL .'/admin/vote/edit/'.$value[0].'">Edit</a> 
+                $output['aaData'][$key][5] = '<a class="edit" name="'.$value[0].'" href="javascript:void(0);">Edit</a> 
                     - <a class="delete" name="'.$value[0].'" href="javascript:void(0);">Delete</a>';
             }
             
@@ -1687,7 +1708,10 @@ class Ajax extends Application\Core\Controller
     {
         // Load language
         $lang = load_language_file( 'messages' );
-        $text = (isset($lang[$message])) ? $lang[$message] : $message;
+        if(!is_array($message))
+        {
+            $message = (isset($lang[$message])) ? $lang[$message] : $message;
+        }
         
         // Build our Json return
         $return = array();
@@ -1696,18 +1720,17 @@ class Ajax extends Application\Core\Controller
         {
             // Remove error tag on success, but allow warnings
             if($type == 'error') $type = 'success';
-            $return['success'] = true;
-            $return['message'] = $text;
-            $return['type'] = $type;
-        }
-        else
-        {
-            $return['success'] = false;
-            $return['message'] = $text;
-            $return['type'] = $type;
+
         }
         
-        echo json_encode($return);
+        // Output to the browser in Json format
+        echo json_encode(
+            array(
+                'success' => $success,
+                'message' => $message,
+                'type' => $type
+            )
+        );
     }
 }
 ?>

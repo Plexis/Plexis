@@ -6,7 +6,7 @@
     // Realm status default function
     function ajax_realm_status(div_id, loading_id)
     { 
-        var post_url = url + "/ajax/realms/";
+        var post_url = Plexis.url + "/ajax/realms/";
         $( div_id ).hide();
         
         // Send our Init. command

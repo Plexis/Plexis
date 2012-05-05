@@ -753,17 +753,19 @@ class Template
 */
     protected function _build_header()
     {
-        // Add our static JS vars
-        $this->setjs('url', SITE_URL);
-        $this->setjs('realm_id', get_realm_cookie());
-        
+
         // Convert our JS vars into a string :)
-        $string = '';
+        $string = 
+        "        var Plexis = {
+            url : '". SITE_URL ."',
+            realm_id : ". get_realm_cookie() .",
+            template_url : '{TEMPLATE_URL}',
+        }\n";
         foreach($this->jsvars as $key => $val)
         {
             // Format the var based on type
             $val = (is_numeric($val)) ? $val : '"'. $val .'"';
-            $string .= "       var ". $key ." = ". $val .";\n";
+            $string .= "        var ". $key ." = ". $val .";\n";
         }
         
         // Remove last whitespace

@@ -10,7 +10,7 @@ function process()
 {
     $.ajax({
         type: "POST",
-        url: url + "/ajax/update",
+        url: Plexis.url + "/ajax/update",
         data: {action: "next", url: update_url},
         dataType: "json",
         timeout: 5000, // in milliseconds
@@ -43,7 +43,7 @@ function process()
             // Set the site up for maintenace
             $.ajax({
                 type: "POST",
-                url: url + '/ajax/update',
+                url: Plexis.url + '/ajax/update',
                 data: { action: 'init' },
                 dataType: "json",
                 timeout: 5000, // in milliseconds
@@ -59,7 +59,7 @@ function process()
                 
                 res = $.ajax({
                     type: "POST",
-                    url: url + '/ajax/update',
+                    url: Plexis.url + '/ajax/update',
                     data: { 
                         action: "update", 
                         status: value['status'], 
@@ -104,7 +104,7 @@ function process()
             // Set the site up for maintenace to false
             $.ajax({
                 type: "POST",
-                url: url + '/ajax/update',
+                url: Plexis.url + '/ajax/update',
                 data: { action: 'finish' },
                 dataType: "json",
                 timeout: 5000, // in milliseconds

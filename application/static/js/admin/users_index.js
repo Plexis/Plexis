@@ -5,7 +5,7 @@ $().ready(function() {
     $('#data-table').dataTable({
         "bServerSide": true,
         "bSortClasses": false,
-        "sAjaxSource": url + "/ajax/users",
+        "sAjaxSource": Plexis.url + "/ajax/users",
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json', 

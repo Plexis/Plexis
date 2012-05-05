@@ -10,7 +10,7 @@
 var command_prefix = '<span class="c_prefix">$</span> ';
 var commands_array = Array();
 var command_position = 0;
-var post_url = url + "/ajax/console";
+var post_url = Plexis.url + "/ajax/console";
 var user = '';
 var pass = '';
 var connection = '';

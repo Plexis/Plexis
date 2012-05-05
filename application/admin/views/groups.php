@@ -41,22 +41,23 @@
 </div>
 
 <!-- Hidden Create form -->
-<div id="create-form-div" title="Create User Group" style="display: none;">
-    <div id="js_create_message" style="display: none;"></div>
-    <form id="create-form" class="form" action="{SITE_URL}/ajax/groups" method="post">
-        <input type="hidden" name="action" value="create">
+<div id="groups-modal">
+    <div id="js_groups_message"></div>
+    <form id="groups-form" class="form" action="{SITE_URL}/ajax/groups" method="post">
+        <input id="formtype" type="hidden" name="action" value="create">
+        <input id="groupid" type="hidden" name="id" value="0">
         <div class="_100">
             <p>
                 <label for="title">Group Title</label>
-                <input id="title" name="title" class="required" type="text" value="" />
+                <input id="title" name="title" type="text" value="" />
             </p>
             
             <p>
-                <label for="type">Group Category</label>
-                <select name="group_type">
+                <label for="grouptype">Group Category</label>
+                <select id="grouptype" name="group_type">
                     <option value="0">Banned</option>
                     <option value="1">Guest</option>
-                    <option value="2" selected="selected">Member</option>
+                    <option value="2">Member</option>
                     <option value="3">Admin</option>
                 </select>
             </p>
@@ -67,42 +68,3 @@
         </div>
     </form>
 </div>
-
-<!-- Hidden Edit form -->
-<div id="edit-form-div" title="Edit User Group" style="display: none;">
-    <div id="js_edit_message" style="display: none;"></div>
-    <form id="edit-form" class="form" action="{SITE_URL}/ajax/groups" method="post">
-        <input type="hidden" name="action" value="edit">
-        <input type="hidden" name="id" value="">
-        
-        <div class="_100">
-            <p>
-                <label for="title">Group Title</label>
-                <input id="title" name="title" class="required" type="text" value="" />
-            </p>
-            
-            <p>
-                <label for="group_type_edit">Group Category</label>
-                <select id="group_type_edit" name="group_type">
-                    <option value="0">Banned</option>
-                    <option value="1">Guest</option>
-                    <option value="2">Member</option>
-                    <option value="3">Admin</option>
-                </select>
-            </p>
-
-            <div>
-                <input id="submit" type="submit" class="button" style="width: 150px; text-align: center; margin: 10px; float: right;" value="Update">
-            </div>
-        </div>
-    </form>
-</div>
-
-<!-- jForm for Ajax loading -->
-<pcms::eval>
-    <?php
-        $this->append_metadata('');
-        $this->append_metadata('<!-- Include jQuery Form css file -->');
-        $this->append_metadata('<link type="text/javascript" src="'. SITE_URL .'/application/admin/js/mylibs/jquery.form.js"/>'); 
-    ?>
-</pcms::eval>

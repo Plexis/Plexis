@@ -57,6 +57,9 @@ class Admin extends Application\Core\Controller
         $info = $this->DB->server_info();
         $rewrite = (isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'On') ? 'On' : 'Off';
         
+        // Add our build var
+        $this->Template->setjs('Build', CMS_BUILD);
+        
         // Set our page data
         $data = array(
             'page_title' => "Dashboard",
@@ -103,51 +106,22 @@ class Admin extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */ 
-    public function news($action = NULL, $id = NULL)
+    public function news()
     {
         // Make sure the user can view this page
         if( !$this->check_access('manage_news')) return;
 
-        // Load the News Model
-        $this->load->model('News_Model');
-  
-        // No action? then load index screen
-        if($action == NULL)
-        {
-            // Build our page variable data
-            $data = array(
-                'page_title' => "Manage News",
-                'page_desc' => "From here, you can Edit, Delete, or create a new news post."
-            );
-            
-            // Load the view
-            $this->load->view('news_index', $data);
-        }
-        else
-        {
-            // Make sure we have an ID and its numeric!
-            if( !is_numeric($id) )
-            {
-                redirect('admin/news');
-                die();
-            }
-            
-            // Get our post
-            $post = $this->News_Model->get_news_post($id);
-            $post['body'] = stripslashes($post['body']);
-            
-            // Build our page variable data
-            $data = array(
-                'page_title' => "Edit News",
-                'page_desc' => "Editing news post.",
-                'id' => $post['id'],
-                'title' => $post['title'],
-                'body' => $post['body']
-            );
-            
-            // Load the view
-            $this->load->view('news_edit', $data); 
-        }
+        // Load our editor script
+        $this->Template->add_script( BASE_URL .'/application/admin/js/tiny_mce/jquery.tinymce.js' );
+
+        // Build our page variable data
+        $data = array(
+            'page_title' => "Manage News",
+            'page_desc' => "From here, you can Edit, Delete, or create a new news post."
+        );
+        
+        // Load the view
+        $this->load->view('news', $data);
     }
 
 /*
@@ -520,39 +494,19 @@ class Admin extends Application\Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    public function vote($action = NULL, $id = NULL)
+    public function vote()
     {
         // Make sure the user can view this page
         if( !$this->check_access('manage_votesites')) return;
 
-        // Load the News Model
-        $this->load->model('Vote_Model', 'model');
-  
-        // No action? then load index screen
-        if($action == NULL)
-        {
-            // Build our page variable data
-            $data = array(
-                'page_title' => "Manage Vote Sites",
-                'page_desc' => "Create, Edit, or Delete vote sites that your users will use to vote for your server."
-            );
-            
-            // Load the view
-            $this->load->view('vote_index', $data);
-        }
-        else
-        {
-            // Build our page variable data
-            $data = $this->model->get_vote_site($id);
-            if($data == FALSE) redirect('admin/vote');
-            
-            // Add page Title and Desc
-            $data['page_title'] = "Edit Vote Site";
-            $data['page_desc'] = "Editing vote site.";
-
-            // Load the view
-            $this->load->view('vote_edit', $data); 
-        }
+        // Build our page variable data
+        $data = array(
+            'page_title' => "Manage Vote Sites",
+            'page_desc' => "Create, Edit, or Delete vote sites that your users will use to vote for your server."
+        );
+        
+        // Load the view
+        $this->load->view('vote', $data);
     }
 
 /*

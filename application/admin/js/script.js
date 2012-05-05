@@ -16,7 +16,7 @@ $(document).ready(function() {
 	/*
 	 * Scroll Effect
 	 */
-	$('a[href*=#]').bind("click", function(event) {
+	/* $('a[href*=#]').bind("click", function(event) {
 		event.preventDefault();
 		var target = $(this).attr("href");
 		
@@ -26,7 +26,7 @@ $(document).ready(function() {
 			//location.hash = target;
 			// finished scrolling
 		});
-	});
+	}); */
 	
 	
 	/*

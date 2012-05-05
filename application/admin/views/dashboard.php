@@ -151,7 +151,3 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    var Plexis = new Array();
-    Plexis['build'] = {CMS_BUILD};
-</script>

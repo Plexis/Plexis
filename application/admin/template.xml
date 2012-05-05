@@ -37,7 +37,7 @@
         <css>css/forms.css</css>
         <css>css/tables.css</css>
         <css>css/charts.css</css>
-        <css>css/jquery-ui-1.8.15.custom.css</css>
+        <css>css/jquery-ui-1.8.20.custom.css</css>
         
         <comment>All JavaScript at the bottom, except for Modernizr</comment>
         <js>js/libs/modernizr-2.0.6.min.js</js>

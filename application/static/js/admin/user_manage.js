@@ -1,5 +1,5 @@
 $().ready(function() {
-    var post_url = url + "/ajax/account/" + username;
+    var post_url = Plexis.url + "/ajax/account/" + username;
 
     // Main Ajax posting function for this page.
     function post_account_action(task)

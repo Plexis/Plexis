@@ -263,11 +263,9 @@
     <!-- JavaScript at the bottom for fast page loading -->
     <!-- scripts concatenated and minified via ant build script-->
     <script src="{TEMPLATE_URL}/js/plugins.js"></script> <!-- lightweight wrapper for consolelog, optional -->
-    <script src="{TEMPLATE_URL}/js/libs/jquery-ui-1.8.15.custom.min.js"></script> <!-- jQuery UI -->
     <script src="{TEMPLATE_URL}/js/libs/jquery.uniform.min.js"></script> <!-- Uniform (Look & Feel from forms) -->
     <script src="{TEMPLATE_URL}/js/libs/jquery.form.js"></script> <!-- Forms & Ajax submission -->
     <script src="{TEMPLATE_URL}/js/libs/jquery.tipsy.js"></script> <!-- Tooltips -->
-    <script src="{TEMPLATE_URL}/js/tiny_mce/jquery.tinymce.js"></script><!-- Load TinyMCE -->
     <script src="{TEMPLATE_URL}/js/common.js"></script> <!-- Generic functions -->
     <script src="{TEMPLATE_URL}/js/script.js"></script> <!-- Generic scripts -->
     <!-- End scripts -->

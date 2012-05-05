@@ -1,5 +1,5 @@
 $().ready(function() {
-    var post_url = url + "/ajax/realms";
+    var post_url = Plexis.url + "/ajax/realms";
     /**
      * DataTables
      */
@@ -21,8 +21,8 @@ $().ready(function() {
     
     // ============================================
     // Uninstall Realm
-    $("#realm-table").delegate('.un-install', 'click', function(){
-        var r_id = $(this).attr('name');
+    $("#realm-table").on('click', '.un-install', function(){
+        var r_id = this.name;
         
         if( confirm('Are you sure you want to uninstall realm #' + r_id) )
         {
@@ -35,15 +35,11 @@ $().ready(function() {
                 timeout: 5000, // in milliseconds
                 success: function(result) 
                 {
+                    // Display our Success message, and ReDraw the table so we imediatly see our action
+                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                     if (result.success == true)
                     {
-                        // Display our Success message, and ReDraw the table so we imediatly see our action
-                        $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
                         realmtable.fnDraw();
-                    }
-                    else
-                    {
-                        $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                     }
                 },
                 error: function(request, status, err) 
@@ -56,8 +52,8 @@ $().ready(function() {
     
     // ============================================
     // Make Realm Default
-    $("#realm-table").delegate('.make-default', 'click', function(){
-        var r_id = $(this).attr('name');
+    $("#realm-table").on('click', '.make-default', function(){
+        var r_id = this.name;
         
         // Send our make default command
         $.ajax({
@@ -68,15 +64,11 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
+                // Display our Success message, and ReDraw the table so we imediatly see our action
+                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 if (result.success == true)
                 {
-                    // Display our Success message, and ReDraw the table so we imediatly see our action
-                    $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
                     realmtable.fnDraw();
-                }
-                else
-                {
-                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 }
             },
             error: function(request, status, err) 

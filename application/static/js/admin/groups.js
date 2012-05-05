@@ -1,7 +1,7 @@
 $().ready(function() {
-    var post_url = url + "/ajax/groups";
+    var post_url = Plexis.url + "/ajax/groups";
 
-    /* Tabs */
+    /** Tabs */
     $("#tab-panel-1").createTabs();
 
     /** DataTables */
@@ -21,23 +21,57 @@ $().ready(function() {
         }
     });
     
-    /** Form validation */
-    var validateform = $("#create-form").validate();
-    var validateform = $("#edit-form").validate();
+    /** Create our vote form modal */
+	var Modal = $("#groups-modal").dialog({
+		autoOpen: false,  
+		modal: true, 
+		width: 600,
+        resizable: false,
+		buttons: [{
+			text: "Close", 
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}]
+	});
     
+    /** Form validation */
+    $("#groups-form").validate({
+        rules: {
+            title: {
+                required: true,
+                minlength: 3
+            }
+        }
+    });
 
     /** Create Group Button (Modal popup) */
     $("#create").click(function() {
+
         // Show form, and hide any previous messages
-        $('#create-form-div').dialog({ modal: true, height: 400, width: 500 });
-        $('#create-form').attr('style', '');
-        $('#js_create_message').attr('style', 'display: none;');
-        $('#create-form-div').attr('style', '');
+        $('#js_groups_message').hide();
+        $('#groups-form').show();
+        
+        // Set form Field Values
+        $('#title').attr('value', '');
+        $("#grouptype").val("2");
+        $('#groupid').attr('value', '0');
+        $("#formtype").attr('value', 'create');
+        $('#grouptype').change();
+        
+        // Open the Modal Window
+		Modal.dialog("option", {
+			title: "Create Group"
+		}).dialog("open");
+        
+        // Hide our close window button from view unless needed
+        Modal.parent().find(".ui-dialog-buttonset").hide();
+        
     });
     
     /** Edit Form */
-    $("#groups").delegate('.edit-button', 'click', function(){
-        var name = $(this).attr('name');
+    $("#groups").on('click', '.edit-button', function(){
+        var name = this.name;
         
         $.ajax({
             type: "POST",
@@ -47,26 +81,36 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                $('#edit-form').attr('style', '');
-                $('#edit-form input[name=title]').val(result.group.title);
-                $('#edit-form input[name=id]').val(result.group.group_id);
-                $("#group_type_edit").val( "" + result.type + "").trigger('change');
+                // Show form, and hide any previous messages
+                $('#js_groups_message').hide();
+                $('#groups-form').show();
+                
+                // Set form Field Values
+                $('#title').attr('value', result.group.title);
+                $("#grouptype").val( result.type );
+                $('#groupid').attr('value', name);
+                $("#formtype").attr('value', 'edit');
+                $('#grouptype').change();
+                
+                // Open the Modal Window
+                Modal.dialog("option", {
+                    title: "Edit Group"
+                }).dialog("open");
+                
+                // Hide our close window button from view unless needed
+                Modal.parent().find(".ui-dialog-buttonset").hide();
             },
             error: function(request, status, err) 
             {
-                $('#js_edit_message').attr('class', 'alert error').html('An error occured, Please check your error log.').slideDown(300);
+                $('#groups-form').hide();
+                $('#js_groups_message').attr('class', 'alert error').html('An error occured, Please check your error log.').slideDown(300);
             }
         });
-        
-        // Show form, and hide any previous messages
-        $('#edit-form-div').dialog({ modal: true, height: 400, width: 500 });
-        $('#js_edit_message').attr('style', 'display: none;');
-        $('#edit-form-div').attr('style', '');
     });
     
     /** Delete Button */
-    $("#groups").delegate('.delete-button', 'click', function(){
-        var name = $(this).attr('name');
+    $("#groups").on('click', '.delete-button', function(){
+        var name = this.name;
         
         $.ajax({
             type: "POST",
@@ -76,11 +120,8 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                if (result.success == false)
-                {
-                    // Display our Success message, and ReDraw the table so we imediatly see our action
-                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
-                }
+                // Display our Success message, and ReDraw the table so we imediatly see our action
+                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
                 table.fnDraw();
             },
             error: function(request, status, err) 
@@ -92,62 +133,30 @@ $().ready(function() {
 
     
     /** bind the Create form using 'ajaxForm' */
-    $('#create-form').ajaxForm({
+    $('#groups-form').ajaxForm({
         beforeSubmit: function (arr, data, options)
         {
-            $('#create-form').attr('style', 'display: none');
-            $('#js_create_message').attr('class', 'alert loading').html('Creating...').slideDown(300);
+            $('#groups-form').hide();
+            $('#js_groups_message').attr('class', 'alert loading').html('Creating...').slideDown(300);
             return true;
         },
-        success: create_result,
+        success: save_result,
         resetForm: true,
-        timeout: 5000 
-    });
-    
-    /** bind the Edit form using 'ajaxForm' */
-    $('#edit-form').ajaxForm({
-        beforeSubmit: function (arr, data, options)
-        {
-            $('#edit-form').attr('style', 'display: none');
-            $('#js_edit_message').attr('class', 'alert loading').html('Submitting...').slideDown(300);
-            return true;
-        },
-        success: edit_result,
-        resetForm: false,
         timeout: 5000 
     });
 
     /** Callback function for the Add New Group ajaxForm */
-    function create_result(response, statusText, xhr, $form)  
+    function save_result(response, statusText, xhr, $form)  
     { 
         // Parse the JSON response
         var result = jQuery.parseJSON(response);
+        
+        // Display our Success message, and ReDraw the table so we imediatly see our action
+        $('#js_groups_message').attr('class', 'alert ' + result.type).html(result.message);
+        Modal.parent().find(".ui-dialog-buttonset").show();
         if (result.success == true)
         {
-            // Display our Success message, and ReDraw the table so we imediatly see our action
-            $('#js_create_message').attr('class', 'alert success').html(result.message);
             table.fnDraw();
-        }
-        else
-        {
-            $('#js_create_message').attr('class', 'alert ' + result.type).html(result.message);
-        }
-    }
-    
-    /** Callback function for the Edit Group ajaxForm */
-    function edit_result(response, statusText, xhr, $form)  
-    { 
-        // Parse the JSON response
-        var result = jQuery.parseJSON(response);
-        if (result.success == true)
-        {
-            // Display our Success message, and ReDraw the table so we imediatly see our action
-            $('#js_edit_message').attr('class', 'alert success').html(result.message);
-            table.fnDraw();
-        }
-        else
-        {
-            $('#js_edit_message').attr('class', 'alert ' + result.type).html(result.message);
         }
     }
 });

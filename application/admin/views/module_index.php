@@ -24,9 +24,9 @@
 </div>
 
 <!-- Hidden Install form -->
-<div id="install-form" title="Install Module" style="display: none;">
-    <div id="js_install_message" style="display: none;"></div>
-    <form id="install" class="form" action="{SITE_URL}/ajax/modules" method="post" style="">
+<div id="install-modal">
+    <div id="js_install_message"></div>
+    <form id="install-form" class="form" action="{SITE_URL}/ajax/modules" method="post">
         <input type="hidden" name="action" value="install">
         <div class="_100">
             <p>
