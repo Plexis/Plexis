@@ -371,16 +371,16 @@ class Template
         $this->parse();
         
         // use output buffering to catch the page. We do this so 
-        // we can catch php errors in the template
+        // we can catch php errors in the template as well
         ob_start();
         
         // Extract the variables so $this->variables[ $var ] becomes just " $var "
         extract($this->variables);
         
-        // Eval the page
+        // Eval the page so we can process the php in the template correctly
         eval('?>'. $this->source);
         
-        // Capture the contents and call it a day
+        // Capture the contents so we can do some search and replacing
         $this->source = ob_get_contents();
         ob_end_clean();
         
@@ -388,41 +388,15 @@ class Template
         $Benchmark = load_class('Benchmark');
         $this->source = str_replace('{MEMORY_USAGE}', $Benchmark->memory_usage(), $this->source);
         $this->source = str_replace('{ELAPSED_TIME}', $Benchmark->elapsed_time('system'), $this->source);
-
-        // Do we use Gzip output?
-        if(config('enable_gzip_output') == 1)
-        {
-            // No default content encoding
-            $encoding = false;
-            
-            // If we havent sent headers yet, and our client isnt the w3c validator, attempt to zip the contents
-            if( headers_sent() == FALSE && $_SERVER['HTTP_USER_AGENT'] != 'W3C_Validator' )
-            {
-                if( strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false )
-                {
-                    $encoding = 'x-gzip';
-                }
-                elseif( strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false )
-                {
-                    $encoding = 'gzip';
-                }
-            }
-            
-            // If we have encoding, use it!
-            if( $encoding )
-            {
-                // Send out headers for G-Zip
-                header('Content-Encoding: '.$encoding);
-                header('Cache-Control: must-revalidate');
-                print("\x1f\x8b\x08\x00\x00\x00\x00\x00");
-                $size = strlen($this->source);
-                $this->source = gzcompress($this->source, 5);
-                $this->source = substr($this->source, 0, $size);
-            }
-        }
+        
+        // Start a new output buffer
+        ob_start();
         
         // Echo the page to the browser
         echo $this->source;
+        
+        // flush the buffers
+        ob_end_flush();
     }
     
 /*

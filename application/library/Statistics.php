@@ -54,7 +54,7 @@ class Statistics
             $Ip = sprintf("%u", $Ip);
             
             // Now check the cookie incase the users IP address changes
-            $cookie = $this->Input->cookie('visiter_id', true);
+            $cookie = $this->Input->cookie('visitor_id', true);
 
             // Ip changed checking
             if($Ip != $cookie)
@@ -66,9 +66,31 @@ class Statistics
             }
         
             // Update hit count
-            $query = "INSERT INTO pcms_hits(ip, hits) VALUES('$Ip', 1) ON DUPLICATE KEY UPDATE `hits` = (`hits` +1)";
+            $query = "INSERT INTO pcms_hits(ip, lastseen) VALUES('$Ip', '". time() ."') ON DUPLICATE KEY UPDATE `lastseen` = ". time();
             $this->DB->query( $query )->num_rows();           
         }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: get_hits()
+| ---------------------------------------------------------------
+|
+| This method returns the total hits and unique hits.
+|
+*/
+    public function get_hits()
+    {
+        // Unique views
+        $query = "SELECT COUNT(ip) FROM `pcms_hits`";
+        $unique = $this->DB->query( $query )->fetch_column();
+        
+        // Vists in the last 24 hours
+        $query = "SELECT COUNT(ip) FROM `pcms_hits` WHERE `lastseen` > ". (time() - 86400);
+        $vists = $this->DB->query( $query )->fetch_column();
+        
+        // Return the results :)
+        return array('unique' => $unique, 'today' => $vists);
     }
     
 /*

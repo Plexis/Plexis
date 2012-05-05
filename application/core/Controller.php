@@ -56,6 +56,9 @@ class Controller extends \System\Core\Controller
         // Build the Core Controller
         parent::__construct();
         
+        // Process stats if we arent in ajax mode
+        if($GLOBALS['controller'] != 'ajax' && is_object($this->Statistics)) $this->Statistics->add_hit();
+        
         // Setup the selected users language
         $GLOBALS['language'] = selected_language();
         
@@ -64,23 +67,6 @@ class Controller extends \System\Core\Controller
         
         // Setup the template system
         if($init_template == TRUE) $this->_init_template();
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Constructer: __destruct()
-| ---------------------------------------------------------------
-|
-*/
-    public function __destruct()
-    {
-        // Make sure the output buffers are flushed so the stats
-        // script doesnt slow the cms down ;)
-        if(ob_get_level() > 0) ob_end_flush();
-        
-        // Process stats if we arent in ajax mode
-        if($GLOBALS['controller'] != 'ajax' && is_object($this->Statistics)) 
-            $this->Statistics->add_hit();
     }
     
 /*

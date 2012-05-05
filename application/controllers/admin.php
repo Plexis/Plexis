@@ -941,17 +941,28 @@ class Admin extends Application\Core\Controller
                 ++$ny;
             }
             
-            // Get our stats for this month
+            // Get our registered stats for this month
             $query = "SELECT COUNT(id) AS `count` FROM `pcms_accounts` WHERE `registered` BETWEEN '$y-$m-00 00:00:00' AND '$ny-$nm-00 00:00:00'";
             $array = $this->DB->query( $query )->fetch_row();
             $results[] = array('name' => $months[$m], 'value' => $array['count']);
         }
         
+        // Active in the last 24
+        $time = date("Y-m-d H:i:s", time() - 86400 );
+        $query = "SELECT COUNT(*) FROM `pcms_accounts` WHERE `last_seen` BETWEEN '$time' AND NOW()";
+        $active = $this->DB->query( $query )->fetch_column();
+
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Statistics",
             'page_desc' => "This page allows you to see various statistics about page views and user accounts.",
-            'months' => $results
+            'months' => $results,
+            'account_count' => $this->realm->get_account_count(),
+            'accounts_banned' => $this->realm->get_banned_count(),
+            'inactive_accounts' => $this->realm->get_inactive_account_count(),
+            'active_accounts' => $this->realm->get_active_account_count(),
+            'accounts_active' => $active,
+            'hits' => $this->Statistics->get_hits()
         );
         $this->load->view('stats', $data);
     }
