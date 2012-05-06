@@ -300,10 +300,12 @@
 | @Param: (String) $className - Class needed to be loaded / returned
 | @Param: (String) $type - Basically the folder name where the class
 |   is stored
+| @Param: (Bool) $surpress - set to TRUE to bypass the error screen
+|   if the class fails to initiate, and return false instead
 | @Return: (Object) - Returns the loaded class
 |
 */
-    function load_class($className, $type = 'Core')
+    function load_class($className, $type = 'Core', $surpress = FALSE)
     {
         // Now we need to make sure the user supplied some sort of path
         if(strpos($className, '\\') === FALSE)
@@ -363,8 +365,14 @@
             $Obj = new $className();
         }
         catch(\Exception $e) {
-            show_error('class_init_failed', array($className, $e->getMessage()), E_ERROR);
+            $message = $e->getMessage();
             $Obj = FALSE;
+        }
+        
+        // Display error?
+        if($Obj == FALSE && $surpress == FALSE)
+        {
+            show_error('class_init_failed', array($className, $message), E_ERROR);
         }
 
         // Store this new object in the registery

@@ -126,7 +126,7 @@ class Controller extends \System\Core\Controller
         if($version < CMS_DB_VERSION)
         {
             $updates = array();
-            $path = ROOT . DS . '__updates';
+            $path = APP_PATH . DS . 'plexis'. DS .'update_sqls';
             
             // Open the __updates directory and scan all updates
             $list = @opendir( $path );

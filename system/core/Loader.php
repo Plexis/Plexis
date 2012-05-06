@@ -131,10 +131,12 @@ class Loader
 | @Param: (String) $name - The name of the class, with or without namespacing
 | @Param: (Mixed) $instance - Do we instance the class? May also specify
 |   the instance name (IE: class Test instance as TeStInG)
+| @Param: (Bool) $surpress - set to TRUE to bypass the error screen
+|   if the class fails to initiate, and return false instead
 | @Return: (Object) Returns the library class
 |
 */
-    public function library($name, $instance = TRUE)
+    public function library($name, $instance = TRUE, $surpress = FALSE)
     {
         // Make sure periods are replaced with slahes if there is any
         if(strpos($name, ".") !== FALSE)
@@ -143,7 +145,7 @@ class Loader
         }
         
         // Load the Class
-        $class = load_class($name, 'Library');
+        $class = load_class($name, 'Library', $surpress);
         
         // Do we instance this class?
         if($instance !== FALSE)
@@ -172,10 +174,12 @@ class Loader
 |   the DB config file.
 | @Param: (Mixed) $instance - If you want to instance the connection
 |   in the controller, set to TRUE, or the instance variable desired
+| @Param: (Bool) $surpress - set to TRUE to bypass the error screen
+|   if the connection failes, and just return false
 | @Return: (Object) Returns the database object / connection
 |
 */
-    public function database($args, $instance = TRUE)
+    public function database($args, $instance = TRUE, $surpress = FALSE)
     {
         // Load our connection settings. We can allow custom connection arguments
         if(!is_array($args))
@@ -230,8 +234,13 @@ class Loader
             $Obj = new $dispatch( $info );
         }
         catch(\Exception $e) {
-            show_error('db_connect_error', array( $info['database'], $info['host'], $info['port'] ), E_ERROR);
             $Obj = FALSE;
+        }
+        
+        // Error?
+        if($surpress == FALSE && $Obj == FALSE)
+        {
+            show_error('db_connect_error', array( $info['database'], $info['host'], $info['port'] ), E_ERROR);
         }
         
         // Store the connection in the registry

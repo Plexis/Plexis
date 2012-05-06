@@ -178,9 +178,11 @@ class Account extends Application\Core\Controller
         if( $enable_captcha == TRUE )
         {
             $Captcha = $this->load->library('Captcha');
-            if( $Captcha->is_compatible() == FALSE )
+            if( $Captcha == FALSE )
             {
+                // Captcha class doesnt work, disable it in the config
                 config_set('enable_captcha', false);
+                config_save();
                 $enable_captcha = FALSE;
             }
             unset($Captcha);
@@ -204,7 +206,9 @@ class Account extends Application\Core\Controller
                 {
                     // If key is posted, If so we must validate it
                     $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($_POST['key']))->fetch_row();
-                    if($result == FALSE || $result['usedby'] >= 0) //'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
+                    
+                    // 'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
+                    if($result == FALSE || $result['usedby'] >= 0) 
                     {
                         // Key form
                         output_message('error', 'reg_failed_invalid_key');
@@ -230,7 +234,9 @@ class Account extends Application\Core\Controller
             {
                 // Process if key is valid
                 $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($key))->fetch_row();
-                if($result == FALSE || $result['usedby'] >= 0) //'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
+                
+                // 'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
+                if($result == FALSE || $result['usedby'] >= 0) 
                 {
                     // Reset the Registration key and start over... load the Key form
                     $this->Input->set_cookie('reg_key', $key, (time() -1));

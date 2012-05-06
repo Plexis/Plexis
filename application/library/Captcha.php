@@ -25,9 +25,6 @@ class Captcha
 
     // An array of all our fonts
     protected $fonts;
-    
-    // Is compatible, meaning GD library is installed
-    protected $is_compatible = TRUE;
 
 /*
 | ---------------------------------------------------------------
@@ -43,23 +40,8 @@ class Captcha
         // Make sure we can even run this show!
         if(!function_exists('imagettftext'))
         {
-            log_message('imagettftext() not found. GD library must not be installed. Captcha failed to start.');
-            $this->is_compatible = FALSE;
+            throw new \Exception('imagettftext() not found. GD library must not be installed. Captcha failed to start.');
         }
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: is_compatible()
-| ---------------------------------------------------------------
-|
-| This Returns a bool based on if the library is compatible with
-|   this webserver... Should be used right after constructing
-|
-*/
-    public function is_compatible()
-    {
-        return $this->is_compatible;
     }
 
 /*
