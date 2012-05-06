@@ -20,7 +20,7 @@ $().ready(function()
     $("#vote").click(function() 
     {
         // Start by getting out ID out of the button name
-        var id = $(this).attr('name');
+        var id = this.name;
         
         // Open the Modal Window
 		Modal.dialog("option", {
@@ -38,14 +38,14 @@ $().ready(function()
         $("#vote-window").html( vote_window_html );
 
         // If the vote site is online, Lock the UI and open a new tab!
-        childWindow = window.open( url + "/account/vote/out/" + id);
+        childWindow = window.open( Plexis.url + "/account/vote/out/" + id);
         setTimeout(function() 
         {
             // Check to make sure the vote window is still open
             if(childWindow && !childWindow.closed)
             {
                 // submit the vote
-                $.post(url + "/ajax/vote", { action : 'vote', site_id : id },
+                $.post( Plexis.url + "/ajax/vote", { action : 'vote', site_id : id },
                     function(response)
                     {
                         // Parse the JSON response

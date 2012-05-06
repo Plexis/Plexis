@@ -2,11 +2,13 @@
  * DataTables
  */
  $().ready(function() {
+    var realm_id = Plexis.realm_id;
+
     // Bind the Onlinelist table to Datatables
     var onlinelist = $('#online-table').dataTable({
         "bServerSide": true,
         "bSortClasses": false,
-        "sAjaxSource": url + "/ajax/onlinelist/" + realm_id,
+        "sAjaxSource": Plexis.url + "/ajax/onlinelist/" + Plexis.realm_id,
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json', 

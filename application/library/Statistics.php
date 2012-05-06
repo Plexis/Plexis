@@ -47,6 +47,7 @@ class Statistics
     {
         // Get IP address and URL info
         $Ip = ip2long( $this->get_ip() );
+        $Time = time();
 
         // Only add hit if the IP is valid
         if( $Ip != false && $Ip != -1 )
@@ -55,19 +56,44 @@ class Statistics
             
             // Now check the cookie incase the users IP address changes
             $cookie = $this->Input->cookie('visitor_id', true);
-
-            // Ip changed checking
-            if($Ip != $cookie)
+            
+            // No cookie?
+            if($cookie == false)
             {
-                // Set a new cookie and update current records, expire time 3 years :)
-                $this->Input->set_cookie('visitor_id', $Ip, (time() + 94608000));
-                $query = "UPDATE `pcms_hits` SET `ip` = '$Ip' WHERE `ip` = '$cookie'";
-                $this->DB->query( $query );
+                // Set a cookie
+                $this->Input->set_cookie('visitor_id', $Ip ."_". $Time, ($Time + 94608000));
+                $query = "INSERT INTO pcms_hits(ip, lastseen) VALUES('$Ip', '". $Time ."') ON DUPLICATE KEY UPDATE `lastseen` = ". $Time;
+                $this->DB->query( $query );  
             }
-        
-            // Update hit count
-            $query = "INSERT INTO pcms_hits(ip, lastseen) VALUES('$Ip', '". time() ."') ON DUPLICATE KEY UPDATE `lastseen` = ". time();
-            $this->DB->query( $query )->num_rows();           
+            else
+            {
+                // Make sure the cookie is valid!
+                if(strpos($cookie, '_') === false)
+                {
+                    $this->Input->set_cookie('visitor_id', $Ip ."_". $Time, ($Time + 94608000));
+                }
+                else
+                {
+                    // Explode the cookie
+                    list($i, $t) = explode('_', $cookie);
+                    
+                    // If the IP doesnt match, or the cookie was set over 15 minutes ago
+                    if($Ip != $i || ($Time - 900) > $t)
+                    {
+                        // Set a new cookie and update current records, expire time 3 years :)
+                        $this->Input->set_cookie('visitor_id', $Ip ."_". $Time, ($Time + 94608000));
+                        $query = "UPDATE `pcms_hits` SET `ip` = '$Ip', `lastseen` = '".$Time ."' WHERE `ip` = ?";
+                        $result = $this->DB->query( $query, array($i) )->num_rows();
+                        
+                        // If the update failed, just insert new record
+                        if($result == false)
+                        {
+                            $query = "INSERT INTO pcms_hits(ip, lastseen) VALUES('$Ip', '". $Time ."') ON DUPLICATE KEY UPDATE `lastseen` = ". $Time;
+                            $this->DB->query( $query );
+                        }
+                    }
+                }
+            }       
         }
     }
     
