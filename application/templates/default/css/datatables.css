@@ -1,10 +1,19 @@
+.datatable {
+	clear: both;
+	width: 100%;
+	margin: 0 auto;
+}
 .dataTables_wrapper
 {
     margin-bottom: 25px;
 }
+.dataTables_wrapper .top {
+	padding: 5px 10px;
+	border-bottom: 1px solid #949494;
+}
 .dataTables_filter label
 {
-    padding-top: 2px;
+    padding-top: 5px;
     display: table-row;
     width: 225px;
     float: right;
@@ -19,12 +28,56 @@
 }
 .dataTables_length label
 {
+    padding: 5px;
     margin: 0;
 }
+.datatable table thead th {
+	vertical-align: middle;
+	text-align: left;
+	padding: 8px 13px;
+	border-left: 1px solid #fff;
+	border-right: 1px solid #c3c3c3;
+	cursor: pointer;
+}
+
+.datatable tbody th, .datatable tbody td, .datatable tfoot th, .datatable tfoot td {
+	vertical-align: top;
+	text-align: left;
+	padding: 7px;
+	border-left: 1px dotted #333333;
+}
+
+.datatable thead th:first-child {
+	border-left: none;
+}
+
+.datatable thead th:last-child {
+	border-right: none;
+}
+
+.datatable thead th {
+	vertical-align: middle;
+	text-align: left;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.datatable tbody th:first-child, .datatable tbody .th:first-child, .datatable tbody td:first-child, .datatable tfoot th:first-child, .datatable tfoot td:first-child {
+	border-left: none;
+}
+
+.datatable tbody tr.even td {
+	background: #222222;
+}
+
+.datatable tbody tr:hover th, .datatable tbody tr:hover .th, .datatable tbody tr:hover td {
+	background: #666666;
+}
+
+
 .dataTables_paginate {
-    width: 100%;
-    text-align: center;
-	margin: 5px auto;
+    float: right;
+    padding: 5px;
 }
 .paginate_button, .paginate_active {
 	background-color: #666;
@@ -36,9 +89,8 @@
 	cursor: pointer;
 }
 .dataTables_info {
-    width: 100%;
-    text-align: center;
-	margin: 0 auto;
+	float: left;
+    padding: 5px;
 }
 .paginate_button_disabled {
 	cursor: default;
@@ -55,4 +107,14 @@
 
 .last {
 	border-radius: 0 3px 3px 0;
+}
+
+.css_right {
+	float: right;
+}
+
+.paging_full_numbers .ui-button {
+    padding: 2px 6px;
+    margin: 0;
+    cursor: pointer;
 }

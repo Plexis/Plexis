@@ -5,21 +5,21 @@
         <br />
         <center>
             Change Realm: <br />
-            <select id="realm-changer">
+            <select id="realm-changer" style="min-width:150px; text-align:center;">
                 {realm_options}
                     {value}
                 {/realm_options}
             </select>
         </center>
         <br /><br />
-        <table id="online-table" style="clear: both; text-align: center;">
+        <table id="online-table" cellpadding="0" cellspacing="0" border="0" class="datatable" style="clear: both; text-align: center;">
             <thead>
                 <tr>
-                    <th scope="col" width="25px;">Id</th>
+                    <th scope="col">Id</th>
                     <th scope="col">Name</th>
-                    <th scope="col" width="30px;">Level</th>
-                    <th scope="col" width="30px;">Race</th>
-                    <th scope="col" width="30px;">Class</th>
+                    <th scope="col">Level</th>
+                    <th scope="col">Race</th>
+                    <th scope="col">Class</th>
                     <th scope="col">Zone</th>
                 </tr>
             </thead>

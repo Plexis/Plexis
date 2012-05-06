@@ -8,6 +8,11 @@
     var onlinelist = $('#online-table').dataTable({
         "bServerSide": true,
         "bSortClasses": false,
+        "sPaginationType": "full_numbers",
+        "bJQueryUI": true,
+        "oLanguage": {
+          "sZeroRecords": "There are no characters Online"
+        },
         "sAjaxSource": Plexis.url + "/ajax/onlinelist/" + Plexis.realm_id,
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
@@ -20,12 +25,17 @@
         }
     });
     
+    // Set our current realm value
+    $('#realm-changer').val( realm_id ).change();
+    
     $('#realm-changer').change(function() {
-        // select realm
+        // Get our selected realm
         realm_id = $('#realm-changer').val();
+        $('#realm-changer').val( realm_id ).change();
+        
+        // Load the character list view ajax
         onlinelist.fnReloadAjax( url + "/ajax/onlinelist/" + realm_id );
         $('#realm-name').html('<h3>' + $("#realm-changer option[value='" + realm_id + "']").text() + '</h3>');
-
     });
     
     // Set the name of the current realm of course ;)
