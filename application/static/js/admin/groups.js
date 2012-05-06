@@ -1,9 +1,6 @@
 $().ready(function() {
     var post_url = Plexis.url + "/ajax/groups";
 
-    /** Tabs */
-    $("#tab-panel-1").createTabs();
-
     /** DataTables */
     var table = $('#groups').dataTable({
         "bServerSide": true,

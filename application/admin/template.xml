@@ -17,6 +17,8 @@
     <config>
         <controller_view_paths>false</controller_view_paths>
         <default_layout>layout</default_layout>
+        <js_folder>js</js_folder>
+        <css_folder>css</css_folder>
     </config>
 
     <head>
@@ -28,18 +30,19 @@
         <favicon type="image/png">img/icons/favicon.png</favicon>
         
         <comment>CSS concatenated and minified via ant build script</comment>
-        <css>css/style.css</css>
-        <css>css/960.fluid.css</css>
-        <css>css/main.css</css>
-        <css>css/buttons.css</css>
-        <css>css/lists.css</css>
-        <css>css/typography.css</css>
-        <css>css/forms.css</css>
-        <css>css/tables.css</css>
-        <css>css/charts.css</css>
-        <css>css/jquery-ui-1.8.20.custom.css</css>
+        <css>style.css</css>
+        <css>960.fluid.css</css>
+        <css>main.css</css>
+        <css>buttons.css</css>
+        <css>lists.css</css>
+        <css>typography.css</css>
+        <css>forms.css</css>
+        <css>tables.css</css>
+        <css>charts.css</css>
+        <css>jquery-ui-1.8.20.custom.css</css>
         
         <comment>All JavaScript at the bottom, except for Modernizr</comment>
-        <js>js/libs/modernizr-2.0.6.min.js</js>
+        <js>libs/modernizr-2.0.6.min.js</js>
+        <js>libs/jquery.dataTables.js</js>
     </head>
 </template> 

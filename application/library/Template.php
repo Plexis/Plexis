@@ -71,6 +71,52 @@ class Template
         $this->load = load_class('Loader');
         $this->session = $this->load->library('Session');
         $this->parser = $this->load->library('Parser');
+        
+        // Set basic headings so they can be modified later!
+        $this->append_metadata("<!-- Basic Headings -->")
+             ->set_metadata('title', config('site_title'))
+             ->set_metadata('keywords', config('meta_keywords'))
+             ->set_metadata('description', config('meta_description'))
+             ->set_metadata('generator', 'Plexis')
+             ->append_metadata("") // Added whitespace
+             ->append_metadata("<!-- Content type, And cache control -->")
+             ->set_metadata('content-type', 'text/html; charset=UTF-8', 'http-equiv')
+             ->set_metadata('cache-control', 'no-cache', 'http-equiv')
+             ->set_metadata('expires', '-1', 'http-equiv');
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: config()
+| ---------------------------------------------------------------
+|
+| Sets template config options
+|
+| @Param: $params - A Config key OR An array of template config 
+|   options ( array($key => $value) )
+| @Param: $value - The config value if $params is a config key string 
+|
+*/	
+    public function config($params, $value = null)
+    {
+        if(is_array($params))
+        {
+            foreach($params as $key => $v)
+            {
+                if(isset($this->config[$key]))
+                {
+                    $this->config[$key] = $v;
+                }
+            }
+        }
+        else
+        {
+            if(isset($this->config[$params]))
+            {
+                $this->config[$params] = $value;
+            }
+        }
+        return $this;
     }
 
 /*
@@ -115,13 +161,14 @@ class Template
 | Function: set_template_path()
 | ---------------------------------------------------------------
 |
-| Sets the template path from the Application folder
+| Sets the template path from the Cms Root folder
 |
 */
-    public function set_template_path($path = 'templates') 
+    public function set_template_path($path = 'application/template') 
     {
         // Set template path
-        $this->template['http_path'] = BASE_URL ."/application/". str_replace( '\\', '/', $path );
+        $path = trim($path, '/\\');
+        $this->template['http_path'] = BASE_URL ."/" . str_replace( '\\', '/', $path );
         $this->template['path'] = str_replace( array('/', '\\'), DS, $path );
         return $this;
     }
@@ -131,8 +178,7 @@ class Template
 | Function: set_controller()
 | ---------------------------------------------------------------
 |
-| This method is used by the admin panel to soft set the module
-| view path to true
+| This method is used to manually overried the controller path
 |
 */
 
@@ -143,54 +189,36 @@ class Template
 
     }
 
+    
 /*
 | ---------------------------------------------------------------
-| Function: set_delimiters()
+| Template Header Building Functions
 | ---------------------------------------------------------------
-|
-| Sets the template config options
-|
-| @Param: $params - An array of template config options
-|
-*/	
-    public function config($params, $value = null)
-    {
-        if(is_array($params))
-        {
-            foreach($params as $key => $v)
-            {
-                if(isset($this->config[$key]))
-                {
-                    $this->config[$key] = $v;
-                }
-            }
-        }
-        else
-        {
-            if(isset($this->config[$params]))
-            {
-                $this->config[$params] = $value;
-            }
-        }
-        return $this;
-    }
-    
+*/
+
+  
 /*
 | ---------------------------------------------------------------
 | Function: add_script()
 | ---------------------------------------------------------------
 |
-| This method adds a JS scr to the header
+| This method adds a JS scr to the header in the template
 |
-| @Param: $path - The path to the JS files. Must be from the 
-|   cms root folder... (Ex: "application/static/js/file.js")
-|   of a full http path
+| @Param: $path - This can be 1 of 3 things...
+|   1) The path to the JS files. Must be from the 
+|       cms root folder... (Ex: "application/static/js/file.js")
+|       of a full http path
+|   2) Js filename. In which the Application/static/js folder is
+|       used as the path, or if the JS file exists in the template
+|       JS folder, that is loaded instead.
+|   3) A full http:// path to the js file
 |
 */
 
     public function add_script($path)
     {
-        $this->jsfiles[] = $path;
+        $name = basename($path);
+        $this->jsfiles[$name] = $path;
         return $this;
     }
     
@@ -199,17 +227,19 @@ class Template
 | Function: add_css()
 | ---------------------------------------------------------------
 |
-| This method adds a CSS scr to the header
+| This method adds a CSS scr to the header in the template
 |
-| @Param: $path - The path to the JS files. Must be from the 
-|   cms root folder... (Ex: "application/static/js/file.js")
-|   of a full http path
+| @Param: $path - This can be 1 of 2 things...
+|   1) Css filename. In which the <template_path>/<css_folder> is
+|       used as the path.
+|   3) A full http:// path to the Css file
 |
 */
 
     public function add_css($path)
     {
-        $this->cssfiles[] = $path;
+        $name = basename($path);
+        $this->cssfiles[$name] = $path;
         return $this;
     }
     
@@ -262,30 +292,34 @@ class Template
 */
     public function set_metadata($name, $content, $type = 'meta')
     {
+        // Convert our name and contents to html friendly
         $name = htmlspecialchars(strip_tags($name));
         $content = htmlspecialchars(strip_tags($content));
+        
+        // if name is title, then we can process the type as title!
+        if($name == 'title') $type = 'title';
 
         switch($type)
         {
             case 'meta':
                 $this->_metadata[$name] = '<meta name="'.$name.'" content="'.$content.'"/>';
-            break;
+                break;
             
             case 'http-equiv':
                 $this->_metadata[$name] = '<meta http-equiv="'.$name.'" content="'.$content.'"/>';
-            break;
+                break;
 
             case 'link':
                 $this->_metadata[$content] = '<link rel="'.$name.'" href="'.$content.'"/>';
-            break;
+                break;
             
             case 'title':
                 $this->_metadata['title'] = '<title>'.$content.'</title>';
-            break;
+                break;
             
             case 'base':
                 $this->_metadata['base'] = '<base href="'.$content.'" target="_self"/>';
-            break;
+                break;
         }
 
         return $this;
@@ -293,54 +327,11 @@ class Template
     
 /*
 | ---------------------------------------------------------------
-| Function: load_template_xml()
+| Template Rendering Functions
 | ---------------------------------------------------------------
-|
-| This method loads the template xml, and sets the template info
-|   into an array
-|
-| @Return (None)
-|
 */
-    public function load_template_xml($path = NULL)
-    {
-        // Shorten up the text here
-        if($path == NULL)
-        {
-            $file = $this->template['path'] . DS .'template.xml';
-        }
-        else
-        {
-            $path = str_replace( array('/', '\\'), DS, $path );
-            $file = APP_PATH . DS . $path . DS .'template.xml';
-        }
-        
-        // Load the template xml fil if it exists
-        if(file_exists( $file ))
-        {
-            if($path == NULL)
-            {
-                $this->xml = simplexml_load_file($file);
-            }
-            else
-            {
-                return simplexml_load_file($file);
-            }
-        }
-        else
-        {
-            if($path == NULL)
-            {
-                show_error('Unable to load the template.xml');
-            }
-            else
-            {
-                return FALSE;
-            }
-        }
-        return;
-    }
-    
+
+
 /*
 | ---------------------------------------------------------------
 | Function: render()
@@ -525,6 +516,14 @@ class Template
         // we are done
         return;
     }
+
+    
+/*
+| ---------------------------------------------------------------
+| Template Loading / Helper Methods
+| ---------------------------------------------------------------
+*/
+
     
 /*
 | ---------------------------------------------------------------
@@ -567,7 +566,7 @@ class Template
     protected function load_view()
     {
         // First we check to see if the template has a custom view for this page
-        $ext = NULL;
+        $ext = '';
         
         // Determine our path
         if($this->_is_module && $this->config['module_view_paths'])
@@ -602,6 +601,56 @@ class Template
 
         // If we are here, we have no view to load
         show_error('missing_page_view', array( $this->view_file .'.php' ));
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: load_template_xml()
+| ---------------------------------------------------------------
+|
+| This method loads the template xml, and sets the template info
+|   into an array
+|
+| @Return (None)
+|
+*/
+    public function load_template_xml($path = NULL)
+    {
+        // Shorten up the text here
+        if($path == NULL)
+        {
+            $file = $this->template['path'] . DS .'template.xml';
+        }
+        else
+        {
+            $path = str_replace( array('/', '\\'), DS, $path );
+            $file = APP_PATH . DS . $path . DS .'template.xml';
+        }
+        
+        // Load the template xml fil if it exists
+        if(file_exists( $file ))
+        {
+            if($path == NULL)
+            {
+                $this->xml = simplexml_load_file($file);
+            }
+            else
+            {
+                return simplexml_load_file($file);
+            }
+        }
+        else
+        {
+            if($path == NULL)
+            {
+                show_error('Unable to load the template.xml');
+            }
+            else
+            {
+                return FALSE;
+            }
+        }
+        return;
     }
     
 /*
@@ -670,176 +719,13 @@ class Template
         return $source;
     }
     
+  
 /*
 | ---------------------------------------------------------------
-| Function: _append_template_metadata()
+| Template Header Compilation / Initialization Methods
 | ---------------------------------------------------------------
-|
-| This method sets all the meta data from the template.xml
-|
 */
-    protected function _append_template_metadata()
-	{
-		// Add the template.xml head data to the metadata
-        if( $this->xml->head )
-        {
-            foreach($this->xml->head->children() as $head)
-            {
-                $path = $this->template['http_path'] . '/';
-                switch( $head->getName() )
-                {
-                    case "comment":
-                        $this->append_metadata(''); // Add a space ontop
-                        $this->append_metadata('<!-- '. wordwrap($head, 125) .' -->');
-                    break;
-                    
-                    case "css":
-                        $this->set_metadata('stylesheet', $path . $head, 'link');
-                    break;
-                    
-                    case "js":
-                        $this->append_metadata('<script type="text/javascript" src="'. $path . $head .'"></script>');
-                    break;
-                    
-                    case "favicon":
-                        // Check to see if we are generous enough to have a filetype
-                        if(isset($head['type']))
-                        {
-                            $ext = $head['type'];
-                        }
-                        else
-                        {
-                            // We need to manually get the image mime type :(
-                            $ext = pathinfo($this->template['path'] . DS . $head, PATHINFO_EXTENSION);
-                            $ext = "image/".$ext;
-                        }
-                        $this->append_metadata('<link rel="icon" type="'. $ext .'" href="'. $path . $head .'" />');
-                    break;
-                    
-                    case "meta":
-                        $quit = FALSE;
-                        $i = 0;
-                        foreach( $head->attributes() as $k => $v )
-                        {
-                            // Check to see if we are overwriting one thats set already
-                            if($k == 'name' || $k == 'http-equiv')
-                            {
-                                if($k == 'name') $this->set_metadata($v, $head);
-                                if($k == 'http-equiv') $this->set_metadata($v, $head, 'http-equiv');
-                                $quit = TRUE;
-                                break;
-                            }
-                            $attr .= $k .'="'.$v.'" ';
-                            ++$i;
-                        }
-                        
-                        // IF quit is still false, we didnt overwright anything
-                        if($quit == FALSE && $i > 0) $this->append_metadata('<meta '.$attr.' content="'.$head.'" />');
-                    break;
-                }
-            }
-        }
-	}
-    
-/*
-| ---------------------------------------------------------------
-| Function: _build_header()
-| ---------------------------------------------------------------
-|
-| This method fills the <head> tag with set meta data
-|
-| @Return (String) The formatted head string
-|
-*/
-    protected function _build_header()
-    {
 
-        // Convert our JS vars into a string :)
-        $string = 
-        "        var Plexis = {
-            url : '". SITE_URL ."',
-            realm_id : ". get_realm_cookie() .",
-            template_url : '{TEMPLATE_URL}',
-        }\n";
-        foreach($this->jsvars as $key => $val)
-        {
-            // Format the var based on type
-            $val = (is_numeric($val)) ? $val : '"'. $val .'"';
-            $string .= "        var ". $key ." = ". $val .";\n";
-        }
-        
-        // Remove last whitespace
-        $string = rtrim($string);
-        
-        // Setup the basic static headings
-        $this->append_metadata("<!-- Basic Headings -->")
-             ->set_metadata('title', config('site_title'), 'title')
-             ->set_metadata('keywords', config('meta_keywords'))
-             ->set_metadata('description', config('meta_description'))
-             ->set_metadata('generator', 'Plexis')
-             ->append_metadata("") // Added whitespace
-             ->append_metadata("<!-- Content type, And cache control -->")
-             ->set_metadata('content-type', 'text/html; charset=UTF-8', 'http-equiv')
-             ->set_metadata('cache-control', 'no-cache', 'http-equiv')
-             ->set_metadata('expires', '-1', 'http-equiv')
-             ->append_metadata("") // Add whitespace
-             ->append_metadata("<!-- Include jQuery Scripts -->")
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery-ui-1.8.20.custom.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.validate.min.js"></script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.dataTables.min.js"></script>')
-             ->append_metadata("") // Add whitespace
-             ->append_metadata("<!-- Define Global Vars and Include Plexis Static JS Scripts -->")
-             ->append_metadata(
-    '<script type="text/javascript">
-'. $string .'
-    </script>')
-             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/plexis.js"></script>'
-        );
-        
-        
-        // Append the template meta data
-        $this->_append_template_metadata();
-        
-        // Append loaded css files
-        if( !empty($this->cssfiles) )
-        {
-            $this->append_metadata(""); // Add whitespace
-            $this->append_metadata("<!-- Include Controller Defined Css Files -->");
-            foreach($this->cssfiles as $f)
-            {
-                $this->set_metadata('stylesheet', $f, 'link');
-            }
-        }
-        
-        // Append loaded js files
-        if( !empty($this->jsfiles) )
-        {
-            $this->append_metadata(""); // Add whitespace
-            $this->append_metadata("<!-- Include Controller Defined JS Files -->");
-            foreach($this->jsfiles as $j)
-            {
-                $this->append_metadata('<script type="text/javascript" src="'. $j .'"></script>');
-            }
-        }
-        
-        // Add the view if we have one
-        $line = $this->view_js_string();
-        if($line != false)
-        {
-            $this->append_metadata( '' );
-            $this->append_metadata( "<!-- Include the page view JS file -->" );
-            $this->append_metadata( $line );
-        }
-
-        // Now, we build the header into a string
-        $head = "";
-        foreach($this->_metadata as $data)
-        {
-            $head .= "\t". trim($data) . "\n";
-        }
-        return $head;
-    }
 
 /*
 | ---------------------------------------------------------------
@@ -857,7 +743,7 @@ class Template
         if($this->template['path'] == NULL) $this->set_template_path();
 
         // set the absolute template path now
-        $this->template['path'] = APP_PATH . DS . $this->template['path'];
+        $this->template['path'] = ROOT . DS . $this->template['path'];
         
         // Load the template information
         if($this->xml == NULL) $this->load_template_xml();
@@ -905,5 +791,210 @@ class Template
         // we are done
         return;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: _build_header()
+| ---------------------------------------------------------------
+|
+| This method fills the <head> tag with set meta data
+|
+| @Return (String) The formatted head string
+|
+*/
+    protected function _build_header()
+    {
+        // Convert our JS vars into a string :)
+        $string = 
+        "        var Plexis = {
+            url : '". SITE_URL ."',
+            realm_id : ". get_realm_cookie() .",
+            template_url : '{TEMPLATE_URL}',
+        }\n";
+        foreach($this->jsvars as $key => $val)
+        {
+            // Format the var based on type
+            $val = (is_numeric($val)) ? $val : '"'. $val .'"';
+            $string .= "        var ". $key ." = ". $val .";\n";
+        }
+        
+        // Remove last whitespace
+        $string = rtrim($string);
+        
+        // Setup the basic static headings
+        $this->append_metadata("") // Add whitespace
+             ->append_metadata("<!-- Include jQuery Scripts -->")
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery-ui.js"></script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/jquery.validate.js"></script>')
+             ->append_metadata("") // Add whitespace
+             ->append_metadata("<!-- Define Global Vars and Include Plexis Static JS Scripts -->")
+             ->append_metadata(
+    '<script type="text/javascript">
+'. $string .'
+    </script>')
+             ->append_metadata('<script type="text/javascript" src="'. BASE_URL .'/application/static/js/plexis.js"></script>'
+        );
+        
+        // Append the template meta data
+        $this->_append_template_metadata();
+        
+        // Append loaded css files
+        if( !empty($this->cssfiles) )
+        {
+            $this->append_metadata(""); // Add whitespace
+            $this->append_metadata("<!-- Include Controller Defined Css Files -->");
+            foreach($this->cssfiles as $f)
+            {
+                // Find the path :O
+                if(preg_match('@^(ftp|http(s)?)://@i', $f))
+                {
+                    // We have a full url
+                    $src = $f;
+                }
+                elseif(strpos($f, 'application/') !== false)
+                {
+                    // Application Path
+                    $f = ltrim($f, '/');
+                    $src = BASE_URL . '/'. $f;
+                }
+                else
+                {
+                    // Just a filename
+                    $src = $this->template['http_path'] . '/' . trim($this->xml->config->css_folder, '/') . '/' . $f;
+                }
+                
+                // Add the stylesheet to the header
+                $this->set_metadata('stylesheet', $f, 'link');
+            }
+        }
+        
+        // Append loaded js files
+        if( !empty($this->jsfiles) )
+        {
+            $this->append_metadata(""); // Add whitespace
+            $this->append_metadata("<!-- Include Controller Defined JS Files -->");
+            foreach($this->jsfiles as $j)
+            {
+                // Find the path :O
+                if(preg_match('@^(ftp|http(s)?)://@i', $j))
+                {
+                    // We have a full url
+                     print_r($j); die();
+                    $src = $j;
+                }
+                elseif(strpos($j, 'application/') !== false)
+                {
+                    // Application Path
+                    $j = ltrim($j, '/');
+                    $src = BASE_URL . '/'. $j;
+                }
+                else
+                {
+                    // Just a filename
+                    $path = $this->template['path'] . DS . trim($this->xml->config->js_folder, '/') . DS . $j;
+                    if(file_exists( str_replace(array('/', '\\'), DS, $path) ))
+                    {
+                        $src = $this->template['http_path'] . '/' . trim($this->xml->config->js_folder, '/') . '/' . $j;
+                    }
+                    else
+                    {
+                        $src = BASE_URL . '/application/static/js/'. $j;
+                    }
+                }
+                
+                // Add the js path
+                $this->append_metadata('<script type="text/javascript" src="'. $src .'"></script>');
+            }
+        }
+        
+        // Add the view if we have one
+        $line = $this->view_js_string();
+        if($line != false)
+        {
+            $this->append_metadata( '' );
+            $this->append_metadata( "<!-- Include the page view JS file -->" );
+            $this->append_metadata( $line );
+        }
+
+        // Now, we build the header into a string
+        $head = "";
+        foreach($this->_metadata as $data)
+        {
+            $head .= "\t". trim($data) . "\n";
+        }
+        return $head;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: _append_template_metadata()
+| ---------------------------------------------------------------
+|
+| This method sets all the meta data from the template.xml
+|
+*/
+    protected function _append_template_metadata()
+	{
+		// Add the template.xml head data to the metadata
+        if( $this->xml->head )
+        {
+            foreach($this->xml->head->children() as $head)
+            {
+                $path = $this->template['http_path'] . '/';
+                switch( $head->getName() )
+                {
+                    case "comment":
+                        $this->append_metadata(''); // Add a space ontop
+                        $this->append_metadata('<!-- '. wordwrap($head, 125) .' -->');
+                        break;
+                    
+                    case "css":
+                        $this->set_metadata('stylesheet', $path . trim($this->xml->config->css_folder, '/') . '/'. $head, 'link');
+                        break;
+                    
+                    case "js":
+                        $this->append_metadata('<script type="text/javascript" src="'. $path . trim($this->xml->config->js_folder, '/') . '/'. $head .'"></script>');
+                        break;
+                    
+                    case "favicon":
+                        // Check to see if we are generous enough to have a filetype
+                        if(isset($head['type']))
+                        {
+                            $ext = $head['type'];
+                        }
+                        else
+                        {
+                            // We need to manually get the image mime type :(
+                            $ext = pathinfo($this->template['path'] . DS . $head, PATHINFO_EXTENSION);
+                            $ext = "image/".$ext;
+                        }
+                        $this->append_metadata('<link rel="icon" type="'. $ext .'" href="'. $path . $head .'" />');
+                        break;
+                    
+                    case "meta":
+                        $quit = FALSE;
+                        $i = 0;
+                        foreach( $head->attributes() as $k => $v )
+                        {
+                            // Check to see if we are overwriting one thats set already
+                            if($k == 'name' || $k == 'http-equiv')
+                            {
+                                if($k == 'name') $this->set_metadata($v, $head);
+                                if($k == 'http-equiv') $this->set_metadata($v, $head, 'http-equiv');
+                                $quit = TRUE;
+                                break;
+                            }
+                            $attr .= $k .'="'.$v.'" ';
+                            ++$i;
+                        }
+                        
+                        // IF quit is still false, we didnt overwright anything
+                        if($quit == FALSE && $i > 0) $this->append_metadata('<meta '.$attr.' content="'.$head.'" />');
+                        break;
+                }
+            }
+        }
+	}
 }
 // EOF

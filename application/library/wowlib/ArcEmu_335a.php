@@ -502,9 +502,9 @@ class ArcEmu_335a
   
         /* 
         * Dwsc: Array of database columns which should be read and sent back to DataTables. 
-        * Format: id, name, character level, race ID, class ID, Gender ID, and Zone ID
+        * Format: id, name, character level, race ID, class ID, Gender ID, and Zone ID, Account ID, and status
         */
-        $cols = array( 'guid', 'name', 'level', 'race', 'class', 'gender', 'zoneId', 'account' );
+        $cols = array( 'guid', 'name', 'level', 'race', 'class', 'gender', 'zoneId', 'account', 'online' );
         
         /* Character ID column name */
         $index = "guid";

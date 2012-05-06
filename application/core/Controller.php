@@ -80,7 +80,7 @@ class Controller extends \System\Core\Controller
         // Set our template path based on the users selected template
         if($this->controller == 'admin')
         {
-            $this->Template->set_template_path('admin');
+            $this->Template->set_template_path('application/admin');
         }
         else
         {
@@ -89,7 +89,7 @@ class Controller extends \System\Core\Controller
             if($user['logged_in'] == FALSE)
             {
                 // Set default template path
-                $this->Template->set_template_path('templates' . DS . config('default_template'));
+                $this->Template->set_template_path('application/templates/'. config('default_template'));
             }
             else
             {
@@ -102,12 +102,12 @@ class Controller extends \System\Core\Controller
                     // If the template exists, and is enabled for site use
                     if($template != FALSE && $template['status'] == 1)
                     {
-                        $this->Template->set_template_path('templates' . DS . $template['name']);
+                        $this->Template->set_template_path('application/templates/'. $template['name']);
                         return;
                     }
                 }
                 // Set default template path if we are here
-                $this->Template->set_template_path('templates' . DS . config('default_template'));
+                $this->Template->set_template_path('application/templates/'.  config('default_template'));
             }
         }
     }

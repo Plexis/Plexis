@@ -17,6 +17,12 @@
         
         <!-- Default layout filename (no extension) -->
         <default_layout>layout</default_layout>
+        
+        <!-- Js folder name, may also use a realative path from the template root folder -->
+        <js_folder>js</js_folder>
+        
+        <!-- Css folder name, may also use a realative path from the template root folder -->
+        <css_folder>css</css_folder>
     </config>
     <!-- END REQUIRED -->
     
@@ -27,8 +33,8 @@
         Example:
         <head>
             <comment>This is a comment in the head tag</comment>
-            <css> {relative_path} </css> :: Include css file.
-            <js> {relative_path} </js> :: Include Javascript file.
+            <css> {css_file_name} </css> :: Include css file file located in your <css_folder>.
+            <js> {Js_file_name} </js> :: Include Javascript file located in your <js_folder>.
             <favicon type="image/{image_type}"> {relative path} </favicon> :: The image type is determined automatically if not given (slow)
             <meta {key}="{value}"> {content} </meta> :: Here you can set meta data, you can add as many "key=value"'s as you need
                 You can overwrite default meta keys.. Ex: <meta http-equiv="Expires">5</meta> will overwrite the default -1 value with 5.
@@ -37,12 +43,12 @@
     <head>
         <comment>Include template CSS stylesheets</comment>
         <favicon type="image/gif">images/favicon.gif</favicon>
-        <css>css/style.css</css>
-        <css>css/alerts.css</css>
-        <css>css/datatables.css</css>
-        <css>css/jquery-ui-1.8.20.custom.css</css>
+        <css>style.css</css>
+        <css>alerts.css</css>
+        <css>datatables.css</css>
+        <css>jquery-ui-1.8.20.custom.css</css>
         <comment>Include feature slide script</comment>
-        <js>js/jquery.cycle.all.min.js</js>
+        <js>jquery.cycle.all.min.js</js>
     </head>
     
     <!-- 

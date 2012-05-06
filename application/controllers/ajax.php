@@ -630,7 +630,7 @@ class Ajax extends Application\Core\Controller
         $this->load->wowlib($realm, 'wowlib');
         $output = $this->wowlib->get_character_list_datatables();
         
-        // Loop, and add options
+        // Loop, each character, and format the rows accordingly
         foreach($output['aaData'] as $key => $value)
         {
             $u = $this->realm->fetch_account($value[7]);
@@ -643,7 +643,8 @@ class Ajax extends Application\Core\Controller
             $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
             $output['aaData'][$key][5] = $zone;
             $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
-            $output['aaData'][$key][7] = '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
+            $output['aaData'][$key][7] = ($value[8] == 1) ? '<font color="red">Character Online</font>' : '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
+            unset($output['aaData'][$key][8]);
         }
 
         // Push the output in json format

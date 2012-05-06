@@ -816,7 +816,7 @@ class Admin extends Application\Core\Controller
             // Build our page title / desc, then load the view
             $data = array(
                 'page_title' => "Character Editor",
-                'page_desc' => "This page allows you to edit character information, and preform actions such as transfering to another realm.",
+                'page_desc' => "This page allows you to edit character information. NOTE: You cannot edit a character while they are playing!",
             );
             $this->load->view('no_realms', $data);
             return;
@@ -846,7 +846,7 @@ class Admin extends Application\Core\Controller
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Character Editor",
-            'page_desc' => "This page allows you to edit character information, and preform actions such as transfering to another realm.",
+            'page_desc' => "This page allows you to edit character information. NOTE: You cannot edit a character while they are playing!",
             'realms' => $array
         );
         $this->load->view('characters', $data);

@@ -66,6 +66,10 @@ class Server extends Application\Core\Controller
             $_COOKIE['realm_id'] = $id;
         }
         
+        // Load the datatables script and fnReload Ajax
+        $this->Template->add_script('jquery.dataTables.js');
+        $this->Template->add_script('jqeruy.dataTables.fnReloadAjax.js');
+        
         // Build our realm select options
         $data['realm_options'] = array();
         $realms = get_installed_realms();
