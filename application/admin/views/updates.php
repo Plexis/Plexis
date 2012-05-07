@@ -78,8 +78,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    var update_url = '{json_data_url}';
-    var update_sha = '{sha}';
-</script>

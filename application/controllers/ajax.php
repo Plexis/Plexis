@@ -1479,7 +1479,9 @@ class Ajax extends Application\Core\Controller
                     break;
                     
                 case "next":
-                    $url = $type = trim( $this->input->post('url') );
+                    // Load the commit.info file
+                    $sha = $type = trim( $this->input->post('sha') );
+                    $url = 'https://raw.github.com/Plexis/Plexis/'. $sha .'/commit.info';
                 
                     // Get the file changes from github
                     $start = microtime(1);
@@ -1501,11 +1503,9 @@ class Ajax extends Application\Core\Controller
                     // Grab POSTS
                     $type = trim( $this->input->post('status') );
                     $sha = trim( $this->input->post('sha') );
-                    $url = trim( $this->input->post('raw_url') );
-                    $file = trim( $this->input->post('filename') );
-                    $adds = trim( $this->input->post('additions') );
-                    $dels = trim( $this->input->post('deletions') );
-                    $filename = ROOT . DS . str_replace(array('/','\\'), DS, $file);
+                    $file = trim( str_replace(array('/', '\\'), '/', $this->input->post('filename')) );
+                    $url = 'https://raw.github.com/Plexis/Plexis/'. $sha .'/'. $file;
+                    $filename = ROOT . DS . str_replace('/', DS, $file);
                     $dirname = dirname($filename);
                     
                     // Load our Filesystem Class
@@ -1516,16 +1516,17 @@ class Ajax extends Application\Core\Controller
                     $success = TRUE;
                     $removed = FALSE;
                     
-                    // Get file contents
-                    $contents = file_get_contents($url, false);
-                    
                     // Hush errors
                     load_class('Debug')->silent_mode(true);
-                    switch($type)
+                    
+                    // Get file contents
+                    $contents = file_get_contents($url, false);
+                    $mod = substr($type, 0, 1);
+                    switch($mod)
                     {
-                        case "renamed":
+                        case "R":
                             // We need to get the old filename, unfortunatly, github API doesnt supply a way to do this
-                            $hurl = "https://github.com/Plexis/Plexis/commits/".$sha."/".$file;
+                            /* $hurl = "https://github.com/Plexis/Plexis/commits/".$sha."/".$file;
                             $src = preg_replace( "#[\r\n\t\s]#", "", file_get_contents( $hurl, false ) );
                             $reg = "#Filerenamedfrom\<code\>\<ahref=\"(.*?)\"\>(.*?)\</a\>\</code\>#i";
                             $count = preg_match_all( $reg, $src, $matches, PREG_SET_ORDER );
@@ -1540,11 +1541,11 @@ class Ajax extends Application\Core\Controller
                                 $success = FALSE;
                                 $text = 'Error moving/renaming file "'. $file .'"';
                                 goto Output;
-                            }
+                            } */
                             // Do not Break!
-                        case "added":
+                        case "A":
 
-                            // We need to check for a soft file rename( file "added", no additions, no files removed )
+                            /* // We need to check for a soft file rename( file "added", no additions, no files removed )
                             if($adds == 0 && $dels == 0)
                             {
                                 // File sha probably is different then the commit sha
@@ -1560,7 +1561,8 @@ class Ajax extends Application\Core\Controller
                                     }
                                 }
                             }
-                            
+                             */
+                             
                             // Continue as normal
                             if(!is_dir($dirname))
                             {
@@ -1573,7 +1575,7 @@ class Ajax extends Application\Core\Controller
                                 }
                             }
                             // Do not Break!
-                        case "modified":
+                        case "M":
                             $handle = @fopen($filename, 'w+');
                             if($handle)
                             {
@@ -1595,7 +1597,7 @@ class Ajax extends Application\Core\Controller
                             }
                             break;
                             
-                        case "removed":
+                        case "D":
                             $removed = TRUE;
                             $Fs->delete($filename);
                             break;

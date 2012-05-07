@@ -11,7 +11,7 @@ function process()
     $.ajax({
         type: "POST",
         url: Plexis.url + "/ajax/update",
-        data: {action: "next", url: update_url},
+        data: {action: "next", sha: update_sha},
         dataType: "json",
         timeout: 5000, // in milliseconds
         success: function(data) 
@@ -28,7 +28,7 @@ function process()
             }
 
             // For progress bar!
-            var count = result['files'].length;
+            var count = result.length;
             var add = (100 / count);
             var running = 0;
             
@@ -51,23 +51,20 @@ function process()
             });
             
             // Get the current update rev number
-            $.each(result['files'], function(key, value){
+            $.each(result, function(key, value){
                 // Update the update status texts
                 current = (key+1);
                 tmp = parseFloat(running);
-                $('#update-state').html('<center>Progress: '+ tmp.toFixed(1) +'%<br />Current file: "' + value['filename'] +'" ('+ current +' / '+ count +')</center>');
-                
+                $('#update-state').html('<center>Progress: '+ tmp.toFixed(1) +'%<br />Current file: "' + value['file'] +'" ('+ current +' / '+ count +')</center>');
+  
                 res = $.ajax({
                     type: "POST",
                     url: Plexis.url + '/ajax/update',
                     data: { 
                         action: "update", 
                         status: value['status'], 
-                        sha: value['sha'], 
-                        raw_url: value['raw_url'], 
-                        filename: value['filename'],
-                        additions: value['additions'],
-                        detetions: value['detetions']
+                        sha: update_sha, 
+                        filename: value['file'],
                     },
                     dataType: "json",
                     async: false,

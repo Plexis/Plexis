@@ -733,6 +733,10 @@ class Admin extends Application\Core\Controller
                 ($count == 0) ? $next = $commits[0] : $next = $commits[$count-1];
                 $d = new DateTime($next['commit']['author']['date']);
                 $date = $d->format("M j, Y - g:i a");
+                
+                // Set JS vars
+                $this->Template->setjs('update_sha', $next['sha']);
+                $this->Template->setjs('update_url', $next['url']);
 
                 
                 // Build our page data
@@ -742,8 +746,6 @@ class Admin extends Application\Core\Controller
                 $data['message'] = preg_replace('/([\[0-9\]]+)/', '', $next['commit']['message'], 1);
                 $data['date'] = $date;
                 $data['author'] = ucfirst($next['author']['login']);
-                $data['sha'] = $next['sha'];
-                $data['json_data_url'] = $next['url'];
                 $data['more_info'] = "https://github.com/Plexis/Plexis/commit/". $next['sha'];
                 $data['CMS_BUILD'] = CMS_BUILD;
                 unset($commits);
