@@ -20,7 +20,7 @@ $().ready(function() {
         }
     });
     
-    /** Create our vote form modal */
+    /** Create our module form modal */
 	var Modal = $("#install-modal").dialog({
 		autoOpen: false,  
 		modal: true, 

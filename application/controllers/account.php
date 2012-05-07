@@ -979,7 +979,7 @@ class Account extends Application\Core\Controller
                 $longid = sprintf("%u%d", ip2long($_SERVER['REMOTE_ADDR']), microtime(true));
                 
                 //Each invitation key consists of a SHA1 hash of the above 'longid' prepended with the user's name.
-                $new_key = $username . sha1($longid);
+                $new_key = substr(sha1($username . $longid), 0, 30);
                 
                 $key_query_data = array(
                     "key" => $new_key, 

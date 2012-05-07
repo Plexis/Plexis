@@ -827,6 +827,12 @@ class Admin extends Application\Core\Controller
         // Editing a character?
         if($character != 0)
         {
+            // Build our page title / desc, then load the view
+            $data = array(
+                'page_title' => "Character Editor",
+                'page_desc' => "This page allows you to edit character information.",
+            );
+            $this->load->view('edit_character', $data);
             return;
         }
         

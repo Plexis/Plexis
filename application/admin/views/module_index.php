@@ -51,7 +51,7 @@
             </p>
 
             <div>
-                <input id="submit" type="submit" class="button" style="width: 150px; text-align: center; margin: 10px; float: right;" value="Submit">
+                <input id="submit" type="submit" class="button" style="width: 150px; text-align: center; margin: 10px; float: right;" value="Submit" />
             </div>
         </div>
     </form>

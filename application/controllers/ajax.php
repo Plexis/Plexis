@@ -1645,6 +1645,54 @@ class Ajax extends Application\Core\Controller
         }
     }
     
+    public function regkeys()
+    {
+        $mode = $_POST['action'];
+
+        // Process key creation first.
+        if( $mode == "generate" )
+        {
+            // Let's generate the key.
+            $new_key = "";
+            
+            // Start by getting the username, all lowercase, alphanumeric only.
+            $username = strtolower( $this->user['username'] );
+            $username = preg_replace("/[^a-z0-9]/i", "", $username);
+            
+            // Get a string containing the current IP address represented as a long integer
+            // and the current Unix timestamp with microsecond prescision.
+            $longid = sprintf("%u%d", ip2long($_SERVER['REMOTE_ADDR']), microtime(true));
+            
+            //Each invitation key consists of a SHA1 hash of the above 'longid' prepended with the user's name.
+            $new_key = substr(sha1($username . $longid), 0, 30);
+            
+            $key_query_data = array(
+                "key" => $new_key, 
+                "sponser" => $this->user['id']
+            );
+            
+            // Insert it into the pcms_reg_keys table.
+            $this->DB->insert("pcms_reg_keys", $key_query_data);
+            
+            $this->output(true, $new_key);
+        }
+        
+        // Process key deletion next.
+        if( $mode == "delete" )
+        {
+            $key_query = $this->DB->delete('pcms_reg_keys', '`usedby` = 0'); //Get the key.
+            
+            // Check to make sure the query didn't fail.
+            if( $key_query !== FALSE )
+            {
+                $this->output(true, 'Unassigned keys deleted successfully!');
+                die();
+            }
+            
+            $this->output(false, 'No Keys Deleted');
+        }
+    }
+    
 /*
 | ---------------------------------------------------------------
 | METHODS
