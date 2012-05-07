@@ -880,7 +880,6 @@ class Template
                 if(preg_match('@^(ftp|http(s)?)://@i', $j))
                 {
                     // We have a full url
-                     print_r($j); die();
                     $src = $j;
                 }
                 elseif(strpos($j, 'application/') !== false)

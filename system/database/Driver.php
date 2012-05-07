@@ -552,15 +552,18 @@ class Driver extends \PDO
             return $this->$name;
         }
         
+        // Create our classname
+        $class = ucfirst($name);
+        
         // Check for the extension
-        if(file_exists(APP_PATH. DS . 'database' . DS . 'extensions' . DS . $name .'.php')) 
+        if(file_exists(APP_PATH. DS . 'database' . DS . 'extensions' . DS . $class .'.php')) 
         {
-            require_once(APP_PATH. DS . 'database' . DS . 'extensions' . DS . $name .'.php');
+            require_once(APP_PATH. DS . 'database' . DS . 'extensions' . DS . $class .'.php');
             $prefix = "\\Application";
         }
-        elseif(file_exists(SYSTEM_PATH. DS . 'database' . DS . 'extensions' . DS . $name .'.php'))
+        elseif(file_exists(SYSTEM_PATH. DS . 'database' . DS . 'extensions' . DS . $class .'.php'))
         {
-            require_once(SYSTEM_PATH. DS . 'database' . DS . 'extensions' . DS . $name .'.php');
+            require_once(SYSTEM_PATH. DS . 'database' . DS . 'extensions' . DS . $class .'.php');
             $prefix = "\\System";
         }
         else
@@ -571,7 +574,6 @@ class Driver extends \PDO
         }
         
         // Load the class
-        $class = ucfirst($name);
         $class = $prefix ."\\Database\\Extensions\\".$class;
         $this->$name = new $class($this);
         return $this->$name;
