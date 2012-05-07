@@ -226,15 +226,5 @@ class Frostbite
         // Neither exists, then no controller found.
         return FALSE;
     }
-    
-    public function loadPlugins()
-    {
-        $query = "SELECT `name`, `method`, `hook` FROM `pcms_plugins`";
-        $Plugins = $this->DB->query( $query )->fetch_array();
-        foreach($Plugins as $p)
-        {
-            $this->plugins[$hook][] = $p;
-        }
-    }
 }
 // EOF
