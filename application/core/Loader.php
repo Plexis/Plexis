@@ -33,7 +33,7 @@ class Loader extends \System\Core\Loader
 | @Return: (Object) Returns the model
 |
 */
-    function model($name, $instance_as = NULL)
+    public function model($name, $instance_as = NULL)
     {
         // Check for path. We need to get the model file name
         if(strpos($name, '/') !== FALSE)
@@ -84,7 +84,7 @@ class Loader extends \System\Core\Loader
 | @Param: (Bool) $skip - Skip the template system and use parent?
 |
 */
-    function view($name, $data = array(), $skip = FALSE)
+    public function view($name, $data = array(), $skip = FALSE)
     {
         // If we are requesting to use the default render system
         if($skip == TRUE)
@@ -97,6 +97,74 @@ class Loader extends \System\Core\Loader
             $template = $this->library('Template');
             $template->render($name, $data);
         }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: plugin()
+| ---------------------------------------------------------------
+|
+| This method is used to load a plugin
+|
+| @Param: (String) $name - The name of the plugin
+| @Param: (String) $method - The method to run
+|
+*/
+    public function plugin($name, $method = false)
+    {
+        // Create our classname
+        $name = ucfirst($name);
+        $store_name = 'Plugins_'. $name;
+        
+        // Check if the plugin is already loaded
+        $Obj = \Registry::singleton()->load($store_name);
+        if( $Obj === null )
+        {
+            // We have to manually load the plugin
+            $className = '\\Application\\Plugins\\'. $name;
+            $file = APP_PATH . DS . 'plugins' . DS . $name . '.php';
+            if(!file_exists($file))
+            {
+                show_error('plugin_not_found', array($name), E_ERROR);
+                return false;
+            }
+            
+            // Include the file just once!
+            include_once( $file );
+            
+            // Init the plugin
+            try {
+                $Obj = new $className();
+            } 
+            catch(\Exception $e) {
+                $Obj = false;
+                show_error('plugin_failed_init', array($name, $e->getMessage()), E_WARNING);
+            }
+            
+            // Store the object
+            \Registry::singleton()->store($store_name, $Obj);
+        }
+        
+        // Make sure the object IS an object
+        if( !is_object($Obj) ) return false;
+        
+        // Run the requested method
+        if($method != false)
+        {
+            try {
+                $Obj->$method();
+                $return = true;
+            } 
+            catch(\Exception $e) {
+                $return = false;
+                show_error('plugin_error', array($name, $method, $e->getMessage()), E_WARNING);
+            }
+            
+            // Return the result
+            return $return;
+        }
+        
+        return $Obj;
     }
 
 /*

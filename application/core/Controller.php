@@ -42,13 +42,6 @@ class Controller extends \System\Core\Controller
 */
     public function __construct($process_db = TRUE, $init_template = TRUE) 
     {
-        // Check if the install folder is still local
-        if(file_exists( ROOT . DS . 'install/index.php'))
-        {
-            redirect('install/index.php');
-            die();
-        }
-        
         // If site is updating, only allow Ajax requests
         if($GLOBALS['controller'] != 'ajax' && config('site_updating')) 
             die('Site Down for maintenance. Be back soon.');

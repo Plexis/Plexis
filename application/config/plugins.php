@@ -1,0 +1,5 @@
+<?php
+$Plugins = array(
+    'Plexis'
+);
+?>

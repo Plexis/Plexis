@@ -15,7 +15,9 @@ namespace Application\Core;
 
 class Frostbite
 {
-    public $Router;
+    protected $Router;
+    protected $load;
+    protected $DB;
     protected $dispatch;
     protected $controller;
     protected $action;
@@ -34,6 +36,7 @@ class Frostbite
     {
         // Initialize the router
         $this->Router = load_class('Router');
+        $this->load = load_class('Loader');
         
         // Tell the router to process the URL for us
         $routes = $this->Router->get_url_info();
@@ -43,15 +46,22 @@ class Frostbite
         $action     = $routes['action'];
         $queryString  = $GLOBALS['querystring']  = $routes['querystring'];
         
-        // Define our site url
+        // Define our Base url
         define('BASE_URL', $routes['site_url']);
-        if( isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'On' )
+        
+        // Define our site url
+        if( !isset($_SERVER['HTTP_MOD_REWRITE']) ) $_SERVER['HTTP_MOD_REWRITE'] == 'Off';
+        ($_SERVER['HTTP_MOD_REWRITE'] == 'On') ? define('SITE_URL', $routes['site_url']) : define('SITE_URL', $routes['site_url'] . '/?url=');
+        
+        // -----------------------------------------
+        // Load Plugins                            |
+        // -----------------------------------------
+        include( APP_PATH . DS .'config'. DS .'plugins.php' );
+        
+        // Load pre system plugins
+        foreach($Plugins as $p)
         {
-            define('SITE_URL', $routes['site_url']);
-        }
-        else
-        {
-            define('SITE_URL', $routes['site_url'] . '/?url=');
+            $this->load->plugin($p, 'pre_system');
         }
 
         // -----------------------------------------
@@ -62,10 +72,22 @@ class Frostbite
             show_404();
         }
         
+        // Prcoess Pre controller Plugins
+        foreach($Plugins as $p)
+        {
+            $this->load->plugin($p, 'pre_controller');
+        }
+        
         // -------------------------------------------------------------
         // Here we init the actual controller / action into a variable.|
         // -------------------------------------------------------------
         $this->dispatch = new $this->controller();
+        
+        // Prcoess Post controller construct Plugins
+        foreach($Plugins as $p)
+        {
+            $this->load->plugin($p, 'post_controller_constructor');
+        }
         
         // After loading the controller, make sure the method exists, or we have a 404
         if(method_exists($this->controller, $this->action)) 
@@ -88,6 +110,12 @@ class Frostbite
         {
             // If the method didnt exist, then we have a 404
             show_404();
+        }
+        
+        // Prcoess Post controller construct Plugins
+        foreach($Plugins as $p)
+        {
+            $this->load->plugin($p, 'post_controller');
         }
     }
 
@@ -128,9 +156,8 @@ class Frostbite
         // Make this a bit easier
         $name = strtolower($controller);
         
-        // Load the loader class and DB connection
-        $Load = load_class('Loader');
-        $DB = $Load->database('DB');
+        // Load database
+        $this->DB = $this->load->database('DB');
         
         // Build our array to get out current URI's module if one exists
         $uri1 = $name .'/*';
@@ -138,7 +165,7 @@ class Frostbite
         
         // Check to see if the URI belongs to a module
         $query = "SELECT * FROM `pcms_modules` WHERE `uri`=? OR `uri`=?";
-        $result = $DB->query( $query, array($uri1, $uri2) )->fetch_row();
+        $result = $this->DB->query( $query, array($uri1, $uri2) )->fetch_row();
         
         // If our result is an array, Then we load it as a module
         if(is_array($result))
@@ -198,6 +225,16 @@ class Frostbite
         
         // Neither exists, then no controller found.
         return FALSE;
+    }
+    
+    public function loadPlugins()
+    {
+        $query = "SELECT `name`, `method`, `hook` FROM `pcms_plugins`";
+        $Plugins = $this->DB->query( $query )->fetch_array();
+        foreach($Plugins as $p)
+        {
+            $this->plugins[$hook][] = $p;
+        }
     }
 }
 // EOF

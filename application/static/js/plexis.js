@@ -90,3 +90,24 @@
     {
         setCookie(name, "", -1);
     }
+    
+/**
+ * Dynamic stylesheet and Js file loading
+ */
+    function load_css(name)
+    {
+        // EI compatability
+        if (document.createStyleSheet) 
+        {
+            document.createStyleSheet(url);
+        } 
+        else 
+        {
+            $('head').append('<link rel="stylesheet" href="' + name + '" type="text/css" />');
+        }
+    }
+    
+    function load_script(name)
+    {
+        $.getScript(name);
+    }
