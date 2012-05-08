@@ -34,7 +34,7 @@ class Plexis
             redirect('install/index.php');
             die();
         }
-        else
+        elseif( $installer == true )
         {
             // Set a nice output message for the admin telling him to delete the installer folder!
             $GLOBALS['template_messages'][] = '<div class="alert error">Install folder still exists! Please Rename or delete your install folder.</div>';
