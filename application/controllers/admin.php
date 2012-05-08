@@ -827,10 +827,65 @@ class Admin extends Application\Core\Controller
         // Editing a character?
         if($character != 0)
         {
+            // Load the wowlib for this realm
+            $Lib = $this->load->wowlib($realmid, false);
+            if($Lib == false)
+            {
+                // Give the admin an error
+                output_message('warning', 'Unable to load wowlib for this realm. Please make sure the character and world databases are online');
+                
+                // Build our page title / desc, then load the view
+                $data = array(
+                    'page_title' => "Character Editor",
+                    'page_desc' => "This page allows you to edit character information. NOTE: You cannot edit a character while they are playing!",
+                );
+                $this->load->view('blank', $data);
+                return;
+            }
+            
+            // Fetch character
+            $char = $Lib->get_character_info($character);
+            if($char == false)
+            {
+                // Give the admin an error
+                output_message('error', 'Character Doesnt Exist!');
+                
+                // Build our page title / desc, then load the view
+                $data = array(
+                    'page_title' => "Character Editor",
+                    'page_desc' => "This page allows you to edit character information. NOTE: You cannot edit a character while they are playing!",
+                );
+                $this->load->view('blank', $data);
+                return;
+            }
+            
+            // Get alist of login flags
+            $flags = array();
+            $aflags   = $Lib->get_available_login_flags();
+            $has_flag = $Lib->get_login_flags($character);
+            
+            // Loop through each flag so we can set the proper enabled : disabled at login select options
+            foreach($aflags as $key => $flag)
+            {
+                // Dont show flags that arent enabled by this realm
+                if($flag == false) continue;
+                
+                // Create a name, and add to the flags array
+                $name = str_replace('_', ' ', ucfirst($key));
+                $flags[] = array('label' => $key, 'name' => $name, 'enabled' => $has_flag[$key]);
+            }
+            
             // Build our page title / desc, then load the view
             $data = array(
                 'page_title' => "Character Editor",
                 'page_desc' => "This page allows you to edit character information.",
+                'flags' => $flags,
+                'character' => $char,
+                'account' => $this->realm->get_account_name($char['account']),
+                'race' => $Lib->race_to_text($char['race']),
+                'class' => $Lib->class_to_text($char['class']),
+                'zone' => $Lib->zone_to_text($char['zone']),
+                'realm' => $realmid
             );
             $this->load->view('edit_character', $data);
             return;

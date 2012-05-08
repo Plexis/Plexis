@@ -274,6 +274,26 @@ class Arcemu
         return FALSE;
     }
     
+/*
+| ---------------------------------------------------------------
+| Method: get_account_name()
+| ---------------------------------------------------------------
+|
+| This function queries the accounts table and gets the username
+| to the specific account ID
+|
+| @Param: (Int) $id - The id for the account
+| @Return (String) - Returns the account name, FALSE otherwise
+|
+*/
+    public function get_account_name($id)
+    {
+        // Build our query
+        $query = "SELECT `username` FROM `accounts` WHERE `acct`= ?";
+        $temp = $this->DB->query( $query, array($id) )->fetch_column();
+        
+        return ($temp == false) ? false : $temp;
+    }
     
 /*
 | ---------------------------------------------------------------

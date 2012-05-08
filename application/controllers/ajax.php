@@ -620,35 +620,124 @@ class Ajax extends Application\Core\Controller
 */    
     public function characters($realm = 0)
     {
-        // check if the realm is installed
-        if($realm != 0 && !realm_installed($realm))
-        {
-            $realm = get_realm_cookie();
-        }
-
-        // Load the WoWLib
-        $this->load->wowlib($realm, 'wowlib');
-        $output = $this->wowlib->get_character_list_datatables();
+        // Make sure have an action
+        if(!isset($_POST['action'])) die( 'No Action Specified!' );
         
-        // Loop, each character, and format the rows accordingly
-        foreach($output['aaData'] as $key => $value)
+        if($_POST['action'] == 'onlinelist')
         {
-            $u = $this->realm->fetch_account($value[7]);
-            $g = $value[5];
-            $r = $value[3];
-            $race = $this->wowlib->race_to_text($r);
-            $class = $this->wowlib->class_to_text($value[4]);
-            $zone = $this->wowlib->zone_to_text($value[6]);
-            $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/application/static/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
-            $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
-            $output['aaData'][$key][5] = $zone;
-            $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
-            $output['aaData'][$key][7] = ($value[8] == 1) ? '<font color="red">Character Online</font>' : '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
-            unset($output['aaData'][$key][8]);
-        }
+            // check if the realm is installed
+            if($realm != 0 && !realm_installed($realm))
+            {
+                $realm = get_realm_cookie();
+            }
 
-        // Push the output in json format
-        echo json_encode($output);
+            // Load the WoWLib
+            $this->load->wowlib($realm, 'wowlib');
+            $output = $this->wowlib->get_character_list_datatables();
+            
+            // Loop, each character, and format the rows accordingly
+            foreach($output['aaData'] as $key => $value)
+            {
+                $u = $this->realm->fetch_account($value[7]);
+                $g = $value[5];
+                $r = $value[3];
+                $race = $this->wowlib->race_to_text($r);
+                $class = $this->wowlib->class_to_text($value[4]);
+                $zone = $this->wowlib->zone_to_text($value[6]);
+                $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/application/static/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
+                $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
+                $output['aaData'][$key][5] = $zone;
+                $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
+                $output['aaData'][$key][7] = ($value[8] == 1) ? '<font color="red">Character Online</font>' : '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
+                unset($output['aaData'][$key][8]);
+            }
+            
+            // Push the output in json format
+            echo json_encode($output);
+        }
+        else
+        {
+            // Mandaroty checks
+            $id = $_POST['id'];
+            $realm = $_POST['realm'];
+            
+            // Make sure the realm is installed
+            if( !realm_installed($realm) )
+            {
+                $this->output(false, "Realm ID: $realm not installed!");
+                die();
+            }
+    
+            // Load the wowlib for this realm
+            $Lib = $this->load->wowlib($realm, false);
+            if($Lib == false)
+            {
+                $this->output(false, "Unable to connect to character and/or world databases");
+                die();
+            }
+            
+            // Fetch character
+            $char = $Lib->get_character_info($id);
+            if($char == false)
+            {
+                $this->output(false, "Character ID: Does not exist!");
+                die();
+            }
+            
+            // Make sure the character isnt online
+            if($char['online'] == 1)
+            {
+                $this->output(false, "Character is online. You cannot edit characters while they are in game.", 'warning');
+                die();
+            }
+            
+            // Process specific actions
+            switch($_POST['action'])
+            {
+                case "update":
+                    // Update the character data
+                    $info = array(
+                        'name' => $_POST['name'],
+                        'level' => $_POST['level'],
+                        'gender' => $_POST['gender'],
+                        'money' => $_POST['money'],
+                        'xp' => $_POST['xp']
+                    );
+                    $result = $Lib->set_character_info($id, $info);
+                    
+                    // make sure we didnt fail here
+                    if($result === false)
+                    {
+                        $this->output(false, "There was an error updating the character information. Please check your error logs");
+                        die();
+                    }
+                    
+                    // Get the characters flags
+                    $change = false;
+                    $flags = $Lib->get_login_flags($id);
+                    foreach($flags as $key => $val)
+                    {
+                        // Updates?
+                        if(isset($_POST[ $key ]) && (bool)$_POST[ $key ] != $val)
+                        {
+                            $change = true;
+                            $Lib->set_login_flag($id, $key, $_POST[ $key ]);
+                        }
+                    }
+                    
+                    // Any successfull changes?
+                    if($result === 0 && $change == false)
+                    {
+                        $this->output(false, "Character data not updated. This may be due to no changes being made.", 'warning');
+                    }
+                    else
+                    {
+                        $this->output(true, "Character updated successfully!");
+                    }
+                    break;
+                    
+            }
+        }
     }
     
 /*

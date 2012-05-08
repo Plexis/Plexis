@@ -164,6 +164,102 @@ class ArcEmu_335a
     
 /*
 | ---------------------------------------------------------------
+| Method: get_character_info
+| ---------------------------------------------------------------
+|
+| This method is used to return an array of character information
+|
+| @Param: (Int) $id - The character ID
+| @Retrun:(Array): False if the character doesnt exist, Otherwise
+|   array(
+|       'account' => The account ID the character belongs too
+|       'id' => Character Id
+|       'name' => The characters name
+|       'race' => The characters race id
+|       'class' => The characters class id
+|       'gender' => Gender
+|       'level' => Level
+|       'money' => characters money
+|       'xp' => Characters current level expierience
+|       'online' => 1 if character online, 0 otherwise
+|       'zone' => The zone ID the character is in
+|   );
+|
+*/  
+    public function get_character_info($id)
+    {
+        // Build our query
+        $query = "SELECT `guid` as `id`, `acct`, `name`, `race`, `class`, `gender`, `level`, `money`, `xp`, `online`, `zone` FROM `characters` WHERE `guid`=?";
+        $account = $this->CDB->query( $query, array($id) )->fetch_row();
+        if($account == FALSE)
+        {
+            return FALSE;
+        }
+        
+        // If we are here, then we have the account ID. return it
+        return $account;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: set_character_info
+| ---------------------------------------------------------------
+|
+| This method is used to set an array of character information
+|
+| @Param: (Int) $id - The character ID
+| @Param:(Array): $info - an array of fields to set... This includes
+| these fields (NOTE: you need not set all of these, just the ones
+|   you are updating)
+|   array(
+|       'account' => The account ID the character belongs too
+|       'name' => The characters name
+|       'gender' => Gender
+|       'level' => Level
+|       'money' => characters money
+|       'xp' => Characters current level expierience
+|   );
+|
+*/  
+    public function set_character_info($id, $info)
+    {
+        // First we check to make sure the character exists!
+        $query = "SELECT `acct`, `name`, `gender`, `level`, `money`, `xp` FROM `characters` WHERE `guid`=?";
+        $char = $this->CDB->query( $query, array($id) )->fetch_row();
+        if($char === false)
+        {
+            // Character doesnt exist or is online
+            return false;
+        }
+        else
+        {
+            // If the name changed, check to make sure a different char doesnt have that name
+            if(isset($info['name']))
+            {
+                if($char['name'] != $info['name'])
+                {
+                    if($this->character_name_exists($info['name'])) return false;
+                }
+            }
+            
+            // Build our data array ( 'column_name' => $info['infoid'] )
+            // We need to check if each field is set, if not, use $char default
+            $data = array(
+                'account'   => (isset($info['account'])) ? $info['account'] : $char['account'],
+                'name'      => (isset($info['name']))    ? $info['name']    : $char['name'],
+                'gender'    => (isset($info['gender']))  ? $info['gender']  : $char['gender'],
+                'level'     => (isset($info['level']))   ? $info['level']   : $char['level'],
+                'money'     => (isset($info['money']))   ? $info['money']   : $char['money'],
+                'xp'        => (isset($info['xp']))      ? $info['xp']      : $char['xp']
+            );
+            
+            // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
+            return $this->CDB->update('characters', $data, "`guid`=".$id);
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: get_character_account_id
 | ---------------------------------------------------------------
 |
@@ -722,6 +818,194 @@ class ArcEmu_335a
 |                               WORLD DATABASE FUNCTIONS
 | -------------------------------------------------------------------------------------------------
 */
+
+
+
+
+/*
+| -------------------------------------------------------------------------------------------------
+|                               AT LOGIN FLAGS
+| -------------------------------------------------------------------------------------------------
+*/
+
+
+/*
+| ---------------------------------------------------------------
+| Method: get_available_login_flags()
+| ---------------------------------------------------------------
+|
+| This method is used to return a list of "at login" flags this
+| core / revision is able to do. Please note, the functions must
+| exist!
+|
+| @Retrun: (Array): An array of true / false flags
+|
+*/ 
+    public function get_available_login_flags()
+    {
+        return array(
+            'rename' => false,
+            'customize' => false,
+            'change_race' => false,
+            'change_faction' => false,
+            'reset_spells' => false,
+            'reset_talents' => false,
+            'reset_pet_talents' => false
+        );
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: flag_to_bit()
+| ---------------------------------------------------------------
+|
+| This method is used to return the bitmask flag for the givin flag 
+| name
+|
+| @Param: (String) $flag - The flag name we are getting the bit for
+| @Retrun: (Int | Bool): The bitmask on success, False otherwise
+|
+*/
+    public function flag_to_bit($flag)
+    {
+        // only list available flags
+        $flags = array();
+        
+        return (isset($flags[ $flag ])) ? $flags[ $flag ] : false;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: set_login_flag()
+| ---------------------------------------------------------------
+|
+| This method is used to return a list of "at login" flags this
+| core / revision is able to do. Please note, the functions must
+| exist!
+|
+| @Param: (Int) $id - The character id
+| @Param: (String) $name - The flag name we are settings
+| @Param: (Bool) $status - True to enable flag, false to remove it
+| @Retrun: (Bool): True on success, False otherwise
+|
+*/ 
+    public function set_login_flag($id, $name, $status)
+    {
+        // Not sure if arcemu supports this!
+        return false;
+        
+        // First, get current login flags
+        $query = "SELECT `at_login` FROM `characters` WHERE `guid`=?";
+        $flags = $this->CDB->query( $query, array($id) )->fetch_column();
+        
+        // Make sure we didnt get a false return!
+        if( $flags === false ) return false;
+        
+        // Convert flags to an int, and get our bit id
+        $flags  = (int) $flags;
+        $flagid = (int) $this->flag_to_bit($name);
+        
+        // Make sure this feature is supported
+        if($flagid == 0) return false;
+        
+        // Determine if the flag is already enabled before enabling it again
+        if ($status == true)
+        {
+            // Check, if the flag is set, return true
+            if($flags != 0 && ($flags & $flagid)) return true;
+            
+            // Set new flag
+            $newflags = $flagid + $flags;
+        }
+        else
+        {
+            // If disabling a flag, return true if its already disabled
+            if($flags == 0 || ( !($flags & $flagid) )) return true;
+            
+            // Set new flag
+            $newflags = $flags - $flagid;
+        }
+        
+        // Update the database setting the new flag
+        return $this->CDB->update('characters', array('at_login' => $newflags), "`guid`=$id");
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: has_login_flag()
+| ---------------------------------------------------------------
+|
+| This method is used to return a if a character has the specified
+| login flag enabled
+|
+| @Param: (Int) $id - The character id
+| @Param: (String) $name - The flag name we are getting
+| @Retrun: (Bool): True if the character has the flag, False otherwise
+|
+*/ 
+    public function has_login_flag($id, $name)
+    {
+        // Not sure if arcemu supports this!
+        return false;
+        
+        // First, get current login flags
+        $query = "SELECT `at_login` FROM `characters` WHERE `guid`=?";
+        $flags = $this->CDB->query( $query, array($id) )->fetch_column();
+        
+        // Is there any flags set?
+        if( $flags == false ) return false;
+        
+        // Convert flags to an int, and get our bit id
+        $flags  = (int) $flags;
+        $flagid = (int) $this->flag_to_bit($name);
+        
+        // Make sure this feature is supported
+        if($flagid == 0) return false;
+        
+        // Check, if the flag is set, return true
+        return ($flags & $flagid) ? true : false;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: get_login_flags()
+| ---------------------------------------------------------------
+|
+| This method is used to return all login flags the character has
+|
+| @Param: (Int) $id - The character id
+| @Retrun: (Array): An array of true / false flags
+|
+*/ 
+    public function get_login_flags($id)
+    {
+        // Not sure if arcemu supports this!
+        return array();
+        
+        // Build the dummy array
+        $flags = array();
+        $supported = $this->get_available_login_flags();
+        foreach($supported as $key => $flag)
+        {
+            $flags[$key] = false;
+        }
+        
+        // First, get current login flags
+        $query = "SELECT `at_login` FROM `characters` WHERE `guid`=?";
+        $cflags = $this->CDB->query( $query, array($id) )->fetch_column();
+        
+        // Is there any flags set?
+        if( $cflags == false ) return $flags;
+        
+        // Determine if each flag is true or false
+        foreach($flags as $key => $flag)
+        {
+            $bit = $this->flag_to_bit($key);
+            $flags[$key] = ($cflags & $bit) ? true : false;
+        }
+        
+        return $flags;
+    }
 
 
 
