@@ -32,7 +32,7 @@ $().ready(function() {
         if (result.success == true)
         {
             // Display our Success message, and ReDraw the table so we imediatly see our action
-            $('#edit-form').html('<div class="alert ' + result.type +'">' + result.message + '. <a href="' + url + '/admin/realms">Click here to return.</a></div>');
+            $('#edit-form').html('<div class="alert ' + result.type +'">' + result.message + '. <a href="' + Plexis.url + '/admin/realms">Click here to return.</a></div>');
         }
         else
         {

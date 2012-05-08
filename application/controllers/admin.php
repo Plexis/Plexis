@@ -896,15 +896,23 @@ class Admin extends Application\Core\Controller
                 --$y;
             }
             
-            // Next month is 13? add a year and make the month january
-            if($nm == 13)
+            // Only do up to the current time stamp if we are at this month!
+            if($i == 0)
             {
-                $nm = 1;
-                ++$ny;
+                $query = "SELECT COUNT(id) AS `count` FROM `pcms_accounts` WHERE `registered` BETWEEN '$y-$m-00 00:00:00' AND CURRENT_TIMESTAMP";
+            }
+            else
+            {
+                // Next month is 13? add a year and make the month january
+                if($nm == 13)
+                {
+                    $nm = 1;
+                    ++$ny;
+                }
+                $query = "SELECT COUNT(id) AS `count` FROM `pcms_accounts` WHERE `registered` BETWEEN '$y-$m-00 00:00:00' AND '$ny-$nm-00 00:00:00'";
             }
             
             // Get our registered stats for this month
-            $query = "SELECT COUNT(id) AS `count` FROM `pcms_accounts` WHERE `registered` BETWEEN '$y-$m-00 00:00:00' AND '$ny-$nm-00 00:00:00'";
             $array = $this->DB->query( $query )->fetch_row();
             $results[] = array('name' => $months[$m], 'value' => $array['count']);
         }
