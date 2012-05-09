@@ -21,6 +21,7 @@
         // Setup our form validator error style class
         jQuery.validator.setDefaults({ 
             errorClass: "input-error",
+            errorElement: "div"
         });
         
         $().ready(function() {

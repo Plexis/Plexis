@@ -665,16 +665,9 @@ class Mangos_335a
             // Character doesnt exist if we get a staight up FALSE
             return FALSE;
         }
-        elseif($online == 1)
-        {
-            // Cant change an online players leve
-            return FALSE;
-        }
-        else
-        {
-            // Update the 'characters' table, SET 'level' => $new_level WHERE guid(id) => $id
-            return $this->CDB->update('characters', array('level' => $new_level), "`guid`=".$id);
-        }
+
+        // Update the 'characters' table, SET 'level' => $new_level WHERE guid(id) => $id
+        return $this->CDB->update('characters', array('level' => $new_level), "`guid`=".$id);
     }
     
 /*
@@ -699,16 +692,9 @@ class Mangos_335a
             // Character doesnt exist if we get a staight up FALSE
             return FALSE;
         }
-        elseif($online == 1)
-        {
-            // Cant change an online players name
-            return FALSE;
-        }
-        else
-        {
-            // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
-            return $this->CDB->update('characters', array('level' => $new_level), "`guid`=".$id);
-        }
+        
+        // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
+        return $this->CDB->update('characters', array('level' => $new_level), "`guid`=".$id);
     }
     
 /*
@@ -733,16 +719,9 @@ class Mangos_335a
             // Character doesnt exist if we get a staight up FALSE
             return FALSE;
         }
-        elseif($online == 1)
-        {
-            // Cant change an online players qccount
-            return FALSE;
-        }
-        else
-        {
-            // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
-            return $this->CDB->update('characters', array('account' => $account), "`guid`=".$id);
-        }
+
+        // Update the 'characters' table, SET 'account' => $new_account WHERE guid(id) => $id
+        return $this->CDB->update('characters', array('account' => $account), "`guid`=".$id);
     }
     
 /*
@@ -807,12 +786,35 @@ class Mangos_335a
         }
     }
     
-    
 /*
-| -------------------------------------------------------------------------------------------------
-|                               WORLD DATABASE FUNCTIONS
-| -------------------------------------------------------------------------------------------------
-*/
+| ---------------------------------------------------------------
+| Method: delete_character
+| ---------------------------------------------------------------
+|
+| This method removes the character from the characters DB
+|
+| @Param: (Int) $id - The character id we are deleteing
+| @Retrun: (Bool): True on success, FALSE otherwise
+|
+*/ 
+    public function delete_character($id)
+    {
+        // A list of (table => character_id_col_name) to remove character info from
+        // The more tables listed, the more we can delete this character
+        $tables = array(
+            'characters' => 'guid'
+        );
+        
+        foreach($tables as $table => $col)
+        {
+            $result = $this->CDB->delete($table, "`$col`=$id");
+            if($result === false) return false;
+        }
+        
+        return true;
+    }
+    
+    public function reset_poistion($id){}
 
 
 
@@ -843,7 +845,7 @@ class Mangos_335a
             'change_race' => false,
             'change_faction' => false,
             'reset_spells' => false,
-            'reset_talents' => false,
+            'reset_talents' => true,
             'reset_pet_talents' => false
         );
     }
@@ -997,6 +999,16 @@ class Mangos_335a
         
         return $flags;
     }
+    
+    
+    
+/*
+| -------------------------------------------------------------------------------------------------
+|                               WORLD DATABASE FUNCTIONS
+| -------------------------------------------------------------------------------------------------
+*/
+
+
 
 /*
 | -------------------------------------------------------------------------------------------------

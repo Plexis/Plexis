@@ -3,14 +3,14 @@ $().ready(function() {
     
     // Lock button
     $("a#unstuck").click(function() {
-        // post_action('unstuck');
+        post_action('unstuck');
     });
     
     // Delete button
     $("a#delete").click(function() {
         if ( confirm('Are you sure you want to delete account: ' + username + ' (#' + userid + ')?') )
         {
-            // post_action('delete');
+            post_action('delete');
         }
     });
     
@@ -34,16 +34,10 @@ $().ready(function() {
             data: { action : task },
             dataType: "json",
             timeout: 5000, // in milliseconds
-            success: function(result) 
+            success: function(response) 
             {
-                switch(task)
-                {
-                    case "unstuck":
-                        break;
-                        
-                    case "delete":
-                        break;
-                }
+                var result = jQuery.parseJSON(response);
+                $('#js_message').attr('class', 'alert ' + result.type).html( result.message ).slideDown(300).delay(3000).slideUp(600);
             },
             error: function(request, status, err) 
             {

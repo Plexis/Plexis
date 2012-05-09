@@ -675,6 +675,13 @@ input[type="text"].input-error, input[type="password"].input-error, textarea.inp
     -webkit-box-shadow: 0 0 5px 1px #bf0000, inset 0 3px 10px 2px #111;
     box-shadow: 0 0 5px 1px #bf0000, inset 0 3px 10px 2px #111;
 }
+input[type="text"].input-success, input[type="password"].input-success, textarea.input-success, select.input-success
+{
+    outline: none;
+    -moz-box-shadow: 0 0 5px 1px #048a10, inset 0 3px 10px 2px #111;
+    -webkit-box-shadow: 0 0 5px 1px #048a10, inset 0 3px 10px 2px #111;
+    box-shadow: 0 0 5px 1px #048a10, inset 0 3px 10px 2px #111;
+}
 div.input-error 
 {
 	color: #bf0000;

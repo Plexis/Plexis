@@ -620,10 +620,8 @@ class Ajax extends Application\Core\Controller
 */    
     public function characters($realm = 0)
     {
-        // Make sure have an action
-        if(!isset($_POST['action'])) die( 'No Action Specified!' );
         
-        if($_POST['action'] == 'onlinelist')
+        if(!isset($_POST['action']))
         {
             // check if the realm is installed
             if($realm != 0 && !realm_installed($realm))
@@ -648,7 +646,7 @@ class Ajax extends Application\Core\Controller
                 $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
                 $output['aaData'][$key][5] = $zone;
                 $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
-                $output['aaData'][$key][7] = ($value[8] == 1) ? '<font color="red">Character Online</font>' : '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
+                $output['aaData'][$key][7] = '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
                 unset($output['aaData'][$key][8]);
             }
             
