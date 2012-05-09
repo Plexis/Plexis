@@ -1,1 +1,1 @@
-[{"status":"M","file":"application\/controllers\/ajax.php"},{"status":"M","file":"application\/static\/js\/admin\/vote.js"},{"status":"M","file":"index.php"}]
+[{"status":"M","file":"index.php"},{"status":"M","file":"install\/index.php"},{"status":"A","file":"install\/steps\/arcemu\/step_2.php"},{"status":"A","file":"install\/steps\/arcemu\/step_3.php"},{"status":"A","file":"install\/steps\/arcemu\/step_4.php"},{"status":"A","file":"install\/steps\/arcemu\/step_5.php"}]

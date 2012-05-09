@@ -26,7 +26,7 @@ else
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-	<title>Wilson212's CMS Installer</title>
+	<title>Plexis CMS Installer</title>
 	<link rel="stylesheet" href="installer/css/main.css" type="text/css"/>
 </head>
 <body>
@@ -55,6 +55,7 @@ else
                             <label for="user">Emulator: </label>
                             <select name="emulator">
                                 <option value="mangos" select="selected">Mangos / Trinity</option>
+								<option value="arcemu">ArcEmu</option>
                             </select>
                             <p class="field_help">Please select your emulator.</p>
                         </div>
