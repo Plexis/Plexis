@@ -88,7 +88,7 @@
                 <div id="user-info">
                     <p>
                         <span class="messages">Hello <a href="javascript:void(0);"><?php echo ucfirst( strtolower('{session.user.username}')); ?></a></span>
-                        <a href="{SITE_URL}" class="button">Return To Site</a> <a href="{SITE_URL}/account/logout" class="button red">Logout</a>
+                        <a href="{SITE_URL}" class="button grey">Return To Site</a> <a href="{SITE_URL}/account/logout" class="button red">Logout</a>
                     </p>
                 </div> 
                 <!--! end of #user-info -->
@@ -195,7 +195,7 @@
                         }
                         elseif($GLOBALS['action'] !== 'index' && isset($GLOBALS['querystring'][0]))
                         {
-                            echo '<li><a href="{SITE_URL}/'.$GLOBALS['controller'].'/'.$GLOBALS['action'].'">'.ucfirst($GLOBALS['action']).'</a></li>';
+                            echo '<li class="no-hover"><a href="{SITE_URL}/'.$GLOBALS['controller'].'/'.$GLOBALS['action'].'">'.ucfirst($GLOBALS['action']).'</a></li>';
                             $__count = count($GLOBALS['querystring']) - 1;
                             foreach($GLOBALS['querystring'] as $k => $qs)
                             {
@@ -249,13 +249,7 @@
         <!--! end of #main -->
 
         <!-- Footer -->
-        <footer id="footer">
-            <div class="container_12">
-                <div class="grid_12">
-                    <div class="footer-icon align-center"><a class="top" href="#top"></a></div>
-                </div>
-            </div>
-        </footer>
+        <footer id="footer"></footer>
 
     </div> 
     <!--! end of #container -->

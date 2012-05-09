@@ -18,7 +18,7 @@
 
 .button {
 	background: url("../img/buttons/button-blue.png") repeat-x scroll 0 0 #2d5672;
-	border-radius: 20px 20px 20px 20px;
+	border-radius: 5px 5px 5px 5px;
 	border-style: solid;
 	border-width: 1px;
 	border-color: #111111;
@@ -91,7 +91,7 @@ input[type="submit"].button {
  * ================================================== */
 
 .user-button {
-	background: url("../img/misc/shine-effect.png") repeat-x scroll top left #344655;
+	background: url("../img/misc/shine-effect.png") repeat-x scroll top left #2a4757;
 	border: 1px solid #000;
 	border-radius: 3px 3px 3px 3px;
 	position: relative;

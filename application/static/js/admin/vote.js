@@ -85,7 +85,7 @@ $().ready(function() {
                     $('#vote').show();
                     
                     // Set the form values
-                    $('formtype').attr('value', 'edit');
+                    $('#formtype').attr('value', 'edit');
                     $('#vote_id').attr('value', vote_id);
                     $('#hostname').attr('value', result.hostname);
                     $('#votelink').attr('value', result.votelink);

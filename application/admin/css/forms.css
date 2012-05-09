@@ -172,7 +172,8 @@ p.inline-mini-label { padding-left: 70px; }
  * ================================================== */
 
 #search-form input[type="text"] {
-	background: url("../img/icons/misc/search.png") no-repeat scroll 8px 6px #fff;
+	background: url("../img/icons/misc/search.png") no-repeat scroll 8px 6px #222222;
+    color: #7c7c7c;
 	margin-top: 8px;
 	margin-left: 10px;
 	margin-right: 10px;
@@ -180,8 +181,8 @@ p.inline-mini-label { padding-left: 70px; }
 	padding-left: 25px;
 	padding-right: 10px;
 	padding-bottom: 4px;
-	border: 1px solid #b3b3b3;
-	border-radius: 20px 20px 20px 20px;
+	border: 1px solid #303030;
+	border-radius: 5px 5px 5px 5px;
 	width: 205px;
 }
 

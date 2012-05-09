@@ -5,12 +5,12 @@
 -->
 <template>
     <info>
-        <name>Grape</name>                                      <!-- The Template Name -->
-        <author>Stammi</author>                                 <!-- Template author / creater -->
-        <coded_by>Stammi</coded_by>                             <!-- Template coder -->
-        <date>14 August 2011</date>                             <!-- Creation data for the template -->
-        <license>ThemeForest Regular Licence</license>          <!-- Template License -->
-        <copyright>All Rights Reserved Stammi</copyright>
+        <name>Plexis</name>                                     <!-- The Template Name -->
+        <author>Stammi, Evilsystem</author>                     <!-- Template author / creater -->
+        <coded_by>Stammi, Wilson212</coded_by>                  <!-- Template coder -->
+        <date>9 May 2012</date>                                 <!-- Creation data for the template -->
+        <license></license>                                     <!-- Template License -->
+        <copyright>All Rights Reserved Plexis</copyright>
         <author_url>http://themeforest.net/user/Stammi</author_url>
     </info>
     
@@ -30,6 +30,7 @@
         <favicon type="image/png">img/icons/favicon.png</favicon>
         
         <comment>CSS concatenated and minified via ant build script</comment>
+        <css>jquery-ui-1.8.20.custom.css</css>
         <css>style.css</css>
         <css>960.fluid.css</css>
         <css>main.css</css>
@@ -39,7 +40,6 @@
         <css>forms.css</css>
         <css>tables.css</css>
         <css>charts.css</css>
-        <css>jquery-ui-1.8.20.custom.css</css>
         
         <comment>All JavaScript at the bottom, except for Modernizr</comment>
         <js>libs/modernizr-2.0.6.min.js</js>

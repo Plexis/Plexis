@@ -16,17 +16,17 @@ $(document).ready(function() {
 	/*
 	 * Scroll Effect
 	 */
-	/* $('a[href*=#]').bind("click", function(event) {
+	$('a[href*=#]').bind("click", function(event) {
 		event.preventDefault();
 		var target = $(this).attr("href");
 		
 		$('html,body').animate({
 			scrollTop: $(target).offset().top
 		}, 1000 , function () {
-			//location.hash = target;
+			// location.hash = target;
 			// finished scrolling
 		});
-	}); */
+	});
 	
 	
 	/*

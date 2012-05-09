@@ -158,16 +158,19 @@ ul.dropdown-username-menu li a:hover {
     padding: 0px;
     overflow: hidden;
     float: left;
+    font-weight: bold;
 }
 
-#breadcrumbs li {
+#breadcrumbs li,  #breadcrumbs li a{
+    color: #9f9f9f;
 	list-style-type: none;
-    padding-left: 10px;
+    padding-left: 5px;
     float: left;
 }
 
-#breadcrumbs li:hover {
-	background: url("../img/misc/breadcrumb/bc-shine.png") no-repeat scroll bottom center transparent;
+#breadcrumbs li:hover,  #breadcrumbs li a:hover{
+	color: #6fb4db;
+
 }
 
 #breadcrumbs li.no-hover {

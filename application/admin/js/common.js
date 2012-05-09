@@ -44,28 +44,28 @@ jQuery.fn.initMenu = function() {
                     if(theElement.hasClass('sub') && theElement.is(':visible')) {
                         if($(parent).hasClass('collapsible')) {
                             $('.sub:visible', parent).first().slideUp('normal', 
-                            function() {
-                                $(this).prev().removeClass('active');
-                                $(this).prev().removeClass('active-icon');
-                            }
-                        );
-                        return false;  
+                                function() {
+                                    $(this).prev().removeClass('active');
+                                    $(this).prev().removeClass('active-icon');
+                                }
+                            );
+                            return false;  
+                        }
+                        return false;
                     }
-                    return false;
-                }
-                if(theElement.hasClass('sub') && !theElement.is(':visible')) {         
-                    $('.sub:visible', parent).first().slideUp('normal', function() {
-                        $(this).prev().removeClass('active');
-                        $(this).prev().removeClass('active-icon');
-                    });
-                    theElement.slideDown('normal', function() {
-                        $(this).prev().addClass('active');
-                    });
-                    return false;
+                    if(theElement.hasClass('sub') && !theElement.is(':visible')) {         
+                        $('.sub:visible', parent).first().slideUp('normal', function() {
+                            $(this).prev().removeClass('active');
+                            $(this).prev().removeClass('active-icon');
+                        });
+                        theElement.slideDown('normal', function() {
+                            $(this).prev().addClass('active');
+                        });
+                        return false;
+                    }
                 }
             }
-        }
-    );
+        );
 	});
 };
 
