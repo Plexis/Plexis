@@ -734,6 +734,15 @@ class Ajax extends Application\Core\Controller
                     }
                     break;
                     
+                case "delete":
+                    $result = $Lib->delete_character($_POST['id']);
+                    ($result == true) ? $this->output(true, "Character deleted successfully!") : $this->output(false, "There was an error deleting the character!");
+                    break;
+                    
+                case "unstuck":
+                    $this->output(false, "This feature is incomplete.", 'warning');
+                    break;
+                    
             }
         }
     }

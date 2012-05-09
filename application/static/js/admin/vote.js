@@ -50,7 +50,7 @@ $().ready(function() {
         Modal.parent().find(".ui-dialog-buttonset").hide();
         
         // Reset form submit button value
-        $('formtype').attr('value', 'create');
+        $('#formtype').attr('value', 'create');
         $('#hostname').attr('value', '');
         $('#votelink').attr('value', '');
         $('#image_url').attr('value', '');
