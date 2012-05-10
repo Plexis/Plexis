@@ -43,7 +43,7 @@ class Controller extends \System\Core\Controller
     public function __construct($process_db = TRUE, $init_template = TRUE) 
     {
         // If site is updating, only allow Ajax requests
-        if($GLOBALS['controller'] != 'ajax' && config('site_updating')) 
+        if($GLOBALS['controller'] != 'admin_ajax' && config('site_updating')) 
             die('Site Down for maintenance. Be back soon.');
         
         // Build the Core Controller
