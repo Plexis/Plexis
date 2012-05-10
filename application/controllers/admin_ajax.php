@@ -96,7 +96,7 @@ class Admin_ajax extends Application\Core\Controller
                     $this->log('Banned user account: '. $user['username']);
                     
                     // Set our variables
-                    $date = strtotime($this->input->post('unbandate', true);
+                    $date = strtotime($this->input->post('unbandate', true));
                     $reason = $this->input->post('banreason', true);
                     $banip = (isset($_POST['banip'])) ? $this->input->post('banip', true) : FALSE;
                     
