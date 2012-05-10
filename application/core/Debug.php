@@ -155,7 +155,7 @@ class Debug extends \System\Core\Debug
         
         // Attempt to insert the error in the database
         $data = array(
-            'level' => $this->ErrorNo,
+            'level' => $this->ErrorLevel,
             'string' => $this->ErrorMessage,
             'file' => $this->ErrorFile,
             'line' => $this->ErrorLine,

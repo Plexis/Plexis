@@ -1789,6 +1789,56 @@ class Ajax extends Application\Core\Controller
         }
     }
     
+    public function logs()
+    {
+        $type = $_POST['type'];
+        switch($_POST['action'])
+        {
+            case "get":
+                // Load the Ajax Model
+                $this->load->model("Ajax_Model", "ajax");
+   
+                if($type == 'errors')
+                {
+                    
+                    /* 
+                    * Array of database columns which should be read and sent back to DataTables. Use a space where
+                    * you want to insert a non-database field (for example a counter or static image)
+                    */
+                    $cols = array( 'id', 'level', 'string', 'file', 'line' );
+                    
+                    /* Indexed column (used for fast and accurate table cardinality) */
+                    $index = "id";
+                    
+                    /* DB table to use */
+                    $table = "pcms_error_logs";
+                    
+                    /* where statment */
+                    $where = '';
+                    
+                    /* Process the request */
+                    $output = $this->ajax->process_datatables($cols, $index, $table, $where, $this->DB);
+                    foreach($output['aaData'] as $key => $value)
+                    {
+                        $output['aaData'][$key][5] = '<a href="#" class="delete" name="'. $value[0] .'">Delete</a>';
+                    }
+                    
+                    echo json_encode($output); return;
+                }
+                break;
+                
+            case "details":
+                break;
+                
+            case "delete":
+                $id = $_POST['id'];
+                $table = ($type == 'errors') ? 'error' : 'admin';
+                $result = $this->DB->delete('pcms_'. $table .'_logs', "`id`=$id");
+                ($result == TRUE) ? $this->output(true, 'Successfully Deleted Log Entry.') : $this->output(false, 'Failed to delete log entry! Please check your error log.');
+                break;
+        }
+    }
+    
 /*
 | ---------------------------------------------------------------
 | METHODS

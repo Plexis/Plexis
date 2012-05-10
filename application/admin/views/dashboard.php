@@ -141,9 +141,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{SITE_URL}/admin/logs">
-                        <img src="{TEMPLATE_URL}/img/icons/logs-icon.png">
-                        View Logs
+                    <a href="{SITE_URL}/admin/adminlogs">
+                        <img src="{TEMPLATE_URL}/img/icons/admin-logs-icon.png">
+                        View Admin Logs
+                    </a>
+                </li>
+                <li>
+                    <a href="{SITE_URL}/admin/errorlogs">
+                        <img src="{TEMPLATE_URL}/img/icons/error-logs-icon.png">
+                        View Error Logs
                     </a>
                 </li>
             </ul>

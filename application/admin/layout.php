@@ -34,7 +34,8 @@
             break;
         case "console":
         case "update":
-        case "logs":
+        case "errorlogs":
+        case "adminlogs":
         case "statistics":
             $g = TRUE;
             break;
@@ -169,10 +170,11 @@
                         <a href="javascript:void(0);" <?php if($g == TRUE) echo 'class="current"'; ?>>
                         <img src="{TEMPLATE_URL}/img/icons/small/system.png">System</a>
                         <ul class="sub">
-                            <li><a href="{SITE_URL}/admin/statistics">View Site Statistics</a></li>
-                            <li><a href="{SITE_URL}/admin/console">Console</a></li>
+                            <li><a href="{SITE_URL}/admin/statistics">Site Statistics</a></li>
+                            <li><a href="{SITE_URL}/admin/adminlogs">Admin Logs</a></li>
+                            <li><a href="{SITE_URL}/admin/errorlogs">Error Logs</a></li>
+                            <li><a href="{SITE_URL}/admin/console">RA Console</a></li>
                             <li><a href="{SITE_URL}/admin/update">Check For Updates</a></li>
-                            <li><a href="{SITE_URL}/admin/logs">View Logs</a></li>
                         </ul>
                     </li>
                 </ul>
