@@ -1,5 +1,5 @@
 $().ready(function() {
-    var post_url = Plexis.url + "/ajax/groups";
+    var post_url = Plexis.url + "/admin_ajax/groups";
 
     /** DataTables */
     var table = $('#groups').dataTable({

@@ -26,7 +26,7 @@
 <!-- Hidden Create / Edit form -->
 <div id="news-modal">
     <div id="js_news_message"></div>
-    <form id="news-form" class="form" action="{SITE_URL}/ajax/news" method="post">
+    <form id="news-form" class="form" action="{SITE_URL}/admin_ajax/news" method="post">
         <input id="form-type" type="hidden" name="action" value="create">
         <input id="news-id" type="hidden" name="id" value="0">
         <div class="_100">

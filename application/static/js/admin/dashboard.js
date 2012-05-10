@@ -2,7 +2,7 @@ $().ready(function() {
     // Check for updates
     $.ajax({
         type: "POST",
-        url: Plexis.url + "/ajax/update",
+        url: Plexis.url + "/admin_ajax/update",
         dataType: "json",
         data: { action: "get_latest" },
         timeout: 5000, // in milliseconds

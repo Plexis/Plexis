@@ -1,5 +1,5 @@
 $().ready(function() {
-    var post_url = Plexis.url + "/ajax/characters";
+    var post_url = Plexis.url + "/admin_ajax/characters";
     
     // Lock button
     $("a#unstuck").click(function() {

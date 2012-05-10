@@ -12,7 +12,7 @@
             <!-- Hidden Message -->
             <div id="js_message" style="display: none;"></div>
             
-            <form id="permissions-form" class="form" action="{SITE_URL}/ajax/permissions" method="post">
+            <form id="permissions-form" class="form" action="{SITE_URL}/admin_ajax/permissions" method="post">
                 <input type="hidden" name="action" value="save"/>
                 <input type="hidden" name="id" value="{group.group_id}"/>
             

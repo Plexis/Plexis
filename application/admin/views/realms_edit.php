@@ -9,7 +9,7 @@
         </div>
         
         <div class="block-content tab-container">
-            <form id="edit-form" class="form" action="{SITE_URL}/ajax/realms" method="post">
+            <form id="edit-form" class="form" action="{SITE_URL}/admin_ajax/realms" method="post">
                 <input type="hidden" name="action" value="edit"/>
                 <input type="hidden" name="name" value="{realm.name}"/>
                 <input type="hidden" name="id" value="{realm.id}"/>

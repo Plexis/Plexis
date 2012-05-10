@@ -9,7 +9,7 @@
         </div>
         
         <div class="block-content tab-container">
-            <form id="install-form" class="form" action="{SITE_URL}/ajax/realms" method="post">
+            <form id="install-form" class="form" action="{SITE_URL}/admin_ajax/realms" method="post">
                 <input type="hidden" name="action" value="install"/>
                 <input type="hidden" name="id" value="{realm.id}"/>
                 

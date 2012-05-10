@@ -5,8 +5,9 @@
         </div>
         
         <!-- Profile Form -->
-        <form id="profile" class="block-content form" action="{SITE_URL}/ajax/account/{user.username}" method="POST">
+        <form id="profile" class="block-content form" action="{SITE_URL}/admin_ajax/accounts" method="POST">
             <input type="hidden" name="action" value="update-account">
+            <input type="hidden" name="id" value="{user.id}" />
             
             <!-- JS Ajax message for profile updates -->
             <div id="js_profile_message" style="display: none;"></div>
@@ -161,8 +162,9 @@
 <!-- hidden ban form -->
 <div id="ban-form" title="Ban User" style="display: none;">
     <div id="js_ban_message" style="display: none"></div>
-    <form id="ban" class="form" action="{SITE_URL}/ajax/account/{user.username}" method="POST">
-        <input type="hidden" name="action" value="ban-account">
+    <form id="ban" class="form" action="{SITE_URL}/admin_ajax/accounts" method="POST">
+        <input type="hidden" name="action" value="ban-account" />
+        <input type="hidden" name="id" value="{user.id}" />
         <div>
             <p>Submitting this form will ban {user.username} until the date specified.</p>
             <p>
@@ -186,9 +188,3 @@
         </div>
     </form>
 </div>
-<script type="text/javascript">
-    var username = '{user.username}';
-    var userid = '{user.id}';
-    var level = '{session.user.group_id}';
-    var is_super = '{session.user.is_super_admin}';
-</script>

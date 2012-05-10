@@ -29,7 +29,7 @@
 <!-- Hidden Create / Edit form -->
 <div id="vote-form" title="Create Vote Site" style="display: none;">
     <div id="js_news_message" style="display: none;"></div>
-    <form id="vote" class="form" action="{SITE_URL}/ajax/vote" method="post">
+    <form id="vote" class="form" action="{SITE_URL}/admin_ajax/vote" method="post">
         <input id="formtype" type="hidden" name="action" value="create">
         <input id="vote_id" type="hidden" name="id" value="0">
         <div class="_100">

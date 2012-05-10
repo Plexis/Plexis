@@ -76,7 +76,7 @@ $().ready(function() {
         // Send our uninstall command
         $.ajax({
             type: "POST",
-            url: Plexis.url + '/ajax/regkeys',
+            url: Plexis.url + '/admin_ajax/regkeys',
             data: { action : c },
             dataType: "json",
             timeout: 5000, // in milliseconds

@@ -1,5 +1,5 @@
 $().ready(function() {
-    var post_url = Plexis.url + "/ajax/realms";
+    var post_url = Plexis.url + "/admin_ajax/realms";
     /**
      * DataTables
      */

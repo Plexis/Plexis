@@ -11,7 +11,7 @@
             <div id="js_message" style="display: none;"></div>
             
             <!-- Basic Settins -->
-            <form id="config-form" class="form" action="{SITE_URL}/ajax/settings" method="post">
+            <form id="config-form" class="form" action="{SITE_URL}/admin_ajax/settings" method="post">
                 <input type="hidden" name="action" value="save"/>
             
                 <fieldset>

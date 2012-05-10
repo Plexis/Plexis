@@ -25,7 +25,7 @@
 <!-- Hidden Create form -->
 <div id="groups-modal">
     <div id="js_groups_message"></div>
-    <form id="groups-form" class="form" action="{SITE_URL}/ajax/groups" method="post">
+    <form id="groups-form" class="form" action="{SITE_URL}/admin_ajax/groups" method="post">
         <input id="formtype" type="hidden" name="action" value="create">
         <input id="groupid" type="hidden" name="id" value="0">
         <div class="_100">

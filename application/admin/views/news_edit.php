@@ -3,7 +3,7 @@
         <div class="block-header">
             <h1>News Form</h1><span></span>
         </div>
-        <form id="validate-form" class="block-content form" action="{SITE_URL}/ajax/news" method="post">
+        <form id="validate-form" class="block-content form" action="{SITE_URL}/admin_ajax/news" method="post">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" value="{id}">
             

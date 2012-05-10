@@ -9,7 +9,7 @@ $().ready(function() {
     var table = $('#character-table').dataTable({
         "bServerSide": true,
         "bSortClasses": false,
-        "sAjaxSource": Plexis.url + "/ajax/characters/" + Plexis.realm_id,
+        "sAjaxSource": Plexis.url + "/admin_ajax/characters/" + Plexis.realm_id,
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json', 
@@ -27,6 +27,6 @@ $().ready(function() {
         $('#realm-changer').val( realm_id );
         
         // Reload the characters table with the new realm id
-        table.fnReloadAjax( Plexis.url + "/ajax/characters/" + realm_id );
+        table.fnReloadAjax( Plexis.url + "/admin_ajax/characters/" + realm_id );
     });
 });

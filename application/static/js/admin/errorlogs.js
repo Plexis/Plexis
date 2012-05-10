@@ -1,5 +1,5 @@
 $().ready(function() {
-    var post_url = Plexis.url + "/ajax/logs";
+    var post_url = Plexis.url + "/admin_ajax/logs";
     
     /**
      * DataTables

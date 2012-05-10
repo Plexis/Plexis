@@ -210,6 +210,11 @@ class Admin extends Application\Core\Controller
                     }
                     $user = array_merge($user2, $user);
                     
+                    // Set some JS vars
+                    $this->Template->setjs('userid', $user['id']);
+                    $this->Template->setjs('level', $this->user['group_id']);
+                    $this->Template->setjs('is_super', $this->user['is_super_admin']);
+                    
                     // Finish Building our data array
                     $data['page_title'] = ucfirst( strtolower($username) )." (Account ID: ".$user['id'].")";
                     $data['page_desc'] = "Here you can manage the account of all your users.";

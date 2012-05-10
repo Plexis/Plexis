@@ -1,5 +1,5 @@
 $().ready(function() {
-    var post_url = Plexis.url + "/ajax/vote";
+    var post_url = Plexis.url + "/admin_ajax/vote";
     
     /** Bind the vote table with DataTables */
     var votetable = $('#data-table').dataTable({

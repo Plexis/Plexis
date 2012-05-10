@@ -5,7 +5,7 @@
         </div>
         
         <!-- Profile Form -->
-        <form id="profile" class="block-content form" action="{SITE_URL}/ajax/characters/" method="POST">
+        <form id="profile" class="block-content form" action="{SITE_URL}/admin_ajax/characters" method="POST">
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="realm" value="{realm}">
             <input type="hidden" name="id" value="{character.id}">
