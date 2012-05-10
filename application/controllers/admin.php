@@ -1010,7 +1010,7 @@ class Admin extends Application\Core\Controller
             'page_title' => "View Admin Logs",
             'page_desc' => "Here you can view what actions each member of your admin group have preformed.",
         );
-        $this->load->view('under_construction', $data);
+        $this->load->view('adminlogs', $data);
     }
  
 /*

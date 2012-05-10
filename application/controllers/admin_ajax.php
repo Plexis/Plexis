@@ -92,6 +92,9 @@ class Admin_ajax extends Application\Core\Controller
             switch($_POST['action'])
             {
                 case "ban-account":
+                    // Log action
+                    $this->log('Banned user account: '. $user['username']);
+                    
                     // Set our variables
                     $date = strtotime($_POST['unbandate']);
                     $reason = $_POST['banreason'];
@@ -103,16 +106,28 @@ class Admin_ajax extends Application\Core\Controller
                     break;
                     
                 case "unban-account":
+                    // Log action
+                    $this->log('Un-Banned user account '. $user['username']);
+                    
+                    // Unban the account
                     $result = $this->realm->unban_account($id);
                     ($result == TRUE) ? $this->output(true, 'account_unban_success') : $this->output(false, 'account_unban_error');
                     break;
                     
                 case "lock-account":
+                    // Log action
+                    $this->log('Locked user account '. $user['username']);
+                    
+                    // Lock account
                     $result = $this->realm->lock_account($id);
                     ($result == TRUE) ? $this->output(true, 'account_lock_success') : $this->output(false, 'account_lock_error');
                     break;
                     
                 case "unlock-account":
+                    // Log action
+                    $this->log('Un-Locked user account '. $user['username']);
+                    
+                    // Unlock the account
                     $result = $this->realm->unlock_account($id);
                     ($result == TRUE) ?$this->output(true, 'account_unlock_success') : $this->output(false, 'account_unlock_error');
                     break;
@@ -120,6 +135,9 @@ class Admin_ajax extends Application\Core\Controller
                 case "delete-account":
                     if( $this->realm->delete_account($id) )
                     {
+                        // Log action
+                        $this->log('Deleted user account '. $user['username']);
+                    
                         // Load the database, Delete user
                         $this->DB = $this->load->database('DB');
                         $result = $this->DB->delete("pcms_accounts", "`id`=".$id);
@@ -323,6 +341,9 @@ class Admin_ajax extends Application\Core\Controller
                     $title = $this->input->post('title', TRUE);
                     $type = $this->input->post('group_type', TRUE);
                     
+                    // Log action
+                    $this->log('Edited Group ID: '. $id);
+                    
                     // Defaults
                     $a = 1;
                     $u = 1;
@@ -361,6 +382,9 @@ class Admin_ajax extends Application\Core\Controller
                     $title = $this->input->post('title', TRUE);
                     $type = $this->input->post('group_type', TRUE);
                     
+                    // Log action
+                    $this->log('Created new group: '. $title);
+                    
                     // Defaults
                     $a = 1;
                     $u = 1;
@@ -397,6 +421,13 @@ class Admin_ajax extends Application\Core\Controller
                 
                 case "deletegroup":
                     $id = $this->input->post('id', TRUE);
+                    
+                    // Get the group title
+                    $query = "SELECT `title` FROM `pcms_groups` WHERE `group_id`=?";
+                    $title = $this->DB->query($query, array($id))->fetch_column();
+                    
+                    // Log action
+                    $this->log('Deleted user group "'. $title .'"');
                     $result = $this->DB->delete("pcms_account_groups", "`group_id`=$id");
                     ($result == TRUE) ? $this->output(true, 'group_delete_success') : $this->output(false, 'group_delete_error');
                     return;
@@ -419,6 +450,13 @@ class Admin_ajax extends Application\Core\Controller
         
         // Load the input class
         $id = $this->input->post('id', TRUE);
+        
+        // Get the group title
+        $query = "SELECT `title` FROM `pcms_groups` WHERE `group_id`=?";
+        $title = $this->DB->query($query, array($id))->fetch_column();
+        
+        // Log action
+        $this->log('Edited permissions for group "'. $title .'"');
         
         // Do we have POST action?
         if(isset($_POST['action']) && $_POST['action'] == 'save')
@@ -473,10 +511,12 @@ class Admin_ajax extends Application\Core\Controller
                         'title' => 'required', 
                         'body' => 'required')
                     );
-                    
+
                     // If both the username and password pass validation
                     if( $this->validation->validate() == TRUE )
                     {
+                        // Log action
+                        $this->log('Published news post "'. $_POST['title'] .'"');
                         $result = $this->News_Model->submit_news($_POST['title'], $_POST['body'], $this->user['username']);
                         ($result == TRUE) ? $this->output(true, 'news_posted_successfully') : $this->output(false, 'news_post_error');
                     }
@@ -516,6 +556,14 @@ class Admin_ajax extends Application\Core\Controller
                     // If both the username and password pass validation
                     if( $this->validation->validate() == TRUE )
                     {
+                        // Get the news title
+                        $query = "SELECT `title` FROM `pcms_news` WHERE `id`=?";
+                        $title = $this->DB->query($query, array($id))->fetch_column();
+                        
+                        // Log action
+                        $this->log('Modified news post with title: "'. $title .'"');
+                    
+                        // Preform the action
                         $result = $this->News_Model->update_news($_POST['id'], $_POST['title'], $_POST['body']);
                         ($result == TRUE) ? $this->output(true, 'news_update_success') : $this->output(false, 'news_update_error', 'warning');
                     }
@@ -529,6 +577,14 @@ class Admin_ajax extends Application\Core\Controller
                     
                 // DELETING
                 case "delete":
+                    // Get the news title
+                    $query = "SELECT `title` FROM `pcms_news` WHERE `id`=?";
+                    $title = $this->DB->query($query, array($id))->fetch_column();
+                    
+                    // Log action
+                    $this->log('Deleted news post with title: "'. $title .'"');
+                    
+                    // Preform the delete
                     $result = $this->News_Model->delete_post($_POST['id']);
                     ($result == TRUE) ? $this->output(true, 'news_delete_success') : $this->output(false, 'news_delete_error');
                     break;
@@ -585,6 +641,9 @@ class Admin_ajax extends Application\Core\Controller
         // Load our config class
         $Config = load_class('Config');
         
+        // Log action
+        $this->log('Modified site config settings');
+        
         // Do we have POST action?
         if(isset($_POST['action']) && $_POST['action'] == 'save')
         {
@@ -623,27 +682,36 @@ class Admin_ajax extends Application\Core\Controller
 
             // Load the WoWLib
             $this->load->wowlib($realm, 'wowlib');
-            $output = $this->wowlib->get_character_list_datatables();
-            
-            // Loop, each character, and format the rows accordingly
-            foreach($output['aaData'] as $key => $value)
+            if(is_object($this->wowlib))
             {
-                $u = $this->realm->fetch_account($value[7]);
-                $g = $value[5];
-                $r = $value[3];
-                $race = $this->wowlib->race_to_text($r);
-                $class = $this->wowlib->class_to_text($value[4]);
-                $zone = $this->wowlib->zone_to_text($value[6]);
-                $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/application/static/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
-                $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
-                $output['aaData'][$key][5] = $zone;
-                $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
-                $output['aaData'][$key][7] = '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
-                unset($output['aaData'][$key][8]);
+                $output = $this->wowlib->get_character_list_datatables();
+                
+                // Loop, each character, and format the rows accordingly
+                foreach($output['aaData'] as $key => $value)
+                {
+                    $u = $this->realm->fetch_account($value[7]);
+                    $g = $value[5];
+                    $r = $value[3];
+                    $race = $this->wowlib->race_to_text($r);
+                    $class = $this->wowlib->class_to_text($value[4]);
+                    $zone = $this->wowlib->zone_to_text($value[6]);
+                    $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/application/static/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
+                    $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
+                    $output['aaData'][$key][5] = $zone;
+                    $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
+                    $output['aaData'][$key][7] = '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
+                    unset($output['aaData'][$key][8]);
+                }
+                
+                // Push the output in json format
+                echo json_encode($output);
+                return;
             }
-            
-            // Push the output in json format
-            echo json_encode($output);
+            else
+            {
+                // Unable to load Wowlib
+                $this->output(false, 'Failed to load Wowlib. Please make sure the character / world Databases are online');
+            }
         }
         else
         {
@@ -685,6 +753,12 @@ class Admin_ajax extends Application\Core\Controller
             switch($_POST['action'])
             {
                 case "update":
+                    // Get our realm name
+                    $r = get_realm($realm);
+                    
+                    // Log action
+                    $this->log('Edited character '. $char['name'] .' from realm '. $r['name']);
+                    
                     // Update the character data
                     $info = array(
                         'name' => $_POST['name'],
@@ -727,6 +801,11 @@ class Admin_ajax extends Application\Core\Controller
                     break;
                     
                 case "delete":
+                    // Get our realm name
+                    $r = get_realm($realm);
+                    
+                    // Log action
+                    $this->log('Deleted character '. $char['name'] .' from realm '. $r['name']);
                     $result = $Lib->delete_character($_POST['id']);
                     ($result == true) ? $this->output(true, "Character deleted successfully!") : $this->output(false, "There was an error deleting the character!");
                     break;
@@ -761,17 +840,24 @@ class Admin_ajax extends Application\Core\Controller
             case "install": 
             case "manual-install":
             case "edit":
-                $this->check_permission('manage_realms');
                 $this->model->process_realm($action);
                 break;
                 
             case "un-install":
-                $this->check_permission('manage_realms');
+                // Get our realm name
+                $r = get_realm($realm);
+                
+                // Log action
+                $this->log('Uninstalled Realm '. $r['name']);
                 $this->model->uninstall_realm();
                 break;
                 
             case "make-default":
-                $this->check_permission('manage_realms');
+                // Get our realm name
+                $r = get_realm($realm);
+                
+                // Log action
+                $this->log('Changed the default realm to '. $r['name']);
                 
                 // Load our config class
                 $Config = load_class('Config');
@@ -934,6 +1020,8 @@ class Admin_ajax extends Application\Core\Controller
                     // If both the username and password pass validation
                     if( $this->validation->validate() == TRUE )
                     {
+                        // Log action
+                        $this->log('Created a new votesite with host "'. $_POST['hostname'] .'"');
                         $result = $this->model->create($_POST['hostname'], $_POST['votelink'], $_POST['image_url'], $_POST['points'], $_POST['reset_time']);
                         ($result == TRUE) ? $this->output(true, 'votesite_created_successfully') : $this->output(false, 'votesite_create_failed');
                     }
@@ -966,6 +1054,8 @@ class Admin_ajax extends Application\Core\Controller
                     // If both the username and password pass validation
                     if( $this->validation->validate() == TRUE )
                     {
+                        // Log action
+                        $this->log('Modified votesite with ID: '. $_POST['id']);
                         $result = $this->model->update($_POST['id'], $_POST['hostname'], $_POST['votelink'], $_POST['image_url'], $_POST['points'], $_POST['reset_time']);
                         ($result == TRUE) ? $this->output(true, 'votesite_update_success') : $this->output(false, 'votesite_update_error', 'warning');
                     }
@@ -979,8 +1069,8 @@ class Admin_ajax extends Application\Core\Controller
                     
                 // DELETING
                 case "delete":
-                    // Make sure we arent getting direct accessed, and the user has permission
-                    $this->check_permission('manage_votesites');
+                    // Log action
+                    $this->log('Deleted votesite ID: '. $_POST['id']);
 
                     $result = $this->model->delete($_POST['id']);
                     ($result == TRUE) ? $this->output(true, 'votesite_delete_success') : $this->output(false, 'votesite_delete_error');
@@ -1054,6 +1144,8 @@ class Admin_ajax extends Application\Core\Controller
                     // If both the username and password pass validation
                     if( $this->validation->validate() == TRUE )
                     {
+                        // Log action
+                        $this->log('Installed module "'. $_POST['module'] .'"');
                         $result = $this->model->install_module($_POST['module'], $_POST['uri'], $_POST['function']);
                         ($result == TRUE) ? $this->output(true, 'module_install_success') : $this->output(false, 'module_install_error');
                     }
@@ -1069,6 +1161,9 @@ class Admin_ajax extends Application\Core\Controller
                 case "un-install":
                     // Load the Modules Model
                     $this->load->model("Admin_Model", "model");
+                    
+                    // Log action
+                    $this->log('Uninstalled module "'. $_POST['name'] .'"');
                     
                     $result = $this->model->uninstall_module($_POST['name']);
                     ($result == TRUE) ? $this->output(true, 'module_uninstall_success') : $this->output(false, 'module_uninstall_error');
@@ -1163,6 +1258,9 @@ class Admin_ajax extends Application\Core\Controller
                     // Make sure we are using an ID here
                     if(!is_numeric($id)) return;
                     
+                    // Log action
+                    $this->log('Installed template "'. $_POST['id'] .'"');
+                    
                     // Load the Templates Model
                     $this->load->model("Admin_Model", "model");
 
@@ -1181,11 +1279,14 @@ class Admin_ajax extends Application\Core\Controller
                     // Dont allow the default template to be uninstalled!
                     $query = "SELECT `name` FROM `pcms_templates` WHERE `id`=?";
                     $name = $this->DB->query( $query, array($id) )->fetch_column();
-                    if($default == $default)
+                    if($default == $name)
                     {
                         $this->output(false, 'template_uninstall_default_warning', 'warning');
                         return;
                     }
+                    
+                    // Log action
+                    $this->log('Uninstalled template "'. $name .'"');
                     
                     // Load the Templates Model
                     $this->load->model("Admin_Model", "model");
@@ -1204,6 +1305,9 @@ class Admin_ajax extends Application\Core\Controller
                     // Get the template name
                     $query = "SELECT `name` FROM `pcms_templates` WHERE `id`=?";
                     $name = $this->DB->query( $query, array($id) )->fetch_column();
+                    
+                    // Log action
+                    $this->log('Changed default template to "'. $name .'"');
                     
                     // Set the new default Realm
                     $Config->set('default_template', $name, 'App');
@@ -1511,15 +1615,61 @@ class Admin_ajax extends Application\Core\Controller
                     
                     echo json_encode($output); return;
                 }
+                else
+                {
+                    /* 
+                    * Array of database columns which should be read and sent back to DataTables. Use a space where
+                    * you want to insert a non-database field (for example a counter or static image)
+                    */
+                    $cols = array( 'id', 'username', 'desc', 'time' );
+                    
+                    /* Indexed column (used for fast and accurate table cardinality) */
+                    $index = "id";
+                    
+                    /* DB table to use */
+                    $table = "pcms_admin_logs";
+                    
+                    /* where statment */
+                    $where = '';
+                    
+                    /* Process the request */
+                    $output = $this->ajax->process_datatables($cols, $index, $table, $where, $this->DB);
+                    foreach($output['aaData'] as $key => $value)
+                    {
+                        $output['aaData'][$key][3] = date('F j, g:i:s a', strtotime($value[3]));
+                        $output['aaData'][$key][4] = '<a href="#" class="delete" name="'. $value[0] .'">Delete</a>';
+                    }
+                    
+                    echo json_encode($output); return;
+                }
                 break;
                 
             case "details":
                 break;
                 
             case "delete":
-                $id = $_POST['id'];
+                // Get our ID and table type
+                $id = $this->input->post('id', true);
                 $table = ($type == 'errors') ? 'error' : 'admin';
-                $result = $this->DB->delete('pcms_'. $table .'_logs', "`id`=$id");
+                
+                // Check for deletion of all logs
+                if($id == 'all')
+                {
+                    $result = $this->DB->exec("TRUNCATE `pcms_{$table}_logs`");
+                    if($result === false) 
+                    {
+                        // Try a normal delete
+                        $result = $this->DB->delete('pcms_'. $table .'_logs');
+                    }
+                    else
+                    {
+                        $result = true;
+                    }
+                }
+                else
+                {
+                    $result = $this->DB->delete('pcms_'. $table .'_logs', "`id`=$id");
+                }
                 ($result == TRUE) ? $this->output(true, 'Successfully Deleted Log Entry.') : $this->output(false, 'Failed to delete log entry! Please check your error log.');
                 break;
         }
@@ -1786,6 +1936,20 @@ class Admin_ajax extends Application\Core\Controller
             $this->output(false, 'access_denied_privlages');
             die();
         }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: log()
+| ---------------------------------------------------------------
+|
+| This method is used to log actions preformed by admins
+|
+| @Param: $message - The message to be saved
+*/   
+    protected function log($message)
+    {
+        log_action($this->user['username'], $message);
     }
  
 /*

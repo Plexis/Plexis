@@ -10,7 +10,7 @@ $().ready(function() {
         "sAjaxSource": post_url,
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             aoData.push( { "name": "action", "value": "get" } );
-            aoData.push( { "name": "type", "value": "errors" } );
+            aoData.push( { "name": "type", "value": "admin" } );
             $.ajax( {
                 "dataType": 'json', 
                 "type": "POST", 
@@ -30,7 +30,7 @@ $().ready(function() {
         $.ajax({
             type: "POST",
             url: post_url,
-            data: {action: 'delete', type: 'errors', id: this.name},
+            data: {action: 'delete', type: 'admin', id: this.name},
             dataType: "json",
             timeout: 5000, // in milliseconds
             success: function(result) 
@@ -58,7 +58,7 @@ $().ready(function() {
         $.ajax({
             type: "POST",
             url: post_url,
-            data: {action: 'delete', type: 'errors', id: 'all'},
+            data: {action: 'delete', type: 'admin', id: 'all'},
             dataType: "json",
             timeout: 5000, // in milliseconds
             success: function(result) 
@@ -78,4 +78,5 @@ $().ready(function() {
             }
         });
     });
+
 });

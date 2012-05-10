@@ -92,7 +92,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: get_languages()
+| Function: get_languages()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of languages in the 
@@ -114,7 +114,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: get_port_status()
+| Function: get_port_status()
 | ---------------------------------------------------------------
 |
 | This function is used to get the port status of a domain/port
@@ -138,7 +138,7 @@
 
 /*
 | ---------------------------------------------------------------
-| Method: get_realm_cookie()
+| Function: get_realm_cookie()
 | ---------------------------------------------------------------
 |
 | This function returns the users selected realm from his cookie
@@ -176,7 +176,7 @@
 
 /*
 | ---------------------------------------------------------------
-| Method: get_installed_realms()
+| Function: get_installed_realms()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of site installed realms.
@@ -196,7 +196,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: realm_installed()
+| Function: realm_installed()
 | ---------------------------------------------------------------
 |
 | This function is used to find out if a realm is installed based on ID
@@ -223,7 +223,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: get_realm()
+| Function: get_realm()
 | ---------------------------------------------------------------
 |
 | This function is used to fetch the realm info based on ID
@@ -246,7 +246,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: get_realm_status()
+| Function: get_realm_status()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of site installed realms.
@@ -310,7 +310,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: get_wowlib_drivers()
+| Function: get_wowlib_drivers()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of WoWLib drivers
@@ -332,7 +332,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: load_module_config()
+| Function: load_module_config()
 | ---------------------------------------------------------------
 |
 | This function is used to load a modules config file, and add
@@ -355,7 +355,7 @@
 
 /*
 | ---------------------------------------------------------------
-| Method: get_modules()
+| Function: get_modules()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of modules in the modules
@@ -377,7 +377,7 @@
 
 /*
 | ---------------------------------------------------------------
-| Method: get_installed_modules()
+| Function: get_installed_modules()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of site installed modules.
@@ -397,7 +397,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: module_installed()
+| Function: module_installed()
 | ---------------------------------------------------------------
 |
 | This function is used to find out if a module is installed based 
@@ -419,7 +419,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: get_templates()
+| Function: get_templates()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of template fodlers 
@@ -441,7 +441,7 @@
 
 /*
 | ---------------------------------------------------------------
-| Method: get_installed_templates()
+| Function: get_installed_templates()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of site installed templates.
@@ -461,7 +461,7 @@
     
 /*
 | ---------------------------------------------------------------
-| Method: template_installed()
+| Function: template_installed()
 | ---------------------------------------------------------------
 |
 | This function is used to find out if a templates is installed based 
@@ -483,7 +483,7 @@
 
 /*
 | ---------------------------------------------------------------
-| Method: get_secret_questions()
+| Function: get_secret_questions()
 | ---------------------------------------------------------------
 |
 | This function is used to return an array of WoWLib drivers
@@ -522,10 +522,29 @@
         // Return the questions
         return $return;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: log_action
+| ---------------------------------------------------------------
+|
+| This function is used to exctract a specific piece of the url.
+|
+| @Param: (String) $id: The username
+| @Param: (String) $desc: The action description
+|
+*/
+
+    function log_action($id, $desc)
+    {
+        $DB = load_class('Loader')->database('DB');
+        return $DB->insert('pcms_admin_logs', array('username' => $id, 'desc' => $desc));
+    }
+    
 	
 /*
 | ---------------------------------------------------------------
-| Method: uri_segment
+| Function: uri_segment
 | ---------------------------------------------------------------
 |
 | This function is used to exctract a specific piece of the url.

@@ -446,7 +446,7 @@ class Ajax_Model extends Application\Core\Model
             {
                 if ( $_POST[ 'bSortable_'. intval($_POST['iSortCol_'.$i]) ] == "true" )
                 {
-                    $sOrder .= $aColumns[ intval( $_POST['iSortCol_'.$i] ) ]."
+                    $sOrder .= "`". $aColumns[ intval( $_POST['iSortCol_'.$i] ) ]."`
                         ". addslashes( $_POST['sSortDir_'.$i] ) .", ";
                 }
             }
@@ -471,7 +471,7 @@ class Ajax_Model extends Application\Core\Model
             $sWhere = "WHERE (";
             for ($i=  0; $i < count($aColumns); $i++)
             {
-                $sWhere .= $aColumns[$i]." LIKE '%". addslashes( $_POST['sSearch'] ) ."%' OR ";
+                $sWhere .= "`". $aColumns[$i]."` LIKE '%". addslashes( $_POST['sSearch'] ) ."%' OR ";
             }
             $sWhere = substr_replace( $sWhere, "", -3 );
             $sWhere .= ')';
@@ -490,7 +490,7 @@ class Ajax_Model extends Application\Core\Model
                 {
                     $sWhere .= " AND ";
                 }
-                $sWhere .= $aColumns[$i]." LIKE '%". addslashes($_POST['sSearch_'.$i]) ."%' ";
+                $sWhere .= "`".$aColumns[$i]."` LIKE '%". addslashes($_POST['sSearch_'.$i]) ."%' ";
             }
         }
         
@@ -511,7 +511,7 @@ class Ajax_Model extends Application\Core\Model
          * SQL queries
          * Get data to display
          */
-        $columns = str_replace(" , ", " ", implode(", ", $aColumns));
+        $columns = "`". str_replace(",``", " ", implode("`, `", $aColumns)) ."`";
         $sQuery = "SELECT SQL_CALC_FOUND_ROWS {$columns} FROM {$sTable} {$sWhere} {$sOrder} {$sLimit}";
         $rResult = $DB->query( $sQuery )->fetch_array('BOTH');
         
