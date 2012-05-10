@@ -112,7 +112,7 @@ class Admin extends Application\Core\Controller
         if( !$this->check_access('manage_news')) return;
 
         // Load our editor script
-        $this->Template->add_script( BASE_URL .'/application/admin/js/tiny_mce/jquery.tinymce.js' );
+        $this->Template->add_script( 'tiny_mce/jquery.tinymce.js' );
 
         // Build our page variable data
         $data = array(

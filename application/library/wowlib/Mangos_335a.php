@@ -37,6 +37,8 @@ class Mangos_335a
 | Constructer
 | ---------------------------------------------------------------
 |
+| This is the default constructer for ALL wowlibs!
+|
 */
     public function __construct($realm_id)
     {
@@ -79,34 +81,7 @@ class Mangos_335a
 |                               CHARACTER DATABASE FUNCTIONS
 | -------------------------------------------------------------------------------------------------
 */
-    
-/*
-| ---------------------------------------------------------------
-| Method: list_characters
-| ---------------------------------------------------------------
-|
-| This method is used to list all the characters from the characters
-| database.
-|
-| @Param: (Int) $limit - The number of results we are recieveing
-| @Param: (Int) $start - The result we start from (example: $start = 50
-|   would return results 50-100)
-| @Retrun: (Array): An array of characters
-|
-*/
-    public function list_characters($limit = 50, $start = 0)
-    {        
-        // Build our query, and query the database
-        $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zone` FROM `characters` LIMIT ".$start.", ".$limit;
-        $list = $this->CDB->query( $query )->fetch_array();
-        
-        // If we have a false return, then there was nothing to select
-        if($list === FALSE)
-        {
-            return array();
-        }
-        return $list;
-    }
+
     
 /*
 | ---------------------------------------------------------------
@@ -194,64 +169,6 @@ class Mangos_335a
         
         // If we are here, then we have the account ID. return it
         return $account;
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: set_character_info
-| ---------------------------------------------------------------
-|
-| This method is used to set an array of character information
-|
-| @Param: (Int) $id - The character ID
-| @Param:(Array): $info - an array of fields to set... This includes
-| these fields (NOTE: you need not set all of these, just the ones
-|   you are updating)
-|   array(
-|       'account' => The account ID the character belongs too
-|       'name' => The characters name
-|       'gender' => Gender
-|       'level' => Level
-|       'money' => characters money
-|       'xp' => Characters current level expierience
-|   );
-|
-*/  
-    public function set_character_info($id, $info)
-    {
-        // First we check to make sure the character exists!
-        $query = "SELECT `account`, `name`, `gender`, `level`, `money`, `xp` FROM `characters` WHERE `guid`=?";
-        $char = $this->CDB->query( $query, array($id) )->fetch_row();
-        if($char === false)
-        {
-            // Character doesnt exist or is online
-            return false;
-        }
-        else
-        {
-            // If the name changed, check to make sure a different char doesnt have that name
-            if(isset($info['name']))
-            {
-                if($char['name'] != $info['name'])
-                {
-                    if($this->character_name_exists($info['name'])) return false;
-                }
-            }
-            
-            // Build our data array ( 'column_name' => $info['infoid'] )
-            // We need to check if each field is set, if not, use $char default
-            $data = array(
-                'account'   => (isset($info['account'])) ? $info['account'] : $char['account'],
-                'name'      => (isset($info['name']))    ? $info['name']    : $char['name'],
-                'gender'    => (isset($info['gender']))  ? $info['gender']  : $char['gender'],
-                'level'     => (isset($info['level']))   ? $info['level']   : $char['level'],
-                'money'     => (isset($info['money']))   ? $info['money']   : $char['money'],
-                'xp'        => (isset($info['xp']))      ? $info['xp']      : $char['xp']
-            );
-            
-            // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
-            return $this->CDB->update('characters', $data, "`guid`=".$id);
-        }
     }
     
 /*
@@ -504,6 +421,34 @@ class Mangos_335a
         // Return the query result
         return $this->CDB->query( $query )->fetch_column();
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: list_characters
+| ---------------------------------------------------------------
+|
+| This method is used to list all the characters from the characters
+| database.
+|
+| @Param: (Int) $limit - The number of results we are recieveing
+| @Param: (Int) $start - The result we start from (example: $start = 50
+|   would return results 50-100)
+| @Retrun: (Array): An array of characters
+|
+*/
+    public function list_characters($limit = 50, $start = 0)
+    {        
+        // Build our query, and query the database
+        $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zone` FROM `characters` LIMIT ".$start.", ".$limit;
+        $list = $this->CDB->query( $query )->fetch_array();
+        
+        // If we have a false return, then there was nothing to select
+        if($list === FALSE)
+        {
+            return array();
+        }
+        return $list;
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -547,7 +492,7 @@ class Mangos_335a
     
 /*
 | ---------------------------------------------------------------
-| Method: get_online_list
+| Method: get_online_list_datatables
 | ---------------------------------------------------------------
 |
 | This method returns a list of characters online
@@ -642,6 +587,64 @@ class Mangos_335a
         // Return the query result
         return $this->CDB->query( $query )->fetch_array();
 	}
+    
+/*
+| ---------------------------------------------------------------
+| Method: set_character_info
+| ---------------------------------------------------------------
+|
+| This method is used to set an array of character information
+|
+| @Param: (Int) $id - The character ID
+| @Param:(Array): $info - an array of fields to set... This includes
+| these fields (NOTE: you need not set all of these, just the ones
+|   you are updating)
+|   array(
+|       'account' => The account ID the character belongs too
+|       'name' => The characters name
+|       'gender' => Gender
+|       'level' => Level
+|       'money' => characters money
+|       'xp' => Characters current level expierience
+|   );
+|
+*/  
+    public function set_character_info($id, $info)
+    {
+        // First we check to make sure the character exists!
+        $query = "SELECT `account`, `name`, `gender`, `level`, `money`, `xp` FROM `characters` WHERE `guid`=?";
+        $char = $this->CDB->query( $query, array($id) )->fetch_row();
+        if($char === false)
+        {
+            // Character doesnt exist or is online
+            return false;
+        }
+        else
+        {
+            // If the name changed, check to make sure a different char doesnt have that name
+            if(isset($info['name']))
+            {
+                if($char['name'] != $info['name'])
+                {
+                    if($this->character_name_exists($info['name'])) return false;
+                }
+            }
+            
+            // Build our data array ( 'column_name' => $info['infoid'] )
+            // We need to check if each field is set, if not, use $char default
+            $data = array(
+                'account'   => (isset($info['account'])) ? $info['account'] : $char['account'],
+                'name'      => (isset($info['name']))    ? $info['name']    : $char['name'],
+                'gender'    => (isset($info['gender']))  ? $info['gender']  : $char['gender'],
+                'level'     => (isset($info['level']))   ? $info['level']   : $char['level'],
+                'money'     => (isset($info['money']))   ? $info['money']   : $char['money'],
+                'xp'        => (isset($info['xp']))      ? $info['xp']      : $char['xp']
+            );
+            
+            // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
+            return $this->CDB->update('characters', $data, "`guid`=".$id);
+        }
+    }
 
 /*
 | ---------------------------------------------------------------
