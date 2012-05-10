@@ -8,7 +8,7 @@ $().ready(function() {
     
     // Delete button
     $("a#delete").click(function() {
-        if ( confirm('Are you sure you want to delete account: ' + username + ' (#' + userid + ')?') )
+        if ( confirm('Are you sure you want to delete this character?') )
         {
             post_action('delete');
         }

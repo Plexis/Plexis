@@ -743,9 +743,9 @@ class Admin extends Application\Core\Controller
                 $data['time'] = round($stop - $start, 5);
                 $data['count'] = $count;
                 $data['latest'] = $latest;
-                $data['message'] = preg_replace('/([\[0-9\]]+)/', '', $next['commit']['message'], 1);
+                $data['message'] = preg_replace('/([\[0-9\]]+)/', '', htmlspecialchars($next['commit']['message']), 1);
                 $data['date'] = $date;
-                $data['author'] = ucfirst($next['author']['login']);
+                $data['author'] = '<a href="https://github.com/'. $next['author']['login'] .'" target="_blank">'. ucfirst($next['author']['login']) .'</a>';
                 $data['more_info'] = "https://github.com/Plexis/Plexis/commit/". $next['sha'];
                 $data['CMS_BUILD'] = CMS_BUILD;
                 unset($commits);
