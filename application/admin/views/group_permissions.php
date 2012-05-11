@@ -29,7 +29,7 @@
                                 echo '
                                     <p>
                                         <label for="'. $key .'">'. $list[$key]['name'] .'</label>
-                                        <select id="'. $key .'" name="perm__'. $key .'">
+                                        <select id="'. $key .'" name="perm__'. $key .'" title="'. $list[$key]['description'] .'">
                                             <option value="0"'; if($value == 0) echo " selected=\"selected\""; echo '>Disallow</option>
                                             <option value="1"'; if($value == 1) echo " selected=\"selected\""; echo '>Allow</option>
                                         </select>

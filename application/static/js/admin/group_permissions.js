@@ -1,5 +1,8 @@
 $().ready(function() {
 
+    /** Tipsy */
+    $('select').tipsy({gravity: 'n', delayIn: 500, delayOut: 500});
+    
     // ===============================================
     // bind the Config form using 'ajaxForm' 
     $('#permissions-form').ajaxForm({

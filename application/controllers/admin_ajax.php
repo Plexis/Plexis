@@ -50,8 +50,7 @@ class Admin_ajax extends Application\Core\Controller
         $this->input = load_class('Input');
         
         // Make sure user is an admin!
-        if( !$this->Auth->has_permission('admin_access') )
-            die('Admin Access Only!');
+        if( !$this->Auth->has_permission('admin_access') ) die('Admin Access Only!');
     }
 
 /*
@@ -243,19 +242,10 @@ class Admin_ajax extends Application\Core\Controller
                     // Load the Ajax Model
                     $this->load->model("Ajax_Model", "ajax");
                     
-                    /* 
-                    * Array of database columns which should be read and sent back to DataTables. Use a space where
-                    * you want to insert a non-database field (for example a counter or static image)
-                    */
+                    /// Perpare DataTables data
                     $cols = array( 'group_id', 'title', 'is_banned', 'is_user', 'is_admin', 'is_super_admin' );
-                    
-                    /* Indexed column (used for fast and accurate table cardinality) */
                     $index = "group_id";
-                    
-                    /* DB table to use */
                     $table = "pcms_account_groups";
-                    
-                    /* where statment */
                     $where = '';
                     
                     /* Process the request */
@@ -592,19 +582,10 @@ class Admin_ajax extends Application\Core\Controller
             // Load the Ajax Model
             $this->load->model("Ajax_Model", "ajax");
             
-            /* 
-            * Array of database columns which should be read and sent back to DataTables. Use a space where
-            * you want to insert a non-database field (for example a counter or static image)
-            */
+            // Prepare DataTables
             $cols = array( 'id', 'title', 'author', 'posted' );
-            
-            /* Indexed column (used for fast and accurate table cardinality) */
             $index = "id";
-            
-            /* DB table to use */
             $table = "pcms_news";
-            
-            /* where statment */
             $where = '';
             
             /* Process the request */
@@ -870,26 +851,14 @@ class Admin_ajax extends Application\Core\Controller
                 
             case "admin":
                 
-                /* 
-                * Array of database columns which should be read and sent back to DataTables. Use a space where
-                * you want to insert a non-database field (for example a counter or static image)
-                */
+                // Prepare DataTables
                 $cols = array( 'id', 'name', 'address', 'port' );
-                
-                /* Indexed column (used for fast and accurate table cardinality) */
                 $index = "id";
-                
-                /* DB table to use */
                 $table = "realmlist";
-                
-                /* where statment */
                 $where = '';
                 
-                /* Database to use */
-                $dB = "RDB";
-                
                 /* Process the request */
-                $output = $this->model->process_datatables($cols, $index, $table, $where, $dB);
+                $output = $this->model->process_datatables($cols, $index, $table, $where, $$this->RDB);
                 
                 
                 // Get our installed realms
@@ -1079,19 +1048,10 @@ class Admin_ajax extends Application\Core\Controller
             // Load the Ajax Model
             $this->load->model("Ajax_Model", "ajax");
             
-            /* 
-            * Array of database columns which should be read and sent back to DataTables. Use a space where
-            * you want to insert a non-database field (for example a counter or static image)
-            */
+            // Prepare DataTables
             $cols = array( 'id', 'hostname', 'votelink', 'points', 'reset_time' );
-            
-            /* Indexed column (used for fast and accurate table cardinality) */
             $index = "id";
-            
-            /* DB table to use */
             $table = "pcms_vote_sites";
-            
-            /* where statment */
             $where = '';
             
             /* Process the request */
@@ -1170,19 +1130,10 @@ class Admin_ajax extends Application\Core\Controller
                     // Load the Ajax Model
                     $this->load->model("Ajax_Model", "ajax");
                     
-                    /* 
-                    * Array of database columns which should be read and sent back to DataTables. Use a space where
-                    * you want to insert a non-database field (for example a counter or static image)
-                    */
+                    // Prepare DataTables
                     $cols = array( 'name', 'uri', 'method', 'has_admin' );
-                    
-                    /* Indexed column (used for fast and accurate table cardinality) */
                     $index = "name";
-                    
-                    /* DB table to use */
                     $table = "pcms_modules";
-                    
-                    /* where statment */
                     $where = '';
 
                     /* Process the request */
@@ -1316,19 +1267,10 @@ class Admin_ajax extends Application\Core\Controller
                     // Load the Ajax Model
                     $this->load->model("Ajax_Model", "ajax");
                     
-                    /* 
-                    * Array of database columns which should be read and sent back to DataTables. Use a space where
-                    * you want to insert a non-database field (for example a counter or static image)
-                    */
+                    // Prepare DataTables
                     $cols = array( 'name', 'type', 'author', 'status', 'id' );
-                    
-                    /* Indexed column (used for fast and accurate table cardinality) */
                     $index = "name";
-                    
-                    /* DB table to use */
                     $table = "pcms_templates";
-                    
-                    /* where statment */
                     $where = '';
                     
                     /* Process the request */
@@ -1588,19 +1530,10 @@ class Admin_ajax extends Application\Core\Controller
                 if($type == 'errors')
                 {
                     
-                    /* 
-                    * Array of database columns which should be read and sent back to DataTables. Use a space where
-                    * you want to insert a non-database field (for example a counter or static image)
-                    */
+                    // Prepare DataTables
                     $cols = array( 'id', 'level', 'string', 'file', 'line' );
-                    
-                    /* Indexed column (used for fast and accurate table cardinality) */
                     $index = "id";
-                    
-                    /* DB table to use */
                     $table = "pcms_error_logs";
-                    
-                    /* where statment */
                     $where = '';
                     
                     /* Process the request */
@@ -1614,19 +1547,10 @@ class Admin_ajax extends Application\Core\Controller
                 }
                 else
                 {
-                    /* 
-                    * Array of database columns which should be read and sent back to DataTables. Use a space where
-                    * you want to insert a non-database field (for example a counter or static image)
-                    */
+                    // Prepare DataTables
                     $cols = array( 'id', 'username', 'desc', 'time' );
-                    
-                    /* Indexed column (used for fast and accurate table cardinality) */
                     $index = "id";
-                    
-                    /* DB table to use */
                     $table = "pcms_admin_logs";
-                    
-                    /* where statment */
                     $where = '';
                     
                     /* Process the request */

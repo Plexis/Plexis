@@ -24,7 +24,10 @@
 | P11 - Templates
 | P12 - Console
 | P13 - Update
-| P14 - Logs
+| P14 - Error Logs
+| P15 - Characters
+| P16 - Stats
+| P17 - Admin Logs
 |
 */
 class Admin extends Application\Core\Controller 
@@ -293,8 +296,7 @@ class Admin extends Application\Core\Controller
             $id = $Input->clean($id);
             switch($sub1)
             {
-                case "permissions":
-                    
+                case "permissions":   
                     // Load the perms for this group
                     $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=?";
                     $group = $this->DB->query( $query, array($id) )->fetch_row();
@@ -303,11 +305,11 @@ class Admin extends Application\Core\Controller
                     if($perms == FALSE) $perms = array();
                     
                     // Get all permissions
-                    $query = "SELECT * FROM `pcms_permissions`";
-                    $array = $this->DB->query( $query, array($id) )->fetch_array();
+                    $query = "SELECT `key`, `name`, `description`, `module` FROM `pcms_permissions` ORDER BY `id` ASC";
+                    $perms_list = $this->DB->query( $query, array($id) )->fetch_array();
                     $changed = FALSE;
                     $list = array();
-                    foreach($array as $key => $p)
+                    foreach($perms_list as $key => $p)
                     {
                         if( !isset($perms[$p['key']]) )
                         {
@@ -316,7 +318,7 @@ class Admin extends Application\Core\Controller
                         }
                         $list[$p['key']] = $p;
                     }
-                    unset($array);
+                    unset($perms_list);
                     
                     // For ordering purposes
                     $permissions = array('admin' => array(), 'core' => array());

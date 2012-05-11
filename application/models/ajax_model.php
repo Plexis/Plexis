@@ -180,17 +180,10 @@ class Ajax_Model extends Application\Core\Model
             'honor'         => $_POST['rates_honor']
         );
 
-        
-        // Turn off all error reporting, since we use our own, this is easy
-        $Debug->silent_mode(true);
-        $good = TRUE;
-
         // Test our new connections before saving to config
-        if( !$this->load->database($cs, FALSE) ) $good = FALSE;
-        if( !$this->load->database($ws, FALSE) ) $good = FALSE;
-        
-        // Re-enable errors
-        $Debug->silent_mode(false);
+        $good = TRUE;
+        if( !$this->load->database($cs, false, true) ) $good = FALSE;
+        if( !$this->load->database($ws, false, true) ) $good = FALSE;
 
         // If manually installing, lets get our unique id
         if($action == 'manual-install')
@@ -416,48 +409,32 @@ class Ajax_Model extends Application\Core\Model
 */    
     public function process_datatables($aColumns, $sIndexColumn, $sTable, $cWhere = '', $DB = 'DB')
     {
-        /* 
-         * DB Setup
-         */
-        if(!is_object($DB))
-        {
-            $DB = $this->$DB;
-        }
+        /* DB Setup */
+        if(!is_object($DB)) $DB = $this->$DB;
 
-        /* 
-         * Paging
-         */
+        /* Paging */
         $sLimit = "";
         if ( isset( $_POST['iDisplayStart'] ) && $_POST['iDisplayLength'] != '-1' )
         {
-            $sLimit = "LIMIT ". addslashes( $_POST['iDisplayStart'] ) .", ".
-                addslashes( $_POST['iDisplayLength'] );
+            $sLimit = "LIMIT ". addslashes( $_POST['iDisplayStart'] ) .", ". addslashes( $_POST['iDisplayLength'] );
         }
         
-        
-        /*
-         * Ordering
-         */
+        /*  Ordering */
         $sOrder = "";
-        if ( isset( $_POST['iSortCol_0'] ) )
+        if( isset( $_POST['iSortCol_0'] ) )
         {
             $sOrder = "ORDER BY  ";
-            for ($i=0; $i < intval($_POST['iSortingCols']); $i++)
+            for($i = 0; $i < intval($_POST['iSortingCols']); $i++)
             {
-                if ( $_POST[ 'bSortable_'. intval($_POST['iSortCol_'.$i]) ] == "true" )
+                if( $_POST[ 'bSortable_'. intval($_POST['iSortCol_'.$i]) ] == "true" )
                 {
-                    $sOrder .= "`". $aColumns[ intval( $_POST['iSortCol_'.$i] ) ]."`
-                        ". addslashes( $_POST['sSortDir_'.$i] ) .", ";
+                    $sOrder .= "`". $aColumns[ intval( $_POST['iSortCol_'.$i] ) ]."`". addslashes( $_POST['sSortDir_'.$i] ) .", ";
                 }
             }
             
             $sOrder = substr_replace( $sOrder, "", -2 );
-            if ( $sOrder == "ORDER BY" )
-            {
-                $sOrder = "";
-            }
+            if( $sOrder == "ORDER BY" ) $sOrder = "";
         }
-        
         
         /* 
          * Filtering
@@ -466,10 +443,10 @@ class Ajax_Model extends Application\Core\Model
          * on very large tables, and MySQL's regex functionality is very limited
          */
         $sWhere = "";
-        if ( isset($_POST['sSearch']) && $_POST['sSearch'] != "" )
+        if( isset($_POST['sSearch']) && $_POST['sSearch'] != "" )
         {
             $sWhere = "WHERE (";
-            for ($i=  0; $i < count($aColumns); $i++)
+            for ($i = 0; $i < count($aColumns); $i++)
             {
                 $sWhere .= "`". $aColumns[$i]."` LIKE '%". addslashes( $_POST['sSearch'] ) ."%' OR ";
             }
@@ -478,39 +455,22 @@ class Ajax_Model extends Application\Core\Model
         }
         
         /* Individual column filtering */
-        for($i=0; $i < count($aColumns); $i++)
+        for($i = 0; $i < count($aColumns); $i++)
         {
             if( isset($_POST['bSearchable_'.$i]) && $_POST['bSearchable_'.$i] == "true" && $_POST['sSearch_'.$i] != '' )
             {
-                if( $sWhere == "" )
-                {
-                    $sWhere = "WHERE ";
-                }
-                else
-                {
-                    $sWhere .= " AND ";
-                }
+                $sWhere = ($sWhere == "") ? "WHERE " : " AND ";
                 $sWhere .= "`".$aColumns[$i]."` LIKE '%". addslashes($_POST['sSearch_'.$i]) ."%' ";
             }
         }
         
-        // == Custom Where statment == //
+        /* Additional where statement */
         if(!empty($cWhere))
         {
-            if($sWhere == '')
-            {
-                $sWhere = ' WHERE '. $cWhere;
-            }
-            else
-            {
-                $sWhere .= ' AND '. $cWhere;
-            }
+            $sWhere = ($sWhere == '') ? ' WHERE '. $cWhere : ' AND '. $cWhere;
         }
         
-        /*
-         * SQL queries
-         * Get data to display
-         */
+        /* SQL queries, Get data to display */
         $columns = "`". str_replace(",``", " ", implode("`, `", $aColumns)) ."`";
         $sQuery = "SELECT SQL_CALC_FOUND_ROWS {$columns} FROM {$sTable} {$sWhere} {$sOrder} {$sLimit}";
         $rResult = $DB->query( $sQuery )->fetch_array('BOTH');
@@ -519,15 +479,12 @@ class Ajax_Model extends Application\Core\Model
         $iFilteredTotal = $DB->query( "SELECT FOUND_ROWS()" )->fetch_column();
         
         /* Total data set length */
-        $iTotal = $DB->query( "SELECT COUNT(".$sIndexColumn.") FROM   $sTable" )->fetch_column();
-        
-        
-        /*
-         * Output
-         */
+        $iTotal = $DB->query( "SELECT COUNT(`".$sIndexColumn."`) FROM   $sTable" )->fetch_column();
+
+        /* Output */
         $output = array(
             "sEcho" => intval($_POST['sEcho']),
-            "iTotalRecords" => $iTotal,
+            "iTotalRecords" => intval($iTotal),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
@@ -535,14 +492,14 @@ class Ajax_Model extends Application\Core\Model
         foreach( $rResult as $aRow )
         {
             $row = array();
-            for ($i = 0; $i < count($aColumns); $i++)
+            for($i = 0; $i < count($aColumns); $i++)
             {
-                if ( $aColumns[$i] == "version" )
+                if( $aColumns[$i] == "version" )
                 {
                     /* Special output formatting for 'version' column */
                     $row[] = ($aRow[ $aColumns[$i] ]=="0") ? '-' : $aRow[ $aColumns[$i] ];
                 }
-                else if ( $aColumns[$i] != ' ' )
+                elseif( $aColumns[$i] != ' ' )
                 {
                     /* General output */
                     $row[] = $aRow[ $aColumns[$i] ];

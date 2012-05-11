@@ -10,6 +10,8 @@ CREATE TABLE `pcms_accounts` (
   `email` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Email verified',
   `group_id` int(3) NOT NULL DEFAULT '2',
+  `last_seen` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `registration_ip` varchar(24) NOT NULL DEFAULT '0.0.0.0',
   `selected_theme` varchar(50) DEFAULT NULL,
   `web_points` int(10) NOT NULL DEFAULT '0',
@@ -41,11 +43,12 @@ CREATE TABLE `pcms_account_groups` (
 -- ----------------------------
 -- Records of pcms_account_groups
 -- ----------------------------
-INSERT INTO `pcms_account_groups` VALUES ('1', 'Guest', '0', '0', '0', '0', 'a:0:{}');
-INSERT INTO `pcms_account_groups` VALUES ('2', 'Member', '0', '1', '0', '0', 'a:1:{s:14:\"account_access\";s:1:\"1\";}');
-INSERT INTO `pcms_account_groups` VALUES ('3', 'Admin', '0', '1', '1', '0', 'a:5:{s:12:\"admin_access\";s:1:\"1\";s:12:\"manage_users\";s:1:\"1\";s:11:\"manage_news\";s:1:\"1\";s:21:\"send_console_commands\";s:1:\"1\";s:14:\"account_access\";s:1:\"1\";}');
-INSERT INTO `pcms_account_groups` VALUES ('4', 'Super Admin', '0', '1', '1', '1', 'a:0:{}');
-INSERT INTO `pcms_account_groups` VALUES ('5', 'Banned', '1', '0', '0', '0', 'a:0:{}');
+INSERT INTO `pcms_account_groups` (`group_id`, `title`, `is_banned`, `is_user`, `is_admin`, `is_super_admin`, `permissions`) VALUES
+(1, 'Guest', 0, 0, 0, 0, 'a:0:{}'),
+(2, 'Member', 0, 1, 0, 0, 'a:3:{s:14:"account_access";s:1:"1";s:12:"update_email";s:1:"1";s:15:"update_password";s:1:"1";}'),
+(3, 'Admin', 0, 1, 1, 0, 'a:11:{s:12:"admin_access";s:1:"1";s:12:"manage_users";s:1:"1";s:11:"manage_news";s:1:"1";s:21:"send_console_commands";s:1:"1";s:16:"ban_user_account";s:1:"1";s:19:"delete_user_account";s:1:"1";s:17:"manage_characters";s:1:"1";s:17:"delete_characters";s:1:"1";s:14:"account_access";s:1:"1";s:12:"update_email";s:1:"1";s:15:"update_password";s:1:"1";}'),
+(4, 'Super Admin', 0, 1, 1, 1, 'a:0:{}'),
+(5, 'Banned', 1, 0, 0, 0, 'a:0:{}');
 
 -- ----------------------------
 -- Table structure for `pcms_admin_logs`
@@ -55,28 +58,12 @@ CREATE TABLE `pcms_admin_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(128) NOT NULL,
   `desc` text,
-  `time` varchar(20) DEFAULT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_admin_logs
--- ----------------------------
-
--- ----------------------------
--- Table structure for `pcms_account_logs`
--- ----------------------------
-DROP TABLE IF EXISTS `pcms_account_logs`;
-CREATE TABLE `pcms_account_logs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(128) NOT NULL,
-  `desc` text,
-  `time` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of pcms_account_logs
 -- ----------------------------
 
 -- ----------------------------
@@ -85,19 +72,33 @@ CREATE TABLE `pcms_account_logs` (
 DROP TABLE IF EXISTS `pcms_error_logs`;
 CREATE TABLE `pcms_error_logs` (
   `id` int(6) NOT NULL AUTO_INCREMENT,
-  `level` int(4) NOT NULL,
+  `level` varchar(20) NOT NULL,
   `string` text NOT NULL,
   `file` text NOT NULL,
   `line` int(5) NOT NULL,
-  `url` varchar(512) DEFAULT NULL,
-  `remote_ip` varchar(128) DEFAULT NULL,
+  `url` text,
+  `remote_ip` varchar(20) DEFAULT NULL,
   `time` int(11) NOT NULL,
   `backtrace` text,
   PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_error_logs
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for table `pcms_hits`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_hits`;
+CREATE TABLE `pcms_hits` (
+  `ip` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `lastseen` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pcms_hits
 -- ----------------------------
 
 -- ----------------------------
@@ -140,27 +141,41 @@ INSERT INTO `pcms_news` VALUES ('1', 'Welcome to Plexis CMS!', 'wilson212', '132
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_permissions`;
 CREATE TABLE `pcms_permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(25) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `module` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23;
 
 -- ----------------------------
 -- Records of pcms_permissions
 -- ----------------------------
-INSERT INTO `pcms_permissions` VALUES ('account_access', 'Access to Account', 'Allow this user to login and access his account?', 'core');
-INSERT INTO `pcms_permissions` VALUES ('admin_access', 'Admin Panel Access', 'Allow this user access to the admin panel?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('manage_admins', 'Manage  Admin Accounts', 'Allow this group to manage and edit admin groups in the admin panel?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('manage_modules', 'Manage Modules', 'Allow this user to manage modules installed in the cms?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('manage_news', 'Post / Edit Frontpage News', 'Allow this group to Post and Edit frontpage news?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('manage_realms', 'Manage Realms', 'Allow this group to Install/Edit realms in the admin panel?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('manage_site_config', 'Manage Site Settings & Configuration', 'Allow this group to change the site configuration settings?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('manage_templates', 'Manage Templates', 'Allow this group to Install / Unistall site templates?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('manage_users', 'Manage User Accounts', 'Allow this group to manage and edit users in the admin panel?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('manage_votesites', 'Manage Vote Sites', 'Allow this user group to manage votesites in the admin panel?', 'admin');
-INSERT INTO `pcms_permissions` VALUES ('send_console_commands', 'Send Console Commands', 'Allow this group access to the RA command console in the admin panel?', 'admin');
+INSERT INTO `pcms_permissions` (`id`, `key`, `name`, `description`, `module`) VALUES
+(1, 'admin_access', 'Admin Panel Access', 'Allow this user access to the admin panel?', 'admin'),
+(2, 'manage_users', 'Manage User Accounts', 'Allow this group to manage and edit users in the admin panel?', 'admin'),
+(3, 'manage_admins', 'Manage Admin Accounts', 'Allow this group to manage and edit admin groups in the admin panel?', 'admin'),
+(4, 'ban_user_account', 'Ban User Accounts', 'Allow this user group to ban user level accounts?', 'admin'),
+(5, 'ban_admin_account', 'Ban Admin Account', 'Allow this user group to ban admin level groups?', 'admin'),
+(6, 'delete_user_account', 'Delete User Accounts', 'Allow this user group to delete user level accounts?', 'admin'),
+(7, 'delete_admin_account', 'Delete Admin Accounts', 'Allow this user group to delete admin level accounts?', 'admin'),
+(8, 'manage_characters', 'Edit Characters', 'Allow this user group to edit characters?', 'admin'),
+(9, 'delete_characters', 'Delete Characters', 'Allow this user group to delete characters?', 'admin'),
+(10, 'manage_modules', 'Manage Modules', 'Allow this user to manage modules installed in the cms?', 'admin'),
+(11, 'manage_news', 'Post / Edit Frontpage News', 'Allow this group to Post and Edit frontpage news?', 'admin'),
+(12, 'manage_realms', 'Manage Realms', 'Allow this group to Install/Edit realms in the admin panel?', 'admin'),
+(13, 'manage_site_config', 'Manage Site Settings & Configuration', 'Allow this group to change the site configuration settings?', 'admin'),
+(14, 'manage_templates', 'Manage Templates', 'Allow this group to Install / Unistall site templates?', 'admin'),
+(15, 'manage_votesites', 'Manage Vote Sites', 'Allow this user group to manage votesites in the admin panel?', 'admin'),
+(16, 'send_console_commands', 'Send Console Commands', 'Allow this group access to the RA command console in the admin panel?', 'admin'),
+(17, 'manage_error_logs', 'Manage Error Logs', 'Allow this user group to view/delete error logs?', 'admin'),
+(18, 'view_admin_logs', 'View Admin Logs', 'Allow this user group to view admin logs?', 'admin'),
+(19, 'delete_admin_logs', 'Delete Admin Logs', 'Allow this user group to delete admin action logs?', 'admin'),
+(20, 'account_access', 'Access to Account', 'Allow this user to login and access his account?', 'core'),
+(21, 'update_email', 'Change Account Email', 'Allow this user group to change their email address?', 'core'),
+(22, 'update_password', 'Change Account  Password', 'Is this user group allowed to change thier password?', 'core');
 
 -- ----------------------------
 -- Table structure for `pcms_realms`
@@ -190,13 +205,12 @@ CREATE TABLE `pcms_realms` (
 DROP TABLE IF EXISTS `pcms_reg_keys`;
 CREATE TABLE `pcms_reg_keys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `key` varchar(128) NOT NULL,
+  `key` varchar(30) NOT NULL,
   `assigned` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'If set to 1, this key has already been giving away, and waiting to be used.',
   `sponser` int(11) NOT NULL COMMENT 'Account ID of the sponser',
   `usedby` int(11) NOT NULL COMMENT 'The account ID of the user who registered with this code (for stat tracking purposes).',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Records of pcms_reg_keys
 -- ----------------------------
@@ -249,7 +263,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.3');
+INSERT INTO `pcms_versions` VALUES ('database', '0.9');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`
