@@ -423,16 +423,16 @@ body {
 }
 
 .block-actions {
-	margin: 0 -19px -10px -19px;
+	margin: 0 -16px -7px -16px;
 	background: url("../img/container/block/block-actions-bg.png") repeat-x scroll bottom left transparent;
 	border-radius: 0px 0px 5px 5px;
-	height: 44px;
+	height: 41px;
 	overflow: hidden;
 }
 
 .dataTables_wrapper .block-actions {
-	margin-left: -9px;
-	margin-right: -9px;
+	margin-left: -6px;
+	margin-right: -6px;
 }
 
 .block-header span {

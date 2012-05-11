@@ -876,7 +876,7 @@ class Admin_ajax extends Application\Core\Controller
                 $where = '';
                 
                 /* Process the request */
-                $output = $this->model->process_datatables($cols, $index, $table, $where, $$this->RDB);
+                $output = $this->model->process_datatables($cols, $index, $table, $where, $this->RDB);
                 
                 
                 // Get our installed realms

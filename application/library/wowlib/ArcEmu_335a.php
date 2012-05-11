@@ -614,7 +614,6 @@ class ArcEmu_335a
         /* Process the request */
         return $ajax->process_datatables($cols, $index, $table, $where, $this->CDB);
     }
-    }
 
 /*
 | ---------------------------------------------------------------

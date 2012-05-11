@@ -26,7 +26,7 @@
 }
 
 .dataTables_wrapper .top {
-	padding: 5px 10px;
+	padding: 10px 10px;
 	background: url("../img/tables/table-head-bg.png") repeat-x scroll top left #dddddd;
 	border-bottom: 1px solid #949494;
 	margin-top: 10px;
@@ -51,11 +51,11 @@
 	padding-left: 100px;
 }
 
-.dataTables_length div.selector {
+.dataTables_length select {
 	width: 70px !important;
 }
 
-.dataTables_length div.selector span {
+.dataTables_length select span {
 	width: 70px !important;
 }
 
