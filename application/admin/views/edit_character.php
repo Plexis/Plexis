@@ -133,13 +133,13 @@
             <div id="js_message" style="display: none;"></div>
             <center>
                 <p>
-                    <a id="unstuck" href="#" class="button" style="width: 150px; text-align: center;">Unstuck Character</a>
+                    <a id="unstuck" href="javascript:void(0);" class="button" style="width: 150px; text-align: center;">Unstuck Character</a>
                 </p>
                 <p>
                     <a href="{SITE_URL}/admin/users/{account}" class="button" style="width: 150px; text-align: center;">View Character Account</a>
                 </p>
                 <p>
-                    <a id="delete" href="#" class="button red" style="width: 150px; text-align: center;">Delete Character</a>
+                    <a id="delete" href="javascript:void(0);" class="button red" style="width: 150px; text-align: center;">Delete Character</a>
                 </p>
             </center>
         </div>

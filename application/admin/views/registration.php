@@ -109,8 +109,8 @@
             </p>
 
             <div>
-                <a id="delete" href="#" class="button red" style="width: 150px; text-align: center; margin: 10px; float: left;">Delete Unassinged Keys</a>
-                <a id="generate" href="#" class="button" style="width: 150px; text-align: center; margin: 10px; float: right;">Generate Key</a>
+                <a id="delete" href="javascript:void(0);" class="button red" style="width: 150px; text-align: center; margin: 10px; float: left;">Delete Unassinged Keys</a>
+                <a id="generate" href="javascript:void(0);" class="button" style="width: 150px; text-align: center; margin: 10px; float: right;">Generate Key</a>
             </div>
         </div>
     </form>

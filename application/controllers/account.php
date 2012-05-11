@@ -430,7 +430,7 @@ class Account extends Application\Core\Controller
     public function activate($key = FALSE) 
     {
         // Make sure we have a key
-        if($key == FALSE || strlen( trim($key) ) != 20) goto Invalid;
+        if($key == FALSE || strlen( trim($key) ) != 30) goto Invalid;
         
         // Load the account model
         $this->load->model('Account_model', 'account');
