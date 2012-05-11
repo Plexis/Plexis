@@ -91,6 +91,9 @@ class Admin_ajax extends Application\Core\Controller
             switch($_POST['action'])
             {
                 case "ban-account":
+                    // Make sure this person has permission to do this!
+                    ($user['is_admin'] == 1) ? $this->check_permission('ban_admin_account') : $this->check_permission('ban_user_account');
+                    
                     // Log action
                     $this->log('Banned user account: '. $user['username']);
                     
@@ -105,6 +108,9 @@ class Admin_ajax extends Application\Core\Controller
                     break;
                     
                 case "unban-account":
+                    // Make sure this person has permission to do this!
+                    ($user['is_admin'] == 1) ? $this->check_permission('ban_admin_account') : $this->check_permission('ban_user_account');
+                    
                     // Log action
                     $this->log('Un-Banned user account '. $user['username']);
                     
@@ -132,6 +138,10 @@ class Admin_ajax extends Application\Core\Controller
                     break;
                     
                 case "delete-account":
+                    // Make sure this person has permission to do this!
+                    ($user['is_admin'] == 1) ? $this->check_permission('delete_admin_account') : $this->check_permission('delete_user_account');
+                    
+                    // Continue
                     if( $this->realm->delete_account($id) )
                     {
                         // Log action
@@ -731,6 +741,9 @@ class Admin_ajax extends Application\Core\Controller
             switch($_POST['action'])
             {
                 case "update":
+                    // Make sure this person has permission to do this!
+                    $this->check_permission('manage_characters');
+                    
                     // Get our realm name
                     $r = get_realm($realm);
                     
@@ -779,6 +792,9 @@ class Admin_ajax extends Application\Core\Controller
                     break;
                     
                 case "delete":
+                    // Make sure this person has permission to do this!
+                    $this->check_permission('delete_characters');
+                    
                     // Get our realm name
                     $r = get_realm($realm);
                     
@@ -789,6 +805,8 @@ class Admin_ajax extends Application\Core\Controller
                     break;
                     
                 case "unstuck":
+                    // Make sure this person has permission to do this!
+                    $this->check_permission('manage_characters');
                     $this->output(false, "This feature is incomplete.", 'warning');
                     break;
                     
@@ -1529,6 +1547,8 @@ class Admin_ajax extends Application\Core\Controller
    
                 if($type == 'errors')
                 {
+                    // Make sure this person has permission to do this!
+                    $this->check_permission('manage_error_logs');
                     
                     // Prepare DataTables
                     $cols = array( 'id', 'level', 'string', 'file', 'line' );
@@ -1547,6 +1567,9 @@ class Admin_ajax extends Application\Core\Controller
                 }
                 else
                 {
+                    // Make sure this person has permission to do this!
+                    $this->check_permission('view_admin_logs');
+                    
                     // Prepare DataTables
                     $cols = array( 'id', 'username', 'desc', 'time' );
                     $index = "id";
@@ -1571,7 +1594,18 @@ class Admin_ajax extends Application\Core\Controller
             case "delete":
                 // Get our ID and table type
                 $id = $this->input->post('id', true);
-                $table = ($type == 'errors') ? 'error' : 'admin';
+                if($type == 'errors')
+                {
+                    // Make sure this person has permission to do this!
+                    $this->check_permission('manage_error_logs');
+                    $table = 'error';
+                }
+                else
+                {
+                    // Make sure this person has permission to do this!
+                    $this->check_permission('delete_admin_logs');
+                    $table = 'admin';
+                }
                 
                 // Check for deletion of all logs
                 if($id == 'all')

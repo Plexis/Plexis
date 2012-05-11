@@ -112,7 +112,7 @@ class Admin extends Application\Core\Controller
     public function news()
     {
         // Make sure the user can view this page
-        if( !$this->check_access('manage_news')) return;
+        if( !$this->check_permission('manage_news')) return;
 
         // Load our editor script
         $this->Template->add_script( 'tiny_mce/jquery.tinymce.js' );
@@ -136,7 +136,7 @@ class Admin extends Application\Core\Controller
     public function users($username = NULL)
     {
         // Make sure the user can view this page
-        if( !$this->check_access('manage_users')) return;
+        if( !$this->check_permission('manage_users')) return;
 
         // No Username, Build the index page
         if($username == NULL)
@@ -252,7 +252,7 @@ class Admin extends Application\Core\Controller
     public function settings()
     {
         // Make sure the user can view this page
-        if( !$this->check_access('manage_site_config')) return;
+        if( !$this->check_permission('manage_site_config')) return;
 
         // Load our config class
         $Config = load_class('Config');
@@ -381,7 +381,7 @@ class Admin extends Application\Core\Controller
     public function registration()
     {
         // Make sure the user can view this page
-        if( !$this->check_access('manage_site_config')) return;
+        if( !$this->check_permission('manage_site_config')) return;
 
         // Load our config class
         $Config = load_class('Config');
@@ -404,7 +404,7 @@ class Admin extends Application\Core\Controller
     public function realms($subpage = 'index', $id = NULL)
     {
         // Make sure the user can view this page
-        if( !$this->check_access('manage_realms')) return;
+        if( !$this->check_permission('manage_realms')) return;
 
         // Process our page
         switch($subpage)
@@ -504,7 +504,7 @@ class Admin extends Application\Core\Controller
     public function vote()
     {
         // Make sure the user can view this page
-        if( !$this->check_access('manage_votesites')) return;
+        if( !$this->check_permission('manage_votesites')) return;
 
         // Build our page variable data
         $data = array(
@@ -525,7 +525,7 @@ class Admin extends Application\Core\Controller
     public function modules($name = null, $subpage = null)
     {
         // Make sure the user can view this page
-        if( !$this->check_access('manage_modules')) return;
+        if( !$this->check_permission('manage_modules')) return;
         
         if($name != null)
         {
@@ -585,7 +585,7 @@ class Admin extends Application\Core\Controller
     public function templates()
     {
         // Make sure the user can view this page
-        if( !$this->check_access('manage_templates')) return;
+        if( !$this->check_permission('manage_templates')) return;
 
         // Build our page title / desc, then load the view
         $data = array(
@@ -635,7 +635,7 @@ class Admin extends Application\Core\Controller
     public function console()
     {
         // Make sure the user can view this page
-        if( !$this->check_access('send_console_commands')) return;
+        if( !$this->check_permission('send_console_commands')) return;
 
         $realms = get_installed_realms();
         $selector = "<select id=\"realm\" name=\"realm\">\n";
@@ -669,6 +669,13 @@ class Admin extends Application\Core\Controller
 */     
     public function update()
     {
+        // Make sure user is super admin for ajax
+        if($this->user['is_super_admin'] != 1)
+        {
+            $this->show_403();
+            return;
+        }
+        
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Remote Updater",
@@ -790,6 +797,9 @@ class Admin extends Application\Core\Controller
 */    
     public function errorlogs()
     {
+        // Make sure the user can view this page
+        if( !$this->check_permission('manage_error_logs')) return;
+        
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "View Error Logs",
@@ -806,6 +816,9 @@ class Admin extends Application\Core\Controller
 */ 
     public function characters($realmid = 0, $character = 0)
     {
+        // Make sure the user can view this page
+        if( !$this->check_permission('manage_characters')) return;
+        
         // Set new realm
         if( $realmid != 0 && realm_installed($realmid) )
         {
@@ -1007,6 +1020,9 @@ class Admin extends Application\Core\Controller
 */    
     public function adminlogs()
     {
+        // Make sure the user can view this page
+        if( !$this->check_permission('view_admin_logs')) return;
+        
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "View Admin Logs",
@@ -1061,14 +1077,14 @@ class Admin extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Method: check_access
+| Method: check_permission
 | ---------------------------------------------------------------
 |
 | Displays a 403 if the user doesnt have access to this page
 | @Param: (Bool) $s403 - Show 403?
 |
 */ 
-    protected function check_access($perm, $s403 = TRUE)
+    protected function check_permission($perm, $s403 = TRUE)
     {
         if( !$this->Auth->has_permission($perm))
         {
