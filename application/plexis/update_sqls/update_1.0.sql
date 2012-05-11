@@ -1,0 +1,1 @@
+UPDATE `pcms_versions` SET `value`='1.0' WHERE (`key`='database');
