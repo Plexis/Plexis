@@ -57,16 +57,14 @@
                 <!-- Logo -->
                 <img src="{TEMPLATE_URL}/img/logo.png" alt="Plexis" class="logo">
                 
-                <!-- Divider between info-button and the toolbar-icons -->
-                <div class="divider-header divider-vertical"></div>
-                
-                <!-- Info-Button -->
+                <!-- Info-Button
                 <a href="javascript:void(0);" onclick="$('#info-dialog').dialog({ modal: true, width: 500 });"><span class="btn-info"></span></a>
                 <div id="info-dialog" title="About" style="display: none;">
                     <p>Plexis is a powerful CMS / Server administration tool for WoW Private Servers. </p>
                     <p>Page loaded in {ELAPSED_TIME} seconds, Using {MEMORY_USAGE}</p>
                     <p>Plexis &copy; 2011, ArchDev Team</p>
                 </div>
+                -->
                 
                 <!-- Update Panel -->
                 <div id="update_info" title="Update Information" style="display: none;">
@@ -88,7 +86,6 @@
                 <!-- Begin of #user-info -->
                 <div id="user-info">
                     <p>
-                        <span class="messages">Hello <a href="javascript:void(0);"><?php echo ucfirst( strtolower('{session.user.username}')); ?></a></span>
                         <a href="{SITE_URL}" class="button grey">Return To Site</a> <a href="{SITE_URL}/account/logout" class="button red">Logout</a>
                     </p>
                 </div> 
@@ -255,15 +252,5 @@
 
     </div> 
     <!--! end of #container -->
-    
-    <!-- JavaScript at the bottom for fast page loading -->
-    <!-- scripts concatenated and minified via ant build script-->
-    <script src="{TEMPLATE_URL}/js/plugins.js"></script> <!-- lightweight wrapper for consolelog, optional -->
-    <script src="{TEMPLATE_URL}/js/libs/jquery.uniform.min.js"></script> <!-- Uniform (Look & Feel from forms) -->
-    <script src="{TEMPLATE_URL}/js/libs/jquery.form.js"></script> <!-- Forms & Ajax submission -->
-    <script src="{TEMPLATE_URL}/js/libs/jquery.tipsy.js"></script> <!-- Tooltips -->
-    <script src="{TEMPLATE_URL}/js/common.js"></script> <!-- Generic functions -->
-    <script src="{TEMPLATE_URL}/js/script.js"></script> <!-- Generic scripts -->
-    <!-- End scripts -->
 </body>
 </html>

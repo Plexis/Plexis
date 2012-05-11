@@ -945,7 +945,7 @@ class Admin extends Application\Core\Controller
     public function statistics()
     {
         // Add visualize
-        $this->Template->add_script( BASE_URL . '/application/admin/js/libs/jquery.visualize.js' );
+        $this->Template->add_script( 'jquery.visualize.js' );
         
         // Array of months
         $months = array('January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');

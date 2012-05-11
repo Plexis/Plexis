@@ -41,46 +41,6 @@ body {
 	background: url("../img/container/navigation/nav-bg.png") repeat-y scroll top left #e3e5e7;
 }
 
-body.special-page {
-	background: url("../img/container/special-page/special-page-bg.png") no-repeat scroll top center #2b3237;
-}
-
-
-
-
-
-
-/* ==================================================
- * 2) Login-Box
- * ================================================== */
-
-#login-box {
-	margin: 0 auto;
-	margin-top: 210px;
-	width: 400px;
-}
-
-
-
-
-/* ==================================================
- * 3) Error-Page (404)
- * ================================================== */
-
-#error-number {
-	text-align: center;
-	margin-top: 240px;
-}
-
-#error-text {
-	text-align: center;
-	margin-top: -20px;
-}
-
-
-
-
-
 
 /* ==================================================
  * 4) Header
@@ -92,7 +52,7 @@ body.special-page {
 
 #container > #header-surround > #header {
 	background: url("../img/container/header/header-bg.png") repeat-x scroll top left transparent;
-	height: 43px;
+	height: 65px;
 	position: relative;
 	z-index: 30;
 }
@@ -105,7 +65,7 @@ body.special-page {
 }
 
 .logo {
-	margin-left: 20px;
+	margin-left: 10px;
 	float: left;
 }
 
@@ -120,7 +80,7 @@ body.special-page {
 
 #user-info {
 	float: right;
-	margin-top: -4px;
+	margin-top: 5px;
 	margin-right: 10px;
 }
 
@@ -407,10 +367,10 @@ body.special-page {
 
 .block-border {
 	margin-top: 15px;
-	background: url("../img/misc/shine-effect.png") repeat-x scroll 0 0 rgba(33, 40, 44, 0.7);
+	background: url("../img/misc/shine-effect.png") repeat-x scroll 0 0 #828282;
 	border: 1px solid #25333c;
 	border-radius: 5px 5px 5px 5px;
-	padding: 8px;
+	padding: 5px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
@@ -429,7 +389,7 @@ body.special-page {
 }
 
 .block-border .block-content + .block-content {
-	margin-top: 10px;
+	margin-top: 5px;
 }
 
 .block-border .block-content {
@@ -441,6 +401,7 @@ body.special-page {
 	min-height: 38px;
 	border: 1px solid #4b5e6b;
 	border-bottom: 1px solid #9ba6ab;
+    border-radius: 5px 5px 0px 0px;
 	margin-bottom: -2px;
 	position: relative;
 	z-index: 5;

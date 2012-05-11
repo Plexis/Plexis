@@ -41,8 +41,13 @@
         <css>tables.css</css>
         <css>charts.css</css>
         
-        <comment>All JavaScript at the bottom, except for Modernizr</comment>
-        <js>libs/modernizr-2.0.6.min.js</js>
-        <js>libs/jquery.dataTables.js</js>
+        <comment>Load Javascripts</comment>
+        <js>plugins.js</js>
+        <js>modernizr-2.0.6.min.js</js>
+        <js>jquery.uniform.min.js</js>
+        <js>jquery.form.js</js>
+        <js>jquery.tipsy.js</js>
+        <js>jquery.dataTables.js</js>
+        <js>template.js</js>
     </head>
 </template> 

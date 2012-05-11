@@ -1,4 +1,79 @@
-/*
+$(document).ready(function() {
+	
+	/** Accordion Menu */
+	$('.menu').initMenu();
+	
+	/** Slide Effect */
+	$('.menu li a').slideList();
+	
+	/** Scroll Effect */
+	$('a[href*=#]').bind("click", function(event) {
+		event.preventDefault();
+		var target = $(this).attr("href");
+		
+		$('html,body').animate({
+			scrollTop: $(target).offset().top
+		}, 1000 , function () {
+			// location.hash = target;
+			// finished scrolling
+		});
+	});
+	
+	/** Form Elements */
+	$("select, input:checkbox, input:text, input:password, input:radio, input:file, textarea").uniform();
+	
+	/** Closable Alert Boxes */
+	$('span.hide').click(function() {
+		$(this).parent().slideUp();					   
+	});	
+	 
+	/** Dropdown-menu for left sidebar */
+	$('.user-button').click(function() {
+		$('.dropdown-username-menu').slideToggle();
+	});
+	
+	$(document).click(function(e){
+		if (!$(e.target).is('.user-button, .arrow-link-down, .dropdown-username-menu *')) {
+			$('.dropdown-username-menu').slideUp();
+		}
+	});
+	
+	var ddumTimer;
+	
+	$('.user-button, ul.dropdown-username-menu').mouseleave(function(e) {
+		ddumTimer = setTimeout(function() {
+			$('.dropdown-username-menu').slideUp();
+		},400);
+	});
+	
+	$('.user-button, ul.dropdown-username-menu').mouseenter(function(e) {
+		clearTimeout(ddumTimer);
+	});
+	
+	/** Closable Content Boxes */
+	$('.block-border .block-header span').click(function() {
+		if($(this).hasClass('closed')) {
+			$(this).removeClass('closed');
+		} else {
+			$(this).addClass('closed');
+		}
+		
+		$(this).parent().parent().children('.block-content').slideToggle();
+	});
+
+	/** Tooltips */
+	$('a[rel=tooltip]').tipsy({fade: true});
+	$('a[rel=tooltip-bottom]').tipsy({fade: true});
+	$('a[rel=tooltip-right]').tipsy({fade: true, gravity: 'w'});
+	$('a[rel=tooltip-top]').tipsy({fade: true, gravity: 's'});
+	$('a[rel=tooltip-left]').tipsy({fade: true, gravity: 'e'});
+	
+	$('a[rel=tooltip-html]').tipsy({fade: true, html: true});
+	
+	$('div[rel=tooltip]').tipsy({fade: true});
+});
+
+/**
  * Accordion Menu
  */
 
@@ -69,7 +144,7 @@ jQuery.fn.initMenu = function() {
 	});
 };
 
-/*
+/**
  * Sliding Entrys
  */
 
@@ -98,54 +173,7 @@ jQuery.fn.initMenu = function() {
 	};
 })(jQuery);
 
-/*
- * Create Alert Boxes
- */
-
-(function($){
-	$.fn.alertBox = function(message, options){
-		var settings = $.extend({}, $.fn.alertBox.defaults, options);
-		
-		this.each(function(i){
-			var block = $(this);
-			
-			var alertClass = 'alert ' + settings.type;
-			if (settings.noMargin) {
-				alertClass += ' no-margin';
-			}
-			if (settings.position) {
-				alertClass += ' top';
-			}
-			var alertMessage = '<div id="alertBox-generated" style="display:none" class="' + alertClass + '">' + message + '</div>';
-			
-			var alertElement = block.prepend(alertMessage);
-			
-			$('#alertBox-generated').fadeIn();
-		});
-	};
-	
-	// Default config for the alertBox function
-	$.fn.alertBox.defaults = {
-		type: 'info',
-		position: 'top',
-		noMargin: true
-	};
-})(jQuery);
-
-/*
- * Remove Alert Boxes
- */
-
-(function($){
-	$.fn.removeAlertBoxes = function(message, options){
-		var block = $(this);
-		
-		var alertMessages = block.find('.alert');
-		alertMessages.remove();
-	};
-})(jQuery);
-
-/*
+/**
  * Placeholder
  */
 
@@ -175,7 +203,6 @@ $('[placeholder]').focus(function() {
  * Resets the form data.  Causes all form elements to be reset to their original value.
  */
 $.fn.resetForm = function() {
-	$(this).removeAlertBoxes();
 	return this.each(function() {
 		// guard against an input with the name of 'reset'
 		// note that IE reports the reset function as an 'object'
@@ -184,7 +211,7 @@ $.fn.resetForm = function() {
 	});
 };
 
-/*
+/**
  * Tabs
  */
 
