@@ -69,7 +69,7 @@
                     <li><a href="{SITE_URL}/account/donate">Donate</a></li>
                     <li><a href="{SITE_URL}/server">Server</a>
                         <ul class="subnav">
-                            <li><a href="{SITE_URL}/server/realms">Realmlist</a></li>
+                            <li><a href="{SITE_URL}/server/realmlist">Realmlist</a></li>
                             <li><a href="{SITE_URL}/server/onlinelist">Players Online</a>
                                 <?php
                                     $realms = get_installed_realms();

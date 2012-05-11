@@ -97,18 +97,11 @@ class Server extends Application\Core\Controller
         $c = get_realm_cookie();
         
         // Get our realm id if none is provieded
-        if($id == 0 && $c == 0)
+        if($c == 0)
         {
             output_message('info', 'no_realms_installed');
             $this->load->view('blank');
             return;
-        }
-        
-        // Absolutly set our cookie realm IF the user selected a different realm
-        if($id != $c)
-        {
-            load_class('Input')->set_cookie('realm_id', $id);
-            $_COOKIE['realm_id'] = $id;
         }
         
         // Load the datatables script
@@ -150,7 +143,7 @@ class Server extends Application\Core\Controller
         output_message('info', 'Page incomplete :p');
         
         // Load the view and call it a day!
-        $this->load->view('blank', $data);
+        $this->load->view('blank');
     }
 
 }

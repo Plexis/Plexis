@@ -1,6 +1,6 @@
 <div class="grid_12">
     <!-- Button -->
-    <div><a id="clear" href="#" class="button red">Clear All Logs</a></div>
+    <div><a id="clear" href="javascript:void(0);" class="button red">Clear All Logs</a></div>
     <div class="block-border">
         <div class="block-header">
             <h1>Error Reports</h1>
