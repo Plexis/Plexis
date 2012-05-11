@@ -215,6 +215,7 @@ class Admin extends Application\Core\Controller
                     
                     // Set some JS vars
                     $this->Template->setjs('userid', $user['id']);
+                    $this->Template->setjs('username', $user['username']);
                     $this->Template->setjs('level', $this->user['group_id']);
                     $this->Template->setjs('is_super', $this->user['is_super_admin']);
                     

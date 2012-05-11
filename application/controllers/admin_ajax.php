@@ -50,7 +50,7 @@ class Admin_ajax extends Application\Core\Controller
         $this->input = load_class('Input');
         
         // Make sure user is an admin!
-        if( !$this->Auth->has_permission('admin_access') ) die('Admin Access Only!');
+        if( !$this->check_permission('admin_access') );
     }
 
 /*

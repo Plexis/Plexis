@@ -3,7 +3,7 @@ $().ready(function() {
 
     /** Bind the Ban button */
     $("#account-ban-button").click(function() {
-        var current = $('#account-ban-button').attr('name');
+        var current = this.name;
         if (current == 'ban')
         {
             $('#ban-form').dialog({ modal: true, height: 460, width: 600 });
@@ -20,7 +20,7 @@ $().ready(function() {
     
     /** Bind the Lock button */
     $("#account-lock-button").click(function() {
-        var current = $('#account-lock-button').attr('name');
+        var current = this.name;
         
         // Start our loading message
         $('#js_message').attr('class', 'alert loading no-margin top').html('Submitting action...').slideDown(400);
