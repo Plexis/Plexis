@@ -23,7 +23,7 @@
                 "success": fnCallback
             } );
         }
-    });
+    }).fnFilterOnReturn();
     
     // Set our current realm value
     $('#realm-changer').val( realm_id ).change();

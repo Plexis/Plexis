@@ -1,7 +1,6 @@
 /**
  * Add a cool little function to datatables that allows reloading of the table
  */
-$().ready(function() {
     $.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallback, bStandingRedraw )
     {
         if ( typeof sNewSource != 'undefined' && sNewSource != null )
@@ -43,4 +42,29 @@ $().ready(function() {
             }
         }, oSettings );
     }
-});
+
+/**
+ * Adds a function to datatables that only filters a search after the
+ * enter key has been hit, rather then after each keyup
+ * Usage:       $('#example').dataTable().fnFilterOnReturn();
+ * Author:      Jon Ranes (www.mvccms.com)
+ * License:     GPL v2 or BSD 3 point style
+ * Contact:     jranes /AT\ mvccms.com
+ */
+    $.fn.dataTableExt.oApi.fnFilterOnReturn = function (oSettings) {
+        var _that = this;
+     
+        this.each(function (i) {
+            $.fn.dataTableExt.iApiIndex = i;
+            var $this = this;
+            var anControl = $('input', _that.fnSettings().aanFeatures.f);
+            anControl.unbind('keyup').bind('keypress', function (e) {
+                if (e.which == 13) {
+                    $.fn.dataTableExt.iApiIndex = i;
+                    _that.fnFilter(anControl.val());
+                }
+            });
+            return this;
+        });
+        return this;
+    }

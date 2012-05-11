@@ -459,7 +459,7 @@ class Ajax_Model extends Application\Core\Model
         {
             if( isset($_POST['bSearchable_'.$i]) && $_POST['bSearchable_'.$i] == "true" && $_POST['sSearch_'.$i] != '' )
             {
-                $sWhere = ($sWhere == "") ? "WHERE " : " AND ";
+                $sWhere .= ($sWhere == "") ? "WHERE " : " AND ";
                 $sWhere .= "`".$aColumns[$i]."` LIKE '%". addslashes($_POST['sSearch_'.$i]) ."%' ";
             }
         }
@@ -467,7 +467,7 @@ class Ajax_Model extends Application\Core\Model
         /* Additional where statement */
         if(!empty($cWhere))
         {
-            $sWhere = ($sWhere == '') ? ' WHERE '. $cWhere : ' AND '. $cWhere;
+            $sWhere .= ($sWhere == "") ? "WHERE ". $cWhere : " AND ". $cWhere;
         }
         
         /* SQL queries, Get data to display */

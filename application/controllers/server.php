@@ -69,7 +69,7 @@ class Server extends Application\Core\Controller
         
         // Load the datatables script and fnReload Ajax
         $this->Template->add_script('jquery.dataTables.js');
-        $this->Template->add_script('jqeruy.dataTables.fnReloadAjax.js');
+        $this->Template->add_script('jquery.dataTables.extended.js');
         
         // Build our realm select options
         $data['realm_options'] = array();
