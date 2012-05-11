@@ -152,7 +152,7 @@
                                 <center>
                                     Welcome {session.user.username}! <br /><br />
                                     Site Rank: {session.user.title}<br />
-                                    Web Points: {session.user.web_points}<br />
+                                    Vote Points: {session.user.vote_points}<br />
                                     <div class="button-row">
                                         <ul>
                                             <li><a href="{SITE_URL}/account" class="button">Dashboard</a></li>

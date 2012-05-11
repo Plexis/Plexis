@@ -228,7 +228,8 @@ class Auth
                     'username' => ucfirst(strtolower($username)), 
                     'email' => $r_data['email'], 
                     'activated' => 1,
-                    'registered' => $r_data['joindate']
+                    'registered' => ($r_data['joindate'] == false) ? date("Y-m-d H:i:s", time()) : $r_data['joindate'],
+                    'registration_ip' => $this->remote_ip
                 );
                 $this->DB->insert( 'pcms_accounts', $data );
                 $result = $this->DB->query( $query )->fetch_row();

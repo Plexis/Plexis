@@ -242,6 +242,7 @@ class Arcemu
 |       'gmlevel' => GM level, in ManGOS Format (1 -4, no A-Z shit here)
 |       'joindate' => When the user joined***
 |       'locked' => Is the account locked? (1 = yes, 0 = no)
+|       'banned' => Is the account banned? (1 = yes, 0 = no)
 |       'last_login' => Users last login***
 |       'last_ip' => Users last seen IP
 |       'Expansion' => Expansion ID
@@ -264,8 +265,9 @@ class Arcemu
                 'username' => $temp['login'],
                 'email' => $temp['email'],
                 //'gmlevel' => $temp['gmlevel'],
-                'joindate' => "N/A", //ArcEmu doesn't store a join date.
+                'joindate' => false, //ArcEmu doesn't store a join date, return false
                 'locked' => $temp['banned'],
+                'banned' => (int) $this->account_banned($temp['id']),
                 'last_login' => $temp['lastlogin'],
                 'last_ip' => $temp['lastip'],
                 'expansion' => $temp['flags']

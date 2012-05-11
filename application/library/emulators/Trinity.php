@@ -249,6 +249,7 @@ class Trinity
 |       'gmlevel' => GM level, in ManGOS Format (1 -4, no A-Z shit here)
 |       'joindate' => When the user joined***
 |       'locked' => Is the account locked? (1 = yes, 0 = no)
+|       'banned' => Is the account banned? (1 = yes, 0 = no)
 |       'last_login' => Users last login***
 |       'last_ip' => Users last seen IP
 |       'Expansion' => Expansion ID
@@ -273,6 +274,7 @@ class Trinity
                 //'gmlevel' => $temp['gmlevel'],
                 'joindate' => $temp['joindate'],
                 'locked' => $temp['locked'],
+                'banned' => (int) $this->account_banned($temp['id']),
                 'last_login' => $temp['last_login'],
                 'last_ip' => $temp['last_ip'],
                 'expansion' => $temp['expansion']

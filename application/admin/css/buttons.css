@@ -113,16 +113,11 @@ input[type="submit"].button {
 	display: block;
 }
 
+.arrow-link-down {
+	background: url("../img/icons/misc/arrow-down.png") no-repeat scroll center right transparent;
+	padding-right: 20px;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+.arrow-link-down:hover {
+	background: url("../img/icons/misc/arrow-down-hover.png") no-repeat scroll center right transparent;
+}

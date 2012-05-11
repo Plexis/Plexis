@@ -64,6 +64,24 @@ class Account extends Application\Core\Controller
         // Fetch account data from the realm
         $data = $this->realm->fetch_account($this->user['id']);
         
+        // Get our banned / active / locked status
+        if($data['banned'] == true)
+        {
+            $status = '<font color="red">Banned</font>';
+        }
+        elseif($data['locked'] == true)
+        {
+            $status = '<font color="red">Locked</font>';
+        }
+        else
+        {
+            $status = '<font color="green">Active</font>';
+        }
+        
+        // Add out custom data
+        $data['joindate'] = date('F j, Y', strtotime($this->user['registered']));
+        $data['status'] = $status;
+        
         // Load the page, and we are done :)
         $this->load->view('index', $data);
     }
