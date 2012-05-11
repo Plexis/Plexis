@@ -250,16 +250,18 @@
         <!-- Footer -->
         <footer id="footer">
             <div class="left">
-                All Rights Reserved &reg; Plexis CMS <a href="javascript:void(0);" onclick="$('#info-dialog').dialog({ modal: true, width: 500 });"><span class="btn-info"></span></a>
+                Plexis CMS &copy; 2012, Plexis Organization<a id="open-info-dialog" href="javascript:void(0);"><span class="btn-info"></span></a>
             </div>
             <div class="right">
-                <a href="#top"><span class="to-top"></span></a>
+                <a href="#top" title="Scroll to Top"><span class="to-top"></span></a>
             </div>
             
-            <div id="info-dialog" title="About" style="display: none;">
-                <p>Plexis is a powerful CMS / Server administration tool for WoW Private Servers. </p>
+            <!-- Info dialog -->
+            <div id="cms-info-dialog" title="Plexis CMS" style="display: none;">
+                <p>
+                    Plexis is a powerful content management system for WoW Servers.
+                </p>
                 <p>Page loaded in {ELAPSED_TIME} seconds, Using {MEMORY_USAGE}</p>
-                <p>Plexis &copy; 2011, ArchDev Team</p>
             </div>
         </footer>
 

@@ -9,7 +9,7 @@ $(document).ready(function() {
 	/** Scroll Effect */
 	$('a[href*=#]').bind("click", function(event) {
 		event.preventDefault();
-		var target = $(this).attr("href");
+		var target = $(this).attr('href');
 		
 		$('html,body').animate({
 			scrollTop: $(target).offset().top
@@ -71,6 +71,25 @@ $(document).ready(function() {
 	$('a[rel=tooltip-html]').tipsy({fade: true, html: true});
 	
 	$('div[rel=tooltip]').tipsy({fade: true});
+    
+    /** Information Model */
+	CmsDialog = $("#cms-info-dialog").dialog({
+		autoOpen: false,  
+		modal: true, 
+		width: 500,
+        resizable: false,
+		buttons: [{
+			text: "Close", 
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}]
+	});
+    
+    $('#open-info-dialog').click(function() {
+        // Open the Modal Window
+		CmsDialog.dialog("open");
+    });
 });
 
 /**

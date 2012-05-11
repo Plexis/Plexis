@@ -1560,7 +1560,7 @@ class Admin_ajax extends Application\Core\Controller
                     $output = $this->ajax->process_datatables($cols, $index, $table, $where, $this->DB);
                     foreach($output['aaData'] as $key => $value)
                     {
-                        $output['aaData'][$key][5] = '<a href="#" class="delete" name="'. $value[0] .'">Delete</a>';
+                        $output['aaData'][$key][5] = '<a href="javascript:void(0);" class="delete" name="'. $value[0] .'">Delete</a>';
                     }
                     
                     echo json_encode($output); return;
@@ -1581,7 +1581,7 @@ class Admin_ajax extends Application\Core\Controller
                     foreach($output['aaData'] as $key => $value)
                     {
                         $output['aaData'][$key][3] = date('F j, g:i:s a', strtotime($value[3]));
-                        $output['aaData'][$key][4] = '<a href="#" class="delete" name="'. $value[0] .'">Delete</a>';
+                        $output['aaData'][$key][4] = '<a href="javascript:void(0);" class="delete" name="'. $value[0] .'">Delete</a>';
                     }
                     
                     echo json_encode($output); return;
