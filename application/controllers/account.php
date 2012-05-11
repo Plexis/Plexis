@@ -19,6 +19,8 @@
 | P06 - Account Recovery Page
 | P07 - Update (password / email) Page
 | P08 - Captcha Page
+| P09 - Vote
+| P10 - Invitation Keys
 |
 */
 class Account extends Application\Core\Controller 
@@ -1047,48 +1049,6 @@ class Account extends Application\Core\Controller
         
         // User isnt allowed to create keys
         redirect( 'account' );
-    }
-
-// Test Page    
-    function test()
-    {
-        $this->load->model('Vote_Model', 'model');
-        $this->model->submit($this->user['id'], 2);
-        die(); 
-        // Check for POST data
-        if(isset($_POST['action'])) goto Process;
-        
-        switch($mode)
-        {
-            case "password":
-                $this->load->view('change_password');
-                break;
-                
-            case "email":
-                $this->load->view('change_password');
-                break;
-                
-            default:
-                show_404();
-        }
-        
-        // Main processing form
-        Process:
-        {
-            switch($mode)
-            {
-                case "password":
-                    $this->load->view('change_password');
-                    break;
-                    
-                case "email":
-                    $this->load->view('change_password');
-                    break;
-                    
-                default:
-                    show_404();
-            }
-        }
     }
 }
 // EOF

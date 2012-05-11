@@ -97,6 +97,16 @@ class Ajax extends Application\Core\Controller
 */    
     public function vote()
     {
+        // Make sure we arent getting direct access
+        $this->check_permission('account_access');
+        
+        // Make sure the request came from this website!
+        if(strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false)
+        {
+            $this->output(false, 'No direct linking allowed');
+            die();
+        }
+        
         // Check for 'action' posts
         if(isset($_POST['action']))
         {

@@ -13,6 +13,7 @@
 |---------------------------------------------------------------
 | P01 - Index Page
 | P02 - Onlinelist
+| P03 - Realmlist
 |
 */
 class Server extends Application\Core\Controller 
@@ -37,7 +38,7 @@ class Server extends Application\Core\Controller
 */
     public function index() 
     {
-        redirect('server/onlinelist');
+        redirect('server/realms');
     }
 
 /*
@@ -82,6 +83,74 @@ class Server extends Application\Core\Controller
         
         // Load the view and call it a day!
         $this->load->view('onlinelist', $data);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| P03: Realmlist
+| ---------------------------------------------------------------
+|
+*/
+    public function realmlist() 
+    {
+        // Get our users selected realm
+        $c = get_realm_cookie();
+        
+        // Get our realm id if none is provieded
+        if($id == 0 && $c == 0)
+        {
+            output_message('info', 'no_realms_installed');
+            $this->load->view('blank');
+            return;
+        }
+        
+        // Absolutly set our cookie realm IF the user selected a different realm
+        if($id != $c)
+        {
+            load_class('Input')->set_cookie('realm_id', $id);
+            $_COOKIE['realm_id'] = $id;
+        }
+        
+        // Load the datatables script
+        $this->Template->add_script('jquery.dataTables.js');
+        
+        // Build our realm select options
+        $data['realms'] = get_installed_realms();
+        
+        // Load the view and call it a day!
+        $this->load->view('realmlist', $data);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| P03: View Ralm
+| ---------------------------------------------------------------
+|
+*/
+    public function viewrealm($id = 0) 
+    {
+        // Get our users selected realm
+        $c = get_realm_cookie();
+        
+        // Get our realm id if none is provieded
+        if($id == 0 && $c == 0)
+        {
+            output_message('info', 'no_realms_installed');
+            $this->load->view('blank');
+            return;
+        }
+        
+        // Absolutly set our cookie realm IF the user selected a different realm
+        if($id != $c)
+        {
+            load_class('Input')->set_cookie('realm_id', $id);
+            $_COOKIE['realm_id'] = $id;
+        }
+        
+        output_message('info', 'Page incomplete :p');
+        
+        // Load the view and call it a day!
+        $this->load->view('blank', $data);
     }
 
 }

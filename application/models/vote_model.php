@@ -201,7 +201,11 @@ class Vote_Model extends Application\Core\Model
         // Return the result of web points givin IF enabled
         if(config('web_points_enabled') == TRUE)
         {
-            $query = "UPDATE `pcms_accounts` SET `web_points` = (`web_points` + ".$site['points'].") WHERE `id`=".$id;
+            $query = "UPDATE `pcms_accounts` SET 
+                `vote_points` = (`vote_points` + ".$site['points']."), 
+                `votes` = (`votes` + 1),
+                `vote_points_earned` = (`vote_points_earned` + ".$site['points'].")
+            WHERE `id`=".$id;
             return $this->DB->query( $query );
         }
         
