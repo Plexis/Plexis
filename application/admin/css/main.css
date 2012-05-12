@@ -38,7 +38,7 @@
  * ================================================== */
 
 body {
-	background: url("../img/container/navigation/nav-bg.png") repeat-y scroll top left #e3e5e7;
+	background: url("../img/container/navigation/nav-bg.png") repeat-y scroll top left #eeeeee;
 }
 
 
@@ -262,8 +262,9 @@ body {
 	height: 42px;
 	position: relative;
 	z-index: 30;
-	margin-right: 1px;
+	border-right: 1px solid #252525;
 	margin-bottom: -1px;
+    margin-left: -2px;
 }
 
 
@@ -279,7 +280,7 @@ body {
 }
 
 #container > #main > #main-content {
-	background: url("../img/container/main/main-bg.png") repeat-x scroll top center transparent;
+
 	position: relative;
 	min-height: 434px;
 	margin-top: -14px;
@@ -456,7 +457,9 @@ body {
     color: #faf9f7;
     text-shadow: 1px 1px 1px #475d68; 
     */
-    text-shadow: 1px 1px 1px #a5c2d1;
+    color: #f3f3f3;
+    text-shadow: 0 0 5px #2a4757;
+    font-size: 15px !important;
 }
 
 

@@ -93,8 +93,8 @@ input[type="submit"].button {
 
 .user-button {
 	background: url("../img/misc/shine-effect.png") repeat-x scroll top left #2a4757;
-	border: 1px solid #000;
-	border-radius: 3px 3px 3px 3px;
+	border: 1px solid #1b2f39;
+	border-radius: 4px 4px 4px 4px;
 	position: relative;
 	float: left;
 	display: inline-block;
