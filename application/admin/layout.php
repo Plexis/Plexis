@@ -57,15 +57,6 @@
                 <!-- Logo -->
                 <img src="{TEMPLATE_URL}/img/logo.png" alt="Plexis" class="logo">
                 
-                <!-- Info-Button
-                <a href="javascript:void(0);" onclick="$('#info-dialog').dialog({ modal: true, width: 500 });"><span class="btn-info"></span></a>
-                <div id="info-dialog" title="About" style="display: none;">
-                    <p>Plexis is a powerful CMS / Server administration tool for WoW Private Servers. </p>
-                    <p>Page loaded in {ELAPSED_TIME} seconds, Using {MEMORY_USAGE}</p>
-                    <p>Plexis &copy; 2011, ArchDev Team</p>
-                </div>
-                -->
-                
                 <!-- Update Panel -->
                 <div id="update_info" title="Update Information" style="display: none;">
                     <p> 

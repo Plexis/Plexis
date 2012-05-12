@@ -56,15 +56,21 @@
 <body>
     <div id="container">
 
-        <div id="header">
-            <div id="logo"><a href="#"><img src="{TEMPLATE_URL}/images/logo.png" alt="Plexis CMS" /></a></div>
-        </div><!-- /header -->
+        <!-- Header -->
+        <header id="header">
+            <div id="logo">
+                <a href="#"><img src="{TEMPLATE_URL}/images/logo.png" alt="Plexis CMS" /></a>
+            </div>
+        </header>
 
+        <!-- Main contentent box -->
         <div id="content-container">
-            <div id="nav">
+        
+            <!-- Navigation -->
+            <nav id="nav">
                 <ul class="navigation">
                     <li><a href="{SITE_URL}">Home</a></li>
-                    <li><a href="{SITE_URL}/forum">Forums</a></li>
+                    <li><a href="http://wilson212.net/forum">Forums</a></li>
                     <li><a href="{SITE_URL}/account/vote">Vote</a></li>
                     <li><a href="{SITE_URL}/account/donate">Donate</a></li>
                     <li><a href="{SITE_URL}/server">Server</a>
@@ -85,10 +91,9 @@
                                     }
                                 ?>
                             </li>
-                            </li>
                         </ul>
                     </li>
-                    <li><a href="support">Support</a>
+                    <li><a href="{SITE_URL}/support">Support</a>
                         <ul class="subnav">
                             <li><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></li>
                         </ul>
@@ -113,17 +118,21 @@
                     
                     <!-- Admin -->
                     <?php if( $session['user']['is_admin'] == TRUE || $session['user']['is_super_admin'] == TRUE): ?>
-                        <li><a href="{SITE_URL}/admin">Admin Panel</a>
+                        <li><a href="{SITE_URL}/admin">Admin Panel</a></li>
                     <?php endif; ?>
 
                 </ul>
-            </div><!-- /navigation -->
+            </nav>
+            <!-- /Navigation -->
 
+            <!-- Main Box -->
             <div id="main" class="clearfix">
+            
+                <!-- Right Side -->
                 <div id="right">
                     
-                    <!-- Account Login -->
                     <?php if( $session['user']['logged_in'] == FALSE): ?>
+                        <!-- Account Login -->
                         <div class="right-box">
                             <h3>Login / Register</h3>
                             <p>
@@ -144,8 +153,10 @@
                                     </fieldset>
                                 </form>
                             </p>
-                        </div><!-- /right-box -->  
+                        </div>
+                        <!-- /Account Login -->  
                     <?php else: ?>
+                        <!-- Account Box -->
                         <div class="right-box">
                             <h3>Account</h3>
                             <p>
@@ -161,10 +172,11 @@
                                     </div>
                                 </center>
                             </p>
-                        </div><!-- /right-box -->
+                        </div>
+                        <!-- /Account Box -->
                     <?php endif; ?>	
-                    <!-- End Account Login -->
 
+                    <!-- Realm Status -->
                     <div class="right-box">
                         <h3>Realm Status</h3>
                         <div id="ajax_loading">
@@ -186,8 +198,10 @@
                             <li></li>
                             <li><center><small><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></small></center></li>
                         </ul>
-                    </div><!-- /right-box -->
-                </div><!-- /right -->
+                    </div>
+                    <!-- /Realm Status -->
+                </div>
+                <!-- /Right Side -->
                 
                 <!-- MAIN CONTENT -->
                 <div id="left">
@@ -209,12 +223,13 @@
             <!-- /main -->
             
             <!-- FOOTER -->
-            <div id="footer">
+            <footer id="footer">
                 <p id="footer-left">&copy; 2011 Plexis.</p>
                 <p id="footer-right">Page Rendered in {ELAPSED_TIME} seconds, Using {MEMORY_USAGE}</p>
-            </div>
+            </footer>
             <!-- END FOOTER -->
         </div>
+        <!-- /Main Content Box -->
     </div>
     <!-- /container -->
 </body>

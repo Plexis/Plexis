@@ -1,4 +1,30 @@
-body 
+/*
+ * Plexis Default Template Css
+ * 
+ * -----------------
+ * TABLE OF CONTENTS
+ * -----------------
+ * 
+ * 1) Body / Main Container
+ * 2) Basic Styles
+ * 3) Header
+ * 4) Navigation
+ * 5) Main Content Box
+ * 6) Right Side
+ * 7) Left Side
+ * 8) Footer
+ * 9) Frontpage Feature Slides
+ * 10) Forms
+ * 11) Tables
+ * 12) Buttons
+ * 13) Misc
+ */
+
+
+/* ==================================================
+ * 1) Main Container
+ * ================================================== */
+ body 
 {
 	background:url(../images/background.jpg) #0D0D0D;
     background-repeat: no-repeat;
@@ -11,9 +37,6 @@ body
 	color:#ccc;
 }
 
-/* ==================================================
- * 1) Main Container
- * ================================================== */
 #container 
 {
 	margin:0 auto;
@@ -106,16 +129,16 @@ blockquote
 /* ==================================================
  * 4) Navigation
  * ================================================== */
-div#nav {
+nav#nav {
 	width: 887px;
 }
-div#nav ul, li, p {
+nav#nav ul, li, p {
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
 }
 /** Main navigation **/
-div#nav ul.navigation {
+nav#nav ul.navigation {
     text-align: center;
     width: inherit;
 	height: 40px;
@@ -131,7 +154,7 @@ div#nav ul.navigation {
 	border-radius: 4px;
 }
 /* Top 1px border above LI elements */
-div#nav ul.navigation:after {
+nav#nav ul.navigation:after {
 	content: '\00a0';
 	position: absolute;
 	display: block;
@@ -146,7 +169,7 @@ div#nav ul.navigation:after {
 	border-radius: 4px;
 }
 /* Using box shadow to simulate gradient and hide part of LI borders */
-div#nav ul.navigation:before {
+nav#nav ul.navigation:before {
 	content: '\00a0';
 	position: absolute;
 	display: block;
@@ -163,21 +186,21 @@ div#nav ul.navigation:before {
 	box-shadow: inset 0 -20px 15px #0D0D0D;
 }
 /* Main LI element style */
-div#nav ul.navigation li {
+nav#nav ul.navigation li {
 	margin-top: 1px;
 	float: left;
 	border-right: 1px solid #0F7393;
 	border-left: 1px solid #222222;
 	position: relative;
 }
-div#nav ul.navigation li:first-child {
+nav#nav ul.navigation li:first-child {
 	border-left: none;
 }
-div#nav ul.navigation li:last-child {
+nav#nav ul.navigation li:last-child {
 	border-right: none;
 }
 /* Main link styling */
-div#nav ul.navigation li a {
+nav#nav ul.navigation li a {
 	display: block;
 	position: relative;
 	z-index: 999;
@@ -187,13 +210,13 @@ div#nav ul.navigation li a {
 
 	text-decoration: none;
 }
-div#nav ul.navigation li:hover a {
+nav#nav ul.navigation li:hover a {
 	color: #777;
     /* border-bottom: 1px solid #0F7393; */
 }
 
 /** Sub navigation - level 1 **/
-div#nav ul.navigation li ul.subnav {
+nav#nav ul.navigation li ul.subnav {
 	display: none;
 	background: #222;
 	width: 160px;
@@ -203,14 +226,14 @@ div#nav ul.navigation li ul.subnav {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
-div#nav ul.navigation li:hover ul.subnav {
+nav#nav ul.navigation li:hover ul.subnav {
 	display: block;
 	position: absolute;
 	top: 49px;
 	left: 0;
 }
 /* Transparent div that is used to connect main and sub UL list so when mouse go over empty space sub menu doesn't close */
-div#nav ul.navigation li ul.subnav:after {
+nav#nav ul.navigation li ul.subnav:after {
 	content: '\00a0';
 	position: absolute;
 	z-index: 50;
@@ -221,7 +244,7 @@ div#nav ul.navigation li ul.subnav:after {
 	display: block;
 }
 /* Using box-shaow to hide edges of LI borders in sub menu making soft edges */
-div#nav ul.navigation li ul.subnav:before, div#nav ul.navigation li ul.subnav li ul.subnav-out:before {
+nav#nav ul.navigation li ul.subnav:before, nav#nav ul.navigation li ul.subnav li ul.subnav-out:before {
     display: block;
 	content: '\00a0';
 	position: absolute;
@@ -241,7 +264,7 @@ div#nav ul.navigation li ul.subnav:before, div#nav ul.navigation li ul.subnav li
 	box-shadow: inset 30px 10px 30px #222, inset -30px 10px 30px #222;
 }
 /* Sub menu LI style */
-div#nav ul.navigation li ul.subnav li {
+nav#nav ul.navigation li ul.subnav li {
 	width: 158px;
 	position: relative;
 	margin: 0;
@@ -251,19 +274,19 @@ div#nav ul.navigation li ul.subnav li {
 }
 
 /* Color of glow between links, in the subnav */
-div#nav ul.navigation li ul.subnav li:hover {
+nav#nav ul.navigation li ul.subnav li:hover {
 	-webkit-box-shadow: inset 0 -5px 5px #555;
 	-moz-box-shadow: inset 0 -5px 5px #555;
 	box-shadow: inset 0 -5px 5px #555;
 }
-div#nav ul.navigation li ul.subnav li:first-child {
+nav#nav ul.navigation li ul.subnav li:first-child {
 	border-top: 0;
 }
-div#nav ul.navigation li ul.subnav li:last-child {
+nav#nav ul.navigation li ul.subnav li:last-child {
 	border-bottom: 0;
 }
 /* Sub menu link style */
-div#nav ul.navigation li ul.subnav li a {
+nav#nav ul.navigation li ul.subnav li a {
 	display: block;
 	position: relative;
 	z-index: 80;
@@ -272,11 +295,11 @@ div#nav ul.navigation li ul.subnav li a {
 	font: normal 14px/28px 'Amaranth', sans-serif;
 
 }
-div#nav ul.navigation li ul.subnav li:hover a {
+nav#nav ul.navigation li ul.subnav li:hover a {
 	color: #DCDCDC;
 }
 /* Circle span element that shows that sub LI element has another drop down option */
-div#nav ul.navigation li ul.subnav li span.spmore {
+nav#nav ul.navigation li ul.subnav li span.spmore {
 	content: '';
 	position: absolute;
 	z-index: 999;
@@ -297,7 +320,7 @@ div#nav ul.navigation li ul.subnav li span.spmore {
 	background-clip: padding-box;
 }
 /** Sub navigation - level 2 **/
-div#nav ul.navigation li ul.subnav li ul.subnav-out {
+nav#nav ul.navigation li ul.subnav li ul.subnav-out {
 	display: none;
 	background: #333;
 	width: 160px;
@@ -307,14 +330,14 @@ div#nav ul.navigation li ul.subnav li ul.subnav-out {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
-div#nav ul.navigation li ul.subnav li:hover ul.subnav-out {
+nav#nav ul.navigation li ul.subnav li:hover ul.subnav-out {
 	display: block;
 	position: absolute;
 	top: 0px;
 	left: 163px;
 }
 /* Transparent div that is used to connect sub and sub 2nd UL list so when mouse go over empty space sub menu doesn't close */
-div#nav ul.navigation li ul.subnav li ul.subnav-out:after {
+nav#nav ul.navigation li ul.subnav li ul.subnav-out:after {
 	content: '\00a0';
 	position: absolute;
 	z-index: 100;
@@ -326,14 +349,14 @@ div#nav ul.navigation li ul.subnav li ul.subnav-out:after {
 	display: block;
 }
 /* Sub 2nd menu link style */
-div#nav ul.navigation li ul.subnav li ul.subnav-out li a {
+nav#nav ul.navigation li ul.subnav li ul.subnav-out li a {
 	display: block;
 	position: relative;
 	z-index: 80;
 	color: #DCDCDC;
 	font: normal 14px/28px 'Amaranth', sans-serif;
 }
-div#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
+nav#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 	color: #DCDCDC;
 }
 
@@ -1039,63 +1062,8 @@ tbody tr:hover td
 }
 
 
-
-
-
-
-
-
 /* ==================================================
- * 13) Breadcrums.
- * ================================================== */
-#breadcrumb
-{
-    font: 11px Arial, Helvetica, sans-serif;
-    background-image:url('../images/bc_bg.png');
-    background-repeat:repeat-x;
-    height:30px;
-    line-height:30px;
-    color:#9b9b9b;
-    border:solid 1px #cacaca;
-    width:100%;
-    overflow:hidden;
-    margin:0px;
-    padding:0px;
-}
-#breadcrumb li
-{
-    list-style-type:none;
-    float:left;
-    padding-left:10px;
-}
-
-#breadcrumb a
-{
-    height:30px;
-    display:block;
-    background-image:url('../images/bc_separator.png');
-    background-repeat:no-repeat;
-    background-position:right;
-    padding-right: 15px;
-    text-decoration: none;
-    color:#454545;
-}
-
-#breadcrumb a:hover
-{
-    color:#35acc5;
-}
-
-.home
-{
-    border: none;
-    margin: 8px 0px;
-}
-
-
-
-/* ==================================================
- * 14) Misc.
+ * 13) Misc.
  * ================================================== */
 .div-center
 {
@@ -1132,7 +1100,8 @@ tbody tr:hover td
     font-weight: bold;
 
 }
-.opera #slide-tabs
+.home
 {
-	margin:-22px 0 0 475px;
+    border: none;
+    margin: 8px 0px;
 }
