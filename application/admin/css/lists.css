@@ -83,12 +83,14 @@
 
 .block-actions ul.actions-left {
 	float: left;
-	margin-left: 10px;
+	margin-left: 5px;
+    padding-top: 4px;
 }
 
 .block-actions ul.actions-right {
 	float: right;
-	margin-right: 10px;
+	margin-right: 5px;
+    padding-top: 4px;
 }
 
 

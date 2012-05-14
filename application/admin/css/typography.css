@@ -261,20 +261,6 @@ p {
 	color: #f3f3f3;
 }
 
-.paginate_button, .paginate_active {
-	color: #373737;
-	text-shadow: 0 1px 0 #FFFFFF;
-}
-
-.paginate_button_disabled {
-	color: #9f9f9f;
-}
-
-.paginate_active {
-	color: #fcfcfc;
-	text-shadow: 0 1px 0 #000;
-}
-
 
 
 

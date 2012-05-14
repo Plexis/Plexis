@@ -424,17 +424,15 @@ body {
 }
 
 .block-actions {
-	margin: 0 -16px -7px -16px;
-	background: url("../img/container/block/block-actions-bg.png") repeat-x scroll bottom left transparent;
-	border-radius: 0px 0px 5px 5px;
-	height: 41px;
+    background: url("../img/container/block/block-actions-bg.png") repeat-x scroll top left transparent;
+	background-color: #828282;
+	border-radius: 0 0 5px 5px;
+	height: 42px;
 	overflow: hidden;
+    border: 1px solid #343434;
+    margin: 0 -11px -1px -11px;
 }
 
-.dataTables_wrapper .block-actions {
-	margin-left: -6px;
-	margin-right: -6px;
-}
 
 .block-header span {
 	background: url("../img/icons/small/close.png") no-repeat scroll 0 0 transparent;
