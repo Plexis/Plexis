@@ -173,6 +173,19 @@ class Input
         // setcookie( $key, $val, $time, $this->cookie_path, $this->cookie_domain, false, true);
         setcookie( $key, $val, $time, $this->cookie_path );
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: is_ajax()
+| ---------------------------------------------------------------
+|
+| @Return (Bool) Return's whether this is an AJAX request or no
+|
+*/
+    public function is_ajax()
+    {
+        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+    }
 
 /*
 | ---------------------------------------------------------------

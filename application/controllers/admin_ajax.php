@@ -51,6 +51,17 @@ class Admin_ajax extends Application\Core\Controller
         
         // Make sure user is an admin!
         if( !$this->check_permission('admin_access') );
+        
+        // Make sure the request is an ajax request, and came from this website!
+        if(!$this->input->is_ajax())
+        {
+            die('No direct linking allowed');
+        }
+        elseif(strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false)
+        {
+            $this->output(false, 'Unauthorized');
+            die();
+        }
     }
 
 /*

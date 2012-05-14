@@ -280,10 +280,6 @@ class Admin extends Application\Core\Controller
 */     
     public function groups($sub1 = NULL, $id = NULL)
     {
-        // Load our config & Input class
-        $Config = load_class('Config');
-        $Input = load_class('Input');
-
         // Make sure user is super admin for ajax
         if($this->user['is_super_admin'] != 1)
         {
@@ -291,13 +287,18 @@ class Admin extends Application\Core\Controller
             return;
         }
         
+        // Make sure we have a page, and group ID
         if($sub1 != NULL && $id != NULL)
         {
-            // Clean the ID
-            $id = $Input->clean($id);
             switch($sub1)
             {
                 case "permissions":   
+                    // Default vars
+                    $changed = FALSE;
+                    $list = array();
+                    $permissions = array('admin' => array(), 'core' => array());
+                    $sections = array('admin', 'core');
+                    
                     // Load the perms for this group
                     $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=?";
                     $group = $this->DB->query( $query, array($id) )->fetch_row();
@@ -305,11 +306,9 @@ class Admin extends Application\Core\Controller
                     unset($group['permissions']); 
                     if($perms == FALSE) $perms = array();
                     
-                    // Get all permissions
+                    // Get all permissions in the database for all modules etc
                     $query = "SELECT `key`, `name`, `description`, `module` FROM `pcms_permissions` ORDER BY `id` ASC";
                     $perms_list = $this->DB->query( $query, array($id) )->fetch_array();
-                    $changed = FALSE;
-                    $list = array();
                     foreach($perms_list as $key => $p)
                     {
                         if( !isset($perms[$p['key']]) )
@@ -321,9 +320,7 @@ class Admin extends Application\Core\Controller
                     }
                     unset($perms_list);
                     
-                    // For ordering purposes
-                    $permissions = array('admin' => array(), 'core' => array());
-                    $sections = array('admin', 'core');
+                    // Remove old unused permissions, and order the permissions by group
                     foreach($perms as $key => $p)
                     {
                         if(!isset($list[$key]))
@@ -337,7 +334,7 @@ class Admin extends Application\Core\Controller
                         if(!in_array($g, $sections)) $sections[] = $g;
                     }
                     
-                    // Update as need be
+                    // Update permissions if we had to remove an unused perm
                     if($changed == TRUE)
                     {
                         // Only insert values of 1

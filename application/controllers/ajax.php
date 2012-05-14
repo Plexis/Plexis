@@ -20,9 +20,16 @@ class Ajax extends Application\Core\Controller
         // Load the input class for xss filtering
         $this->input = load_class('Input');
         
-        // Make sure user is an admin!
-        if( !$this->Auth->has_permission('admin_access') )
-            die('Admin Access Only!');
+        // Make sure the request is an ajax request, and came from this website!
+        if(!$this->input->is_ajax())
+        {
+            die('No direct linking allowed');
+        }
+        elseif(strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false)
+        {
+            $this->output(false, 'Unauthorized');
+            die();
+        }
     }
     
 /*
@@ -99,13 +106,6 @@ class Ajax extends Application\Core\Controller
     {
         // Make sure we arent getting direct access
         $this->check_permission('account_access');
-        
-        // Make sure the request came from this website!
-        if(strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false)
-        {
-            $this->output(false, 'No direct linking allowed');
-            die();
-        }
         
         // Check for 'action' posts
         if(isset($_POST['action']))

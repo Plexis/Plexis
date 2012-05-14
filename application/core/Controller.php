@@ -50,7 +50,8 @@ class Controller extends \System\Core\Controller
         parent::__construct();
         
         // Process stats if we arent in ajax mode
-        if($GLOBALS['controller'] != 'ajax' && is_object($this->Statistics)) $this->Statistics->add_hit();
+        if($GLOBALS['controller'] != 'ajax' && $GLOBALS['controller'] != 'admin_ajax' && is_object($this->Statistics)) 
+            $this->Statistics->add_hit();
         
         // Setup the selected users language
         $GLOBALS['language'] = selected_language();
