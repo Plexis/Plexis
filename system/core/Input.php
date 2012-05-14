@@ -196,31 +196,100 @@ class Input
 | Method: ip_address()
 | ---------------------------------------------------------------
 |
-| @Return (Mixed) Returns the users IP address
+| @Return (Mixed) Returns the users IP address, or 0.0.0.0 if
+|   unable to determine. Order is in trust/use order top to bottom
 |
 */
     public function ip_address()
     {
         // Return it if we already determined the IP
-        if($this->ip_address == FALSE)
-        {       
+        if($this->ip_address === FALSE)
+        {  
             // Check to see if the server has the IP address
-            if(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] != '')
-            {
-                $this->ip_address = $_SERVER['REMOTE_ADDR'];
-            }
-            elseif(isset($_SERVER['HTTP_CLIENT_IP']) && $_SERVER['HTTP_CLIENT_IP'] != '')
+            if(isset($_SERVER['HTTP_CLIENT_IP']) && $this->valid_ip($_SERVER['HTTP_CLIENT_IP']))
             {
                 $this->ip_address = $_SERVER['HTTP_CLIENT_IP'];
             }
+            elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+            {
+                // HTTP_X_FORWARDED_FOR can be an array og IPs!
+                $ips = explode(",", $_SERVER['HTTP_X_FORWARDED_FOR']);
+                foreach($ips as $ip_add) 
+                {
+                    if($this->valid_ip($ip_add))
+                    {
+                        $this->ip_address = $ip;
+                        break;
+                    }
+                }
+            }
+            elseif(isset($_SERVER['HTTP_X_FORWARDED']) && $this->valid_ip($_SERVER['HTTP_X_FORWARDED']))
+            {
+                $this->ip_address = $_SERVER['HTTP_X_FORWARDED'];
+            }
+            elseif(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) && $this->valid_ip($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']))
+            {
+                $this->ip_address = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+            }
+            elseif(isset($_SERVER['HTTP_FORWARDED_FOR']) && $this->valid_ip($_SERVER['HTTP_FORWARDED_FOR']))
+            {
+                $this->ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
+            }
+            elseif(isset($_SERVER['HTTP_FORWARDED']) && $this->valid_ip($_SERVER['HTTP_FORWARDED']))
+            {
+                $this->ip_address = $_SERVER['HTTP_FORWARDED'];
+            }
+            elseif(isset($_SERVER['HTTP_VIA']) && $this->valid_ip($_SERVER['HTTP_VIAD']))
+            {
+                $this->ip_address = $_SERVER['HTTP_VIA'];
+            }
+            elseif(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
+            {
+                $this->ip_address = $_SERVER['REMOTE_ADDR'];
+            }
 
             // If we still have a FALSE IP address, then set to 0's
-            if ($this->ip_address === FALSE)
-            {
-                $this->ip_address = '0.0.0.0';
-            }
+            if($this->ip_address === FALSE) $this->ip_address = '0.0.0.0';
         }
         return $this->ip_address;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: valid_ip()
+| ---------------------------------------------------------------
+|
+| Returns if the given IP address is a valid, Non-Private IP
+|
+| @Return (Bool)
+|
+*/
+    public function valid_ip($ip)
+    {
+        // Trim the ip address
+        $ip = trim($ip);
+        if(!empty($ip) && ip2long($ip) != -1) 
+        {
+            $reserved_ips = array(
+                array('0.0.0.0','2.255.255.255'),
+                array('10.0.0.0','10.255.255.255'),
+                array('127.0.0.0','127.255.255.255'),
+                array('169.254.0.0','169.254.255.255'),
+                array('172.16.0.0','172.31.255.255'),
+                array('192.0.2.0','192.0.2.255'),
+                array('192.168.0.0','192.168.255.255'),
+                array('255.255.255.0','255.255.255.255')
+            );
+
+            foreach($reserved_ips as $r) 
+            {
+                $min = ip2long($r[0]);
+                $max = ip2long($r[1]);
+                if ((ip2long($ip) >= $min) && (ip2long($ip) <= $max)) return false;
+            }
+            return true;
+        }
+        return false;
     }
 
 /*

@@ -154,11 +154,12 @@ class Session
         // If we have a result, then data IS in the DB
         if($result !== FALSE)
         {
+            // Set our token
+            $this->data['token'] = $result['token'];
+            
             // check users IP address to prevent cookie stealing
             if( $result['ip_address'] == $this->input->ip_address() )
-            {	
-                $this->data['token'] = $result['token'];
-            
+            {
                 // Set data if we have any
                 if(count($result['user_data']) > 0)
                 {
@@ -174,6 +175,11 @@ class Session
             
                 // Return success
                 return TRUE;
+            }
+            else
+            {
+                // Ip address changed, destroy the current session
+                $this->destroy();
             }
         }
         

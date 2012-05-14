@@ -29,7 +29,6 @@ class Statistics
     {
         $this->load = load_class('Loader');
         $this->DB = $this->load->database('DB');
-        $this->Router = load_class('Router');
         $this->Input = load_class('Input');
     }
     
@@ -46,12 +45,13 @@ class Statistics
     public function add_hit()
     {
         // Get IP address and URL info
-        $Ip = ip2long( $this->get_ip() );
+        $Ip = ip2long( $this->Input->ip_address() );
         $Time = time();
 
         // Only add hit if the IP is valid
         if( $Ip != false && $Ip != -1 )
         {
+            // Make the IP valid to use with MySQL's INET_NTOA() functions
             $Ip = sprintf("%u", $Ip);
             
             // Now check the cookie incase the users IP address changes
@@ -117,33 +117,5 @@ class Statistics
         
         // Return the results :)
         return array('unique' => $unique, 'today' => $vists);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: get_ip()
-| ---------------------------------------------------------------
-|
-| This function gets the remote hosts ip address
-|
-*/
-    public function get_ip()
-    {
-        if (!empty($_SERVER['HTTP_CLIENT_IP']))
-        {
-          return $_SERVER['HTTP_CLIENT_IP'];
-        }
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
-        {
-            if(is_array($_SERVER['HTTP_X_FORWARDED_FOR']))
-            {
-                return $_SERVER['HTTP_X_FORWARDED_FOR'][0];
-            }
-            return $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
-        else
-        {
-          return $_SERVER['REMOTE_ADDR'];
-        }
     }
 }
