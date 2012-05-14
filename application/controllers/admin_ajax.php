@@ -566,7 +566,7 @@ class Admin_ajax extends Application\Core\Controller
                     {
                         // Get the news title
                         $query = "SELECT `title` FROM `pcms_news` WHERE `id`=?";
-                        $title = $this->DB->query($query, array($id))->fetch_column();
+                        $title = $this->DB->query($query, array( $this->input->post('id', true) ))->fetch_column();
                         
                         // Log action
                         $this->log('Modified news post with title: "'. $title .'"');
@@ -587,7 +587,7 @@ class Admin_ajax extends Application\Core\Controller
                 case "delete":
                     // Get the news title
                     $query = "SELECT `title` FROM `pcms_news` WHERE `id`=?";
-                    $title = $this->DB->query($query, array($id))->fetch_column();
+                    $title = $this->DB->query($query, array( $this->input->post('id', true) ))->fetch_column();
                     
                     // Log action
                     $this->log('Deleted news post with title: "'. $title .'"');
