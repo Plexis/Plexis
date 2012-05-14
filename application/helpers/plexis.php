@@ -559,4 +559,32 @@
     {
         return load_class('Router')->get_uri_segement($index);
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: real_ver
+| ---------------------------------------------------------------
+|
+| This function is used to convert float values (in string format)
+| into REAL floats... (IE: .10 is greater then .1, which is not
+| the case in normal float comparisons... (.1 becomes .01, and
+| .10 becomes .1... 1.2.1 becomes 1.0201)
+|
+|
+*/
+
+    function real_ver($ver)
+    {
+        // First, conver to array by periods
+        $ver_arr = explode(".", $ver);
+	
+        $i = 1;
+        $result = 0;
+        foreach($ver_arr as $vbit) 
+        {
+            $result += $vbit * $i;
+            $i = $i / 100;
+        }
+        return $result;
+    }
 // EOF

@@ -267,7 +267,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.9');
+INSERT INTO `pcms_versions` VALUES ('database', '0.12');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`

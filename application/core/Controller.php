@@ -114,10 +114,10 @@ class Controller extends \System\Core\Controller
 */
     private function _process_db() 
     {
-        // Foir starts, get our current database version
+        // For starts, get our current database version
         $query = "SELECT `value` FROM `pcms_versions` WHERE `key`='database'";
-        $version = (float) $this->DB->query( $query )->fetch_column();
-        if($version < CMS_DB_VERSION)
+        $version = real_ver( $this->DB->query( $query )->fetch_column() );
+        if($version < real_ver( REQ_DB_VERSION ))
         {
             $updates = array();
             $path = APP_PATH . DS . 'plexis'. DS .'update_sqls';
@@ -128,14 +128,14 @@ class Controller extends \System\Core\Controller
             {
                 while(false !== ($file = readdir($list)))
                 {
-                    if($file[0] != "." && is_file($path . DS . $file))
+                    if($file[0] != "." && !is_dir($path . DS . $file))
                     {
                         // Format should be like so "update_#.sql
                         $names = explode('_', $file);
                         $update = str_replace('.sql', '', $names[1]);
-                        if($update > $version)
+                        if(real_ver($update) > $version)
                         {
-                            $updates[] = $file;
+                            $updates[] = array('file' => $file, 'version' => $update);
                         }
                     }
                 }
@@ -149,12 +149,20 @@ class Controller extends \System\Core\Controller
                 sort($updates);
 
                 // Process updates
-                foreach($updates as $file)
+                foreach($updates as $update)
                 {
-                    $this->DB->utilities->run_sql_file($path . DS . $file);
+                    if( !$this->DB->utilities->run_sql_file($path . DS . $update['file']) )
+                    {
+                        log_message('Failed to run SQL file "'. $path . DS . $update['file'] .'" on database', 'error.log');
+                        break;
+                    }
+                    $version = $update['version'];
                 }
             }
         }
+        
+        // Define our REAL db version now, after updates are run
+        define('CMS_DB_VERSION', $version);
     }
 }
 // EOF

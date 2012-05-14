@@ -63,6 +63,9 @@ class Admin extends Application\Core\Controller
         // Add our build var
         $this->Template->setjs('Build', CMS_BUILD);
         
+        // Proccess DB red font if out of date
+        $db = (REQ_DB_VERSION != CMS_DB_VERSION) ? '<font color="red">'. REQ_DB_VERSION .'</font> (Manual update Required)' : REQ_DB_VERSION;
+        
         // Set our page data
         $data = array(
             'page_title' => "Dashboard",
@@ -73,7 +76,7 @@ class Admin extends Application\Core\Controller
             'database_version' => $info['version'],
             'CMS_VERSION' => CMS_VERSION,
             'CMS_BUILD' => CMS_BUILD,
-            'CMS_DB_VERSION' => CMS_DB_VERSION
+            'CMS_DB_VERSION' => $db
         );
         
         // Load the page, and we are done :)
