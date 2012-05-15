@@ -160,4 +160,31 @@ class Cache
         }
         return TRUE;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: expire_time()
+| ---------------------------------------------------------------
+|
+| Reads and returns the expire time for the file in UNIX timestamp
+|
+| @Param: (String) $id - The id of the cache file
+| @Return (Int): Returns UNIX timestamp expire time
+|
+*/
+    public function expire_time($id)
+    {
+        // Define a file path
+        $file = $this->path . DS . $id . '.cache';
+        
+        // check if our file exists
+        if(file_exists($file))
+        {
+            // Get our file contents and Unserialize our data
+            $data = file_get_contents($file);
+            $data = unserialize($data);
+            return $data['expire_time'];
+        }
+        return FALSE;
+    }
 }

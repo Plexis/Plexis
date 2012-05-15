@@ -38,7 +38,7 @@ class Server extends Application\Core\Controller
 */
     public function index() 
     {
-        redirect('server/realms');
+        redirect('server/realmlist');
     }
 
 /*
