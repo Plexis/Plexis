@@ -32,6 +32,10 @@
                                 <input id="port" name="port" class="required" type="text" value="{realm.port}"/>
                             </p>
                             <p>
+                                <label for="max_players">Max Players</label>
+                                <input id="max_players" name="max_players" class="required" type="text" value="{realm.max_players}"/>
+                            </p>
+                            <p>
                                 <label for="type">Realm Type</label>
                                 <select id="type" name="type">
                                     <option value="PvP" <?php if('{realm.type}' == 'PvP') echo "selected=\"selected\""; ?>>PvP</option>

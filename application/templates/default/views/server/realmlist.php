@@ -6,19 +6,19 @@
                 <tr>
                     <th scope="col">Status</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Uptime</th>
                     <th scope="col">Type</th>
                     <th scope="col">Population</th>
-                    <th scope="col">Desc</th>
                 </tr>
             </thead>
             <tbody>
                 {realms}
                     <tr>
-                        <td><center><img src='{BASE_URL}/application/static/images/icons/loading.gif'></center></td>
+                        <td><center><img id="realm-{id}" src='{BASE_URL}/application/static/images/icons/loading.gif'></center></td>
                         <td><a href="{SITE_URL}/server/viewrealm/{id}">{name}</a></td>
+                        <td id="realm-{id}-uptime"></td>
                         <td>{type}</td>
-                        <td>0</td>
-                        <td>Fun Realm</td>
+                        <td id="realm-{id}-population"></td>
                     </tr>
                 {/realms}
             </tbody>

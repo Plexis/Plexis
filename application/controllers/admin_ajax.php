@@ -1938,12 +1938,8 @@ class Admin_ajax extends Application\Core\Controller
         // Build our Json return
         $return = array();
         
-        if($success == TRUE)
-        {
-            // Remove error tag on success, but allow warnings
-            if($type == 'error') $type = 'success';
-
-        }
+        // Remove error tag on success, but allow warnings
+        if($success == TRUE && $type == 'error') $type = 'success';
         
         // Output to the browser in Json format
         echo json_encode(

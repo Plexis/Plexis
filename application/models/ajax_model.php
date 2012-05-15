@@ -143,6 +143,7 @@ class Ajax_Model extends Application\Core\Model
         $name = $_POST['name'];
         $address = $_POST['address'];
         $port = $_POST['port'];
+        $max = $_POST['max_players'];
         $type = $_POST['type'];
         $driver = $_POST['driver'];
         
@@ -216,11 +217,12 @@ class Ajax_Model extends Application\Core\Model
             'address' => $address,
             'port' => $port,
             'type' => $type,
+            'max_players' => $max,
+            'driver' => $driver,
+            'rates' => serialize($rates),
             'char_db' => serialize($cs),
             'world_db' => serialize($ws),
-            'ra_info' => serialize($ra),
-            'driver' => $driver,
-            'rates' => serialize($rates)
+            'ra_info' => serialize($ra)
         );
         
         // Process our return message
@@ -331,7 +333,7 @@ class Ajax_Model extends Application\Core\Model
             $this->load->helper('Time');
             
             // Build our query
-            $query = "SELECT `id`, `name`, `type`, `address`, `port` FROM `pcms_realms`";
+            $query = "SELECT `id`, `name`, `type`, `address`, `port`, `max_players` FROM `pcms_realms`";
             
             // fetch the array of realms
             $realms = $this->DB->query( $query )->fetch_array();
@@ -343,7 +345,7 @@ class Ajax_Model extends Application\Core\Model
 
                 // Dont show errors errors
                 $Debug->silent_mode(true);
-                $handle = @fsockopen($realm['address'], $realm['port'], $errno, $errstr, 1.5);
+                $handle = @fsockopen($realm['address'], $realm['port'], $errno, $errstr, 2);
                 $Debug->silent_mode(false);
                 
                 // Set our status var
@@ -355,15 +357,37 @@ class Ajax_Model extends Application\Core\Model
                 // Build our realms return
                 if($status == 1 && $wowlib != FALSE)
                 {
+                    // Get our realm uptime
                     $uptime = $this->realm->uptime( $realm['id'] );
                     ($uptime == FALSE) ? $uptime = 'Unavailable' : $uptime = format_time($uptime);
                     
+                    // Determine population
+                    $online = $wowlib->get_online_count(0);
+                    $space = $realm['max_players'] - $online;
+                    $percent = ($space < 0) ? 100 : $space / $realm['max_players'];
+                    
+                    // Get our population text
+                    if($percent < 40)
+                    {
+                        $pop = '<span id="realm_population_low">Low</span>';
+                    }
+                    elseif($percent < 75)
+                    {
+                        $pop = '<span id="realm_population_medium">Medium</span>';
+                    }
+                    else
+                    {
+                        $pop = ($percent > 98) ? '<span id="realm_population_full">Full</span>' : '<span id="realm_population_high">High</span>';
+                    }
+
+                    // Build our realm info array
                     $result[] = array(
                         'id' => $realm['id'],
                         'name' => $realm['name'],
                         'type' => $realm['type'],
                         'status' => $status,
-                        'online' => $wowlib->get_online_count(0),
+                        'population' => $pop,
+                        'online' => $online,
                         'alliance' => $wowlib->get_online_count(1),
                         'horde' => $wowlib->get_online_count(2),
                         'uptime' => $uptime
@@ -376,6 +400,7 @@ class Ajax_Model extends Application\Core\Model
                         'name' => $realm['name'],
                         'type' => $realm['type'],
                         'status' => $status,
+                        'population' => '<span id="realm_population_low">Low</span>',
                         'online' => 0,
                         'alliance' => 0,
                         'horde' => 0,

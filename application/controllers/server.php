@@ -126,7 +126,7 @@ class Server extends Application\Core\Controller
         $c = get_realm_cookie();
         
         // Get our realm id if none is provieded
-        if($id == 0 && $c == 0)
+        if($c == 0)
         {
             output_message('info', 'no_realms_installed');
             $this->load->view('blank');
@@ -140,10 +140,8 @@ class Server extends Application\Core\Controller
             $_COOKIE['realm_id'] = $id;
         }
         
-        output_message('info', 'Page incomplete :p');
-        
         // Load the view and call it a day!
-        $this->load->view('blank');
+        $this->load->view('viewrealm');
     }
 
 }

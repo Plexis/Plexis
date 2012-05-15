@@ -17,7 +17,8 @@
  * 10) Forms
  * 11) Tables
  * 12) Buttons
- * 13) Misc
+ * 13) Realm Population
+ * 14) Misc
  */
 
 
@@ -1061,9 +1062,29 @@ tbody tr:hover td
     border-radius: 0 3px 3px 0;    
 }
 
+/* ==================================================
+ * 13) Realm Population.
+ * ================================================== */
+span#realm_population_low
+{
+    color: green;
+}
+span#realm_population_medium
+{
+    color: yellow;
+}
+span#realm_population_high
+{
+    color: orange;
+}
+span#realm_population_full
+{
+    color: red;
+}
+
 
 /* ==================================================
- * 13) Misc.
+ * 14) Misc.
  * ================================================== */
 .div-center
 {

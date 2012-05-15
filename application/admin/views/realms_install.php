@@ -35,6 +35,10 @@
                                 <input id="port" name="port" class="required" type="text" value="{realm.port}"/>
                             </p>
                             <p>
+                                <label for="max_players">Max Players</label>
+                                <input id="max_players" name="max_players" class="required" type="text" value="500"/>
+                            </p>
+                            <p>
                                 <label for="type">Realm Type</label>
                                 <select id="type" name="type">
                                     <option value="PvP">PvP</option>
