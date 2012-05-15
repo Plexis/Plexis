@@ -1774,9 +1774,8 @@ class Admin_ajax extends Application\Core\Controller
                                 // Create the directory for the new file if it doesnt exist
                                 if( !$Fs->create_dir($dirname) )
                                 {
-                                    $success = FALSE;
-                                    $text = 'Error creating directory "'. $dirname .'"';
-                                    goto Output;
+                                    $this->output(false, 'Error creating directory "'. $dirname .'"');
+                                    return;
                                 }
                             }
                             // Do not Break!
@@ -1788,17 +1787,15 @@ class Admin_ajax extends Application\Core\Controller
                                 $fwrite = @fwrite($handle, $contents);
                                 if($fwrite === FALSE)
                                 {
-                                    $success = FALSE;
-                                    $text = 'Error writing to file "'. $file .'"';
-                                    goto Output;
+                                    $this->output(false, 'Error writing to file "'. $file .'"');
+                                    return;
                                 }
                                 @fclose($handle);
                             }
                             else
                             {
-                                $success = FALSE;
-                                $text = 'Error opening / creating file "'. $file .'"';
-                                goto Output;
+                                $this->output(false, 'Error creating / writting to file "'. $file .'"');
+                                return;
                             }
                             break;
                             
@@ -1822,24 +1819,8 @@ class Admin_ajax extends Application\Core\Controller
                         }
                     }
                     
-                    // Output goto
-                    Output:
-                    {
-                        load_class('Debug')->silent_mode(false);
-                        if($success == TRUE)
-                        {
-                            // Remove error tag on success, but allow warnings
-                            ($type == 'error') ? $type = 'success' : '';
-                            $return['success'] = true;
-                        }
-                        else
-                        {
-                            $return['success'] = false;
-                            $return['message'] = $text;
-                        }
-                        
-                        echo json_encode($return);
-                    }
+                    // Output success
+                    $this->output(true, '');
                 break;
 
             } // End Swicth $action
@@ -1929,10 +1910,13 @@ class Admin_ajax extends Application\Core\Controller
     public function output($success, $message, $type = 'error')
     {
         // Load language
-        $lang = load_language_file( 'messages' );
-        if(!is_array($message))
+        if(!empty($message) && strpos($message, ' ') === false)
         {
-            $message = (isset($lang[$message])) ? $lang[$message] : $message;
+            $lang = load_language_file( 'messages' );
+            if(!is_array($message))
+            {
+                $message = (isset($lang[$message])) ? $lang[$message] : $message;
+            }
         }
         
         // Build our Json return

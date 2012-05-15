@@ -50,7 +50,7 @@ class Frostbite
         define('BASE_URL', $routes['site_url']);
         
         // Define our site url
-        if( !isset($_SERVER['HTTP_MOD_REWRITE']) ) $_SERVER['HTTP_MOD_REWRITE'] == 'Off';
+        if( !array_key_exists('HTTP_MOD_REWRITE', $_SERVER) ) $_SERVER['HTTP_MOD_REWRITE'] == 'Off';
         ($_SERVER['HTTP_MOD_REWRITE'] == 'On') ? define('SITE_URL', $routes['site_url']) : define('SITE_URL', $routes['site_url'] . '/?url=');
         
         // -----------------------------------------

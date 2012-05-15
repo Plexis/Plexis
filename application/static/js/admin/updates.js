@@ -55,9 +55,34 @@ function process()
                 // Update the update status texts
                 current = (key+1);
                 tmp = parseFloat(running);
-                $('#update-state').html('<center>Progress: '+ tmp.toFixed(1) +'%<br />Current file: "' + value['file'] +'" ('+ current +' / '+ count +')</center>');
+                s = value['status'];
+                status = s.substr(0, 1);
+                
+                // Get our file mode
+                switch(status)
+                {
+                    case "M":
+                        mode = 'Updating';
+                        break;
+                    case "A":
+                        mode = 'Adding';
+                        break;
+                    case "D":
+                        mode = 'Removing';
+                        break;
+                    case "R":
+                        mode = 'Renaming';
+                        break;
+                    default:
+                        mode = '';
+                        break;
+                }
+                
+                // Update the status
+                $('#update-state').html('<center>Progress: '+ tmp.toFixed(1) +'%<br />' + mode + ' file: "' + value['file'] +'" ('+ current +' / '+ count +')</center>');
   
-                res = $.ajax({
+                // Send action
+                $.ajax({
                     type: "POST",
                     url: Plexis.url + '/admin_ajax/update',
                     data: { 
@@ -68,7 +93,7 @@ function process()
                     },
                     dataType: "json",
                     async: false,
-                    timeout: 7000, // in milliseconds
+                    timeout: 15000, // in milliseconds
                     success: function(result) 
                     {
                         if(result.success == true)
@@ -90,12 +115,11 @@ function process()
                         // Show that there we cant connect to the update server
                         update_error = true;
                         update_message = 'Server is taking too long to respond';
-                        return false;
                     }
                 });
                 
                 // Stop the loop!
-                if(res == false) return false;
+                if(update_error == true) return false;
             });
             
             // Set the site up for maintenace to false
