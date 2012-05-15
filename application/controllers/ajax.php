@@ -49,6 +49,8 @@ class Ajax extends Application\Core\Controller
         switch($action)
         {
             case "status":
+                // Dont close this script!
+                ignore_user_abort(true);
                 $this->model->realm_status();
                 break;
             
@@ -167,8 +169,8 @@ class Ajax extends Application\Core\Controller
 */    
     public function output($success, $message, $type = 'error')
     {
-        // Load language
-        if(!is_array($message))
+        // Load language only if a string, with no spaces is offered
+        if(!empty($message) && !is_array($message) && strpos($message, ' ') === false)
         {
             $lang = load_language_file( 'messages' );
             $message = (isset($lang[$message])) ? $lang[$message] : $message;
@@ -177,12 +179,8 @@ class Ajax extends Application\Core\Controller
         // Build our Json return
         $return = array();
         
-        if($success == TRUE)
-        {
-            // Remove error tag on success, but allow warnings
-            if($type == 'error') $type = 'success';
-
-        }
+        // Remove error tag on success, but allow warnings
+        if($success == TRUE && $type == 'error') $type = 'success';
         
         // Output to the browser in Json format
         echo json_encode(

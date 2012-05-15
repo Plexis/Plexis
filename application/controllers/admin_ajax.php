@@ -1909,14 +1909,11 @@ class Admin_ajax extends Application\Core\Controller
 */    
     public function output($success, $message, $type = 'error')
     {
-        // Load language
-        if(!empty($message) && strpos($message, ' ') === false)
+        // Load language only if a string, with no spaces is offered
+        if(!empty($message) && !is_array($message) && strpos($message, ' ') === false)
         {
             $lang = load_language_file( 'messages' );
-            if(!is_array($message))
-            {
-                $message = (isset($lang[$message])) ? $lang[$message] : $message;
-            }
+            $message = (isset($lang[$message])) ? $lang[$message] : $message;
         }
         
         // Build our Json return
