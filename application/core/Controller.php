@@ -120,7 +120,7 @@ class Controller extends \System\Core\Controller
         if($version < real_ver( REQ_DB_VERSION ))
         {
             $updates = array();
-            $path = APP_PATH . DS . 'plexis'. DS .'update_sqls';
+            $path = APP_PATH . DS .'assets'. DS .'sql'. DS .'updates';
             
             // Open the __updates directory and scan all updates
             $list = @opendir( $path );

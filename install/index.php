@@ -54,7 +54,8 @@ else
                         <div class="field" >
                             <label for="user">Emulator: </label>
                             <select name="emulator">
-                                <option value="mangos" select="selected">Mangos / Trinity</option>
+                                <option value="trinity" select="selected">Trinity</option>
+                                <option value="mangos" select="selected">Mangos</option>
 								<option value="arcemu">ArcEmu</option>
                             </select>
                             <p class="field_help">Please select your emulator.</p>

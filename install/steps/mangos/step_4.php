@@ -53,11 +53,29 @@ else
     die();
 }
 
+// Edit the config.php file and switch it to the Mangos emulator (Thanks Skye :p )
+$cmsconf = "../application/config/config.php";
+if( is_writeable(  $cmsconf ) )
+{
+	$contents = file_get_contents( $cmsconf );
+	$confhandle = fopen( $cmsconf, "wb" );
+	
+	$contents = preg_replace( "#(\\\$emulator\s*=\s*[\"|']{1}(.*?)[\"|']{1};)#i", "\$emulator = \"mangos\";", $contents );
+	
+	fwrite( $confhandle, $contents );
+	fclose( $confhandle );
+}
+else
+{
+	show_error( "Couldn\'t open config.php for editing, it must be writable by webserver! Please set your permissions and try again." );
+	die();
+}
+
 // Preparing for sql injection... (prashing, etc...)
 if(!isset($_POST['skip']))
 {
     // Dealing with the full install sql file
-    $install = $DB->run_sql_file("installer/sql/full_install.sql");
+    $install = $DB->run_sql_file("../application/assets/sql/full_install.sql");
     if($install)
     {
         output_message('success', 'Plexis database installed');

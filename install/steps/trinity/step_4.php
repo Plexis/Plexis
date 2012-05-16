@@ -53,14 +53,14 @@ else
     die();
 }
 
-//Edit the config.php file and switch it to the Arcemu emulator
+// Edit the config.php file and switch it to the Trinity emulator (Thanks Skye :p )
 $cmsconf = "../application/config/config.php";
 if( is_writeable(  $cmsconf ) )
 {
 	$contents = file_get_contents( $cmsconf );
 	$confhandle = fopen( $cmsconf, "wb" );
 	
-	$contents = preg_replace( "#(\\\$emulator\s*=\s*[\"|']{1}(.*?)[\"|']{1};)#i", "\$emulator = \"arcemu\";", $contents );
+	$contents = preg_replace( "#(\\\$emulator\s*=\s*[\"|']{1}(.*?)[\"|']{1};)#i", "\$emulator = \"trinity\";", $contents );
 	
 	fwrite( $confhandle, $contents );
 	fclose( $confhandle );
