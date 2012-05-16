@@ -179,7 +179,8 @@ INSERT INTO `pcms_permissions` (`id`, `key`, `name`, `description`, `module`) VA
 (19, 'delete_admin_logs', 'Delete Admin Logs', 'Allow this user group to delete admin action logs?', 'admin'),
 (20, 'account_access', 'Access to Account', 'Allow this user to login and access his account?', 'core'),
 (21, 'update_email', 'Change Account Email', 'Allow this user group to change their email address?', 'core'),
-(22, 'update_password', 'Change Account  Password', 'Is this user group allowed to change thier password?', 'core');
+(22, 'update_password', 'Change Account  Password', 'Is this user group allowed to change thier password?', 'core'),
+(23, 'create_invite_keys', 'Create Invite Keys', 'Allow this user group to create Invite Keys to give to unregistered users?', 'core');
 
 -- ----------------------------
 -- Table structure for `pcms_realms`
@@ -191,6 +192,7 @@ CREATE TABLE `pcms_realms` (
   `address` varchar(50) NOT NULL,
   `port` int(7) NOT NULL,
   `type` varchar(50) NOT NULL COMMENT 'Icon',
+  `max_players` int(5) UNSIGNED NOT NULL DEFAULT '500',
   `driver` varchar(100) NOT NULL,
   `rates` text,
   `char_db` text NOT NULL,
@@ -267,7 +269,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.12');
+INSERT INTO `pcms_versions` VALUES ('database', '0.14');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`

@@ -20,7 +20,8 @@
 | P07 - Update (password / email) Page
 | P08 - Captcha Page
 | P09 - Vote
-| P10 - Invitation Keys
+| P10 - Donate
+| P11 - Invitation Keys
 |
 */
 class Account extends Application\Core\Controller 
@@ -972,65 +973,62 @@ class Account extends Application\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| P10: Invitation Keys
+| P10: Donate
+| ---------------------------------------------------------------
+|
+*/    
+    public function donate()
+    {
+        // Make sure the user is logged in HERE!
+        if($this->user['logged_in'] == FALSE) redirect('account/login');
+        
+        // Prepare for view
+        $this->load->view('donate');
+    }
+    
+/*
+| ---------------------------------------------------------------
+| P11: Invitation Keys
 | ---------------------------------------------------------------
 |
 */
     public function invite_keys($mode = NULL, $key_id = NULL)
     {
-        $can_create_keys = config("reg_user_key_creation");
-        $data["can_create_keys"] = $can_create_keys;
+        // get permissions
+        $enabled = config('reg_registration_key');
+        $create_keys = $this->Auth->has_permission('create_invite_keys');
+        
+        // Load the account model
+        $this->load->model('account_model', 'model');
         
         // Only process the mode IF we allow users to create keys!
-        if( $can_create_keys == 1)
+        if($enabled == 1 && $create_keys == 1)
         {
             // Process key creation first.
             if( $mode == "create" )
             {
-                // Let's generate the key.
-                $new_key = "";
-                
-                // Start by getting the username, all lowercase, alphanumeric only.
-                $username = strtolower( $this->user['username'] );
-                $username = preg_replace("/[^a-z0-9]/i", "", $username);
-                
-                // Get a string containing the current IP address represented as a long integer
-                // and the current Unix timestamp with microsecond prescision.
-                $longid = sprintf("%u%d", ip2long($_SERVER['REMOTE_ADDR']), microtime(true));
-                
-                //Each invitation key consists of a SHA1 hash of the above 'longid' prepended with the user's name.
-                $new_key = substr(sha1($username . $longid), 0, 30);
-                
-                $key_query_data = array(
-                    "key" => $new_key, 
-                    "sponser" => $this->user['id']
-                );
-                
-                // Insert it into the pcms_reg_keys table.
-                $this->DB->insert("pcms_reg_keys", $key_query_data);
-                
-                // Redirect back to /account/invite_keys/ so that F5 won't resubmit the form.
-                redirect("account/invite_keys");
+                // Make sure the user hasnt created too many keys
+                $query = "SELECT COUNT(*) FROM `pcms_reg_keys` WHERE `sponser` = ? AND `assigned` = 0";
+                $result = (int) $this->DB->query( $query, array($this->user['id']) )->fetch_column();
+                if($result < 3)
+                {
+                    // Send the request to the model
+                    $this->model->create_invite_key($this->user['id']);
+                    
+                    // Redirect back to /account/invite_keys/ so that F5 won't resubmit the form.
+                    redirect("account/invite_keys");
+                }
+                else
+                {
+                    output_message('warning', 'You have reached your limit of unassigned keys (3)');
+                }
             }
             
             // Process key deletion next.
             if( $mode == "delete" && $key_id !== NULL )
             {
-                // Prevent possible SQLi vulnerability, we only continue processing if $key_id is strictly alpanumeric and between 3 and 128 characters long (inclusive).
-                if( is_numeric($key_id) )
-                {
-                    $query = "SELECT * FROM `pcms_reg_keys` WHERE `id` = ?";
-                    $key_query = $this->DB->query($query, array($key_id))->fetch_row(); //Get the key.
-                    
-                    // Check to make sure the query didn't fail.
-                    if( $key_query != FALSE )
-                    {
-                        $sponsor = $key_query["sponser"];
-                        
-                        // Only allow the key to be deleted if it belongs to the currently logged in user.
-                        if( $sponsor == $this->user["id"] ) $this->DB->delete("pcms_reg_keys", "`id` = '$key_id'");
-                    }
-                }
+                // Send the request to the model
+                $this->model->delete_invite_key($this->user['id'], $key_id);
                 
                 // Redirect back to /account/invite_keys/ so that F5 won't resubmit the form.
                 redirect("account/invite_keys");
@@ -1041,8 +1039,7 @@ class Account extends Application\Core\Controller
             $user_keys = $this->DB->query($query, array($this->user['id']))->fetch_array();
             
             // Prepare for output
-            $data['keys'] = array();
-            if( sizeof( $user_keys ) > 0 ) $data['keys'] = $user_keys;
+            $data['keys'] = (sizeof( $user_keys ) > 0) ? $user_keys : array();
             $this->load->view("reg_keys", $data);
             return;
         }

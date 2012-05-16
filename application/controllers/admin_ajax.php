@@ -1494,34 +1494,18 @@ class Admin_ajax extends Application\Core\Controller
 */  
     public function regkeys()
     {
+        // Assign our mode varaible
         $mode = $_POST['action'];
 
         // Process key creation first.
         if( $mode == "generate" )
         {
+            // Load the account model
+            $this->load->model('account_model', 'model');
+        
             // Let's generate the key.
-            $new_key = "";
-            
-            // Start by getting the username, all lowercase, alphanumeric only.
-            $username = strtolower( $this->user['username'] );
-            $username = preg_replace("/[^a-z0-9]/i", "", $username);
-            
-            // Get a string containing the current IP address represented as a long integer
-            // and the current Unix timestamp with microsecond prescision.
-            $longid = sprintf("%u%d", ip2long($_SERVER['REMOTE_ADDR']), microtime(true));
-            
-            //Each invitation key consists of a SHA1 hash of the above 'longid' prepended with the user's name.
-            $new_key = substr(sha1($username . $longid), 0, 30);
-            
-            $key_query_data = array(
-                "key" => $new_key, 
-                "sponser" => $this->user['id']
-            );
-            
-            // Insert it into the pcms_reg_keys table.
-            $this->DB->insert("pcms_reg_keys", $key_query_data);
-            
-            $this->output(true, $new_key);
+            $new_key = $this->model->create_invite_key($this->user['id']);
+            ($new_key !== false) ? $this->output(true, $new_key) : $this->output(false, 'Error creating invite key. Please check your error logs');
         }
         
         // Process key deletion next.

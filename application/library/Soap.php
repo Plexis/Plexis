@@ -65,13 +65,13 @@ class Soap
         
         // Disable error reporting
         $Debug = load_class('Debug');
-        $Debug->error_reporting(0);
+        $Debug->silent_mode(true);
         
         // Open the handle
         $test = @fsockopen($server, $port, $errno, $errstr, 3);
         
         // Re-enable error reporting
-        $Debug->error_reporting(1);
+        $Debug->silent_mode(false);
         
         // Check if we connected successfully
         if($test)

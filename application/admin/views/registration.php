@@ -71,15 +71,6 @@
                                 <option value="0" <?php if($config['reg_registration_key'] === 0) echo "selected=\"selected\""; ?>>Disabled</option>
                             </select>
                         </p>
-                        <p>
-                            <label for="UserKeyCreation" title="If enabled, users will be able to generate their own keys from the User Control Panel.">
-                                User Registration Key Creation
-                            </label>
-                            <select id="UserKeyCreation" name="cfg__reg_user_key_creation">
-                                <option value="1" <?php if($config['reg_user_key_creation'] === 1) echo "selected=\"selected\""; ?>>Enabled</option>
-                                <option value="0" <?php if($config['reg_user_key_creation'] === 0) echo "selected=\"selected\""; ?>>Disabled</option>
-                            </select>
-                        </p>
                     </div>
                 </fieldset>
                 <!-- Form Buttons -->

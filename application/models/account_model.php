@@ -205,6 +205,69 @@ class Account_Model extends Application\Core\Model
     
 /*
 | ---------------------------------------------------------------
+| Function: create_invite_key()
+| ---------------------------------------------------------------
+|
+| This method creates an invite key for the user
+|
+| @Param: (Int) $userid - The users id we are creating a key from
+| @Return (Mixed) Returns new key, or false on failure
+|
+*/
+    public function create_invite_key($userid)
+    {
+        // Load the input class
+        $this->input = load_class('Input');
+        
+        // Get a string containing the current IP address represented as a long integer
+        // and the current Unix timestamp with microsecond prescision.
+        $longid = sprintf("%u%d", ip2long($this->input->ip_address()), microtime(true));
+        
+        //Each invitation key consists of a SHA1 hash of the above 'longid' prepended with the user's name.
+        $new_key = substr(sha1($userid . $longid), 0, 30);
+        
+        $key_query_data = array(
+            "key" => $new_key, 
+            "sponser" => $userid
+        );
+        
+        // Insert it into the pcms_reg_keys table.
+        $result = $this->DB->insert("pcms_reg_keys", $key_query_data);
+        return ($result !== false) ? $new_key : false;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: create_invite_key()
+| ---------------------------------------------------------------
+|
+| This method deletes an invite key for the user
+|
+| @Param: (Int) $userid - The users id we are deleteing a key from
+| @Param: (Int) $keyid - The id of the key
+| @Return (Bool)
+|
+*/
+    public function delete_invite_key($userid, $keyid)
+    {
+        // Build our query, fetch the key
+        $query = "SELECT * FROM `pcms_reg_keys` WHERE `id` = ?";
+        $result = $this->DB->query($query, array($keyid))->fetch_row();
+        
+        // Check to make sure the query didn't fail.
+        if( $result !== false )
+        {
+            $sponsor = $result["sponser"];
+            
+            // Only allow the key to be deleted if it belongs to the currently logged in user.
+            $result = ( $sponsor == $userid ) ? $this->DB->delete("pcms_reg_keys", "`id` = '$keyid'") : false;
+        }
+        return ($result !== false);
+    }
+
+    
+/*
+| ---------------------------------------------------------------
 | Function: get_id()
 | ---------------------------------------------------------------
 |
