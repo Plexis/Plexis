@@ -683,31 +683,39 @@ class Admin extends Application\Core\Controller
             'page_desc' => "This script allows you to update your CMS with just a click of a button.",
         );
         
-        // Make sure the Openssl extension is loaded
-        if(!extension_loaded('openssl'))
+        // cURL exist? If not we need to verify the user has openssl installed and https support
+        $curl = function_exists('curl_exec');
+        if(!$curl)
         {
-            $message = 'Openssl extension not found. Please enable the openssl extension in your php.ini file (extension=php_openssl.dll).'.
-                'You must enable openssl before using the remote updater';
-            output_message('warning', $message);
-            $this->load->view('blank', $data);
-            return;
-        }
-        
-        // Check for https support
-        if(!in_array('https', stream_get_wrappers()))
-        {
-            output_message('warning', 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?');
-            $this->load->view('blank', $data);
-            return;
+            // Make sure the Openssl extension is loaded
+            if(!extension_loaded('openssl'))
+            {
+                $message = 'Openssl extension not found. Please enable the openssl extension in your php.ini file (extension=php_openssl.dll).'.
+                    'You must enable openssl before using the remote updater';
+                output_message('warning', $message);
+                $this->load->view('blank', $data);
+                return;
+            }
+            
+            // Check for https support
+            if(!in_array('https', stream_get_wrappers()))
+            {
+                output_message('warning', 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?');
+                $this->load->view('blank', $data);
+                return;
+            }
         }
         
         // Make sure the client server allows fopen of urls
-        if(ini_get('allow_url_fopen') == 1)
+        if(ini_get('allow_url_fopen') == 1 || $curl == true)
         {
+            // Include the URL helper
+            $this->load->helper('Url');
+            
             // Get the file changes from github
             $start = microtime(1);
             load_class('Debug')->silent_mode(true);
-            $page = file_get_contents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30', false);
+            $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30', false);
             load_class('Debug')->silent_mode(false);
             $stop = microtime(1);
             

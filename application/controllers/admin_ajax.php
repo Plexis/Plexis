@@ -1637,6 +1637,9 @@ class Admin_ajax extends Application\Core\Controller
         // Make sure we arent directly accessed and the user has perms
         $this->check_access('sa');
         
+        // Load the URL helper
+        $this->load->helper('Url');
+        
         if(isset($_POST['action']))
         {
             $action = trim( $this->input->post('action') );
@@ -1644,27 +1647,32 @@ class Admin_ajax extends Application\Core\Controller
             switch($action)
             {
                 case "get_latest":
-                    // Make sure the Openssl extension is loaded
-                    if(!extension_loaded('openssl'))
+                    // cURL exist? If not we need to verify the user has openssl installed and https support
+                    $curl = function_exists('curl_exec');
+                    if(!$curl)
                     {
-                        echo json_encode( array('success' => false, 'message' => 'Openssl extension not found. Please enable the openssl extension in your php.ini file') );
-                        return;
-                    }
-                    
-                    // Check for https support
-                    if(!in_array('https', stream_get_wrappers()))
-                    {
-                        echo json_encode( array('success' => false, 'message' => 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?') );
-                        return;
+                        // Make sure the Openssl extension is loaded
+                        if(!extension_loaded('openssl'))
+                        {
+                            echo json_encode( array('success' => false, 'message' => 'Openssl extension not found. Please enable the openssl extension in your php.ini file') );
+                            return;
+                        }
+                        
+                        // Check for https support
+                        if(!in_array('https', stream_get_wrappers()))
+                        {
+                            echo json_encode( array('success' => false, 'message' => 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?') );
+                            return;
+                        }
                     }
                     
                     // Make sure the client server allows fopen of urls
-                    if(ini_get('allow_url_fopen') == 1)
+                    if(ini_get('allow_url_fopen') == 1 || $curl == true)
                     {
                         // Get the file changes from github
                         $start = microtime(1);
                         load_class('Debug')->silent_mode(true);
-                        $page = trim( file_get_contents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=1', false) );
+                        $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=1', false);
                         load_class('Debug')->silent_mode(false);
                         $stop = microtime(1);
                         
@@ -1709,7 +1717,7 @@ class Admin_ajax extends Application\Core\Controller
                     // Get the file changes from github
                     $start = microtime(1);
                     load_class('Debug')->silent_mode(true);
-                    $page = trim( file_get_contents($url, false) );
+                    $page = trim( getPageContents($url, false) );
                     load_class('Debug')->silent_mode(false);
                     $stop = microtime(1);
                     
@@ -1743,7 +1751,7 @@ class Admin_ajax extends Application\Core\Controller
                     load_class('Debug')->silent_mode(true);
                     
                     // Get file contents
-                    $contents = file_get_contents($url, false);
+                    $contents = trim( getPageContents($url, false) );
                     $mod = substr($type, 0, 1);
                     switch($mod)
                     {
