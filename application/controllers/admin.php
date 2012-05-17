@@ -865,7 +865,7 @@ class Admin extends Application\Core\Controller
             }
             
             // Fetch character
-            $char = $Lib->get_character_info($character);
+            $char = $Lib->characters->get_character_info($character);
             if($char == false)
             {
                 // Give the admin an error
@@ -882,8 +882,8 @@ class Admin extends Application\Core\Controller
             
             // Get alist of login flags
             $flags = array();
-            $aflags   = $Lib->get_available_login_flags();
-            $has_flag = $Lib->get_login_flags($character);
+            $aflags   = $Lib->characters->login_flags();
+            $has_flag = $Lib->characters->get_login_flags($character);
             
             // Loop through each flag so we can set the proper enabled : disabled at login select options
             foreach($aflags as $key => $flag)
@@ -903,9 +903,9 @@ class Admin extends Application\Core\Controller
                 'flags' => $flags,
                 'character' => $char,
                 'account' => $this->realm->get_account_name($char['account']),
-                'race' => $Lib->race_to_text($char['race']),
-                'class' => $Lib->class_to_text($char['class']),
-                'zone' => $Lib->zone_to_text($char['zone']),
+                'race' => $Lib->characters->race_to_text($char['race']),
+                'class' => $Lib->characters->class_to_text($char['class']),
+                'zone' => $Lib->zone->name($char['zone']),
                 'realm' => $realmid
             );
             $this->load->view('edit_character', $data);

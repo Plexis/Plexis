@@ -284,7 +284,7 @@
             $realms = $DB->query( $query )->fetch_array();
             
             // Dont log errors
-            $Debug->error_reporting(false);
+            $Debug->silent_mode(true);
             
             // Loop through each realm, and get its status
             foreach($realms as $key => $realm)
@@ -301,7 +301,7 @@
             }
             
             // Re-enable errors, and Cache the results for 5 minutes
-            $Debug->error_reporting(true);
+            $Debug->silent_mode(false);
             $Cache->save('realm_status_'.$id, $realms, $cache_time);
             return $realms;
         }
@@ -321,11 +321,11 @@
     function get_wowlib_drivers()
     {
         $reallist = FALSE;
-        $list = scandir(APP_PATH . DS . 'library' . DS . 'wowlib');
+        $path = APP_PATH . DS . 'wowlib'. DS . config('emulator');
+        $list = load_class('Filesystem', 'Library')->list_folders($path);
         foreach($list as $file)
         {
-            if($file[0] == "." || $file == "index.html") continue;
-            $reallist[] = str_replace(".php", '', $file);
+            $reallist[] = $file;
         }
         return $reallist;
     }

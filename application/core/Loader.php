@@ -182,66 +182,53 @@ class Loader extends \System\Core\Loader
     public function wowlib($id = 0, $instance_as = FALSE)
     {
         // Get our realm id if none is provieded
-        if($id === 0)
-        {
-            $id = config('default_realm_id');
-        }
+        if($id === 0) $id = config('default_realm_id');
+        
+        // Make sure we havent loaded the lib already
+        $Obj = \Registry::singleton()->load('Wowlib_r'.$id);
+        if($Obj !== NULL) return $Obj;
         
         // Load our driver name
         $DB = $this->database('DB', FALSE);
-        $name = $DB->query("SELECT `driver` FROM `pcms_realms` WHERE `id`=".$id)->fetch_column();
+        $realm = $DB->query("SELECT `id`, `name`, `driver`, `char_db`, `world_db` FROM `pcms_realms` WHERE `id`=".$id)->fetch_row();
         
         // Make sure we didnt get a false DB return
-        if($name === FALSE)
+        if($realm === FALSE)
         {
             $language = load_language_file('messages');
             $message = $language['wowlib_realm_doesnt_exist'];
             show_error($message, array($id), E_ERROR);
         }
         
-        // Define our classname
-        $reference_name = strtolower($name);
-        $class_name = ucfirst($reference_name);
-        $file = APP_PATH . DS . 'library' . DS . 'wowlib' . DS . $class_name . '.php';
-        
-        // Make sure we havent loaded the lib already
-        $Obj = \Registry::singleton()->load($class_name .'_r'.$id);
-        if($Obj !== NULL)
-        {
-            return $Obj;
-        }
-
-        // Load the lib file
-        elseif(file_exists($file))
-        {
-            // Include the wowlib file
-            require_once($file);
-            $name = "\\Application\\Library\\Wowlib\\". $class_name;
-            
-            // Try to init the class
-            try{
-                $class = new $name($id);
-            }
-            catch(\Exception $e){
-                $class = FALSE;
-            }
-            
-            // Store the class statically and return the class
-            \Registry::singleton()->store($class_name .'_r'.$id, $class);
-            
-            // Check to see if the user wants to instance
-            if($instance_as !== FALSE)
-            {
-                get_instance()->$instance_as = $class;
-            }
-            return $class;
-        }
-        else
+        // Make sure the wowlib exists
+        if( !is_dir( APP_PATH . DS . 'wowlib' . DS . config('emulator') . DS . $realm['driver']) )
         {
             $language = load_language_file('messages');
             $message = $language['wowlib_driver_doesnt_exist'];
-            show_error($message, array($class_name), E_ERROR);
+            show_error($message, array($realm['driver']), E_ERROR);
+            return false;
         }
+
+        // Include the wowlib file
+        require_once( APP_PATH . DS . 'wowlib' . DS . 'Wowlib.php' );
+        
+        // Try to init the class
+        try{
+            $class = new \Wowlib\Wowlib($realm);
+        }
+        catch(\Exception $e){
+            $class = FALSE;
+        }
+        
+        // Store the class statically and return the class
+        \Registry::singleton()->store('Wowlib_r'.$id, $class);
+        
+        // Check to see if the user wants to instance
+        if($instance_as !== FALSE)
+        {
+            get_instance()->$instance_as = $class;
+        }
+        return $class;
     }
     
 /*
@@ -260,7 +247,7 @@ class Loader extends \System\Core\Loader
         // Get our emulator from the Config File
         $emulator = ucfirst( config('emulator') );
         $class_name = "Emulator_".$emulator;
-        $file = APP_PATH . DS . 'library' . DS . 'emulators' . DS . $emulator . '.php';
+        $file = APP_PATH . DS . 'wowlib' . DS . strtolower($emulator) . DS . $emulator . '.php';
         
         // Make sure we havent loaded the lib already
         $class = \Registry::singleton()->load($class_name);
@@ -273,7 +260,7 @@ class Loader extends \System\Core\Loader
         elseif(file_exists($file))
         {
             include_once $file;
-            $name = "\\Application\\Library\\Emulators\\". $emulator;
+            $name = "\\Wowlib\\". $emulator;
             $class = new $name();
             
             // Store the class statically and return the class

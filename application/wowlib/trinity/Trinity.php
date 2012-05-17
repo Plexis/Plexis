@@ -11,7 +11,7 @@
 | License:      GNU GPL v3
 |
 */
-namespace Application\Library\Emulators;
+namespace Wowlib;
 
 class Trinity
 {

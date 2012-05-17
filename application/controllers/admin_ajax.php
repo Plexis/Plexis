@@ -683,7 +683,7 @@ class Admin_ajax extends Application\Core\Controller
             $this->load->wowlib($realm, 'wowlib');
             if(is_object($this->wowlib))
             {
-                $output = $this->wowlib->get_character_list_datatables();
+                $output = $this->wowlib->characters->get_character_list_datatables();
                 
                 // Loop, each character, and format the rows accordingly
                 foreach($output['aaData'] as $key => $value)
@@ -691,9 +691,9 @@ class Admin_ajax extends Application\Core\Controller
                     $u = $this->realm->fetch_account($value[7]);
                     $g = $value[5];
                     $r = $value[3];
-                    $race = $this->wowlib->race_to_text($r);
-                    $class = $this->wowlib->class_to_text($value[4]);
-                    $zone = $this->wowlib->zone_to_text($value[6]);
+                    $race = $this->wowlib->characters->race_to_text($r);
+                    $class = $this->wowlib->characters->class_to_text($value[4]);
+                    $zone = $this->wowlib->zone->name($value[6]);
                     $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/application/static/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
                     $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
                     $output['aaData'][$key][5] = $zone;
@@ -734,7 +734,7 @@ class Admin_ajax extends Application\Core\Controller
             }
             
             // Fetch character
-            $char = $Lib->get_character_info($id);
+            $char = $Lib->characters->get_character_info($id);
             if($char == false)
             {
                 $this->output(false, "Character ID: Does not exist!");
