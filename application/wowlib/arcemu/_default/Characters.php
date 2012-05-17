@@ -822,7 +822,7 @@ class Characters
 
 /*
 | ---------------------------------------------------------------
-| Method: get_available_login_flags()
+| Method: login_flags()
 | ---------------------------------------------------------------
 |
 | This method is used to return a list of "at login" flags this
@@ -975,7 +975,7 @@ class Characters
         
         // Build the dummy array
         $flags = array();
-        $supported = $this->get_available_login_flags();
+        $supported = $this->login_flags();
         foreach($supported as $key => $flag)
         {
             $flags[$key] = false;
