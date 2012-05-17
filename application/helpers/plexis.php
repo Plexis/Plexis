@@ -361,7 +361,7 @@
 | This function is used to return an array of modules in the modules
 | folder
 |
-| @Return: (Array) Array of drivers
+| @Return: (Array) Array of modules
 |
 */
     function get_modules()
@@ -382,7 +382,7 @@
 |
 | This function is used to return an array of site installed modules.
 |
-| @Return: (Array) Array of installed realms
+| @Return: (Array) Array of installed modules
 |
 */
     function get_installed_modules()
@@ -403,7 +403,7 @@
 | This function is used to find out if a module is installed based 
 | on the module name
 |
-| @Return: (Bool) True if the rmodule is installed, FALSE otherwise
+| @Return: (Bool) True if the module is installed, FALSE otherwise
 |
 */
     function module_installed($name)
@@ -446,7 +446,7 @@
 |
 | This function is used to return an array of site installed templates.
 |
-| @Return: (Array) Array of installed realms
+| @Return: (Array) Array of installed templates
 |
 */
     function get_installed_templates()
@@ -479,6 +479,28 @@
         $query = "SELECT `status` FROM `pcms_templates` WHERE `name`=?";
         $result = $DB->query( $query, array($name) )->fetch_column();
         return ($result == FALSE) ? FALSE : TRUE;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: get_emulators()
+| ---------------------------------------------------------------
+|
+| This function is used to return an array of modules in the modules
+| folder
+|
+| @Return: (Array) Array of emulators
+|
+*/
+    function get_emulators()
+    {
+        $reallist = array();
+        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'wowlib');
+        foreach($list as $file)
+        {
+            $reallist[] = $file;
+        }
+        return $reallist;
     }
 
 /*

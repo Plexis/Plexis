@@ -112,10 +112,27 @@ class Admin_Model extends Application\Core\Model
             $languages[] = '<option value="'.$file.'" '. $selected .'>'. ucfirst($file).'</option>';
         }
         
+        // Process installed emulators
+        $default = config('emulator');
+        $list = get_emulators();
+        foreach($list as $name)
+        {
+            // Get our selected option
+            $selected = '';
+            if($default == $name)
+            {
+                $selected = 'selected="selected" ';
+            }
+            
+            // Add the language folder to the array
+            $emu[] = '<option value="'.$name.'" '. $selected .'>'. ucfirst($name) .'</option>';
+        }
+        
         return array(
             'realms' => $realms,
             'templates' => $templates,
-            'languages' => $languages
+            'languages' => $languages,
+            'emulators' => $emu
         );
     }
     

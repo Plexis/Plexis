@@ -79,10 +79,9 @@
                             <p>
                                 <label for="emu">Emulator</label>
                                 <select id="emu" name="cfg__emulator">
-                                    <option value="mangos" <?php if('{config.emulator}' == 'mangos') echo "selected=\"selected\""; ?>>Mangos</option>
-                                    <option value="trinity" <?php if('{config.emulator}' == 'trinity') echo "selected=\"selected\""; ?>>Trinity</option>
-                                    <option value="arcemu" <?php if('{config.emulator}' == 'arcemu') echo "selected=\"selected\""; ?>>ArcEmu</option>
-                                    <option value="skyfire" <?php if('{config.emulator}' == 'skyfire') echo "selected=\"selected\""; ?>>Skyfire</option>
+                                    {options.emulators}
+                                        {value}
+                                    {/options.emulators}
                                 </select>
                             </p>
                             <p>
