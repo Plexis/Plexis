@@ -273,7 +273,7 @@
                         <div class="_50">
                             <p>
                                 <label for="ra_type">Remote Access Type</label>
-                                <select id="ra_type" name="ra_type" title="Warning: If you are using Trinity, SOAP probably will not work!">
+                                <select id="ra_type" name="ra_type">
                                     <option value="TELNET" <?php if('{realm.ra.type}' == 'TELNET') echo "selected=selected"; ?>>Telnet</option>
                                     <option value="SOAP" <?php if('{realm.ra.type}' == 'SOAP') echo "selected=selected"; ?>>SOAP</option>
                                 </select>

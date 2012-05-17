@@ -592,7 +592,7 @@ class Template
         // No template custom view, load default
         elseif( !$this->_is_module )
         {
-            $file = APP_PATH . DS . 'plexis' . DS . 'default_views' . DS . $this->_controller . DS . $this->view_file .'.php';
+            $file = APP_PATH . DS . 'assets' . DS . 'default_views' . DS . $this->_controller . DS . $this->view_file .'.php';
             if(file_exists($file))
             {
                 return file_get_contents($file);

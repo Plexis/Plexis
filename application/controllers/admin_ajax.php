@@ -1795,7 +1795,7 @@ class Admin_ajax extends Application\Core\Controller
                             $removed = TRUE;
                             $Fs->delete($filename);
                             break;
-                    } // End witch type
+                    }
                     
                     // Removed empty dirs
                     if($removed == TRUE)
