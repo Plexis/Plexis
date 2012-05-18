@@ -53,7 +53,7 @@
                 <legend>Account Settings</legend>
                 <div class="_50">
                     <p>
-                        <label for="account level">Account Level</label>
+                        <label for="account level">User Group</label>
                         <select id="account level" name="group_id">
                             <?php
                                 $ug = "{user.group_id}";

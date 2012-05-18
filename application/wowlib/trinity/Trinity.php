@@ -663,19 +663,19 @@ class Trinity
 |
 |  Gets information about account expansions.
 |
-| @Return (Array) Returns an array containing the expansions and all relevant information.
+| @Return (Array) Returns an array containing the expansions and 
+|    all relevant information.
 |
 */
     
     public function get_expansion_info()
     {
-        return array
-            (
-                //Expansion ID => Expansion Name
-                0  => "Classic",
-                1  => "The Burning Crusade",
-                2 => "Wrath of the Lich King"
-            );
+        // Expansion ID => Expansion Name
+        return array(
+            0 => "Classic",
+            1 => "The Burning Crusade",
+            2 => "Wrath of the Lich King"
+        );
     }
     
 /*
@@ -686,8 +686,10 @@ class Trinity
 |  Returns the name of the expansion from the given ID.
 |
 | @Param: (Int) $id - The account ID.
-| @Param: (Bool) $string - Whether or not to return the expansion ID as it in the accounts table, or the name of the expansion.
-| @Return (Mixed) Returns the current expansion (ID number or name) on success, FALSE on failure.
+| @Param: (Bool) $string - Whether or not to return the expansion ID 
+|   or the name of the expansion.
+| @Return (Mixed) Returns the current expansion (ID number or name) 
+|   on success, FALSE on failure.
 |
 */
     

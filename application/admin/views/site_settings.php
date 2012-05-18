@@ -103,13 +103,6 @@
                         <legend>Account Settings</legend>
                         <div class="_50">
                             <p>
-                                <label for="Pass_recovery">Password Recovery via Email</label>
-                                <select id="Pass_recovery" name="cfg__account_recover_email_pass">
-                                    <option value="1" <?php if('{config.account_recover_email_pass}' == 1) echo "selected=\"selected\""; ?>>Enabled</option>
-                                    <option value="0" <?php if('{config.account_recover_email_pass}' == 0) echo "selected=\"selected\""; ?>>Disabled</option>
-                                </select>
-                            </p>
-                            <p>
                                 <label for="Pass_recovery">Send Email On Password Change</label>
                                 <select id="Pass_recovery" name="cfg__send_email_pass_change">
                                     <option value="1" <?php if('{config.send_email_pass_change}' == 1) echo "selected=\"selected\""; ?>>Enabled</option>
