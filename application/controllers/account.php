@@ -775,29 +775,35 @@ class Account extends Application\Core\Controller
                         if($this->realm->change_password($this->user['id'], $password))
                         {
                             // Check if the admin wants the user to get the new password in email
-                            if(config('account_recover_email_pass') == TRUE)
+                            if(config('send_email_pass_change') == TRUE)
                             {
-                                // Email password
-                                // Setup our variables and load our extensions
-                                $site_title = config('site_title');
-                                $site_email = config('site_email');
-                                $lang = load_language_file('emails');
-                                $this->email = $this->load->library('email');
-
-                                // Create out email message
-                                $message = vsprintf( $lang['account_update_message'], array($username, $site_support_email) );
-
-                                // Build the email
-                                $this->email->to( $email, $username );
-                                $this->email->from( $site_email, $site_title );
-                                $this->email->subject( $lang['account_update_subject'] );
-                                $this->email->message( $message );
-                                $sent = $this->email->send();
-
-                                // Check if our email sent correctly
-                                if($sent == false)
+                                // Get the accounts current email
+                                $email = $this->DB->query("SELECT `email` FROM `pcms_accounts` WHERE `id`=". $this->user['id'])->fetch_column();
+                                
+                                // Make sure the email isnt NULL!
+                                if(!empty($email))
                                 {
-                                    log_message("Failed to send email to $email, about account password change", 'error.log');
+                                    // Setup our variables and load our extensions
+                                    $site_title = config('site_title');
+                                    $site_email = config('site_support_email');
+                                    $lang = load_language_file('emails');
+                                    $this->email = $this->load->library('email');
+
+                                    // Create out email message
+                                    $message = vsprintf( $lang['account_update_message'], array($username, $site_support_email) );
+
+                                    // Build the email
+                                    $this->email->to( $email, $username );
+                                    $this->email->from( $site_email, $site_title );
+                                    $this->email->subject( $lang['account_update_subject'] );
+                                    $this->email->message( $message );
+                                    $sent = $this->email->send();
+
+                                    // Check if our email sent correctly
+                                    if($sent == false)
+                                    {
+                                        log_message("Failed to send email to $email, about account password change", 'error.log');
+                                    }
                                 }
                             }
                             
