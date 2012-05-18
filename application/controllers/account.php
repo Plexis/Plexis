@@ -621,7 +621,7 @@ class Account extends Application\Core\Controller
                                 }
                                 
                                 // Make sure the emails match! Else, back to step 1
-                                if($r_data['email'] != $email)
+                                if($r_data['registration_email'] != $email)
                                 {
                                     output_message('error', 'account_recover_invalid_email');
                                     goto Step1;

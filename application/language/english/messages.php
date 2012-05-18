@@ -11,7 +11,7 @@ return array(
     'account_lock_error' => 'Unable to lock account. Please check your error log.',
     'account_recover_failed_not_set' => 'We are sorry, but your account cannot be recovered because your recovery question was never set. Please contact an administrator',
     'account_recover_failed_wrong_answer' => 'The answer to the secret question was invalid. Please check your spelling and try again',
-    'account_recover_invalid_email' => 'The email entered does not match the email tied to this account. Please check your spelling or try a different email address',
+    'account_recover_invalid_email' => 'The email entered does not match the email that was used when this account was registered. Please check your spelling or try a different email address',
     'account_recover_pass_failed' => 'A critical error happened while updating your password. Please contact an admin to resolve this issue.',
     'account_recover_pass_success' => 'Your account was recovered successfully! Your new password is <b>%s</b>',
     'account_recover_pass_success_email' => 'Your account was recovered successfully! We have sent an email with your new password to the registered email address.',

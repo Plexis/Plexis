@@ -121,7 +121,6 @@ class Loader extends \System\Core\Loader
         if( $Obj === null )
         {
             // We have to manually load the plugin
-            $className = '\\Application\\Plugins\\'. $name;
             $file = APP_PATH . DS . 'plugins' . DS . $name . '.php';
             if(!file_exists($file))
             {
@@ -134,6 +133,7 @@ class Loader extends \System\Core\Loader
             
             // Init the plugin
             try {
+                $className = "\Plugins\\". $name;
                 $Obj = new $className();
             } 
             catch(\Exception $e) {

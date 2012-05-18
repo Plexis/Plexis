@@ -16,7 +16,7 @@
 | is installed
 |
 */
-namespace Application\Plugins;
+namespace Plugins;
 
 class Plexis
 {

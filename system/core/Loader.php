@@ -139,10 +139,7 @@ class Loader
     public function library($name, $instance = TRUE, $surpress = FALSE)
     {
         // Make sure periods are replaced with slahes if there is any
-        if(strpos($name, ".") !== FALSE)
-        {
-            $name = str_replace('.', '\\', $name);
-        }
+        if(strpos($name, ".") !== FALSE) $name = str_replace('.', '\\', $name);
         
         // Load the Class
         $class = load_class($name, 'Library', $surpress);
@@ -186,7 +183,7 @@ class Loader
         {
             // Check our registry to see if we already loaded this connection
             $Obj = \Registry::singleton()->load("DBC_".$args);
-            if($Obj != NULL)
+            if($Obj !== NULL)
             {
                 // Skip to the instancing part unless we set instance to FALSE
                 if($instance != FALSE) goto Instance;
