@@ -786,14 +786,15 @@ class Account extends Application\Core\Controller
                                     // Setup our variables and load our extensions
                                     $site_title = config('site_title');
                                     $site_email = config('site_support_email');
+                                    $link = SITE_URL .'/account/recover';
                                     $lang = load_language_file('emails');
                                     $this->email = $this->load->library('email');
 
                                     // Create out email message
-                                    $message = vsprintf( $lang['account_update_message'], array($username, $site_support_email) );
+                                    $message = vsprintf( $lang['account_update_message'], array($this->user['username'], $link) );
 
                                     // Build the email
-                                    $this->email->to( $email, $username );
+                                    $this->email->to( $email, $this->user['username'] );
                                     $this->email->from( $site_email, $site_title );
                                     $this->email->subject( $lang['account_update_subject'] );
                                     $this->email->message( $message );
