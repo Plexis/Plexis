@@ -73,13 +73,24 @@ class Email
 |
 | Calling this method will build the email and send it
 |
-| @Return: (BOOL) returns TRUE if sent, FALSE otherwise
+| @Param: (Bool) $supress - Supress errors?
+| @Return: (Bool) returns TRUE if sent, FALSE otherwise
 |
 */    
-    public function send() 
+    public function send($supress = true) 
     {
+        // Build the email header
         $this->build_header();
-        return mail($this->to, $this->subject, $this->message, $this->header);
+        
+        // Disable error reporting
+        if($supress = true) load_class('Debug')->silent_mode(true);
+        
+        // Send the email
+        $sent = mail($this->to, $this->subject, $this->message, $this->header);
+        
+        // Re-enable errors and return
+        if($supress = true) load_class('Debug')->silent_mode(false);
+        return $sent;
     }
 
 /*
