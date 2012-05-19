@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Global Emails language file.
+    Format: 
+        <email_key>
+            <subject>
+            <message>
+        </email_key>
+        
+    ** All html open/close tags ('<' and '>') need to be converted to BBcode open/close tags ('[' and ']').
+    because XML open and close tags match html. Ex: [p] becomes <p>
+-->
+<emails>
+    <!-- Password Change Notification Email -->
+    <password_change>
+        <subject>Changes to your Account</subject>
+        <message>
+            [p]
+                Hello, {username}, [br /][br /]
+                This is an automated notification regarding the recent password change made to your account.[br /][br /]
+                *** If you made this password change, please disregard this notification.[br /][br /]
+                If you did not request to your password, we recommend you visit the [a href="{recovery_link}"]account recovery[/a] page as soon as possible, as your account may have been compromised.
+            [/p]
+        </message>
+    </password_change>
+    
+    <!-- Account Activate Email -->
+    <account_activation_req>
+        <subject>Account Activation Required</subject>
+        <message>
+            [p]
+                Hello, {username}, [br /][br /]
+                Thank you for registering an account with us! We require everyone to activate their account before logging into the site or our servers. 
+                You can do this by simply clicking the link below, or copy/pasting the address in your browser. Once activated, you will have full access to your account.
+                [br /][br /][a href="{activate_link}"]Click here to activate your account[/a][br /][br /] Or copy + paste this in your browser to activate your account: {activate_link}
+            [/p]
+        </message>
+    </account_activation_req>
+</emails>

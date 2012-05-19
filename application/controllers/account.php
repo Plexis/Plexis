@@ -370,23 +370,25 @@ class Account extends Application\Core\Controller
                     if( config('reg_email_verification') == TRUE )
                     {
                         // Setup our variables and load our extensions
-                        $site_title = config('site_title');
-                        $site_email = config('site_email');
-                        $lang = load_language_file('emails');
-                        $this->load->library('email');
-                        $this->load->model('Account_model', 'account');
+                        $l = selected_language();
+                        $lang = (language_exists($l)) ? $l : default_language();
+                        $lang = simplexml_load_file( APP_PATH . DS . 'language' . DS . $lang . DS .'emails.xml' );
+                        $this->email = $this->load->library('email');
                         
-                        // generate our random account verification code
+                        // Generate a activation key
                         $genkey = $this->account->create_key($username);
-                        $href = SITE_URL . "/account/activate/".$genkey;
-                        $message = vsprintf( $lang['email_activate_message'], array( $username, $site_title, $href, $href ) );
-                        
+
+                        // Create out email message, parse bbcode open/close tags to html open/close tags, and variables
+                        $find = array('[', ']', '{username}', '{activate_link}');
+                        $replace = array('<', '>', $username, SITE_URL ."/account/activate/".$genkey);
+                        $message = str_replace( $find, $replace, trim($lang->account_activation_req->message) );
+
                         // Build the email
-                        $this->email->to($email, $username);
-                        $this->email->from( $site_email, $site_title );
-                        $this->email->subject( $lang['email_activate_subject'] );
+                        $this->email->to( $email, $username );
+                        $this->email->from( config('site_support_email'), config('site_title') );
+                        $this->email->subject( $lang->account_activation_req->subject );
                         $this->email->message( $message );
-                        $sent = $this->email->send();
+                        $sent = $this->email->send(true);
                         
                         // Check if our email sent correctly
                         if($sent == TRUE)
@@ -777,28 +779,25 @@ class Account extends Application\Core\Controller
                             // Check if the admin wants the user to get the new password in email
                             if(config('send_email_pass_change') == TRUE)
                             {
-                                // Get the accounts current email
-                                $email = $this->DB->query("SELECT `email` FROM `pcms_accounts` WHERE `id`=". $this->user['id'])->fetch_column();
-                                
                                 // Make sure the email isnt NULL!
-                                if(!empty($email))
+                                if(!empty($this->user['email']))
                                 {
                                     // Setup our variables and load our extensions
-                                    $site_title = config('site_title');
-                                    $site_email = config('site_support_email');
-                                    $link = SITE_URL .'/account/recover';
-                                    $lang = load_language_file('emails');
+                                    $lang = (language_exists($this->user['language'])) ? $this->user['language'] : default_language();
+                                    $email = simplexml_load_file( APP_PATH . DS . 'language' . DS . $lang . DS .'emails.xml' );
                                     $this->email = $this->load->library('email');
 
-                                    // Create out email message
-                                    $message = vsprintf( $lang['account_update_message'], array($this->user['username'], $link) );
+                                    // Create out email message, parse bbcode open/close tags to html open/close tags, and variables
+                                    $find = array('[', ']', '{username}', '{recovery_link}');
+                                    $replace = array('<', '>', $this->user['username'], SITE_URL .'/account/recover');
+                                    $message = str_replace( $find, $replace, trim($email->password_change->message) );
 
                                     // Build the email
-                                    $this->email->to( $email, $this->user['username'] );
-                                    $this->email->from( $site_email, $site_title );
-                                    $this->email->subject( $lang['account_update_subject'] );
+                                    $this->email->to( $this->user['email'], $this->user['username'] );
+                                    $this->email->from( config('site_support_email'), config('site_title') );
+                                    $this->email->subject( $email->password_change->subject );
                                     $this->email->message( $message );
-                                    $sent = $this->email->send();
+                                    $sent = $this->email->send(true);
 
                                     // Check if our email sent correctly
                                     if($sent == false)

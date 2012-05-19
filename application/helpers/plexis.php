@@ -114,6 +114,44 @@
     
 /*
 | ---------------------------------------------------------------
+| Function: language_exists()
+| ---------------------------------------------------------------
+|
+| This function is used to return if a language exists or not
+|
+| @Return: (Bool)
+|
+*/
+    function language_exists($lang)
+    {
+        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'language');
+        foreach($list as $file)
+        {
+            if($lang == $file) return true;
+        }
+        return false;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: default_language()
+| ---------------------------------------------------------------
+|
+| This function checks if the default language if it exists, or
+| the first found language if it does not
+|
+| @Return: (String) A language name
+|
+*/
+    function default_language()
+    {
+        $default = config('default_language');
+        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'language');
+        return (in_array($default, $list)) ? $default : $list[0];
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Function: get_port_status()
 | ---------------------------------------------------------------
 |
