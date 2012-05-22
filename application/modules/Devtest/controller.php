@@ -52,6 +52,7 @@ class Devtest extends \Application\Core\Controller
             load_module_config('Devtest', 'mod_config', 'config.php', 'config_options');
             
             // Usage
+            $this->Config = load_class('Config');
             $this->Config->get('var_name', 'mod_config');
             // OR
             config('var_name', 'mod_config');

@@ -54,7 +54,7 @@ class Controller extends \System\Core\Controller
             $this->Statistics->add_hit();
         
         // Setup the selected users language
-        $GLOBALS['language'] = selected_language();
+        $this->_init_language();
         
         // Process DB updates
         if($process_db == TRUE) $this->_process_db();
@@ -65,7 +65,7 @@ class Controller extends \System\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Funtion: _init_template()
+| Method: _init_template()
 | ---------------------------------------------------------------
 |
 */
@@ -87,19 +87,21 @@ class Controller extends \System\Core\Controller
             }
             else
             {
+                // Load users selected theme if there is one selected
                 if(!empty($user['selected_theme']))
                 {
                     // Make sure the tempalate exists before setting the theme
-                    $query = "SELECT * FROM `pcms_templates` WHERE `name`=?";
-                    $template = $this->DB->query( $query, array($user['selected_theme']) )->fetch_row();
+                    $query  = "SELECT `status` FROM `pcms_templates` WHERE `name`=?";
+                    $status = $this->DB->query( $query, array($user['selected_theme']) )->fetch_column();
                     
                     // If the template exists, and is enabled for site use
-                    if($template != FALSE && $template['status'] == 1)
+                    if($status)
                     {
-                        $this->Template->set_template_path('application/templates/'. $template['name']);
+                        $this->Template->set_template_path('application/templates/'. $user['selected_theme']);
                         return;
                     }
                 }
+                
                 // Set default template path if we are here
                 $this->Template->set_template_path('application/templates/'.  config('default_template'));
             }
@@ -108,7 +110,7 @@ class Controller extends \System\Core\Controller
     
 /*
 | ---------------------------------------------------------------
-| Funtion: _process_db() 
+| Method: _process_db() 
 | ---------------------------------------------------------------
 |
 */
@@ -163,6 +165,34 @@ class Controller extends \System\Core\Controller
         
         // Define our REAL db version now, after updates are run
         define('CMS_DB_VERSION', $version);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: _init_language()
+| ---------------------------------------------------------------
+|
+*/
+    private function _init_language() 
+    {
+        // Load language
+        $this->Input = load_class('Input');
+        $language = $this->Input->cookie('language', true);
+        
+        //Load the default language if the user hasnt selected a language yet
+        if($language == false)
+        {
+            $language = default_language();
+            $this->Input->set_cookie('language', $language);
+        }
+        else
+        {
+            // Check and make sure the language is installed
+            if(!language_exists($language)) $language = default_language();
+        }
+        
+        // Set globals
+        $GLOBALS['language'] = $language;
     }
 }
 // EOF
