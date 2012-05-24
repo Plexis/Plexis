@@ -370,23 +370,21 @@ class Account extends Application\Core\Controller
                     if( config('reg_email_verification') == TRUE )
                     {
                         // Setup our variables and load our extensions
-                        $l = selected_language();
-                        $lang = (language_exists($l)) ? $l : default_language();
-                        $lang = simplexml_load_file( APP_PATH . DS . 'language' . DS . $lang . DS .'emails.xml' );
+                        $XML = simplexml_load_file( APP_PATH . DS . 'language' . DS . $GLOBALS['language'] . DS .'emails.xml' );
                         $this->email = $this->load->library('email');
                         
                         // Generate a activation key
                         $genkey = $this->account->create_key($username);
 
-                        // Create out email message, parse bbcode open/close tags to html open/close tags, and variables
-                        $find = array('[', ']', '{username}', '{activate_link}');
-                        $replace = array('<', '>', $username, SITE_URL ."/account/activate/".$genkey);
-                        $message = str_replace( $find, $replace, trim($lang->account_activation_req->message) );
+                        // Create out email message, parse variables
+                        $find = array('{username}', '{activate_link}');
+                        $replace = array($username, SITE_URL ."/account/activate/".$genkey);
+                        $message = str_replace( $find, $replace, trim($XML->account_activation_req->message) );
 
                         // Build the email
                         $this->email->to( $email, $username );
                         $this->email->from( config('site_support_email'), config('site_title') );
-                        $this->email->subject( $lang->account_activation_req->subject );
+                        $this->email->subject( $XML->account_activation_req->subject );
                         $this->email->message( $message );
                         $sent = $this->email->send(true);
                         
@@ -787,9 +785,9 @@ class Account extends Application\Core\Controller
                                     $email = simplexml_load_file( APP_PATH . DS . 'language' . DS . $lang . DS .'emails.xml' );
                                     $this->email = $this->load->library('email');
 
-                                    // Create out email message, parse bbcode open/close tags to html open/close tags, and variables
-                                    $find = array('[', ']', '{username}', '{recovery_link}');
-                                    $replace = array('<', '>', $this->user['username'], SITE_URL .'/account/recover');
+                                    // Create out email message, parse variables
+                                    $find = array('{username}', '{recovery_link}');
+                                    $replace = array($this->user['username'], SITE_URL .'/account/recover');
                                     $message = str_replace( $find, $replace, trim($email->password_change->message) );
 
                                     // Build the email

@@ -179,16 +179,36 @@ class Controller extends \System\Core\Controller
         $this->Input = load_class('Input');
         $language = $this->Input->cookie('language', true);
         
+        // Get the users prefered language
+        $prefered = null;
+        if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+        {
+            $prefered = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+        }
+        
         //Load the default language if the user hasnt selected a language yet
         if($language == false)
         {
-            $language = default_language();
+            // Check and make sure the language is installed
+            $language = (!language_exists($prefered)) ? default_language() : $prefered;
+            
+            // Update the language cookie
             $this->Input->set_cookie('language', $language);
         }
         else
         {
+            // List insalled languages
+            $langs = get_languages();
+            
             // Check and make sure the language is installed
-            if(!language_exists($language)) $language = default_language();
+            if(!in_array($language, $langs))
+            {
+                // See id the users prefered language is installed
+                $language = (!in_array($prefered, $langs)) ? default_language() : $prefered;
+                
+                // Update the language cookie
+                $this->Input->set_cookie('language', $language);
+            }
         }
         
         // Set globals
