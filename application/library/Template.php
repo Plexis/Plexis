@@ -412,16 +412,17 @@ class Template
         $trigger = $this->config['trigger'];
         
         // Get our template layout file
-        $c = $this->_controller;
-        $a = $this->_action;
-        $name = eval('if( $this->xml->layouts && $this->xml->layouts->'.$c.'->'.$a.' ) return $this->xml->layouts->'.$c.'->'.$a.'; return FALSE; ');
-        if( !$name )
+        if( isset($this->xml->layouts->{$this->_controller}->{$this->_action}) )
+        {
+            $name = $this->xml->layouts->{$this->_controller}->{$this->_action};
+        }
+        else
         {
             $name = $this->xml->config->default_layout;
         }
         
         // load the layout
-        $source = trim( $this->load( $name .'.php' ) );
+        $source = trim( $this->load( 'views'. DS . $this->lang . DS . $name .'.php' ) );
         
         // Load global page contents early so they can be parsed as well!
         if(strpos( $source, $l_delim . $trigger ."page_contents /". $r_delim ))
@@ -565,7 +566,7 @@ class Template
 */
     protected function load_view()
     {
-        // First we check to see if the template has a custom view for this page
+        // Init emtpy controller extension
         $ext = '';
         
         // Determine our path
@@ -575,12 +576,14 @@ class Template
         }
         else
         {
-            if( $this->xml->config->controller_view_paths == "true" && !$this->_is_module)
+            // Are we using controller view paths? Everything but the admin panel should be!
+            if(!$this->_is_module)
             {
-                $ext = $this->_controller . DS;
+                if(!isset($this->xml->config->controller_view_paths) || $this->xml->config->controller_view_paths == "true") $ext = $this->_controller . DS;
             }
+            
             // Build our template view path
-            $file = $this->template['path'] . DS . 'views' . DS . $ext . $this->view_file .'.php';
+            $file = $this->template['path'] . DS . 'views' . DS . $this->lang . DS . $ext . $this->view_file .'.php';
         }
         
         // Check if the file exists
@@ -592,7 +595,7 @@ class Template
         // No template custom view, load default
         elseif( !$this->_is_module )
         {
-            $file = APP_PATH . DS . 'assets' . DS . 'default_views' . DS . $this->_controller . DS . $this->view_file .'.php';
+            $file = APP_PATH . DS . 'assets' . DS . 'default_views' . DS . $this->lang . DS . $this->_controller . DS . $this->view_file .'.php';
             if(file_exists($file))
             {
                 return file_get_contents($file);
@@ -739,6 +742,9 @@ class Template
 */
     protected function _initialize($data)
     {
+        // Init the template language
+        $this->lang = $GLOBALS['language'];
+        
         // Set our template paths and all that if the we dont have one
         if($this->template['path'] == NULL) $this->set_template_path();
 
@@ -755,6 +761,14 @@ class Template
             {
                 $this->load->helper($helper);
             }
+        }
+        
+        // Set our layout/view language
+        $supported = explode(',', $this->xml->config->languages);
+        if(!in_array($this->lang, $supported))
+        {
+            $default = default_language();
+            $this->lang = (in_array($default, $supported)) ? $default : $supported[0];
         }
 
         // Add session data to our data array

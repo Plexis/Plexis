@@ -12,9 +12,6 @@
     </info>
     
     <config>
-        <!-- Use controller view paths? ( <template>/views/ {controller} / viewfile ) ? true : false -->
-        <controller_view_paths>true</controller_view_paths>
-        
         <!-- Default layout filename (no extension) -->
         <default_layout>layout</default_layout>
         
@@ -23,6 +20,16 @@
         
         <!-- Css folder name, may also use a realative path from the template root folder -->
         <css_folder>css</css_folder>
+        
+        <!-- 
+            Template supported languages (two character langauge ID).
+                "views/<language>/..."
+            If a language inst listed here, then the template system
+            will load the default language... If that language isnt 
+            supported either, then the first language listed here will be used.
+            seperate langaages with a comma (,). NO SPACES!
+        -->
+        <languages>en</languages>
     </config>
     <!-- END REQUIRED -->
     

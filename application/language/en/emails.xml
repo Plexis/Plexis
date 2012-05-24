@@ -10,7 +10,7 @@
 <emails>
     <!-- Password Change Notification Email -->
     <password_change>
-        <subject>Changes to your Account</subject>
+        <subject>Password Change Notice</subject>
         <message>
         <![CDATA[
             <p>

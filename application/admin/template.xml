@@ -19,6 +19,7 @@
         <default_layout>layout</default_layout>
         <js_folder>js</js_folder>
         <css_folder>css</css_folder>
+        <languages>en</languages>
     </config>
 
     <head>
