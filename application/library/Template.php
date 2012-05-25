@@ -40,6 +40,8 @@ class Template
     
     // An array of template configs
     protected $config = array(
+        'controller' => null,
+        'is_module' => null,
         'trigger' => "pcms::",              // Our Compiler trigger
         'l_delim' => '{',                   // Left variable delimeter    
         'r_delim' => '}',                   // Right variable delimeter
@@ -63,10 +65,9 @@ class Template
     public function __construct()
     {
         // Define defaults
-        $this->_controller = $GLOBALS['controller'];
-        $this->_action = $GLOBALS['action'];
-        $this->_is_module = $GLOBALS['is_module'];
-        
+        $this->config['controller'] = $GLOBALS['controller'];
+        $this->config['is_module'] = $GLOBALS['is_module'];
+
         // Load the loader, Session, and Parser classes
         $this->load = load_class('Loader');
         $this->session = $this->load->library('Session');
@@ -184,9 +185,8 @@ class Template
 
     public function set_controller($controller, $module = false) 
     {
-        $this->_controller = $controller;
-        $this->_is_module = $module;
-
+        $this->config['controller'] = $controller;
+        $this->config['is_module'] = $module;
     }
 
     
@@ -412,9 +412,9 @@ class Template
         $trigger = $this->config['trigger'];
         
         // Get our template layout file
-        if( isset($this->xml->layouts->{$this->_controller}->{$this->_action}) )
+        if( isset($this->xml->layouts->{$this->config['controller']}->{$this->view_file}) )
         {
-            $name = $this->xml->layouts->{$this->_controller}->{$this->_action};
+            $name = $this->xml->layouts->{$this->config['controller']}->{$this->view_file};
         }
         else
         {
@@ -570,16 +570,16 @@ class Template
         $ext = '';
         
         // Determine our path
-        if($this->_is_module && $this->config['module_view_paths'])
+        if($this->config['is_module'] && $this->config['module_view_paths'])
         {
-            $file = APP_PATH . DS . 'modules' . DS . $this->_controller . DS . 'views' . DS . $this->view_file .'.php';
+            $file = APP_PATH . DS . 'modules' . DS . $this->config['controller'] . DS . 'views' . DS . $this->view_file .'.php';
         }
         else
         {
             // Are we using controller view paths? Everything but the admin panel should be!
-            if(!$this->_is_module)
+            if(!$this->config['is_module'])
             {
-                if(!isset($this->xml->config->controller_view_paths) || $this->xml->config->controller_view_paths == "true") $ext = $this->_controller . DS;
+                if(!isset($this->xml->config->controller_view_paths) || $this->xml->config->controller_view_paths == "true") $ext = $this->config['controller'] . DS;
             }
             
             // Build our template view path
@@ -593,9 +593,9 @@ class Template
         }
         
         // No template custom view, load default
-        elseif( !$this->_is_module )
+        elseif(!$this->config['is_module'])
         {
-            $file = APP_PATH . DS . 'assets' . DS . 'default_views' . DS . $this->lang . DS . $this->_controller . DS . $this->view_file .'.php';
+            $file = APP_PATH . DS . 'assets' . DS . 'default_views' . DS . $this->lang . DS . $this->config['controller'] . DS . $this->view_file .'.php';
             if(file_exists($file))
             {
                 return file_get_contents($file);
@@ -669,15 +669,15 @@ class Template
         // Build our custom view JS path, and Static View Paths
         if( $this->config['load_view_js'] )
         {
-            $t_file = $this->template['path'] . DS . 'js'. DS . $this->_controller . DS . $this->view_file .'.js';
-            $s_file = APP_PATH . DS . 'static'. DS . 'js'. DS . $this->_controller . DS . $this->view_file .'.js';
+            $t_file = $this->template['path'] . DS . 'js'. DS . $this->config['controller'] . DS . $this->view_file .'.js';
+            $s_file = APP_PATH . DS . 'static'. DS . 'js'. DS . $this->config['controller'] . DS . $this->view_file .'.js';
             if(file_exists( $t_file ))
             {
-                return '<script type="text/javascript" src="{TEMPLATE_URL}/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+                return '<script type="text/javascript" src="{TEMPLATE_URL}/js/'. $this->config['controller'] .'/'.$this->view_file.'.js"></script>';
             }
             elseif(file_exists( $s_file ))
             {
-                return '<script type="text/javascript" src="'. BASE_URL .'/application/static/js/'. $this->_controller .'/'.$this->view_file.'.js"></script>';
+                return '<script type="text/javascript" src="'. BASE_URL .'/application/static/js/'. $this->config['controller'] .'/'.$this->view_file.'.js"></script>';
             }
         }
         return false; 
@@ -755,7 +755,7 @@ class Template
         if($this->xml == NULL) $this->load_template_xml();
         
         // Load template helpers if required
-        if( $this->xml->helpers )
+        if( isset($this->xml->helpers) )
         {
             foreach($this->xml->helpers->children() as $helper)
             {
@@ -950,7 +950,7 @@ class Template
     protected function _append_template_metadata()
 	{
 		// Add the template.xml head data to the metadata
-        if( $this->xml->head )
+        if( isset($this->xml->head) )
         {
             foreach($this->xml->head->children() as $head)
             {
