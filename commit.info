@@ -1,1 +1,1 @@
-[{"status":"M","file":"application\/language\/en\/emails.xml"},{"status":"M","file":"application\/library\/Template.php"},{"status":"M","file":"index.php"}]
+[{"status":"M","file":"application\/config\/core.config.php"},{"status":"M","file":"application\/controllers\/account.php"},{"status":"M","file":"application\/templates\/default\/views\/en\/account\/register.php"},{"status":"M","file":"index.php"}]

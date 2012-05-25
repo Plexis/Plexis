@@ -1,11 +1,14 @@
 <div class="left-box">
     <h2>Registration</h2>
     <div class="left-box-content">
-        <form method="post" action="{SITE_URL}/account/register" id="register-form">
+        <!-- Hidden JS Message -->
+        <div id="js-message" style="display:none"></div>
+        
+        <!-- Registration Form -->
+        <form id="register-form" method="post" action="{SITE_URL}/ajax/register">
             <input type="hidden" name="action" value="register" />
             <fieldset>
                 <div class="div-center">
-                
                     <label for="username">Username:</label> 
                     <input type="text" name="username" id="username" value="" size="30" tabindex="1" />
                     

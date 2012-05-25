@@ -52,7 +52,7 @@ $config['catch_fetal_errors'] = 1;
 |
 */
 
-$config['core_language'] = 'english';
+$config['core_language'] = 'en';
 
 
 /*

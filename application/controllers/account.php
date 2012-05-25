@@ -212,9 +212,6 @@ class Account extends Application\Core\Controller
         // Load our secret questions
         $data['secret_questions'] = get_secret_questions();
         
-        // Load the input cleaner
-        $this->Input = load_class('Input');
-        
         // See if the admin requires a registration key, and IF there is one
         if( config('reg_registration_key') == TRUE )
         {
