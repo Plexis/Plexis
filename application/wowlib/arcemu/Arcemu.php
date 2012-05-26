@@ -356,7 +356,7 @@ class Arcemu
     public function email_exists($email)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `login` FROM `account` WHERE `email`=?";
+        $query = "SELECT `login` FROM `accounts` WHERE `email`=?";
         $res = $this->DB->query( $query, array($email) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
@@ -740,7 +740,7 @@ class Arcemu
     
     public function get_account_count()
     {
-        return $this->DB->query("SELECT count(id) FROM `account`")->fetch_column();
+        return $this->DB->query("SELECT count(id) FROM `accounts`")->fetch_column();
     }
     
 /*
@@ -756,7 +756,7 @@ class Arcemu
     
     public function get_banned_count()
     {
-        return $this->DB->query("SELECT count(id) FROM `account_banned` WHERE `active` = 1")->fetch_column();
+        return $this->DB->query("SELECT count(acct) FROM `accounts` WHERE NOT `banned` = 0;")->fetch_column();
     }
     
 /*
@@ -795,7 +795,7 @@ class Arcemu
     {
         // 90 days or older
         $time = date("Y-m-d H:i:s", time() - 86400);
-        $query = "SELECT COUNT(*) FROM `account` WHERE `last_login` BETWEEN  '$time' AND NOW()";
+        $query = "SELECT COUNT(*) FROM `accounts` WHERE `lastlogin` BETWEEN  '$time' AND NOW()";
         return $this->DB->query( $query )->fetch_column();
     }
 }
