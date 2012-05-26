@@ -1756,11 +1756,12 @@ class Admin_ajax extends Application\Core\Controller
                             break;
                             
                         case "A":
+                        case "M":
                             // Make sure the Directory exists!
                             if(!is_dir($dirname))
                             {
                                 // Ignore install files if the install directory doesnt exist
-                                if(substr($file, 0, 8) == 'install/')
+                                if(strpos($dirname, ROOT . DS . 'install') !== false)
                                 {
                                     $this->output(true, '');
                                     return;
@@ -1773,8 +1774,8 @@ class Admin_ajax extends Application\Core\Controller
                                     return;
                                 }
                             }
-                            // Do not Break!
-                        case "M":
+                            
+                            // Now attempt to write to the file, create it if it doesnt exist
                             $handle = @fopen($filename, 'w+');
                             if($handle)
                             {
@@ -1789,7 +1790,7 @@ class Admin_ajax extends Application\Core\Controller
                             }
                             else
                             {
-                                $this->output(false, 'Error creating / writting to file "'. $file .'"');
+                                $this->output(false, 'Error creating/opening file "'. $file .'"');
                                 return;
                             }
                             break;
