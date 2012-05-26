@@ -78,34 +78,22 @@ class Language
    
         // Load language cookie
         $this->language = $this->Input->cookie('language', true);
-        
-        // Get the users prefered language
-        $prefered = null;
-        if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
-        {
-            $prefered = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-        }
-        
+
         //Load the default language if the user hasnt selected a language yet
-        if($this->language == false)
+        if($this->language == false || !in_array($this->language, $this->found_languages))
         {
+            // Get the users prefered language
+            $prefered = null;
+            if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+            {
+                $prefered = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+            }
+        
             // Check and make sure the language is installed
             $this->language = (!in_array($prefered, $this->found_languages)) ? $this->default_language() : $prefered;
             
             // Update the language cookie
             $this->Input->set_cookie('language', $this->language);
-        }
-        else
-        {
-            // Check and make sure the language is installed
-            if(!in_array($this->language, $this->found_languages))
-            {
-                // See id the users prefered language is installed
-                $this->language = (!in_array($prefered, $this->found_languages)) ? $this->default_language() : $prefered;
-                
-                // Update the language cookie
-                $this->Input->set_cookie('language', $this->language);
-            }
         }
 
         // Set globals
@@ -120,7 +108,8 @@ class Language
 | Sets the langauge. Does not reload already loaded files
 |
 | @Param: (String) $lang - Name of the language we are loading
-| @Return (None)
+| @Return (Bool) True if the language was set, false if it didnt
+|   exist in the languages folder
 |
 */
     public function set_language($lang)

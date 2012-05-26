@@ -261,11 +261,11 @@
     {
         if(class_exists('Application\\Core\\Controller', FALSE))
         {
-            return Application\Core\Controller::get_instance();
+            return \Application\Core\Controller::get_instance();
         }
         elseif(class_exists('System\\Core\\Controller', FALSE))
         {
-            return System\Core\Controller::get_instance();
+            return \System\Core\Controller::get_instance();
         }
         else
         {

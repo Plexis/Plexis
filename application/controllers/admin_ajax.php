@@ -1904,12 +1904,8 @@ class Admin_ajax extends Application\Core\Controller
         // Load language only if a string, with no spaces is offered
         if(!empty($message) && !is_array($message) && strpos($message, ' ') === false)
         {
-            $lang = load_language_file( 'messages' );
-            $message = (isset($lang[$message])) ? $lang[$message] : $message;
-            
-            // For next update
-            // $lang = $this->Language->get($message, 'messages');
-            // $message = ($lang != false) ? $lang : $message;
+            $lang = $this->Language->get($message, 'messages');
+            $message = ($lang != false) ? $lang : $message;
         }
         
         // Build our Json return
