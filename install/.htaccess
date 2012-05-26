@@ -5,7 +5,7 @@
     SetEnv HTTP_MOD_REWRITE On
 </IfModule>
 
-<Files ~ "^\.lock">
-	Order allow,deny
+<Files "install.lock">
+	Order deny,allow
 	Deny from all
 </Files>
