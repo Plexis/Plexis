@@ -740,7 +740,7 @@ class Arcemu
     
     public function get_account_count()
     {
-        return $this->DB->query("SELECT count(id) FROM `accounts`")->fetch_column();
+        return $this->DB->query("SELECT count(acct) FROM `accounts`")->fetch_column();
     }
     
 /*
@@ -776,7 +776,7 @@ class Arcemu
         // 90 days or older
         $time = time() - 7776000;
         $query = "SELECT COUNT(*) FROM `pcms_accounts` WHERE UNIX_TIMESTAMP(`last_seen`) <  $time";
-        return $this->DB->query("SELECT count(id) FROM `account`")->fetch_column();
+        return $this->DB->query("SELECT count(acct) FROM `accounts`")->fetch_column();
     }
     
 /*
