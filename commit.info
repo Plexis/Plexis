@@ -1,1 +1,1 @@
-[{"status":"M","file":"application\/plugins\/Plexis.php"},{"status":"M","file":"install\/.htaccess"},{"status":"M","file":"install\/index.php"},{"status":"M","file":"install\/steps\/arcemu\/step_5.php"},{"status":"M","file":"install\/steps\/mangos\/step_5.php"},{"status":"M","file":"install\/steps\/trinity\/step_5.php"},{"status":"M","file":"index.php"}]
+[{"status":"M","file":"install\/installer\/Driver.php"},{"status":"M","file":"install\/installer\/functions.php"},{"status":"M","file":"index.php"}]

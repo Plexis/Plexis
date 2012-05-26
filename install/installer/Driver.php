@@ -53,7 +53,7 @@ class Database extends \PDO
         }
         else
         {
-            $dsn = $i['driver'] .':dbname=mysql;host='.$i['host'] .';port='.$i['port'];
+            $dsn = $i['driver'] .':dbname='.$i['database'].';host='.$i['host'] .';port='.$i['port'];
         }
         
         // Try and Connect to the database
@@ -68,8 +68,6 @@ class Database extends \PDO
             $result = FALSE;
         }
         
-        // Do we need to create the table?
-        $this->query("create database ". $i['database'], null, true);
         return $result;
     }
 
