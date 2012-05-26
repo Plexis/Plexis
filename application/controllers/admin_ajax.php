@@ -46,14 +46,11 @@ class Admin_ajax extends Application\Core\Controller
         // Init a session var
         $this->user = $this->Session->get('user');
         
-        // Load the input class since we are always using that here!
-        $this->input = load_class('Input');
-        
         // Make sure user is an admin!
         if( !$this->check_permission('admin_access') );
         
         // Make sure the request is an ajax request, and came from this website!
-        if(!$this->input->is_ajax())
+        if(!$this->Input->is_ajax())
         {
             die('No direct linking allowed');
         }
@@ -81,7 +78,7 @@ class Admin_ajax extends Application\Core\Controller
         if(isset($_POST['action']))
         {
             // Get our user id
-            $id = $this->input->post('id');
+            $id = $this->Input->post('id');
             
             // Get users information. We can use GET because the queries second param will be cleaned
             // by the PDO class when bound to the "?". Build our query
@@ -109,9 +106,9 @@ class Admin_ajax extends Application\Core\Controller
                     $this->log('Banned user account: '. $user['username']);
                     
                     // Set our variables
-                    $date = strtotime($this->input->post('unbandate', true));
-                    $reason = $this->input->post('banreason', true);
-                    $banip = (isset($_POST['banip'])) ? $this->input->post('banip', true) : FALSE;
+                    $date = strtotime($this->Input->post('unbandate', true));
+                    $reason = $this->Input->post('banreason', true);
+                    $banip = (isset($_POST['banip'])) ? $this->Input->post('banip', true) : FALSE;
                     
                     // Process the Ban, and process the return result
                     $result = $this->realm->ban_account($id, $reason, $date, $this->user['username'], $banip);
@@ -316,7 +313,7 @@ class Admin_ajax extends Application\Core\Controller
                     
                 case "getgroup":
                     // Load the group
-                    $id = $this->input->post('id', TRUE);
+                    $id = $this->Input->post('id', TRUE);
                     $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=?";
                     $group = $this->DB->query( $query, array($id) )->fetch_row();
                     unset($group['permissions']);
@@ -345,9 +342,9 @@ class Admin_ajax extends Application\Core\Controller
                     
                 case "edit":
                     // Load the group
-                    $id = $this->input->post('id', TRUE);
-                    $title = $this->input->post('title', TRUE);
-                    $type = $this->input->post('group_type', TRUE);
+                    $id = $this->Input->post('id', TRUE);
+                    $title = $this->Input->post('title', TRUE);
+                    $type = $this->Input->post('group_type', TRUE);
                     
                     // Log action
                     $this->log('Edited Group ID: '. $id);
@@ -387,8 +384,8 @@ class Admin_ajax extends Application\Core\Controller
                     
                 case "create":
                     // Load POSTS
-                    $title = $this->input->post('title', TRUE);
-                    $type = $this->input->post('group_type', TRUE);
+                    $title = $this->Input->post('title', TRUE);
+                    $type = $this->Input->post('group_type', TRUE);
                     
                     // Log action
                     $this->log('Created new group: '. $title);
@@ -428,7 +425,7 @@ class Admin_ajax extends Application\Core\Controller
                     return;
                 
                 case "deletegroup":
-                    $id = $this->input->post('id', TRUE);
+                    $id = $this->Input->post('id', TRUE);
                     
                     // Get the group title
                     $query = "SELECT `title` FROM `pcms_groups` WHERE `group_id`=?";
@@ -457,7 +454,7 @@ class Admin_ajax extends Application\Core\Controller
         $this->check_access('sa');
         
         // Load the input class
-        $id = $this->input->post('id', TRUE);
+        $id = $this->Input->post('id', TRUE);
         
         // Get the group title
         $query = "SELECT `title` FROM `pcms_account_groups` WHERE `group_id`=?";
@@ -524,7 +521,7 @@ class Admin_ajax extends Application\Core\Controller
                     if( $this->validation->validate() == TRUE )
                     {
                         // Log action
-                        $this->log('Published news post "'. $this->input->post('title', true) .'"');
+                        $this->log('Published news post "'. $this->Input->post('title', true) .'"');
                         $result = $this->News_Model->submit_news($_POST['title'], $_POST['body'], $this->user['username']);
                         ($result == TRUE) ? $this->output(true, 'news_posted_successfully') : $this->output(false, 'news_post_error');
                     }
@@ -538,7 +535,7 @@ class Admin_ajax extends Application\Core\Controller
                     
                 // FETCHING
                 case "get":
-                    $result = $this->News_Model->get_news_post( $this->input->post('id', true) );
+                    $result = $this->News_Model->get_news_post( $this->Input->post('id', true) );
                     if($result == FALSE)
                     {
                         $this->output(false, 'News Item Doesnt Exist!');
@@ -566,7 +563,7 @@ class Admin_ajax extends Application\Core\Controller
                     {
                         // Get the news title
                         $query = "SELECT `title` FROM `pcms_news` WHERE `id`=?";
-                        $title = $this->DB->query($query, array( $this->input->post('id', true) ))->fetch_column();
+                        $title = $this->DB->query($query, array( $this->Input->post('id', true) ))->fetch_column();
                         
                         // Log action
                         $this->log('Modified news post with title: "'. $title .'"');
@@ -587,13 +584,13 @@ class Admin_ajax extends Application\Core\Controller
                 case "delete":
                     // Get the news title
                     $query = "SELECT `title` FROM `pcms_news` WHERE `id`=?";
-                    $title = $this->DB->query($query, array( $this->input->post('id', true) ))->fetch_column();
+                    $title = $this->DB->query($query, array( $this->Input->post('id', true) ))->fetch_column();
                     
                     // Log action
                     $this->log('Deleted news post with title: "'. $title .'"');
                     
                     // Preform the delete
-                    $result = $this->News_Model->delete_post( $this->input->post('id', true) );
+                    $result = $this->News_Model->delete_post( $this->Input->post('id', true) );
                     ($result == TRUE) ? $this->output(true, 'news_delete_success') : $this->output(false, 'news_delete_error');
                     break;
             }
@@ -715,8 +712,8 @@ class Admin_ajax extends Application\Core\Controller
         else
         {
             // Mandaroty checks
-            $id = $this->input->post('id', true);
-            $realm = $this->input->post('realm', true);
+            $id = $this->Input->post('id', true);
+            $realm = $this->Input->post('realm', true);
             
             // Make sure the realm is installed
             if( !realm_installed($realm) )
@@ -763,11 +760,11 @@ class Admin_ajax extends Application\Core\Controller
                     
                     // Update the character data
                     $info = array(
-                        'name' => $this->input->post('name', true),
-                        'level' => $this->input->post('level', true),
-                        'gender' => $this->input->post('gender', true),
-                        'money' => $this->input->post('money', true),
-                        'xp' => $this->input->post('xp', true)
+                        'name' => $this->Input->post('name', true),
+                        'level' => $this->Input->post('level', true),
+                        'gender' => $this->Input->post('gender', true),
+                        'money' => $this->Input->post('money', true),
+                        'xp' => $this->Input->post('xp', true)
                     );
                     $result = $Lib->set_character_info($id, $info);
                     
@@ -811,7 +808,7 @@ class Admin_ajax extends Application\Core\Controller
                     
                     // Log action
                     $this->log('Deleted character '. $char['name'] .' from realm '. $r['name']);
-                    $result = $Lib->delete_character( $this->input->post('id', true) );
+                    $result = $Lib->delete_character( $this->Input->post('id', true) );
                     ($result == true) ? $this->output(true, "Character deleted successfully!") : $this->output(false, "There was an error deleting the character!");
                     break;
                     
@@ -836,7 +833,10 @@ class Admin_ajax extends Application\Core\Controller
     {
         // Load the ajax model and action
         $this->load->model('Ajax_Model', 'model');
-        $action = $this->input->post('action');
+        $action = $this->Input->post('action');
+        
+        // Get our realm ID
+        $id = $this->Input->post('id', true);
         
         // Make sure use has perms
         $this->check_permission('manage_realms');
@@ -852,7 +852,7 @@ class Admin_ajax extends Application\Core\Controller
                 
             case "un-install":
                 // Get our realm name
-                $r = get_realm($realm);
+                $r = get_realm($id);
                 
                 // Log action
                 $this->log('Uninstalled Realm '. $r['name']);
@@ -861,16 +861,13 @@ class Admin_ajax extends Application\Core\Controller
                 
             case "make-default":
                 // Get our realm name
-                $r = get_realm($realm);
+                $r = get_realm($id);
                 
                 // Log action
                 $this->log('Changed the default realm to '. $r['name']);
                 
                 // Load our config class
                 $Config = load_class('Config');
-                
-                // Get our realm ID
-                $id = $this->input->post('id', true);
                 
                 // Set the new default Realm
                 $Config->set('default_realm_id', $id, 'App');
@@ -1031,7 +1028,7 @@ class Admin_ajax extends Application\Core\Controller
                 // FETCHING
                 case "get":
                     // Get our votesite
-                    $data = $this->model->get_vote_site( $this->input->post('id', true) );
+                    $data = $this->model->get_vote_site( $this->Input->post('id', true) );
                     ( $data == false ) ? $this->output(false, 'Votesite Doesnt Exist!') : $this->output(true, $data);
                     break;
                 
@@ -1050,7 +1047,7 @@ class Admin_ajax extends Application\Core\Controller
                     if( $this->validation->validate() == TRUE )
                     {
                         // Log action
-                        $this->log('Modified votesite with ID: '. $this->input->post('id', true));
+                        $this->log('Modified votesite with ID: '. $this->Input->post('id', true));
                         $result = $this->model->update($_POST['id'], $_POST['hostname'], $_POST['votelink'], $_POST['image_url'], $_POST['points'], $_POST['reset_time']);
                         ($result == TRUE) ? $this->output(true, 'votesite_update_success') : $this->output(false, 'votesite_update_error', 'warning');
                     }
@@ -1065,9 +1062,9 @@ class Admin_ajax extends Application\Core\Controller
                 // DELETING
                 case "delete":
                     // Log action
-                    $this->log('Deleted votesite ID: '. $this->input->post('id', true));
+                    $this->log('Deleted votesite ID: '. $this->Input->post('id', true));
 
-                    $result = $this->model->delete($this->input->post('id', true));
+                    $result = $this->model->delete($this->Input->post('id', true));
                     ($result == TRUE) ? $this->output(true, 'votesite_delete_success') : $this->output(false, 'votesite_delete_error');
                     break;
             }
@@ -1131,8 +1128,8 @@ class Admin_ajax extends Application\Core\Controller
                     if( $this->validation->validate() == TRUE )
                     {
                         // Log action
-                        $this->log('Installed module "'. $this->input->post('module', true) .'"');
-                        $result = $this->model->install_module($this->input->post('module', true), $this->input->post('uri', true), $this->input->post('function', true));
+                        $this->log('Installed module "'. $this->Input->post('module', true) .'"');
+                        $result = $this->model->install_module($this->Input->post('module', true), $this->Input->post('uri', true), $this->Input->post('function', true));
                         ($result == TRUE) ? $this->output(true, 'module_install_success') : $this->output(false, 'module_install_error');
                     }
                     
@@ -1149,9 +1146,9 @@ class Admin_ajax extends Application\Core\Controller
                     $this->load->model("Admin_Model", "model");
                     
                     // Log action
-                    $this->log('Uninstalled module "'. $this->input->post('name', true) .'"');
+                    $this->log('Uninstalled module "'. $this->Input->post('name', true) .'"');
                     
-                    $result = $this->model->uninstall_module( $this->input->post('name', true) );
+                    $result = $this->model->uninstall_module( $this->Input->post('name', true) );
                     ($result == TRUE) ? $this->output(true, 'module_uninstall_success') : $this->output(false, 'module_uninstall_error');
                     break;
                     
@@ -1225,7 +1222,7 @@ class Admin_ajax extends Application\Core\Controller
         if(isset($_POST['action']))
         {
             // Get our template id
-            $id = $this->input->post('id', TRUE);
+            $id = $this->Input->post('id', TRUE);
             
             // Get our action type
             switch($_POST['action']) 
@@ -1382,7 +1379,7 @@ class Admin_ajax extends Application\Core\Controller
         if( !isset($_POST['action']) ) return;
         
         // Defaults
-        $action = trim( $this->input->post('action', TRUE) );
+        $action = trim( $this->Input->post('action', TRUE) );
 
         // Proccess our action
         if($action == 'init')
@@ -1394,11 +1391,11 @@ class Admin_ajax extends Application\Core\Controller
         }
         elseif($action == 'command')
         {
-            $overide = $this->input->post('overide', TRUE);
+            $overide = $this->Input->post('overide', TRUE);
             if( empty($overide) )
             {
                 // Grab our realm info
-                $id = $this->input->post('realm', TRUE);
+                $id = $this->Input->post('realm', TRUE);
                 $realm = get_realm($id);
                 if($realm == FALSE)
                 {
@@ -1413,16 +1410,16 @@ class Admin_ajax extends Application\Core\Controller
                 $ra = unserialize($realm['ra_info']);
                 $port = $ra['port'];
                 $type = ucfirst( strtolower($ra['type']) );
-                $user = $this->input->post('user', TRUE);
-                $pass = $this->input->post('pass', TRUE);
+                $user = $this->Input->post('user', TRUE);
+                $pass = $this->Input->post('pass', TRUE);
                 $host = $realm['address'];
                 $uri = ( !empty($ra['urn']) ) ? $ra['urn'] : NULL;
             }
             else
             {
-                $info = explode(' ', $this->input->post('overide', TRUE));
-                $user = $this->input->post('user', TRUE);
-                $pass = $this->input->post('pass', TRUE);
+                $info = explode(' ', $this->Input->post('overide', TRUE));
+                $user = $this->Input->post('user', TRUE);
+                $pass = $this->Input->post('pass', TRUE);
                 $host = $info[0];
                 $port = $info[1];
                 $type = ucfirst( strtolower($info[2]) );
@@ -1449,7 +1446,7 @@ class Admin_ajax extends Application\Core\Controller
             }
             
             // Default vars
-            $command = trim( $this->input->post('command', TRUE) );
+            $command = trim( $this->Input->post('command', TRUE) );
             $command = ltrim($command, '.');
             $comm = explode(' ', $command);
             $type = trim($comm[0]);
@@ -1533,7 +1530,7 @@ class Admin_ajax extends Application\Core\Controller
 */  
     public function logs()
     {
-        $type = $this->input->post('type', true);
+        $type = $this->Input->post('type', true);
         switch($_POST['action'])
         {
             case "get":
@@ -1588,7 +1585,7 @@ class Admin_ajax extends Application\Core\Controller
                 
             case "delete":
                 // Get our ID and table type
-                $id = $this->input->post('id', true);
+                $id = $this->Input->post('id', true);
                 if($type == 'errors')
                 {
                     // Make sure this person has permission to do this!
@@ -1642,7 +1639,7 @@ class Admin_ajax extends Application\Core\Controller
         
         if(isset($_POST['action']))
         {
-            $action = trim( $this->input->post('action') );
+            $action = trim( $this->Input->post('action') );
             
             switch($action)
             {
@@ -1711,7 +1708,7 @@ class Admin_ajax extends Application\Core\Controller
                     
                 case "next":
                     // Load the commit.info file
-                    $sha = $type = trim( $this->input->post('sha') );
+                    $sha = $type = trim( $this->Input->post('sha') );
                     $url = 'https://raw.github.com/Plexis/Plexis/'. $sha .'/commit.info';
                 
                     // Get the file changes from github
@@ -1732,9 +1729,9 @@ class Admin_ajax extends Application\Core\Controller
                 
                 case "update":
                     // Grab POSTS
-                    $type = trim( $this->input->post('status') );
-                    $sha = trim( $this->input->post('sha') );
-                    $file = trim( str_replace(array('/', '\\'), '/', $this->input->post('filename')) );
+                    $type = trim( $this->Input->post('status') );
+                    $sha = trim( $this->Input->post('sha') );
+                    $file = trim( str_replace(array('/', '\\'), '/', $this->Input->post('filename')) );
                     $url = 'https://raw.github.com/Plexis/Plexis/'. $sha .'/'. $file;
                     $filename = ROOT . DS . str_replace('/', DS, $file);
                     $dirname = dirname($filename);
