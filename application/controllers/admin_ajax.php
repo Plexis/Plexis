@@ -1906,6 +1906,10 @@ class Admin_ajax extends Application\Core\Controller
         {
             $lang = load_language_file( 'messages' );
             $message = (isset($lang[$message])) ? $lang[$message] : $message;
+            
+            // For next update
+            // $lang = $this->Language->get($message, 'messages');
+            // $message = ($lang != false) ? $lang : $message;
         }
         
         // Build our Json return

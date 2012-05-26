@@ -17,11 +17,8 @@ class Ajax extends Application\Core\Controller
         // Init a session var
         $this->user = $this->Session->get('user');
         
-        // Load the input class for xss filtering
-        $this->input = load_class('Input');
-        
         // Make sure the request is an ajax request, and came from this website!
-        if(!$this->input->is_ajax())
+        if(!$this->Input->is_ajax())
         {
             die('No direct linking allowed');
         }
@@ -43,7 +40,7 @@ class Ajax extends Application\Core\Controller
     {
         // Load the ajax model and action
         $this->load->model('Ajax_Model', 'model');
-        $action = $this->input->post('action');
+        $action = $this->Input->post('action');
 
         // Find out what we are doing here by our requested action
         switch($action)
@@ -174,6 +171,10 @@ class Ajax extends Application\Core\Controller
         {
             $lang = load_language_file( 'messages' );
             $message = (isset($lang[$message])) ? $lang[$message] : $message;
+            
+            // For next update
+            // $lang = $this->Language->get($message, 'messages');
+            // $message = ($lang != false) ? $lang : $message;
         }
         
         // Build our Json return

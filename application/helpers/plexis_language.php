@@ -1,4 +1,4 @@
-<?php
+<?php   
 /*
 | ---------------------------------------------------------------
 | Function: selected_language
@@ -11,24 +11,11 @@
 */
     function selected_language($check = false)
     {
-        // Load language
-        $input = load_class('Input');
-        $language = $input->cookie('language', true);
+        // Make this easy, if its already defined
+        if(isset($GLOBALS['language'])) return $GLOBALS['language'];
         
-        //Load the default language if the user hasnt selected a language yet
-        if($language == false)
-        {
-            $language = default_language();
-            $input->set_cookie('language', $language);
-        }
-        elseif($check == true)
-        {
-            // Check and make sure the language is installed
-            if(!language_exists($language)) $language = default_language();
-        }
-        
-        // Return the language string
-        return $language;
+        // Load language, and return it
+        return load_class('Language')->selected_language();
     }
 
 /*
@@ -45,21 +32,8 @@
 */
     function load_language_file($file)
     {
-        // Load language, and Language class
-        $language = selected_language();
-        $lang = load_class('Language');
-        
-        // Attempt to get the language file variables
-        $array = $lang->load($file, $language);
-        
-        // If we got a false or empty return from the language class, file was not found
-        if($array == FALSE)
-        {
-            // Try and load the default lanuage
-            $lang->set_language( config('default_language') );
-            $array = $lang->load($file);
-        }
-        return $array;	
+        // Load Language class, and return the language vars for this file
+        return load_class('Language')->load($file);	
     }
     
 /*
@@ -70,18 +44,13 @@
 | This function is used to return an array of languages in the 
 |   languages folder
 |
-| @Return: (Array) Array of drivers
+| @Return: (Array) Array of found language folders
 |
 */
     function get_languages()
     {
-        $reallist = array();
-        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'language');
-        foreach($list as $file)
-        {
-            $reallist[] = $file;
-        }
-        return $reallist;
+        // Load Language class, and return the found languages
+        return load_class('Language')->get_languages();	
     }
     
 /*
@@ -96,12 +65,8 @@
 */
     function language_exists($lang)
     {
-        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'language');
-        foreach($list as $file)
-        {
-            if($lang == $file) return true;
-        }
-        return false;
+        // Load Language class, and return if $lang exists
+        return load_class('Language')->exists($lang);	
     }
     
 /*
@@ -117,8 +82,7 @@
 */
     function default_language()
     {
-        $default = config('default_language');
-        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'language');
-        return (in_array($default, $list)) ? $default : $list[0];
+        // Load Language class, and return if $lang exists
+        return load_class('Language')->default_language();
     }
 ?>

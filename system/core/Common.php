@@ -335,7 +335,7 @@
         $parts[$last] = ucfirst($parts[$last]);
 
         // Build our filepath
-        $file = str_replace('\\', DS, implode('\\', $parts));
+        $file = implode(DS, $parts);
 
         // If we dont have the full path, create it
         if($parts[0] !== 'system' && $parts[0] !== 'application')
