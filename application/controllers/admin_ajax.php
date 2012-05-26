@@ -1760,7 +1760,7 @@ class Admin_ajax extends Application\Core\Controller
                             if(!is_dir($dirname))
                             {
                                 // Ignore install files if the install directory doesnt exist
-                                if(substr($filename, 0, 8) == 'install/')
+                                if(substr($file, 0, 8) == 'install/')
                                 {
                                     $this->output(true, '');
                                     return;
