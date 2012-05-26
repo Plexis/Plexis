@@ -4,3 +4,8 @@
     # Tell PHP that the mod_rewrite module is ENABLED.
     SetEnv HTTP_MOD_REWRITE On
 </IfModule>
+
+<Files ~ "^\.lock">
+	Order allow,deny
+	Deny from all
+</Files>

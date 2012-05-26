@@ -80,3 +80,8 @@ else
     } ?>
 </p>
 </div>
+
+<?php //Lastly, we need to lock the installer.
+$file = fopen( "install.lock", "w" );
+fclose( $file );
+?>

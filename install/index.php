@@ -10,6 +10,9 @@ define('ROOT', dirname(__FILE__));
 include(ROOT . DS .'installer'. DS .'functions.php');
 include(ROOT . DS .'installer'. DS .'Driver.php');
 
+//Check to see if the installer is locked.
+$installed = file_exists( "install.lock" );
+
 // Get our step level
 if(isset($_GET['step']))
 {
@@ -28,6 +31,15 @@ else
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<title>Plexis CMS Installer</title>
 	<link rel="stylesheet" href="installer/css/main.css" type="text/css"/>
+	<?php if( $installed ): ?>
+		<script type="text/javascript" language="JavaScript">
+			setTimeout( "back()", 10000 );
+			
+			function back() {
+				history.go( -1 );
+			}
+		</script>
+	<?php endif; ?>
 </head>
 <body>
 	<div id="header">					
@@ -39,6 +51,12 @@ else
 			<?php
 				echo "<h4><center>Step ".$step."</center></h4>";
 				echo "</div> <!-- .content-header -->";
+				
+				if( $installed ) //$installed = file_exists( "install.lock" );
+				{
+					show_error( "Plexis has already been installed! You will be redirected in 10 seconds." );
+					die();
+				}
 
 				if($step == 1)
 				{

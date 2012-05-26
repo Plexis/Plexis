@@ -26,19 +26,19 @@ class Plexis
         $DB = load_class('Loader')->database('DB', false, true);
         
         // Check if installer files are present
-        $installer = file_exists( ROOT . DS . 'install/index.php' );
+        $installer = file_exists( ROOT . DS . 'install/install.lock' );
         
         // Check if the install folder is still local
-        if($DB == false && $installer == true)
+        if($DB == false && $installer == false)
         {
             redirect('install/index.php');
             die();
         }
-        elseif( $installer == true )
-        {
-            // Set a nice output message for the admin telling him to delete the installer folder!
-            $GLOBALS['template_messages'][] = '<div class="alert error">Install folder still exists! Please Rename or delete your install folder.</div>';
-        }
+		elseif( $installer == false )
+		{
+			//Warn that the installer is accessible.
+			$GLOBALS["template_messages"][] = "<div class=\"alert error\">The installer is publicly accessible! Please rename, delete or re-lock your install folder.</div>";
+		}
     }
     
     // Un used by this plugin, but they HAVE TO BE defined!
