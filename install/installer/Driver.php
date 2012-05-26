@@ -53,7 +53,7 @@ class Database extends \PDO
         }
         else
         {
-            $dsn = $i['driver'] .':dbname='.$i['database'] .';host='.$i['host'] .';port='.$i['port'];
+            $dsn = $i['driver'] .':dbname=mysql;host='.$i['host'] .';port='.$i['port'];
         }
         
         // Try and Connect to the database
@@ -67,6 +67,9 @@ class Database extends \PDO
         {
             $result = FALSE;
         }
+        
+        // Do we need to create the table?
+        $this->query("create database ". $i['database'], null, true);
         return $result;
     }
 
@@ -84,7 +87,7 @@ class Database extends \PDO
 | @Param: $sprints - An array or replacemtnts of (?)'s in the $query
 |
 */
-    public function query($query, $sprints = NULL)
+    public function query($query, $sprints = NULL, $supress = false)
     {
         // Add to last query
         $this->last_query = $query;
@@ -94,12 +97,21 @@ class Database extends \PDO
         
         // Prepare the statement
         $this->result = $this->prepare($query);
+        
+        // Define there is no error yet
+        $error = false;
 
         // process our query
         try {
             $this->result->execute($sprints);
         }
-        catch (\PDOException $e) { 
+        catch (\PDOException $e) {
+            $error = true;
+        }
+        
+        // Are we supressing an error?
+        if($error == true && $supress == false)
+        {
             $this->trigger_error();
         }
         

@@ -1756,10 +1756,16 @@ class Admin_ajax extends Application\Core\Controller
                             break;
                             
                         case "A":
-
                             // Make sure the Directory exists!
                             if(!is_dir($dirname))
                             {
+                                // Ignore install files if the install directory doesnt exist
+                                if(substr($filename, 0, 8) == 'install/')
+                                {
+                                    $this->output(true, '');
+                                    return;
+                                }
+                                
                                 // Create the directory for the new file if it doesnt exist
                                 if( !$Fs->create_dir($dirname) )
                                 {
@@ -1802,7 +1808,7 @@ class Admin_ajax extends Application\Core\Controller
                         $files = $Fs->read_dir($dirname);
 
                         // If empty, delete .DS / .htaccess files and remove dir!
-                        if(empty($files) || (sizeof($files) == 1 && $files[0] == '.htaccess'))
+                        if(empty($files) || (sizeof($files) == 1 && ($files[0] == '.htaccess')))
                         {
                             $Fs->remove_dir($dirname);
                         }
