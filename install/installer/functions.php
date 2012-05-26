@@ -107,29 +107,29 @@
         // Attempt to connect
         if( !$DB->connect($info) )
         {
-			//Something went wrong, try opening information_schema instead.
-			$DB = new Database();
-			$info["database"] = "information_schema";
-			
-			if( $DB->connect( $info ) )
-			{
-				//Create our database if it doesn't exist.
-				$query = "CREATE DATABASE `" . $_POST["db_name"] . "`;";
-				if( $DB->exec( $query ) )
-				{
-					$info["database"] = $_POST["db_name"];
-					$DB->connect( $info ); //Scrap the old connection, and create a new one to the newly created DB.
-					
-					goto Success; //Skip the error message below.
-				}
-			}
-			
-			show_error('Counld Not select Plexis database! Please go back and re-submit your DB information.');
-			die();
+            // Something went wrong, try opening information_schema instead.
+            $DB = new Database();
+            $info["database"] = "information_schema";
+            
+            // If we can connect to the information schema, then the database doesnt exist, so we create it
+            if( $DB->connect( $info ) )
+            {
+                //Create our database if it doesn't exist.
+                $query = "CREATE DATABASE `" . $_POST["db_name"] . "`;";
+                if( $DB->exec( $query ) )
+                {
+                    // Select the newly created database
+                    $DB->exec("use ". $_POST['db_name'] .";");
+                    goto Success; //Skip the error message below.
+                }
+            }
+            
+            show_error('Counld Not select Plexis database! Please go back and re-submit your DB information.');
+            die();
         }
         else
         {
-			Success:
+            Success:
             output_message('success', 'Successfully Connected to Plexis DB.');
         }
         
