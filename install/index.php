@@ -1,5 +1,5 @@
 <?php
-// Turn off error reporting except errors
+// Turn off error reporting except fetal errors
 error_reporting( E_ERROR );
 
 // Define a smaller Directory seperater and ROOT path
@@ -14,16 +14,10 @@ include(ROOT . DS .'installer'. DS .'includes'. DS .'driver.php');
 $installed = file_exists( "install.lock" );
 
 // Get our step level
-if(isset($_GET['step']))
-{
-    $step = $_GET['step'];
-}
-else
-{
-    $step = 1;
-}
+$step = (isset($_GET['step'])) ? $_GET['step'] : 1;
 ?>
 <!DOCTYPE html>
+<html>
 <head>
 	<title>Plexis CMS Installer</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
