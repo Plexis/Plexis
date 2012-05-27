@@ -10,6 +10,14 @@
 | Copyright:    Copyright (c) 2011, Steven Wilson
 | License:      GNU GPL v3
 |
+| ---------------------------------------------------------------
+| Class: Benchmark
+| ---------------------------------------------------------------
+|
+| This class is used to benchmark certain parts of the system. You
+| can define new start and stop times, and get elapsed times as 
+| well
+|
 */
 namespace System\Core;
 
