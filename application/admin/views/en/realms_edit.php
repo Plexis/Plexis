@@ -13,12 +13,13 @@
                 <input type="hidden" name="action" value="edit"/>
                 <input type="hidden" name="name" value="{realm.name}"/>
                 <input type="hidden" name="id" value="{realm.id}"/>
+                
+                <!-- Hidden Message -->
+                <div id="js_message" style="display: none;"></div>
             
                 <!-- TAB 1 -->
                 <div id="tab-1" class="tab-content">
-                    <!-- Hidden Message -->
-                    <div id="js_message" style="display: none;"></div>
-                    
+
                     <!-- Basic Information Field Set -->
                     <fieldset>
                         <legend>Basic Settings</legend>

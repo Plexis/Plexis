@@ -13,11 +13,12 @@
                 <input type="hidden" name="action" value="install"/>
                 <input type="hidden" name="id" value="{realm.id}"/>
                 
+                <!-- Hidden Message -->
+                <div id="js_message" style="display: none;"></div>
+                
                 <!-- TAB 1 -->
                 <div id="tab-1" class="tab-content">
-                    <!-- Hidden Message -->
-                    <div id="js_message" style="display: none;"></div>
-
+                
                     <!-- Basic Information Field Set -->
                     <fieldset>
                         <legend>Basic Information</legend>

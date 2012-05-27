@@ -12,10 +12,11 @@
             <form id="install-form" class="form" action="{SITE_URL}/admin_ajax/realms" method="post">
                 <input type="hidden" name="action" value="manual-install"/>
                 
+                <!-- Hidden Message -->
+                <div id="js_message" style="display: none;"></div>
+                
                 <!-- TAB 1 -->
                 <div id="tab-1" class="tab-content">
-                    <!-- Hidden Message -->
-                    <div id="js_message" style="display: none;"></div>
                     
                     <!-- Basic Information Field Set -->
                     <fieldset>

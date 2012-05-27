@@ -36,7 +36,7 @@
             // Failed to load class all together.
             show_error('autoload_failed', array( addslashes($className) ), E_ERROR);
         }
-        require_once($file);
+        require $file;
     }
 
 /*
