@@ -7,8 +7,8 @@ define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__));
 
 // Include our functions file
-include(ROOT . DS .'installer'. DS .'functions.php');
-include(ROOT . DS .'installer'. DS .'Driver.php');
+include(ROOT . DS .'installer'. DS .'includes'. DS .'functions.php');
+include(ROOT . DS .'installer'. DS .'includes'. DS .'driver.php');
 
 //Check to see if the installer is locked.
 $installed = file_exists( "install.lock" );
@@ -23,17 +23,14 @@ else
     $step = 1;
 }
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
+<!DOCTYPE html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<title>Plexis CMS Installer</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<link rel="stylesheet" href="installer/css/main.css" type="text/css"/>
 	<?php if( $installed ): ?>
 		<script type="text/javascript" language="JavaScript">
-			setTimeout( "back()", 10000 );
+			setTimeout( "back()", 5000 );
 			
 			function back() {
 				history.go( -1 );
@@ -54,53 +51,19 @@ else
 				
 				if( $installed ) //$installed = file_exists( "install.lock" );
 				{
-					show_error( "Plexis has already been installed! You will be redirected in 10 seconds." );
-					die();
+					show_error( "Plexis has already been installed! Please delete the install.lock file if you need to re-run the installer. You will be redirected in 5 seconds." );
 				}
-
-				if($step == 1)
-				{
-			?>		
-					<!-- STEP 1 -->
-					<form method="POST" action="index.php?step=2" class="form label-inline">
-					<div class="main-content">		
-						<p>
-							Welcome to the Plexis Installer!. Before we start the installation proccess, we need to make sure your
-							web server is compatible with the cms. Please select your realms emulator, and click the start at the bottom to begin.
-						</p>
-                        
-                        <div class="field" >
-                            <label for="user">Emulator: </label>
-                            <select name="emulator">
-                                <option value="trinity" select="selected">Trinity</option>
-                                <option value="mangos" select="selected">Mangos</option>
-								<option value="arcemu">ArcEmu</option>
-                            </select>
-                            <p class="field_help">Please select your emulator.</p>
-                        </div>
-        
-						<div class="buttonrow-border">								
-							<center><button><span>Start</span></button></center>			
-						</div>
-						<div class="clear"></div>
-					</div> <!-- .main-content -->
-					</form>
-			<?php
-				} 
 				else
 				{
-                    // Include our step file
-                    include( ROOT . DS . 'steps' . DS . $_POST['emulator'] . DS . 'step_'.$step.'.php');
-                }
+					// Include our steps file if one exists
+					$file = ROOT . DS . 'installer'. DS .'includes'. DS .'step'.$step.'.php';
+					if(file_exists($file)) include $file;
+
+					// Include our view file
+					include ROOT . DS . 'installer'. DS .'views'. DS .'step'.$step.'.php';
+				}
             ?>
 		</div> <!-- .content -->
-		<div id="footer">
-			<center>
-			<p>
-				Template originally designed by <a href="http://rodcreative.com/">Rod Creative</a>, Modified by Wilson212 for his CMS projects.<br /> 
-			</p>
-			</center>
-		</div>
 	</div>
 </body>
 </html>

@@ -22,6 +22,8 @@ class Database extends \PDO
 
     // Our last queries number of rows / affected rows
     protected $num_rows;
+	
+	protected $error_message = null;
     
     // result of the last query
     public $result;
@@ -65,12 +67,11 @@ class Database extends \PDO
         }
         catch (\PDOException $e)
         {
-            $result = FALSE;
+            $result = $e->getMessage();
         }
         
         return $result;
     }
-
  
 /*
 | ---------------------------------------------------------------
@@ -268,7 +269,7 @@ class Database extends \PDO
 | @Return: (Bool) Returns TRUE on success of FALSE on error
 |
 */
-    public function insert($table, $data)
+    public function insert($table, $data, $supress = false)
     {
         // enclose the column names in grave accents
         $cols = '`' . implode('`,`', array_keys($data)) . '`';
@@ -288,7 +289,7 @@ class Database extends \PDO
         $query = 'INSERT INTO ' . $table . '(' . $cols . ') VALUES (' . $values . ')';
 
         // Prepare the statment
-        $this->query( $query, array_values($data) );
+        $this->query( $query, array_values($data), $supress );
         
         return $this->num_rows; 
     }

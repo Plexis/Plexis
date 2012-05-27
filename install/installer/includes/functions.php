@@ -69,7 +69,7 @@
 | Easy way to connect to the databases after step 2
 |
 */ 
-    function get_database_connections()
+    function get_database_connections($show)
     {
         // Check if provided info is correct
         $Realm = new Database();
@@ -83,14 +83,15 @@
         );
 
         // Attempt to connect
-        if( !$Realm->connect($r_info) )
+		$connect = $Realm->connect($r_info);
+        if($connect !== true)
         {
-            show_error('Counld Not select Realm database! Please go back and re-submit your DB information.');
+            show_error('Counld Not connect to the Realm database!<br /><br />Error: '. $connect);
             die();
         }
         else
         {
-            output_message('success', 'Successfully Connected to Realm DB.');
+            if($show) output_message('success', 'Successfully Connected to Realm DB.');
         }
         
         // Plexis DB
@@ -105,14 +106,16 @@
         );
         
         // Attempt to connect
-        if( !$DB->connect($info) )
+		$connect = $DB->connect($info);
+        if($connect !== true)
         {
             // Something went wrong, try opening information_schema instead.
             $DB = new Database();
             $info["database"] = "information_schema";
             
             // If we can connect to the information schema, then the database doesnt exist, so we create it
-            if( $DB->connect( $info ) )
+			$connect = $DB->connect( $info );
+            if($connect === true)
             {
                 //Create our database if it doesn't exist.
                 $query = "CREATE DATABASE `" . $_POST["db_name"] . "`;";
@@ -124,13 +127,13 @@
                 }
             }
             
-            show_error('Counld Not select Plexis database! Please go back and re-submit your DB information.');
+            show_error('Counld Not select Plexis database!<br /><br />Error: '. $connect);
             die();
         }
         else
         {
             Success:
-            output_message('success', 'Successfully Connected to Plexis DB.');
+				if($show) output_message('success', 'Successfully Connected to Plexis DB.');
         }
         
         return array('plexis' => $DB, 'realm' => $Realm);

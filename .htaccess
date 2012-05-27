@@ -11,3 +11,8 @@
     # Rewrite all other URLs to index.php/URL
     RewriteRule ^(.*)$ index.php?url=$1 [PT,L]
 </IfModule>
+
+<IfModule !mod_rewrite.c>
+    # Tell PHP that the mod_rewrite module is DISABLED.
+    SetEnv HTTP_MOD_REWRITE Off
+</IfModule>
