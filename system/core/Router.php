@@ -54,7 +54,8 @@ class Router
 */ 
     public function __construct()
     {
-        // Load the input class
+        // Load the config and input class'
+        $this->config = load_class('Config');
         $this->input = load_class('Input');
         
         // Start off by routing this thing
@@ -101,7 +102,7 @@ class Router
         $this->site_url = str_replace( '\\', '', $this->protocol .'://' . rtrim($site_url, '/') );
 
         // Process the site URI
-        if( !config('enable_query_strings', 'Core'))
+        if( !$this->config->get('enable_query_strings', 'Core'))
         {
             // Get our current url, which is passed on by the 'url' param
             $this->uri = (isset($_GET['url']) ? $this->input->get('url', TRUE) : '');   
@@ -109,8 +110,8 @@ class Router
         else
         {
             // Define our needed vars
-            $c_param =  config('controller_param', 'Core');
-            $a_param = config('action_param', 'Core');
+            $c_param =  $this->config->get('controller_param', 'Core');
+            $a_param = $this->config->get('action_param', 'Core');
             
             // Make sure we have a controller at least
             $c = $this->input->get($c_param, TRUE );
@@ -122,7 +123,7 @@ class Router
             {
                 // Get our action
                 $a = $this->input->get( $a_param, TRUE );
-                if( !$a ) $a = config('default_action', 'Core'); // Default Action
+                if( !$a ) $a = $this->config->get('default_action', 'Core'); // Default Action
                 
                 // Init the uri
                 $this->uri = $c .'/'. $a;
@@ -148,8 +149,8 @@ class Router
         if(empty($this->uri)) 
         {
             // Set our Controller / Action to the defaults
-            $controller = config('default_controller', 'Core'); // Default Controller
-            $action = config('default_action', 'Core'); // Default Action
+            $controller = $this->config->get('default_controller', 'Core'); // Default Controller
+            $action = $this->config->get('default_action', 'Core'); // Default Action
             $queryString = array(); // Default query string
         }
         
@@ -175,7 +176,7 @@ class Router
             // If there is no action, load the default 'index'.
             else 
             {
-                $action = config('default_action', 'Core'); // Default Action
+                $action = $this->config->get('default_action', 'Core'); // Default Action
             }
             
             // $queryString is what remains

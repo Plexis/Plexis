@@ -161,25 +161,6 @@
         return $DB->insert('pcms_admin_logs', array('username' => $id, 'desc' => $desc));
     }
     
-	
-/*
-| ---------------------------------------------------------------
-| Function: uri_segment
-| ---------------------------------------------------------------
-|
-| This function is used to exctract a specific piece of the url.
-|
-| @Param: (String) $index: The zero-based index of the url part to return.
-| @Return: (String / Null) String containing the specified url part, 
-|   null if the index it out of bounds of the array.
-|
-*/
-
-    function uri_segment($index)
-    {
-        return load_class('Router')->get_uri_segement($index);
-    }
-    
 /*
 | ---------------------------------------------------------------
 | Function: real_ver

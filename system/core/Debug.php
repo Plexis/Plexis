@@ -60,8 +60,9 @@ class Debug
     public function __construct()
     {
         // Set our error reporting
-        $this->log_errors = config('log_errors', 'Core');
-        $this->Environment = config('environment', 'Core');
+        $this->config = load_class('Config');
+        $this->log_errors = $this->config->get('log_errors', 'Core');
+        $this->Environment = $this->config->get('environment', 'Core');
         
         // Get our URL info
         $this->url_info = get_url_info();
@@ -85,7 +86,7 @@ class Debug
     public function trigger_error($errno, $message = '', $file = '', $line = 0, $backtrace = NULL)
     {
         // Language setup
-        $this->lang = strtolower( config('core_language', 'Core') );
+        $this->lang = strtolower( $this->config->get('core_language', 'Core') );
         
         // fill attributes
         $this->ErrorMessage = $message;

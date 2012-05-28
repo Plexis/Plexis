@@ -8,6 +8,8 @@
 | http://www.php.net/manual/en/function.var-dump.php#80288
 |
 */
+if(!function_exists('html_var_dump'))
+{
     function html_var_dump($var, $var_name = NULL, $indent = NULL)
     {	
         // Init our empty html return
@@ -80,4 +82,5 @@
         // Return our variable dump :D
         return $html;
     }
+}
 ?>

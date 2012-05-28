@@ -55,13 +55,14 @@ class Controller
         $this->action = $GLOBALS['action'];
         $this->querystring = $GLOBALS['querystring'];
         
-        // Initiate the loader
+        // Initiate the loader and config class
         $this->load = load_class('Loader');
+        $this->Config = load_class('Config');
         
         // --------------------------------------
         // Autoload the config autoload_helpers |
         // --------------------------------------
-        $libs = config('autoload_helpers', 'Core');
+        $libs = $this->Config->get('autoload_helpers', 'Core');
         if(count($libs) > 0)
         {
             foreach($libs as $lib)
@@ -73,7 +74,7 @@ class Controller
         //-----------------------------------------
         // Autoload the config autoload_libraries |
         //-----------------------------------------
-        $libs = config('autoload_libraries', 'Core');
+        $libs = $this->Config->get('autoload_libraries', 'Core');
         if(count($libs) > 0)
         {
             foreach($libs as $lib)

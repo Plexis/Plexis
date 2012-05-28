@@ -11,6 +11,8 @@
 | @Return (String) The array of data
 |
 */
+if(!function_exists('sec2hms'))
+{
     function sec2hms($sec, $padHours = true) 
     {
         // start with a blank string
@@ -42,6 +44,7 @@
         // done!
         return $hms;
     }
+}
     
 /*
 | ---------------------------------------------------------------
@@ -54,6 +57,8 @@
 | @Return (String) The array of data
 |
 */
+if(!function_exists('format_time'))
+{
     function format_time($seconds)
     {
         // Get our seconds to hours:minutes:seconds
@@ -84,6 +89,7 @@
         
         return $set;
     }
+}
     
 /*
 | ---------------------------------------------------------------
@@ -93,10 +99,12 @@
 | Returns the absolute microtime in a float
 |
 */
+if(!function_exists('microtime_float'))
+{
     function microtime_float() 
     {
         list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
     }
-    
+}   
 // EOF

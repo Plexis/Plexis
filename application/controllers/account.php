@@ -160,10 +160,7 @@ class Account extends Application\Core\Controller
     public function logout() 
     {
         // Redirect to the login page if the user is not logged in
-        if($this->user['logged_in'] == FALSE)
-        {
-            redirect('account/login');
-        }
+        if( !$this->user['logged_in'] ) redirect('account/login');
         
         // Destroy the users session
         $this->Auth->logout();
@@ -181,10 +178,7 @@ class Account extends Application\Core\Controller
     public function register() 
     {
         // Redirect to the users dashboard if already logged in
-        if($this->user['logged_in'] == TRUE)
-        {
-            redirect('account');
-        }
+        if($this->user['logged_in']) redirect('account');
         
         // Make sure the config says we can register
         if( config('allow_registration') == FALSE )
@@ -196,7 +190,7 @@ class Account extends Application\Core\Controller
         
         // Do our captcha check
         $enable_captcha = config('enable_captcha');
-        if( $enable_captcha == TRUE )
+        if( $enable_captcha )
         {
             $Captcha = $this->load->library('Captcha');
             if( $Captcha == FALSE )
@@ -213,11 +207,11 @@ class Account extends Application\Core\Controller
         $data['secret_questions'] = get_secret_questions();
         
         // See if the admin requires a registration key, and IF there is one
-        if( config('reg_registration_key') == TRUE )
+        if( config('reg_registration_key') )
         {
             // Check for a key
             $key = $this->Input->cookie('reg_key', TRUE);
-            if( $key == FALSE )
+            if( !$key )
             {
                 // Check if the user recently posted the key
                 if( isset($_POST['key']) )
@@ -226,7 +220,7 @@ class Account extends Application\Core\Controller
                     $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($_POST['key']))->fetch_row();
                     
                     // 'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
-                    if($result == FALSE || $result['usedby'] >= 0) 
+                    if(!$result || $result['usedby'] >= 0) 
                     {
                         // Key form
                         output_message('error', 'reg_failed_invalid_key');
@@ -254,7 +248,7 @@ class Account extends Application\Core\Controller
                 $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($key))->fetch_row();
                 
                 // 'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
-                if($result == FALSE || $result['usedby'] >= 0) 
+                if(!$result || $result['usedby'] >= 0) 
                 {
                     // Reset the Registration key and start over... load the Key form
                     $this->Input->set_cookie('reg_key', $key, (time() -1));
@@ -306,7 +300,7 @@ class Account extends Application\Core\Controller
             );
             
             // If everything passes validation, we are good to go
-            if( $this->validation->validate() == TRUE )
+            if( $this->validation->validate() )
             {
                 // Check for captcha validation
                 if( $enable_captcha == TRUE )
@@ -340,8 +334,7 @@ class Account extends Application\Core\Controller
                 if( config('reg_unique_email') == TRUE )
                 {
                     // Check the DB for the email address
-                    $ee = $this->realm->email_exists($email);
-                    if($ee == TRUE)
+                    if($this->realm->email_exists($email))
                     {
                         output_message('error', 'reg_failed_email_exists');
                         $this->load->view('register', $data);
@@ -351,20 +344,18 @@ class Account extends Application\Core\Controller
                 
                 // Use the AUTH class to register the user officially
                 $id = $this->Auth->register($username, $password, $email, $sq, $sa);
-                if( $id == TRUE )
+                if($id != false)
                 {
                     // Remove registration key IF enabled
-                    if( config('reg_registration_key') == TRUE )
+                    if( config('reg_registration_key') )
                     {
-                        $this->Input->set_cookie('reg_key', $key, (time() -1));
-                        //$this->DB->delete('pcms_reg_keys', "`key`='".$key."'");
-                        
                         // Set the 'usedby' field for the reg key.
                         $this->DB->update("pcms_reg_keys", array('usedby' => $id), "`key` = '$key'");
+						$this->Input->set_cookie('reg_key', $key, (time() -1));
                     }
                     
                     // Check for email verification
-                    if( config('reg_email_verification') == TRUE )
+                    if( config('reg_email_verification') )
                     {
                         // Setup our variables and load our extensions
                         $XML = simplexml_load_file( APP_PATH . DS . 'language' . DS . $GLOBALS['language'] . DS .'emails.xml' );
@@ -383,19 +374,10 @@ class Account extends Application\Core\Controller
                         $this->email->from( config('site_support_email'), config('site_title') );
                         $this->email->subject( $XML->account_activation_req->subject );
                         $this->email->message( $message );
-                        $sent = $this->email->send(true);
                         
-                        // Check if our email sent correctly
-                        if($sent == TRUE)
-                        {
-                            output_message('success', 'reg_success_activation_required');
-                            $this->load->view('blank');
-                        }
-                        else
-                        {
-                            output_message('warning', 'reg_success_email_error');
-                            $this->load->view('blank');
-                        }
+                        // Send the email
+                        ($this->email->send(true) == true) ? output_message('success', 'reg_success_activation_required') : output_message('warning', 'reg_success_email_error');
+						$this->load->view('blank');
                     }
                     else
                     {
@@ -438,8 +420,7 @@ class Account extends Application\Core\Controller
         if($username == FALSE) goto Invalid;
         
         // We have a valid key, now activate the account
-        $result = $this->DB->update('pcms_accounts', array('activated' => 1), "`username`='".$username."'");
-        if($result == TRUE)
+        if($this->DB->update('pcms_accounts', array('activated' => 1), "`username`='".$username."'"))
         {
             // Unlock account
             $query = "SELECT `id` FROM `pcms_accounts` WHERE `username`=?";
@@ -498,10 +479,7 @@ class Account extends Application\Core\Controller
         else
         {
             // If the user is logged in, we dont need to be here
-            if($this->user['logged_in'] == TRUE)
-            {
-                redirect('account');
-            }
+            if($this->user['logged_in']) redirect('account');
         
             // Do we have login information?
             if(isset($_POST['action'])) goto Process;
@@ -792,13 +770,9 @@ class Account extends Application\Core\Controller
                                     $this->email->from( config('site_support_email'), config('site_title') );
                                     $this->email->subject( $email->password_change->subject );
                                     $this->email->message( $message );
-                                    $sent = $this->email->send(true);
 
                                     // Check if our email sent correctly
-                                    if($sent == false)
-                                    {
-                                        log_message("Failed to send email to $email, about account password change", 'error.log');
-                                    }
+                                    if( !$this->email->send(true) ) log_message("Failed to send email to $email, about account password change", 'error.log');
                                 }
                             }
                             

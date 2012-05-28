@@ -191,7 +191,7 @@ class Loader
             }
         
             // Get the DB connection information
-            $info = config($args, 'DB');
+            $info = load_class('Config')->get($args, 'DB');
             if($info === NULL)
             {
                 show_error('db_key_not_found', array($args), E_ERROR);
@@ -285,7 +285,7 @@ class Loader
         }
         
         // Check the core/helpers folder
-        else 
+        if(file_exists(SYSTEM_PATH . DS .  'helpers' . DS . $name . '.php')) 
         {
             require_once(SYSTEM_PATH . DS .  'helpers' . DS . $name . '.php');
         }

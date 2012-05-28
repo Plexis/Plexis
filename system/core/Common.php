@@ -38,256 +38,7 @@
         }
         require $file;
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: php_error_handler()
-| ---------------------------------------------------------------
-|
-| Php uses this error handle instead of the default one because
-| php calls this method statically
-|
-*/
-    function php_error_handler($errno, $errstr, $errfile, $errline)
-    {
-        if(!$errno) 
-        {
-            // This error code is not included in error_reporting
-            return;
-        }
-        
-        // Get singleton
-        $Debug = load_class('Debug');	
-        
-        // Trigger
-        $Debug->trigger_error($errno, $errstr, $errfile, $errline, debug_backtrace());
-
-        // Don't execute PHP internal error handler
-        return true;
-    }
     
-/*
-| ---------------------------------------------------------------
-| Function: shutdown()
-| ---------------------------------------------------------------
-|
-| Method for catching fetal and parse errors
-|
-*/
-    function shutdown()
-    {
-        $error = error_get_last();
-        if(is_array($error) && config('catch_fetal_errors', 'Core') == 1)
-        {
-            if($error['type'] == E_ERROR || $error['type'] == E_PARSE)
-            {
-                // Get singleton
-                $Debug = load_class('Debug');	
-            
-                // Trigger
-                $Debug->trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
-            }
-            // Otherwise ignore
-        }
-    }
-
-/*
-| ---------------------------------------------------------------
-| Function: show_error()
-| ---------------------------------------------------------------
-|
-| This function is used to simplify the showing of errors
-|
-| @Param: (String) $err_message - Error message code
-| @Param: (Array) $args - An array for vsprintf to replace in the 
-| @Param: (Int) $lvl - Level of the error
-| @Return: (None)
-|
-*/	
-    function show_error($err_message = 'none', $args = NULL, $lvl = E_ERROR)
-    {
-        // Let get a backtrace for deep debugging
-        $backtrace = debug_backtrace();
-        $calling = $backtrace[0];
-        
-        // Load language
-        $lang = load_class('Language');
-        $lang->set_language( config('core_language', 'Core') );
-        $lang->load('core_errors');
-        $message = $lang->get($err_message);
-        
-        // Allow custom messages
-        if($message === FALSE)
-        {
-            $message = $err_message;
-        }
-        
-        // do replacing
-        if(is_array($args))
-        {
-            $message = vsprintf($message, $args);
-        }
-        
-        // Init and spit the error
-        $Debug = load_class('Debug');
-        $Debug->trigger_error($lvl, $message, $calling['file'], $calling['line'], $backtrace);
-    }
-	
-/*
-| ---------------------------------------------------------------
-| Function: show_404()
-| ---------------------------------------------------------------
-|
-| Displays the 404 Page
-|
-| @Return: (None)
-|
-*/	
-    function show_404()
-    {		
-        // Init and spit the error
-        $Debug = load_class('Debug');
-        $Debug->show_error(404);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: log_message()
-| ---------------------------------------------------------------
-|
-| Logs a message in the debug log, or specified file
-|
-| @Return: (None)
-|
-*/	
-    function log_message($message, $filename = 'debug.log')
-    {		
-        // Init and spit the error
-        $Debug = load_class('Debug');
-        $Debug->log($message, $filename);
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: config()
-| ---------------------------------------------------------------
-|
-| This function is used to return a config value from a config
-| file.
-|
-| @Param: (String) $item - The config item we are looking for
-| @Param: (Mixed) $type - Name of the config variables, this is set 
-|	when you load the config, defaults are Core, App and Mod
-| @Return: (Mixed) - Returns the config vaule of $item
-|
-*/
-    function config($item, $type = 'App')
-    {
-        $Config = load_class('Config');		
-        return $Config->get($item, $type);
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: config_set()
-| ---------------------------------------------------------------
-|
-| This function is used to set site config values. This does not
-| set core, or database values.
-|
-| @Param: (String) $item - The config item we are setting a value for
-| @Param: (Mixed) $value - the value of $item
-| @Param: (Mixed) $name - The name of this config variables container
-| @Return: (None)
-|
-*/
-    function config_set($item, $value, $name = 'App')
-    {
-        $Config = load_class('Config');	
-        $Config->set($item, $value, $name);
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: config_save()
-| ---------------------------------------------------------------
-|
-| This function is used to save site config values to the condig.php. 
-| *Warning - This will remove any and ALL comments in the config file
-|
-| @Param: (Mixed) $name - Which config are we saving? App? Core? Module?
-| @Return: (None)
-|
-*/
-    function config_save($name)
-    {
-        $Config = load_class('Config');	
-        return $Config->save($name);
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: load_config()
-| ---------------------------------------------------------------
-|
-| This function is used to get all defined variables from a config
-| file.
-|
-| @Param: (String) $file - full path and filename to the config file being loaded
-| @Param: (Mixed) $name - The name of this config variables, for later access. Ex:
-| 	if $name = 'test', the to load a $var -> config( 'var', 'test');
-| @Param: (String) $array - If the config vars are stored in an array, whats
-|	the array variable name?
-| @Return: (None)
-|
-*/
-    function load_config($file, $name, $array = FALSE)
-    {	
-        $Config = load_class('Config');	
-        $Config->load($file, $name, $array);
-    }
-
-/*
-| ---------------------------------------------------------------
-| Function: get_instance()
-| ---------------------------------------------------------------
-|
-| Gateway to adding the controller into your current working class
-|
-| @Return: (Object) - Return the instnace of the Controller
-|
-*/	
-    function get_instance()
-    {
-        if(class_exists('Application\\Core\\Controller', FALSE))
-        {
-            return \Application\Core\Controller::get_instance();
-        }
-        elseif(class_exists('System\\Core\\Controller', FALSE))
-        {
-            return \System\Core\Controller::get_instance();
-        }
-        else
-        {
-            return FALSE;
-        }
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: get_url_info()
-| ---------------------------------------------------------------
-|
-| Simple way of getting the site url and url information
-|
-| @Return: (Object) - Return the instnace of the Controller
-|
-*/	
-    function get_url_info()
-    {
-        return load_class('Router')->get_url_info();
-    }
-
 /*
 | ---------------------------------------------------------------
 | Function: load_class()
@@ -384,33 +135,145 @@
 
 /*
 | ---------------------------------------------------------------
-| Method: redirect()
+| Function: php_error_handler()
 | ---------------------------------------------------------------
 |
-| This function is used to easily redirect and refresh pages
-|
-| @Param: (String) $url - Where were going
-| @Param: (Int) $wait - How many sec's we wait till the redirect.
-| @Return: (None)
+| Php uses this error handle instead of the default one because
+| php calls this method statically
 |
 */
-    function redirect($url, $wait = 0)
+    function php_error_handler($errno, $errstr, $errfile, $errline)
     {
-        // Check for a valid URL. If not then add our current SITE_URL to it.
-        if(!preg_match('@^(mailto|ftp|http(s)?)://@i', $url))
-        {
-            $url = SITE_URL .'/'. $url;
-        }
+		// Return false if there is no error code
+        if(!$errno) return false;
+        
+        // Trigger
+        load_class('Debug')->trigger_error($errno, $errstr, $errfile, $errline, debug_backtrace());
 
-        // Check for refresh or straight redirect
-        if($wait >= 1)
+        // Don't execute PHP internal error handler
+        return true;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: shutdown()
+| ---------------------------------------------------------------
+|
+| Method for catching fetal and parse errors
+|
+*/
+    function shutdown()
+    {
+        // Get las error, and confg option
+        $error = error_get_last();
+        $catch = load_class('Config')->get('catch_fetal_errors', 'Core');
+        if(is_array($error) && $catch == 1)
         {
-            header("Refresh:". $wait .";url=". $url);
+            if($error['type'] == E_ERROR || $error['type'] == E_PARSE)
+            {
+                // Trigger
+                load_class('Debug')->trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
+            }
+            // Otherwise ignore
+        }
+    }
+
+/*
+| ---------------------------------------------------------------
+| Function: show_error()
+| ---------------------------------------------------------------
+|
+| This function is used to simplify the showing of errors
+|
+| @Param: (String) $err_message - Error message code
+| @Param: (Array) $args - An array for vsprintf to replace in the 
+| @Param: (Int) $lvl - Level of the error
+| @Return: (None)
+|
+*/	
+    function show_error($err_message = 'none', $args = NULL, $lvl = E_ERROR)
+    {
+        // Let get a backtrace for deep debugging
+        $backtrace = debug_backtrace();
+        $calling = $backtrace[0];
+        
+        // Load language
+        $lang = load_class('Language');
+        $lang->set_language( config('core_language', 'Core') );
+        $lang->load('core_errors');
+        $message = $lang->get($err_message);
+        
+        // Allow custom messages
+        if($message === FALSE)
+        {
+            $message = $err_message;
+        }
+        
+        // do replacing
+        if(is_array($args))
+        {
+            $message = vsprintf($message, $args);
+        }
+        
+        // Init and spit the error
+        load_class('Debug')->trigger_error($lvl, $message, $calling['file'], $calling['line'], $backtrace);
+    }
+	
+/*
+| ---------------------------------------------------------------
+| Function: show_404()
+| ---------------------------------------------------------------
+|
+| Displays the 404 Page
+|
+| @Return: (None)
+|
+*/	
+    function show_404()
+    {		
+        // Init and spit the error
+        load_class('Debug')->show_error(404);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: log_message()
+| ---------------------------------------------------------------
+|
+| Logs a message in the debug log, or specified file
+|
+| @Return: (None)
+|
+*/	
+    function log_message($message, $filename = 'debug.log')
+    {		
+        // Init and spit the error
+        load_class('Debug')->log($message, $filename);
+    }
+	
+/*
+| ---------------------------------------------------------------
+| Function: get_instance()
+| ---------------------------------------------------------------
+|
+| Gateway to adding the controller into your current working class
+|
+| @Return: (Object) - Return the instnace of the Controller
+|
+*/	
+    function get_instance()
+    {
+        if(class_exists('Application\\Core\\Controller', FALSE))
+        {
+            return \Application\Core\Controller::get_instance();
+        }
+        elseif(class_exists('System\\Core\\Controller', FALSE))
+        {
+            return \System\Core\Controller::get_instance();
         }
         else
         {
-            header("Location: ".$url);
-            die();
+            return FALSE;
         }
     }
 

@@ -224,7 +224,7 @@
             
             <!-- FOOTER -->
             <footer id="footer">
-                <p id="footer-left">&copy; 2011 Plexis.</p>
+                <p id="footer-left">&copy; 2012 Plexis.</p>
                 <p id="footer-right">Page Rendered in {ELAPSED_TIME} seconds, Using {MEMORY_USAGE}</p>
             </footer>
             <!-- END FOOTER -->
