@@ -13,7 +13,7 @@
 function fetch_account($name)
 {
 	global $Realm;
-	return $Realm->query("SELECT `id`, `login` as `username`, `email` FROM `accounts` WHERE `login` LIKE ? LIMIT 1", array($name))->fetch_row();
+	return $Realm->query("SELECT `acct` as `id`, `login` as `username`, `email` FROM `accounts` WHERE `login` LIKE ? LIMIT 1", array($name))->fetch_row();
 }
 
 /*
