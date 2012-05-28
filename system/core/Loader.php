@@ -278,6 +278,9 @@ class Loader
 */
     public function helper($name)
     {
+        // Lowercase the name because it isnt a class file!
+        $name = strtolower($name);
+        
         // Check the application/helpers folder
         if(file_exists(APP_PATH . DS .  'helpers' . DS . $name . '.php')) 
         {

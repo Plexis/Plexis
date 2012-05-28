@@ -1,1 +1,1 @@
-[{"status":"M","file":"system\/core\/Debug.php"},{"status":"M","file":"index.php"}]
+[{"status":"A","file":"application\/helpers\/config.php"},{"status":"A","file":"application\/helpers\/url.php"},{"status":"M","file":"system\/core\/Loader.php"},{"status":"M","file":"index.php"},{"status":"D","file":"system\/helpers\/Config.php"},{"status":"D","file":"system\/helpers\/Time.php"},{"status":"D","file":"system\/helpers\/Url.php"},{"status":"D","file":"system\/helpers\/Variables.php"}]
