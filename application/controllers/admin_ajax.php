@@ -766,7 +766,7 @@ class Admin_ajax extends Application\Core\Controller
                         'money' => $this->Input->post('money', true),
                         'xp' => $this->Input->post('xp', true)
                     );
-                    $result = $Lib->set_character_info($id, $info);
+                    $result = $Lib->characters->set_character_info($id, $info);
                     
                     // make sure we didnt fail here
                     if($result === false)
@@ -777,14 +777,14 @@ class Admin_ajax extends Application\Core\Controller
                     
                     // Get the characters flags
                     $change = false;
-                    $flags = $Lib->get_login_flags($id);
+                    $flags = $Lib->characters->get_login_flags($id);
                     foreach($flags as $key => $val)
                     {
                         // Updates?
                         if(isset($_POST[ $key ]) && (bool)$_POST[ $key ] != $val)
                         {
                             $change = true;
-                            $Lib->set_login_flag($id, $key, $_POST[ $key ]);
+                            $Lib->characters->set_login_flag($id, $key, $_POST[ $key ]);
                         }
                     }
                     
@@ -808,7 +808,7 @@ class Admin_ajax extends Application\Core\Controller
                     
                     // Log action
                     $this->log('Deleted character '. $char['name'] .' from realm '. $r['name']);
-                    $result = $Lib->delete_character( $this->Input->post('id', true) );
+                    $result = $Lib->characters->delete_character( $this->Input->post('id', true) );
                     ($result == true) ? $this->output(true, "Character deleted successfully!") : $this->output(false, "There was an error deleting the character!");
                     break;
                     
