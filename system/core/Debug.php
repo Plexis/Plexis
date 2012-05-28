@@ -65,7 +65,7 @@ class Debug
         $this->Environment = $this->config->get('environment', 'Core');
         
         // Get our URL info
-        $this->url_info = get_url_info();
+        $this->url_info = load_class('Router')->get_url_info();
     }
 
 /*
