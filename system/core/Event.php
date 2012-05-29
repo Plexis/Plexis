@@ -24,9 +24,6 @@ class Event
 {
 	// Static array of events, and handlers
 	protected static $events = array(); 
-    
-    // To be removed
-    public function fire() {}
 
 /*
 | ---------------------------------------------------------------
