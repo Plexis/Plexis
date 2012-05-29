@@ -25,6 +25,12 @@ class Controller extends \System\Core\Controller
     // Our auth class
     public $Auth;
     
+    // Event handler
+    public $Event;
+    
+    // language class
+    public $Language;
+    
     // Template Class
     public $Template;
     
@@ -44,15 +50,11 @@ class Controller extends \System\Core\Controller
     {
         // Build the Core Controller
         parent::__construct();
-        
+
         // If site is updating, only allow Ajax requests
         if($GLOBALS['controller'] != 'admin_ajax' && config('site_updating')) 
             die('Site Down for maintenance. Be back soon.');
         
-        // Process stats if we arent in ajax mode
-        if($GLOBALS['controller'] != 'ajax' && $GLOBALS['controller'] != 'admin_ajax' && is_object($this->Statistics)) 
-            $this->Statistics->add_hit();
-            
         // Globally load the Input class
         $this->Input = load_class('Input');
         
@@ -65,6 +67,10 @@ class Controller extends \System\Core\Controller
         
         // Setup the template system
         if($init_template == TRUE) $this->_init_template();
+        
+        // Fire the controller event
+        $this->Event = load_class('Event');
+        $this->Event->fire('controller_init');
     }
     
 /*

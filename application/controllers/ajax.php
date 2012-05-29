@@ -118,7 +118,15 @@ class Ajax extends Application\Core\Controller
                 // VOTING
                 case "vote":
                     $result = $this->model->submit($this->user['id'], $_POST['site_id']);
-                    ($result == TRUE) ? $this->output(true, 'vote_submit_success') : $this->output(false, 'vote_submit_error');
+                    if($result == TRUE)
+                    {
+                        load_class('Event')->fire('user_voted', array($this->user['id'], $_POST['site_id']));
+                        $this->output(true, 'vote_submit_success');
+                    }
+                    else
+                    {
+                        $this->output(false, 'vote_submit_error');
+                    }
                     break;
                  
                 // STATUS

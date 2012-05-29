@@ -74,6 +74,9 @@ class Ajax_Model extends Application\Core\Model
                     $Ajax->output(false, 'account_update_error');
                     return;
                 }
+                
+                // Fire the change password event
+                load_class('Event')->fire('password_change', array($id, $password[0]));
             }
             else
             {
@@ -101,6 +104,9 @@ class Ajax_Model extends Application\Core\Model
             {
                 $changes = TRUE;
                 $data[$key] = $value;
+                
+                // Fire change email event if changed
+                if($key => 'email') load_class('Event')->fire('email_change', array($id, $user['email'], $value));
             }
         }
         

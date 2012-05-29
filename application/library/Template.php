@@ -484,10 +484,7 @@ class Template
         $source = str_replace($search, $message_block, $source);
         
         // Lastely, Strip template comment blocks
-        while(preg_match('/<!--#.*#-->/iUs', $source, $replace)) 
-        {
-            $source = str_replace($replace[0], '', $source);
-        }
+        $source = preg_replace('/<!--#.*#-->/iUs', '', $source);
         
         $this->source = $source;
         return;

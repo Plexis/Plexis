@@ -157,15 +157,7 @@ class Account_Model extends Application\Core\Model
         $result = $this->realm->change_password($id, $password);
         
         // Check the result, if FALSE then we failed to change the password :O
-        if($result === FALSE)
-        {
-            output_message('error', 'account_recover_pass_failed');
-            return FALSE;
-        }
-        
-        // Send a success message and include the new password there
-        output_message('success', 'account_recover_pass_success', array($password));
-        return TRUE;
+        return ($result === false) ? false : $password;
     }
     
 /*

@@ -116,12 +116,12 @@ class Debug
                 break;
         }
         
-        // Log error based on error log level
-        if($this->log_level != 0) $this->log_error();
-        
         // If we are silent, then be silent
         if($severity == 3 || !$this->silence)
         {
+            // Log error based on error log level
+            if($this->log_level != 0) $this->log_error();
+        
             // Only build the error page when its fetal, or a development Env.
             if( $this->Environment == 2 || $severity > 1 ) $this->build_error_page();
         }

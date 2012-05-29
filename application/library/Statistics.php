@@ -27,9 +27,16 @@ class Statistics
 */ 
     public function __construct()
     {
+        // Load database and input classes
         $this->load = load_class('Loader');
         $this->DB = $this->load->database('DB');
         $this->Input = load_class('Input');
+        
+        // When the controller finishes initializing, add stats hit
+        if(!$this->Input->is_ajax())
+        {
+            load_class('Event')->register('controller_init', array($this, 'add_hit'));
+        }
     }
     
 /*

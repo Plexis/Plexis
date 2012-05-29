@@ -279,6 +279,11 @@ class Auth
             
             // Now add the rest of the users information
             $this->session->set('user', array_merge($result, $data));
+            
+            // Fire the login event
+            load_class('Event')->fire('user_logged_in', array($data['id'], $username));
+            
+            // Return
             return TRUE;
         }
     }
@@ -369,10 +374,14 @@ class Auth
                 );
                 
                 // Try and insert into pcms_accounts table
-                if($this->DB->insert('pcms_accounts', $data))
-                {
-                    return $id;
-                }
+                $this->DB->insert('pcms_accounts', $data);
+                
+                // Fire the registration event
+                $event = array($id, $username, $password, $email, $this->remote_ip);
+                load_class('Event')->fire('user_registered', $event);
+                
+                // Return ID
+                return $id;
             }
             return FALSE;
         }
@@ -466,6 +475,13 @@ class Auth
 
     public function logout()
     {
+        // Load the currrent user
+        $user = $this->session->get('user');
+        
+        // Fire the login event
+        load_class('Event')->fire('user_logged_out', array($user['id'], $user['username']));
+        
+        // Destroy the session and re-load the user
         $this->session->destroy();
         $this->load_user();
     }

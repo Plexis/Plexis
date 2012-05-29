@@ -645,6 +645,17 @@ class Account extends Application\Core\Controller
                                 // Load the account model as it holds the code to change the password etc
                                 $result = $this->account->process_recovery($r_data['id'], $username, $r_data['email']);
                                 
+                                // Output our message
+                                if($result !== false)
+                                {
+                                    output_message('success', 'account_recover_pass_success', array($result));
+                                    load_class('Event')->fire('account_recovered', array($r_data['id']));
+                                }
+                                else
+                                {
+                                    output_message('error', 'account_recover_pass_failed');
+                                }
+                                
                                 // The message will be there if we whether we failed or succeded
                                 $this->load->view('blank');
                                 return;
@@ -776,6 +787,9 @@ class Account extends Application\Core\Controller
                                 }
                             }
                             
+                            // Fire the change password event
+                            load_class('Event')->fire('password_change', array($this->user['id'], $password));
+                            
                             // Inform the user the pass change was successfull
                             output_message('success', 'account_update_pass_success');
                             $this->load->view('blank');
@@ -865,6 +879,9 @@ class Account extends Application\Core\Controller
                                 $this->load->view('blank');
                                 return; 
                             }
+                            
+                            // Fire the change email event
+                            load_class('Event')->fire('email_change', array($this->user['id'], $old, $new));
                             
                             // If we are here, we have a success!
                             output_message('success', 'account_update_email_success');
