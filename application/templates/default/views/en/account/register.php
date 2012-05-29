@@ -5,7 +5,7 @@
         <div id="js-message" style="display:none"></div>
         
         <!-- Registration Form -->
-        <form id="register-form" method="post" action="{SITE_URL}/ajax/register">
+        <form id="register-form" method="post" action="{SITE_URL}/account/register">
             <input type="hidden" name="action" value="register" />
             <fieldset>
                 <div class="div-center">
