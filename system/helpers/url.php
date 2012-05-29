@@ -57,7 +57,7 @@ if(!function_exists('redirect'))
         if(!preg_match('@^(mailto|ftp|http(s)?)://@i', $url))
         {
             $info = load_class('Router')->get_url_info();
-            $url = $info['protocol'] .'://'. trim($info['site_url'], '/') .'/'. ltrim($url, '/');
+            $url = trim($info['site_url'], '/') .'/'. ltrim($url, '/');
         }
 
         // Check for refresh or straight redirect
