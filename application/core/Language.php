@@ -46,7 +46,7 @@ class Language
 */
     public function __construct()
     {
-        // Load the input and filesystem class
+        // Load the Input and Filesystem class'
         $this->Input = load_class('Input');
         $this->filesystem = load_class('Filesystem', 'Library');
         
@@ -54,7 +54,7 @@ class Language
         $this->scan_language_dirs();
         
         // Set the default language
-        $this->default_language = config('default_language');
+        $this->default_language = load_class('Config')->get('default_language');
 
         // Set the default Language
         $this->selected_language();

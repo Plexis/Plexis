@@ -20,6 +20,9 @@ class Session
 
     // Array of session data
     public $data = array();
+    
+    // Our config clas
+    protected $config;
 
     // Database / cookie info
     protected $session_use_db;
@@ -41,11 +44,14 @@ class Session
         // start the session
         $this->start_session();
         
+        // Load the config class
+        $this->config = load_class('Config');
+        
         // Get our DB information
-        $this->session_use_db = config('session_use_database', 'Core');
-        $this->session_db_id = config('session_database_id', 'Core');
-        $this->session_table_name = config('session_table_name', 'Core');
-        $this->session_cookie_name = config('session_cookie_name', 'Core');
+        $this->session_use_db = $this->config->get('session_use_database', 'Core');
+        $this->session_db_id = $this->config->get('session_database_id', 'Core');
+        $this->session_table_name = $this->config->get('session_table_name', 'Core');
+        $this->session_cookie_name = $this->config->get('session_cookie_name', 'Core');
         
         // Init the loader class
         $this->load = load_class('Loader');

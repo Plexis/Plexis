@@ -44,7 +44,7 @@ class Language
         $this->scan_language_dirs();
 
         // Set the default Language
-        $this->language = config('core_language', 'Core');
+        $this->language = load_class('Config')->get('core_language', 'Core');
     }
 
 /*

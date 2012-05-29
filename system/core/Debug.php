@@ -36,8 +36,8 @@ class Debug
     // Error Backtrace.
     protected $ErrorTrace;
     
-    // Do we log errors?.
-    protected $log_errors;
+    // Our log error level.
+    protected $log_level;
     
     // Our sites error level.
     protected $Environment;
@@ -45,11 +45,12 @@ class Debug
     // Silent Mode
     protected $silence = FALSE;
     
+    // Array of debug and system messages to be logged
+    protected $debug_logs = array();
+    protected $system_logs = array();
+    
     // Our URL info
     protected $url_info;
-    
-    // Our current language
-    protected $lang;
 
 /*
 | ---------------------------------------------------------------
@@ -61,7 +62,7 @@ class Debug
     {
         // Set our error reporting
         $this->config = load_class('Config');
-        $this->log_errors = $this->config->get('log_errors', 'Core');
+        $this->log_level = $this->config->get('log_level', 'Core');
         $this->Environment = $this->config->get('environment', 'Core');
         
         // Get our URL info
@@ -85,84 +86,44 @@ class Debug
 */
     public function trigger_error($errno, $message = '', $file = '', $line = 0, $backtrace = NULL)
     {
-        // Language setup
-        $this->lang = strtolower( $this->config->get('core_language', 'Core') );
-        
         // fill attributes
+        $this->ErrorLevel = $this->error_string($errno);
         $this->ErrorMessage = $message;
         $this->ErrorFile = $file; //str_replace(ROOT . DS, '', $file);
         $this->ErrorLine = $line;
         $this->ErrorTrace = $backtrace;
 
-        // Get our level text
+        // Get our severity
         switch($errno)
         {
-            case E_USER_ERROR:
-                $this->ErrorLevel = 'Error';
-                $severity = 2;
-                break;
-
-            case E_USER_WARNING:
-                $this->ErrorLevel = 'Warning';
-                $severity = 1;
-                break;
-                
-            case E_USER_NOTICE:
-                $this->ErrorLevel = 'Notice';
-                $severity = 1;
-                break;
-            
             case E_ERROR:
-                $this->ErrorLevel = 'Error';
+            case E_PARSE:
+            case E_USER_ERROR:
                 $severity = 2;
                 break;
-                
-            case E_WARNING:
-                $this->ErrorLevel = 'Warning';
-                $severity = 1;
-                break;
-                
-            case E_NOTICE:
-                $this->ErrorLevel = 'Notice';
-                $severity = 1;
-                break;
-                
-            case E_PARSE:
-                $this->ErrorLevel = 'Parse Error';
-                $severity = 3;
-                break;
-                
-            case E_DEPRECATED:
-                $this->ErrorLevel = 'Deprecated';
-                $severity = 1;
-                break;
 
+            case E_NOTICE:
+            case E_WARNING:
+            case E_DEPRECATED:
             case E_STRICT:
-                $this->ErrorLevel = 'Strict';
+            case E_USER_WARNING:    
+            case E_USER_NOTICE:
                 $severity = 1;
                 break;
 
             default:
-                $this->ErrorLevel = 'Fetal Error: ('.$errno.')';
                 $severity = 3;
                 break;
         }
         
+        // Log error based on error log level
+        if($this->log_level != 0) $this->log_error();
+        
         // If we are silent, then be silent
         if($severity == 3 || !$this->silence)
         {
-            // log error if enabled
-            if( $this->log_errors == 1 )
-            {
-                $this->log_error();
-            }
-            
             // Only build the error page when its fetal, or a development Env.
-            if( $this->Environment == 2 || $severity > 1 )
-            {
-                // build nice error page
-                $this->build_error_page();
-            }
+            if( $this->Environment == 2 || $severity > 1 ) $this->build_error_page();
         }
     }
     
@@ -185,14 +146,14 @@ class Debug
         $site_url = $this->url_info['site_url'];
         
         // See if there is a custom page in the app folder
-        $file = APP_PATH . DS . 'errors' . DS . $type .'.php';
+        $file = APP_PATH . DS . 'errors' . DS . 'error_'. $type .'.php';
         if(file_exists( $file ))
         {
             include($file);
         }
         else
         {
-            include(SYSTEM_PATH . DS . 'errors' . DS . $type .'.php');
+            include(SYSTEM_PATH . DS . 'errors' . DS . 'error_'. $type .'.php');
         }
         
         // Kill the script
@@ -207,7 +168,7 @@ class Debug
 | Logs the error message in the error log
 |
 */
-    protected function log_error()
+    protected function log_error($was_silenced = false)
     {
         // Get our site url
         $url = $this->url_info;
@@ -218,11 +179,12 @@ class Debug
         $err_message .= "| Message: ".$this->ErrorMessage . PHP_EOL; 
         $err_message .= "| Reporting File: ".$this->ErrorFile . PHP_EOL;
         $err_message .= "| Error Line: ".$this->ErrorLine . PHP_EOL;
+        $err_message .= "| Error Displayed: ". ($was_silenced == true) ? "No" : "Yes". PHP_EOL;
         $err_message .= "| URL When Error Occured: ". $url['site_url'] ."/". $url['uri'] . PHP_EOL;
         $err_message .= "--------------------------------------------------------------------". PHP_EOL . PHP_EOL;
 
         // Write in the log file, the very long message we made
-        $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'error.log', 'a');
+        $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'php_errors.log', 'a');
         @fwrite($log, $err_message);
         @fclose($log);
     }
@@ -232,18 +194,77 @@ class Debug
 | Function: log()
 | ---------------------------------------------------------------
 |
-| Logs a message in the debug.log
+| Logs a message for file writting
 |
 */
-    public function log($message, $filename = 'debug.log')
+    public function log($type, $message)
     {
-        // Create our log message
-        $log_message = "(".date('Y-m-d H:i:s') .") ".$message ."\n"; 
-
-        // Write in the log file, the very long message we made
-        $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . $filename, 'a');
-        @fwrite($log, $log_message);
-        @fclose($log);
+        // Determine if the user wants this logged
+        switch( $this->log_level )
+        {
+            case 0:
+                return;
+            case 1:
+                if($type != 'error') return;
+                break;
+            case 2:
+                if($type == 'info') return;
+                break;
+        }
+        
+        // Next get our filename
+        switch( strtolower($type) )
+        {
+            case "debug":
+                $this->debug_logs[] = " - ". $message; 
+                break;
+            case "info":
+            case "error":
+                $this->system_logs[] = "[".date('Y-m-d H:i:s') ."] ". ucfirst($type) .": ". $message ."\n"; 
+                break;
+            default:
+                return;
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: write_logs()
+| ---------------------------------------------------------------
+|
+| Writes the debug / system logs
+|
+*/
+    public function write_logs()
+    {
+        // Write debugging logs first
+        if(!empty($this->debug_logs))
+        {
+            $message = "Logging started at: ". date('Y-m-d H:i:s') . PHP_EOL;
+            $message .= implode( PHP_EOL, $this->debug_logs );
+            
+            // Write in the log file, the very long message we made
+            $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'debug.log', 'w');
+            if($log)
+            {
+                @fwrite($log, $message);
+                @fclose($log);
+            }
+        }
+        
+        // Write system logs first
+        if(!empty($this->system_logs))
+        {
+            $message = implode( PHP_EOL, $this->system_logs );
+            
+            // Write in the log file, the very long message we made
+            $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'system_logs.log', 'a');
+            if($log)
+            {
+                @fwrite($log, $message);
+                @fclose($log);
+            }
+        }
     }
     
 /*
@@ -278,29 +299,14 @@ class Debug
         
         // Capture the orig_settingslate using Output Buffering, file depends on Environment
         ob_start();
-            if($this->Environment == 1)
+            $file = APP_PATH . DS . 'errors' . DS . 'general_error.php';
+            if(file_exists($file))
             {
-                $file = APP_PATH . DS . 'errors' . DS . 'basic_error.php';
-                if(file_exists($file))
-                {
-                    include($file);
-                }
-                else
-                {
-                    include(SYSTEM_PATH . DS . 'pages' . DS . 'basic_error.php');
-                }
+                include($file);
             }
             else
             {
-                $file = APP_PATH . DS . 'errors' . DS . 'detailed_error.php';
-                if(file_exists($file))
-                {
-                    include($file);
-                }
-                else
-                {
-                    include(SYSTEM_PATH . DS . 'errors' . DS . 'detailed_error.php');
-                }
+                include(SYSTEM_PATH . DS . 'errors' . DS . 'general_error.php');
             }
             $page = ob_get_contents();
         @ob_end_clean();
@@ -368,6 +374,24 @@ class Debug
         // Spit the page out
         echo $page;
         die();
+    }
+    
+    public function error_string($level)
+    {
+        switch($level)
+        {
+            case E_ERROR: $string = 'PHP Error'; break;
+            case E_PARSE: $string = 'Parse Error'; break;
+            case E_USER_ERROR: $string = 'PHP Error'; break;
+            case E_NOTICE:  $string = 'PHP Notice'; break;
+            case E_WARNING: $string = 'PHP Warning'; break;
+            case E_DEPRECATED: $string = 'Depreciated'; break;
+            case E_STRICT:  $string = 'PHP Strict'; break;
+            case E_USER_WARNING: $string = 'PHP Warning'; break;
+            case E_USER_NOTICE: $string = 'PHP Notice'; break;
+            default: $string = 'PHP Fetal Error ['. $level .']'; break;
+        }
+        return $string;
     }
 
 /*

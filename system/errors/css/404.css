@@ -1,0 +1,57 @@
+html {
+   min-height: 100%;
+}
+body
+{
+	background: #454545;
+	padding: 30px;
+	margin: 0;
+    
+    /* IE10 */ 
+    background-image: -ms-radial-gradient(center top, circle closest-corner, #757575 0%, #454545 100%);
+    /* Mozilla Firefox */ 
+    background-image: -moz-radial-gradient(center top, circle closest-corner, #757575 0%, #454545 100%);
+    /* Opera */ 
+    background-image: -o-radial-gradient(center top, circle closest-corner, #757575 0%, #454545 100%);
+    /* Webkit (Safari/Chrome 10) */ 
+    background-image: -webkit-gradient(radial, center top, 0, center top, 490, color-stop(0, #757575), color-stop(1, #454545));
+    /* Webkit (Chrome 11+) */ 
+    background-image: -webkit-radial-gradient(center top, circle closest-corner, #757575 0%, #454545 100%);
+    /* Proposed W3C Markup */ 
+    background-image: radial-gradient(center top, circle closest-corner, #757575 0%, #454545 100%);
+}
+#container {
+    margin: auto;
+	width: 800px;
+    text-align: center;
+}
+#error-number h1 {
+	color:#FFFFFF;
+	font-size: 200px;
+    font-weight: 900;
+	text-shadow: 0 1px 0 #ccc,
+	0 2px 0 #c9c9c9,
+	0 3px 0 #bbb,
+	0 4px 0 #b9b9b9,
+	0 5px 0 #aaa,
+	0 6px 1px rgba(0,0,0,.1),
+	0 0 5px rgba(0,0,0,.1),
+	0 1px 3px rgba(0,0,0,.3),
+	0 3px 5px rgba(0,0,0,.2),
+	0 5px 10px rgba(0,0,0,.25),
+	0 10px 10px rgba(0,0,0,.2),
+	0 20px 20px rgba(0,0,0,.15);
+    line-height: 20px;
+}
+#message {
+    color: #f8f8f8;
+    text-shadow: 1px 2px 2px #200404;
+	margin:10px;
+	font-size: 16px;
+}
+#links {
+	padding-top: 3px;
+	margin:10px;
+	text-align: center;
+	font-size: 12px;
+}
