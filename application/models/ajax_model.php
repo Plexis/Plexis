@@ -106,7 +106,7 @@ class Ajax_Model extends Application\Core\Model
                 $data[$key] = $value;
                 
                 // Fire change email event if changed
-                if($key => 'email') load_class('Event')->fire('email_change', array($id, $user['email'], $value));
+                if($key == 'email') load_class('Event')->fire('email_change', array($id, $user['email'], $value));
             }
         }
         
