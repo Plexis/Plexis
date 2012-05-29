@@ -70,7 +70,7 @@ class Controller extends \System\Core\Controller
         
         // Fire the controller event
         $this->Event = load_class('Event');
-        $this->Event->fire('controller_init');
+        $this->Event->trigger('controller_init');
     }
     
 /*

@@ -24,19 +24,22 @@ class Event
 {
 	// Static array of events, and handlers
 	protected static $events = array(); 
+    
+    // To be removed
+    public function fire() {}
 
 /*
 | ---------------------------------------------------------------
-| Method: fire()
+| Method: trigger()
 | ---------------------------------------------------------------
 |
-| This method fires an event
+| This method triggers an event
 |
 | @Param: (String) $event - Name of the event to be fired
 | @Param: (Array) $params - An array of params to be passed
 |
 */
-	public function fire($event, $params = array())
+	public function trigger($event, $params = array())
 	{	
 		if(array_key_exists($event, self::$events))
 		{

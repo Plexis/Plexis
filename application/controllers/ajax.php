@@ -120,7 +120,7 @@ class Ajax extends Application\Core\Controller
                     $result = $this->model->submit($this->user['id'], $_POST['site_id']);
                     if($result == TRUE)
                     {
-                        load_class('Event')->fire('user_voted', array($this->user['id'], $_POST['site_id']));
+                        load_class('Event')->trigger('user_voted', array($this->user['id'], $_POST['site_id']));
                         $this->output(true, 'vote_submit_success');
                     }
                     else
