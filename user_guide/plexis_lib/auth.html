@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Auth Class :: Plexis CMS Documentation</title>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Plexis CMS</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Auth Class</h1>
+	<p>
+		The Auth class is the main class in dealing with users. It handles Sessions, Logging in, Logging out, Registering new accounts, and fetching a users permissions.
+	</p>
+    
+    <!-- Loading the auth class -->
+	<h2>Loading the Auth class</h2>
+	<p>
+		Once the controller is initialized, this class is automatically loaded, constructed, and the load_user() function is ran
+	</p>
+	<code>
+		$this->Auth = $this->load->library('Auth');<br />
+	</code>
+	<!-- End Loading the auth class -->
+
+	<!-- Loggin In -->
+	<h2>Loggin In</h2>
+	<p>To log a user in, run this code:</p>
+	<code>
+		$this->Auth->login('<var>$username</var>', '<var>$password</var>');
+	</code>
+	
+	<h5><u>Arguments:</u></h5>
+	<p>
+        <ol>
+            <li><var>$username</var> [Type: String]: The username of the account</li>
+            <li><var>$password</var> [Type: String]: The clean, un-encrypted password to the account.</li>
+        </ol>
+    </p>
+	
+	<!-- Logging Out -->
+	<h2>Logging Out</h2>
+	<p>Tho log a user out:</p>
+	<code>
+		$this->Auth->logout();
+	</code>
+	
+	<!-- Register -->
+	<h2>Registering a new account</h2>
+	<p>To register a new account, run:</p>
+	<code>
+		$this->Auth->register('<var>$username</var>', '<var>$password</var>', '<var>$email</var>', '<dfn>$secret_question</dfn>', '<dfn>$secret_answer</dfn>');
+	</code>
+	
+	<h5><u>Arguments:</u></h5>
+	<p>
+        <ol>
+            <li><var>$username</var> [Type: String]: The username of the account</li>
+            <li><var>$password</var> [Type: String]: The clean, un-encrypted password to the account.</li>
+            <li><var>$email</var> [Type: String]: The email address tied to this account</li>
+            <li><dfn>$secret_question</dfn> [Type: Int]: The secret question array key (from the secret_questions.php language file)</li>
+            <li><dfn>$secret_answer</dfn> [Type: String]: The secret question answer</li>
+        </ol>
+    </p>
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<!-- Next Topic:&nbsp;&nbsp;<a href="config.html">Config Class</a> -->
+	</p>
+	<p>Original Template Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>

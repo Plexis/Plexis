@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Input Class :: Frostbite Framework Documentation</title>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Frostbite Framework</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Input Class</h1>
+
+	<p>
+		The input class makes it easy to interact with data the user has sent over the web, such as POST and COOKIE data. This class can also get the users IP address as well as
+		what browser the user is using. The Input class is mainly used in the session class, but can be initiated and used manually.
+	</p>
+	
+	<!-- Initalizing -->
+	<h2>Initializing the Input Class</h2>
+	<p>
+		By default, the seInput class is not initiated, so you will need to set that up manually or enable in the config to autoload the class. To load the Input class:
+	</p>
+	<code>
+		$this->input = load_class('Input');
+	</code>
+	
+	<!-- POST -->
+	<h2>Getting a POST variable</h2>
+	<p>
+		Once the Input class is loaded, you can use this method below to access $_POST data
+	</p>
+	<code>
+		$var = $this->input->post('<var>$key</var>', '<dfn>$sanatize</dfn>');
+	</code>
+	
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<var>$key</var> [Type: String]: This is the name of the post variable you are trying to get.<br />
+		<dfn>$sanatize</dfn> [Type: Bool, Default: FALSE]: Use the XSS filter to sanatize the data?<br />
+	</p>
+	
+	<!-- COOKIE -->
+	<h2>Reading cookie data</h2>
+	<p>
+		You can use this method below to read users cookie data:
+	</p>
+	<code>
+		$var = $this->input->cookie('<var>$key</var>', '<dfn>$sanatize</dfn>');
+	</code>
+	
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<var>$key</var> [Type: String]: This is the name of the cookie you are reading information from.<br />
+		<dfn>$sanatize</dfn> [Type: Bool, Default: FALSE]: Use the XSS filter to sanatize the data?<br />
+	</p>
+
+	<!-- Setting a COOKIE -->
+	<h2>Setting a cookie</h2>
+	<p>
+		You can use this method below to set cookies on the users machine and store data for a later time:
+	</p>
+	<code>
+		$this->input->set_cookie('<var>$name</var>', '<var>$data</var>', '<dfn>$expiration</dfn>');
+	</code>
+	
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<var>$name</var> [Type: String]: This is the name of the cookie you are setting.<br />
+		<var>$data</var> [Type: String]: The data you are storing in the cookie<br />
+		<dfn>$expiration</dfn> [Type: Int, Default: (60 * 60 * 24 * 365)]: This is the expiration time in seconds, of when the cookie will expire. Default is one year.<br />
+	</p>
+	
+	<!-- Browser Info -->
+	<h2>Users Agent / Browser Information</h2>
+	<p>
+		It is possible to determine which internet browser and operating system the user is using by using the method below:
+	</p>
+	<code>
+		$var = $this->input->user_agent();
+	</code>
+	
+	<!-- IP Address -->
+	<h2>Users IP Address</h2>
+	<p>
+		To determine the users IP adress, you can use the following information:
+	</p>
+	<code>
+		$var = $this->input->ip_address();
+	</code>
+	
+	<!-- Setting XSS Rules -->
+	<h2>Setting XSS Filter Rules</h2>
+	<p>
+		The XSS filter is a flexable Tag remover. It removes tags such as < script >, and < ?php . There is a whole blacklist of tags that can be removed. When you set rules for the filter,
+		it allows you to override the blacklist and keep tags that you specify, and even skip the blacklist all together, and just filter the tags you sepcify. It is a very flexable system.
+		Below we will go over some examples:
+	</p>
+	<code>
+		$var = $this->input->set_rules(<dfn>$tags</dfn>, <dfn>$attributes</dfn>, <dfn>$tag_method</dfn>, <dfn>$attr_method</dfn>, <dfn>$use_blacklist</dfn>);
+	</code>
+	
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<dfn>$tags</dfn> [Type: Array, Default: empty Array]: Depending on the method, this is an array of which tags you want to filter, or keep<br />
+		<dfn>$attributes</dfn> [Type: Array, Default: empty Array]: Depending on the method, this is an array of which attributes you want to filter, or keep<br />
+		<dfn>$tag_method</dfn> - <var>0</var> = remove ALL BUT these <dfn>$tags</dfn> (default), <var>1</var> = remove ONLY these <dfn>$tags</dfn><br />
+		<dfn>$attr_method</dfn> - <var>0</var> = remove ALL BUT these <dfn>$attributes</dfn> (default), <var>1</var> = remove ONLY these <dfn>$attributes</dfn><br />
+		<dfn>$use_blacklist</dfn> [Type: Int, Default: 0]: Do we use the blacklist at all?
+	</p>
+	<p class="important">Note that none of these arguments are needed. You can reset the defaults just by going $this->input->set_rules(); </p>
+
+	<!-- Clean -->
+	<h2>Cleaning data Manually</h2>
+	<p>
+		You can manualy run arrays and strings directly into the InputFilter. Once you load the Input class, just run this code below. The InputFilter will string
+		all dangerous code that can be harmful to your site. <var>$content</var> is the contents you want cleaned.
+	</p>
+	<p class="important">Reminder: You do not need to clean Cookie & Post data manually, as there is an option to do it automatically, Look above ^^</p>
+	<code>
+		$var = $this->input->clean('<var>$content</var>');
+	</code>
+	
+	<!-- Checking data -->
+	<h2>Checking basic inputs for dirty code</h2>
+	<p>
+		This method can be used to validate input data, and determine if there is illegal characters. There are 3 different types
+		<ul>
+			<li>BASIC: Checks to see if the inputed text and numbers ONLY</li>
+			<li>DATE: Will determine if the inputted text is in date format( 12/12/2012 )</li>
+			<li>EMAIL: Checks to see if the inputed text is in an email format</li>
+		</ul>
+		This method will return <font color='blue'>TRUE</font> if the contents are clean and in a good format, <font color='blue'>FALSE</font> otherwise.
+	</p>
+	<code>
+		$var = $this->input->is_clean('<var>$content</var>', '<dfn>$type</dfn>');
+	</code>
+	
+	<h5><u>Arguments:</u></h5>
+	<p> 
+		<var>$content</var> [Type: String]: The content you are verifying.<br />
+		<dfn>$type</dfn> [Type: String, Default: "BASIC"]: One of the 3 types mentioned above.<br />
+	</p>
+	
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		Previous Topic:&nbsp;&nbsp;<a href="database.html">Database Class</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		Next Topic:&nbsp;&nbsp;<a href="loader.html">Loader Class</a>
+	</p>
+	<p>Original Template Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Frostbite Framework Documentation</title>
+
+	<style type='text/css' media='all'>@import url('./userguide.css');</style>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Frostbite Framework</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Config Class</h1>
+
+	<p>
+		The config class handles different config files and variables. The site config (config.php), The core config (core.config), The database config (database.config.php), 
+		and the module config if A) We are loding a module and B) The config file exists. Are all loaded by default at the start of the frostbite framework.
+	</p>
+	
+	<p class="important"><strong>Note:</strong>&nbsp; Be sure to check out the "Common functions" section. There are easy to use functions to handle config files and variables.</p>
+
+	<p>Features:</p>
+	<ul>
+		<li>Allows saving of site config variables to the config files. Note that doing this will remove any and all comment from the file.</li>
+		<li>Can load as many config files as needed, and all variables will be in seperate containers to prevent overriding.</li>
+	</ul>
+
+	
+	<!-- Loading the config class -->
+	<h2>Loading the Config class</h2>
+	<p>
+		If you need to access the function manually, you will do so like below. Please note that load_class() is the default way of loading Core Classes... but you can use the loader.
+	</p>
+	<code>
+		$this->config = load_class('Config');<br />
+	</code>
+	<!-- End Loading the config class -->
+	
+	
+	<!-- Loading a config file -->
+	<h2>Loading a new config file</h2>
+	<p>
+		You can load as many config files as you please using this method below
+	</p>
+	<code>
+		$this->config->load('<var>$file_path</var>', '<var>$container_name</var>', '<dfn>$array_key</dfn>');<br />
+	</code>
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<ol>
+			<li>
+				<var>$file_path</var> [Type: String]: This is the full path from the system root to the config file. File name and extension must be included.
+			</li>
+			<li>
+				<var>$container_name</var> [Type: String]: This is the container key, that holds the config variables for a this config file. Must be unique. It will 
+				be needed to get config variables from this config file.
+			</li>
+			<li>
+				<dfn>$array_key</dfn> [Type: String]: If the config variables are stored in an array, then this is the variable name that the array is stored into.
+			</li>
+		</ol>
+	</p>
+	<!-- End Loading a config file -->
+
+	
+	<!-- Getting a Variable -->
+	<h2>Getting a variable from the a config file</h2>
+	<p>The method below will show you how to get a config variable. The default container names are <var>"app"</var> (config.php), <var>"core"</var> (core.config.php), 
+		<var>"db"</var> (database.config.php), and If there is a module, default is <var>"mod"</var>
+	<code>
+		$this->config->get('<var>$var_name</var>', '<dfn>$container_name</dfn>');
+	</code>
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<ol>
+			<li>
+				<var>$var_name</var> [Type: String]: The variable key that is stored in the config file. (Ex: data, would be "$data" in the config file). Also, if the config options are stored
+				in an array, then it would be the key in the array (Ex: data, would be "$config['data']).
+			</li>
+			<li>
+				<dfn>$container_name</dfn> [Type: String]: Default "App" - This is the container key, that holds the config options for a particular config file. Each file has its own container.
+			</li>
+		</ol>
+	</p>
+	<!-- End getting a variable -->
+    
+    <!-- Getting all Variables -->
+	<h2>Getting all variable from the a config file</h2>
+	<p>The method below will show you how to get an array of all the config variables. The default container names are <var>"app"</var> (config.php), <var>"core"</var> (core.config.php), 
+		<var>"db"</var> (database.config.php), and If there is a module, default is <var>"mod"</var>
+	<code>
+		$array = $this->config->get_all('<dfn>$container_name</dfn>');
+	</code>
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<ol>
+			<li>
+				<dfn>$container_name</dfn> [Type: String]: Default "App" - This is the container key, that holds the config options for a particular config file. Each file has its own container.
+			</li>
+		</ol>
+	</p>
+	<!-- End getting all variables -->
+
+	
+	<!-- Setting a variable -->
+	<h2>Setting a variable</h2>
+	<code>
+		$this->config->set('<var>$var_name</var>', '<var>$new_value</var>', '<dfn>$container_name</dfn>');
+	</code>
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<ol>
+			<li>
+				<var>$var_name</var> [Type: String]: The variable key that is stored in the config file. (Ex: data, would be "$data" in the config file). Also, if the config options are stored
+				in an array, then it would be the key in the array (Ex: data, would be "$config['data']).
+			</li>
+			<li>
+				<var>$new_value</var> [Type: Mixed]: The new value of <var>$var_name</var>
+			</li>
+			<li>
+				<dfn>$container_name</dfn> [Type: String]: Default "App" - The container name that holds the <var>$var_name</var> that we are setting to value <var>$new_value</var>
+			</li>
+		</ol>
+	</p>
+	<!-- End Setting a variable -->
+	
+	
+	<!-- Saving -->
+	<h2>Saving all set config variables to the config file</h2>
+	<p>This method will save all the current variables and values in the containers config file.</p>
+	<p class="important"><strong>Note:</strong>&nbsp; Saving to a config file WILL remove all comments and special formatting you may have used.</p>
+	<code>
+		$this->config->save('<var>$container_name</var>);
+	</code>
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<ol>
+			<li>
+				<var>$container_name</var> [Type: String]: The container name that holds the variables we are saving. The filename and path are stored locally, so you dont need to provide this info
+			</li>
+		</ol>
+	</p>
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		Previous Topic:&nbsp;&nbsp;<a href="benchmark.html">Benchmark Class</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		Next Topic:&nbsp;&nbsp;<a href="database.html">Database Class</a>
+	</p>
+	<p>Original Template Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>

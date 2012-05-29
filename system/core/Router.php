@@ -38,7 +38,7 @@ class Router
     protected $site_dir;
     
     // Our controller name
-    protected $controler;
+    protected $controller;
 
     // Our action (sub page)
     protected $action;
@@ -57,9 +57,6 @@ class Router
         // Load the config and input class'
         $this->config = load_class('Config');
         $this->input = load_class('Input');
-        
-        // Start off by routing this thing
-        $this->route_url();
     }
 
 /*
@@ -73,7 +70,7 @@ class Router
 | @Return (Array) Returns an array of controller, action and queryString
 |
 */
-    protected function route_url() 
+    public function route_url() 
     {
         // Determine our http hostname, and site directory
         $this->http_host = rtrim($_SERVER['HTTP_HOST'], '/');

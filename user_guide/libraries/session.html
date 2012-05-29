@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Session Class :: Frostbite Framework Documentation</title>
+
+	<style type='text/css' media='all'>@import url('./userguide.css');</style>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Frostbite Framework</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Session Class</h1>
+
+	<p>
+		The session class makes it easier to manage users login session information, and is more secure as it does not use the $_SESSION global. All session information is stored in the
+		database for easy and secure reach. If you have the session Database turned off, then session data will be serialized and stored in a file.
+	</p>
+	
+	<!-- Initalizing -->
+	<h2>Initializing the Session Class</h2>
+	<p>
+		By default, the session class is not initiated, so you will need to set that up manually or enable in the config to autoload the class. Once loaded, the session class will set itself up automatically, 
+		so there isnt much you need to do. All you have to do is use the loader to load the session like so:
+	</p>
+	<code>
+		$this->load->library('Session'); 
+	</code>
+	
+	
+	<!-- Class Variables -->
+	<h2>Public class variables</h2>
+	<p>
+		There are a few variables within the Session Class that can be accessed from the outside
+	</p>	
+	<p>
+		<!-- variable: statistics -->
+		<h3>$data</h3>
+		<p>The data variable is an array of variables you have set using the "set" method. <i>(Type: Array)</i></p>
+		<code>
+			Format: $data = array( 'key' => '<i>value</i>', 'key2' => '<i>value2</i>' ... etc etc);<br />
+			Access: $session_data = $this->session->data;
+		</code>
+		<!-- END variable: statistics -->
+	</p>
+	
+	
+	<!-- Setting -->
+	<h2>Setting a session variable</h2>
+	<p>
+		Once the session is loaded, you will most likely want and need to set some session variables, such as a username etc etc. Here is how you do that:
+	</p>
+	<code>
+		$this->session->set('<var>$key</var>', '<var>$value</var>');
+	</code>
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<ol>
+			<li>
+				<var>$key</var> [Type: String]: This is the name of the value your setting, such as "username = $value", the $key in this example is "username".<br />
+			</li>
+			<li>
+				<var>$value</var> [Type: Mixed]: This is value you are setting to your key.
+			</li>
+		</ol>
+	</p>
+	
+	<!-- Getting -->
+	<h2>Fetching a session variable</h2>
+	<p>
+		Once you have set some session variables, you will probablily need to access one of those variables later on. This is how you do that:
+	</p>
+	<code>
+		$var = $this->session->get('<var>$key</var>');
+	</code>
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<ol>
+			<li>
+				<var>$key</var> [Type: String]: This is the name of the value your getting.<br />
+			</li>
+		</ol>
+	</p>
+	
+	<!-- Saving -->
+	<h2>Saving / Updating your Session</h2>
+	<p>
+		Once you have all your session data set up, you will need to save it to the database and cookie. If session data already exists, then it will update where needed. This is how you 
+		save your session once all the data is set.
+	</p>
+	<code>
+		$this->session->save();
+	</code>
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		Previous Topic:&nbsp;&nbsp;<a href="#"> -- </a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		Next Topic:&nbsp;&nbsp;<a href="#"> -- </a>
+	</p>
+	<p>Original Template Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>

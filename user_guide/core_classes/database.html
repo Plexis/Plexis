@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Database Class :: Frostbite Framework Documentation</title>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Frostbite Framework</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Database Class</h1>
+	<p>
+		The Database class is there to make querying the database much easier. The database class is an extension to the powerful <a href='http://www.php.net/manual/en/book.pdo.php'>
+		PHP PDO </a> library. You can use straight PDO methods (except "query") if you prefer, or use the etended (easier) methods. Be sure to also check the 
+		"Libraries -> Querybuilder" section. The querybuilder makes it really simple to build sql statments that can be passed into the database query method.
+	</p>
+
+	
+	<!-- Connection -->
+	<h2>Using the loader to establish a Database Connection</h2>
+	<p>
+		Before you establish a database connection, you need to enter the connection info in the "Application/config/database.config.php" file.
+		Below is an example of how to configure your DB connection:
+	</p>
+	<pre>
+		$DB_configs = array( 
+			'<var>$config_key</var>' => array(
+				'driver'	=> 'The database type' (Ex: mysql, sqlite. <a href='http://www.php.net/manual/en/pdo.drivers.php'>List of supported drivers</a>)
+				'hostname'	=> 'host IP';
+				'port'		=> 'mysql port #';
+				'username'	=> 'database username';
+				'password'	=> 'database password';
+				'database'	=> 'name of the database';
+			),
+			'<var>$config_key2</var>' => array(
+				'hostname' => .....
+		);
+	</pre>
+	<p>
+		Now below, this how we load that very connection:
+		<code>
+			$connection = $this->load->database('<var>$config_key</var>', '<dfn>$instance</dfn>');
+		</code>
+	</p>
+	<h5><u>Arguments:</u></h5>
+	<p>
+		<ol>
+			<li>
+				<var>$config_key</var> [Type: String or Array]: The array key containing your connection information. You may also manually pass the database connectoin array here.
+			</li>
+			<li>
+				<dfn>$instance</dfn> [Type: String, Default: FALSE]: Do we instance this connection in the controller super object?
+			</li>
+		</ol>
+	</p>	
+	<p class="important">
+		<kbd>NOTE:</kbd> If <dfn>$instance</dfn>
+		is set to <font color='blue'><b>TRUE</b></font>, then <var>$connection = </var> is <b>NOT</b> needed as it will be instanced as "$this->$config_key" UNLESS you are using it outside the
+		controller.
+	</p>
+	<!-- END Connection -->
+	
+	
+	<!-- Class Variables -->
+	<h2>Public class variables</h2>
+	<p>
+		There are aone variable within the Database Driver that can be accessed from the outside
+	</p>	
+	<p>
+		<!-- variable: result -->
+		<h3>$result</h3>
+		<p>This is the current result object from the last query. You can chain off the result variable and access the PDO mehtods inside ( Ex: $connection->result->rowCount() ). <i>(Type: Object)</i></p>
+		<code>
+			Format: $result = '<i>Result Object</i>'<br />
+			Access: $name = $connection->result;
+		</code>
+		<!-- END variable: result -->
+	</p>		
+	<!-- End Variables -->
+	
+	
+	<!-- Querying the DB -->
+	<h2>Querying the Database</h2>
+	<p>
+		There are mulitple ways of quering the database. You can use <a hre='http://www.php.net/manual/en/pdo.exec.php'>PDO's exec method</a>
+		( $connection->exec($query) ), <a href='http://www.php.net/manual/en/pdo.prepare.php'>PDO's Prepare / execute method</a> ( $object = $connection->prepare($query) ), 
+		or the built in methods shown below. Please note that if you use PDO's prepare / execute methods, The database class will be unable to get statistics on your queries.
+	</p>
+	
+		<!-- query: query -->
+		<h3>query()</h3>
+		Instanced:
+		<code>
+			$this-><var>$database_key</var>->query('<var>$query</var>', '<dfn>$replacements</dfn>');<br />
+		</code>
+		
+		Not - Instanced:
+		<code>
+			$connection->query('<var>$query</var>', '<dfn>$replacements</dfn>');<br />
+		</code>	
+		<h5><u>Arguments:</u></h5>
+		<p>
+			<ol>
+				<li>
+					<var>$database_key</var> [Type: String]: The same as the <var>$config_key</var> in the Connection example.
+				</li>
+				<li>
+					<var>$query</var> [Type: String]: The query you are putting the in the Database.
+				</li>
+				<li>
+					<dfn>$replacements</dfn> [Type: Array]: An array of replacments of the "?" 's or ":var" 's. These "$key => $value" 's will be used in $PDO->bindParam($key, $value);
+				</li>
+			</ol>
+		</p>
+		<!-- END query: query -->
+		
+		<br />
+		<!-- query: insert -->
+		<h3>insert()</h3>
+		<p>This method makes it easy to insert data into the database.</p>
+		<code>
+			$connection->insert('<var>$table</var>', '<var>$data</var>');
+		</code>
+		<h5><u>Arguments:</u></h5>
+		<p>
+			<ol>
+				<li>
+					<var>$table</var> [Type: String]: The table name we are inserting into.
+				</li>
+				<li>
+					<var>$data</var> [Type: Array]: An array of ( $coloumn_name => $column_value ).
+				</li>
+			</ol>
+		</p>
+		<!-- END query: insert -->
+		
+		<br />
+		<!-- query: update -->
+		<h3>update()</h3>
+		<p>This method makes it easy to update data in the database.</p>
+		<code>
+			$connection->update('<var>$table</var>', '<var>$data</var>', '<var>$where</var>');
+		</code>
+		<h5><u>Arguments:</u></h5>
+		<p>
+			<ol>
+				<li>
+					<var>$table</var>[Type: String]: The table name we are updating.
+				</li>
+				<li>
+					<var>$data</var> [Type: Array]: An array of ( $coloumn_name => $column_value ).
+				</li>
+				<li>
+					<var>$where</var> [Type: String]: A string of the WHERE clause. ( "'token' = 'value'" ). Remember to escape your single qoutes( \' )!
+				</li>
+			</ol>
+		</p>
+		<!-- END query: update -->
+		
+		<br />
+		<!-- query: delete -->
+		<h3>delete()</h3>
+		<p>This method makes it easy to delete data in the database.</p>
+		<code>
+			$connection->delete('<var>$table</var>', '<var>$where</var>');
+		</code>
+		<h5><u>Arguments:</u></h5>
+		<p>
+			<ol>
+				<li>
+					<var>$table</var> [Type: String]: The table name we are deleting into.
+				</li>
+				<li>
+					<var>$where</var> [Type: String]: A string of the WHERE clause. ( "'token' = 'value'" ). Remember to escape your qoutes( \' )!
+				</li>
+			</ol>
+		</p>
+		<!-- END query: update -->
+		
+	<!-- END Querying -->
+	
+	
+	<!-- Fetching Results -->
+	<h2>Fetching Results</h2>
+	<p>
+		There is actually 2 ways of getting results from the query
+	</p>
+	
+		<!-- Fetch_array() -->
+		<h3>fetch_array()</h3>
+		<p>This method is great when using a Select statement and expect multiple rows of data.</p>
+		<code>
+			$result = $connection->fetch_array('<dfn>$type</dfn>');
+		</code>
+		<h5><u>Arguments:</u></h5>
+		<p>
+			<ol>
+				<li>
+					<dfn>$type</dfn> [Type: String, Default: "ASSOC"]: This is the return type of the array. It uses the same constants as the PDO fetch() method
+					( <a href='http://www.php.net/manual/en/pdostatement.fetch.php'>Php PDO::Fetch</a> ). Just remember you just need the end of the fetch 
+					constant name ( PDO::FETCH_* ). For example: to use PDO::FECTH_BOTH, you query like this: $connection->fetch_array('BOTH'); <dfn>$type</dfn>
+					is not case sensitive.
+				</li>
+			</ol>
+		</p>
+		<!-- END Fetch_array -->
+		
+		<!-- Fetch_column() -->
+		<h3>fetch_column()</h3>
+		<p>This method is perfect for COUNT() queries or queries where you need just need 1 value from a single cell.</p>
+		<code>
+			$result = $connection->fetch_column();
+		</code>
+		<!-- END Fetch_column() -->
+	
+	<!-- END Fetching results -->
+
+	
+	<!-- Num Rows -->
+	<h2>Getting the number of rows</h2>
+	<p>
+		This method is quite unique. It will return the number of affected rows from the last Delete/Update/Insert query, or return the number (count) of rows
+		in the last queries result array, depending on the type of query.
+	</p>
+	<code>
+		$connection->num_rows();
+	</code>
+	<!-- END Num Rows -->
+	
+	<!-- Insert ID -->
+	<h2>Getting the last insert id</h2>
+	<p>
+		This method will return the insert id of the last Insert. Equivelant to mysql_insert_id()
+	</p>
+	<code>
+		$connection->last_insert_id('<dfn>$name</dfn>');
+	</code>
+	<h5><u>Arguments:</u></h5>
+		<p>
+			<ol>
+				<li>
+					<dfn>$name</dfn> [Type: String]: Default = NULL - this only applies If using a Postgre database. Please read more here
+					( <a href='http://www.php.net/manual/en/pdo.lastinsertid.php'>Php PDO::lastInsertId</a> )
+				</li>
+			</ol>
+		</p>
+	<!-- END Insert ID -->
+    
+    <!-- Getting Statistics -->
+	<h2>Getting DB statistics</h2>
+	<p>
+		Returns an array of statistics for the current connection. (Format: array('total_queries', 'total_time'))
+	</p>
+	<code>
+		$connection->statistics();
+	</code>
+	<!-- END Getting Statistics -->
+    
+    <!-- Resetting -->
+	<h2>Reseting DB statistics</h2>
+	<p>
+		The frostbite database drivers keep an array of all the queries, as well as benchmarks while the script is loading. At any given time you can call the
+		reset() method to reset the statistics.
+	</p>
+	<code>
+		$connection->reset();
+	</code>
+	<!-- END Resetting -->
+    
+    <!-- Getting Queries -->
+	<h2>Getting all queuries</h2>
+	<p>
+		Returns an array of all the queries ran on the current connection. (Format: array( $key => array('time', 'query')))
+	</p>
+	<code>
+		$connection->get_all_queries();
+	</code>
+	<!-- END Getting Queries -->
+
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		Previous Topic:&nbsp;&nbsp;<a href="config.html">Config Class</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		Next Topic:&nbsp;&nbsp;<a href="input.html">Input Class</a>
+	</p>
+	<p>Original Template Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>

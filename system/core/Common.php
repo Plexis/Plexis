@@ -36,7 +36,7 @@
             // Failed to load class all together.
             show_error('autoload_failed', array( addslashes($className) ), E_ERROR);
         }
-        require $file;
+        require_once $file;
     }
     
 /*
@@ -109,7 +109,7 @@
         }
 
         // Include our file. If it doesnt exists, class is un-obtainable.
-        require($file);
+        require $file;
 
         //  Initiate the new class into a variable
         try{

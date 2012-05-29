@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Views :: Frostbite Framework Documentation</title>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Frostbite Framework</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Views</h1>
+	<p>
+		A view is basically a webpage full of html code and things of that sort. You can embed views inside of views if you wish. Views are never accessed directly via the url as 
+		the controller is responsible for loading the view.
+	</p>
+	
+	<!-- Creating -->
+	<h2>Creating a View</h2>
+	<p>
+		Using the example controller in the <a href='controllers.html'>controller</a> page, we are going to make a view for it.
+		<pre>
+&lt;html>
+&lt;head>
+	&lt;title>My View File&lt;/title>
+&lt;/head>
+&lt;body>
+	&lt;div>Welcome to my view file!&lt;/div>
+&lt;/body>
+&lt;/html>
+		</pre>
+		
+		<ol>
+			<li>First, Create this file: "<dfn>application/views/test_page.php</dfn>"</li>
+			<li>Next, copy the code above and put it in your newly created file</li>
+			<li>Keep reading to find out how to load this view</li>
+		</ol>
+	</p>
+	
+	
+	
+	<!-- Loading -->
+	<h2>Loading a View</h2>
+	<p>
+		to load the view file we just created, you would do it like so:
+		<pre>
+public function index()
+{
+	$this->load->view('test_page'); 
+}
+		</pre>
+		
+		You can load multiple views at once if you wish like so:
+		<pre>
+public function index()
+{
+	$this->load->view('header'); 
+	$this->load->view('body');
+	$this->load->view('footer');
+}
+		</pre>
+		
+		Your view files can be stored in subfolders just like Models of you wish. They are called like this:
+		<code>$this->load->view('<var>folder</var>/<dfn>filename</dfn>');</code>
+	</p>
+	
+	
+	
+	<!-- Dynamic Data -->
+	<h2>Passing variables into the view file</h2>
+	<p>
+		Variables can be passed into the view by using an array. Look at the example below
+		<pre>
+public function index()
+{
+	$data['title'] = 'Testpage';
+	$data['body'] = 'It Works!';
+	
+	$this->load->view('test_page', $data);
+}
+		</pre>
+		
+		And here is what the view looks like:
+		
+		<pre>
+&lt;html>
+&lt;head>
+	&lt;title>&lt;?php echo $title; ?>&lt;/title>
+&lt;/head>
+&lt;body>
+	&lt;div>&lt;?php echo $body; ?>&lt;/div>
+&lt;/body>
+&lt;/html>
+		</pre>
+		
+		When the view is loaded into the browser, the php variables will be processed and replaced. You can do anything you want using php in these view files. You can do loops, objects, you name it.
+	</p>
+	
+	
+	
+	<!-- Returning -->
+	<h2>Returning the view as a String</h2>
+	<p>
+		There is a third variable that can be passed into the loader that tells it to return the page as a string, instead of sending it to the browser.
+		<code>$this->load->view('<var>index</var>', '', <samp>TRUE</samp>); </code>
+		
+		By default, this third param is set to <samp>FALSE</samp> and the page is passed to the browser for display.
+	</p>
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		Previous Topic:&nbsp;&nbsp;<a href="#"> -- </a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#">User Guide Home</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		Next Topic:&nbsp;&nbsp;<a href="flow_chart.html">Flow Chart</a>
+	</p>
+	<p>Original Template Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>
