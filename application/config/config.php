@@ -10,7 +10,6 @@ $default_template = 'default';
 $default_language = 'en';
 $emulator = 'trinity';
 $logon_server = '127.0.0.1';
-$enable_gzip_output = 1;
 $default_realm_id = 1;
 $allow_registration = 1;
 $reg_email_verification = 0;

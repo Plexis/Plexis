@@ -227,18 +227,27 @@ class Config
         // Loop through each var and write it
         foreach( $this->data[$name] as $key => $val )
         {
-            if(is_numeric($val)) 
+            switch( gettype($val) )
             {
-                $cfg .= "\$$key = " . $val . ";\n";
-            } 
-            elseif(is_array($val))
-            {
-                $val = var_export($val, TRUE);
-                $cfg .= "\$$key = " . $val . ";\n";
-            }
-            else
-            {
-                $cfg .= "\$$key = '" . addslashes( $val ) . "';\n";
+                case "boolean":
+                    $val = ($val == true) ? 'true' : 'false';
+                    // donot break
+                case "integer":
+                case "double":
+                case "float":
+                    $cfg .= "\$$key = " . $val . ";\n";
+                    break;
+                case "array":
+                    $val = var_export($val, TRUE);
+                    $cfg .= "\$$key = " . $val . ";\n";
+                    break;
+                case "NULL":
+                    $cfg .= "\$$key = null;\n";
+                    break;
+                case "string":
+                    $cfg .= (is_numeric($val)) ? "\$$key = " . $val . ";\n" : "\$$key = '" . addslashes( $val ) . "';\n";
+                    break;
+                default: break;
             }
         }
 

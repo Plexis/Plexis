@@ -129,8 +129,8 @@ class Loader
 | library, or the system library folders.
 |
 | @Param: (String) $name - The name of the class, with or without namespacing
-| @Param: (Mixed) $instance - Do we instance the class? May also specify
-|   the instance name (IE: class Test instance as TeStInG)
+| @Param: (Bool | String) $instance - Do we instance the class (true|false)? 
+| May also specify the instance name (IE: class Test instance as TeStInG)
 | @Param: (Bool) $surpress - set to TRUE to bypass the error screen
 |   if the class fails to initiate, and return false instead
 | @Return: (Object) Returns the library class
@@ -138,9 +138,6 @@ class Loader
 */
     public function library($name, $instance = TRUE, $surpress = FALSE)
     {
-        // Make sure periods are replaced with slahes if there is any
-        if(strpos($name, ".") !== FALSE) $name = str_replace('.', '\\', $name);
-        
         // Load the Class
         $class = load_class($name, 'Library', $surpress);
         
@@ -148,13 +145,13 @@ class Loader
         if($instance !== FALSE)
         {
             // Allow for custom class naming
-            ($instance !== TRUE) ? $name = $instance : '';
+            if($instance !== TRUE) $name = $instance;
             
             // Instance
             $FB = get_instance();
             if($FB !== FALSE)
             {
-                (!isset($FB->$name)) ? $FB->$name = $class : '';
+                $FB->$name = $class;
             }
         }
         return $class;

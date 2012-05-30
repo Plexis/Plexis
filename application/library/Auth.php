@@ -378,7 +378,7 @@ class Auth
                 
                 // Fire the registration event
                 $event = array($id, $username, $password, $email, $this->remote_ip);
-                load_class('Event')->trigger('user_registered', $event);
+                load_class('Event')->trigger('account_created', $event);
                 
                 // Return ID
                 return $id;

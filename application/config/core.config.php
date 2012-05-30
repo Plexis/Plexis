@@ -75,12 +75,13 @@ $config['default_controller'] = 'welcome';
 
 /*
 | ---------------------------------------------------------------
-| Default_controller
+| Default_action
 | ---------------------------------------------------------------
 |
 | This is the default action that loads when no action is givin
 |
 */
+
 $config['default_action'] = 'index';
 
 

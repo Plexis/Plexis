@@ -32,7 +32,8 @@
     <!-- Loading the auth class -->
 	<h2>Loading the Auth class</h2>
 	<p>
-		Once the controller is initialized, this class is automatically loaded, constructed, and the load_user() function is ran
+		Once the controller is initialized, this class is automatically loaded, constructed, and stored in the Controller variable <font color="blue">$this->Auth</font>.
+        The User is initialized automatically when this class is constructed
 	</p>
 	<code>
 		$this->Auth = $this->load->library('Auth');<br />
@@ -53,6 +54,7 @@
             <li><var>$password</var> [Type: String]: The clean, un-encrypted password to the account.</li>
         </ol>
     </p>
+    <p>Returns a Bool (True | False) based on success.</p>
 	
 	<!-- Logging Out -->
 	<h2>Logging Out</h2>
@@ -60,6 +62,7 @@
 	<code>
 		$this->Auth->logout();
 	</code>
+    <p>This method does not have a return value.</p>
 	
 	<!-- Register -->
 	<h2>Registering a new account</h2>
@@ -78,6 +81,21 @@
             <li><dfn>$secret_answer</dfn> [Type: String]: The secret question answer</li>
         </ol>
     </p>
+    <p>Returns a Bool (False) if the registration failed, or the account ID (Int) if successfull.</p>
+    
+    <!-- Permissions -->
+	<h2>Has Permission</h2>
+	<p>This method checks the usergroups permissions, and returns true | false if this user group has this permission. If the user is a super admin, it will always return true!</p>
+	<code>
+		$this->Auth->has_permission('<var>$name</var>');
+	</code>
+	
+	<h5><u>Arguments:</u></h5>
+	<p>
+        <ol>
+            <li><var>$name</var> [Type: String]: The name of the permission</li>
+        </ol>
+    </p>
 
 </div>
 <!-- END CONTENT -->
@@ -89,7 +107,10 @@
 		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
 		<!-- Next Topic:&nbsp;&nbsp;<a href="config.html">Config Class</a> -->
 	</p>
-	<p>Original Template Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+	<p>
+		Frostbite Framework &copy; 2011 - 2012, Steven Wilson | Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
+		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
+	</p>
 </div>
 
 </body>
