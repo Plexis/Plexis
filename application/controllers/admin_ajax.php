@@ -40,24 +40,28 @@ class Admin_ajax extends Application\Core\Controller
 */    
     public function __construct()
     {
-        // Build the Core Controller
-        parent::__construct(false, false);
-        
-        // Init a session var
-        $this->user = $this->Session->get('user');
-        
-        // Make sure user is an admin!
-        if( !$this->check_permission('admin_access') );
-        
-        // Make sure the request is an ajax request, and came from this website!
-        if(!$this->Input->is_ajax())
+        // Only build this up IF the request is not an update request
+        if($GLOBALS['action'] != 'update')
         {
-            die('No direct linking allowed');
-        }
-        elseif(strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false)
-        {
-            $this->output(false, 'Unauthorized');
-            die();
+            // Build the Core Controller
+            parent::__construct(false, false);
+            
+            // Init a session var
+            $this->user = $this->Session->get('user');
+            
+            // Make sure user is an admin!
+            if( !$this->check_permission('admin_access') );
+            
+            // Make sure the request is an ajax request, and came from this website!
+            if(!$this->Input->is_ajax())
+            {
+                die('No direct linking allowed');
+            }
+            elseif(strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false)
+            {
+                $this->output(false, 'Unauthorized');
+                die();
+            }
         }
     }
 
@@ -1631,12 +1635,30 @@ class Admin_ajax extends Application\Core\Controller
 */    
     public function update()
     {
+        // Build out own cunstructer for Update requests to minimize errors
+        $this->load = load_class('Loader');
+        $this->Input = load_class('Input');
+        
+        // Make sure the request is an ajax request, and came from this website!
+        if(!$this->Input->is_ajax()) die('No direct linking allowed');
+        
+        // Load the config and URL helper
+        $this->load->helper('config');
+        $this->load->helper('url');
+        
+        // Load the user
+        $this->Session = $this->load->library('Session', false);
+        $this->Auth = $this->load->library('Auth', false);
+        $this->user = $this->Session->get('user');
+        
+        // Setup the selected users language
+        $this->Language = load_class('Language');
+        $GLOBALS['language'] = $this->Language->selected_language();
+
         // Make sure we arent directly accessed and the user has perms
         $this->check_access('sa');
         
-        // Load the URL helper
-        $this->load->helper('Url');
-        
+        // Process action
         if(isset($_POST['action']))
         {
             $action = trim( $this->Input->post('action') );

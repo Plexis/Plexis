@@ -97,7 +97,6 @@ class Debug
         switch($errno)
         {
             case E_ERROR:
-            case E_PARSE:
             case E_USER_ERROR:
                 $severity = 2;
                 break;
