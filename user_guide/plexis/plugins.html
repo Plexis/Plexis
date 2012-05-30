@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Plugins :: Plexis CMS Documentation</title>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Plexis CMS</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Creating Plugins</h1>
+	<p>
+		Plexis comes equiped with a plugin system, that act just like hooks in any other framework / cms. Plugins are mainly just normal classes, but thier method's (depending on name) are called
+        based on where the script is at that current point. Plugins are perfect for registering <a href="events.html">Events</a> and callbacks ;)
+	</p>
+
+
+	<!--Start -->
+	<h2>Plugin Layout</h2>
+	<p>Below is the base of any plugin. The methods listed here are <font color="red">Required</font> in order for your plugin to work correctly when loaded.</p>
+	<pre>
+namespace Plugins;
+
+class Plugin_name
+{
+	public function pre_system()
+	{
+		// This code is executed very early in the cms, before any database connections are made,
+		// right after the URL is routed.
+	}
+	
+	public function pre_controller() 
+	{
+		// This code is executed right before the controller is constructed. Database connections are 
+		// established right before this point.
+	}
+	
+	public function post_controller_constructor() 
+	{
+		// This code is executed imediatly after the controller is finsihed constructing, but before
+		// the page method is loaded.
+	}
+	
+	public function post_controller() 
+	{
+		// This code is executed after the template has rendered the template, and pushed its contents
+		// to the browser.
+	}
+}
+	</pre>
+    <p class="important">All plugin file names must have the first letter capitalized! The Classname and Namespace are also Capitalized.</p>
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<!-- Next Topic:&nbsp;&nbsp;<a href="config.html">Config Class</a> -->
+	</p>
+	<p>
+		Frostbite Framework &copy; 2011 - 2012, Steven Wilson | Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
+		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
+	</p>
+</div>
+
+</body>
+</html>
