@@ -30,41 +30,50 @@ class Loader
 |
 | This method is used to call in a model
 |
-| @Param: (String) $name - The name of the model. You may also go path/to/$name
+| @Param: (String) $name - The name of the model.
 | @Param: (Mixed) $instance_as - How you want to access it as in the 
 |   controller (IE: $instance_as = test; In controller: $this->test)
 | @Return: (Object) Returns the model
 |
 */
-    public function model($name, $instance_as = NULL)
+    public function model($name, $instance = true, $supress = false)
     {
-        // Check for path. We need to get the model file name
-        if(strpos($name, '/') !== FALSE)
+        // Fix names
+        $class = ucfirst($name);
+        $name = strtolower($name);
+        
+        // Check the registry
+        $Obj = \Registry::singleton()->load($class);
+        if($Obj !== NULL)
         {
-            $paths = explode('/', $name);
-            $class = ucfirst( end($paths) );
-        }
-        else
-        {
-            $class = ucfirst($name);
-            $name = strtolower($name);
+            return $Obj;
         }
         
         // Include the model page
         require_once(APP_PATH . DS . 'models' . DS . $name .'.php');
         
-        // Get our class into a variable
-        $Obj = new $class();
-
+        // Load the class
+        try{
+            $Obj = new $class();
+        }
+        catch(\Exception $e) {
+            $Obj = FALSE;
+        }
+        
         // Instnace the Model in the controller
-        if($instance_as !== NULL)
+        if($instance != false)
         {
-            get_instance()->$instance_as = $Obj;
+            $FB = get_instance();
+            if(is_object($FB))
+            {
+                $instance = (!is_string($instance)) ? $class : $instance;
+                if(!isset($FB->$instance)) $FB->$instance = $Obj;
+            }
         }
-        else
-        {
-            get_instance()->$class = $Obj;
-        }
+        
+        // Store the model
+        \Registry::singleton()->store($class, $Obj);
+
         return $Obj;
     }
 
@@ -139,22 +148,19 @@ class Loader
     public function library($name, $instance = TRUE, $surpress = FALSE)
     {
         // Load the Class
-        $class = load_class($name, 'Library', $surpress);
+        $Obj = load_class($name, 'Library', $surpress);
         
         // Do we instance this class?
-        if($instance !== FALSE)
+        if($instance != false)
         {
-            // Allow for custom class naming
-            if($instance !== TRUE) $name = $instance;
-            
-            // Instance
             $FB = get_instance();
             if(is_object($FB))
             {
-                $FB->$name = $class;
+                $instance = (!is_string($instance)) ? $name : $instance;
+                if(!isset($FB->$instance)) $FB->$instance = $Obj;
             }
         }
-        return $class;
+        return $Obj;
     }
 
 /*
@@ -252,7 +258,7 @@ class Loader
                 $FB = get_instance();
                 if(is_object($FB))
                 {
-                    (!isset($FB->$instance)) ? $FB->$instance = $Obj : '';
+                    if(!isset($FB->$instance)) $FB->$instance = $Obj;
                 }
             }
         }
@@ -275,8 +281,21 @@ class Loader
 */
     public function helper($name)
     {
+        // Static array of helpers
+        static $loaded = array();
+        
         // Lowercase the name because it isnt a class file!
         $name = strtolower($name);
+        
+        // Make sure this helper isnt already loaded
+        if(in_array($name, $loaded))
+        {
+            return;
+        }
+        else
+        {
+            $loaded[] = $name;
+        }
         
         // Check the application/helpers folder
         if(file_exists(APP_PATH . DS .  'helpers' . DS . $name . '.php')) 

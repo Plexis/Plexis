@@ -33,42 +33,51 @@ class Loader extends \System\Core\Loader
 | @Return: (Object) Returns the model
 |
 */
-    public function model($name, $instance_as = NULL)
+    public function model($name, $instance = true, $silence = false)
     {
-        // Check for path. We need to get the model file name
-        if(strpos($name, '/') !== FALSE)
+        // Fix names
+        $class = ucfirst($name);
+        $name = strtolower($name);
+        
+        // Check the registry
+        $Obj = \Registry::singleton()->load($class);
+        if($Obj !== NULL)
         {
-            $paths = explode('/', $name);
-            $class = ucfirst( end($paths) );
-        }
-        else
-        {
-            $class = ucfirst($name);
-            $name = strtolower($name);
+            return $Obj;
         }
         
         // Include the model page
         if($GLOBALS['is_module'] == TRUE)
         {
-            require(APP_PATH . DS .'modules'. DS . $GLOBALS['controller'] . DS .'models'. DS . $name .'.php');
+            require_once(APP_PATH . DS .'modules'. DS . $GLOBALS['controller'] . DS .'models'. DS . $name .'.php');
         }
         else
         {
-            require(APP_PATH . DS . 'models' . DS . $name .'.php');
+            require_once(APP_PATH . DS . 'models' . DS . $name .'.php');
         }
         
-        // Get our class into a variable
-        $Obj = new $class();
-
+        // Load the class
+        try{
+            $Obj = new $class();
+        }
+        catch(\Exception $e) {
+            $Obj = FALSE;
+        }
+        
         // Instnace the Model in the controller
-        if($instance_as !== NULL)
+        if($instance != false)
         {
-            get_instance()->$instance_as = $Obj;
+            $FB = get_instance();
+            if(is_object($FB))
+            {
+                $instance = (!is_string($instance)) ? $class : $instance;
+                if(!isset($FB->$instance)) $FB->$instance = $Obj;
+            }
         }
-        else
-        {
-            get_instance()->$class = $Obj;
-        }
+        
+        // Store the model
+        \Registry::singleton()->store($class, $Obj);
+
         return $Obj;
     }
 

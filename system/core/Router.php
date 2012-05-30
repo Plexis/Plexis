@@ -22,6 +22,9 @@ namespace System\Core;
 
 class Router
 {
+    // Have we routed the url yet?
+    public $routed = false;
+    
     // Our http protocol (https or http)
     protected $protocol;
     
@@ -141,7 +144,7 @@ class Router
                 }
             }
         }
-
+        
         // If the URI is empty, then load defaults
         if(empty($this->uri)) 
         {
@@ -180,6 +183,9 @@ class Router
             $queryString = $urlArray;
         }
         
+        // Tell the system we've routed
+        $this->routed = true;  
+        
         // Make sure the first character of the controller is not an _ !
         if( strncmp($controller, '_', 1) == 0 || strncmp($action, '_', 1) == 0 )
         {
@@ -204,7 +210,9 @@ class Router
 */    
     public function get_url_info()
     {
-        $array = array(
+        // Make sure we've at least routed the url here;
+        if(!$this->routed) $this->route_url();
+        return array(
             'protocol' => $this->protocol,
             'http_host' => $this->http_host,
             'site_url' => $this->site_url,
@@ -214,7 +222,6 @@ class Router
             'action' => $this->action,
             'querystring' => $this->queryString
         );
-        return $array;
     }
     
 /*
