@@ -93,8 +93,8 @@ class Debug extends \System\Core\Debug
                 // Output depending on request type
                 if($this->isAjax)
                 {
-                    // Only display ajax errors if they are severe
-                    if($errno != E_STRICT)
+                    // Only display ajax errors if they are severe!
+                    if($errno != E_STRICT && $errno != E_DEPRECATED)
                     {
                         $string = $this->error_string($errno);
                         echo json_encode( 

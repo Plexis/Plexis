@@ -270,18 +270,19 @@
 */	
     function get_instance()
     {
-        if(class_exists('Application\\Core\\Controller', FALSE))
-        {
-            return \Application\Core\Controller::get_instance();
-        }
-        elseif(class_exists('System\\Core\\Controller', FALSE))
+        if(class_exists('System\\Core\\Controller', FALSE))
         {
             return \System\Core\Controller::get_instance();
         }
-        else
+        elseif(class_exists('Application\\Core\\Controller', FALSE))
         {
-            return FALSE;
+            if(method_exists('Application\\Core\\Controller', 'get_instance'))
+            {
+                return \Application\Core\Controller::get_instance();
+            }
         }
+
+        return FALSE;
     }
 
 // Register the Core to process errors with the custom_error_handler method

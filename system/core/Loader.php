@@ -149,7 +149,7 @@ class Loader
             
             // Instance
             $FB = get_instance();
-            if($FB !== FALSE)
+            if(is_object($FB))
             {
                 $FB->$name = $class;
             }
@@ -250,7 +250,7 @@ class Loader
 
                 // Easy way to instance the connection is like this
                 $FB = get_instance();
-                if($FB !== FALSE)
+                if(is_object($FB))
                 {
                     (!isset($FB->$instance)) ? $FB->$instance = $Obj : '';
                 }

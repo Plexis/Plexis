@@ -272,7 +272,7 @@ class Loader extends \System\Core\Loader
                 if($instance == TRUE)
                 {
                     $FB = get_instance();
-                    ($FB !== FALSE) ? $FB->realm = $class : '';
+                    if(is_object($FB)) $FB->realm = $class;
                 }
             }
             

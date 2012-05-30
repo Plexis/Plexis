@@ -1,1 +1,1 @@
-[{"status":"A","file":"application\/index.html"},{"status":"M","file":"application\/controllers\/admin_ajax.php"},{"status":"M","file":"application\/core\/Debug.php"},{"status":"M","file":"system\/core\/Debug.php"},{"status":"M","file":"index.php"}]
+[{"status":"M","file":"application\/core\/Debug.php"},{"status":"M","file":"application\/core\/Loader.php"},{"status":"M","file":"system\/core\/Common.php"},{"status":"M","file":"system\/core\/Loader.php"},{"status":"M","file":"index.php"}]
