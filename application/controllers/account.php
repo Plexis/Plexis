@@ -384,7 +384,7 @@ class Account extends Application\Core\Controller
                         // Log the user in, and redirect
                         $this->Auth->login($username, $password);
                         output_message('success', 'reg_success');
-                        $this->load->view('register_success', array('username' => $username) );
+                        $this->load->view('blank', array('username' => $username) );
                     }
                 }
                 else
