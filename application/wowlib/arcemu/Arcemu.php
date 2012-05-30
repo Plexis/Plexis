@@ -267,7 +267,7 @@ class Arcemu
                 //'gmlevel' => $temp['gmlevel'],
                 'joindate' => false, //ArcEmu doesn't store a join date, return false
                 'locked' => $temp['banned'],
-                'banned' => (int) $this->account_banned($temp['id']),
+                'banned' => (int) $this->account_banned($temp['acct']),
                 'last_login' => $temp['lastlogin'],
                 'last_ip' => $temp['lastip'],
                 'expansion' => $temp['flags']

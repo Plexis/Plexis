@@ -145,7 +145,7 @@ class Ajax_Model extends Application\Core\Model
         $Ajax = get_instance();
 
         // Get our posted information
-        $id = $_POST['id'];
+        $id = ( $action == 'manual-install' ) ? 0 : $_POST['id'];
         $name = $_POST['name'];
         $address = $_POST['address'];
         $port = $_POST['port'];
@@ -197,6 +197,7 @@ class Ajax_Model extends Application\Core\Model
         {
             $result = $this->realm->realmlist();
             $installed = get_installed_realms();
+			
             if( !empty($result) )
             {
                 $highest = end($result);
@@ -212,7 +213,13 @@ class Ajax_Model extends Application\Core\Model
             }
             else
             {
-                ( !empty($installed) ) ? $id = $high2['id'] + 1 : $id = 1;
+				if( empty( $installed ) )
+					$id = 1;
+				else
+				{
+					$highest = end( $installed );
+					$id = $highest['id']; + 1;
+				}
             }
         }
         
