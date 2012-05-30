@@ -34,7 +34,7 @@ class Plexis
         // Check if the install folder is still local
         if($DB == false && $locked == false && $installer == true)
         {
-            redirect('install/index.php');
+            header('Location: '. SITE_URL .'/install/index.php');
             die();
         }
 		elseif($locked == false && $installer == true)

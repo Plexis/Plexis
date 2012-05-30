@@ -128,32 +128,40 @@ class Debug extends \System\Core\Debug
     {
         // Get our site url
         $url = $this->url_info;
-        $DB = load_class('Loader')->database('DB');
+        $DB = load_class('Loader')->database('DB', false, true);
         
-        // Make neat the error trace ;)
-        $trace = array();
-        if($this->ErrorTrace != null)
+        // Only log if database is connectable
+        if(is_object($DB))
         {
-            foreach($this->ErrorTrace as $key => $t)
+            // Make neat the error trace ;)
+            $trace = array();
+            if($this->ErrorTrace != null)
             {
-                if($key == 0) continue; 
-                unset($t['object']);
-                $trace[] = print_r( $t, true );
+                foreach($this->ErrorTrace as $key => $t)
+                {
+                    if($key == 0) continue; 
+                    unset($t['object']);
+                    $trace[] = print_r( $t, true );
+                }
             }
+            
+            // Attempt to insert the error in the database
+            $data = array(
+                'level' => $this->ErrorLevel,
+                'string' => $this->ErrorMessage,
+                'file' => $this->ErrorFile,
+                'line' => $this->ErrorLine,
+                'url' => $url['site_url'] ."/". $url['uri'],
+                'remote_ip' => $_SERVER['REMOTE_ADDR'],
+                'time' => time(),
+                'backtrace' => serialize( $trace )
+            );
+            $DB->insert('pcms_error_logs', $data);
         }
-        
-        // Attempt to insert the error in the database
-        $data = array(
-            'level' => $this->ErrorLevel,
-            'string' => $this->ErrorMessage,
-            'file' => $this->ErrorFile,
-            'line' => $this->ErrorLine,
-            'url' => $url['site_url'] ."/". $url['uri'],
-            'remote_ip' => $_SERVER['REMOTE_ADDR'],
-            'time' => time(),
-            'backtrace' => serialize( $trace )
-        );
-        $DB->insert('pcms_error_logs', $data);
+        else
+        {
+            parent::log_error(true);
+        }
     }
 }
 // EOF
