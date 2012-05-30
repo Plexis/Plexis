@@ -780,6 +780,9 @@ class Admin extends Application\Core\Controller
                 }
                 else
                 {
+                    // Add the progress bar
+                    $this->Template->add_script('progressbar_mini.js');
+                    $this->Template->add_css('progressbar.css');
                     $this->load->view('updates', $data);
                 }
             }

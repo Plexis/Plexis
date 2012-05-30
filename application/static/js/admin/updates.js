@@ -1,5 +1,23 @@
 $().ready(function() {
-    $("#progressbar").progressbar({ value: 0, disabled: false });
+    var width = $(".grid_8").width();
+    width = (width * .75);
+    
+    // Init the progressbar
+    myProgressBar = new ProgressBar("progressbar", {
+        borderRadius: 5,
+        width: width,
+        height: 20,
+        value: 0,
+        maxValue: 100,
+        labelText: "{progress}%",
+        orientation: ProgressBar.Orientation.Horizontal,
+        direction: ProgressBar.Direction.LeftToRight,
+        animationStyle: ProgressBar.AnimationStyle.LeftToRight1,
+        animationSpeed: 1.5,
+        imageUrl: Plexis.template_url + "/img/misc/progressbar/fg.png",
+        backgroundUrl: Plexis.template_url + "/img/misc/progressbar/bg.png"
+    });
+
     $("#details").delegate('a#update-cms', 'click', function(){
         process();
     });
@@ -79,7 +97,7 @@ function process()
                 }
                 
                 // Update the status
-                $('#update-state').html('<center>Progress: '+ tmp.toFixed(1) +'%<br />' + mode + ' file: "' + value['file'] +'" ('+ current +' / '+ count +')</center>');
+                $('#update-state').html('<center>' + mode + ' file: "' + value['file'] +'"</center>');
   
                 // Send action
                 $.ajax({
@@ -100,7 +118,7 @@ function process()
                         {
                             // Progress
                             running += add;
-                            $("#progressbar").progressbar( 'value', running );
+                            myProgressBar.setValue( running );
                         }
                         else
                         {

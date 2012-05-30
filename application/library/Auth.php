@@ -478,6 +478,11 @@ class Auth
         // Load the currrent user
         $user = $this->session->get('user');
         
+        if(!isset($user['username']))
+        {
+            $user = $this->realm->fetch_account($user['id']);
+        }
+        
         // Fire the login event
         load_class('Events')->trigger('user_logged_out', array($user['id'], $user['username']));
         

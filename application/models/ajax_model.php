@@ -197,7 +197,7 @@ class Ajax_Model extends Application\Core\Model
         {
             $result = $this->realm->realmlist();
             $installed = get_installed_realms();
-			
+            
             if( !empty($result) )
             {
                 $highest = end($result);
@@ -213,13 +213,15 @@ class Ajax_Model extends Application\Core\Model
             }
             else
             {
-				if( empty( $installed ) )
-					$id = 1;
-				else
-				{
-					$highest = end( $installed );
-					$id = $highest['id']; + 1;
-				}
+                if( empty( $installed ) )
+                {
+                    $id = 1;
+                }
+                else
+                {
+                    $highest = end( $installed );
+                    $id = $highest['id']; + 1;
+                }
             }
         }
         

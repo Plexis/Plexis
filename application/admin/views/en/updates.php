@@ -7,9 +7,9 @@
             <div class="alert warning">Please note this is still in development and may cause errors!</div>
             
             <!-- Progess of update -->
-            <div id="update" style="display: none; padding: 25px;">
+            <div id="update" style="padding: 25px;">
                 <p><center>Updating... Please do not refresh the screen!</center></p>
-                <div id="progressbar"></div>
+                <div id="progressbar" style="width: 100%; height: 100%; margin: 0px auto;"></div>
                 <br />
                 <div id="update-state"></div>
             </div>

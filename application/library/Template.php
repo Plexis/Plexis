@@ -876,7 +876,7 @@ class Template
                 }
                 
                 // Add the stylesheet to the header
-                $this->set_metadata('stylesheet', $f, 'link');
+                $this->set_metadata('stylesheet', $src, 'link');
             }
         }
         
