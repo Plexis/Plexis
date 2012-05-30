@@ -20,7 +20,7 @@
 */
 namespace System\Core;
 
-class Event
+class Events
 {
 	// Static array of events, and handlers
 	protected static $events = array(); 

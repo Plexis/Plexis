@@ -76,7 +76,7 @@ class Ajax_Model extends Application\Core\Model
                 }
                 
                 // Fire the change password event
-                load_class('Event')->trigger('password_change', array($id, $password[0]));
+                load_class('Events')->trigger('password_change', array($id, $password[0]));
             }
             else
             {
@@ -106,7 +106,7 @@ class Ajax_Model extends Application\Core\Model
                 $data[$key] = $value;
                 
                 // Fire change email event if changed
-                if($key == 'email') load_class('Event')->trigger('email_change', array($id, $user['email'], $value));
+                if($key == 'email') load_class('Events')->trigger('email_change', array($id, $user['email'], $value));
             }
         }
         

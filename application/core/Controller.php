@@ -69,8 +69,7 @@ class Controller extends \System\Core\Controller
         if($init_template == TRUE) $this->_init_template();
         
         // Fire the controller event
-        $this->Event = load_class('Event');
-        $this->Event->trigger('controller_init');
+        load_class('Events')->trigger('controller_init');
     }
     
 /*

@@ -35,7 +35,7 @@ class Statistics
         // When the controller finishes initializing, add stats hit
         if(!$this->Input->is_ajax())
         {
-            load_class('Event')->register('controller_init', array($this, 'add_hit'));
+            load_class('Events')->register('controller_init', array($this, 'add_hit'));
         }
     }
     

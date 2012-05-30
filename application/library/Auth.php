@@ -281,7 +281,7 @@ class Auth
             $this->session->set('user', array_merge($result, $data));
             
             // Fire the login event
-            load_class('Event')->trigger('user_logged_in', array($data['id'], $username));
+            load_class('Events')->trigger('user_logged_in', array($data['id'], $username));
             
             // Return
             return TRUE;
@@ -378,7 +378,7 @@ class Auth
                 
                 // Fire the registration event
                 $event = array($id, $username, $password, $email, $this->remote_ip);
-                load_class('Event')->trigger('account_created', $event);
+                load_class('Events')->trigger('account_created', $event);
                 
                 // Return ID
                 return $id;
@@ -479,7 +479,7 @@ class Auth
         $user = $this->session->get('user');
         
         // Fire the login event
-        load_class('Event')->trigger('user_logged_out', array($user['id'], $user['username']));
+        load_class('Events')->trigger('user_logged_out', array($user['id'], $user['username']));
         
         // Destroy the session and re-load the user
         $this->session->destroy();

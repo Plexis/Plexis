@@ -649,7 +649,7 @@ class Account extends Application\Core\Controller
                                 if($result !== false)
                                 {
                                     output_message('success', 'account_recover_pass_success', array($result));
-                                    load_class('Event')->trigger('account_recovered', array($r_data['id']));
+                                    load_class('Events')->trigger('account_recovered', array($r_data['id']));
                                 }
                                 else
                                 {
@@ -788,7 +788,7 @@ class Account extends Application\Core\Controller
                             }
                             
                             // Fire the change password event
-                            load_class('Event')->trigger('password_change', array($this->user['id'], $password));
+                            load_class('Events')->trigger('password_change', array($this->user['id'], $password));
                             
                             // Inform the user the pass change was successfull
                             output_message('success', 'account_update_pass_success');
@@ -881,7 +881,7 @@ class Account extends Application\Core\Controller
                             }
                             
                             // Fire the change email event
-                            load_class('Event')->trigger('email_change', array($this->user['id'], $old, $new));
+                            load_class('Events')->trigger('email_change', array($this->user['id'], $old, $new));
                             
                             // If we are here, we have a success!
                             output_message('success', 'account_update_email_success');
