@@ -19,7 +19,7 @@
                 <td><?php echo $database_config_writable; ?></td>
             </tr>
             <tr>
-                <td>Cache ("application/cache/") Writable by Webserver </td>
+                <td>Cache ("system/cache/") Writable by Webserver </td>
                 <td><?php echo $cache_writable; ?></td>
             </tr>
             <tr>
