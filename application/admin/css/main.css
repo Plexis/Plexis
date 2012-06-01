@@ -28,9 +28,10 @@
  * 15) Toolbox
  * 16) Alert Boxes
  * 17) Tooltips
- * 18) Misc
- *   18.1) Noise
- *   18.2) Aligments
+ * 18) Message Boxes
+ * 19) Misc
+ *   19.1) Noise
+ *   19.2) Aligments
  */
 
 /* ==================================================
@@ -596,14 +597,30 @@ body {
 .tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
 
 
+/* ==================================================
+ * 18) Message Boxes
+ * ================================================== */
+ 
+.msgbox { background:url(../img/misc/msgbox/background.png) repeat-x left bottom; padding-bottom:55px; font-style:normal; }
+.msgbox-wrapper { padding:20px 20px 20px 100px; }
+.msgbox-buttons { padding:15px; text-align:right; position:absolute; bottom:0; right:0; }
+.msgbox-buttons button, .msgbox-buttons input { margin-left:10px; min-width:85px; padding:0 14px 2px; height:24px; cursor:pointer; }
+.msgbox-inputs { margin-top:4px; }
+.msgbox-inputs input { display:block; padding:3px 2px; border:1px solid #dddddd; margin:3px 0 6px 0; width:95%; }
+.msgbox-label { font-weight:bold; font-size:11px; }
+.msgbox-alert { background: url(../img/misc/msgbox/alert.png) no-repeat 20px 20px; }
+.msgbox-info { background: url(../img/misc/msgbox/info.png) no-repeat 20px 20px; }
+.msgbox-error { background: url(../img/misc/msgbox/error.png) no-repeat 20px 20px; }
+.msgbox-prompt { background: url(../img/misc/msgbox/question.png) no-repeat 20px 20px; }
+.msgbox-confirm { background: url(../img/misc/msgbox/confirm.png) no-repeat 20px 20px; }
 
 
 /* ==================================================
- * 18) Misc
+ * 19) Misc
  * ================================================== */
 
 /*
- * 18.1) Noise
+ * 19.1) Noise
  */
 
 .noise {
@@ -613,7 +630,7 @@ body {
 }
 
 /*
- * 18.2) Aligments
+ * 19.2) Aligments
  */
 
 .text-left {
@@ -645,6 +662,3 @@ body {
 	margin: 0 auto;
 	float: none !important;
 }
-
-
-

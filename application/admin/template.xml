@@ -49,6 +49,7 @@
         <js>jquery.form.js</js>
         <js>jquery.tipsy.js</js>
         <js>jquery.dataTables.js</js>
+        <js>jquery.pageloading.js</js>
         <js>template.js</js>
     </head>
 </template> 

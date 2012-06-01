@@ -252,10 +252,10 @@
 | @Return: (None)
 |
 */	
-    function log_message($message, $filename = 'debug.log')
+    function log_message($type, $message)
     {		
         // Init and spit the error
-        load_class('Debug')->log($message, $filename);
+        load_class('Debug')->log($type, $message);
     }
 	
 /*

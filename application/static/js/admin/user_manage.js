@@ -36,10 +36,12 @@ $().ready(function() {
     
     /** Bind the Delete button */
     $("#account-delete-button").click(function() {
-        if ( confirm('Are you sure you want to delete account: ' + username + ' (#' + userid + ')?') )
-        {
-            post_account_action('delete-account');
-        }
+        $.msgbox('Are you sure you want to delete account: ' + username + '? This action <u>can not</u> be undone!', {type : 'confirm', style: 'alert'}, function(result) {
+            if (result == "Accept")
+            {
+                post_account_action('delete-account');
+            }
+        });
     });
 
     /** Validate Forms */
@@ -104,6 +106,7 @@ $().ready(function() {
             }
             else
             {
+                page_loading(true);
                 $('#js_profile_message').attr('class', 'alert loading').html('Submitting Form').slideDown(300);
                 return true;
             }
@@ -124,6 +127,8 @@ $().ready(function() {
                 // General errors
                 $('#js_profile_message').attr('class', 'alert ' + result.type).html(result.message);
             }
+            
+            page_loading(false);
             $('#js_profile_message').delay(4000).slideUp(600);
         },
         timeout: 3000 

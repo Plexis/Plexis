@@ -1,4 +1,13 @@
 $(document).ready(function() {
+    /** Display loading */
+    /* $.PadeLoading({
+       'BgColor' : '#353535',
+       'BgInnerColor' : '#FFFFFF',
+       'BorderColor' : '#FFFFFF',
+       'ShadowColor' : '#FFFFFF',
+       'LoaderIMG' : Plexis.template_url + '/img/ajax.gif',
+       'zIndex' : 9990
+	}); */
 	
 	/** Accordion Menu */
 	$('.menu').initMenu();
@@ -91,6 +100,14 @@ $(document).ready(function() {
 		CmsDialog.dialog("open");
     });
 });
+
+/**
+ *  Unlock window when page is finished loading
+ */
+/* $(window).load(function ()
+{
+   $.PadeLoaded();
+}); */
 
 /**
  * Accordion Menu
@@ -255,3 +272,21 @@ $.fn.resetForm = function() {
 		
 	};
 })(jQuery);
+
+function page_loading(is_loading)
+{
+    if(is_loading == true)
+    {
+        $.PadeLoading({
+           'BgColor' : '#353535',
+           'BgInnerColor' : '#FFFFFF',
+           'BorderColor' : '#FFFFFF',
+           'ShadowColor' : '#FFFFFF',
+           'zIndex' : 9990
+        });
+    }
+    else
+    {
+        $.PadeLoaded();
+    }
+}

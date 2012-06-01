@@ -258,5 +258,8 @@
 
     </div> 
     <!--! end of #container -->
+    
+    <!-- Hidden Ajax Loading Page -->
+    <div id="AjaxLoadImg" style="display: none;"><img src="{TEMPLATE_URL}/img/ajax.gif"></div>
 </body>
 </html>
