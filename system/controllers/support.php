@@ -20,7 +20,7 @@ class Support extends Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Constructer
+| Constructor
 | ---------------------------------------------------------------
 |
 */
@@ -70,7 +70,7 @@ class Support extends Core\Controller
             }
         }
         
-        // Set up our hoew to play page
+        // Set up our how to play page
         $data['text'] = file_get_contents( APP_PATH . DS . 'language' . DS . $language . DS . 'howtoplay.html' );
         $data['logon_server'] = config('logon_server');
         $data['register_link'] = SITE_URL .'/account/register';

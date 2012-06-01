@@ -143,20 +143,20 @@
 | Function: shutdown()
 | ---------------------------------------------------------------
 |
-| Method for catching fetal and parse errors
+| Method for catching fatal and parse errors
 |
 */
     function shutdown()
     {
         // Get las error, and confg option
-        $catch = load_class('Config')->get('catch_fetal_errors', 'Core');
+        $catch = load_class('Config')->get('catch_fatal_errors', 'Core');
         $error = error_get_last();
         
         // Write debug / system logs
         $Debug = load_class('Debug');
         $Debug->write_logs();
         
-        // If we have an error, only track if its fetal
+        // If we have an error, only track if it's fatal
         if(is_array($error) && $catch == 1)
         {
             if($error['type'] == E_ERROR || $error['type'] == E_PARSE)

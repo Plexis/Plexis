@@ -30,7 +30,7 @@ class Database extends \PDO
 
 /*
 | ---------------------------------------------------------------
-| Constructer
+| Constructor
 | ---------------------------------------------------------------
 |
 | Donot construct the parent yet!
@@ -61,7 +61,7 @@ class Database extends \PDO
         // Try and Connect to the database
         try 
         {
-            // Connect using the PDO constructer
+            // Connect using the PDO Constructor
             parent::__construct($dsn, $i['username'], $i['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
             $result = TRUE;
         }

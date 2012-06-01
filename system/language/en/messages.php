@@ -1,7 +1,7 @@
 <?php
 return array(
     'account_access_denied' => "Access to this account has been suspended.",
-    'access_denied_privlages' => 'Your account level does not have sufficient privileges to preform this action.',
+    'access_denied_privileges' => 'Your account level does not have sufficient privileges to preform this action.',
     'account_ban_success' => 'Account successfully banned.',
     'account_ban_error' => 'Account ban was unsuccessful! Please check your error logs.',
     'account_cant_ban_self' => 'You can\'t ban yourself!',
@@ -41,7 +41,7 @@ return array(
     'config_save_error' => "Error: There was a problem updating the config file. Please check you error log for details.!",
     'emulator_doesnt_exist' => "Emulator '%s' can't be found in the 'Application/Library/Emulators' folder.",
     'form_validation_failed' => 'One or more fields where not filled out correctly. Please try again',
-    'fetal_error' => "Fetal error! Please notify an administrator.",
+    'fatal_error' => "Fatal error! Please notify an administrator.",
     'group_create_error' => "An error occurred while creating this user group. Please check your error log",
     'group_create_success' => "User group created successfully!",
     'group_delete_error' => "An error occurred while deleting this user group. Please check your error log",

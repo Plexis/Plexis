@@ -19,7 +19,7 @@ class Utilities
 
 /*
 | ---------------------------------------------------------------
-| Constructer
+| Constructor
 | ---------------------------------------------------------------
 |
 | Creates the connection to the database using PDO

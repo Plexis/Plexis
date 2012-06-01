@@ -6,13 +6,13 @@
 |
 | This is the error level of which you would like to show when
 | viewing the website. This should be set to 2 (all errors + debugging) 
-| when developing or testing, and just 1 (only fetal erros, no debugging) 
+| when developing or testing, and just 1 (only fatal erros, no debugging) 
 | for live sites.
 |
 | Levels:
 | 	2 = Development, Set at this level when all errors are to be displayed
 |	1 = Production, Enabled when your site is live on the web. Only
-|       fetal errors will be shown.
+|       fatal errors will be shown.
 */
 
 $config['environment'] = 2;
@@ -37,15 +37,15 @@ $config['log_level'] = 2;
 
 /*
 | ---------------------------------------------------------------
-| Catch_fetal_errors
+| Catch_fatal_errors
 | ---------------------------------------------------------------
 |
-| Set to 1 to catch fetal errors and parse errors. Best to disable
+| Set to 1 to catch fatal errors and parse errors. Best to disable
 | if already using a special debugger such as Xdebug
 |
 */
 
-$config['catch_fetal_errors'] = 1;
+$config['catch_fatal_errors'] = 1;
 
 
 /*

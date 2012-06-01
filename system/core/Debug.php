@@ -59,7 +59,7 @@ class Debug
 
 /*
 | ---------------------------------------------------------------
-| Constructer
+| Constructor
 | ---------------------------------------------------------------
 |
 */
@@ -125,7 +125,7 @@ class Debug
             // Log error based on error log level
             if($this->log_level != 0) $this->log_error();
         
-            // Only build the error page when its fetal, or a development Env.
+            // Only build the error page when it's fatal, or a development Env.
             if( $this->Environment == 2 || $severity > 1 )
             {
                 // Output depending on request type
@@ -326,7 +326,7 @@ class Debug
 | Function: silent_mode()
 | ---------------------------------------------------------------
 |
-| Enable / disable error reporting (except for fetal errors)
+| Enable / disable error reporting (except for fatal errors)
 |
 */
     public function silent_mode($silent = TRUE)
@@ -439,7 +439,7 @@ class Debug
             case E_STRICT:  $string = 'PHP Strict'; break;
             case E_USER_WARNING: $string = 'PHP Warning'; break;
             case E_USER_NOTICE: $string = 'PHP Notice'; break;
-            default: $string = 'PHP Fetal Error ['. $level .']'; break;
+            default: $string = 'PHP Fatal Error ['. $level .']'; break;
         }
         return $string;
     }

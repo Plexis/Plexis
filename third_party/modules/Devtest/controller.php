@@ -10,7 +10,7 @@ class Devtest extends \Core\Controller
 
 /*
 | ---------------------------------------------------------------
-| Required Constructer. Must contain at least the following!
+| Required Constructor. Must contain at least the following!
 | ---------------------------------------------------------------
 */
     public function __construct($admin_operations = false)
@@ -62,7 +62,7 @@ class Devtest extends \Core\Controller
             /* 
                 Admin panel is loading these functions... Cant
                 construct the application controller so we create
-                our own module install / uninstall / admin constructer
+                our own module install / uninstall / admin Constructor
                 You just need to load what is required to run the
                 __install(), __uninstall(), and admin() functions 
             */

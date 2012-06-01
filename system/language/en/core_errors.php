@@ -9,7 +9,7 @@ return array(
     'db_improper_key_format' => 'Improper parameter key passed into query. Please make sure you are using a semi-colon ":" in your param keys.',
     'db_key_not_found' => "Database connection info for key \"%s\" not found in the database configuration file.",
     'db_select_error' => "Cant connect to database: %s",
-    'fetal_error' => 'Fetal Error! Please contact an administrator.',
+    'fatal_error' => 'Fatal Error! Please contact an administrator.',
     'missing_page_view' => "Unable to locate the view file \"%s\". Please make sure a view page is created and is correctly named.",
     'none' => 'No Message Specified',
     'non_array' => "Variable \$%s passed in a non-array format in method %s",

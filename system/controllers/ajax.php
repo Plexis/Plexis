@@ -159,7 +159,7 @@ class Ajax extends Core\Controller
         // Make sure the user has admin access'
         if( !$this->Auth->has_permission($perm))
         {
-            $this->output(false, 'access_denied_privlages');
+            $this->output(false, 'access_denied_privileges');
             die();
         }
     }

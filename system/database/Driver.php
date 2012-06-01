@@ -41,7 +41,7 @@ class Driver extends \PDO
 
 /*
 | ---------------------------------------------------------------
-| Constructer
+| Constructor
 | ---------------------------------------------------------------
 |
 | Creates the connection to the database using PDO
@@ -62,7 +62,7 @@ class Driver extends \PDO
         // Try and Connect to the database
         try 
         {
-            // Connect using the PDO constructer
+            // Connect using the PDO Constructor
             parent::__construct($dsn, $i['username'], $i['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
         }
         catch (\PDOException $e)

@@ -1,5 +1,5 @@
 <?php
-// Turn off error reporting except fetal errors
+// Turn off error reporting except fatal errors
 error_reporting( E_ERROR );
 
 // Define a smaller Directory seperater and ROOT path

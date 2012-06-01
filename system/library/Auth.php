@@ -39,7 +39,7 @@ class Auth
 
 /*
 | ---------------------------------------------------------------
-| Constructer
+| Constructor
 | ---------------------------------------------------------------
 |
 | Initiates the user sessions and such
@@ -237,7 +237,7 @@ class Auth
                 // If the insert failed, we have a fatal error
                 if($result === FALSE)
                 {
-                    show_error('fetal_error', FALSE, E_ERROR);
+                    show_error('fatal_error', FALSE, E_ERROR);
                     return FALSE;
                 }
             }
