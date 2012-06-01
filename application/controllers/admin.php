@@ -553,28 +553,21 @@ class Admin extends Application\Core\Controller
                     
                     // Run the module installer
                     $result = $module->__admin( $this, $subpage );
-                    if($result == TRUE) die();
-                    
-                    // We have an error!
-                    
-                    // Correct the module view path'
-                    $this->Template->set_controller('Admin', false);
-                    
-                    // Build our page title / desc, then load the view
-                    $this->Template->set( 'page_title', "Error Loading Module");
-                    $this->Template->set( 'page_desc', "");
-                    $this->load->view('module_load_error', $data);
-                    return;
+					
+					if( $result == false )
+					{
+						// Correct the module view path'
+						$this->Template->set_controller('Admin', false);
+
+						// Build our page title / desc, then load the view
+						$this->Template->set( 'page_title', "Error Loading Module");
+						$this->Template->set( 'page_desc', "");
+						$this->load->view('module_load_error');
+						return;
+					}
                 }
             }
         }
-
-        // Build our page title / desc, then load the view
-        $data = array(
-            'page_title' => "Module Managment",
-            'page_desc' => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
-        );
-        $this->load->view('module_index', $data);
     }
 
 /*

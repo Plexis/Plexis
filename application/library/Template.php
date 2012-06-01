@@ -746,7 +746,10 @@ class Template
         if($this->template['path'] == NULL) $this->set_template_path();
 
         // set the absolute template path now
-        $this->template['path'] = ROOT . DS . $this->template['path'];
+		$len = strlen( ROOT );
+		
+		if ( substr( $this->template['path'], 0, $len ) !== ROOT ) //Only prepend ROOT if it's not there to begin with.
+			$this->template['path'] = ROOT . DS . $this->template['path'];
         
         // Load the template information
         if($this->xml == NULL) $this->load_template_xml();
