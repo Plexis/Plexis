@@ -17,7 +17,7 @@
 | A class built to send emails
 |
 */
-namespace System\Library;
+namespace Library;
 
 class Email 
 {

@@ -1,29 +1,30 @@
 <?php
-/* 
+/*
 | --------------------------------------------------------------
-| 
-| Frostbite Framework
-|
+| Plexis
 | --------------------------------------------------------------
-|
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
-|
 | ---------------------------------------------------------------
 | Class: Model()
 | ---------------------------------------------------------------
 |
-| This is the Base model class. Doesnt do anything other then
-| load the loader so the Database's can be loaded upon request.
+| Base Model class. Init's the database connections and realm
 |
 */
-namespace System\Core;
+namespace Core;
 
 class Model
 {
-    public function __construct() 
+    function __construct() 
     {
         $this->load = load_class('Loader');
+        
+        // Setup the databases and realm
+        $this->DB = $this->load->database( 'DB' );
+        $this->RDB = $this->load->database( 'RDB' );
+        $this->realm = $this->load->realm();
     }
 }

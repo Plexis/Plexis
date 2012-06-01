@@ -14,7 +14,7 @@ else
 } 
 
 // Config Writable
-if(is_writable('../application/config/config.php') == TRUE)
+if(is_writable('../system/config/config.php') == TRUE)
 {
     $config_writable = "<img src='installer/images/check.png' height='18px' width='18px' />";
 }
@@ -25,7 +25,7 @@ else
 }
 
 // Database config writable
-if(is_writable('../application/config/database.config.php') == TRUE)
+if(is_writable('../system/config/database.config.php') == TRUE)
 {
     $database_config_writable = "<img src='installer/images/check.png' height='18px' width='18px' />";
 }
@@ -36,7 +36,7 @@ else
 }
 
 // Cache Writable
-if(is_writable('../application/cache') == TRUE)
+if(is_writable('../system/cache') == TRUE)
 {
     $cache_writable = "<img src='installer/images/check.png' height='18px' width='18px' />";
 }

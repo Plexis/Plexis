@@ -1,15 +1,12 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
-| Frostbite Framework
-|
+| Plexis
 | --------------------------------------------------------------
-|
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
-|
 | ---------------------------------------------------------------
 | Class: Loader()
 | ---------------------------------------------------------------
@@ -18,10 +15,45 @@
 | class / method.
 |
 */
-namespace System\Core;
+namespace Core;
 
 class Loader
 {
+
+/*
+| ---------------------------------------------------------------
+| Method: library()
+| ---------------------------------------------------------------
+|
+| This method is used to call in a class from either the APP
+| library, or the system library folders.
+|
+| @Param: (String) $name - The name of the class, with or without namespacing
+| @Param: (Bool | String) $instance - Do we instance the class (true|false)? 
+| May also specify the instance name (IE: class Test instance as TeStInG)
+| @Param: (Bool) $surpress - set to TRUE to bypass the error screen
+|   if the class fails to initiate, and return false instead
+| @Return: (Object) Returns the library class
+|
+*/
+    public function library($name, $instance = TRUE, $surpress = FALSE)
+    {
+        // Load the Class
+        $Obj = load_class($name, 'Library', $surpress);
+        
+        // Do we instance this class?
+        if($instance != false)
+        {
+            $FB = get_instance();
+            if(is_object($FB))
+            {
+                $instance = (!is_string($instance)) ? $name : $instance;
+                if(!isset($FB->$instance)) $FB->$instance = $Obj;
+            }
+        }
+        
+        return $Obj;
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -30,13 +62,13 @@ class Loader
 |
 | This method is used to call in a model
 |
-| @Param: (String) $name - The name of the model.
+| @Param: (String) $name - The name of the model. You may also go path/to/$name
 | @Param: (Mixed) $instance_as - How you want to access it as in the 
 |   controller (IE: $instance_as = test; In controller: $this->test)
 | @Return: (Object) Returns the model
 |
 */
-    public function model($name, $instance = true, $supress = false)
+    public function model($name, $instance = true, $silence = false)
     {
         // Fix names
         $class = ucfirst($name);
@@ -50,7 +82,14 @@ class Loader
         }
         
         // Include the model page
-        require_once(APP_PATH . DS . 'models' . DS . $name .'.php');
+        if($GLOBALS['is_module'] == TRUE)
+        {
+            require_once(ROOT . DS .'third_party'. DS .'modules'. DS . $GLOBALS['controller'] . DS .'models'. DS . $name .'.php');
+        }
+        else
+        {
+            require_once(SYSTEM_PATH . DS . 'models' . DS . $name .'.php');
+        }
         
         // Load the class
         try{
@@ -84,85 +123,26 @@ class Loader
 |
 | This method is used to load the view file and display it
 |
-| @Param: (String) $_view_name - The name of the controllers view file
-|   can also be path/to/view/$_view_name
-| @Param: (Array) $_data - an array of variables to be extracted
-| @Param: (Bool) $_return_view - Return the page instead of echo it?
+| @Param: (String) $name - The name of the requested view file
+| @Param: (Array) $data - an array of variables to be extracted
+| @Param: (Bool) $skip - Skip the template system and use parent?
 |
 */
-    public function view($_view_name, $_data, $_return_view = FALSE)
+    public function view($name, $data = array(), $skip = FALSE)
     {
-        // Make sure our data is in an array format
-        if(!is_array($_data))
+        // If we are requesting to use the default render system
+        if($skip == TRUE)
         {
-            show_error('non_array', array('data', 'Loader::view'), E_WARNING);
-            $_data = array();
-        }
-        
-        // To prevent overwriting a variable, we give it a funky name
-        $_file_path = APP_PATH . DS . 'views' . DS . $_view_name . '.php';
-
-        // extract variables
-        extract($_data);	 
-
-        // Get our page contents
-        if(file_exists( $_file_path ))
-        {
-            ob_start();
-            include( $_file_path );
-            $page = ob_get_contents();
-            ob_end_clean();
-        
-            // Replace some Global values
-            $Benchmark = load_class('Benchmark');
-            $page = str_replace('{ELAPSED_TIME}', $Benchmark->elapsed_time('system', 4), $page);
-            $page = str_replace('{MEMORY_USAGE}', $Benchmark->memory_usage(), $page);
-
-            // Spit out the page
-            if($_return_view == FALSE) echo $page;
-            return $page;
+            parent::view($name, $data);
         }
         else
         {
-            show_error('missing_page_view', array($_view_name), E_ERROR);
-            return FALSE;
+            // We are just going to let the template engine handle this
+            $template = $this->library('Template');
+            $template->render($name, $data);
         }
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: library()
-| ---------------------------------------------------------------
-|
-| This method is used to call in a class from either the APP
-| library, or the system library folders.
-|
-| @Param: (String) $name - The name of the class, with or without namespacing
-| @Param: (Bool | String) $instance - Do we instance the class (true|false)? 
-| May also specify the instance name (IE: class Test instance as TeStInG)
-| @Param: (Bool) $surpress - set to TRUE to bypass the error screen
-|   if the class fails to initiate, and return false instead
-| @Return: (Object) Returns the library class
-|
-*/
-    public function library($name, $instance = TRUE, $surpress = FALSE)
-    {
-        // Load the Class
-        $Obj = load_class($name, 'Library', $surpress);
-        
-        // Do we instance this class?
-        if($instance != false)
-        {
-            $FB = get_instance();
-            if(is_object($FB))
-            {
-                $instance = (!is_string($instance)) ? $name : $instance;
-                if(!isset($FB->$instance)) $FB->$instance = $Obj;
-            }
-        }
-        return $Obj;
-    }
-
+    
 /*
 | ---------------------------------------------------------------
 | Method: database()
@@ -217,19 +197,13 @@ class Loader
         
         // Check for a DB class in the Application, and system core folder
         $info['driver'] = strtolower($info['driver']);
-        if(file_exists(APP_PATH. DS . 'database' . DS . 'Driver.php')) 
+        if(file_exists(ROOT . DS . 'system'. DS .'database' . DS . 'Driver.php'))
         {
-            require_once(APP_PATH. DS . 'database' . DS . 'Driver.php');
-            $first = "Application\\";
-        }
-        else
-        {
-            require_once(SYSTEM_PATH. DS . 'database' . DS . 'Driver.php');
-            $first = "System\\";
+            require_once(ROOT . DS . 'system'. DS .'database' . DS . 'Driver.php');
         }
         
         // Not in the registry, so istablish a new connection
-        $dispatch = $first ."Database\\Driver";
+        $dispatch = "Database\\Driver";
         try{
             $Obj = new $dispatch( $info );
         }
@@ -266,7 +240,7 @@ class Loader
         // Return the object!
         return $Obj;
     }
-
+    
 /*
 | ---------------------------------------------------------------
 | Method: helper()
@@ -297,16 +271,198 @@ class Loader
             $loaded[] = $name;
         }
         
-        // Check the application/helpers folder
-        if(file_exists(APP_PATH . DS .  'helpers' . DS . $name . '.php')) 
+        // Check the core/helpers folder
+        if(file_exists( SYSTEM_PATH . DS .'helpers'. DS . $name .'.php')) 
         {
-            require_once(APP_PATH . DS .  'helpers' . DS . $name . '.php');
+            require_once(SYSTEM_PATH . DS .'helpers'. DS . $name .'.php');
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: plugin()
+| ---------------------------------------------------------------
+|
+| This method is used to load a plugin
+|
+| @Param: (String) $name - The name of the plugin
+| @Param: (String) $method - The method to run
+|
+*/
+    public function plugin($name, $method = false)
+    {
+        // Create our classname
+        $name = ucfirst($name);
+        $store_name = 'Plugins_'. $name;
+        
+        // Check if the plugin is already loaded
+        $Obj = \Registry::singleton()->load($store_name);
+        if( $Obj === null )
+        {
+            // We have to manually load the plugin
+            $file = ROOT . DS . 'third_party'. DS .'plugins' . DS . $name . '.php';
+            if(!file_exists($file))
+            {
+                show_error('plugin_not_found', array($name), E_ERROR);
+                return false;
+            }
+            
+            // Include the file just once!
+            include_once( $file );
+            
+            // Init the plugin
+            try {
+                $className = "\Plugins\\". $name;
+                $Obj = new $className();
+            } 
+            catch(\Exception $e) {
+                $Obj = false;
+                show_error('plugin_failed_init', array($name, $e->getMessage()), E_WARNING);
+            }
+            
+            // Store the object
+            \Registry::singleton()->store($store_name, $Obj);
         }
         
-        // Check the core/helpers folder
-        if(file_exists(SYSTEM_PATH . DS .  'helpers' . DS . $name . '.php')) 
+        // Make sure the object IS an object
+        if( !is_object($Obj) ) return false;
+        
+        // Run the requested method
+        if($method != false)
         {
-            require_once(SYSTEM_PATH . DS .  'helpers' . DS . $name . '.php');
+            try {
+                $Obj->$method();
+                $return = true;
+            } 
+            catch(\Exception $e) {
+                $return = false;
+                show_error('plugin_error', array($name, $method, $e->getMessage()), E_WARNING);
+            }
+            
+            // Return the result
+            return $return;
+        }
+        
+        return $Obj;
+    }
+
+/*
+| ---------------------------------------------------------------
+| Method: wowlib()
+| ---------------------------------------------------------------
+|
+| This method is used to load a WoW library
+|
+| @Param: (Int) $id - The realm ID as stored in the `scms_realms` table
+| @Param: (String) $instance_as - The name the instance variable
+|   Ex: $this->$instance_as->method()
+|
+*/
+    public function wowlib($id = 0, $instance_as = FALSE)
+    {
+        // Get our realm id if none is provieded
+        if($id === 0) $id = config('default_realm_id');
+        
+        // Make sure we havent loaded the lib already
+        $Obj = \Registry::singleton()->load('Wowlib_r'.$id);
+        if($Obj !== NULL) return $Obj;
+        
+        // Load our driver name
+        $DB = $this->database('DB', FALSE);
+        $realm = $DB->query("SELECT `id`, `name`, `driver`, `char_db`, `world_db` FROM `pcms_realms` WHERE `id`=".$id)->fetch_row();
+        
+        // Make sure we didnt get a false DB return
+        if($realm === FALSE)
+        {
+            $language = load_language_file('messages');
+            $message = $language['wowlib_realm_doesnt_exist'];
+            show_error($message, array($id), E_ERROR);
+        }
+        
+        // Make sure the wowlib exists
+        if( !is_dir( APP_PATH . DS . 'wowlib' . DS . config('emulator') . DS . $realm['driver']) )
+        {
+            $language = load_language_file('messages');
+            $message = $language['wowlib_driver_doesnt_exist'];
+            show_error($message, array($realm['driver']), E_ERROR);
+            return false;
+        }
+
+        // Include the wowlib file
+        require_once( ROOT . DS . 'third_party' . DS . 'wowlib' . DS . 'Wowlib.php' );
+        
+        // Try to init the class
+        try{
+            $class = new \Wowlib\Wowlib($realm);
+        }
+        catch(\Exception $e){
+            $class = FALSE;
+        }
+        
+        // Store the class statically and return the class
+        \Registry::singleton()->store('Wowlib_r'.$id, $class);
+        
+        // Check to see if the user wants to instance
+        if($instance_as !== FALSE)
+        {
+            get_instance()->$instance_as = $class;
+        }
+        return $class;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: realm()
+| ---------------------------------------------------------------
+|
+| This method is used to load a WoW Emulator, and connect to 
+|   the realm
+|
+|   @Param: $instance - Instance the realm?
+|
+*/
+    public function realm($instance = TRUE)
+    {  
+        // Get our emulator from the Config File
+        $emulator = ucfirst( config('emulator') );
+        $class_name = "Emulator_".$emulator;
+        $file = ROOT . DS . 'third_party'. DS .'wowlib' . DS . strtolower($emulator) . DS . $emulator . '.php';
+        
+        // Make sure we havent loaded the lib already
+        $class = \Registry::singleton()->load($class_name);
+        if($class !== NULL)
+        {
+            goto Instance;
+        }
+
+        // Load the lib file
+        elseif(file_exists($file))
+        {
+            include_once $file;
+            $name = "\\Wowlib\\". $emulator;
+            $class = new $name();
+            
+            // Store the class statically and return the class
+            \Registry::singleton()->store($class_name, $class);
+            
+            // Instance
+            Instance:
+            {
+                if($instance == TRUE)
+                {
+                    $FB = get_instance();
+                    if(is_object($FB)) $FB->realm = $class;
+                }
+            }
+            
+            // Return the class
+            return $class;
+        }
+        else
+        {
+            $language = load_language_file('messages');
+            $message = $language['emulator_doesnt_exist'];
+            show_error($message, array($emulator), E_ERROR);
         }
     }
 }

@@ -18,7 +18,7 @@
 | in the config file.
 |
 */
-namespace System\Core;
+namespace Core;
 
 class Config
 {
@@ -36,9 +36,9 @@ class Config
     public function __construct() 
     {
         // Set default files
-        $this->files['app']['file_path'] = APP_PATH . DS . 'config' . DS . 'config.php';
-        $this->files['core']['file_path'] = APP_PATH . DS . 'config' . DS . 'core.config.php';
-        $this->files['db']['file_path'] = APP_PATH . DS . 'config' . DS . 'database.config.php';
+        $this->files['app']['file_path'] = SYSTEM_PATH . DS . 'config' . DS . 'config.php';
+        $this->files['core']['file_path'] = SYSTEM_PATH . DS . 'config' . DS . 'core.config.php';
+        $this->files['db']['file_path'] = SYSTEM_PATH . DS . 'config' . DS . 'database.config.php';
         
         // Lets roll!
         $this->Init();

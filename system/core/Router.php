@@ -18,7 +18,7 @@
 | also used for module checking, or spitting out 404's
 |
 */
-namespace System\Core;
+namespace Core;
 
 class Router
 {

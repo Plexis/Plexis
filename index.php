@@ -15,15 +15,14 @@
 
 // Define CMS versions
 define('CMS_VERSION', 'Beta 1');
-define('CMS_BUILD', 222);
+define('CMS_BUILD', 223);
 define('REQ_DB_VERSION', '0.15');
 
 // Define a smaller Directory seperater and ROOT path
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__));
 
-// Define full paths to the APP and System Folders
-define('APP_PATH', ROOT . DS . 'application');
+// Define full paths to the System Folder
 define('SYSTEM_PATH', ROOT . DS . 'system');
 
 // Include required scripts to run the system

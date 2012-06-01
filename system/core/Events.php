@@ -18,7 +18,7 @@
 | to be notified / called when an event name is fired.
 |
 */
-namespace System\Core;
+namespace Core;
 
 class Events
 {

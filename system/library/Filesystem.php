@@ -17,7 +17,7 @@
 | A class built to easily manage files and directories
 |
 */
-namespace System\Library;
+namespace Library;
 
 class Filesystem
 {

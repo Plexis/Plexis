@@ -11,7 +11,7 @@
 | License:      GNU GPL v3
 |
 */
-namespace System\Library;
+namespace Library;
 
 class Session
 {

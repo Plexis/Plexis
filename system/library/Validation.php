@@ -17,7 +17,7 @@
 | A class built to validate user input from forms
 |
 */
-namespace System\Library;
+namespace Library;
 
 class Validation
 {

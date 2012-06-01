@@ -11,7 +11,7 @@
 | License: 		GNU GPL v3
 |
 */
-namespace System\Database;
+namespace Database;
 
 class Driver extends \PDO
 {
@@ -556,16 +556,9 @@ class Driver extends \PDO
         $class = ucfirst($name);
         
         // Check for the extension
-        if(file_exists(APP_PATH. DS . 'database' . DS . 'extensions' . DS . $class .'.php')) 
-        {
-            require_once(APP_PATH. DS . 'database' . DS . 'extensions' . DS . $class .'.php');
-            $prefix = "\\Application";
-        }
-        elseif(file_exists(SYSTEM_PATH. DS . 'database' . DS . 'extensions' . DS . $class .'.php'))
-        {
-            require_once(SYSTEM_PATH. DS . 'database' . DS . 'extensions' . DS . $class .'.php');
-            $prefix = "\\System";
-        }
+		$file = path(SYSTEM_PATH, 'database', 'extensions', $class . '.php');
+        if(file_exists( $file )) 
+            require_once($file);
         else
         {
             // Extension doesnt exists :O
@@ -574,7 +567,7 @@ class Driver extends \PDO
         }
         
         // Load the class
-        $class = $prefix ."\\Database\\Extensions\\".$class;
+        $class = "System\\Database\\Extensions\\".$class;
         $this->$name = new $class($this);
         return $this->$name;
     }

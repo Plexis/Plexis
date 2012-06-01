@@ -1,15 +1,12 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
-| Frostbite Framework
-|
+| Plexis
 | --------------------------------------------------------------
-|
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Author:       Steven Wilson 
+| Author:       Tony (Syke)
+| Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
-|
 | ---------------------------------------------------------------
 | Class: Debug
 | ---------------------------------------------------------------
@@ -17,10 +14,14 @@
 | Main error handler for the Core.
 |
 */
-namespace System\Core;
+namespace Core;
 
 class Debug
 {
+
+    // Error Number
+    protected $ErrorNo;
+    
     // Error message,
     protected $ErrorMessage;
 
@@ -51,6 +52,10 @@ class Debug
     
     // Our URL info
     protected $url_info;
+    
+    // Ajax Request?
+    protected $isAjax;
+
 
 /*
 | ---------------------------------------------------------------
@@ -67,8 +72,9 @@ class Debug
         
         // Get our URL info
         $this->url_info = load_class('Router')->get_url_info();
+        $this->isAjax = load_class('Input')->is_ajax();
     }
-
+    
 /*
 | ---------------------------------------------------------------
 | Function: trigger_error()
@@ -92,7 +98,7 @@ class Debug
         $this->ErrorFile = $file; //str_replace(ROOT . DS, '', $file);
         $this->ErrorLine = $line;
         $this->ErrorTrace = $backtrace;
-
+        
         // Get our severity
         switch($errno)
         {
@@ -100,7 +106,6 @@ class Debug
             case E_USER_ERROR:
                 $severity = 2;
                 break;
-
             case E_NOTICE:
             case E_WARNING:
             case E_DEPRECATED:
@@ -109,12 +114,11 @@ class Debug
             case E_USER_NOTICE:
                 $severity = 1;
                 break;
-
             default:
                 $severity = 3;
                 break;
         }
-        
+
         // If we are silent, then be silent
         if($severity == 3 || !$this->silence)
         {
@@ -122,7 +126,95 @@ class Debug
             if($this->log_level != 0) $this->log_error();
         
             // Only build the error page when its fetal, or a development Env.
-            if( $this->Environment == 2 || $severity > 1 ) $this->build_error_page();
+            if( $this->Environment == 2 || $severity > 1 )
+            {
+                // Output depending on request type
+                if($this->isAjax)
+                {
+                    // Only display ajax errors if they are severe!
+                    if($errno != E_STRICT && $errno != E_DEPRECATED)
+                    {
+                        $string = $this->error_string($errno);
+                        echo json_encode( 
+                            array(
+                                'success' => false,
+                                'message' => '['. $string .'] '. $message ." $file [$line]",
+                                'data' => '['. $string .'] '. $message,
+                                'type' => 'error'
+                            )
+                        );
+                        exit();
+                    }
+                }
+                else
+                {
+                    $this->build_error_page();
+                }
+            }
+        }
+    }
+
+/*
+| ---------------------------------------------------------------
+| Function: log_error()
+| ---------------------------------------------------------------
+|
+| Logs the error message in the error log
+|
+*/
+    protected function log_error($was_silenced = false)
+    {
+        // Get our site url
+        $url = $this->url_info;
+        $DB = load_class('Loader')->database('DB', false, true);
+        
+        // Only log if database is connectable
+        if(is_object($DB))
+        {
+            // Make neat the error trace ;)
+            $trace = array();
+            if($this->ErrorTrace != null)
+            {
+                foreach($this->ErrorTrace as $key => $t)
+                {
+                    if($key == 0) continue; 
+                    unset($t['object']);
+                    $trace[] = print_r( $t, true );
+                }
+            }
+            
+            // Attempt to insert the error in the database
+            $data = array(
+                'level' => $this->ErrorLevel,
+                'string' => $this->ErrorMessage,
+                'file' => $this->ErrorFile,
+                'line' => $this->ErrorLine,
+                'url' => $url['site_url'] ."/". $url['uri'],
+                'remote_ip' => $_SERVER['REMOTE_ADDR'],
+                'time' => time(),
+                'backtrace' => serialize( $trace )
+            );
+            $DB->insert('pcms_error_logs', $data);
+        }
+        else
+        {
+            // Get our site url
+            $url = $this->url_info;
+            
+            // Create our log message
+            $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') . PHP_EOL;
+            $err_message .= "| Error Level: ".$this->ErrorLevel . PHP_EOL;
+            $err_message .= "| Message: ".$this->ErrorMessage . PHP_EOL; 
+            $err_message .= "| Reporting File: ".$this->ErrorFile . PHP_EOL;
+            $err_message .= "| Error Line: ".$this->ErrorLine . PHP_EOL;
+            $err_message .= "| Error Displayed: ". ($was_silenced == true) ? "No" : "Yes". PHP_EOL;
+            $err_message .= "| URL When Error Occured: ". $url['site_url'] ."/". $url['uri'] . PHP_EOL;
+            $err_message .= "--------------------------------------------------------------------". PHP_EOL . PHP_EOL;
+
+            // Write in the log file, the very long message we made
+            $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'php_errors.log', 'a');
+            @fwrite($log, $err_message);
+            @fclose($log);
         }
     }
     
@@ -144,48 +236,11 @@ class Debug
         // Get our site url
         $site_url = $this->url_info['site_url'];
         
-        // See if there is a custom page in the app folder
-        $file = APP_PATH . DS . 'errors' . DS . 'error_'. $type .'.php';
-        if(file_exists( $file ))
-        {
-            include($file);
-        }
-        else
-        {
-            include(SYSTEM_PATH . DS . 'errors' . DS . 'error_'. $type .'.php');
-        }
+        // Include error page
+        include(SYSTEM_PATH . DS . 'errors' . DS . 'error_'. $type .'.php');
         
         // Kill the script
         die();
-    }
-
-/*
-| ---------------------------------------------------------------
-| Function: log_error()
-| ---------------------------------------------------------------
-|
-| Logs the error message in the error log
-|
-*/
-    protected function log_error($was_silenced = false)
-    {
-        // Get our site url
-        $url = $this->url_info;
-        
-        // Create our log message
-        $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') . PHP_EOL;
-        $err_message .= "| Error Level: ".$this->ErrorLevel . PHP_EOL;
-        $err_message .= "| Message: ".$this->ErrorMessage . PHP_EOL; 
-        $err_message .= "| Reporting File: ".$this->ErrorFile . PHP_EOL;
-        $err_message .= "| Error Line: ".$this->ErrorLine . PHP_EOL;
-        $err_message .= "| Error Displayed: ". ($was_silenced == true) ? "No" : "Yes". PHP_EOL;
-        $err_message .= "| URL When Error Occured: ". $url['site_url'] ."/". $url['uri'] . PHP_EOL;
-        $err_message .= "--------------------------------------------------------------------". PHP_EOL . PHP_EOL;
-
-        // Write in the log file, the very long message we made
-        $log = @fopen(SYSTEM_PATH . DS . 'logs' . DS . 'php_errors.log', 'a');
-        @fwrite($log, $err_message);
-        @fclose($log);
     }
     
 /*
@@ -298,14 +353,10 @@ class Debug
         
         // Capture the orig_settingslate using Output Buffering, file depends on Environment
         ob_start();
-            $file = APP_PATH . DS . 'errors' . DS . 'general_error.php';
+            $file = SYSTEM_PATH . DS . 'errors' . DS . 'general_error.php';
             if(file_exists($file))
             {
                 include($file);
-            }
-            else
-            {
-                include(SYSTEM_PATH . DS . 'errors' . DS . 'general_error.php');
             }
             $page = ob_get_contents();
         @ob_end_clean();

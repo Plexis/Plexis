@@ -17,7 +17,7 @@
 | This class is used to load language files and return lang vars.
 | 
 */
-namespace System\Core;
+namespace Core;
 
 class Language
 {
@@ -27,11 +27,17 @@ class Language
     // An array of loaded language files
     protected $loaded_files = array();
     
-    // Array of system and application languages
-    protected $languages = array();
+    // Array of found languages
+    protected $found_languages = array();
+    
+    // Our default language
+    protected $default_language;
+    
+    // Our file system class
+    protected $filesystem;
     
     // Our selected language
-    public $language;
+    public $language = null;
 
 /*
 | ---------------------------------------------------------------
@@ -40,29 +46,77 @@ class Language
 */
     public function __construct()
     {
+        // Load the Input and Filesystem class'
+        $this->Input = load_class('Input');
+        $this->filesystem = load_class('Filesystem', 'Library');
+        
         // Load our languages
         $this->scan_language_dirs();
+        
+        // Set the default language
+        $this->default_language = load_class('Config')->get('default_language');
 
         // Set the default Language
-        $this->language = load_class('Config')->get('core_language', 'Core');
+        $this->selected_language();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: selected_language()
+| ---------------------------------------------------------------
+|
+| Returns the users selected language, or figures it our manually
+| if not already set.
+|
+| @Return (String) Language name
+|
+*/
+    public function selected_language() 
+    {
+        // return the selected language if its set already
+        if(!empty($this->language)) return $this->language;
+   
+        // Load language cookie
+        $this->language = $this->Input->cookie('language', true);
+
+        //Load the default language if the user hasnt selected a language yet
+        if($this->language == false || !in_array($this->language, $this->found_languages))
+        {
+            // Get the users prefered language
+            $prefered = null;
+            if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+            {
+                $prefered = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+            }
+        
+            // Check and make sure the language is installed
+            $this->language = (!in_array($prefered, $this->found_languages)) ? $this->default_language() : $prefered;
+            
+            // Update the language cookie
+            $this->Input->set_cookie('language', $this->language);
+        }
+
+        // Set globals
+        return $this->language;
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: set_language()
+| method: set_language()
 | ---------------------------------------------------------------
 |
 | Sets the langauge. Does not reload already loaded files
 |
 | @Param: (String) $lang - Name of the language we are loading
-| @Return (None)
+| @Return (Bool) True if the language was set, false if it didnt
+|   exist in the languages folder
 |
 */
     public function set_language($lang)
     {
         // Check if the language exists
         $lang = strtolower($lang);
-        if( in_array($lang, $this->languages['application']) || in_array($lang, $this->languages['system']) )
+        if(in_array($lang, $this->found_languages))
         {
             $this->language = $lang;
             return TRUE;
@@ -71,10 +125,43 @@ class Language
         // If we are here, then langauge doesnt exist! set whatever we can
         return FALSE;
     }
+    
+/*
+| ---------------------------------------------------------------
+| Method: default_language()
+| ---------------------------------------------------------------
+|
+| Return the default language, after making sure it exists
+|
+| @Return (String) Language name
+|
+*/
+    public function default_language($type = 'application')
+    {
+        // Check if the language exists
+        return (in_array($this->default_language, $this->found_languages)) ? $this->default_language : 'en';
+    }
+    
+/*
+| ---------------------------------------------------------------
+| method: language_exists()
+| ---------------------------------------------------------------
+|
+| Returns if the language exists or not
+|
+| @Return (Bool)
+|
+*/
+    public function exists($lang)
+    {
+        // Return if the language exists
+        $lang = strtolower($lang);
+        return (in_array($lang, $this->found_languages)) ? true : false;
+    }
 
 /*
 | ---------------------------------------------------------------
-| Function: load()
+| Method: load()
 | ---------------------------------------------------------------
 |
 | Loads the lanugage file
@@ -85,13 +172,12 @@ class Language
 | @Return (Mixed) Depends on the $return variable
 |
 */
-    public function load($file, $lang = NULL)
+    public function load($file)
     {
         // Set the language if specified
-        if($lang != NULL) $this->set_language($lang);
+        $lang = $this->language;
         
         // Add the extension, and create our tag
-        $lang = $this->language;
         $key = $file .'_'. $lang;
         $file_ext = $file . '.php';
 
@@ -103,24 +189,13 @@ class Language
         
         // Init our empty variable arrays
         $vars = array();
-        $vars2 = array();
 
-        // Load the core language file if it exists
+        // Next we load the application file, allows overriding of the core one
         if(file_exists(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file_ext))
         {
             $vars = include(SYSTEM_PATH . DS .'language' . DS . $lang . DS . $file_ext);
             if(!is_array($vars)) return FALSE;
         }
-
-        // Next we load the application file, allows overriding of the core one
-        if(file_exists(APP_PATH . DS .'language' . DS . $lang . DS . $file_ext))
-        {
-            $vars2 = include(APP_PATH . DS .'language' . DS . $lang . DS . $file_ext);
-            if(!is_array($vars2)) return FALSE;
-        }
-        
-        // Merge if both the app and core had the same filename
-        $vars = array_merge($vars, $vars2);
 
         // Without a return, we need to store what we have here.
         $this->loaded_files[] = $file;
@@ -132,7 +207,7 @@ class Language
 
 /*
 | ---------------------------------------------------------------
-| Function: get()
+| Method: get()
 | ---------------------------------------------------------------
 |
 | Returns the variable from the config array
@@ -142,13 +217,22 @@ class Language
 | @Return (Mixed) FALSE if the var is unset, or the string otherwise
 |
 */
-    public function get($var, $file = NULL)
+    public function get($var, $file = null)
     {
-        // Check to see that we loaded something first
-        if(empty( $this->language_vars )) return FALSE;
+        // Load the filename if we need
+        if($file != null && !in_array($file, $this->loaded_files))
+        {
+            $this->load($file);
+        }
+        
+        // Make sure we have variables to return at all
+        if(empty( $this->language_vars ))
+        {
+            return FALSE;
+        }
         
         // Determine our language variable filename if not givin
-        if($file == NULL) $file = end( $this->loaded_files );
+        if($file == null) $file = end( $this->loaded_files );
 
         // Build out lang var key
         $key = $file .'_'. $this->language;
@@ -168,7 +252,7 @@ class Language
 
 /*
 | ---------------------------------------------------------------
-| Function: get_languages()
+| Method: get_languages()
 | ---------------------------------------------------------------
 |
 | Returns an array of found langauges in the language folders
@@ -177,25 +261,14 @@ class Language
 | @Return (Array) An array of found languages
 |
 */    
-    public function get_languages($type = NULL)
+    public function get_languages()
     {
-        // Type check!
-        if($type == 'system')
-        {
-            return $this->languages['system'];
-        }
-        elseif($type == 'application')
-        {
-            return $this->languages['application'];
-        }
-        
-        // Return both
-        return $this->languages;
+        return $this->found_languages;
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: scan_language_dirs()
+| Method: scan_language_dirs()
 | ---------------------------------------------------------------
 |
 | Scans and finds all installed languages
@@ -203,29 +276,9 @@ class Language
 */
     protected function scan_language_dirs()
     {
-        // Load the system languages first
-        $path = SYSTEM_PATH . DS . 'language';
-        $list = opendir( $path );
-        while($file = readdir($list))
-        {
-            if($file[0] != "." && is_dir($path . DS . $file))
-            {
-                $this->languages['system'][] = $file;
-            }
-        }
-        closedir($list);
-        
         // Finally, Load app languages
-        $path = APP_PATH . DS . 'language';
-        $list = opendir( $path );
-        while($file = readdir($list))
-        {
-            if($file[0] != "." && is_dir($path . DS . $file))
-            {
-                $this->languages['application'][] = $file;
-            }
-        }
-        closedir($list);
+        $path = SYSTEM_PATH . DS . 'language';
+        $this->found_languages = $this->filesystem->list_folders($path);
     }
 }
 // EOF

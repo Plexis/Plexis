@@ -19,7 +19,7 @@
 | well
 |
 */
-namespace System\Core;
+namespace Core;
 
 class Benchmark
 {

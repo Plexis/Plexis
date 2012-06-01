@@ -17,7 +17,7 @@
 | A simple source parser
 |
 */
-namespace System\Library;
+namespace Library;
 
 class Parser
 {

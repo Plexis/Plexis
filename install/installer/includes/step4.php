@@ -18,7 +18,7 @@ $connect = get_database_connections(true);
 $DB = $connect['plexis'];
 
 // Everthing should be fine, so first insert info into protected config file
-$conffile = "../application/config/database.config.php";
+$conffile = "../system/config/database.config.php";
 $build = '';
 $build .= "<?php
 \$DB_configs = array(
@@ -54,7 +54,7 @@ else
 }
 
 // Edit the config.php file and switch it to the Trinity emulator (Thanks Skye :p )
-$cmsconf = "../application/config/config.php";
+$cmsconf = "../system/config/config.php";
 if( is_writeable(  $cmsconf ) )
 {
 	$contents = file_get_contents( $cmsconf );
@@ -75,7 +75,7 @@ else
 if(!isset($_POST['skip']))
 {
     // Dealing with the full install sql file
-    $install = $DB->run_sql_file("../application/assets/sql/full_install.sql");
+    $install = $DB->run_sql_file("../system/sql/full_install.sql");
     if($install)
     {
         output_message('success', 'Plexis database installed');

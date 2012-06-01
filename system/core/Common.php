@@ -17,7 +17,7 @@
         $parts = explode('\\', strtolower($className));
 
         // Shave the first value if empty (it happens when going from the root 
-        // namespace "\\System\\Core...")
+        // namespace "\Core\...")
         if( empty($parts[0]) ) $parts = array_shift($parts);
 
         // Upercase the filename
@@ -28,12 +28,13 @@
         $class_path = implode(DS, $parts);
 
         // Lets make our file path from the root directory
-        $file = ROOT . DS . $class_path .'.php';
+        $file = SYSTEM_PATH . DS . $class_path .'.php';
 
         // If the file exists, then include it, and return
         if(!file_exists($file))
         {
             // Failed to load class all together.
+            trigger_error($className . ': '. $file); die();
             show_error('autoload_failed', array( addslashes($className) ), E_ERROR);
         }
         require_once $file;
@@ -61,7 +62,7 @@
         // Now we need to make sure the user supplied some sort of path
         if(strpos($className, '\\') === FALSE)
         {
-            $className = $type .'\\'. $className;
+            $className = $type. '\\'. $className;
         }
 
         // Make a lowercase version, and a storage name
@@ -88,31 +89,14 @@
         // Build our filepath
         $file = implode(DS, $parts);
 
-        // If we dont have the full path, create it
-        if($parts[0] !== 'system' && $parts[0] !== 'application')
-        {
-            // Check for needed classes from the Application library folder
-            if(file_exists(APP_PATH. DS . $file . '.php')) 
-            {
-                $file = APP_PATH . DS . $file .'.php';
-                $className = '\Application\\'. $className;
-            }
-            else 
-            {
-                $file = SYSTEM_PATH . DS . $file .'.php';
-                $className = '\System\\'. $className;
-            }
-        }
-        else
-        {
-            $file = ROOT . DS . $file .'.php';
-        }
+        // Build our file path
+        $file = SYSTEM_PATH . DS . $file .'.php';
 
         // Include our file. If it doesnt exists, class is un-obtainable.
-        require $file;
+        require_once $file;
 
         //  Initiate the new class into a variable
-        try{
+        try {
             $Obj = new $className();
         }
         catch(\Exception $e) {
@@ -203,14 +187,14 @@
         $backtrace = debug_backtrace();
         $calling = $backtrace[0];
         
-        // Load language
+        //Load language
         $lang = load_class('Language');
         $language = load_class('Config')->get('core_language', 'Core');
         $lang->set_language( $language );
         $lang->load('core_errors');
         $message = $lang->get($err_message);
         
-        // Allow custom messages
+        //Allow custom messages
         if($message === FALSE)
         {
             $message = $err_message;
@@ -270,20 +254,53 @@
 */	
     function get_instance()
     {
-        if(class_exists('System\\Core\\Controller', FALSE))
+        if(isset($GLOBALS['registered_instance']))
         {
-            return \System\Core\Controller::get_instance();
-        }
-        elseif(class_exists('Application\\Core\\Controller', FALSE))
-        {
-            if(method_exists('Application\\Core\\Controller', 'get_instance'))
+            if(method_exists($GLOBALS['registered_instance'][0], $GLOBALS['registered_instance'][1]))
             {
-                return \Application\Core\Controller::get_instance();
+                return eval("return \\". $GLOBALS['registered_instance'][0] ."->". $GLOBALS['registered_instance'][1] ."::get_instance()");
             }
+        }
+        elseif(class_exists('Core\\Controller', FALSE))
+        {
+            return \Core\Controller::get_instance();
         }
 
         return FALSE;
     }
+    
+    function register_instance($className, $method)
+    {
+        $GLOBALS['registered_instance'] = array($className, $method);
+    }
+	
+/*
+| ---------------------------------------------------------------
+| Function: path()
+| ---------------------------------------------------------------
+|
+| Combines several strings into an absolute file path.
+|
+| @Param: (Variable) - The pieces of the path, passed as individual arguments, as an array, or a mixture of the two.
+| @Return: (String) - The absolute path.
+|
+*/
+
+	function path()
+	{
+		$args = func_get_args();
+		$parts = array();
+		
+		foreach( $args as $part )
+		{
+			if( is_array( $part ) )
+				$parts[] = trim( implode( DIRECTORY_SEPARATOR, $part ), " \\/" );
+			else
+				$parts[] = trim( $part, " \\/" );
+		}
+		
+		return implode( DIRECTORY_SEPARATOR, $parts );
+	}
 
 // Register the Core to process errors with the custom_error_handler method
 set_error_handler('php_error_handler', E_ALL | E_STRICT);

@@ -18,7 +18,7 @@
 | $_POST vars, Ip address, browser etc etc.
 | 
 */
-namespace System\Core;
+namespace Core;
 
 class Input
 {

@@ -18,7 +18,7 @@
 | forms to paypal for processing.
 |
 */
-namespace System\Library;
+namespace Library;
 
 class Paypal 
 {
