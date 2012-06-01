@@ -10,9 +10,6 @@ define('ROOT', dirname(__FILE__));
 include(ROOT . DS .'installer'. DS .'includes'. DS .'functions.php');
 include(ROOT . DS .'installer'. DS .'includes'. DS .'driver.php');
 
-//Check to see if the installer is locked.
-$installed = file_exists( "install.lock" );
-
 // Get our step level
 $step = (isset($_GET['step'])) ? $_GET['step'] : 1;
 ?>
@@ -22,15 +19,6 @@ $step = (isset($_GET['step'])) ? $_GET['step'] : 1;
 	<title>Plexis CMS Installer</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<link rel="stylesheet" href="installer/css/main.css" type="text/css"/>
-	<?php if( $installed ): ?>
-		<script type="text/javascript" language="JavaScript">
-			setTimeout( "back()", 5000 );
-			
-			function back() {
-				history.go( -1 );
-			}
-		</script>
-	<?php endif; ?>
 </head>
 <body>
 	<div id="header">					
@@ -43,9 +31,16 @@ $step = (isset($_GET['step'])) ? $_GET['step'] : 1;
 				echo "<h4><center>Step ".$step."</center></h4>";
 				echo "</div> <!-- .content-header -->";
 				
-				if( $installed ) //$installed = file_exists( "install.lock" );
+				if( file_exists( "install.lock" ) )
 				{
 					show_error( "Plexis has already been installed! Please delete the install.lock file if you need to re-run the installer. You will be redirected in 5 seconds." );
+					
+					//build the site url
+					$host = $_SERVER["HTTP_HOST"];
+					$self = rtrim( dirname( filter_var( $_SERVER["PHP_SELF"], FILTER_SANITIZE_STRING ) ), "install" );
+					$protocol = ( isset( $_SERVER["HTTPS"] ) ) ? "https://" : "http://";
+					
+					header( "Refresh:5;url=" . $protocol . $host . $self );
 				}
 				else
 				{
