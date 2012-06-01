@@ -50,7 +50,7 @@ class Plexis
         define('BASE_URL', $routes['site_url']);
         
         // Determine if HTTP_MOD_REWRITE is enabled, and Define our site url
-        if( !array_key_exists('HTTP_MOD_REWRITE', $_SERVER) ) $_SERVER['HTTP_MOD_REWRITE'] == 'Off';
+        if( !array_key_exists('HTTP_MOD_REWRITE', $_SERVER) ) $_SERVER['HTTP_MOD_REWRITE'] = 'Off';
         ($_SERVER['HTTP_MOD_REWRITE'] == 'On') ? define('SITE_URL', $routes['site_url']) : define('SITE_URL', $routes['site_url'] . '/?url=');
         
         // Load Plugins config file
