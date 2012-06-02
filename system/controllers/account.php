@@ -358,7 +358,8 @@ class Account extends Core\Controller
                     if( config('reg_email_verification') )
                     {
                         // Setup our variables and load our extensions
-                        $XML = simplexml_load_file( APP_PATH . DS . 'language' . DS . $GLOBALS['language'] . DS .'emails.xml' );
+                        $path = path(SYSTEM_PATH, 'language', $GLOBALS['language'], 'emails.xml');
+                        $XML = simplexml_load_file( $path );
                         $this->email = $this->load->library('email');
                         
                         // Generate a activation key
@@ -767,8 +768,8 @@ class Account extends Core\Controller
                                 if(!empty($this->user['email']))
                                 {
                                     // Setup our variables and load our extensions
-                                    $lang = (language_exists($this->user['language'])) ? $this->user['language'] : default_language();
-                                    $email = simplexml_load_file( APP_PATH . DS . 'language' . DS . $lang . DS .'emails.xml' );
+                                    $path = path(SYSTEM_PATH, 'language', $GLOBALS['language'], 'emails.xml');
+                                    $email = simplexml_load_file( $path );
                                     $this->email = $this->load->library('email');
 
                                     // Create out email message, parse variables
