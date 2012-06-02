@@ -152,7 +152,7 @@ class Admin_Model extends Core\Model
     public function install_module($name, $uri, $method)
     {
         // Load the module controller
-        $file = APP_PATH . DS . 'modules' . DS . $name . DS .'controller.php';
+        $file = path( ROOT, "third_party", "modules", $name, "controller.php" );
         if(!file_exists($file))
         {
             return FALSE;
@@ -199,7 +199,7 @@ class Admin_Model extends Core\Model
     public function uninstall_module($name)
     {
         // Load the module controller
-        $file = APP_PATH . DS . 'modules' . DS . $name . DS .'controller.php';
+        $file = path( ROOT, "third_party", "modules", $name, "controller.php" );
         if(!file_exists($file))
         {
             return FALSE;

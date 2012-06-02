@@ -81,15 +81,14 @@ class Loader
             return $Obj;
         }
         
+		$model_path = "";
         // Include the model page
         if($GLOBALS['is_module'] == TRUE)
-        {
-            require_once(ROOT . DS .'third_party'. DS .'modules'. DS . $GLOBALS['controller'] . DS .'models'. DS . $name .'.php');
-        }
+			$model_path = path( ROOT, "third_party", "modules", $GLOBALS["controller"], "models", $name . ".php" );
         else
-        {
-            require_once(SYSTEM_PATH . DS . 'models' . DS . $name .'.php');
-        }
+			$model_path = path( SYSTEM_PATH, "models", $name . ".php" );
+			
+		require_once( $model_path );
         
         // Load the class
         try{
@@ -380,7 +379,8 @@ class Loader
         }
         
         // Make sure the wowlib exists
-        if( !is_dir( APP_PATH . DS . 'wowlib' . DS . config('emulator') . DS . $realm['driver']) )
+		$path = path( SYSTEM_PATH, "wowlib", config("emulator"), $realm["driver"] );
+        if( !is_dir( $path ) )
         {
             $language = load_language_file('messages');
             $message = $language['wowlib_driver_doesnt_exist'];

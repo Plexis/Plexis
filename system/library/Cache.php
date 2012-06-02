@@ -24,7 +24,7 @@ class Cache
 */
     public function __construct()
     {
-        $this->path = APP_PATH . DS . 'cache';
+        $this->path = path( SYSTEM_PATH, "cache" );
     }
 
 /*

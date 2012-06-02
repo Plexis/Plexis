@@ -18,7 +18,7 @@
     function load_module_config($module, $name = 'mod', $filename = 'config.php', $array = FALSE)
     {	
         // Get our filename and use the load_config method
-        $file = APP_PATH . DS .'modules' . DS . $module . DS . 'config' . DS . $filename;
+		$file = path( ROOT, "modules", $module, "config", $filename );
         load_config($file, $name, $array);
     }
 
@@ -36,7 +36,7 @@
     function get_modules()
     {
         $reallist = array();
-        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'modules');
+        $list = load_class('Filesystem', 'library')->list_folders( path( ROOT, "third_party", "modules" ) );
         foreach($list as $file)
         {
             $reallist[] = $file;

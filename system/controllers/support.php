@@ -60,7 +60,8 @@ class Support extends Core\Controller
         else
         {
             // Make sure the language exists still
-            if( file_exists(APP_PATH . DS . 'language' . DS . $cookie . DS . 'howtoplay.html') )
+			$file = path( SYSTEM_PATH, "language", $cookie, "howtoplay.html" );
+            if( file_exists( $file ) )
             {
                 $language = $cookie;
             }
@@ -71,7 +72,7 @@ class Support extends Core\Controller
         }
         
         // Set up our how to play page
-        $data['text'] = file_get_contents( APP_PATH . DS . 'language' . DS . $language . DS . 'howtoplay.html' );
+        $data['text'] = file_get_contents( path( SYSTEM_PATH, "language", $language, "howtoplay.html" ) );
         $data['logon_server'] = config('logon_server');
         $data['register_link'] = SITE_URL .'/account/register';
         $this->load->view('howtoplay', $data);

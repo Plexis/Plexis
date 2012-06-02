@@ -87,9 +87,10 @@ class Wowlib
         $libname = strtolower($this->realm_info['driver']);
         
         // Check for the extension
-        if(file_exists(APP_PATH. DS . 'wowlib' . DS . $this->emulator . DS . $libname . DS . $class .'.php')) 
+		$file = path( ROOT, "third_party", "wowlib", $this->emulator, $libname, $class . ".php" );
+        if( file_exists( $path ) ) 
         {
-            require_once(APP_PATH. DS . 'wowlib' . DS . $this->emulator . DS . $libname . DS . $class .'.php');
+            require_once( $path );
         }
         else
         {

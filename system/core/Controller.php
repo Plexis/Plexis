@@ -81,7 +81,7 @@ class Controller
         $this->Language = load_class('Language');
         $GLOBALS['language'] = $this->Language->selected_language();
         
-        // Autoload helpers and library's
+        // Autoload helpers and libraries
         if($autoload == true) $this->_autoload();
         
         // Setup the template system

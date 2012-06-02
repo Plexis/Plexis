@@ -13,7 +13,7 @@
     function get_templates()
     {
         $reallist = array();
-        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'templates');
+        $list = load_class('Filesystem', 'library')->list_folders( path( ROOT, "third_party", "themes" ) );
         foreach($list as $file)
         {
             $reallist[] = $file;

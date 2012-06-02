@@ -12,7 +12,7 @@
 |
 */
     function __autoload($className) 
-    {	
+    {
         // We will need to lowercase everything except for the filename
         $parts = explode('\\', strtolower($className));
 
@@ -25,10 +25,10 @@
         $parts[$last] = ucfirst($parts[$last]);
 
         // Build our filepath
-        $class_path = implode(DS, $parts);
+        $class_path = path( $parts );
 
         // Lets make our file path from the root directory
-        $file = SYSTEM_PATH . DS . $class_path .'.php';
+        $file = path( SYSTEM_PATH, $class_path . ".php" );
 
         // If the file exists, then include it, and return
         if(!file_exists($file))
@@ -37,6 +37,7 @@
             trigger_error($className . ': '. $file); die();
             show_error('autoload_failed', array( addslashes($className) ), E_ERROR);
         }
+		
         require_once $file;
     }
     

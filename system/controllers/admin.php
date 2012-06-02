@@ -534,7 +534,7 @@ class Admin extends Core\Controller
             if( module_installed($name) )
             {
                 // Load the module controller
-                $file = APP_PATH . DS . 'modules' . DS . $name . DS .'controller.php';
+                $file = path( ROOT, "third_party", "modules", $name, "controller.php" );
                 if(file_exists($file))
                 {
                     // Load the file
@@ -568,6 +568,15 @@ class Admin extends Core\Controller
                 }
             }
         }
+		else
+		{
+			$data = array(
+				"page_title" => "Module Management",
+				"page_desc" => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
+			);
+			
+			$this->load->view( "module_index", $data );
+		}
     }
 
 /*
@@ -596,13 +605,13 @@ class Admin extends Core\Controller
         }
         
         // Scan and get a list of all templates
-        $list = scandir(APP_PATH . DS . 'templates');
+        $list = scandir( path( ROOT, "third_party", "themes" ) );
         foreach($list as $file)
         {
             if($file[0] == "." || $file == "index.html") continue;
             if(!in_array($file, $aa))
             {
-                $xml = APP_PATH . DS . 'templates' . DS . $file . DS .'template.xml';
+                $xml = path( ROOT, "third_party", "themes", $file, "tmeplate.xml" );
                 if(file_exists($xml))
                 {
                     $xml = simplexml_load_file($xml);

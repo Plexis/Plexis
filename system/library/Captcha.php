@@ -34,7 +34,7 @@ class Captcha
     public function __construct()
     {
         // Define where out fonts are stored, and load them
-        $this->fontpath = APP_PATH . DS . 'library/fonts/';      
+        $this->fontpath = path( SYSTEM_PATH, "library", "fonts" );      
         $this->load_fonts();
 
         // Make sure we can even run this show!

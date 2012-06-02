@@ -1199,7 +1199,7 @@ class Admin_ajax extends Core\Controller
                             4 => "<a class=\"install\" name=\"".$mod."\" href=\"javascript:void(0);\">Install</a>"
                         );
                     }
-                    
+					
                     // add totals
                     $output["iTotalRecords"] = $i + $output["iTotalRecords"];
                     $output["iTotalDisplayRecords"] = $i + $output["iTotalDisplayRecords"];
@@ -1310,7 +1310,7 @@ class Admin_ajax extends Core\Controller
                     $default = config('default_template');
                     
                     // Get a list of all template folders
-                    $list = scandir( APP_PATH . DS . 'templates' );
+                    $list = scandir( path( ROOT, "third_party", "themes" ) );
 
                     // Loop, and add options
                     foreach($output['aaData'] as $key => $value)

@@ -69,7 +69,7 @@
     function get_wowlib_drivers()
     {
         $reallist = FALSE;
-        $path = APP_PATH . DS . 'wowlib'. DS . config('emulator');
+        $path = path( ROOT, "third_party", "wowlib", config("emulator") );
         $list = load_class('Filesystem', 'Library')->list_folders($path);
         foreach($list as $file)
         {
@@ -93,7 +93,7 @@
     function get_emulators()
     {
         $reallist = array();
-        $list = load_class('Filesystem', 'library')->list_folders(APP_PATH . DS . 'wowlib');
+        $list = load_class('Filesystem', 'library')->list_folders( path( ROOT, "third_party", "wowlib" ) );
         foreach($list as $file)
         {
             $reallist[] = $file;
