@@ -73,19 +73,38 @@ $().ready(function() {
         { 
             // Parse the JSON response
             var result = jQuery.parseJSON(response);
-            if (result.success == true)
+            if(typeof result.php_error != "undefined" && result.php_error == true)
             {
-                // Show that there are updates
-                $('#account-ban-button').html('UnBan Account');
-                $('#account-ban-button').attr('name', 'unban');
-                
-                // Update our status
-                post_account_action('account-status');
-                $('#js_ban_message').attr('class', 'alert success').html( result.message );
+                show_php_error( result.php_error_data );
             }
             else
             {
-                $('#js_ban_message').attr('class', 'alert error').html( result.message );
+                if (result.success == true)
+                {
+                    // Show that there are updates
+                    $('#account-ban-button').html('UnBan Account');
+                    $('#account-ban-button').attr('name', 'unban');
+                    
+                    // Update our status
+                    post_account_action('account-status');
+                    $('#js_ban_message').attr('class', 'alert success').html( result.message );
+                }
+                else
+                {
+                    $('#js_ban_message').attr('class', 'alert error').html( result.message );
+                }
+            }
+        },
+        error: function(request, status, err) 
+        {
+            switch(status)
+            {
+                case "error":
+                    $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                    break;
+                default:
+                    $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                    break;
             }
         },
         timeout: 5000 
@@ -115,21 +134,40 @@ $().ready(function() {
         { 
             // Parse the JSON response
             var result = jQuery.parseJSON(response);
-            if (result.success == true)
+            if(typeof result.php_error != "undefined" && result.php_error == true)
             {
-                // Account updated successfully
-                $('#js_profile_message').attr('class', 'alert success').html(result.message);
-                $('#password1').attr('value', '');
-                $('#password2').attr('value', '');
+                show_php_error( result.php_error_data );
             }
             else
             {
-                // General errors
-                $('#js_profile_message').attr('class', 'alert ' + result.type).html(result.message);
+                if (result.success == true)
+                {
+                    // Account updated successfully
+                    $('#js_profile_message').attr('class', 'alert success').html(result.message);
+                    $('#password1').attr('value', '');
+                    $('#password2').attr('value', '');
+                }
+                else
+                {
+                    // General errors
+                    $('#js_profile_message').attr('class', 'alert ' + result.type).html(result.message);
+                }
             }
             
             page_loading(false);
             $('#js_profile_message').delay(4000).slideUp(600);
+        },
+        error: function(request, status, err) 
+        {
+            switch(status)
+            {
+                case "error":
+                    $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                    break;
+                default:
+                    $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                    break;
+            }
         },
         timeout: 3000 
     });
@@ -149,69 +187,76 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-               switch(task)
+                if(typeof result.php_error != "undefined" && result.php_error == true)
                 {
-                    case "unban-account":
-                        if (result.success == true){
-                            // UnBan was a success
-                            $('#js_message').attr('class', 'alert success no-margin top').html( result.message );
-                            $('#account-ban-button').html('Ban Account');
-                            $('#account-ban-button').attr('name', 'ban');
-                        }else{
-                            // General error
-                            $('#js_message').attr('class', 'alert error no-margin top').html( result.message );
-                        }
-                        // Update our status and display our message
-                        post_account_action('account-status');
-                        $('#js_message').delay(2000).slideUp(600);
-                        break;
-                        
-                    case "lock-account":
-                        if (result.success == true){
-                            // Locking of account successful
-                            $('#account-lock-button').html('Unlock Account');
-                            $('#account-lock-button').attr('name', 'unlock');
-                            $('#js_message').attr('class', 'alert success no-margin top').html( result.message );
-                        }else{
-                            // General error
-                            $('#js_message').attr('class', 'alert error no-margin top').html( result.message );
-                        }
-                        
-                        // Update our status and display our message
-                        post_account_action('account-status');
-                        $('#js_message').delay(2000).slideUp(600);
-                        break;
-                        
-                    case "unlock-account":
-                        if (result.success == true){
-                            // Unlocking of account successful
-                            $('#account-lock-button').html('Lock Account');
-                            $('#account-lock-button').attr('name', 'lock');
-                            $('#js_message').attr('class', 'alert success no-margin top').html( result.message );
-                        }else{
-                            // General error
-                            $('#js_message').attr('class', 'alert error no-margin top').html( result.message );
-                        }
-                        
-                        // Update our status and display our message
-                        post_account_action('account-status');
-                        $('#js_message').delay(2000).slideUp(600);
-                        break;
-                        
-                    case "account-status":
-                        $('#account_status').html( result.message );
-                        break;
-                        
-                    case "delete-account":
-                        if (result.success == true){
-                            // Delete successful
-                            alert( result.message );
-                            window.location = url + "/admin/users";
-                        }else{
-                            // Error
-                            alert( result.message );
-                        }
-                        break;
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                   switch(task)
+                    {
+                        case "unban-account":
+                            if (result.success == true){
+                                // UnBan was a success
+                                $('#js_message').attr('class', 'alert success no-margin top').html( result.message );
+                                $('#account-ban-button').html('Ban Account');
+                                $('#account-ban-button').attr('name', 'ban');
+                            }else{
+                                // General error
+                                $('#js_message').attr('class', 'alert error no-margin top').html( result.message );
+                            }
+                            // Update our status and display our message
+                            post_account_action('account-status');
+                            $('#js_message').delay(2000).slideUp(600);
+                            break;
+                            
+                        case "lock-account":
+                            if (result.success == true){
+                                // Locking of account successful
+                                $('#account-lock-button').html('Unlock Account');
+                                $('#account-lock-button').attr('name', 'unlock');
+                                $('#js_message').attr('class', 'alert success no-margin top').html( result.message );
+                            }else{
+                                // General error
+                                $('#js_message').attr('class', 'alert error no-margin top').html( result.message );
+                            }
+                            
+                            // Update our status and display our message
+                            post_account_action('account-status');
+                            $('#js_message').delay(2000).slideUp(600);
+                            break;
+                            
+                        case "unlock-account":
+                            if (result.success == true){
+                                // Unlocking of account successful
+                                $('#account-lock-button').html('Lock Account');
+                                $('#account-lock-button').attr('name', 'lock');
+                                $('#js_message').attr('class', 'alert success no-margin top').html( result.message );
+                            }else{
+                                // General error
+                                $('#js_message').attr('class', 'alert error no-margin top').html( result.message );
+                            }
+                            
+                            // Update our status and display our message
+                            post_account_action('account-status');
+                            $('#js_message').delay(2000).slideUp(600);
+                            break;
+                            
+                        case "account-status":
+                            $('#account_status').html( result.message );
+                            break;
+                            
+                        case "delete-account":
+                            if (result.success == true){
+                                // Delete successful
+                                alert( result.message );
+                                window.location = url + "/admin/users";
+                            }else{
+                                // Error
+                                alert( result.message );
+                            }
+                            break;
+                    }
                 }
             },
             error: function(request, status, err) 

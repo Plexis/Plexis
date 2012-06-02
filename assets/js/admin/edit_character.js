@@ -8,10 +8,12 @@ $().ready(function() {
     
     // Delete button
     $("a#delete").click(function() {
-        if ( confirm('Are you sure you want to delete this character?') )
-        {
-            post_action('delete');
-        }
+        $.msgbox('Are you sure you want to delete this character?', {type : 'confirm'}, function(result) {
+            if (result == "Accept")
+            {
+                post_action('delete');
+            }
+        });
     });
     
     
@@ -19,7 +21,17 @@ $().ready(function() {
     $('#profile').ajaxForm({
         success: function (response, statusText, xhr, $form) {
             var result = jQuery.parseJSON(response);
-            $('#js_message').attr('class', 'alert ' + result.type).html( result.message ).slideDown(300).delay(3000).slideUp(600);
+            if(typeof result.php_error != "undefined" && result.php_error == true)
+            {
+                show_php_error( result.php_error_data );
+            }
+            else
+            {
+                $('#js_message').attr('class', 'alert ' + result.type).html( result.message ).slideDown(300).delay(3000).slideUp(600);
+            }
+        },
+        error: function () {
+            $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
         },
         timeout: 3000 
     });
@@ -36,8 +48,14 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(response) 
             {
-                var result = jQuery.parseJSON(response);
-                $('#js_message').attr('class', 'alert ' + result.type).html( result.message ).slideDown(300).delay(3000).slideUp(600);
+                if(typeof result.php_error != "undefined" && result.php_error == true)
+                {
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                    $('#js_message').attr('class', 'alert ' + result.type).html( result.message ).slideDown(300).delay(3000).slideUp(600);
+                }
             },
             error: function(request, status, err) 
             {

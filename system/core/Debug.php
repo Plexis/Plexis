@@ -138,8 +138,14 @@ class Debug
                         echo json_encode( 
                             array(
                                 'success' => false,
-                                'message' => '['. $string .'] '. $message ." $file [$line]",
-                                'data' => '['. $string .'] '. $message,
+                                'php_error' => true,
+                                'php_error_data' => array(
+                                    'message' => '['. $string .'] '. $message,
+                                    'file' => $file,
+                                    'line' => $line
+                                ),
+                                'message' => '['. $string .'] '. $message ." in File: $file, on Line: $line",
+                                'data' => '['. $string .'] '. $message ." in File: $file, on Line: $line",
                                 'type' => 'error'
                             )
                         );
@@ -149,6 +155,7 @@ class Debug
                 else
                 {
                     $this->build_error_page();
+                    exit();
                 }
             }
         }

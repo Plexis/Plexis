@@ -78,29 +78,43 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                // Show form, and hide any previous messages
-                $('#js_groups_message').hide();
-                $('#groups-form').show();
-                
-                // Set form Field Values
-                $('#title').attr('value', result.group.title);
-                $("#grouptype").val( result.type );
-                $('#groupid').attr('value', name);
-                $("#formtype").attr('value', 'edit');
-                $('#grouptype').change();
-                
-                // Open the Modal Window
-                Modal.dialog("option", {
-                    title: "Edit Group"
-                }).dialog("open");
-                
-                // Hide our close window button from view unless needed
-                Modal.parent().find(".ui-dialog-buttonset").hide();
+                if(typeof result.php_error != "undefined" && result.php_error == true)
+                {
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                    // Show form, and hide any previous messages
+                    $('#js_groups_message').hide();
+                    $('#groups-form').show();
+                    
+                    // Set form Field Values
+                    $('#title').attr('value', result.group.title);
+                    $("#grouptype").val( result.type );
+                    $('#groupid').attr('value', name);
+                    $("#formtype").attr('value', 'edit');
+                    $('#grouptype').change();
+                    
+                    // Open the Modal Window
+                    Modal.dialog("option", {
+                        title: "Edit Group"
+                    }).dialog("open");
+                    
+                    // Hide our close window button from view unless needed
+                    Modal.parent().find(".ui-dialog-buttonset").hide();
+                }
             },
             error: function(request, status, err) 
             {
-                $('#groups-form').hide();
-                $('#js_groups_message').attr('class', 'alert error').html('An error occured, Please check your error log.').slideDown(300);
+                switch(status)
+                {
+                    case "error":
+                        $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                        break;
+                    default:
+                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                        break;
+                }
             }
         });
     });
@@ -117,9 +131,16 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
-                table.fnDraw();
+                if(typeof result.php_error != "undefined" && result.php_error == true)
+                {
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                    // Display our Success message, and ReDraw the table so we imediatly see our action
+                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                    table.fnDraw();
+                }
             },
             error: function(request, status, err) 
             {
@@ -145,23 +166,29 @@ $().ready(function() {
             $('#js_groups_message').attr('class', 'alert loading').html('Creating...').slideDown(300);
             return true;
         },
-        success: save_result,
+        success: function (response, statusText, xhr, $form) {
+            var result = jQuery.parseJSON(response);
+            Modal.parent().find(".ui-dialog-buttonset").show();
+            
+            // Check for php error
+            if(typeof result.php_error != "undefined" && result.php_error == true)
+            {
+                show_php_error( result.php_error_data );
+            }
+            else
+            {
+                // Display our Success message, and ReDraw the table so we imediatly see our action
+                $('#js_groups_message').attr('class', 'alert ' + result.type).html(result.message);
+                if (result.success == true)
+                {
+                    table.fnDraw();
+                }
+            }
+        },
+        error: function () {
+            $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+        },
         resetForm: true,
         timeout: 5000 
     });
-
-    /** Callback function for the Add New Group ajaxForm */
-    function save_result(response, statusText, xhr, $form)  
-    { 
-        // Parse the JSON response
-        var result = jQuery.parseJSON(response);
-        
-        // Display our Success message, and ReDraw the table so we imediatly see our action
-        $('#js_groups_message').attr('class', 'alert ' + result.type).html(result.message);
-        Modal.parent().find(".ui-dialog-buttonset").show();
-        if (result.success == true)
-        {
-            table.fnDraw();
-        }
-    }
 });

@@ -14,7 +14,19 @@ $().ready(function() {
                 "type": "POST", 
                 "url": sSource, 
                 "data": aoData, 
-                "success": fnCallback
+                "success": function (result, status, jqXHR) {
+                    if(typeof result.php_error != "undefined" && result.php_error == true)
+                    {
+                        show_php_error(result.php_error_data);
+                    }
+                    else
+                    {
+                        fnCallback(result, status, jqXHR);
+                    }
+                },
+                "error": function(request, status, err) {
+                    show_ajax_error(status);
+                }
             } );
         }
     });
@@ -113,37 +125,44 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                if (result.success == true)
+                if(typeof result.php_error != "undefined" && result.php_error == true)
                 {
-                    // Less typing
-                    result = result.message;
-                    
-                    // Set the form values
-                    $('#form-type').attr('value', 'edit');
-                    $('#news-id').attr('value', news_id);
-                    $('#title').attr('value', result.title);
-                    $('textarea#body').val( result.body );
-                    $('#submit').attr('value', 'Update Post');
-                    
-                    // Make sure we hide the old message, and display the form
-                    $('#js_news_message').hide();
-                    $('#vote').show();
-                    
-                    // Open the Modal Window
-                    Modal.dialog("option", {
-                        title: "Edit News Post"
-                    }).dialog("open");
-                    
-                    // Hide our close window button from view unless needed
-                    Modal.parent().find(".ui-dialog-buttonset").hide();
-                    
-                    // Show the form
-                    $('#js_news_message').hide();
-                    $('#news-form').show();
+                    show_php_error( result.php_error_data );
                 }
                 else
                 {
-                    $.msgbox( result.message, {type : 'error'});
+                    if (result.success == true)
+                    {
+                        // Less typing
+                        result = result.message;
+                        
+                        // Set the form values
+                        $('#form-type').attr('value', 'edit');
+                        $('#news-id').attr('value', news_id);
+                        $('#title').attr('value', result.title);
+                        $('textarea#body').val( result.body );
+                        $('#submit').attr('value', 'Update Post');
+                        
+                        // Make sure we hide the old message, and display the form
+                        $('#js_news_message').hide();
+                        $('#vote').show();
+                        
+                        // Open the Modal Window
+                        Modal.dialog("option", {
+                            title: "Edit News Post"
+                        }).dialog("open");
+                        
+                        // Hide our close window button from view unless needed
+                        Modal.parent().find(".ui-dialog-buttonset").hide();
+                        
+                        // Show the form
+                        $('#js_news_message').hide();
+                        $('#news-form').show();
+                    }
+                    else
+                    {
+                        $.msgbox( result.message, {type : 'error'});
+                    }
                 }
             },
             error: function(request, status, err) 
@@ -178,20 +197,23 @@ $().ready(function() {
                 timeout: 5000, // in milliseconds
                 success: function(result) 
                 {
-                    if (result.success == true)
+                    if(typeof result.php_error != "undefined" && result.php_error == true)
                     {
-                        // Display our Success message, and ReDraw the table so we imediatly see our action
-                        $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
-                        newstable.fnDraw();
+                        show_php_error( result.php_error_data );
                     }
                     else
                     {
-                        $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                        // Display our Success message, and ReDraw the table so we imediatly see our action
+                        $('#js_message').attr('class', 'alert success').html(result.message).slideDown(300).delay(3000).slideUp(600);
+                        if (result.success == true)
+                        {
+                            newstable.fnDraw();
+                        }
                     }
                 },
                 error: function(request, status, err) 
                 {
-                    $switch(status)
+                    switch(status)
                     {
                         case "error":
                             $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
@@ -217,25 +239,32 @@ $().ready(function() {
             });
             return true;
         },
-        success: news_result,
+        success: function (response)  
+        {
+            // Parse the JSON response
+            var result = jQuery.parseJSON(response);
+            
+            if(typeof result.php_error != "undefined" && result.php_error == true)
+            {
+                show_php_error( result.php_error_data );
+            }
+            else
+            {
+                // Display our Success message, and ReDraw the table so we imediatly see our action
+                $('#js_news_message').attr('class', 'alert ' + result.type).html(result.message);
+                if (result.success == true)
+                {
+                    newstable.fnDraw();
+                }
+            }
+            
+            // Reshow the button to close the window!
+            Modal.parent().find(".ui-dialog-buttonset").show();
+        },
+        error: function () {
+            $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+        },
         clearForm: true,
         timeout: 5000 
     });
-
-    // Callback function for the News ajaxForm 
-    function news_result(response, statusText, xhr, $form)  
-    {
-        // Parse the JSON response
-        var result = jQuery.parseJSON(response);
-        
-        // Display our Success message, and ReDraw the table so we imediatly see our action
-        $('#js_news_message').attr('class', 'alert ' + result.type).html(result.message);
-        if (result.success == true)
-        {
-            newstable.fnDraw();
-        }
-        
-        // Reshow the button to close the window!
-        Modal.parent().find(".ui-dialog-buttonset").show();
-    }
 })

@@ -12,7 +12,19 @@ $().ready(function() {
                 "type": "POST", 
                 "url": sSource, 
                 "data": aoData, 
-                "success": fnCallback
+                "success": function (result, status, jqXHR) {
+                    if(typeof result.php_error != "undefined" && result.php_error == true)
+                    {
+                        show_php_error(result.php_error_data);
+                    }
+                    else
+                    {
+                        fnCallback(result, status, jqXHR);
+                    }
+                },
+                "error": function(request, status, err) {
+                    show_ajax_error(status);
+                }
             } );
         }
     });
@@ -75,37 +87,44 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                if (result.success == true)
+                if(typeof result.php_error != "undefined" && result.php_error == true)
                 {
-                    // Less typing
-                    result = result.message;
-                    
-                    // Make sure we hide the old message, and display the form
-                    $('#js_news_message').hide();
-                    $('#vote').show();
-                    
-                    // Set the form values
-                    $('#formtype').attr('value', 'edit');
-                    $('#vote_id').attr('value', vote_id);
-                    $('#hostname').attr('value', result.hostname);
-                    $('#votelink').attr('value', result.votelink);
-                    $('#image_url').attr('value', result.image_url);
-                    $('#points').attr('value', result.points);
-                    $('#reset_time').val(result.reset_time);
-                    $('#reset_time').change();
-                    $('#form-submit').attr('value', 'Update Vote Site');
-                    
-                    // Open the Modal Window
-                    Modal.dialog("option", {
-                        title: "Edit Vote Site"
-                    }).dialog("open");
-                    
-                    // Hide our close window button from view unless needed
-                    Modal.parent().find(".ui-dialog-buttonset").hide();
+                    show_php_error( result.php_error_data );
                 }
                 else
                 {
-                    alert( result.message );
+                    if (result.success == true)
+                    {
+                        // Less typing
+                        result = result.message;
+                        
+                        // Make sure we hide the old message, and display the form
+                        $('#js_news_message').hide();
+                        $('#vote').show();
+                        
+                        // Set the form values
+                        $('#formtype').attr('value', 'edit');
+                        $('#vote_id').attr('value', vote_id);
+                        $('#hostname').attr('value', result.hostname);
+                        $('#votelink').attr('value', result.votelink);
+                        $('#image_url').attr('value', result.image_url);
+                        $('#points').attr('value', result.points);
+                        $('#reset_time').val(result.reset_time);
+                        $('#reset_time').change();
+                        $('#form-submit').attr('value', 'Update Vote Site');
+                        
+                        // Open the Modal Window
+                        Modal.dialog("option", {
+                            title: "Edit Vote Site"
+                        }).dialog("open");
+                        
+                        // Hide our close window button from view unless needed
+                        Modal.parent().find(".ui-dialog-buttonset").hide();
+                    }
+                    else
+                    {
+                        $.msgbox( result.message, {type: 'alert'} );
+                    }
                 }
             },
             error: function(request, status, err) 
@@ -139,10 +158,17 @@ $().ready(function() {
                     timeout: 5000, // in milliseconds
                     success: function(result) 
                     {
-                        $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown('slow').delay(3000).slideUp('slow');
-                        if (result.success == true)
+                        if(typeof result.php_error != "undefined" && result.php_error == true)
                         {
-                            votetable.fnDraw();
+                            show_php_error( result.php_error_data );
+                        }
+                        else
+                        {
+                            $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown('slow').delay(3000).slideUp('slow');
+                            if (result.success == true)
+                            {
+                                votetable.fnDraw();
+                            }
                         }
                     },
                     error: function(request, status, err) 
@@ -173,23 +199,30 @@ $().ready(function() {
             });
             return true;
         },
-        success: post_result,
+        success: function (response)  
+        {
+            // Parse the JSON response
+            var result = jQuery.parseJSON(response);
+            if(typeof result.php_error != "undefined" && result.php_error == true)
+            {
+                show_php_error( result.php_error_data );
+            }
+            else
+            {
+                $('#js_news_message').attr('class', 'alert ' + result.type).html(result.message);
+                if (result.success == true)
+                {
+                    votetable.fnDraw();
+                }
+            }
+            
+            // Reshow the button to close the window!
+            Modal.parent().find(".ui-dialog-buttonset").show();
+        },
+        error: function () {
+            $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+        },
         clearForm: true,
         timeout: 5000 
     });
-
-    /** Callback function for the Vote ajaxForm */
-    function post_result(response, statusText, xhr, $form)  
-    {
-        // Parse the JSON response
-        var result = jQuery.parseJSON(response);
-        $('#js_news_message').attr('class', 'alert ' + result.type).html(result.message);
-        if (result.success == true)
-        {
-            votetable.fnDraw();
-        }
-        
-        // Reshow the button to close the window!
-        Modal.parent().find(".ui-dialog-buttonset").show();
-    }
 })

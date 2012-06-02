@@ -15,7 +15,19 @@ $().ready(function() {
                 "type": "POST", 
                 "url": sSource, 
                 "data": aoData, 
-                "success": fnCallback
+                "success": function (result, status, jqXHR) {
+                    if(typeof result.php_error != "undefined" && result.php_error == true)
+                    {
+                        show_php_error(result.php_error_data);
+                    }
+                    else
+                    {
+                        fnCallback(result, status, jqXHR);
+                    }
+                },
+                "error": function(request, status, err) {
+                    show_ajax_error(status);
+                }
             } );
         }
     });
@@ -34,16 +46,31 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
-                if (result.success == true)
+                if(typeof result.php_error != "undefined" && result.php_error == true)
                 {
-                    table.fnDraw();
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                    // Display our Success message, and ReDraw the table so we imediatly see our action
+                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                    if (result.success == true)
+                    {
+                        table.fnDraw();
+                    }
                 }
             },
             error: function(request, status, err) 
             {
-                $('#js_message').attr('class', 'alert error').html('Connection timed out. Please try again.').slideDown(300).delay(3000).slideUp(600);
+                switch(status)
+                {
+                    case "error":
+                        $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                        break;
+                    default:
+                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                        break;
+                }
             }
         });
     });
@@ -62,16 +89,31 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
-                if (result.success == true)
+                if(typeof result.php_error != "undefined" && result.php_error == true)
                 {
-                    table.fnDraw();
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                    // Display our Success message, and ReDraw the table so we imediatly see our action
+                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                    if (result.success == true)
+                    {
+                        table.fnDraw();
+                    }
                 }
             },
             error: function(request, status, err) 
             {
-                $('#js_message').attr('class', 'alert error').html('Connection timed out. Please try again.').slideDown(300).delay(3000).slideUp(600);
+                switch(status)
+                {
+                    case "error":
+                        $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                        break;
+                    default:
+                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                        break;
+                }
             }
         });
     });
@@ -90,16 +132,31 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
-                if (result.success == true)
+                if(typeof result.php_error != "undefined" && result.php_error == true)
                 {
-                    table.fnDraw();
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                    // Display our Success message, and ReDraw the table so we imediatly see our action
+                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                    if (result.success == true)
+                    {
+                        table.fnDraw();
+                    }
                 }
             },
             error: function(request, status, err) 
             {
-                $('#js_message').attr('class', 'alert error').html('Connection timed out. Please try again.').slideDown(300).delay(3000).slideUp(600);
+                switch(status)
+                {
+                    case "error":
+                        $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                        break;
+                    default:
+                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                        break;
+                }
             }
         });
     });

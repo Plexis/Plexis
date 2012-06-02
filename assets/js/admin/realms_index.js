@@ -14,7 +14,19 @@ $().ready(function() {
                 "type": "POST", 
                 "url": sSource, 
                 "data": aoData, 
-                "success": fnCallback
+                "success": function (result, status, jqXHR) {
+                    if(typeof result.php_error != "undefined" && result.php_error == true)
+                    {
+                        show_php_error(result.php_error_data);
+                    }
+                    else
+                    {
+                        fnCallback(result, status, jqXHR);
+                    }
+                },
+                "error": function(request, status, err) {
+                    show_ajax_error(status);
+                }
             } );
         }
     });
@@ -24,30 +36,47 @@ $().ready(function() {
     $("#realm-table").on('click', '.un-install', function(){
         var r_id = this.name;
         
-        if( confirm('Are you sure you want to uninstall realm #' + r_id) )
-        {
-            // Send our Uninstall command
-            $.ajax({
-                type: "POST",
-                url: post_url,
-                data: { action : 'un-install', id : r_id },
-                dataType: "json",
-                timeout: 5000, // in milliseconds
-                success: function(result) 
-                {
-                    // Display our Success message, and ReDraw the table so we imediatly see our action
-                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
-                    if (result.success == true)
+        $.msgbox('Are you sure you want to uninstall realm #' + r_id, {type : 'confirm'}, function(result) {
+            if (result == "Accept")
+            {
+                // Send our Uninstall command
+                $.ajax({
+                    type: "POST",
+                    url: post_url,
+                    data: { action : 'un-install', id : r_id },
+                    dataType: "json",
+                    timeout: 5000, // in milliseconds
+                    success: function(result) 
                     {
-                        realmtable.fnDraw();
+                        if(typeof result.php_error != "undefined" && result.php_error == true)
+                        {
+                            show_php_error( result.php_error_data );
+                        }
+                        else
+                        {
+                            // Display our Success message, and ReDraw the table so we imediatly see our action
+                            $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                            if (result.success == true)
+                            {
+                                realmtable.fnDraw();
+                            }
+                        }
+                    },
+                    error: function(request, status, err) 
+                    {
+                        switch(status)
+                        {
+                            case "error":
+                                $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                                break;
+                            default:
+                                $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                                break;
+                        }
                     }
-                },
-                error: function(request, status, err) 
-                {
-                    $('#js_message').attr('class', 'alert error').html('Connection timed out. Please try again.').slideDown(300).delay(3000).slideUp(600);
-                }
-            });
-        }
+                });
+            }
+        });
     });
     
     // ============================================
@@ -64,16 +93,31 @@ $().ready(function() {
             timeout: 5000, // in milliseconds
             success: function(result) 
             {
-                // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
-                if (result.success == true)
+                if(typeof result.php_error != "undefined" && result.php_error == true)
                 {
-                    realmtable.fnDraw();
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                    // Display our Success message, and ReDraw the table so we imediatly see our action
+                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                    if (result.success == true)
+                    {
+                        realmtable.fnDraw();
+                    }
                 }
             },
             error: function(request, status, err) 
             {
-                $('#js_message').attr('class', 'alert error').html('Connection timed out. Please try again.').slideDown(300).delay(3000).slideUp(600);
+                switch(status)
+                {
+                    case "error":
+                        $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                        break;
+                    default:
+                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                        break;
+                }
             }
         });
     });

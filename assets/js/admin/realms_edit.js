@@ -84,16 +84,27 @@ $().ready(function() {
         { 
             // Parse the JSON response
             var result = jQuery.parseJSON(response);
-            if (result.success == true)
+            
+            if(typeof result.php_error != "undefined" && result.php_error == true)
             {
-                // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#edit-form').html('<div class="alert ' + result.type +'">' + result.message + '. <a href="' + Plexis.url + '/admin/realms">Click here to return.</a></div>');
+                show_php_error( result.php_error_data );
             }
             else
             {
-                $('#js_message').attr('class', 'alert ' + result.type).html(result.message);
+                if (result.success == true)
+                {
+                    // Display our Success message, and ReDraw the table so we imediatly see our action
+                    $('#edit-form').html('<div class="alert ' + result.type +'">' + result.message + '. <a href="' + Plexis.url + '/admin/realms">Click here to return.</a></div>');
+                }
+                else
+                {
+                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message);
+                }
+                $('#js_message').delay(5000).slideUp(300);
             }
-            $('#js_message').delay(5000).slideUp(300);
+        },
+        error: function () {
+            $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
         },
         timeout: 5000 
     });

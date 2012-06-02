@@ -13,6 +13,7 @@ CREATE TABLE `pcms_accounts` (
   `last_seen` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `registration_ip` varchar(24) NOT NULL DEFAULT '0.0.0.0',
+  `language` VARCHAR( 20 ) DEFAULT NULL,
   `selected_theme` varchar(50) DEFAULT NULL,
   `votes` int(5) unsigned NOT NULL DEFAULT '0',
   `vote_points` int(10) NOT NULL DEFAULT '0',
@@ -120,7 +121,7 @@ CREATE TABLE `pcms_modules` (
 -- ----------------------------
 -- Records of pcms_modules
 -- ----------------------------
-INSERT INTO `pcms_modules` VALUES ('devtest/index', 'Devtest', 'index', '0');
+INSERT INTO `pcms_modules` VALUES ('devtest/index', 'Devtest', 'index', '1');
 
 -- ----------------------------
 -- Table structure for `pcms_news`
@@ -269,7 +270,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.14');
+INSERT INTO `pcms_versions` VALUES ('database', '0.16');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`

@@ -16,7 +16,19 @@ $().ready(function() {
                 "type": "POST", 
                 "url": sSource, 
                 "data": aoData, 
-                "success": fnCallback
+                "success": function (result, status, jqXHR) {
+                    if(typeof result.php_error != "undefined" && result.php_error == true)
+                    {
+                        show_php_error(result.php_error_data);
+                    }
+                    else
+                    {
+                        fnCallback(result, status, jqXHR);
+                    }
+                },
+                "error": function(request, status, err) {
+                    show_ajax_error(status);
+                }
             } );
         }
     });
@@ -41,18 +53,17 @@ $().ready(function() {
                 {
                     table.fnDraw();
                 }
+                else
+                {
+                    if(typeof result.php_error != "undefined" && result.php_error == true)
+                    {
+                        show_php_error( result.php_error_data );
+                    }
+                }
             },
             error: function(request, status, err) 
             {
-                switch(status)
-                {
-                    case "error":
-                        $.msgbox('An error ocurred while sending the ajax request. Unable to establish connection.', {type : 'error'});
-                        break;
-                    default:
-                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
-                        break;
-                }
+                show_ajax_error(status);
             }
         });
     });
@@ -77,20 +88,19 @@ $().ready(function() {
                 }
                 else
                 {
-                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                    if(typeof result.php_error != "undefined" && result.php_error == true)
+                    {
+                        show_php_error( result.php_error_data );
+                    }
+                    else
+                    {
+                        $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                    }
                 }
             },
             error: function(request, status, err) 
             {
-                switch(status)
-                {
-                    case "error":
-                        $.msgbox('An error ocurred while sending the ajax request. Unable to establish connection.', {type : 'error'});
-                        break;
-                    default:
-                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
-                        break;
-                }
+                show_ajax_error(status);
             }
         });
     });

@@ -51,6 +51,26 @@
         return finished;
     }
     
+    function show_ajax_error(status)
+    {
+        switch(status)
+        {
+            case "error":
+                $.msgbox('An error ocurred while sending the ajax request. Unable to establish connection.', {type : 'error'});
+                break;
+            default:
+                $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                break;
+        }
+    }
+    
+    function show_php_error(data)
+    {
+        $.msgbox('An error was encountered during this ajax request!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
+            type : 'error'
+        });
+    }
+    
 /**
  * Cookie reading / writing / deleting functions
  * Functions from QuirksMode
