@@ -254,12 +254,9 @@
 */	
     function get_instance()
     {
-        if(isset($GLOBALS['registered_instance']))
+        if(isset($GLOBALS['_instance']) && is_object($GLOBALS['_instance']))
         {
-            if(method_exists($GLOBALS['registered_instance'][0], $GLOBALS['registered_instance'][1]))
-            {
-                return eval("return \\". $GLOBALS['registered_instance'][0] ."->". $GLOBALS['registered_instance'][1] ."::get_instance()");
-            }
+            return $GLOBALS['_instance'];
         }
         elseif(class_exists('Core\\Controller', FALSE))
         {
@@ -269,9 +266,20 @@
         return FALSE;
     }
     
-    function register_instance($className, $method)
+/*
+| ---------------------------------------------------------------
+| Function: register_instance()
+| ---------------------------------------------------------------
+|
+| This function sets the registered instance to the specified object
+|
+| @Return: (Object) - The instance object
+| @Return: (None)
+|
+*/	
+    function register_instance($Obj)
     {
-        $GLOBALS['registered_instance'] = array($className, $method);
+        $GLOBALS['_instance'] = $Obj;
     }
 	
 /*
@@ -279,10 +287,12 @@
 | Function: path()
 | ---------------------------------------------------------------
 |
-| Combines several strings into an absolute file path.
+| Combines several strings into a file path.
 |
-| @Param: (Variable) - The pieces of the path, passed as individual arguments, as an array, or a mixture of the two.
-| @Return: (String) - The absolute path.
+| @Params: (String | Array) - The pieces of the path, passed as 
+|   individual arguments. Each argument can be an array of paths,
+|   a string foldername, or a mixture of the two.
+| @Return: (String) - The path, with the corrected Directory Seperator
 |
 */
 
@@ -291,15 +301,12 @@
 		$args = func_get_args();
 		$parts = array();
 		
-		foreach( $args as $part )
+		foreach($args as $part)
 		{
-			if( is_array( $part ) )
-				$parts[] = trim( implode( DIRECTORY_SEPARATOR, $part ), " \\/" );
-			else
-				$parts[] = trim( $part, " \\/" );
+			$parts[] = (is_array( $part )) ? trim( implode(DS, $part), " \\/" ) : trim($part, " \\/");
 		}
 		
-		return implode( DIRECTORY_SEPARATOR, $parts );
+		return implode(DS, $parts);
 	}
 
 // Register the Core to process errors with the custom_error_handler method

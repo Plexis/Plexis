@@ -58,7 +58,7 @@ class Controller
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($process_db = TRUE, $init_template = TRUE) 
+    public function __construct($autoload = true, $init_template = true) 
     {
         // Set the instance here
         self::$instance = $this;
@@ -68,13 +68,41 @@ class Controller
         $this->action = $GLOBALS['action'];
         $this->querystring = $GLOBALS['querystring'];
         
-        // Initiate the loader and config class
+        // Initiate the Loader Input, and Config class
         $this->load = load_class('Loader');
         $this->Config = load_class('Config');
+        $this->Input = load_class('Input');
+
+        // If site is updating, only allow Ajax requests
+        if($GLOBALS['controller'] != 'admin_ajax' && $this->Config->get('site_updating')) 
+            die('Site Down for maintenance. Be back soon.');
         
-        // --------------------------------------
-        // Autoload the config autoload_helpers |
-        // --------------------------------------
+        // Setup the selected users language
+        $this->Language = load_class('Language');
+        $GLOBALS['language'] = $this->Language->selected_language();
+        
+        // Autoload helpers and library's
+        if($autoload == true) $this->_autoload();
+        
+        // Setup the template system
+        if($init_template == true) $this->_init_template();
+        
+        // Process DB updates
+        if( !$this->Input->is_ajax() ) $this->_process_db();
+        
+        // Fire the controller event
+        load_class('Events')->trigger('controller_init');
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: _autoload()
+| ---------------------------------------------------------------
+|
+*/
+    protected function _autoload()
+    {
+        // Autoload the config autoload_helpers 
         $libs = $this->Config->get('autoload_helpers', 'Core');
         if(count($libs) > 0)
         {
@@ -84,9 +112,7 @@ class Controller
             }
         }
         
-        //-----------------------------------------
-        // Autoload the config autoload_libraries |
-        //-----------------------------------------
+        // Autoload the config autoload_libraries
         $libs = $this->Config->get('autoload_libraries', 'Core');
         if(count($libs) > 0)
         {
@@ -95,26 +121,6 @@ class Controller
                 $this->load->library($lib);
             }
         }
-
-        // If site is updating, only allow Ajax requests
-        if($GLOBALS['controller'] != 'admin_ajax' && config('site_updating')) 
-            die('Site Down for maintenance. Be back soon.');
-        
-        // Globally load the Input class
-        $this->Input = load_class('Input');
-        
-        // Setup the selected users language
-        $this->Language = load_class('Language');
-        $GLOBALS['language'] = $this->Language->selected_language();
-        
-        // Process DB updates
-        if($process_db == TRUE) $this->_process_db();
-        
-        // Setup the template system
-        if($init_template == TRUE) $this->_init_template();
-        
-        // Fire the controller event
-        load_class('Events')->trigger('controller_init');
     }
     
 /*
@@ -123,42 +129,38 @@ class Controller
 | ---------------------------------------------------------------
 |
 */
-    private function _init_template() 
+    protected function _init_template() 
     {
         // Set our template path based on the users selected template
         if($this->controller == 'admin')
         {
-            $this->Template->set_template_path('system/admin');
+            $path = path('system', 'admin');
+            $this->Template->set_template_path($path);
         }
         else
         {
             // Check if the user has a selected theme.
             $user = $this->Session->data['user'];
-            if($user['logged_in'] == FALSE)
+            
+            // Load users selected theme if there is one selected
+            if($user['logged_in'] == true && !empty($user['selected_theme']))
             {
-                // Set default template path
-                $this->Template->set_template_path('third_party/themes/'. config('default_template'));
-            }
-            else
-            {
-                // Load users selected theme if there is one selected
-                if(!empty($user['selected_theme']))
-                {
-                    // Make sure the tempalate exists before setting the theme
-                    $query  = "SELECT `status` FROM `pcms_templates` WHERE `name`=?";
-                    $status = $this->DB->query( $query, array($user['selected_theme']) )->fetch_column();
-                    
-                    // If the template exists, and is enabled for site use
-                    if($status)
-                    {
-                        $this->Template->set_template_path('third_party/themes/'. $user['selected_theme']);
-                        return;
-                    }
-                }
+                // Make sure the tempalate exists before setting the theme
+                $query  = "SELECT `status` FROM `pcms_templates` WHERE `name`=?";
+                $status = $this->DB->query( $query, array($user['selected_theme']) )->fetch_column();
                 
-                // Set default template path if we are here
-                $this->Template->set_template_path('third_party/themes/'.  config('default_template'));
+                // If the template exists, and is enabled for site use
+                if($status)
+                {
+                    $path = path('third_party', 'themes', $user['selected_theme']);
+                    $this->Template->set_template_path($path);
+                    return;
+                }
             }
+            
+            // Set default template path if we are here
+            $path = path('third_party', 'themes', config('default_template'));
+            $this->Template->set_template_path($path);
         }
     }
     

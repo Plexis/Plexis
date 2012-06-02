@@ -66,12 +66,12 @@ class Template
     {
         // Define defaults
         $this->config['controller'] = $GLOBALS['controller'];
-        $this->config['is_module'] = $GLOBALS['is_module'];
+        $this->config['is_module']  = $GLOBALS['is_module'];
 
         // Load the loader, Session, and Parser classes
         $this->load = load_class('Loader');
         $this->session = $this->load->library('Session');
-        $this->parser = $this->load->library('Parser');
+        $this->parser  = $this->load->library('Parser');
         
         // Set basic headings so they can be modified later!
         $this->append_metadata("<!-- Basic Headings -->")
@@ -170,7 +170,7 @@ class Template
         // Set template path
         $path = trim($path, '/\\');
         $this->template['http_path'] = BASE_URL ."/" . str_replace( '\\', '/', $path );
-        $this->template['path'] = trim(ROOT . DS . str_replace(array('/', '\\'), DS, $path), DS);
+        $this->template['path'] = path(ROOT, $path);
         return $this;
     }
     

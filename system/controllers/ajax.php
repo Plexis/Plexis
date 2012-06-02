@@ -12,7 +12,7 @@ class Ajax extends Core\Controller
     public function __construct()
     {
         // Build the Core Controller
-        parent::__construct(false, false);
+        parent::__construct(true, false);
         
         // Init a session var
         $this->user = $this->Session->get('user');
