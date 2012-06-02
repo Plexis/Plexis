@@ -436,7 +436,7 @@ body {
 
 
 .block-header span {
-	background: url("../img/icons/small/close.png") no-repeat scroll 0 0 transparent;
+	background: url("../img/icons/small/slider.png") no-repeat scroll 0 0 transparent;
 	height: 20px;
 	width: 20px;
 	float: right;
@@ -447,7 +447,7 @@ body {
 }
 
 .block-header span.closed {
-	background: url("../img/icons/small/open.png") no-repeat scroll 0 0 transparent;
+	background-position: 0px -20px;
 }
 
 .block-header h1 {

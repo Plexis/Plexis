@@ -611,7 +611,7 @@ class Admin extends Core\Controller
             if($file[0] == "." || $file == "index.html") continue;
             if(!in_array($file, $aa))
             {
-                $xml = path( ROOT, "third_party", "themes", $file, "tmeplate.xml" );
+                $xml = path( ROOT, "third_party", "themes", $file, "template.xml" );
                 if(file_exists($xml))
                 {
                     $xml = simplexml_load_file($xml);
