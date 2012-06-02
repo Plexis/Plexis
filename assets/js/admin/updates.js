@@ -114,17 +114,29 @@ function process()
                     timeout: 15000, // in milliseconds
                     success: function(result) 
                     {
-                        if(result.success == true)
+                        if(typeof result.php_error != "undefined" && result.php_error == true)
                         {
-                            // Progress
-                            running += add;
-                            myProgressBar.setValue( running );
+                            data = result.php_error_data;
+                            update_error = true;
+                            update_message = data.message;
+                            
+                            $.msgbox('Update failed because a PHP error was encountered!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
+                                type : 'error'
+                            });
                         }
                         else
                         {
-                            update_error = true;
-                            update_message = result.message;
-                            return false;
+                            if(result.success == true)
+                            {
+                                // Progress
+                                running += add;
+                                myProgressBar.setValue( running );
+                            }
+                            else
+                            {
+                                update_error = true;
+                                update_message = result.message;
+                            }
                         }
                         
                     },
@@ -132,15 +144,7 @@ function process()
                     {
                         // Show that there we cant connect to the update server
                         update_error = true;
-                        switch(status)
-                        {
-                            case "error":
-                                $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
-                                break;
-                            default:
-                                $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
-                                break;
-                        }
+                        show_ajax_error(status);
                     }
                 });
                 

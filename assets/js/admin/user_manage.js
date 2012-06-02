@@ -249,8 +249,9 @@ $().ready(function() {
                         case "delete-account":
                             if (result.success == true){
                                 // Delete successful
-                                alert( result.message );
-                                window.location = url + "/admin/users";
+                                $.msgbox( result.message, {type: 'info'}, function(result) {
+                                    window.location = Plexis.url + "/admin/users";
+                                });
                             }else{
                                 // Error
                                 alert( result.message );

@@ -1,6 +1,5 @@
 $().ready(function() {
-    var post_url = Plexis.url + "/admin_ajax/characters";
-    
+
     // Lock button
     $("a#unstuck").click(function() {
         post_action('unstuck');
@@ -39,14 +38,18 @@ $().ready(function() {
     // Main Ajax posting function for this page.
     function post_action(task)
     {
+        // Get the realm id
+        realm_id = $('input[name=realm]').val();
+        character_id = $('input[name=id]').val();
+        
         // Send our Install command
         $.ajax({
             type: "POST",
-            url: post_url,
-            data: { action : task },
+            url: Plexis.url + "/admin_ajax/characters",
+            data: { action : task, id: character_id, realm : realm_id },
             dataType: "json",
             timeout: 5000, // in milliseconds
-            success: function(response) 
+            success: function(result) 
             {
                 if(typeof result.php_error != "undefined" && result.php_error == true)
                 {
@@ -54,7 +57,25 @@ $().ready(function() {
                 }
                 else
                 {
-                    $('#js_message').attr('class', 'alert ' + result.type).html( result.message ).slideDown(300).delay(3000).slideUp(600);
+                    switch(task)
+                    {
+                        case "delete":
+                            // Delete successful
+                            if(result.success == true)
+                            {
+                                $.msgbox( result.message, {type: 'info'}, function(result) {
+                                    window.location = Plexis.url + "/admin/characters";
+                                });
+                            }
+                            else
+                            {
+                                $('#js_message').attr('class', 'alert ' + result.type).html( result.message ).slideDown(300).delay(3000).slideUp(600);
+                            }
+                            break;
+                        default:
+                            $('#js_message').attr('class', 'alert ' + result.type).html( result.message ).slideDown(300).delay(3000).slideUp(600);
+                            break;
+                    }
                 }
             },
             error: function(request, status, err) 
