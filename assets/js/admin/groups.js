@@ -123,7 +123,15 @@ $().ready(function() {
             },
             error: function(request, status, err) 
             {
-                $('#js_message').attr('class', 'alert error').html('An error occured, Please check your error log.').slideDown(300);
+                switch(status)
+                {
+                    case "error":
+                        $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                        break;
+                    default:
+                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                        break;
+                }
             }
         });
     });

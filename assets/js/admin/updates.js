@@ -132,7 +132,15 @@ function process()
                     {
                         // Show that there we cant connect to the update server
                         update_error = true;
-                        update_message = 'Server is taking too long to respond';
+                        switch(status)
+                        {
+                            case "error":
+                                $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                                break;
+                            default:
+                                $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                                break;
+                        }
                     }
                 });
                 

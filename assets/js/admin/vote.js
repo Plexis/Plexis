@@ -110,7 +110,15 @@ $().ready(function() {
             },
             error: function(request, status, err) 
             {
-                $('#js_message').attr('class', 'alert error').html('Connection timed out. Please try again.').slideDown('slow').delay(3000).slideUp('slow');
+                switch(status)
+                {
+                    case "error":
+                        $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                        break;
+                    default:
+                        $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                        break;
+                }
             }
         });
     });
@@ -119,29 +127,39 @@ $().ready(function() {
     $("#data-table").on('click', '.delete', function(){
         var vote_id = this.name;
         
-        if( confirm('Are you sure you want to delete vote site #' + vote_id) )
-        {
-            // Send our delete command
-            $.ajax({
-                type: "POST",
-                url: post_url,
-                data: { action : 'delete', id : vote_id },
-                dataType: "json",
-                timeout: 5000, // in milliseconds
-                success: function(result) 
-                {
-                    $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown('slow').delay(3000).slideUp('slow');
-                    if (result.success == true)
+        $.msgbox('Are you sure you want to delete vote site #' + vote_id, {type : 'confirm'}, function(result) {
+            if (result == "Accept")
+            {
+                // Send our delete command
+                $.ajax({
+                    type: "POST",
+                    url: post_url,
+                    data: { action : 'delete', id : vote_id },
+                    dataType: "json",
+                    timeout: 5000, // in milliseconds
+                    success: function(result) 
                     {
-                        votetable.fnDraw();
+                        $('#js_message').attr('class', 'alert ' + result.type).html(result.message).slideDown('slow').delay(3000).slideUp('slow');
+                        if (result.success == true)
+                        {
+                            votetable.fnDraw();
+                        }
+                    },
+                    error: function(request, status, err) 
+                    {
+                        switch(status)
+                        {
+                            case "error":
+                                $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
+                                break;
+                            default:
+                                $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                                break;
+                        }
                     }
-                },
-                error: function(request, status, err) 
-                {
-                    $('#js_message').attr('class', 'alert error').html('Connection timed out. Please try again.').slideDown('slow').delay(3000).slideUp('slow');
-                }
-            });
-        }
+                });
+            }
+        });
     });
     
 

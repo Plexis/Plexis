@@ -549,7 +549,7 @@
                     // Add style if exists
                     if( typeof options.style === "undefined" )
                     {
-                        option.style = options.type;
+                        options.style = options.type;
                     }
                   
                     $.each(types, $.proxy(function(i, e) {
