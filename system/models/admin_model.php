@@ -151,20 +151,20 @@ class Admin_Model extends Core\Model
 */
     public function install_module($name, $uri, $method)
     {
-        // Load the module controller
-        $file = path( ROOT, "third_party", "modules", $name, "controller.php" );
+        // Load the module admin controller
+        $file = path( ROOT, "third_party", "modules", $name, "admin.php" );
         if(!file_exists($file))
         {
-            return FALSE;
+            return true;
         }
         require $file;
         
         // Init the module into a variable
         $class = ucfirst($name);
-        $module = new $class( true );
+        $module = new $class();
         
         // Run the module installer
-        $result = $module->__install();
+        $result = $module->install();
         if($result == FALSE) return FALSE;
         
         // Make sure we have a fixed URI
@@ -179,7 +179,7 @@ class Admin_Model extends Core\Model
         $data['name'] = $name;
         $data['uri'] = $uri;
         $data['method'] = $method;
-        $data['has_admin'] = $module->__has_admin();
+        $data['has_admin'] = (method_exists($module, 'admin')) ? 1 : 0;
         
         // Insert our post
         return $this->DB->insert('pcms_modules', $data);
@@ -199,10 +199,10 @@ class Admin_Model extends Core\Model
     public function uninstall_module($name)
     {
         // Load the module controller
-        $file = path( ROOT, "third_party", "modules", $name, "controller.php" );
+        $file = path( ROOT, "third_party", "modules", $name, "admin.php" );
         if(!file_exists($file))
         {
-            return FALSE;
+            return true;
         }
         require $file;
         
@@ -211,7 +211,7 @@ class Admin_Model extends Core\Model
         $module = new $class( true );
         
         // Run the module installer
-        $result = $module->__uninstall();
+        $result = $module->uninstall();
         if($result == FALSE) return FALSE;
         
         // Delete our post and return the result

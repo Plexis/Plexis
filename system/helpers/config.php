@@ -13,13 +13,10 @@
 | @Return: (Mixed) - Returns the config vaule of $item
 |
 */
-if(!function_exists('config'))
-{
     function config($item, $type = 'App')
     {
         return load_class('Config')->get($item, $type);
     }
-}
 
 /*
 | ---------------------------------------------------------------
@@ -35,13 +32,10 @@ if(!function_exists('config'))
 | @Return: (None)
 |
 */
-if(!function_exists('config_set'))
-{
     function config_set($item, $value, $name = 'App')
     {
         load_class('Config')->set($item, $value, $name);
     }
-}
 
 /*
 | ---------------------------------------------------------------
@@ -55,13 +49,10 @@ if(!function_exists('config_set'))
 | @Return: (None)
 |
 */
-if(!function_exists('config_save'))
-{
     function config_save($name)
     {
         return load_class('Config')->save($name);
     }
-}
 
 /*
 | ---------------------------------------------------------------
@@ -79,10 +70,7 @@ if(!function_exists('config_save'))
 | @Return: (Bool)
 |
 */
-if(!function_exists('config_load'))
-{
     function config_load($file, $name, $array = FALSE)
     {
         return load_class('Config')->load($file, $name, $array);
     }
-}

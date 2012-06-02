@@ -88,9 +88,9 @@ class Wowlib
         
         // Check for the extension
 		$file = path( ROOT, "third_party", "wowlib", $this->emulator, $libname, $class . ".php" );
-        if( file_exists( $path ) ) 
+        if( file_exists( $file ) ) 
         {
-            require_once( $path );
+            require_once( $file );
         }
         else
         {

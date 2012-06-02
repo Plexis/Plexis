@@ -379,7 +379,7 @@ class Loader
         }
         
         // Make sure the wowlib exists
-		$path = path( SYSTEM_PATH, "wowlib", config("emulator"), $realm["driver"] );
+		$path = path( ROOT, 'third_party', 'wowlib', config("emulator"), $realm["driver"] );
         if( !is_dir( $path ) )
         {
             $language = load_language_file('messages');
@@ -389,7 +389,7 @@ class Loader
         }
 
         // Include the wowlib file
-        require_once( ROOT . DS . 'third_party' . DS . 'wowlib' . DS . 'Wowlib.php' );
+        require_once path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
         
         // Try to init the class
         try{

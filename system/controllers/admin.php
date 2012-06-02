@@ -534,7 +534,7 @@ class Admin extends Core\Controller
             if( module_installed($name) )
             {
                 // Load the module controller
-                $file = path( ROOT, "third_party", "modules", $name, "controller.php" );
+                $file = path( ROOT, "third_party", "modules", $name, "admin.php" );
                 if(file_exists($file))
                 {
                     // Load the file
@@ -552,7 +552,7 @@ class Admin extends Core\Controller
                     $this->Template->set( 'page_desc', "On this page, you can configure this module.");
                     
                     // Run the module installer
-                    $result = $module->__admin( $this, $subpage );
+                    $result = $module->admin();
 					
 					if( $result == false )
 					{

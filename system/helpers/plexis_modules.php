@@ -19,7 +19,7 @@
     {	
         // Get our filename and use the load_config method
 		$file = path( ROOT, "modules", $module, "config", $filename );
-        load_config($file, $name, $array);
+        config_load($file, $name, $array);
     }
 
 /*

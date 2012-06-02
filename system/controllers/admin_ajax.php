@@ -695,8 +695,8 @@ class Admin_ajax extends Core\Controller
                     $race = $this->wowlib->characters->race_to_text($r);
                     $class = $this->wowlib->characters->class_to_text($value[4]);
                     $zone = $this->wowlib->zone->name($value[6]);
-                    $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/application/static/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
-                    $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/application/static/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
+                    $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/assets/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
+                    $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/assets/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
                     $output['aaData'][$key][5] = $zone;
                     $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
                     $output['aaData'][$key][7] = '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';

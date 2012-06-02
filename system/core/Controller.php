@@ -29,7 +29,7 @@ class Controller
     public $querystring;
 
     // The instance of this class
-    private static $instance;
+    private static $instance = false;
     
     // Out session
     public $Session;
@@ -61,7 +61,7 @@ class Controller
     public function __construct($autoload = true, $init_template = true) 
     {
         // Set the instance here
-        self::$instance = $this;
+        if(self::$instance == false) self::$instance = $this;
         
         // Set our Controller and Action
         $this->controller = $GLOBALS['controller'];
