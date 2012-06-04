@@ -34,13 +34,19 @@ class Captcha
     public function __construct()
     {
         // Define where out fonts are stored, and load them
-        $this->fontpath = path( SYSTEM_PATH, "library", "fonts" );      
-        $this->load_fonts();
-
+        $this->fontpath = path( SYSTEM_PATH, "library", "fonts" ); 
+        
         // Make sure we can even run this show!
         if(!function_exists('imagettftext'))
         {
+            log_message('error', 'imagettftext() not found. GD library must not be installed. Captcha failed to start.');
             throw new \Exception('imagettftext() not found. GD library must not be installed. Captcha failed to start.');
+        }
+        
+        // Check for error
+        if(!$this->load_fonts())
+        {
+            throw new \Exception('Error loading fonts. Please check your systems error log.');
         }
     }
 
@@ -62,10 +68,10 @@ class Captcha
             while(($file = readdir($handle)) !== FALSE)
             {      
                 // Get the ext of each file
-                $ext = pathinfo($file, PATHINFO_EXTENSION);
+                $parts = explode('.', $file);
        
                 // Only allow .ttf files
-                if ($ext == 'ttf')
+                if(end($parts) == 'ttf')
                 {         	
                     $this->fonts[] = $file;
                 }
@@ -76,16 +82,18 @@ class Captcha
         // Couldnt open the Dir. 
         else
         {     	
-            show_error('captcha_bad_font_dir', FALSE, E_ERROR);
-        
+            log_message('error', 'Bad captcha font directory '. $this->fontpath);
+            return false;
         }
       
         // Make sure we have 1 or more fonts
         if(count($this->fonts) == 0)
         {
-            log_message('No fonts found in the appliacation/library/fonts/ folder.');
-            show_error('captcha_no_fonts', FALSE, E_ERROR);     	
-        } 
+            log_message('error', 'No fonts found in the system/library/fonts/ folder.');
+            return false;          
+        }
+        
+        return true;
     }
 
 /*
@@ -98,7 +106,7 @@ class Captcha
 */	
     protected function get_random_font()
     {   
-        return $this->fontpath . $this->fonts[ mt_rand(0, count($this->fonts) - 1) ];   
+        return $this->fontpath . DS . $this->fonts[ mt_rand(0, count($this->fonts) - 1) ];   
     }
 
 /*
@@ -187,7 +195,6 @@ class Captcha
                 $this->get_random_font(), // Font File
                 $string[$i] // Text
             );
-      
         }
 
         // Create the image png and destroy our temp image
@@ -256,11 +263,8 @@ class Captcha
                     $font, // Font File
                     $letter // Letter
                 );
-        
             }
-        
         }
-
     }
-} 
+}
 ?>

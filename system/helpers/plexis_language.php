@@ -85,4 +85,22 @@
         // Load Language class, and return if $lang exists
         return load_class('Language')->default_language();
     }
+    
+/*
+| ---------------------------------------------------------------
+| Function: lang()
+| ---------------------------------------------------------------
+|
+| Returns the $key text from $file
+|
+| @Param: (String) $key - The language text array key
+| @Param: (String) $file - The filename the text is in.
+| @Return: (String | false)
+|
+*/
+    function lang($key, $file = 'messages')
+    {
+        // Load Language class, and return if $lang exists
+        return load_class('Language')->get($key, $file);	
+    }
 ?>
