@@ -557,8 +557,10 @@ class Driver extends \PDO
         
         // Check for the extension
 		$file = path(SYSTEM_PATH, 'database', 'extensions', $class . '.php');
-        if(file_exists( $file )) 
+        if(file_exists( $file ))
+        {
             require_once($file);
+        }
         else
         {
             // Extension doesnt exists :O
@@ -567,7 +569,7 @@ class Driver extends \PDO
         }
         
         // Load the class
-        $class = "System\\Database\\Extensions\\".$class;
+        $class = "\\Database\\".$class;
         $this->$name = new $class($this);
         return $this->$name;
     }

@@ -135,12 +135,14 @@ class Debug
                     if($errno != E_STRICT && $errno != E_DEPRECATED)
                     {
                         $string = $this->error_string($errno);
+                        $file = str_replace( ROOT . DS, '', $file );
                         echo json_encode( 
                             array(
                                 'success' => false,
                                 'php_error' => true,
                                 'php_error_data' => array(
-                                    'message' => '['. $string .'] '. $message,
+                                    'level' => str_replace('PHP ', '', $string),
+                                    'message' => $message,
                                     'file' => $file,
                                     'line' => $line
                                 ),

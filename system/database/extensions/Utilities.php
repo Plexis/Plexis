@@ -11,7 +11,7 @@
 | License: 		GNU GPL v3
 |
 */
-namespace System\Database\Extensions;
+namespace Database;
 
 class Utilities
 {
