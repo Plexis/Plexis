@@ -206,9 +206,9 @@ class Template
 |
 | @Param: $path - This can be 1 of 3 things...
 |   1) The path to the JS files. Must be from the 
-|       cms root folder... (Ex: "application/static/js/file.js")
+|       cms root folder... (Ex: "assets/js/file.js")
 |       of a full http path
-|   2) Js filename. In which the Application/static/js folder is
+|   2) Js filename. In which the assets/js folder is
 |       used as the path, or if the JS file exists in the template
 |       JS folder, that is loaded instead.
 |   3) A full http:// path to the js file
@@ -884,7 +884,7 @@ class Template
                     }
                     else
                     {
-                        $src = BASE_URL . '/application/static/js/'. $j;
+                        $src = BASE_URL . '/assets/js/'. $j;
                     }
                 }
                 
