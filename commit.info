@@ -1,1 +1,1 @@
-[{"status":"M","file":"system\/helpers\/plexis_language.php"},{"status":"M","file":"system\/library\/Captcha.php"},{"status":"M","file":"index.php"}]
+[{"status":"M","file":"system\/core\/Common.php"},{"status":"M","file":"system\/core\/Language.php"},{"status":"M","file":"index.php"}]

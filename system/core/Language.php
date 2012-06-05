@@ -136,7 +136,7 @@ class Language
 | @Return (String) Language name
 |
 */
-    public function default_language($type = 'application')
+    public function default_language()
     {
         // Check if the language exists
         return (in_array($this->default_language, $this->found_languages)) ? $this->default_language : 'en';

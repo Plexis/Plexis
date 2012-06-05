@@ -304,7 +304,7 @@
 		
 		foreach($args as $part)
 		{
-			$parts[] = (is_array( $part )) ? trim( implode(DS, $part), " \\/" ) : trim($part, " \\/");
+			$parts[] = (is_array( $part )) ? rtrim( implode(DS, $part), " \\/" ) : rtrim($part, " \\/");
 		}
 		
 		return implode(DS, $parts);
