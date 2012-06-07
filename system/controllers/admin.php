@@ -961,25 +961,24 @@ class Admin extends Core\Controller
         $this->Template->add_script( 'jquery.visualize.js' );
         
         // Array of months
-        $months = array('January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+        $months = array('', 'January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
         
         // Get current month and year
         $date = date('n-Y');
         list($data['month'], $data['year']) = explode('-', $date);
-        $month = $data['month'] - 1;
         $results = array();
         
         // Start back 5 months, and get stats for that month
         for($i = 5; $i >= 0; $i--)
         {
             // Establich this month / year and next
-            $m = $month - $i;
+            $m = $data['month'] - $i;
             $y = $data['year'];
             $nm = $m + 1;
             $ny = $y;
             
             // If month is negative, add 12 months and subtract a year
-            if($m < 0)
+            if($m < 1)
             {
                 $m = $m + 12;
                 --$y;
@@ -1002,8 +1001,8 @@ class Admin extends Core\Controller
             }
             
             // Get our registered stats for this month
-            $array = $this->DB->query( $query )->fetch_row();
-            $results[] = array('name' => $months[$m], 'value' => $array['count']);
+            $value = $this->DB->query( $query )->fetch_column();
+            $results[] = array('name' => $months[$m], 'value' => $value);
         }
         
         // Active in the last 24
