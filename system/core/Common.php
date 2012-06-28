@@ -34,7 +34,6 @@
         if(!file_exists($file))
         {
             // Failed to load class all together.
-            trigger_error($className . ': '. $file); die();
             show_error('autoload_failed', array( addslashes($className) ), E_ERROR);
         }
 		
@@ -304,7 +303,7 @@
 		
 		foreach($args as $part)
 		{
-			$parts[] = (is_array( $part )) ? rtrim( implode(DS, $part), " \\/" ) : rtrim($part, " \\/");
+			$parts[] = (is_array( $part )) ? trim( implode(DS, $part) ) : trim($part);
 		}
 		
 		return implode(DS, $parts);

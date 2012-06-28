@@ -654,6 +654,9 @@ class Admin extends Core\Controller
             $selector .= "\t<option value='0'>No Realms Installed</option>\n";
         }
         $selector .= "</select>\n";
+        
+        // Tell the template system to add the console css file
+        $this->Template->add_css('console.css');
 
         // Build our page title / desc, then load the view
         $data = array(
