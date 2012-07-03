@@ -23,5 +23,6 @@ return array(
     'template_load_error' => "Unable to load template file \"%s\". This may be due to a non-existent file or template",
     'unknown_template_command' => "Template compile error: Unknown template command \"%s\"",
     'unkown_template_var_in_array' => "Unknown template variable \"%s\" in array \"%s\"",
-    'unkown_template_var' => "Unknown template variable \"%s\""
+    'unkown_template_var' => "Unknown template variable \"%s\"",
+	'illegal_chars_in_path' => "The string \"%s\" contains illegal file name characters."
 );

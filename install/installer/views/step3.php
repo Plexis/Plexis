@@ -23,13 +23,13 @@
     
     <div class="field">
         <label for="db user">Plexis Database Pass: </label>
-        <input id="Site Title" name="db_password" size="20" type="password" class="medium" value="ascent"/>
+        <input id="Site Title" name="db_password" size="20" type="password" class="medium" value=""/>
         <p class="field_help">Enter you database Password.</p>
     </div>
     
     <div class="field">
         <label for="db user">Plexis Database: </label>
-        <input id="Site Title" name="db_name" size="20" type="text" class="medium" value="plexis" />
+        <input id="Site Title" name="db_name" size="20" type="text" class="medium" value="" />
         <p class="field_help">Enter your Plexis database name.</p>
     </div>
     
@@ -57,13 +57,13 @@
     
     <div class="field">
         <label for="db user">Realm Database Pass: </label>
-        <input id="Site Title" name="rdb_password" size="20" type="password" class="medium" value="ascent"/>
+        <input id="Site Title" name="rdb_password" size="20" type="password" class="medium" value=""/>
         <p class="field_help">Enter you database Password.</p>
     </div>
     
     <div class="field">
         <label for="db user">Realm Database: </label>
-        <input id="Site Title" name="rdb_name" size="20" type="text" class="medium" value="realmd" />
+        <input id="Site Title" name="rdb_name" size="20" type="text" class="medium" value="" />
         <p class="field_help">Enter your Realm database name.</p>
     </div>
     
