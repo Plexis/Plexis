@@ -24,5 +24,5 @@ return array(
     'unknown_template_command' => "Template compile error: Unknown template command \"%s\"",
     'unkown_template_var_in_array' => "Unknown template variable \"%s\" in array \"%s\"",
     'unkown_template_var' => "Unknown template variable \"%s\"",
-	'illegal_chars_in_path' => "The string \"%s\" contains illegal file name characters."
+	'illegal_chars_in_path' => "The string \"%s\" contains illegal file name characters. Disallowed characters: \\, /, ?, *, |, :, <, >, \", \\n, \\r"
 );

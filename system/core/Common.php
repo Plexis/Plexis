@@ -176,7 +176,7 @@
 | This function is used to simplify the showing of errors
 |
 | @Param: (String) $err_message - Error message code
-| @Param: (Array) $args - An array for vsprintf to replace in the 
+| @Param: (Array) $args - An array for vsprintf to replace in the message.
 | @Param: (Int) $lvl - Level of the error
 | @Return: (None)
 |
@@ -307,10 +307,10 @@
 			
 		$newPath = implode( DS, $parts );
 		
-		if( $IsWindows ) //So some checking for illegal path chars
+		if( $IsWindows ) //Do some checking for illegal path chars
 		{
-			$IllegalChars = "/:?*\"<>|\r\n\\";
-			$Pattern = "~[" . preg_quote( $IllegalChars ) . "]~";
+			$IllegalChars = "\\/:?*\"<>|\r\n";
+			$Pattern = "~[" . $IllegalChars . "]+~";
 				
 			$tempPath = preg_replace( "~^[A-Z]{1}:~", "", $newPath );
 			$tempPath = trim( $tempPath, DS );
