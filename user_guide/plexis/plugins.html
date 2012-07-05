@@ -26,8 +26,9 @@
 <div id="content">
 	<h1>Creating Plugins</h1>
 	<p>
-		Plexis comes equiped with a plugin system, that act just like hooks in any other framework / cms. Plugins are mainly just normal classes, but their method's (depending on name) are called
-        based on where the script is at that current point. Plugins are perfect for registering <a href="events.html">Events</a> and callbacks ;)
+		Plexis comes equiped with a plugin system, that acts just like hooks in any other framework or Cms. Plugins are mainly just normal classes, that are used
+		for registering <a href="events.html">Events</a> and callbacks. This allows plugins to hook in at different stages through the page load, or when specific
+		actions are preformed, without having to modify the cms code.
 	</p>
 
 
@@ -39,28 +40,26 @@ namespace Plugins;
 
 class Plugin_name
 {
-	public function pre_system()
+	public function __construct()
 	{
-		// This code is executed very early in the cms, before any database connections are made,
-		// right after the URL is routed.
+		/*
+			This code is executed very early in the cms, before any database connections are made,
+			right after the URL is routed. This is the only method called, so in order to "hook" into
+			The cms at later parts, or when certain actions are preformed, you must use events
+		*/
+		
+		// Example event registration
+		$this->Events = load_class('Events');
+		$this->Events->register('user_logged_in', array($this, 'MyLoginHookFunction'));
 	}
 	
-	public function pre_controller() 
+	public function MyLoginHookFunction($accountID, $username)
 	{
-		// This code is executed right before the controller is constructed. Database connections are 
-		// established right before this point.
-	}
-	
-	public function post_controller_constructor() 
-	{
-		// This code is executed imediatly after the controller is finsihed constructing, but before
-		// the page method is loaded.
-	}
-	
-	public function post_controller() 
-	{
-		// This code is executed after the template has rendered the template, and pushed its contents
-		// to the browser.
+		/*
+			Code exectued when the 'user_logged_in' event is triggered
+			The parameters passed are based on the event we are registered to recieve.
+			Please read the 'List of Events' section to see a list of events
+		*/
 	}
 }
 	</pre>

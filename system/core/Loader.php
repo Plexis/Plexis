@@ -285,10 +285,9 @@ class Loader
 | This method is used to load a plugin
 |
 | @Param: (String) $name - The name of the plugin
-| @Param: (String) $method - The method to run
 |
 */
-    public function plugin($name, $method = false)
+    public function plugin($name)
     {
         // Create our classname
         $name = ucfirst($name);
@@ -299,7 +298,7 @@ class Loader
         if( $Obj === null )
         {
             // We have to manually load the plugin
-            $file = ROOT . DS . 'third_party'. DS .'plugins' . DS . $name . '.php';
+            $file = path( ROOT, 'third_party', 'plugins', $name .'.php');
             if(!file_exists($file))
             {
                 show_error('plugin_not_found', array($name), E_ERROR);
@@ -324,25 +323,7 @@ class Loader
         }
         
         // Make sure the object IS an object
-        if( !is_object($Obj) ) return false;
-        
-        // Run the requested method
-        if($method != false)
-        {
-            try {
-                $Obj->$method();
-                $return = true;
-            } 
-            catch(\Exception $e) {
-                $return = false;
-                show_error('plugin_error', array($name, $method, $e->getMessage()), E_WARNING);
-            }
-            
-            // Return the result
-            return $return;
-        }
-        
-        return $Obj;
+        return (is_object($Obj)) ? $Obj : false;
     }
 
 /*

@@ -20,7 +20,7 @@ namespace Plugins;
 
 class Plexis
 {
-    public function pre_system()
+    public function __construct()
     {
         // Check for database online, surpress errors
         $DB = load_class('Loader')->database('DB', false, true);
@@ -43,11 +43,5 @@ class Plexis
 			$GLOBALS["template_messages"][] = "<div class=\"alert error\">The installer is publicly accessible! Please rename, delete or re-lock your install folder.</div>";
 		}
     }
-    
-    // Un used by this plugin, but they HAVE TO BE defined!
-    public function pre_controller() {}
-    public function post_controller_constructor() {}
-    public function post_controller() {}
 }
-
 ?>

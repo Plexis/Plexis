@@ -89,9 +89,6 @@ class Controller
         
         // Process DB updates
         if( !$this->Input->is_ajax() ) $this->_process_db();
-        
-        // Fire the controller event
-        load_class('Events')->trigger('controller_init');
     }
     
 /*

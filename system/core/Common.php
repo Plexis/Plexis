@@ -296,38 +296,41 @@
 |
 */
 
-	function path()
-	{
-		$IsWindows = strtoupper( substr( PHP_OS, 0, 3 ) ) === "WIN";
-		$args = func_get_args();
-		$parts = array();
-		
-		foreach( $args as $part )
-			$parts[] = (is_array( $part )) ? trim( implode(DS, $part) ) : trim($part);
-			
-		$newPath = implode( DS, $parts );
-		
-		if( $IsWindows ) //Do some checking for illegal path chars
-		{
-			$IllegalChars = "\\/:?*\"<>|\r\n";
-			$Pattern = "~[" . $IllegalChars . "]+~";
-				
-			$tempPath = preg_replace( "~^[A-Z]{1}:~", "", $newPath );
-			$tempPath = trim( $tempPath, DS );
-			$tempPath = explode( DS, $tempPath );
-			
-			foreach( $tempPath as $part )
-			{
-				if( preg_match( $Pattern, $part ) )
-				{
-					show_error( "illegal_chars_in_path", array( $part ) );
-					return null;
-				}
-			}
-		}
-		
-		return $newPath;
-	}
+    function path()
+    {
+        $IsWindows = strtoupper( substr(PHP_OS, 0, 3) ) === "WIN";
+        $args = func_get_args();
+        $parts = array();
+        
+        foreach( $args as $part )
+        {
+            $parts[] = (is_array( $part )) ? trim( implode(DS, $part) ) : trim($part);
+        }
+
+        $newPath = implode( DS, $parts );
+        
+        //Do some checking for illegal path chars
+        if( $IsWindows )
+        {
+            $IllegalChars = "\\/:?*\"<>|\r\n";
+            $Pattern = "~[" . $IllegalChars . "]+~";
+    
+            $tempPath = preg_replace( "~^[A-Z]{1}:~", "", $newPath );
+            $tempPath = trim( $tempPath, DS );
+            $tempPath = explode( DS, $tempPath );
+            
+            foreach( $tempPath as $part )
+            {
+                if( preg_match( $Pattern, $part ) )
+                {
+                    show_error( "illegal_chars_in_path", array( $part ) );
+                    return null;
+                }
+            }
+        }
+        
+        return $newPath;
+    }
 
 // Register the Core to process errors with the custom_error_handler method
 set_error_handler('php_error_handler', E_ALL | E_STRICT);

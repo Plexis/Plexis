@@ -1349,6 +1349,7 @@ class Admin_ajax extends Core\Controller
                             // Default?
                             if($value[3] == 1)
                             {
+                                $output['aaData'][$key][3] = "<font color='green'>Installed</font>";
                                 $output['aaData'][$key][4] .= "<a class=\"make-default\" name=\"".$id."\" href=\"javascript:void(0);\">Make Default</a> - ";
                                 $output['aaData'][$key][4] .= "<a class=\"un-install\" name=\"".$id."\" href=\"javascript:void(0);\">Uninstall</a>";
                             }

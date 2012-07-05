@@ -31,13 +31,39 @@
         <a href="../core_classes/events.html">This Page</a>. Below is a list of events in Plexis CMS that your custom code can register to receieve a callback 
         from. <u>Callback Recieved Arguments</u> is a list of arguments that are passed to your callback method when the event is triggered.
 	</p>
-
+	
+	
+	<!-- Pre Controller Init -->
+	<h2>Pre Controller Initialization</h2>
+	<p>
+		This event is triggered after the controller and action have been determined, but before the application controller is called and initialized. At this point of
+		time, the database has been connected to. To register for this event, 
+		use the following code:
+	</p>
+	<code>
+		$this->Events->register('<var>pre_controller</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        None
+    </p>
 
 	<!-- Controller Init -->
-	<h2>Controller Initialized</h2>
-	<p>This event is triggered once the application controller has finished constructing. To register for this event, use the following code:</p>
+	<h2>Post Controller Initialization</h2>
+	<p>This event is triggered once the application controller has finished constructing, but before the action method is ran. To register for this event, use the following code:</p>
 	<code>
-		$this->Events->register('<var>controller_init</var>', '<var>$callback</var>');
+		$this->Events->register('<var>post_controller_init</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        None
+    </p>
+	
+	<!-- Post Action -->
+	<h2>Post Controller</h2>
+	<p>This event is triggered once the application controller has finished rendering the page, and the output sent to the browser. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>post_controller</var>', '<var>$callback</var>');
 	</code>
 	<h5><u>Callback Recieved Arguments:</u></h5>
 	<p>

@@ -36,6 +36,7 @@ class Plexis
         // Initialize the router
         $this->Router = load_class('Router');
         $this->load = load_class('Loader');
+        $this->EventHandler = load_class('Events');
         
         // Tell the router to process the URL for us
         $this->Router->route_url();
@@ -51,34 +52,26 @@ class Plexis
         
         // Determine if HTTP_MOD_REWRITE is enabled, and Define our site url
         if( !array_key_exists('HTTP_MOD_REWRITE', $_SERVER) ) $_SERVER['HTTP_MOD_REWRITE'] = 'Off';
-        ($_SERVER['HTTP_MOD_REWRITE'] == 'On') ? define('SITE_URL', $routes['site_url']) : define('SITE_URL', $routes['site_url'] . '/?url=');
+        ($_SERVER['HTTP_MOD_REWRITE'] == 'On') ? define('SITE_URL', $routes['site_url']) : define('SITE_URL', $routes['site_url'] .'/?url=');
         
         // Load Plugins config file
         include( SYSTEM_PATH . DS .'config'. DS .'plugins.php' );
-        
-        // Load pre system plugins
         foreach($Plugins as $p)
         {
-            $this->load->plugin($p, 'pre_system');
+            $this->load->plugin($p);
         }
 
         // Load the application controller, and determine if this request is to a module		
         if( !$this->findRoute() ) show_404();
         
-        // Prcoess Pre controller Plugins
-        foreach($Plugins as $p)
-        {
-            $this->load->plugin($p, 'pre_controller');
-        }
+        // Trigger the Pre controller Event
+        $this->EventHandler->trigger('pre_controller');
         
         // Here we init the actual controller / action into a variable.
         $this->dispatch = new $this->controller();
         
-        // Prcoess Post controller construct Plugins
-        foreach($Plugins as $p)
-        {
-            $this->load->plugin($p, 'post_controller_constructor');
-        }
+        // Trigger the Post controller constructEvent
+        $this->EventHandler->trigger('post_controller_init');
         
         // After loading the controller, make sure the method exists, or we have a 404
         if(method_exists($this->controller, $this->action)) 
@@ -98,11 +91,8 @@ class Plexis
             show_404();
         }
         
-        // Prcoess Post controller construct Plugins
-        foreach($Plugins as $p)
-        {
-            $this->load->plugin($p, 'post_controller');
-        }
+        // Trigger the Post controller Event
+        $this->EventHandler->trigger('post_controller');
     }
 
 /*
@@ -181,7 +171,7 @@ class Plexis
             $this->action = $GLOBALS['action'] = $result['method'];
             
             // Include the module controller file
-            include (ROOT . DS . 'third_party'. DS .'modules' . DS . $this->controller . DS . 'controller.php');
+            include path(ROOT, 'third_party', 'modules', $this->controller, 'controller.php');
             return TRUE;
         }
         
@@ -190,7 +180,8 @@ class Plexis
         {
             Skip:
             {
-                if(file_exists(SYSTEM_PATH . DS . 'controllers' . DS . $name . '.php'))
+                $path = path(SYSTEM_PATH, 'controllers', $name .'.php');
+                if(file_exists($path))
                 {
                     // Define out globals and this controller/action
                     $GLOBALS['is_module'] = FALSE;
@@ -198,7 +189,7 @@ class Plexis
                     $GLOBALS['action'] = $this->action;
                     
                     // Include the controller file
-                    include (SYSTEM_PATH . DS . 'controllers' . DS . $name . '.php');
+                    include $path;
                     return TRUE;
                 }
             }
