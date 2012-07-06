@@ -152,9 +152,8 @@
         $catch = load_class('Config')->get('catch_fatal_errors', 'Core');
         $error = error_get_last();
         
-        // Write debug / system logs
+        // Load the debug class
         $Debug = load_class('Debug');
-        $Debug->write_logs();
         
         // If we have an error, only track if it's fatal
         if(is_array($error) && $catch == 1)

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-	<title>Forstbite :: 404 - Not Found</title>
+	<title>Frostbite :: 404 - Not Found</title>
 	<link rel="stylesheet" href="<?php echo $site_url; ?>/system/errors/css/404.css" type="text/css"/>
 </head>
 <body>
