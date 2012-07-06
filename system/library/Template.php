@@ -838,12 +838,6 @@ class Template
                     // We have a full url
                     $src = $f;
                 }
-                elseif(strpos($f, 'application/') !== false)
-                {
-                    // Application Path
-                    $f = ltrim($f, '/');
-                    $src = BASE_URL . '/'. $f;
-                }
                 else
                 {
                     // Just a filename
@@ -867,12 +861,6 @@ class Template
                 {
                     // We have a full url
                     $src = $j;
-                }
-                elseif(strpos($j, 'application/') !== false)
-                {
-                    // Application Path
-                    $j = ltrim($j, '/');
-                    $src = BASE_URL . '/'. $j;
                 }
                 else
                 {

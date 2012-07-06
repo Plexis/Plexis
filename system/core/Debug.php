@@ -258,7 +258,7 @@ class Debug
         }
         
         // Write in the log file, the very long message we made
-        $message = "[".date('Y-m-d H:i:s') ."] ". ucfirst($type) .": ". $message ."\n";
+        $message = "[".date('Y-m-d H:i:s') ."] ". ucfirst($type) .": ". $message . PHP_EOL;
         $log = @fopen( SYSTEM_PATH . DS . 'logs' . DS . 'system_logs.log', 'a' );
         if($log)
         {
@@ -332,10 +332,9 @@ class Debug
             @ob_end_clean();
             
             // alittle parsing
-            $page = str_replace("{ERROR_LEVEL}", $this->ErrorLevel, $page);
-            $page = str_replace("{MESSAGE}", $this->ErrorMessage, $page);
-            $page = str_replace("{FILE}", $this->ErrorFile, $page);
-            $page = str_replace("{LINE}", $this->ErrorLine, $page);
+            $search = array('{ERROR_LEVEL}', '{MESSAGE}', '{FILE}', '{LINE}');
+            $replace = array($this->ErrorLevel, $this->ErrorMessage, $this->ErrorFile, $this->ErrorLine);
+            $page = str_replace($search, $replace, $page);
             
             // Spit the page out
             echo $page;
