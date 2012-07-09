@@ -14,38 +14,37 @@
 | Main debug / error handler for the Cms
 |
 */
-namespace Core;
 
 class Debug
 {
     // Error specific variables
-    protected $ErrorNo;         // Error Number
-    protected $ErrorMessage;    // Error message
-    protected $ErrorFile;       // Error file
-    protected $ErrorLine;       // Error line.
-    protected $ErrorLevel;      // Error Level Text.
+    protected static $ErrorNo;         // Error Number
+    protected static $ErrorMessage;    // Error message
+    protected static $ErrorFile;       // Error file
+    protected static $ErrorLine;       // Error line.
+    protected static $ErrorLevel;      // Error Level Text.
     
     // Our log error level.
-    protected $LogLevel;
+    protected static $LogLevel;
     
     // Our sites error level.
-    protected $Environment;
+    protected static $Environment;
 
     // Silent Mode
-    protected $silence = false;
+    protected static $silence = false;
     
     // Array of trac and system messages to be logged
-    protected $traceLogs = array();
-    protected $systemLogs = array();
+    protected static $traceLogs = array();
+    protected static $systemLogs = array();
     
     // Have we already wrote our logs?
-    protected $logged = false;
+    protected static $logged = false;
     
     // Our URL info
-    protected $urlInfo;
+    protected static $urlInfo;
     
     // Ajax Request?
-    protected $isAjax;
+    protected static $isAjax;
 
 
 /*
@@ -54,16 +53,16 @@ class Debug
 | ---------------------------------------------------------------
 |
 */
-    public function __construct()
+    public static function Init()
     {
         // Set our error reporting
-        $this->config = load_class('Config');
-        $this->LogLevel = $this->config->get('log_level', 'Core');
-        $this->Environment = $this->config->get('environment', 'Core');
+        $config = load_class('Config');
+        self::$LogLevel = $config->get('log_level', 'Core');
+        self::$Environment = $config->get('environment', 'Core');
         
         // Get our URL info
-        $this->urlInfo = load_class('Router')->get_url_info();
-        $this->isAjax = load_class('Input')->is_ajax();
+        self::$urlInfo = load_class('Router')->get_url_info();
+        self::$isAjax = load_class('Input')->is_ajax();
     }
     
 /*
@@ -81,14 +80,14 @@ class Debug
 | @Param: (Array)   $backtrace - Backtrace information if any
 |
 */
-    public function trigger_error($errno, $message = '', $file = '', $line = 0)
+    public static function trigger_error($errno, $message = '', $file = '', $line = 0)
     {
         // Fill error specific attributes
-        $this->ErrorNo = $errno;
-        $this->ErrorLevel = $this->error_string($errno);
-        $this->ErrorMessage = $message;
-        $this->ErrorFile = $file;
-        $this->ErrorLine = $line;
+        self::$ErrorNo = $errno;
+        self::$ErrorLevel = self::error_string($errno);
+        self::$ErrorMessage = $message;
+        self::$ErrorFile = $file;
+        self::$ErrorLine = $line;
         
         /* 
             Get our severity:
@@ -116,16 +115,16 @@ class Debug
         }
 
         // If we are silent, and the error is Non-Fetal... then be silent
-        if($severity == 3 || !$this->silence)
+        if($severity == 3 || !self::$silence)
         {
             // Log error based on error log level
-            if($this->LogLevel != 0) $this->log_error();
+            if(self::$LogLevel != 0) self::log_error();
         
             // Only build the error page when it's fatal, or a development Env.
-            if( $this->Environment == 2 || $severity > 1 )
+            if( self::$Environment == 2 || $severity > 1 )
             {
-               $this->output_error();
-               if( !$this->logged ) $this->write_logs();
+               self::output_error();
+               if( !self::$logged ) self::write_logs();
             }
         }
     }
@@ -138,10 +137,10 @@ class Debug
 | Logs the error message in the error log
 |
 */
-    protected function log_error($was_silenced = false)
+    protected static function log_error($was_silenced = false)
     {
         // Get our site url
-        $url = $this->urlInfo;
+        $url = self::$urlInfo;
         $DB = load_class('Loader')->database('DB', false, true);
         
         // Only log in the database if database is connectable
@@ -149,10 +148,10 @@ class Debug
         {
             // Attempt to insert the error in the database
             $data = array(
-                'level' => $this->ErrorLevel,
-                'string' => $this->ErrorMessage,
-                'file' => $this->ErrorFile,
-                'line' => $this->ErrorLine,
+                'level' => self::$ErrorLevel,
+                'string' => self::$ErrorMessage,
+                'file' => self::$ErrorFile,
+                'line' => self::$ErrorLine,
                 'url' => $url['site_url'] ."/". $url['uri'],
                 'remote_ip' => $_SERVER['REMOTE_ADDR'],
                 'time' => time(),
@@ -164,10 +163,10 @@ class Debug
         {
             // Create our log message
             $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') . PHP_EOL;
-            $err_message .= "| Error Level: ".$this->ErrorLevel . PHP_EOL;
-            $err_message .= "| Message: ".$this->ErrorMessage . PHP_EOL; 
-            $err_message .= "| Reporting File: ".$this->ErrorFile . PHP_EOL;
-            $err_message .= "| Error Line: ".$this->ErrorLine . PHP_EOL;
+            $err_message .= "| Error Level: ".self::$ErrorLevel . PHP_EOL;
+            $err_message .= "| Message: ".self::$ErrorMessage . PHP_EOL; 
+            $err_message .= "| Reporting File: ".self::$ErrorFile . PHP_EOL;
+            $err_message .= "| Error Line: ".self::$ErrorLine . PHP_EOL;
             $err_message .= "| Error Displayed: ". ($was_silenced == true) ? "No" : "Yes". PHP_EOL;
             $err_message .= "| URL When Error Occured: ". $url['site_url'] ."/". $url['uri'] . PHP_EOL;
             $err_message .= "--------------------------------------------------------------------". PHP_EOL . PHP_EOL;
@@ -189,13 +188,13 @@ class Debug
 | @Param: (Numeric) $type - The type of error page such as 404.
 |
 */
-    public function show_error($type)
+    public static function show_error($type)
     {
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_level() != 0) ob_end_clean();
 
         // Get our site url
-        $site_url = $this->urlInfo['site_url'];
+        $site_url = self::$urlInfo['site_url'];
         
         // Include error page
         include(SYSTEM_PATH . DS . 'errors' . DS . 'error_'. $type .'.php');
@@ -216,9 +215,9 @@ class Debug
 | @Param: (Int) $line - The line in the $file calling this trace
 |
 */
-    public function trace($message, $file = 'none', $line = 'none')
+    public static function trace($message, $file = 'none', $line = 'none')
     {
-        $this->traceLogs[] = array('message' => $message, 'file' => $file, 'line' => $line);
+        self::$traceLogs[] = array('message' => $message, 'file' => $file, 'line' => $line);
     }
     
 /*
@@ -229,9 +228,9 @@ class Debug
 | Returns all traced messages in an array
 |
 */
-    public function backtrace()
+    public static function backtrace()
     {
-        return $this->traceLogs;
+        return self::$traceLogs;
     }
     
 /*
@@ -242,10 +241,10 @@ class Debug
 | Logs a message for file writting
 |
 */
-    public function log($type, $message)
+    public static function log($type, $message)
     {
         // Determine if the user wants this logged
-        switch( $this->LogLevel )
+        switch( self::$LogLevel )
         {
             case 0:
                 return;
@@ -275,10 +274,9 @@ class Debug
 | Enable / disable error reporting (except for fatal errors)
 |
 */
-    public function silent_mode($silent = true)
+    public static function silent_mode($silent = true) 
     {
-        $this->silence = $silent;
-        return TRUE;
+        self::$silence = $silent;
     }
     
 /*
@@ -289,31 +287,31 @@ class Debug
 | Builds the error page and displays it
 |
 */
-    protected function output_error()
+    protected static function output_error()
     {
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_level() != 0) ob_end_clean();
         
         // If this is an ajax request, popup a dialog rather then error page.
-        if($this->isAjax)
+        if(self::$isAjax)
         {
             // Only display ajax errors if they are severe!
-            if($this->ErrorNo != E_STRICT && $this->ErrorNo != E_DEPRECATED)
+            if(self::$ErrorNo != E_STRICT && self::$ErrorNo != E_DEPRECATED)
             {
-                $string = $this->ErrorLevel;
-                $file = str_replace( ROOT . DS, '', $this->ErrorFile );
+                $string = self::$ErrorLevel;
+                $file = str_replace( ROOT . DS, '', self::$ErrorFile );
                 echo json_encode(
                     array(
                         'success' => false,
                         'php_error' => true,
                         'php_error_data' => array(
                             'level' => str_replace('PHP ', '', $string),
-                            'message' => $this->ErrorMessage,
+                            'message' => self::$ErrorMessage,
                             'file' => $file,
-                            'line' => $this->ErrorLine
+                            'line' => self::$ErrorLine
                         ),
-                        'message' => '['. $string .'] '. $this->ErrorMessage ." in File: $file, on Line: ". $this->ErrorLine,
-                        'data' => '['. $string .'] '. $this->ErrorMessage ." in File: $file, on Line: ". $this->ErrorLine,
+                        'message' => '['. $string .'] '. self::$ErrorMessage ." in File: $file, on Line: ". self::$ErrorLine,
+                        'data' => '['. $string .'] '. self::$ErrorMessage ." in File: $file, on Line: ". self::$ErrorLine,
                         'type' => 'error'
                     )
                 );
@@ -322,7 +320,7 @@ class Debug
         else
         {
             // Get our site url
-            $site_url = $this->urlInfo['site_url'];
+            $site_url = self::$urlInfo['site_url'];
             
             // Capture the orig_settingslate using Output Buffering, file depends on Environment
             ob_start();
@@ -333,7 +331,7 @@ class Debug
             
             // alittle parsing
             $search = array('{ERROR_LEVEL}', '{MESSAGE}', '{FILE}', '{LINE}');
-            $replace = array($this->ErrorLevel, $this->ErrorMessage, $this->ErrorFile, $this->ErrorLine);
+            $replace = array(self::$ErrorLevel, self::$ErrorMessage, self::$ErrorFile, self::$ErrorLine);
             $page = str_replace($search, $replace, $page);
             
             // Spit the page out
@@ -352,7 +350,7 @@ class Debug
 | Turns an error number to a string
 |
 */
-    public function error_string($level)
+    public static function error_string($level)
     {
         switch($level)
         {
@@ -370,4 +368,11 @@ class Debug
         return $string;
     }
 }
+
+// Initialize the debug class
+Debug::Init();
+
+// Register the Core to process errors with the custom_error_handler method
+set_error_handler('php_error_handler', E_ALL | E_STRICT);
+register_shutdown_function('shutdown');
 // EOF

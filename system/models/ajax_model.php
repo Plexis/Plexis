@@ -141,7 +141,6 @@ class Ajax_Model extends Core\Model
     {
         // Load our config class
         $Config = load_class('Config');
-        $Debug = load_class('Debug');
         $Ajax = get_instance();
 
         // Get our posted information
@@ -340,28 +339,22 @@ class Ajax_Model extends Core\Model
         $result = $Cache->get('ajax_realm_status');
         if($result == FALSE)
         {
-            // Set to array
+            // Set the result to array, and load time helper
             $result = array();
-
-            // If we are here, then the cache results were expired
-            $Debug = load_class('Debug');
             $this->load->helper('Time');
             
-            // Build our query
+            // Fetch the array of realms
             $query = "SELECT `id`, `name`, `type`, `address`, `port`, `max_players` FROM `pcms_realms`";
-            
-            // fetch the array of realms
             $realms = $this->DB->query( $query )->fetch_array();
             if($realms == FALSE) $realms = array();
             
             // Loop through each realm, and get its status
             foreach($realms as $key => $realm)
             {
-
                 // Dont show errors errors
-                $Debug->silent_mode(true);
-                $handle = @fsockopen($realm['address'], $realm['port'], $errno, $errstr, 2);
-                $Debug->silent_mode(false);
+                \Debug::silent_mode(true);
+                $handle = fsockopen($realm['address'], $realm['port'], $errno, $errstr, 2);
+                \Debug::silent_mode(false);
                 
                 // Set our status var
                 ($handle == FALSE) ? $status = 0 : $status = 1;
@@ -370,7 +363,7 @@ class Ajax_Model extends Core\Model
                 $wowlib = $this->load->wowlib($realm['id']);
 
                 // Build our realms return
-                if($status == 1 && $wowlib != FALSE)
+                if($status == 1 && is_object($wowlib))
                 {
                     // Get our realm uptime
                     $uptime = $this->realm->uptime( $realm['id'] );
@@ -383,20 +376,15 @@ class Ajax_Model extends Core\Model
                     
                     // Get our population text
                     if($percent < 40)
-                    {
                         $pop = '<span id="realm_population_low">Low</span>';
-                    }
                     elseif($percent < 75)
-                    {
                         $pop = '<span id="realm_population_medium">Medium</span>';
-                    }
                     else
-                    {
                         $pop = ($percent > 98) ? '<span id="realm_population_full">Full</span>' : '<span id="realm_population_high">High</span>';
-                    }
 
                     // Build our realm info array
                     $result[] = array(
+                        'success' => true,
                         'id' => $realm['id'],
                         'name' => $realm['name'],
                         'type' => $realm['type'],
@@ -411,6 +399,7 @@ class Ajax_Model extends Core\Model
                 else
                 {
                     $result[] = array(
+                        'success' => true,
                         'id' => $realm['id'],
                         'name' => $realm['name'],
                         'type' => $realm['type'],

@@ -72,7 +72,7 @@ Class Registry
 
 /*
 | ---------------------------------------------------------------
-| Method: _set()
+| Method: set()
 | ---------------------------------------------------------------
 |
 | This method is a privte method used to store an object
@@ -122,7 +122,7 @@ Class Registry
     static function store($key, $instance)
     {
 
-        return self::singleton()->set($key,$instance);
+        return self::singleton()->set($key, $instance);
     }
 
 }

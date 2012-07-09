@@ -1691,9 +1691,9 @@ class Admin_ajax extends Core\Controller
                     {
                         // Get the file changes from github
                         $start = microtime(1);
-                        load_class('Debug')->silent_mode(true);
+                        \Debug::silent_mode(true);
                         $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=1', false);
-                        load_class('Debug')->silent_mode(false);
+                        \Debug::silent_mode(false);
                         $stop = microtime(1);
                         
                         if($page == FALSE || empty($page))
@@ -1736,9 +1736,9 @@ class Admin_ajax extends Core\Controller
                 
                     // Get the file changes from github
                     $start = microtime(1);
-                    load_class('Debug')->silent_mode(true);
+                    \Debug::silent_mode(true);
                     $page = trim( getPageContents($url, false) );
-                    load_class('Debug')->silent_mode(false);
+                    \Debug::silent_mode(false);
                     $stop = microtime(1);
                     
                     if($page == FALSE || empty($page))
@@ -1768,7 +1768,7 @@ class Admin_ajax extends Core\Controller
                     $removed = FALSE;
                     
                     // Hush errors
-                    load_class('Debug')->silent_mode(true);
+                    \Debug::silent_mode(true);
                     
                     // Get file contents
                     $contents = trim( getPageContents($url, false) );

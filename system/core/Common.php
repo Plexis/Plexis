@@ -70,7 +70,7 @@
         $store_name = str_replace('\\', '_', $class);
 
         // Check the registry for the class, If its there, then return the class
-        $loaded = \Registry::singleton()->load($store_name);
+        $loaded = \Registry::load($store_name);
         if($loaded !== NULL) return $loaded;
 
         // ---------------------------------------------------------
@@ -111,7 +111,7 @@
         }
 
         // Store this new object in the registery
-        \Registry::singleton()->store($store_name, $Obj); 
+        \Registry::store($store_name, $Obj); 
 
         // return the object.
         return $Obj;
@@ -132,7 +132,7 @@
         if(!$errno) return false;
         
         // Trigger
-        load_class('Debug')->trigger_error($errno, $errstr, $errfile, $errline, debug_backtrace());
+        \Debug::trigger_error($errno, $errstr, $errfile, $errline);
 
         // Don't execute PHP internal error handler
         return true;
@@ -152,16 +152,13 @@
         $catch = load_class('Config')->get('catch_fatal_errors', 'Core');
         $error = error_get_last();
         
-        // Load the debug class
-        $Debug = load_class('Debug');
-        
         // If we have an error, only track if it's fatal
         if(is_array($error) && $catch == 1)
         {
             if($error['type'] == E_ERROR || $error['type'] == E_PARSE)
             {
                 // Trigger
-                $Debug->trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
+                \Debug::trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
             }
             // Otherwise ignore
         }
@@ -206,7 +203,7 @@
         }
         
         // Init and spit the error
-        load_class('Debug')->trigger_error($lvl, $message, $calling['file'], $calling['line'], $backtrace);
+        \Debug::trigger_error($lvl, $message, $calling['file'], $calling['line'], $backtrace);
     }
 	
 /*
@@ -222,7 +219,7 @@
     function show_404()
     {		
         // Init and spit the error
-        load_class('Debug')->show_error(404);
+        \Debug::show_error(404);
     }
     
 /*
@@ -238,7 +235,7 @@
     function log_message($type, $message)
     {		
         // Init and spit the error
-        load_class('Debug')->log($type, $message);
+        \Debug::log($type, $message);
     }
 	
 /*
@@ -330,8 +327,4 @@
         
         return $newPath;
     }
-
-// Register the Core to process errors with the custom_error_handler method
-set_error_handler('php_error_handler', E_ALL | E_STRICT);
-register_shutdown_function('shutdown');
 // EOF

@@ -794,8 +794,9 @@ class Template
         $string = 
         "        var Plexis = {
             url : '". SITE_URL ."',
-            realm_id : ". get_realm_cookie() .",
             template_url : '{TEMPLATE_URL}',
+            debugging : false,
+            realm_id : ". get_realm_cookie() .",
         }\n";
         foreach($this->jsvars as $key => $val)
         {

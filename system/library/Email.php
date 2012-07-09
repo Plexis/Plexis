@@ -83,13 +83,13 @@ class Email
         $this->build_header();
         
         // Disable error reporting
-        if($supress = true) load_class('Debug')->silent_mode(true);
+        if($supress = true) \Debug::silent_mode(true);
         
         // Send the email
         $sent = mail($this->to, $this->subject, $this->message, $this->header);
         
         // Re-enable errors and return
-        if($supress = true) load_class('Debug')->silent_mode(false);
+        if($supress = true) \Debug::silent_mode(false);
         return $sent;
     }
 

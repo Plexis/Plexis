@@ -40,14 +40,13 @@ class Telnet
     public function connect($host, $port, $user, $pass)
     {
         // Disable error reporting
-        $Debug = load_class('Debug');
-        $Debug->silent_mode(true);
+        \Debug::silent_mode(true);
         
         // Open the handle
-        $this->handle = @fsockopen($host, $port, $errno, $errstr, 3);
+        $this->handle = fsockopen($host, $port, $errno, $errstr, 3);
         
         // Re-enable error reporting
-        $Debug->silent_mode(false);
+        \Debug::silent_mode(false);
         
         // Check if we connected successfully
         if($this->handle)

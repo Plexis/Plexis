@@ -15,7 +15,7 @@
 
 // Define CMS versions
 define('CMS_VERSION', 'Beta 1');
-define('CMS_BUILD', 245);
+define('CMS_BUILD', 246);
 define('REQ_DB_VERSION', '0.16');
 
 // Define a smaller Directory seperater and ROOT path
@@ -28,6 +28,7 @@ define('SYSTEM_PATH', ROOT . DS . 'system');
 // Include required scripts to run the system
 require (SYSTEM_PATH . DS . 'core' . DS . 'Common.php');
 require (SYSTEM_PATH . DS . 'core' . DS . 'Registry.php');
+require (SYSTEM_PATH . DS . 'core' . DS . 'Debug.php');
 
 // Initiate the system start time
 load_class('Benchmark')->start('system');

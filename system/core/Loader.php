@@ -75,7 +75,7 @@ class Loader
         $name = strtolower($name);
         
         // Check the registry
-        $Obj = \Registry::singleton()->load($class);
+        $Obj = \Registry::load($class);
         if($Obj !== NULL)
         {
             return $Obj;
@@ -110,7 +110,7 @@ class Loader
         }
         
         // Store the model
-        \Registry::singleton()->store($class, $Obj);
+        \Registry::store($class, $Obj);
 
         return $Obj;
     }
@@ -164,7 +164,7 @@ class Loader
         if(!is_array($args))
         {
             // Check our registry to see if we already loaded this connection
-            $Obj = \Registry::singleton()->load("DBC_".$args);
+            $Obj = \Registry::load("DBC_".$args);
             if($Obj !== NULL)
             {
                 // Skip to the instancing part unless we set instance to FALSE
@@ -217,7 +217,7 @@ class Loader
         }
         
         // Store the connection in the registry
-        \Registry::singleton()->store("DBC_".$args, $Obj);		
+        \Registry::store("DBC_".$args, $Obj);		
         
         // Here is our instance goto
         Instance:
@@ -294,7 +294,7 @@ class Loader
         $store_name = 'Plugins_'. $name;
         
         // Check if the plugin is already loaded
-        $Obj = \Registry::singleton()->load($store_name);
+        $Obj = \Registry::load($store_name);
         if( $Obj === null )
         {
             // We have to manually load the plugin
@@ -319,7 +319,7 @@ class Loader
             }
             
             // Store the object
-            \Registry::singleton()->store($store_name, $Obj);
+            \Registry::store($store_name, $Obj);
         }
         
         // Make sure the object IS an object
@@ -344,7 +344,7 @@ class Loader
         if($id === 0) $id = config('default_realm_id');
         
         // Make sure we havent loaded the lib already
-        $Obj = \Registry::singleton()->load('Wowlib_r'.$id);
+        $Obj = \Registry::load('Wowlib_r'.$id);
         if($Obj !== NULL) return $Obj;
         
         // Load our driver name
@@ -381,7 +381,7 @@ class Loader
         }
         
         // Store the class statically and return the class
-        \Registry::singleton()->store('Wowlib_r'.$id, $class);
+        \Registry::store('Wowlib_r'.$id, $class);
         
         // Check to see if the user wants to instance
         if($instance_as !== FALSE)
@@ -410,7 +410,7 @@ class Loader
         $file = ROOT . DS . 'third_party'. DS .'wowlib' . DS . strtolower($emulator) . DS . $emulator . '.php';
         
         // Make sure we havent loaded the lib already
-        $class = \Registry::singleton()->load($class_name);
+        $class = \Registry::load($class_name);
         if($class !== NULL)
         {
             goto Instance;
@@ -424,7 +424,7 @@ class Loader
             $class = new $name();
             
             // Store the class statically and return the class
-            \Registry::singleton()->store($class_name, $class);
+            \Registry::store($class_name, $class);
             
             // Instance
             Instance:
