@@ -48,6 +48,9 @@ class Debug
     
     // Ajax Request?
     protected static $ajaxRequest;
+    
+    // Output sent to browser?
+    protected static $outputSent = false;
 
 
 /*
@@ -58,11 +61,13 @@ class Debug
 */
     public static function Init()
     {
-        // Set our error reporting
-        $config = load_class('Config');
-        self::$LogLevel = $config->get('log_level', 'Core');
-        self::$Environment = $config->get('environment', 'Core');
-        self::$catchFatalErrors = $config->get('catch_fatal_errors', 'Core');
+        // Load the config class
+        $Config = load_class('Config');
+        
+        // Fill our error reporting variables
+        self::$LogLevel = $Config->get('log_level', 'Core');
+        self::$Environment = $Config->get('environment', 'Core');
+        self::$catchFatalErrors = $Config->get('catch_fatal_errors', 'Core');
         
         // Get our URL info
         self::$urlInfo = load_class('Router')->get_url_info();
@@ -94,7 +99,7 @@ class Debug
         $error = error_get_last();
         
         // If we have an error on shutdown, that means we never caught it :O ... its Fatal
-        if(is_array($error) && self::$catchFatalErrors == 1)
+        if(is_array($error) && self::$catchFatalErrors == 1 && !self::$outputSent)
         {
             // Trigger
             return self::trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
@@ -244,6 +249,21 @@ class Debug
         
         // Kill the script
         die();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: output_sent()
+| ---------------------------------------------------------------
+|
+| Callback method for the template system to prevent display of
+| future errors
+|
+*/
+    public static function output_sent()
+    {
+        self::$outputSent = true;
+        self::trace('Page compiled and sent to browser', __FILE__, __LINE__);
     }
     
 /*

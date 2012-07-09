@@ -379,7 +379,7 @@ class Template
         $Benchmark = load_class('Benchmark');
         $this->source = str_replace('{MEMORY_USAGE}', $Benchmark->memory_usage(), $this->source);
         $this->source = str_replace('{ELAPSED_TIME}', $Benchmark->elapsed_time('system'), $this->source);
-        
+
         // Start a new output buffer
         ob_start();
         
@@ -388,6 +388,9 @@ class Template
         
         // flush the buffers
         ob_end_flush();
+        
+        // Tell the debug class that we output the content so we dont get errors after the template has been produced
+        \Debug::output_sent();
     }
     
 /*

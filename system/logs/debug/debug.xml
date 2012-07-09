@@ -3,11 +3,11 @@
 	<trace>
 		<message>Debug class initialized successfully</message>
 		<file>C:\wamp\www\Plexis\system\core\Debug.php</file>
-		<line>72</line>
+		<line>77</line>
 	</trace>
 	<trace>
 		<message>Shutting down</message>
 		<file>C:\wamp\www\Plexis\system\core\Debug.php</file>
-		<line>84</line>
+		<line>89</line>
 	</trace>
 </debug>

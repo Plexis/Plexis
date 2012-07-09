@@ -1,1 +1,1 @@
-[{"status":"A","file":"system\/logs\/debug\/debug.xml"},{"status":"M","file":"system\/core\/Common.php"},{"status":"M","file":"system\/core\/Debug.php"},{"status":"M","file":"system\/core\/Plexis.php"},{"status":"M","file":"index.php"}]
+[{"status":"M","file":"system\/core\/Debug.php"},{"status":"M","file":"system\/library\/Template.php"},{"status":"M","file":"system\/logs\/debug\/debug.xml"},{"status":"M","file":"index.php"}]
