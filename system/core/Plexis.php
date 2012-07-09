@@ -39,7 +39,6 @@ class Plexis
         $this->EventHandler = load_class('Events');
         
         // Tell the router to process the URL for us
-        $this->Router->route_url();
         $routes = $this->Router->get_url_info();
         
         // Initialize some important routing variables

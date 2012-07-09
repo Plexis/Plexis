@@ -1,0 +1,13 @@
+<?xml version='1.0' standalone='yes' encoding='UTF-8'?>
+<debug>
+	<trace>
+		<message>Debug class initialized successfully</message>
+		<file>C:\wamp\www\Plexis\system\core\Debug.php</file>
+		<line>72</line>
+	</trace>
+	<trace>
+		<message>Shutting down</message>
+		<file>C:\wamp\www\Plexis\system\core\Debug.php</file>
+		<line>84</line>
+	</trace>
+</debug>

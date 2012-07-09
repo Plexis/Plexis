@@ -119,53 +119,6 @@
 
 /*
 | ---------------------------------------------------------------
-| Function: php_error_handler()
-| ---------------------------------------------------------------
-|
-| Php uses this error handle instead of the default one because
-| php calls this method statically
-|
-*/
-    function php_error_handler($errno, $errstr, $errfile, $errline)
-    {
-		// Return false if there is no error code
-        if(!$errno) return false;
-        
-        // Trigger
-        \Debug::trigger_error($errno, $errstr, $errfile, $errline);
-
-        // Don't execute PHP internal error handler
-        return true;
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: shutdown()
-| ---------------------------------------------------------------
-|
-| Method for catching fatal and parse errors
-|
-*/
-    function shutdown()
-    {
-        // Get las error, and confg option
-        $catch = load_class('Config')->get('catch_fatal_errors', 'Core');
-        $error = error_get_last();
-        
-        // If we have an error, only track if it's fatal
-        if(is_array($error) && $catch == 1)
-        {
-            if($error['type'] == E_ERROR || $error['type'] == E_PARSE)
-            {
-                // Trigger
-                \Debug::trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
-            }
-            // Otherwise ignore
-        }
-    }
-
-/*
-| ---------------------------------------------------------------
 | Function: show_error()
 | ---------------------------------------------------------------
 |

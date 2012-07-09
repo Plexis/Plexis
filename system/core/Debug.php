@@ -29,6 +29,9 @@ class Debug
     
     // Our sites error level.
     protected static $Environment;
+    
+    // Catch Fatal errors variable
+    protected static $catchFatalErrors;
 
     // Silent Mode
     protected static $silence = false;
@@ -44,7 +47,7 @@ class Debug
     protected static $urlInfo;
     
     // Ajax Request?
-    protected static $isAjax;
+    protected static $ajaxRequest;
 
 
 /*
@@ -59,10 +62,43 @@ class Debug
         $config = load_class('Config');
         self::$LogLevel = $config->get('log_level', 'Core');
         self::$Environment = $config->get('environment', 'Core');
+        self::$catchFatalErrors = $config->get('catch_fatal_errors', 'Core');
         
         // Get our URL info
         self::$urlInfo = load_class('Router')->get_url_info();
-        self::$isAjax = load_class('Input')->is_ajax();
+        self::$ajaxRequest = load_class('Input')->is_ajax();
+        
+        // Add this to the trace
+        self::trace('Debug class initialized successfully', __FILE__, __LINE__);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Destructor
+| ---------------------------------------------------------------
+|
+*/
+    public static function Shutdown()
+    {
+        // Add this to the trace
+        self::trace('Shutting down', __FILE__, __LINE__);
+        
+        // Generate trace logs
+        if( !self::$logged )
+        {
+            self::write_debuglog('debug');
+            self::$logged = true;
+        }
+        
+        // Generate the debug log
+        $error = error_get_last();
+        
+        // If we have an error on shutdown, that means we never caught it :O ... its Fatal
+        if(is_array($error) && self::$catchFatalErrors == 1)
+        {
+            // Trigger
+            return self::trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
+        }
     }
     
 /*
@@ -82,6 +118,9 @@ class Debug
 */
     public static function trigger_error($errno, $message = '', $file = '', $line = 0)
     {
+        // Return false if there is no error code
+        if(!$errno) return false;
+        
         // Fill error specific attributes
         self::$ErrorNo = $errno;
         self::$ErrorLevel = self::error_string($errno);
@@ -93,7 +132,7 @@ class Debug
             Get our severity:
             1 = Less then error level... Passable
             2 = Error that can be silenced
-            3 = Fetal Error, None silencable
+            3 = Fatal Error, None silencable
         */
         switch($errno)
         {
@@ -114,9 +153,12 @@ class Debug
                 break;
         }
 
-        // If we are silent, and the error is Non-Fetal... then be silent
+        // If we are silent, and the error is Non-Fatal... then be silent
         if($severity == 3 || !self::$silence)
         {
+            // Add this to the trace
+            self::trace('Error triggered: '. $message .'; File: '. $file .'['. $line .']', __FILE__, __LINE__);
+            
             // Log error based on error log level
             if(self::$LogLevel != 0) self::log_error();
         
@@ -124,9 +166,11 @@ class Debug
             if( self::$Environment == 2 || $severity > 1 )
             {
                self::output_error();
-               if( !self::$logged ) self::write_logs();
             }
         }
+        
+        // Don't execute PHP internal error handler
+        return true;
     }
 
 /*
@@ -139,8 +183,7 @@ class Debug
 */
     protected static function log_error($was_silenced = false)
     {
-        // Get our site url
-        $url = self::$urlInfo;
+        // Load the database
         $DB = load_class('Loader')->database('DB', false, true);
         
         // Only log in the database if database is connectable
@@ -152,7 +195,7 @@ class Debug
                 'string' => self::$ErrorMessage,
                 'file' => self::$ErrorFile,
                 'line' => self::$ErrorLine,
-                'url' => $url['site_url'] ."/". $url['uri'],
+                'url' => self::$urlInfo['site_url'] ."/". self::$urlInfo['uri'],
                 'remote_ip' => $_SERVER['REMOTE_ADDR'],
                 'time' => time(),
                 'backtrace' => null
@@ -163,12 +206,12 @@ class Debug
         {
             // Create our log message
             $err_message =  "| Logging started at: ". date('Y-m-d H:i:s') . PHP_EOL;
-            $err_message .= "| Error Level: ".self::$ErrorLevel . PHP_EOL;
-            $err_message .= "| Message: ".self::$ErrorMessage . PHP_EOL; 
-            $err_message .= "| Reporting File: ".self::$ErrorFile . PHP_EOL;
-            $err_message .= "| Error Line: ".self::$ErrorLine . PHP_EOL;
+            $err_message .= "| Error Level: ". self::$ErrorLevel . PHP_EOL;
+            $err_message .= "| Message: ". self::$ErrorMessage . PHP_EOL; 
+            $err_message .= "| Reporting File: ". self::$ErrorFile . PHP_EOL;
+            $err_message .= "| Error Line: ". self::$ErrorLine . PHP_EOL;
             $err_message .= "| Error Displayed: ". ($was_silenced == true) ? "No" : "Yes". PHP_EOL;
-            $err_message .= "| URL When Error Occured: ". $url['site_url'] ."/". $url['uri'] . PHP_EOL;
+            $err_message .= "| URL When Error Occured: ". self::$urlInfo['site_url'] ."/". self::$urlInfo['uri'] . PHP_EOL;
             $err_message .= "--------------------------------------------------------------------". PHP_EOL . PHP_EOL;
 
             // Write in the log file, the very long message we made
@@ -235,6 +278,33 @@ class Debug
     
 /*
 | ---------------------------------------------------------------
+| Method: write_debuglog()
+| ---------------------------------------------------------------
+|
+| Generates the debug log
+|
+*/
+    public static function write_debuglog($name = null)
+    {
+        // Do we have a custom name?
+        $name = ($name == null) ? 'debug_'. time() : $name;
+        
+        // Build the xml
+        $string = "<?xml version='1.0' standalone='yes' encoding='UTF-8'?>\r\n<debug>\r\n";
+        foreach(self::$traceLogs as $trace)
+        {
+            $string .= "\t<trace>\r\n";
+            $string .= "\t\t<message>". $trace['message'] ."</message>\r\n";
+            $string .= "\t\t<file>". $trace['file'] ."</file>\r\n";
+            $string .= "\t\t<line>". $trace['line'] ."</line>\r\n";
+            $string .= "\t</trace>\r\n";
+        }
+        $string .= '</debug>';
+        file_put_contents( path(SYSTEM_PATH, 'logs', 'debug', $name .'.xml'), $string );
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: log()
 | ---------------------------------------------------------------
 |
@@ -293,7 +363,7 @@ class Debug
         if(ob_get_level() != 0) ob_end_clean();
         
         // If this is an ajax request, popup a dialog rather then error page.
-        if(self::$isAjax)
+        if(self::$ajaxRequest)
         {
             // Only display ajax errors if they are severe!
             if(self::$ErrorNo != E_STRICT && self::$ErrorNo != E_DEPRECATED)
@@ -372,7 +442,7 @@ class Debug
 // Initialize the debug class
 Debug::Init();
 
-// Register the Core to process errors with the custom_error_handler method
-set_error_handler('php_error_handler', E_ALL | E_STRICT);
-register_shutdown_function('shutdown');
+// Register the server to process errors with the this class
+set_error_handler('Debug::trigger_error', E_ALL | E_STRICT);
+register_shutdown_function('Debug::Shutdown');
 // EOF
