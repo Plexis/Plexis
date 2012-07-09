@@ -23,7 +23,19 @@ namespace Core;
 class Events
 {
 	// Static array of events, and handlers
-	protected static $events = array(); 
+	protected static $events = array();
+    
+/*
+| ---------------------------------------------------------------
+| Constructor
+| ---------------------------------------------------------------
+|
+*/
+    public function __construct()
+    {
+        // Add trace for debugging
+        \Debug::trace('Event handler initialized', __FILE__, __LINE__);
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -37,7 +49,17 @@ class Events
 |
 */
 	public function trigger($event, $params = array())
-	{	
+	{
+        // Get calling
+        $backtrace = debug_backtrace();
+        
+        // Add trace for debugging
+        \Debug::trace("Event \"{$event}\" triggered from: {$backtrace[0]['file']} on line {$backtrace[0]['line']}", __FILE__, __LINE__);
+        
+        // Free up memory
+        unset($backtrace);
+        
+        // Check that event exists
 		if(array_key_exists($event, self::$events))
 		{
 			foreach(self::$events[$event] as $callback)

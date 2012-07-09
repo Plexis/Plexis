@@ -26,5 +26,8 @@ class Model
         $this->DB = $this->load->database( 'DB' );
         $this->RDB = $this->load->database( 'RDB' );
         $this->realm = $this->load->realm();
+        
+        // Add trace for debugging
+        \Debug::trace('Model class initialized', __FILE__, __LINE__);
     }
 }

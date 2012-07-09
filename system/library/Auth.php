@@ -48,6 +48,9 @@ class Auth
 
     public function __construct()
     {
+        // Add trace for debugging
+        \Debug::trace('Initializing Auth class...', __FILE__, __LINE__);
+        
         // Init the loader
         $this->load = load_class('Loader');
         
@@ -70,6 +73,9 @@ class Auth
         
         // Load this users credentials
         $this->load_user();
+        
+        // Add trace for debugging
+        \Debug::trace('Auth class initialized successfully', __FILE__, __LINE__);
     }
 
 /*
@@ -93,6 +99,9 @@ class Auth
         {
             Guest:
             {
+                // Add trace for debugging
+                \Debug::trace('Loading user as guest', __FILE__, __LINE__);
+        
                 // Get guest privilages
                 $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=1";
                 
@@ -113,6 +122,8 @@ class Auth
         // If the session time is expired
         elseif($session['expire_time'] < time() - $this->expire_time) 
         {
+            // Add trace for debugging
+            \Debug::trace('User session expired, Logging out...', __FILE__, __LINE__);
             $this->logout();
             return;
         }
@@ -135,6 +146,8 @@ class Auth
             // Check that our session is not being used by another user
             if($this->session->get('token') != $result['_session_id'])
             {
+                // Add trace for debugging
+                \Debug::trace('User session ID does not match cookie. Logging out...', __FILE__, __LINE__);
                 $this->logout();
                 goto Guest;
             }
@@ -166,6 +179,9 @@ class Auth
             
             // Set our users info up the the session and carry onwards :D
             $this->session->set('user', array_merge($session, $result));
+            
+            // Add trace for debugging
+            \Debug::trace('Loaded user '. $result['username'], __FILE__, __LINE__);
         }
         
         // Load the permissions
@@ -400,7 +416,9 @@ class Auth
 
     protected function load_permissions($gid, $perms)
     {
-
+        // Add trace for debugging
+        \Debug::trace('Loading permissions for group id: '. $gid, __FILE__, __LINE__);
+        
         // set to empty array if false
         if($perms == FALSE) $perms = array();
         
@@ -439,10 +457,10 @@ class Auth
     
 /*
 | ---------------------------------------------------------------
-| Function: load_permissions()
+| Function: has_permissions()
 | ---------------------------------------------------------------
 |
-| Loads the permissions specific to this user
+| Used to find if user has a specified permission
 |
 | @Return (Int) 1 if the user has permission, else 0
 |

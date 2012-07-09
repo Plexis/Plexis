@@ -60,6 +60,9 @@ class Controller
 */
     public function __construct($autoload = true, $init_template = true) 
     {
+        // Add trace for debugging
+        \Debug::trace('Initializing core controller...', __FILE__, __LINE__);
+        
         // Set the instance here
         if(self::$instance == false) self::$instance = $this;
         
@@ -89,6 +92,9 @@ class Controller
         
         // Process DB updates
         if( !$this->Input->is_ajax() ) $this->_process_db();
+        
+        // Add trace for debugging
+        \Debug::trace('Core controller initialized successfully', __FILE__, __LINE__);
     }
     
 /*
@@ -101,8 +107,11 @@ class Controller
     {
         // Autoload the config autoload_helpers 
         $libs = $this->Config->get('autoload_helpers', 'Core');
-        if(count($libs) > 0)
+        $c = count($libs);
+        if($c > 0)
         {
+            // Add trace for debugging
+            \Debug::trace('Autoloading '. $c .' helper(s)', __FILE__, __LINE__);
             foreach($libs as $lib)
             {
                 $this->load->helper($lib);
@@ -111,8 +120,11 @@ class Controller
         
         // Autoload the config autoload_libraries
         $libs = $this->Config->get('autoload_libraries', 'Core');
-        if(count($libs) > 0)
+        $c = count($libs);
+        if($c > 0)
         {
+            // Add trace for debugging
+            \Debug::trace('Autoloading '. $c .' library class(es)', __FILE__, __LINE__);
             foreach($libs as $lib)
             {
                 $this->load->library($lib);
@@ -177,6 +189,9 @@ class Controller
             $updates = array();
             $path = path( SYSTEM_PATH, "sql", "updates" );
             
+            // Add trace for debugging
+            \Debug::trace("Updating core database from {$version} to ". REQ_DB_VERSION, __FILE__, __LINE__);
+            
             // Open the __updates directory and scan all updates
             $list = @opendir( $path );
             if($list)
@@ -208,9 +223,14 @@ class Controller
                 {
                     if( !$this->DB->utilities->run_sql_file($path . DS . $update['file']) )
                     {
+                        // Add trace for debugging
+                        \Debug::trace('Database update to version '. $version .' failed!', __FILE__, __LINE__);
                         log_message('Failed to run SQL file "'. $path . DS . $update['file'] .'" on database', 'error.log');
                         break;
                     }
+                    
+                    // Add trace for debugging
+                    \Debug::trace('Database successfully updated to version '. $version, __FILE__, __LINE__);
                     $version = $update['version'];
                 }
             }

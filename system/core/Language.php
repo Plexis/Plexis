@@ -46,6 +46,9 @@ class Language
 */
     public function __construct()
     {
+        // Add trace for debugging
+        \Debug::trace('Initializing language class...', __FILE__, __LINE__);
+        
         // Load the Input and Filesystem class'
         $this->Input = load_class('Input');
         $this->filesystem = load_class('Filesystem', 'Library');
@@ -58,6 +61,9 @@ class Language
 
         // Set the default Language
         $this->selected_language();
+        
+        // Add trace for debugging
+        \Debug::trace('Language class initiated successfully', __FILE__, __LINE__);
     }
     
 /*

@@ -33,6 +33,9 @@ class Plexis
 */
     public function Init()
     {
+        // Add trace for debugging
+        \Debug::trace('Initializing Plexis bootstrap class...', __FILE__, __LINE__);
+        
         // Initialize the router
         $this->Router = load_class('Router');
         $this->load = load_class('Loader');
@@ -53,12 +56,20 @@ class Plexis
         if( !array_key_exists('HTTP_MOD_REWRITE', $_SERVER) ) $_SERVER['HTTP_MOD_REWRITE'] = 'Off';
         ($_SERVER['HTTP_MOD_REWRITE'] == 'On') ? define('SITE_URL', $routes['site_url']) : define('SITE_URL', $routes['site_url'] .'/?url=');
         
+        // Add trace for debugging
+        \Debug::trace('Loading plugins...', __FILE__, __LINE__);
+        
         // Load Plugins config file
+        $i = 0;
         include( SYSTEM_PATH . DS .'config'. DS .'plugins.php' );
         foreach($Plugins as $p)
         {
+            ++$i;
             $this->load->plugin($p);
         }
+        
+        // Add trace for debugging
+        \Debug::trace("Successfully loaded {$i} plugins", __FILE__, __LINE__);
 
         // Load the application controller, and determine if this request is to a module		
         if( !$this->findRoute() ) show_404();
@@ -127,6 +138,9 @@ class Plexis
         // Make this a bit easier
         $name = strtolower($this->controller);
         
+        // Add trace for debugging
+        \Debug::trace("Loading routes for url...", __FILE__, __LINE__);
+        
         // Load database
         $this->DB = $this->load->database('DB');
         
@@ -169,6 +183,9 @@ class Plexis
             $this->controller  = $GLOBALS['controller'] = ucfirst($result['name']);
             $this->action = $GLOBALS['action'] = $result['method'];
             
+            // Add trace for debugging
+            \Debug::trace("Found module route in database. Using {$this->controller} as controller, and {$this->action} as method", __FILE__, __LINE__);
+            
             // Include the module controller file
             include path(ROOT, 'third_party', 'modules', $this->controller, 'controller.php');
             return TRUE;
@@ -186,6 +203,9 @@ class Plexis
                     $GLOBALS['is_module'] = FALSE;
                     $GLOBALS['controller'] = $this->controller;
                     $GLOBALS['action'] = $this->action;
+                    
+                    // Add trace for debugging
+                    \Debug::trace("No module found for url route, using default contoller from the system/controllers folder", __FILE__, __LINE__);
                     
                     // Include the controller file
                     include $path;

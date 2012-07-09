@@ -85,16 +85,6 @@ class Debug
 */
     public static function Shutdown()
     {
-        // Add this to the trace
-        self::trace('Shutting down', __FILE__, __LINE__);
-        
-        // Generate trace logs
-        if( !self::$logged )
-        {
-            self::write_debuglog('debug');
-            self::$logged = true;
-        }
-        
         // Generate the debug log
         $error = error_get_last();
         
@@ -103,6 +93,16 @@ class Debug
         {
             // Trigger
             return self::trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
+        }
+        
+        // Add this to the trace
+        self::trace('Everything complete... Shutting down', __FILE__, __LINE__);
+        
+        // Generate trace logs
+        if( !self::$logged )
+        {
+            self::write_debuglog('debug');
+            self::$logged = true;
         }
     }
     
@@ -170,7 +170,15 @@ class Debug
             // Only build the error page when it's fatal, or a development Env.
             if( self::$Environment == 2 || $severity > 1 )
             {
-               self::output_error();
+                // Generate trace logs
+                if( !self::$logged )
+                {
+                    self::write_debuglog('debug');
+                    self::$logged = true;
+                }
+        
+                // Output error
+                self::output_error();
             }
         }
         
@@ -309,11 +317,22 @@ class Debug
         // Do we have a custom name?
         $name = ($name == null) ? 'debug_'. time() : $name;
         
+        // Make sure this isnt a ajax request
+        // if(self::$ajaxRequest) return;
+        
         // Build the xml
         $string = "<?xml version='1.0' standalone='yes' encoding='UTF-8'?>\r\n<debug>\r\n";
-        foreach(self::$traceLogs as $trace)
+        $string .= "\t<info>\r\n";
+        $string .= "\t\t<cms_version>". CMS_VERSION ."</cms_version>\r\n";
+        $string .= "\t\t<cms_build>". CMS_BUILD ."</cms_build>\r\n";
+        $string .= "\t\t<url>". self::$urlInfo['site_url'] ."/". self::$urlInfo['uri'] ."</url>\r\n";
+        $string .= "\t\t<generated>". date("F j, Y, g:i a", time()) ."</generated>\r\n";
+        $string .= "\t</info>\r\n";
+        
+        // Loop through and add the traces
+        foreach(self::$traceLogs as $key => $trace)
         {
-            $string .= "\t<trace>\r\n";
+            $string .= "\t<trace id=\"". ($key + 1) ."\">\r\n";
             $string .= "\t\t<message>". $trace['message'] ."</message>\r\n";
             $string .= "\t\t<file>". $trace['file'] ."</file>\r\n";
             $string .= "\t\t<line>". $trace['line'] ."</line>\r\n";

@@ -35,6 +35,9 @@ class Config
 */
     public function __construct() 
     {
+        // Add trace for debugging
+        \Debug::trace('Initializing config class...', __FILE__, __LINE__);
+        
         // Set default files
         $this->files['app']['file_path'] = SYSTEM_PATH . DS . 'config' . DS . 'config.php';
         $this->files['core']['file_path'] = SYSTEM_PATH . DS . 'config' . DS . 'core.config.php';
@@ -42,6 +45,9 @@ class Config
         
         // Lets roll!
         $this->Init();
+        
+        // Add trace for debugging
+        \Debug::trace('Config class initiated successfully', __FILE__, __LINE__);
     }
 
 /*
@@ -169,6 +175,9 @@ class Config
         // Lowercase the $name
         $_name = strtolower($_name);
         
+        // Add trace for debugging
+        \Debug::trace('Loading config "'. $_name .'" from: '. $_file, __FILE__, __LINE__);
+        
         // Include file and add it to the $files array
         if(!file_exists($_file)) return FALSE;
         include( $_file );
@@ -213,6 +222,9 @@ class Config
         // Lowercase the $name
         $name = strtolower($name);
         
+        // Add trace for debugging
+        \Debug::trace('Saving config: '. $name, __FILE__, __LINE__);
+        
         // Check to see if we need to put this in an array
         $ckey = $this->files[$name]['config_key'];
         if($ckey != FALSE)
@@ -255,20 +267,21 @@ class Config
         $cfg .= "?>";
         
         // Add the back to non array if we did put it in one
-        if($ckey != FALSE)
-        {
-            $this->data[$name] = $Old_Data;
-        }
+        if($ckey != FALSE) $this->data[$name] = $Old_Data;
         
         // Copy the current config file for backup, 
         // and write the new config values to the new config
         copy($this->files[$name]['file_path'], $this->files[$name]['file_path'].'.bak');
         if(file_put_contents( $this->files[$name]['file_path'], $cfg )) 
         {
+            // Add trace for debugging
+            \Debug::trace('Successfully Saved config: '. $name, __FILE__, __LINE__);
             return TRUE;
         } 
         else 
         {
+            // Add trace for debugging
+            \Debug::trace('Failed to save config: '. $name, __FILE__, __LINE__);
             return FALSE;
         }
     }

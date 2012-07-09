@@ -60,6 +60,9 @@ class Router
         // Load the config and input class'
         $this->config = load_class('Config');
         $this->input = load_class('Input');
+        
+        // Add trace for debugging
+        \Debug::trace('Router class initialized successfully', __FILE__, __LINE__);
     }
 
 /*
@@ -75,6 +78,9 @@ class Router
 */
     public function route_url() 
     {
+        // Add trace for debugging
+        \Debug::trace('Routing url...', __FILE__, __LINE__);
+        
         // Determine our http hostname, and site directory
         $this->http_host = rtrim($_SERVER['HTTP_HOST'], '/');
         $this->site_dir = dirname( $_SERVER['PHP_SELF'] );
@@ -196,6 +202,9 @@ class Router
         $this->controller = $controller;
         $this->action = $action;
         $this->queryString = $queryString;
+        
+        // Add trace for debugging
+        \Debug::trace("Url routed successfully. Found controller: {$this->controller}; Action: {$this->action}; Querystring: ". implode('/', $this->queryString), __FILE__, __LINE__);
     }
 
 /*

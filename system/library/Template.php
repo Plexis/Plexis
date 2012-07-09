@@ -64,6 +64,9 @@ class Template
 */   
     public function __construct()
     {
+        // Add trace for debugging
+        \Debug::trace('Initializing template class...', __FILE__, __LINE__);
+        
         // Define defaults
         $this->config['controller'] = $GLOBALS['controller'];
         $this->config['is_module']  = $GLOBALS['is_module'];
@@ -84,6 +87,9 @@ class Template
              ->set_metadata('content-type', 'text/html; charset=UTF-8', 'http-equiv')
              ->set_metadata('cache-control', 'no-cache', 'http-equiv')
              ->set_metadata('expires', '-1', 'http-equiv');
+             
+        // Add trace for debugging
+        \Debug::trace('Template class initialized successfully', __FILE__, __LINE__);
     }
     
 /*
@@ -352,6 +358,9 @@ class Template
         // Define our view file name, and layout filename
         $this->view_file = str_replace( array('/', '\\'), DS, $view_name);
         
+        // Add trace for debugging
+        \Debug::trace('Rendering page using view name: '. $view_name, __FILE__, __LINE__);
+        
         // Compile all the variables into one array
         $this->_initialize($data);
 
@@ -413,6 +422,9 @@ class Template
         $l_delim = "<";
         $r_delim = ">";
         $trigger = $this->config['trigger'];
+        
+        // Add trace for debugging
+        \Debug::trace('Compiling template layout and partials...', __FILE__, __LINE__);
         
         // Get our template layout file
         if( isset($this->xml->layouts->{$this->config['controller']}->{$this->view_file}) )
@@ -506,6 +518,9 @@ class Template
 */
     protected function parse()
     {
+        // Add trace for debugging
+        \Debug::trace('Parsing template', __FILE__, __LINE__);
+        
         // Shorten up the text here
         $l_delim = $this->config['l_delim'];
         $r_delim = $this->config['r_delim'];
@@ -621,6 +636,9 @@ class Template
     {
         // Build filepath
         $file = path($this->template['path'], 'template.xml');
+        
+        // Add trace for debugging
+        \Debug::trace('Loading template xml file ('. $file .')', __FILE__, __LINE__);
 
         // Load the template xml fil if it exists
         if(file_exists( $file ))
@@ -793,6 +811,9 @@ class Template
 */
     protected function _build_header()
     {
+        // Add trace for debugging
+        \Debug::trace('Building template header', __FILE__, __LINE__);
+        
         // Convert our JS vars into a string :)
         $string = 
         "        var Plexis = {

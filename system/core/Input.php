@@ -65,6 +65,9 @@ class Input
         $this->time = ( time() + (60 * 60 * 24 * 365) );
         $this->cookie_path =  "/";
         $this->cookie_domain = rtrim($_SERVER['HTTP_HOST'], '/');
+        
+        // Add trace for debugging
+        \Debug::trace('Input class initiated successfully', __FILE__, __LINE__);
     }
 
 /*

@@ -26,6 +26,18 @@ class Benchmark
     // Start and stop timers
     protected $start = array(); 
     protected $stop = array();
+    
+/*
+| ---------------------------------------------------------------
+| Constructor
+| ---------------------------------------------------------------
+|
+*/
+    public function __construct()
+    {
+        // Add trace for debugging
+        \Debug::trace('Benchmark class initialized', __FILE__, __LINE__);
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -39,6 +51,8 @@ class Benchmark
 */
     public function start($key)
     {
+        // Add trace for debugging
+        \Debug::trace("Starting benchmark \"{$key}\"", __FILE__, __LINE__);
         $this->start[$key] = microtime(true);
     }
 
@@ -54,6 +68,8 @@ class Benchmark
 */
     public function stop($key)
     {
+        // Add trace for debugging
+        \Debug::trace("Stoping benchmark \"{$key}\"", __FILE__, __LINE__);
         $this->stop[$key] = microtime(true);
     }
 
