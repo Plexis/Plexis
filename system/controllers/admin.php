@@ -719,9 +719,9 @@ class Admin extends Core\Controller
             
             // Get the file changes from github
             $start = microtime(1);
-            load_class('Debug')->silent_mode(true);
+            \Debug::silent_mode(true);
             $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30', false);
-            load_class('Debug')->silent_mode(false);
+            \Debug::silent_mode(false);
             $stop = microtime(1);
             
             // Granted we have page contents
