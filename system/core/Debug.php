@@ -321,7 +321,7 @@ class Debug
         // if(self::$ajaxRequest) return;
         
         // Build the xml
-        $string = "<?xml version='1.0' standalone='yes' encoding='UTF-8'?>\r\n<debug>\r\n";
+        $string = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\r\n<debug>\r\n";
         $string .= "\t<info>\r\n";
         $string .= "\t\t<cms_version>". CMS_VERSION ."</cms_version>\r\n";
         $string .= "\t\t<cms_build>". CMS_BUILD ."</cms_build>\r\n";

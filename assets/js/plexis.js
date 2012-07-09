@@ -20,7 +20,7 @@
             {
                 if(result.success == false)
                 {
-                    if(typeof result.php_error != "undefined" && result.php_error == true && Plexis.debugging == true)
+                    if(typeof result.php_error != "undefined" && result.php_error == true && Plexis.debugging == false)
                     {
                         show_php_error(result.php_error_data);
                     }

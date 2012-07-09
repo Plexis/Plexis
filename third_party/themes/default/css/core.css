@@ -42,7 +42,7 @@
  * 2) Message Boxes
  * ================================================== */
  
-.msgbox { background:url(../images/msgbox/background.png) repeat-x left bottom; padding-bottom:55px; font-style:normal; }
+.msgbox { color: #000; background:url(../images/msgbox/background.png) repeat-x left bottom; padding-bottom:55px; font-style:normal; }
 .msgbox-wrapper { padding:20px 20px 20px 100px; }
 .msgbox-buttons { padding:15px; text-align:right; position:absolute; bottom:0; right:0; }
 .msgbox-buttons button, .msgbox-buttons input { margin-left:10px; min-width:85px; padding:0 14px 2px; height:24px; cursor:pointer; }

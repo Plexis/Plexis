@@ -1,10 +1,10 @@
-<?xml version='1.0' standalone='yes' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <debug>
 	<info>
 		<cms_version>Beta 1</cms_version>
-		<cms_build>249</cms_build>
-		<url>http://127.0.0.1/Plexis/ajax/realms/</url>
-		<generated>July 9, 2012, 4:02 pm</generated>
+		<cms_build>250</cms_build>
+		<url>http://127.0.0.1/Plexis/admin_ajax/update</url>
+		<generated>July 9, 2012, 4:21 pm</generated>
 	</info>
 	<trace id="1">
 		<message>Initializing config class...</message>
@@ -47,7 +47,7 @@
 		<line>82</line>
 	</trace>
 	<trace id="9">
-		<message>Url routed successfully. Found controller: ajax; Action: realms; Querystring: </message>
+		<message>Url routed successfully. Found controller: admin_ajax; Action: update; Querystring: </message>
 		<file>C:\wamp\www\Plexis\system\core\Router.php</file>
 		<line>207</line>
 	</trace>
@@ -107,81 +107,46 @@
 		<line>57</line>
 	</trace>
 	<trace id="21">
-		<message>Initializing core controller...</message>
-		<file>C:\wamp\www\Plexis\system\core\Controller.php</file>
-		<line>64</line>
-	</trace>
-	<trace id="22">
-		<message>Initializing language class...</message>
-		<file>C:\wamp\www\Plexis\system\core\Language.php</file>
-		<line>50</line>
-	</trace>
-	<trace id="23">
-		<message>Language class initiated successfully</message>
-		<file>C:\wamp\www\Plexis\system\core\Language.php</file>
-		<line>66</line>
-	</trace>
-	<trace id="24">
-		<message>Autoloading 7 helper(s)</message>
-		<file>C:\wamp\www\Plexis\system\core\Controller.php</file>
-		<line>114</line>
-	</trace>
-	<trace id="25">
-		<message>Autoloading 3 library class(es)</message>
-		<file>C:\wamp\www\Plexis\system\core\Controller.php</file>
-		<line>127</line>
-	</trace>
-	<trace id="26">
-		<message>Initializing Auth class...</message>
-		<file>C:\wamp\www\Plexis\system\library\Auth.php</file>
-		<line>52</line>
-	</trace>
-	<trace id="27">
-		<message>Loaded user Wilson212</message>
-		<file>C:\wamp\www\Plexis\system\library\Auth.php</file>
-		<line>184</line>
-	</trace>
-	<trace id="28">
-		<message>Loading permissions for group id: 4</message>
-		<file>C:\wamp\www\Plexis\system\library\Auth.php</file>
-		<line>420</line>
-	</trace>
-	<trace id="29">
-		<message>Auth class initialized successfully</message>
-		<file>C:\wamp\www\Plexis\system\library\Auth.php</file>
-		<line>78</line>
-	</trace>
-	<trace id="30">
-		<message>Initializing template class...</message>
-		<file>C:\wamp\www\Plexis\system\library\Template.php</file>
-		<line>68</line>
-	</trace>
-	<trace id="31">
-		<message>Template class initialized successfully</message>
-		<file>C:\wamp\www\Plexis\system\library\Template.php</file>
-		<line>92</line>
-	</trace>
-	<trace id="32">
-		<message>Core controller initialized successfully</message>
-		<file>C:\wamp\www\Plexis\system\core\Controller.php</file>
-		<line>97</line>
-	</trace>
-	<trace id="33">
 		<message>Event "post_controller_init" triggered from: C:\wamp\www\Plexis\system\core\Plexis.php on line 84</message>
 		<file>C:\wamp\www\Plexis\system\core\Events.php</file>
 		<line>57</line>
 	</trace>
-	<trace id="34">
-		<message>Model class initialized</message>
-		<file>C:\wamp\www\Plexis\system\core\Model.php</file>
-		<line>31</line>
+	<trace id="22">
+		<message>Initializing Auth class...</message>
+		<file>C:\wamp\www\Plexis\system\library\Auth.php</file>
+		<line>52</line>
 	</trace>
-	<trace id="35">
+	<trace id="23">
+		<message>Loaded user Wilson212</message>
+		<file>C:\wamp\www\Plexis\system\library\Auth.php</file>
+		<line>184</line>
+	</trace>
+	<trace id="24">
+		<message>Loading permissions for group id: 4</message>
+		<file>C:\wamp\www\Plexis\system\library\Auth.php</file>
+		<line>420</line>
+	</trace>
+	<trace id="25">
+		<message>Auth class initialized successfully</message>
+		<file>C:\wamp\www\Plexis\system\library\Auth.php</file>
+		<line>78</line>
+	</trace>
+	<trace id="26">
+		<message>Initializing language class...</message>
+		<file>C:\wamp\www\Plexis\system\core\Language.php</file>
+		<line>50</line>
+	</trace>
+	<trace id="27">
+		<message>Language class initiated successfully</message>
+		<file>C:\wamp\www\Plexis\system\core\Language.php</file>
+		<line>66</line>
+	</trace>
+	<trace id="28">
 		<message>Event "post_controller" triggered from: C:\wamp\www\Plexis\system\core\Plexis.php on line 105</message>
 		<file>C:\wamp\www\Plexis\system\core\Events.php</file>
 		<line>57</line>
 	</trace>
-	<trace id="36">
+	<trace id="29">
 		<message>Everything complete... Shutting down</message>
 		<file>C:\wamp\www\Plexis\system\core\Debug.php</file>
 		<line>99</line>
