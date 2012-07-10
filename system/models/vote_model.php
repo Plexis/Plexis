@@ -49,14 +49,8 @@ class Vote_Model extends Core\Model
         $query = "SELECT * FROM `pcms_vote_sites` WHERE `id`=".$id;
         $post = $this->DB->query( $query )->fetch_row();
         
-        // If we have no results, return an empty array
-        if($post == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // Return Our Data
-        return $post;
+        // If we have no results, return false, else return votesite
+        return ($post == false) ? false : $post;
     }
     
 /*
@@ -75,14 +69,8 @@ class Vote_Model extends Core\Model
         $query = "SELECT * FROM `pcms_vote_sites`";
         $post = $this->DB->query( $query )->fetch_array();
         
-        // If we have no results, return an empty array
-        if($post == FALSE)
-        {
-            return array();
-        }
-        
-        // Return Our Data
-        return $post;
+        // If we have no results, return an empty array, else return votesite
+        return ($post == false) ? array() : $post;
     }
     
 /*
@@ -103,11 +91,13 @@ class Vote_Model extends Core\Model
     public function create($hostname, $votelink, $image_url, $points, $reset_time)
     {
         // Build out insert data
-        $data['hostname'] = $hostname;
-        $data['votelink'] = $votelink;
-        $data['image_url'] = $image_url;
-        $data['points'] = $points;
-        $data['reset_time'] = $reset_time;
+        $data = array(
+            'hostname' => $hostname,
+            'votelink' => $votelink,
+            'image_url' => $image_url,
+            'points' => $points,
+            'reset_time' => $reset_time
+        );
         
         // Insert our post
         return $this->DB->insert('pcms_vote_sites', $data);
@@ -132,13 +122,15 @@ class Vote_Model extends Core\Model
     public function update($id, $hostname, $votelink, $image_url, $points, $reset_time)
     {
         // Build out insert data
-        $data['hostname'] = $hostname;
-        $data['votelink'] = $votelink;
-        $data['image_url'] = $image_url;
-        $data['points'] = $points;
-        $data['reset_time'] = $reset_time;
+        $data = array(
+            'hostname' => $hostname,
+            'votelink' => $votelink,
+            'image_url' => $image_url,
+            'points' => $points,
+            'reset_time' => $reset_time
+        );
         
-        // Insert our post
+        // Update our post
         return $this->DB->update('pcms_vote_sites', $data, "`id`=$id");
     }
     

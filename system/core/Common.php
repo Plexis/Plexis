@@ -60,10 +60,7 @@
     function load_class($className, $type = 'Core', $surpress = FALSE)
     {
         // Now we need to make sure the user supplied some sort of path
-        if(strpos($className, '\\') === FALSE)
-        {
-            $className = $type. '\\'. $className;
-        }
+        if(strpos($className, $type) === FALSE) $className = $type .'\\'. $className;
 
         // Make a lowercase version, and a storage name
         $class = strtolower($className);
@@ -81,15 +78,11 @@
         // We need to find the file the class is stored in. Good thing the
         // Namespaces are pretty much paths to the class ;)
         $parts = explode('\\', $class);
-
-        // Uppercase the filename
         $last = count($parts) - 1;
         $parts[$last] = ucfirst($parts[$last]);
 
         // Build our filepath
         $file = implode(DS, $parts);
-
-        // Build our file path
         $file = SYSTEM_PATH . DS . $file .'.php';
 
         // Include our file. If it doesnt exists, class is un-obtainable.
@@ -105,7 +98,7 @@
         }
         
         // Display error?
-        if($Obj == FALSE && $surpress == FALSE)
+        if(!is_object($Obj) && !$surpress)
         {
             show_error('class_init_failed', array($className, $message), E_ERROR);
         }
@@ -127,36 +120,30 @@
 | @Param: (String) $err_message - Error message code
 | @Param: (Array) $args - An array for vsprintf to replace in the message.
 | @Param: (Int) $lvl - Level of the error
+| @Param: (Bool) $fatal - If set to true, error cannot be silenced
 | @Return: (None)
 |
 */	
-    function show_error($err_message = 'none', $args = NULL, $lvl = E_ERROR)
+    function show_error($err_message = 'none', $args = null, $lvl = E_ERROR, $fatal = false)
     {
         // Let get a backtrace for deep debugging
         $backtrace = debug_backtrace();
         $calling = $backtrace[0];
         
-        //Load language
+        // Load language
         $lang = load_class('Language');
-        $language = load_class('Config')->get('core_language', 'Core');
-        $lang->set_language( $language );
         $lang->load('core_errors');
         $message = $lang->get($err_message);
         
-        //Allow custom messages
-        if($message === FALSE)
-        {
-            $message = $err_message;
-        }
+        // Allow custom messages
+        if($message === FALSE) $message = $err_message;
         
-        // do replacing
-        if(is_array($args))
-        {
-            $message = vsprintf($message, $args);
-        }
+        // Do replacing
+        if(is_array($args)) $message = vsprintf($message, $args);
         
-        // Init and spit the error
-        \Debug::trigger_error($lvl, $message, $calling['file'], $calling['line'], $backtrace);
+        // Let the debugger take over from here
+        if($fatal) \Debug::silent_mode(false);
+        \Debug::trigger_error($lvl, $message, $calling['file'], $calling['line']);
     }
 	
 /*
@@ -170,8 +157,7 @@
 |
 */	
     function show_404()
-    {		
-        // Init and spit the error
+    {
         \Debug::show_error(404);
     }
     
@@ -180,14 +166,15 @@
 | Function: log_message()
 | ---------------------------------------------------------------
 |
-| Logs a message in the debug log, or specified file
+| Logs a message in the system log
 |
+| @Param: (String) $type - The message type (info, error)
+| @Param: (String) $message - The message
 | @Return: (None)
 |
 */	
     function log_message($type, $message)
-    {		
-        // Init and spit the error
+    {
         \Debug::log($type, $message);
     }
 	
@@ -247,23 +234,25 @@
 
     function path()
     {
+        // Determine if we are one windows, And get our path parts
         $IsWindows = strtoupper( substr(PHP_OS, 0, 3) ) === "WIN";
         $args = func_get_args();
         $parts = array();
         
+        // Trim our paths to remvove spaces and new lines
         foreach( $args as $part )
         {
             $parts[] = (is_array( $part )) ? trim( implode(DS, $part) ) : trim($part);
         }
 
+        // Get our cleaned path into a variable with the correct directory seperator
         $newPath = implode( DS, $parts );
         
-        //Do some checking for illegal path chars
+        // Do some checking for illegal path chars
         if( $IsWindows )
         {
             $IllegalChars = "\\/:?*\"<>|\r\n";
             $Pattern = "~[" . $IllegalChars . "]+~";
-    
             $tempPath = preg_replace( "~^[A-Z]{1}:~", "", $newPath );
             $tempPath = trim( $tempPath, DS );
             $tempPath = explode( DS, $tempPath );

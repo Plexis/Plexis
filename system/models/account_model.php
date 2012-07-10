@@ -45,10 +45,7 @@ class Account_Model extends Core\Model
 
         // Insert the key into the DB
         $result = $this->DB->update('pcms_accounts', array('_activation_code' => $key), "`username`='".$username."'");
-        if($result == TRUE) return $key;
-        
-        // If we are here, there was a DB error
-        return FALSE; 
+        return ($result == TRUE) ? $key : false;
     }
     
 /*
@@ -63,13 +60,7 @@ class Account_Model extends Core\Model
     {
         // make sure this key doesnt already exist
         $result = $this->DB->query("SELECT `username` FROM `pcms_accounts` WHERE `_activation_code`=?", array($key))->fetch_column();
-        if($result !== FALSE)
-        {
-            // Return the username
-            return $result;
-        }
-        // If we are here, there the key didnt exist
-        return FALSE; 
+        return ($result !== FALSE) ? $result : false;
     }
     
 /*

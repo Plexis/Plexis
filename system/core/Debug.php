@@ -95,6 +95,7 @@ class Debug
         if(is_array($error) && self::$catchFatalErrors == 1 && !self::$outputSent)
         {
             // Trigger
+            self::$silence = false;
             return self::trigger_error($error['type'], $error['message'], $error['file'], $error['line']);
         }
         
@@ -121,7 +122,6 @@ class Debug
 | @Param: (String)  $file - The file reporting the error
 | @Param: (Int)     $line - Error line number
 | @Param: (Int)     $errno - Error number
-| @Param: (Array)   $backtrace - Backtrace information if any
 |
 */
     public static function trigger_error($errno, $message = '', $file = '', $line = 0)
@@ -136,7 +136,7 @@ class Debug
         self::$ErrorFile = $file;
         self::$ErrorLine = $line;
         
-        /* 
+        /*
             Get our severity:
             1 = Less then error level... Passable
             2 = Error that can be silenced

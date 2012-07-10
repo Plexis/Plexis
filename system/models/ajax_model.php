@@ -351,7 +351,7 @@ class Ajax_Model extends Core\Model
             // Loop through each realm, and get its status
             foreach($realms as $key => $realm)
             {
-                // Dont show errors errors
+                // Dont show warning produced by fsockopen
                 \Debug::silent_mode(true);
                 $handle = fsockopen($realm['address'], $realm['port'], $errno, $errstr, 2);
                 \Debug::silent_mode(false);
