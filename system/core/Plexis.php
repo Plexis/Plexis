@@ -98,6 +98,7 @@ class Plexis
         else
         {
             // If the method didnt exist, then we have a 404
+            \Debug::trace("Method '{$this->action}' doesnt exist in controller '{$GLOBALS['controller']}'. Displaying 404" , __FILE__, __LINE__);
             show_404();
         }
         
@@ -210,6 +211,11 @@ class Plexis
                     // Include the controller file
                     include $path;
                     return TRUE;
+                }
+                else
+                {
+                    // If the method didnt exist, then we have a 404
+                    \Debug::trace("Controller '{$name}' doesnt exist. Displaying 404" , __FILE__, __LINE__);
                 }
             }
         }

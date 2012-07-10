@@ -111,7 +111,7 @@ class Router
         if( !$this->config->get('enable_query_strings', 'Core'))
         {
             // Get our current url, which is passed on by the 'url' param
-            $this->uri = (isset($_GET['url']) ? $this->input->get('url', TRUE) : '');   
+            $this->uri = (isset($_GET['url'])) ? $this->input->get('url', TRUE) : '';   
         }
         else
         {
@@ -195,6 +195,8 @@ class Router
         // Make sure the first character of the controller is not an _ !
         if( strncmp($controller, '_', 1) == 0 || strncmp($action, '_', 1) == 0 )
         {
+            // Add this to the trace
+            \Debug::trace('Controller or action contains a private prefix "_", showing 404' , __FILE__, __LINE__);
             show_404();
         }
         

@@ -1,4 +1,5 @@
-application/cache/*.cache
-application/config/database.config.php
+system/cache/*.cache
+system/config/database.config.php
 system/logs/*.log
+system/logs/debug/*.xml
 install/install.lock

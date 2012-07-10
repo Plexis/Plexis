@@ -61,6 +61,9 @@ class Debug
 */
     public static function Init()
     {
+        // Add this to the trace
+        self::trace('Initializing debug class...', __FILE__, __LINE__);
+        
         // Load the config class
         $Config = load_class('Config');
         
@@ -101,7 +104,7 @@ class Debug
         // Generate trace logs
         if( !self::$logged )
         {
-            self::write_debuglog('debug');
+            self::write_debuglog();
             self::$logged = true;
         }
     }
@@ -248,7 +251,7 @@ class Debug
     {
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_level() != 0) ob_end_clean();
-
+        
         // Get our site url
         $site_url = self::$urlInfo['site_url'];
         
@@ -315,7 +318,8 @@ class Debug
     public static function write_debuglog($name = null)
     {
         // Do we have a custom name?
-        $name = ($name == null) ? 'debug_'. time() : $name;
+        $uri = str_replace(array('/', '\\'), '-', trim(self::$urlInfo['uri'], '/'));
+        if($name == null) $name = (empty($uri)) ? 'debug_'. $GLOBALS['controller'] . '-'. $GLOBALS['action'] : 'debug_'. $uri;
         
         // Make sure this isnt a ajax request
         // if(self::$ajaxRequest) return;
@@ -482,6 +486,6 @@ class Debug
 Debug::Init();
 
 // Register the server to process errors with the this class
-set_error_handler('Debug::trigger_error', E_ALL | E_STRICT);
-register_shutdown_function('Debug::Shutdown');
+set_error_handler( array('Debug', 'trigger_error'), E_ALL | E_STRICT );
+register_shutdown_function( array('Debug', 'Shutdown') );
 // EOF
