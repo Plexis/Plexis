@@ -370,7 +370,9 @@ class Ajax_Model extends Core\Model
                     ($uptime == FALSE) ? $uptime = 'Unavailable' : $uptime = format_time($uptime);
                     
                     // Determine population
-                    $online = $wowlib->get_online_count(0);
+                    $ally = $wowlib->characters->get_online_count(1);
+                    $horde = $wowlib->characters->get_online_count(2);
+                    $online = $ally + $horde;
                     $space = $realm['max_players'] - $online;
                     $percent = ($space < 0) ? 100 : $space / $realm['max_players'];
                     
@@ -391,8 +393,8 @@ class Ajax_Model extends Core\Model
                         'status' => $status,
                         'population' => $pop,
                         'online' => $online,
-                        'alliance' => $wowlib->get_online_count(1),
-                        'horde' => $wowlib->get_online_count(2),
+                        'alliance' => $ally,
+                        'horde' => $horde,
                         'uptime' => $uptime
                     );
                 }
