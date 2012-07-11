@@ -334,9 +334,10 @@ class Filesystem
     {
         // Correct path
         $file = str_replace(array('/', '\\'), DS, $file);
-        
+
         // Attempt to create the file
-        if(touch($file))
+        $handle = @fopen($file, 'w+');
+        if($handle)
         {
             // If contents are an array, then serialize them
             if(is_array($contents)) $contents = serialize($contents);
@@ -344,7 +345,8 @@ class Filesystem
             // only add file contents if they are not null!
             if(!empty($contents))
             {
-                return file_put_contents($file, $contents);
+                fwrite($handle, $contents);
+                fclose($handle);
             }
             
             // Return true if we are here

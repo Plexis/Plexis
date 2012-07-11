@@ -37,11 +37,11 @@ class Admin extends Core\Controller
         // Build the Core Controller
         parent::__construct();
         
-        // Init a session var
-        $this->user = $this->Session->get('user');
+        // Load user data
+        $this->user = $this->User->data;
         
         // Make sure the user has admin access'
-        if( !$this->Auth->has_permission('admin_access') )
+        if( !$this->User->has_permission('admin_access') )
         {
             redirect( SITE_URL );
             die();
@@ -1102,7 +1102,7 @@ class Admin extends Core\Controller
 */ 
     protected function check_permission($perm, $s403 = TRUE)
     {
-        if( !$this->Auth->has_permission($perm))
+        if( !$this->User->has_permission($perm))
         {
             if($s403) $this->show_403();
             return FALSE;

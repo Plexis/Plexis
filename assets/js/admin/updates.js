@@ -80,10 +80,8 @@ function process()
                 switch(status)
                 {
                     case "M":
-                        mode = 'Updating';
-                        break;
                     case "A":
-                        mode = 'Adding';
+                        mode = 'Downloading';
                         break;
                     case "D":
                         mode = 'Removing';
@@ -151,8 +149,44 @@ function process()
                 // Stop the loop!
                 if(update_error == true) return false;
             });
+
+            // Finalize changes
+            if(update_error == false)
+            {
+                // Update the status
+                $('#update-state').html('<center>Finalizing update... Please wait.</center>');
             
-            // Set the site up for maintenace to false
+                $.ajax({
+                    type: "POST",
+                    url: Plexis.url + '/admin_ajax/update',
+                    data: { action: 'finalize' },
+                    dataType: "json",
+                    timeout: 5000, // in milliseconds
+                    success: function(result) 
+                    {
+                        if(typeof result.php_error != "undefined" && result.php_error == true)
+                        {
+                            data = result.php_error_data;
+                            update_error = true;
+                            update_message = data.message;
+                            
+                            $.msgbox('Update failed because a PHP error was encountered!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
+                                type : 'error'
+                            });
+                        }
+                        else
+                        {
+                            if(result.success == false)
+                            {
+                                update_error = true;
+                                update_message = result.message;
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // unlcok site
             $.ajax({
                 type: "POST",
                 url: Plexis.url + '/admin_ajax/update',

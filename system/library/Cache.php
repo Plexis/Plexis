@@ -41,7 +41,7 @@ class Cache
     public function set_path($path)
     {
         // Remove any trailing slashes
-        $path = rtrim($path, '/');
+        $path = rtrim($path, '/\\');
         $this->path = str_replace( array('\\', '/'), DS, $path );
     }
 

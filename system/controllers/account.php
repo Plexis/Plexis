@@ -39,7 +39,7 @@ class Account extends Core\Controller
         parent::__construct();
         
         // Make the user info a little easier to get
-        $this->user = $this->Session->get('user');
+        $this->user = $this->User->data;
     }
 
 /*
@@ -125,7 +125,7 @@ class Account extends Core\Controller
                 $username = $this->input->post('username', TRUE);
                 $password = $this->input->post('password', TRUE);
                 
-                if($this->Auth->login($username, $password))
+                if($this->User->login($username, $password))
                 {
                     // Success
                     (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : redirect('account');
@@ -163,7 +163,7 @@ class Account extends Core\Controller
         if( !$this->user['logged_in'] ) redirect('account/login');
         
         // Destroy the users session
-        $this->Auth->logout();
+        $this->User->logout();
         
         // Load the page, and we are done :)
         (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : redirect( SITE_URL );
@@ -343,7 +343,7 @@ class Account extends Core\Controller
                 }
                 
                 // Use the AUTH class to register the user officially
-                $id = $this->Auth->register($username, $password, $email, $sq, $sa);
+                $id = $this->User->register($username, $password, $email, $sq, $sa);
                 if($id != false)
                 {
                     // Remove registration key IF enabled
@@ -383,7 +383,7 @@ class Account extends Core\Controller
                     else
                     {
                         // Log the user in, and redirect
-                        $this->Auth->login($username, $password);
+                        $this->User->login($username, $password);
                         output_message('success', 'reg_success');
                         $this->load->view('blank', array('username' => $username) );
                     }
@@ -1015,7 +1015,7 @@ class Account extends Core\Controller
     {
         // get permissions
         $enabled = config('reg_registration_key');
-        $create_keys = $this->Auth->has_permission('create_invite_keys');
+        $create_keys = $this->User->has_permission('create_invite_keys');
         
         // Load the account model
         $this->load->model('account_model', 'model');

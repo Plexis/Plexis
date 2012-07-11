@@ -52,9 +52,9 @@ class Template
     // Our viewname
     protected $view_file;
     
-    // Our loader and Session
+    // Our loader and parser
     protected $load;
-    protected $session;
+    protected $parser;
 
 /*
 | ---------------------------------------------------------------
@@ -73,7 +73,6 @@ class Template
 
         // Load the loader, Session, and Parser classes
         $this->load = load_class('Loader');
-        $this->session = $this->load->library('Session');
         $this->parser  = $this->load->library('Parser');
         
         // Set basic headings so they can be modified later!
@@ -765,7 +764,7 @@ class Template
         }
 
         // Add session data to our data array
-        $data['session'] = $this->session->data;
+        $data['session']['user'] = $this->load->library('User')->data;
         
         // Add the config...
         $configs = load_class('Config')->get_all('App');

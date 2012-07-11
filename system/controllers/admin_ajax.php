@@ -46,8 +46,8 @@ class Admin_ajax extends Core\Controller
             // Build the Core Controller
             parent::__construct(true, false);
             
-            // Init a session var
-            $this->user = $this->Session->get('user');
+            // Get our user data into an array
+            $this->user = $this->User->data;
             
             // Make sure user is an admin!
             if( !$this->check_permission('admin_access') );
@@ -1648,9 +1648,7 @@ class Admin_ajax extends Core\Controller
         $this->load->helper('url');
         
         // Load the user
-        $this->Session = $this->load->library('Session', false);
-        $this->Auth = $this->load->library('Auth', false);
-        $this->user = $this->Session->get('user');
+        $this->user = $this->load->library('User', false)->data;
         
         // Setup the selected users language
         $this->Language = load_class('Language');
@@ -1725,6 +1723,7 @@ class Admin_ajax extends Core\Controller
                     break;
                     
                 case "finish":
+                    // Enable the site again
                     config_set('site_updating', 0);
                     config_save('app');
                     break;
@@ -1774,10 +1773,7 @@ class Admin_ajax extends Core\Controller
                     $contents = trim( getPageContents($url, false) );
                     $mod = substr($type, 0, 1);
                     switch($mod)
-                    {
-                        case "R":
-                            break;
-                            
+                    { 
                         case "A":
                         case "M":
                             // Make sure the Directory exists!
@@ -1798,48 +1794,87 @@ class Admin_ajax extends Core\Controller
                                 }
                             }
                             
-                            // Now attempt to write to the file, create it if it doesnt exist
-                            $handle = @fopen($filename, 'w+');
-                            if($handle)
+                            // Create cache file of modified files to prevent update errors
+                            if($mod == 'M')
                             {
-                                // Write the new file contents to the file
-                                $fwrite = @fwrite($handle, $contents);
-                                if($fwrite === FALSE)
+                                if(!$this->addfileids($sha, 'M', $filename))
                                 {
-                                    $this->output(false, 'Error writing to file "'. $file .'"');
+                                    $this->output(false, 'Error creating file cache file');
                                     return;
                                 }
-                                @fclose($handle);
+
+                                // Set cache filename
+                                $filename = $filename .'.tmp';
                             }
-                            else
+                            
+                            // Now attempt to write to the file, create it if it doesnt exist
+                            if(!$Fs->create_file($filename, $contents))
                             {
-                                $this->output(false, 'Error creating/opening file "'. $file .'"');
+                                $this->output(false, 'Error creating/opening file "'. $filename .'"');
                                 return;
                             }
+                            
+                            // Add file to modify list
                             break;
                             
                         case "D":
-                            $removed = TRUE;
-                            $Fs->delete($filename);
+                            if(!$this->addfileids($sha, 'D', $filename))
+                            {
+                                $this->output(false, 'Error creating file cache file');
+                                return;
+                            }
                             break;
-                    }
-                    
-                    // Removed empty dirs
-                    if($removed == TRUE)
-                    {
-                        // Re-read the directory
-                        clearstatcache();
-                        $files = $Fs->read_dir($dirname);
-
-                        // If empty, delete .DS / .htaccess files and remove dir!
-                        if(empty($files) || (sizeof($files) == 1 && ($files[0] == '.htaccess')))
-                        {
-                            $Fs->remove_dir($dirname);
-                        }
                     }
                     
                     // Output success
                     $this->output(true, '');
+                break;
+            
+                case 'finalize':
+                    // Load our Filesystem Class
+                    $Fs = $this->load->library('Filesystem');
+                    
+                    // We need to rename all modified files from thier cache version, and remove deleted files
+                    $cfile = path( SYSTEM_PATH, 'cache', 'updater', 'updates.cache' );
+                    if(file_exists($cfile))
+                    {
+                        $data = unserialize( file_get_contents($cfile) );
+                        unset($data['sha']);
+                        foreach($data['files'] as $file)
+                        {
+                            if($file['mode'] == 'M')
+                            {
+                                $tmp = $file['filename'] .'.tmp';
+                                if(!copy($tmp, $file['filename']))
+                                {
+                                    $this->output(false, 'Error copying cache contents of file '. $file['filename'] .'. Update failed.');
+                                    return;
+                                }
+                                @unlink($tmp);
+                            }
+                            else
+                            {
+                                $Fs->delete($data['filename']);
+                                
+                                // Re-read the directory
+                                clearstatcache();
+                                $files = $Fs->read_dir($dirname);
+
+                                // If empty, delete .DS / .htaccess files and remove dir!
+                                if(empty($files) || (sizeof($files) == 1 && ($files[0] == '.htaccess')))
+                                {
+                                    $Fs->remove_dir($dirname);
+                                }
+                            }
+                        }
+                        
+                        // Output success
+                        $this->output(true, '');
+                    }
+                    else
+                    {
+                        $this->output(false, 'Error reading the updates cache file. unable to finish update');
+                    }
                 break;
 
             } // End Swicth $action
@@ -1855,6 +1890,35 @@ class Admin_ajax extends Core\Controller
 | METHODS
 | ---------------------------------------------------------------
 */
+
+
+/*
+| ---------------------------------------------------------------
+| Method: addfileids()
+| ---------------------------------------------------------------
+|
+| This method us used by the remote updater to add files to a cache
+| file, so they can be transfered over to live files and prevent
+| update errors
+*/
+
+    protected function addfileids($sha, $mode, $filename)
+    {
+        $cfile = path( SYSTEM_PATH, 'cache', 'updater', 'updates.cache' );
+        if(file_exists($cfile))
+        {
+            $data = unserialize( file_get_contents($cfile) );
+            if($data['sha'] != $sha) $data['sha'] = $sha;
+        }
+        else
+        {
+            $data = array('sha' => $sha);
+        }
+        
+        // Add file to data
+        $data['files'][] = array('mode' => $mode, 'filename' => $filename);
+        return (!file_put_contents($cfile, serialize($data))) ? false : true;
+    }
     
 /*
 | ---------------------------------------------------------------
@@ -1897,7 +1961,7 @@ class Admin_ajax extends Core\Controller
     protected function check_permission($perm)
     {
         // Make sure the user has admin access'
-        if( !$this->Auth->has_permission($perm))
+        if( !$this->User->has_permission($perm))
         {
             $this->output(false, 'access_denied_privlages');
             die();

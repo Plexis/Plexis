@@ -30,27 +30,6 @@ class Controller
 
     // The instance of this class
     private static $instance = false;
-    
-    // Out session
-    public $Session;
-    
-    // Our auth class
-    public $Auth;
-    
-    // Event handler
-    public $Event;
-    
-    // language class
-    public $Language;
-    
-    // Template Class
-    public $Template;
-    
-    // Database functions
-    public $DB, $RDB;
-    
-    // Stats Class
-    public $Statistics;
 
 /*
 | ---------------------------------------------------------------
@@ -149,7 +128,7 @@ class Controller
         else
         {
             // Check if the user has a selected theme.
-            $user = $this->Session->data['user'];
+            $user = $this->User->data;
             
             // Load users selected theme if there is one selected
             if($user['logged_in'] == true && !empty($user['selected_theme']))

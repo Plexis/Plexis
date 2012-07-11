@@ -14,8 +14,8 @@ class Ajax extends Core\Controller
         // Build the Core Controller
         parent::__construct(true, false);
         
-        // Init a session var
-        $this->user = $this->Session->get('user');
+        // Get our user data into an array
+        $this->user = $this->User->data;
         
         // Make sure the request is an ajax request, and came from this website!
         if(!$this->Input->is_ajax())
@@ -157,7 +157,7 @@ class Ajax extends Core\Controller
     protected function check_permission($perm)
     {
         // Make sure the user has admin access'
-        if( !$this->Auth->has_permission($perm))
+        if( !$this->User->has_permission($perm))
         {
             $this->output(false, 'access_denied_privileges');
             die();

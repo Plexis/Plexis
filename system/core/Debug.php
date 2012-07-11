@@ -319,10 +319,16 @@ class Debug
     {
         // Do we have a custom name?
         $uri = str_replace(array('/', '\\'), '-', trim(self::$urlInfo['uri'], '/'));
-        if($name == null) $name = (empty($uri)) ? 'debug_'. $GLOBALS['controller'] . '-'. $GLOBALS['action'] : 'debug_'. $uri;
         
-        // Make sure this isnt a ajax request
-        // if(self::$ajaxRequest) return;
+        // Prevent further errors
+        if(!isset($GLOBALS['controller']))
+        {
+            $GLOBALS['controller'] = 'welcome';
+            $GLOBALS['action'] = 'index';
+        }
+        
+        // Determine the name of the debug file name
+        if($name == null) $name = (empty($uri)) ? 'debug_'. $GLOBALS['controller'] . '-'. $GLOBALS['action'] : 'debug_'. $uri;
         
         // Build the xml
         $string = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\r\n<debug>\r\n";

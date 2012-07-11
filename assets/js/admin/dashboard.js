@@ -49,7 +49,14 @@ $().ready(function() {
             }
             else
             {
-                $('#update').html('<font color="orange">' + result.message + '</font>');
+                if(typeof result.php_error != "undefined" && result.php_error == true)
+                {
+                    show_php_error( result.php_error_data );
+                }
+                else
+                {
+                    $('#update').html('<font color="orange">' + result.message + '</font>');
+                }
             }
         },
         error: function(request, status, err) 

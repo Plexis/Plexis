@@ -17,7 +17,7 @@
 */
 namespace Library;
 
-class Auth
+class User
 {
     // The loader class
     protected $load;
@@ -26,16 +26,20 @@ class Auth
     protected $expire_time;
 
     // The databases and realm
-    protected $DB, $RDB, $realm;
+    protected $DB;
+    protected $realm;
 
-    // The session class
-    protected $session;
+    // The session id
+    protected $sessionid = 0;
     
     // Users access permission
     protected $permissions;
     
     // Clients IP address
-    public $remote_ip;
+    protected $data = array(
+        'ip_address' => '0.0.0.0',
+        'logged_in' => false,
+    );
 
 /*
 | ---------------------------------------------------------------
@@ -49,38 +53,32 @@ class Auth
     public function __construct()
     {
         // Add trace for debugging
-        \Debug::trace('Initializing Auth class...', __FILE__, __LINE__);
+        \Debug::trace('Initializing User class...', __FILE__, __LINE__);
         
         // Init the loader
         $this->load = load_class('Loader');
         
-        // Setup the DB connections
+        // Setup the DB connections, and get users real IP address
         $this->DB = $this->load->database('DB');
-        $this->RDB = $this->load->database('RDB');
-        
-        // Load the session class
-        $this->session = $this->load->library('Session');
-        
-        // Load the Input class and get our users IP
         $this->input = load_class('Input');
-        $this->remote_ip = $this->input->ip_address();
+        $this->data['ip_address'] = $this->input->ip_address();
         
-        // Load the emulator
+        // Load the emulator (realm)
         $this->realm = $this->load->realm();
         
         // Set our session expire time
         $this->expire_time = (60 * 60 * 24 * 30);
         
         // Load this users credentials
-        $this->load_user();
+        $this->Init();
         
         // Add trace for debugging
-        \Debug::trace('Auth class initialized successfully', __FILE__, __LINE__);
+        \Debug::trace('User class initialized successfully', __FILE__, __LINE__);
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: load_user()
+| Method: Init()
 | ---------------------------------------------------------------
 |
 | This method checks to see if the user is logged in by session.
@@ -89,13 +87,56 @@ class Auth
 |
 */
 
-    protected function load_user()
+    protected function Init()
     {
-        // Get our session information
-        $session = $this->session->get('user');
+        // Check for a session cookie
+        $cookie = $this->input->cookie('session');
+        
+        // If the cookie doesnt exists, then neither does the session
+        if($cookie == false) goto Guest;
+        
+        // Read cookie data to get our token
+        $cookie = base64_decode( $cookie );
+        if(strpos($cookie, '::') != false):
+            list($userid, $token) = explode('::', $cookie);
+        else:
+            $this->logout(false);
+            goto Guest;
+        endif;
+
+        // Get the database result
+        $query = "SELECT * FROM `pcms_sessions` WHERE `token` = ?";
+        $session = $this->DB->query( $query, array($token) )->fetch_row();
+        
+        // Unserialize the user_data array
+        if($session !== false)
+        {
+            // Compatability till next update
+            if(!isset($session['expire_time'])) goto Guest;
+            
+            // check users IP address to prevent cookie stealing
+            if( $session['ip_address'] != $this->data['ip_address'] )
+            {
+                // Session time is expired
+                \Debug::trace('User IP address doesnt match the IP address of the session id. Forced logout', __FILE__, __LINE__);
+                $this->logout(false);
+            }
+            elseif($session['expire_time'] < (time() - $this->expire_time))
+            {
+                // Session time is expired
+                \Debug::trace('User session expired, Forced logout', __FILE__, __LINE__);
+                $this->logout(false);
+            }
+            else
+            {
+                // User is good and logged in
+                $this->data['logged_in'] = true;
+                $this->sessionid = $session['token'];
+            }
+        }
         
         // if the Session isnt set or is false
-        if( $session === NULL || $session['logged_in'] == FALSE ) 
+        if(!$this->data['logged_in']) 
         {
             Guest:
             {
@@ -108,24 +149,19 @@ class Auth
                 // Query our database set default guest information
                 $result = $this->DB->query( $query )->fetch_row();			
                 $result['username'] = "Guest";
-                $result['logged_in'] = FALSE;
+                $result['logged_in'] = false;
                 
                 // Load our perms into a different var and unset
                 $perms = unserialize( $result['permissions'] );
                 unset( $result['permissions'] );
                 
+                // Set Guest Data
+                $result['username'] = 'Guest';
+                $result['logged_in'] = false;
+                
                 // Merge and set the data
-                $this->session->set('user', $result);
+                $this->data = array_merge($this->data, $result);
             }
-        }
-        
-        // If the session time is expired
-        elseif($session['expire_time'] < time() - $this->expire_time) 
-        {
-            // Add trace for debugging
-            \Debug::trace('User session expired, Logging out...', __FILE__, __LINE__);
-            $this->logout();
-            return;
         }
         
         // Everything is good, user is valid, but we need to load his information
@@ -135,27 +171,18 @@ class Auth
             $query = "SELECT * FROM `pcms_accounts` 
                 INNER JOIN `pcms_account_groups` ON 
                 pcms_accounts.group_id = pcms_account_groups.group_id 
-                WHERE id = '".$session['id']."'";
+                WHERE `id` = '". $userid ."'";
             
             // Query our database and get the users information
             $result = $this->DB->query( $query )->fetch_row();
             
             // Make sure user wasnt deleted!
-            if($result == FALSE) goto Guest;
-            
-            // Check that our session is not being used by another user
-            if($this->session->get('token') != $result['_session_id'])
-            {
-                // Add trace for debugging
-                \Debug::trace('User session ID does not match cookie. Logging out...', __FILE__, __LINE__);
-                $this->logout();
-                goto Guest;
-            }
+            if($result == false) goto Guest;
             
             // Good to go, Update the last seen if its more then 5 minutes ago
             if((strtotime($result['last_seen']) + 300) < time())
             {
-                $this->DB->query("UPDATE `pcms_accounts` SET `last_seen` = NOW() WHERE `id`=".$session['id']);
+                $this->DB->query("UPDATE `pcms_accounts` SET `last_seen` = NOW() WHERE `id`=".$userid);
             }
             
             // Load our perms into a different var and unset
@@ -163,7 +190,7 @@ class Auth
             unset( $result['permissions'] );
             
             // Custom variable for QA checking
-            ($result['_account_recovery'] == NULL) ? $set = FALSE : $set = TRUE;
+            ($result['_account_recovery'] == NULL) ? $set = false : $set = TRUE;
           
             // Loop through and remove private columns (underscore as first character)
             foreach($result as $key => $value)
@@ -178,7 +205,7 @@ class Auth
             $result['_account_recovery'] = $set;
             
             // Set our users info up the the session and carry onwards :D
-            $this->session->set('user', array_merge($session, $result));
+            $this->data = array_merge($this->data, $result);
             
             // Add trace for debugging
             \Debug::trace('Loaded user '. $result['username'], __FILE__, __LINE__);
@@ -190,14 +217,14 @@ class Auth
 
 /*
 | ---------------------------------------------------------------
-| Function: login()
+| Method: login()
 | ---------------------------------------------------------------
 |
 | The main login script!
 |
 | @Param: (String) $username - The username logging in
 | @Param: (String) $password - The unencrypted password
-| @Return (Bool) True upon success, FALSE otherwise
+| @Return (Bool) True upon success, false otherwise
 |
 */
 
@@ -207,20 +234,25 @@ class Auth
         $username = trim($username);
         $password = trim($password);
 
-        // if the username or password is empty, return FALSE
+        // if the username or password is empty, return false
         if(empty($username) || empty($password))
         {
             output_message('error', 'login_failed_field_invalid');
-            return FALSE;
+            return false;
         }
         
+        // Add trace for debugging
+        \Debug::trace("User {$username} logging in...", __FILE__, __LINE__);
+        
         // If the Emulator cant match the passwords, or user doesnt exist,
-        // Then we spit out an error and return FALSE
+        // Then we spit out an error and return false
         $account_id = $this->realm->validate_login($username, $password);
-        if($account_id === FALSE)
+        if($account_id === false)
         {
+            // Add trace for debugging
+            \Debug::trace("Failed to validate password for account '{$username}'. Login failed", __FILE__, __LINE__);
             output_message('error', 'login_failed_wrong_credentials');
-            return FALSE;
+            return false;
         }
         
         // Username exists and password is correct, Lets log in
@@ -236,8 +268,10 @@ class Auth
             $result = $this->DB->query( $query, array($account_id) )->fetch_row();
             
             // If the user doesnt exists in the table, we need to insert it
-            if($result === FALSE)
+            if($result === false)
             {
+                // Add trace for debugging
+                \Debug::trace("User account '{$username}' doesnt exist in Plexis database, fetching account from realm", __FILE__, __LINE__);
                 $r_data = $this->realm->fetch_account($account_id);
                 $data = array(
                     'id' => $account_id, 
@@ -245,59 +279,92 @@ class Auth
                     'email' => $r_data['email'], 
                     'activated' => 1,
                     'registered' => ($r_data['joindate'] == false) ? date("Y-m-d H:i:s", time()) : $r_data['joindate'],
-                    'registration_ip' => $this->remote_ip
+                    'registration_ip' => $this->data['ip_address']
                 );
                 $this->DB->insert( 'pcms_accounts', $data );
                 $result = $this->DB->query( $query )->fetch_row();
                 
                 // If the insert failed, we have a fatal error
-                if($result === FALSE)
+                if($result === false)
                 {
-                    show_error('fatal_error', FALSE, E_ERROR);
-                    return FALSE;
+                    // Add trace for debugging
+                    \Debug::trace("There was a fatal error trying to insert account data into the plexis database", __FILE__, __LINE__);
+                    show_error('fatal_error', false, E_ERROR);
+                    return false;
                 }
             }
             
-            // Load permissions
-            $perms = unserialize($result['permissions']);
+            // Load our perms into a different var and unset
+            $perms = unserialize( $result['permissions'] );
+            unset( $result['permissions'] );
             
             // Make sure we have access to our account, we have to do this after saving the session unfortunatly
             if( (!isset($perms['account_access']) || $perms['account_access'] == 0) && $result['is_super_admin'] == 0)
             {
+                // Add trace for debugging
+                \Debug::trace("User has no permission to access account. Login failed.", __FILE__, __LINE__);
                 output_message('warning', 'account_access_denied');
-                return FALSE;
+                return false;
             }
             
             // We are good, save permissions for this user
             $this->load_permissions($result['group_id'], $perms);
             
             // Make sure the account isnt locked due to verification
-            if($result['activated'] == FALSE && config('reg_email_verification') == TRUE)
+            if($result['activated'] == false && config('reg_email_verification') == TRUE)
             {
+                // Add trace for debugging
+                \Debug::trace("Account '{$username}' is unactivated. Login failed.", __FILE__, __LINE__);
                 output_message('warning', 'login_failed_account_unactivated');
-                return FALSE;
+                return false;
             }
-
+            
+            // Generate a completely random session id
+            $time = microtime(1);
+            $string = sha1(base64_encode(md5(utf8_encode( $time ))));
+            $this->sessionid = substr($string, 0, 20);
+            
             // Set additionals, and return true
             $time = time();
-            $data['id'] = $result['id'];
-            $data['logged_in'] = TRUE;
-            $data['last_seen'] = $time;
-            $data['expire_time'] = ($time + $this->expire_time);
+            $data = array(
+                'token' => $this->sessionid,
+                'ip_address' => $this->data['ip_address'],
+                'expire_time' => ($time + $this->expire_time)
+            );
             
-            // We only want to save whats in the $data array to the session database.
-            $this->session->set('user', $data);
-            $this->session->save();
+            // Insert session information
+            $this->DB->insert('pcms_sessions', $data);
+
+            // Update user with new session id
+            $this->DB->update('pcms_accounts', array('last_seen' => $time), "`id`=". $result['id']);
             
-            // Update the sessions column to prevent more then 1 person logged in an account at a time
-            $token = $this->session->get('token');
-            $this->DB->update('pcms_accounts', array('_session_id' => $token), "`id`=".$data['id']);
+            // Custom variable for QA checking
+            ($result['_account_recovery'] == NULL) ? $set = false : $set = TRUE;
+          
+            // Loop through and remove private columns (underscore as first character)
+            foreach($result as $key => $value)
+            {
+                if(!strncmp($key, "_", 1))
+                {
+                    unset($result[$key]);
+                }
+            }
             
-            // Now add the rest of the users information
-            $this->session->set('user', array_merge($result, $data));
+            // Add back our account recovery stuff
+            $result['_account_recovery'] = $set;
+            
+            // Set our users info up the the session and carry onwards :D
+            $this->data = array_merge($this->data, $result);
+            
+            // Set cookie
+            $token = base64_encode($this->data['id'] .'::'. $this->sessionid);
+            $this->input->set_cookie('session', $token, (time() + $this->expire_time));
+            
+            // Add trace for debugging
+            \Debug::trace("Account '{$username}' logged in successfully", __FILE__, __LINE__);
             
             // Fire the login event
-            load_class('Events')->trigger('user_logged_in', array($data['id'], $username));
+            load_class('Events')->trigger('user_logged_in', array($this->data['id'], $username));
             
             // Return
             return TRUE;
@@ -306,7 +373,7 @@ class Auth
 
 /*
 | ---------------------------------------------------------------
-| Function: register()
+| Method: register()
 | ---------------------------------------------------------------
 |
 | The main register script
@@ -316,7 +383,7 @@ class Auth
 | @Param: (String) $email - The email
 | @Param: (Int) $sq - The secret Question ID
 | @Param: (String) $sa - The secret Question answer
-| @Return (Int) Account ID upon success, FALSE otherwise
+| @Return (Int) Account ID upon success, false otherwise
 |
 */
 
@@ -327,36 +394,46 @@ class Auth
         $password = trim($password);
         $email = trim($email);
 
-        // If the username, password, or email is empty, return FALSE
+        // If the username, password, or email is empty, return false
         if(empty($username) || empty($password) || empty($email))
         {
             output_message('error', 'reg_failed_field_invalid');
-            return FALSE;
+            return false;
         }
         
+        // Add trace for debugging
+        \Debug::trace("Registering account '{$username}'...", __FILE__, __LINE__);
+        
         // Make sure the users IP isnt blocked
-        if($this->realm->ip_banned( $this->remote_ip ) == TRUE)
+        if($this->realm->ip_banned( $this->data['ip_address'] ) == TRUE)
         {
+            // Add trace for debugging
+            \Debug::trace("Ip address is banned. Registration failed", __FILE__, __LINE__);
             output_message('error', 'reg_failed_ip_banned');
-            return FALSE;
+            return false;
         }
         
         // If the result is not was false, then the username already exists
         if($this->realm->username_exists($username))
         {
+            // Add trace for debugging
+            \Debug::trace("Account '{$username}' already exists. Registration failed", __FILE__, __LINE__);
             output_message('error', 'reg_failed_username_exists');
-            return FALSE;
+            return false;
         }
         
         // We are good to go, register the user
         else
         {
             // Try and create the account through the emulator class
-            $id = $this->realm->create_account($username, $password, $email, $this->remote_ip);
+            $id = $this->realm->create_account($username, $password, $email, $this->data['ip_address']);
             
             // If insert into Realm Database is a success, move on
-            if($id !== FALSE)
+            if($id !== false)
             {
+                // Add trace for debugging
+                \Debug::trace("Account '{$username}' created successfully", __FILE__, __LINE__);
+                
                 // Defaults
                 $activated = 1;
                 $secret = NULL;
@@ -385,7 +462,7 @@ class Auth
                     'username' => $username,
                     'email' => $email,
                     'activated' => $activated,
-                    'registration_ip' => $this->remote_ip,
+                    'registration_ip' => $this->data['ip_address'],
                     '_account_recovery' => $secret
                 );
                 
@@ -393,19 +470,19 @@ class Auth
                 $this->DB->insert('pcms_accounts', $data);
                 
                 // Fire the registration event
-                $event = array($id, $username, $password, $email, $this->remote_ip);
+                $event = array($id, $username, $password, $email, $this->data['ip_address']);
                 load_class('Events')->trigger('account_created', $event);
                 
                 // Return ID
                 return $id;
             }
-            return FALSE;
+            return false;
         }
     }
     
 /*
 | ---------------------------------------------------------------
-| Function: load_permissions()
+| Method: load_permissions()
 | ---------------------------------------------------------------
 |
 | Loads the permissions specific to this user
@@ -420,7 +497,7 @@ class Auth
         \Debug::trace('Loading permissions for group id: '. $gid, __FILE__, __LINE__);
         
         // set to empty array if false
-        if($perms == FALSE) $perms = array();
+        if($perms == false) $perms = array();
         
         // Get alist of all permissions
         $query = "SELECT `key` FROM `pcms_permissions`";
@@ -434,7 +511,7 @@ class Auth
         unset($r);
         
         // Unset old perms that dont exist anymore
-        $dif = FALSE;
+        $dif = false;
         foreach($perms as $key => $value)
         {
             if( !isset($list[ $key ]) )
@@ -457,7 +534,7 @@ class Auth
     
 /*
 | ---------------------------------------------------------------
-| Function: has_permissions()
+| Method: has_permissions()
 | ---------------------------------------------------------------
 |
 | Used to find if user has a specified permission
@@ -469,8 +546,7 @@ class Auth
     public function has_permission($key)
     {
         // Super admin always wins
-        $user = $this->session->get('user');
-        if($user['is_super_admin']) return 1;
+        if($this->data['is_super_admin']) return 1;
         
         // Not a super admin, continue
         if(array_key_exists($key, $this->permissions))
@@ -482,31 +558,58 @@ class Auth
 
 /*
 | ---------------------------------------------------------------
-| Function: logout()
+| Method: logout()
 | ---------------------------------------------------------------
 |
 | Logs the user out and sets all session variables to Guest.
 |
+| @Param (Bool) $newSession - Init a new session? Should only
+|   be set internally in this class.
 | @Return (None)
 |
 */
 
-    public function logout()
+    public function logout($newSession = true)
     {
-        // Load the currrent user
-        $user = $this->session->get('user');
+        // Make sure we are logged in first!
+        if(!$this->data['logged_in']) return;
         
-        if(!isset($user['username']))
-        {
-            $user = $this->realm->fetch_account($user['id']);
-        }
+        // Unset cookie
+        $this->input->set_cookie('session', 0, (time() - 1));
+        $_COOKIE['session'] = false;
+        
+        // remove session from database
+        $this->DB->delete('pcms_sessions', "`token`='{$this->sessionid}'");
+        
+        // Add trace for debugging
+        \Debug::trace("Logout request recieved for account '{$username}'", __FILE__, __LINE__);
         
         // Fire the login event
-        load_class('Events')->trigger('user_logged_out', array($user['id'], $user['username']));
+        load_class('Events')->trigger('user_logged_out', array($this->data['id'], $this->data['username']));
         
-        // Destroy the session and re-load the user
-        $this->session->destroy();
-        $this->load_user();
+        // Init a new session
+        if($newSession == true) $this->Init();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: __get()
+| ---------------------------------------------------------------
+|
+| This magic method is used to return the requested user variable
+| such as 'username' when a function of that name is called.
+|
+| @Return (Mixed) - Returns user value, or false if it doesnt exist
+|
+*/
+
+    public function __get($var)
+    {
+        // If passed function name is just 'data', then return all user data
+        if($var == 'data')
+            return $this->data;
+        else
+            return (array_key_exists($var, $this->data)) ? $this->data[$var] : false;
     }
 }
 // EOF
