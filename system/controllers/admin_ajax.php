@@ -1835,13 +1835,17 @@ class Admin_ajax extends Core\Controller
                     $Fs = $this->load->library('Filesystem');
                     
                     // We need to rename all modified files from thier cache version, and remove deleted files
-                    $cfile = path( SYSTEM_PATH, 'cache', 'updater', 'updates.cache' );
+                    $cfile = path( SYSTEM_PATH, 'cache', 'updates.cache' );
                     if(file_exists($cfile))
                     {
                         $data = unserialize( file_get_contents($cfile) );
                         unset($data['sha']);
                         foreach($data['files'] as $file)
                         {
+                            // If we are missing a file name or mode, then continue to the next loop
+                            if(!isset($file['mode']) || !isset($file['filename'])) continue;
+                            
+                            // Modified file
                             if($file['mode'] == 'M')
                             {
                                 $tmp = $file['filename'] .'.tmp';
@@ -1854,6 +1858,7 @@ class Admin_ajax extends Core\Controller
                             }
                             else
                             {
+                                // Deleted file / dir
                                 $Fs->delete($data['filename']);
                                 
                                 // Re-read the directory
@@ -2013,6 +2018,9 @@ class Admin_ajax extends Core\Controller
                 'type' => $type
             )
         );
+        
+        // Prevent future errors messages
+        \Debug::output_sent();
     }
 }
 ?>

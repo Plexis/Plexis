@@ -171,7 +171,7 @@ class Debug
             if(self::$LogLevel != 0) self::log_error();
         
             // Only build the error page when it's fatal, or a development Env.
-            if( self::$Environment == 2 || $severity > 1 )
+            if( (self::$Environment == 2 || $severity > 1) && !self::$outputSent )
             {
                 // Generate trace logs
                 if( !self::$logged )
