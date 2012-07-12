@@ -40,28 +40,24 @@ class Admin_ajax extends Core\Controller
 */    
     public function __construct()
     {
-        // Only build this up IF the request is not an update request
-        if($GLOBALS['action'] != 'update')
+        // Build the Core Controller
+        parent::__construct(true, false);
+        
+        // Get our user data into an array
+        $this->user = $this->User->data;
+        
+        // Make sure user is an admin!
+        if( !$this->check_permission('admin_access') );
+        
+        // Make sure the request is an ajax request, and came from this website!
+        if(!$this->Input->is_ajax())
         {
-            // Build the Core Controller
-            parent::__construct(true, false);
-            
-            // Get our user data into an array
-            $this->user = $this->User->data;
-            
-            // Make sure user is an admin!
-            if( !$this->check_permission('admin_access') );
-            
-            // Make sure the request is an ajax request, and came from this website!
-            if(!$this->Input->is_ajax())
-            {
-                die('No direct linking allowed');
-            }
-            elseif(strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false)
-            {
-                $this->output(false, 'Unauthorized');
-                die();
-            }
+            die('No direct linking allowed');
+        }
+        elseif(strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false)
+        {
+            $this->output(false, 'Unauthorized');
+            die();
         }
     }
 
@@ -1636,24 +1632,6 @@ class Admin_ajax extends Core\Controller
 */    
     public function update()
     {
-        // Build out own cunstructer for Update requests to minimize errors
-        $this->load = load_class('Loader');
-        $this->Input = load_class('Input');
-        
-        // Make sure the request is an ajax request, and came from this website!
-        if(!$this->Input->is_ajax()) die('No direct linking allowed');
-        
-        // Load the config and URL helper
-        $this->load->helper('config');
-        $this->load->helper('url');
-        
-        // Load the user
-        $this->user = $this->load->library('User', false)->data;
-        
-        // Setup the selected users language
-        $this->Language = load_class('Language');
-        $GLOBALS['language'] = $this->Language->selected_language();
-
         // Make sure we arent directly accessed and the user has perms
         $this->check_access('sa');
         
@@ -1799,7 +1777,8 @@ class Admin_ajax extends Core\Controller
                             {
                                 if(!$this->addfileids($sha, 'M', $filename))
                                 {
-                                    $this->output(false, 'Error creating file cache file');
+                                    \Debug::write_debuglog('updater.xml');
+                                    $this->output(false, 'Error creating/writting to the updater.cache file. A Detailed trace log has been generated "system/logs/debug/updater.xml"');
                                     return;
                                 }
 
@@ -1820,7 +1799,8 @@ class Admin_ajax extends Core\Controller
                         case "D":
                             if(!$this->addfileids($sha, 'D', $filename))
                             {
-                                $this->output(false, 'Error creating file cache file');
+                                \Debug::write_debuglog('updater.xml');
+                                $this->output(false, 'Error creating/writting to the updater.cache file. A Detailed trace log has been generated "system/logs/debug/updater.xml"');
                                 return;
                             }
                             break;
@@ -1834,8 +1814,11 @@ class Admin_ajax extends Core\Controller
                     // Load our Filesystem Class
                     $Fs = $this->load->library('Filesystem');
                     
+                    // Add trace for debugging
+                    \Debug::trace('Finalizing updates...', __FILE__, __LINE__);
+                    
                     // We need to rename all modified files from thier cache version, and remove deleted files
-                    $cfile = path( SYSTEM_PATH, 'cache', 'updates.cache' );
+                    $cfile = path( SYSTEM_PATH, 'cache', 'updater.cache' );
                     if(file_exists($cfile))
                     {
                         $data = unserialize( file_get_contents($cfile) );
@@ -1849,12 +1832,15 @@ class Admin_ajax extends Core\Controller
                             if($file['mode'] == 'M')
                             {
                                 $tmp = $file['filename'] .'.tmp';
-                                if(!copy($tmp, $file['filename']))
+                                if(!$Fs->copy($tmp, $file['filename']))
                                 {
+                                    // Add trace for debugging
+                                    \Debug::trace('Failed to copy {'. $tmp .'} to {'. $file['filename'] .'}', __FILE__, __LINE__);
+                                    \Debug::write_debuglog('updater.xml');
                                     $this->output(false, 'Error copying cache contents of file '. $file['filename'] .'. Update failed.');
-                                    return;
+                                    die();
                                 }
-                                @unlink($tmp);
+                                $Fs->delete_file($tmp);
                             }
                             else
                             {
@@ -1873,12 +1859,18 @@ class Admin_ajax extends Core\Controller
                             }
                         }
                         
+                        // Remove the updater cache file
+                        $Fs->delete_file($cfile);
+                        
                         // Output success
                         $this->output(true, '');
                     }
                     else
                     {
-                        $this->output(false, 'Error reading the updates cache file. unable to finish update');
+                        // Add trace for debugging
+                        \Debug::trace('updater.cache file doesnt exist. Update failed.', __FILE__, __LINE__);
+                        \Debug::write_debuglog('updater.xml');
+                        $this->output(false, 'Unable to open the updater.cache file. Update failed.');
                     }
                 break;
 
@@ -1909,14 +1901,16 @@ class Admin_ajax extends Core\Controller
 
     protected function addfileids($sha, $mode, $filename)
     {
-        $cfile = path( SYSTEM_PATH, 'cache', 'updater', 'updates.cache' );
+        $cfile = path( SYSTEM_PATH, 'cache', 'updater.cache' );
         if(file_exists($cfile))
         {
+            \Debug::trace("Adding file {$filename} ({$mode}) to updater.cache file.", __FILE__, __LINE__);
             $data = unserialize( file_get_contents($cfile) );
             if($data['sha'] != $sha) $data['sha'] = $sha;
         }
         else
         {
+            \Debug::trace('Updater.cache file. doesnt exist. Creating new cache file.', __FILE__, __LINE__);
             $data = array('sha' => $sha);
         }
         

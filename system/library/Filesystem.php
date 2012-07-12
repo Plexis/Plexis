@@ -136,11 +136,16 @@ class Filesystem
     {
         // Correct path
         $path = str_replace(array('/', '\\'), DS, $path);
+        
+        // Add trace for debugging
+        \Debug::trace("Creating directory '{$path}' (chmod: $chmod)", __FILE__, __LINE__);
 
         // Get current directory mask
         $oldumask = umask(0);
         if( !mkdir($path, $chmod, true) )
         {
+            // Add trace for debugging
+            \Debug::trace("Failed to create directory '{$path}' (chmod: $chmod)", __FILE__, __LINE__);
             return false;
         }
         
@@ -173,6 +178,9 @@ class Filesystem
             // Make sure our path is correct
             if($path[strlen($path)-1] != DS) $path = $path . DS;
             
+            // Add trace for debugging
+            \Debug::trace("Removing directory '{$path}' recursivly.", __FILE__, __LINE__);
+            
             // Open the directory
             $handle = @opendir($path);
             if ($handle === false) return false;
@@ -204,6 +212,11 @@ class Filesystem
             $result = rmdir($path);
             clearstatcache();
             return $result;
+        }
+        else
+        {
+            // Add trace for debugging
+            \Debug::trace("Unable to remove '{$path}' as it is not a directory!", __FILE__, __LINE__);
         }
         return false;
     }
@@ -334,6 +347,9 @@ class Filesystem
     {
         // Correct path
         $file = str_replace(array('/', '\\'), DS, $file);
+        
+        // Add trace for debugging
+        \Debug::trace("Creating file '{$file}'", __FILE__, __LINE__);
 
         // Attempt to create the file
         $handle = @fopen($file, 'w+');
@@ -352,6 +368,9 @@ class Filesystem
             // Return true if we are here
             return true;
         }
+        
+        // Add trace for debugging
+        \Debug::trace("Creation of file '{$file}' failed.", __FILE__, __LINE__);
         return false;
     }
 
@@ -374,8 +393,13 @@ class Filesystem
         // Attempt to delete the file
         if( @unlink($file) )
         {
+            // Add trace for debugging
+            \Debug::trace("Deleted file ". $file, __FILE__, __LINE__);
             return true;
         }
+        
+        // Add trace for debugging
+        \Debug::trace("Failed to delete file ". $file, __FILE__, __LINE__);
         return false;
     }
     
@@ -592,11 +616,25 @@ class Filesystem
         $src = str_replace(array('/', '\\'), DS, $src);
         $dest = str_replace(array('/', '\\'), DS, $dest);
         
+        // Add trace for debugging
+        \Debug::trace("Copying the contents of '{$src}' to file '{$dest}'", __FILE__, __LINE__);
+        
         // Make sure the src file exists
-        if( !file_exists($src) ) return false;
+        if( !file_exists($src) )
+        {
+            // Add trace for debugging
+            \Debug::trace("Unable to copy the contents of '{$src}' because the file doesnt exist", __FILE__, __LINE__);
+            return false;
+        }
         
         // Copy the file
-        return copy($src, $dest);
+        if(!copy($src, $dest))
+        {
+            // Add trace for debugging
+            \Debug::trace("Error copying the contents of file '{$src}' to '{$dest}'", __FILE__, __LINE__);
+            return false;
+        }
+        return true;
     }
 
 /*
@@ -618,8 +656,16 @@ class Filesystem
         $src = str_replace(array('/', '\\'), DS, $src);
         $dest = str_replace(array('/', '\\'), DS, $dest);
         
+        // Add trace for debugging
+        \Debug::trace("Renaming file '{$src}' to '{$dest}'", __FILE__, __LINE__);
+        
         // Make sure the src file exists
-        if( !file_exists($src) ) return false;
+        if( !file_exists($src) )
+        {
+            // Add trace for debugging
+            \Debug::trace("Unable to rename file '{$src}' because it doesnt exist", __FILE__, __LINE__);
+            return false;
+        }
         
         // Rename the file
         return rename($src, $dest);
@@ -643,6 +689,9 @@ class Filesystem
     {
         // Correct path
         $path = str_replace(array('/', '\\'), DS, $path);
+        
+        // Add trace for debugging
+        \Debug::trace("Deleting file/folder '{$path}'", __FILE__, __LINE__);
         
         if(is_dir($path))
         {
