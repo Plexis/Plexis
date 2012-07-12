@@ -582,7 +582,7 @@ class User
         $this->DB->delete('pcms_sessions', "`token`='{$this->sessionid}'");
         
         // Add trace for debugging
-        \Debug::trace("Logout request recieved for account '{$username}'", __FILE__, __LINE__);
+        \Debug::trace("Logout request recieved for account '{$this->data['username']}'", __FILE__, __LINE__);
         
         // Fire the login event
         load_class('Events')->trigger('user_logged_out', array($this->data['id'], $this->data['username']));
