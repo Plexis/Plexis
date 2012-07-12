@@ -1906,7 +1906,11 @@ class Admin_ajax extends Core\Controller
         {
             \Debug::trace("Adding file {$filename} ({$mode}) to updater.cache file.", __FILE__, __LINE__);
             $data = unserialize( file_get_contents($cfile) );
-            if($data['sha'] != $sha) $data['sha'] = $sha;
+            if($data['sha'] != $sha)
+            {
+                $data = array();
+                $data['sha'] = $sha;
+            }
         }
         else
         {
