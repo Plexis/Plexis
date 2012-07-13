@@ -24,8 +24,9 @@ class Debug
     protected static $ErrorLine;       // Error line.
     protected static $ErrorLevel;      // Error Level Text.
     
-    // Our log error level.
-    protected static $LogLevel;
+    // Logs
+    protected static $LogSystem = false;
+    protected static $LogDebug = false;
     
     // Our sites error level.
     protected static $Environment;
@@ -68,7 +69,8 @@ class Debug
         $Config = load_class('Config');
         
         // Fill our error reporting variables
-        self::$LogLevel = $Config->get('log_level', 'Core');
+        self::$LogSystem = $Config->get('enable_system_logs', 'Core');
+        self::$LogDebug = $Config->get('enable_debug_logs', 'Core');
         self::$Environment = $Config->get('environment', 'Core');
         self::$catchFatalErrors = $Config->get('catch_fatal_errors', 'Core');
         
@@ -103,7 +105,7 @@ class Debug
         self::trace('Everything complete... Shutting down', __FILE__, __LINE__);
         
         // Generate trace logs
-        if( !self::$logged )
+        if( !self::$logged && self::$LogDebug )
         {
             self::write_debuglog();
             self::$logged = true;
@@ -168,7 +170,7 @@ class Debug
             self::trace('Error triggered: '. $message .'; File: '. $file .'['. $line .']', __FILE__, __LINE__);
             
             // Log error based on error log level
-            if(self::$LogLevel != 0) self::log_error();
+            self::log_error();
         
             // Only build the error page when it's fatal, or a development Env.
             if( (self::$Environment == 2 || $severity > 1) && !self::$outputSent )
@@ -176,7 +178,7 @@ class Debug
                 // Generate trace logs
                 if( !self::$logged )
                 {
-                    self::write_debuglog('debug');
+                    self::write_debuglog('debug_error_'. time());
                     self::$logged = true;
                 }
         
@@ -315,8 +317,11 @@ class Debug
 | Generates the debug log
 |
 */
-    public static function write_debuglog($name = null)
+    public static function write_debuglog($name = null, $uri = true)
     {
+        // Are we turning logging off?
+        if(is_bool($name)) self::$LogDebug = $name;
+        
         // Do we have a custom name?
         $uri = str_replace(array('/', '\\'), '-', trim(self::$urlInfo['uri'], '/'));
         
@@ -328,14 +333,18 @@ class Debug
         }
         
         // Determine the name of the debug file name
-        if($name == null) $name = (empty($uri)) ? 'debug_'. $GLOBALS['controller'] . '-'. $GLOBALS['action'] : 'debug_'. $uri;
+        if($name == null)
+            $name = (empty($uri)) ? 'debug_'. $GLOBALS['controller'] . '-'. $GLOBALS['action'] : 'debug_'. $uri;
+        else
+            if($uri == true) $name = $name .'_'. $uri;
         
         // Build the xml
         $string = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\r\n<debug>\r\n";
         $string .= "\t<info>\r\n";
-        $string .= "\t\t<cms_version>". CMS_VERSION ."</cms_version>\r\n";
-        $string .= "\t\t<cms_build>". CMS_BUILD ."</cms_build>\r\n";
         $string .= "\t\t<url>". self::$urlInfo['site_url'] ."/". self::$urlInfo['uri'] ."</url>\r\n";
+        $string .= "\t\t<php_version>". PHP_VERSION ."</php_version>\r\n";
+        $string .= "\t\t<cms_version>". CMS_VERSION ."</cms_version>\r\n";
+        $string .= "\t\t<cms_revision>". CMS_BUILD ."</cms_revision>\r\n";
         $string .= "\t\t<generated>". date("F j, Y, g:i a", time()) ."</generated>\r\n";
         $string .= "\t</info>\r\n";
         
@@ -363,17 +372,7 @@ class Debug
     public static function log($type, $message)
     {
         // Determine if the user wants this logged
-        switch( self::$LogLevel )
-        {
-            case 0:
-                return;
-            case 1:
-                if($type != 'error') return;
-                break;
-            case 2:
-                if($type == 'info') return;
-                break;
-        }
+        if( !self::$LogSystem ) return;
         
         // Write in the log file, the very long message we made
         $message = "[".date('Y-m-d H:i:s') ."] ". ucfirst($type) .": ". $message . PHP_EOL;

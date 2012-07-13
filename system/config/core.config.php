@@ -20,20 +20,32 @@ $config['environment'] = 2;
 
 /*
 | ---------------------------------------------------------------
-| Log_level
+| enable_system_logs
 | ---------------------------------------------------------------
 |
-| Logging Level. Error and Info messages are stored in the 
-| "/system/logs/system_logs.log" file, and Debug messages are
-| stored in the "/system/logs/debug.log" file.
-|   0 = Disabled
-|   1 = Errors only
-|   2 = Debug, and Errors only
-|   3 = All including Debug, Errors, and Info logs
+| Log system error's and information messages? These messages are
+| not php errors, but rather just logs that classes may generate.
+| Logs are stored in the "/system/logs/system_logs.log" file.
 |
 */
 
-$config['log_level'] = 2;
+$config['enable_system_logs'] = true;
+
+
+/*
+| ---------------------------------------------------------------
+| enable_debug_logs
+| ---------------------------------------------------------------
+|
+| Enable site debugging? If true, debug files will be generated
+| each page load, and stored in the "/system/logs/debug" folder.
+| If disabled, debug logs will still be generated if a fetal error
+| occurs with the prefix of 'debug_error_{timestamp}'
+|
+*/
+
+$config['enable_debug_logs'] = true;
+
 
 /*
 | ---------------------------------------------------------------
