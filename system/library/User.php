@@ -19,6 +19,9 @@ namespace Library;
 
 class User
 {
+    // Session started?
+    protected static $started = false;
+    
     // The loader class
     protected $load;
 
@@ -37,6 +40,7 @@ class User
     
     // Clients IP address
     protected $data = array(
+        'username' => 'Guest',
         'ip_address' => '0.0.0.0',
         'logged_in' => false,
     );
@@ -54,6 +58,13 @@ class User
     {
         // Add trace for debugging
         \Debug::trace('Initializing User class...', __FILE__, __LINE__);
+        
+        // Start the session
+        if(!self::$started)
+        {
+            session_start();
+            self::$started = true;
+        }
         
         // Init the loader
         $this->load = load_class('Loader');
