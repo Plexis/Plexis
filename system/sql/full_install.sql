@@ -20,7 +20,6 @@ CREATE TABLE `pcms_accounts` (
   `vote_points_earned` int(10) unsigned NOT NULL DEFAULT '0',
   `vote_points_spent` int(10) unsigned NOT NULL DEFAULT '0',
   `donations` float NOT NULL DEFAULT '0',
-  `_session_id` varchar(50) DEFAULT '',
   `_account_recovery` text COMMENT '// Hashed account revcovery question and answer',
   `_activation_code` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -153,7 +152,7 @@ CREATE TABLE `pcms_permissions` (
   `module` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24;
 
 -- ----------------------------
 -- Records of pcms_permissions
@@ -169,19 +168,20 @@ INSERT INTO `pcms_permissions` (`id`, `key`, `name`, `description`, `module`) VA
 (8, 'manage_characters', 'Edit Characters', 'Allow this user group to edit characters?', 'admin'),
 (9, 'delete_characters', 'Delete Characters', 'Allow this user group to delete characters?', 'admin'),
 (10, 'manage_modules', 'Manage Modules', 'Allow this user to manage modules installed in the cms?', 'admin'),
-(11, 'manage_news', 'Post / Edit Frontpage News', 'Allow this group to Post and Edit frontpage news?', 'admin'),
-(12, 'manage_realms', 'Manage Realms', 'Allow this group to Install/Edit realms in the admin panel?', 'admin'),
-(13, 'manage_site_config', 'Manage Site Settings & Configuration', 'Allow this group to change the site configuration settings?', 'admin'),
-(14, 'manage_templates', 'Manage Templates', 'Allow this group to Install / Unistall site templates?', 'admin'),
-(15, 'manage_votesites', 'Manage Vote Sites', 'Allow this user group to manage votesites in the admin panel?', 'admin'),
-(16, 'send_console_commands', 'Send Console Commands', 'Allow this group access to the RA command console in the admin panel?', 'admin'),
-(17, 'manage_error_logs', 'Manage Error Logs', 'Allow this user group to view/delete error logs?', 'admin'),
-(18, 'view_admin_logs', 'View Admin Logs', 'Allow this user group to view admin logs?', 'admin'),
-(19, 'delete_admin_logs', 'Delete Admin Logs', 'Allow this user group to delete admin action logs?', 'admin'),
-(20, 'account_access', 'Access to Account', 'Allow this user to login and access his account?', 'core'),
-(21, 'update_email', 'Change Account Email', 'Allow this user group to change their email address?', 'core'),
-(22, 'update_password', 'Change Account  Password', 'Is this user group allowed to change thier password?', 'core'),
-(23, 'create_invite_keys', 'Create Invite Keys', 'Allow this user group to create Invite Keys to give to unregistered users?', 'core');
+(11, 'manage_plugins', 'Manage Plugins', 'Allow this user group to install and remove plugins via the admin panel?', 'admin'),
+(12, 'manage_news', 'Post / Edit Frontpage News', 'Allow this group to Post and Edit frontpage news?', 'admin'),
+(13, 'manage_realms', 'Manage Realms', 'Allow this group to Install/Edit realms in the admin panel?', 'admin'),
+(14, 'manage_site_config', 'Manage Site Settings & Configuration', 'Allow this group to change the site configuration settings?', 'admin'),
+(15, 'manage_templates', 'Manage Templates', 'Allow this group to Install / Unistall site templates?', 'admin'),
+(16, 'manage_votesites', 'Manage Vote Sites', 'Allow this user group to manage votesites in the admin panel?', 'admin'),
+(17, 'send_console_commands', 'Send Console Commands', 'Allow this group access to the RA command console in the admin panel?', 'admin'),
+(18, 'manage_error_logs', 'Manage Error Logs', 'Allow this user group to view/delete error logs?', 'admin'),
+(19, 'view_admin_logs', 'View Admin Logs', 'Allow this user group to view admin logs?', 'admin'),
+(20, 'delete_admin_logs', 'Delete Admin Logs', 'Allow this user group to delete admin action logs?', 'admin'),
+(21, 'account_access', 'Access to Account', 'Allow this user to login and access his account?', 'core'),
+(22, 'update_email', 'Change Account Email', 'Allow this user group to change their email address?', 'core'),
+(23, 'update_password', 'Change Account  Password', 'Is this user group allowed to change thier password?', 'core'),
+(24, 'create_invite_keys', 'Create Invite Keys', 'Allow this user group to create Invite Keys to give to unregistered users?', 'core');
 
 -- ----------------------------
 -- Table structure for `pcms_realms`
@@ -230,8 +230,7 @@ CREATE TABLE `pcms_sessions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `token` text,
   `ip_address` varchar(50) DEFAULT NULL,
-  `last_seen` varchar(50) DEFAULT NULL,
-  `user_data` text,
+  `expire_time` INT( 11 ) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -270,7 +269,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.16');
+INSERT INTO `pcms_versions` VALUES ('database', '0.18');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`

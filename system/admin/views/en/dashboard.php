@@ -93,6 +93,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{SITE_URL}/admin/plugins">
+                        <img src="{TEMPLATE_URL}/img/icons/plugin-icon.png">
+                        Plugin Managment
+                    </a>
+                </li>
+                <li>
                     <a href="{SITE_URL}/admin/vote">
                         <img src="{TEMPLATE_URL}/img/icons/vote-icon.png">
                         Vote System Settings

@@ -1625,6 +1625,113 @@ class Admin_ajax extends Core\Controller
     
 /*
 | ---------------------------------------------------------------
+| A15: plugins()
+| ---------------------------------------------------------------
+|
+*/    
+    public function plugins()
+    {
+        // Make sure we arent getting direct accessed, and the user has permission
+        $this->check_permission('manage_plugins');
+
+        // Check for 'action' posts
+        if(isset($_POST['action']))
+        {
+            // Get our plugin name
+            $id = $this->Input->post('id', TRUE);
+            
+            // Get our action type
+            switch($_POST['action']) 
+            {
+                // INSTALLING
+                case "install":
+                    // Log action
+                    $this->log('Installed plugin "'. $id .'"');
+                    
+                    // Include the plugins file
+                    $file = path( SYSTEM_PATH, 'config', 'plugins.php' );
+                    include $file;
+                    $Plugins[] = $id;
+                    $data = "<?php\n\$Plugins = ". var_export($Plugins, true) .";\n?>";
+                    
+                    // Write data, and output to browser
+                    (file_put_contents($file, $data)) ? $this->output(true, 'plugin_install_success') : $this->output(false, 'plugin_install_error');
+                    break;
+                
+                // UNINSTALL
+                case "un-install":
+                    // Log action
+                    $this->log('Uninstalled plugin "'. $id .'"');
+                    
+                    // Include the plugins file
+                    $file = path( SYSTEM_PATH, 'config', 'plugins.php' );
+                    include $file;
+                    foreach($Plugins as $k => $v)
+                    {
+                        if($v == $id) unset($Plugins[$k]);
+                    }
+                    $data = "<?php\n\$Plugins = ". var_export($Plugins, true) .";\n?>";
+                    
+                    // Write data, and output to browser
+                    (file_put_contents($file, $data)) ? $this->output(true, 'plugin_uninstall_success') : $this->output(false, 'plugin_uninstall_error');
+                    break;
+                    
+                case "getlist":
+                    // Prepare datatables output
+                    $output = array(
+                        'sEcho' => intval($_POST['sEcho']),
+                        'aaData' => array(),
+                        'iTotalRecords' => 0,
+                        'iTotalDisplayRecords' => 0
+                    );
+                    
+                    // Get a list of all plugins folders
+                    $list = $this->load->library('Filesystem')->list_files( path( ROOT, 'third_party', 'plugins' ) );
+                    
+                    // Include the plugins file
+                    include path( SYSTEM_PATH, 'config', 'plugins.php' );
+
+                    // Loop, and add options
+                    foreach($list as $plugin)
+                    {
+                        // Make sure this is a plugin file!
+                        if(strpos($plugin, '.php') === false) continue;
+                        
+                        // Remove .php extension
+                        $plugin = str_replace('.php', '', $plugin);
+                        
+                        // Increment records data
+                        ++$output['iTotalRecords'];
+                        ++$output['iTotalDisplayRecords'];
+                        
+                        // Is this plugin installed?
+                        if(in_array($plugin, $Plugins))
+                        {
+                            $output['aaData'][] = array(
+                                $plugin, 
+                                "<font color='green'>Installed</font>",
+                                "<a class=\"un-install\" name=\"{$plugin}\" href=\"javascript:void(0);\">Uninstall</a>"
+                            );
+                        }
+                        else
+                        {
+                            $output['aaData'][] = array(
+                                $plugin, 
+                                "<font color='red'>Not Installed</font>",
+                                "<a class=\"install\" name=\"{$plugin}\" href=\"javascript:void(0);\">Install</a>"
+                            );
+                        }
+                    }
+
+                    // Push the output in json format
+                    echo json_encode($output);
+                    break;
+            }
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
 | A19: update()
 | ---------------------------------------------------------------
 |

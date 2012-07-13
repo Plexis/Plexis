@@ -28,6 +28,7 @@
 | P15 - Characters
 | P16 - Stats
 | P17 - Admin Logs
+| P18 - Plugins
 |
 */
 class Admin extends Core\Controller 
@@ -1045,6 +1046,27 @@ class Admin extends Core\Controller
             'page_desc' => "Here you can view what actions each member of your admin group have preformed.",
         );
         $this->load->view('adminlogs', $data);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| P18: Plugins
+| ---------------------------------------------------------------
+|
+*/
+    public function plugins()
+    {
+        // Make sure the user can view this page
+        if( !$this->check_permission('manage_plugins')) return;
+
+        // Build our page variable data
+        $data = array(
+            'page_title' => "Manage Plugins",
+            'page_desc' => "This page lets you configure which plugins to run during each page load."
+        );
+        
+        // Load the view
+        $this->load->view('plugins', $data);
     }
  
 /*
