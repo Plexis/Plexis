@@ -15,7 +15,7 @@
 
 // Define CMS versions
 define('CMS_VERSION', 'Beta 1');
-define('CMS_BUILD', 263);
+define('CMS_BUILD', 264);
 define('REQ_DB_VERSION', '0.18');
 
 // Define a smaller Directory seperater and ROOT path
@@ -24,6 +24,11 @@ define('ROOT', dirname(__FILE__));
 
 // Define full paths to the System Folder
 define('SYSTEM_PATH', ROOT . DS . 'system');
+
+// Make sure we are running php version 5.3.0 or newer!!!!
+if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300):
+    die('PHP version 5.3.0 or newer required to run Plexis cms. Your version: '. PHP_VERSION);
+endif;
 
 // Include required scripts to run the system
 require (SYSTEM_PATH . DS . 'core' . DS . 'Common.php');
