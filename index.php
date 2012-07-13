@@ -15,15 +15,16 @@
 
 // Define CMS versions
 define('CMS_VERSION', 'Beta 1');
-define('CMS_BUILD', 264);
+define('CMS_BUILD', 265);
 define('REQ_DB_VERSION', '0.18');
 
-// Define a smaller Directory seperater and ROOT path
+// Define a smaller Directory seperater and ROOT, SYSTEM paths
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__));
+define('SYSTEM_PATH', ROOT . DS .'system');
 
-// Define full paths to the System Folder
-define('SYSTEM_PATH', ROOT . DS . 'system');
+// Point php to our own php error log
+ini_set('error_log', SYSTEM_PATH . DS .'logs'. DS .'php_errors.log');
 
 // Make sure we are running php version 5.3.0 or newer!!!!
 if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300):
@@ -31,9 +32,9 @@ if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300):
 endif;
 
 // Include required scripts to run the system
-require (SYSTEM_PATH . DS . 'core' . DS . 'Common.php');
-require (SYSTEM_PATH . DS . 'core' . DS . 'Registry.php');
-require (SYSTEM_PATH . DS . 'core' . DS . 'Debug.php');
+require (SYSTEM_PATH . DS .'core'. DS .'Common.php');
+require (SYSTEM_PATH . DS .'core'. DS .'Registry.php');
+require (SYSTEM_PATH . DS .'core'. DS .'Debug.php');
 
 // Initiate the system start time
 load_class('Benchmark')->start('system');
