@@ -19,6 +19,7 @@
         case "news":
         case "groups":
         case "modules":
+        case "plugins":
         case "templates":
         case "vote":
         case "donate":
@@ -139,6 +140,7 @@
                             <li><a href="{SITE_URL}/admin/news">News Posts</a></li>
                             <li><a href="{SITE_URL}/admin/groups">User Groups</a></li>
                             <li><a href="{SITE_URL}/admin/modules">Modules</a></li>
+                            <li><a href="{SITE_URL}/admin/plugins">Plugins</a></li>
                             <li><a href="{SITE_URL}/admin/templates">Templates</a></li>
                             <li><a href="{SITE_URL}/admin/vote">Vote Sites</a></li>
                             <li><a href="{SITE_URL}/admin/donate">Donation Packages</a></li>

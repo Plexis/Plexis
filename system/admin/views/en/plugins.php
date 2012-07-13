@@ -1,5 +1,4 @@
 <div class="grid_12">
-
     <!-- Plugins Table -->
     <div class="block-border">
         <div class="block-header">
