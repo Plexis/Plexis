@@ -3,7 +3,7 @@
 $nogood = 0;
 
 // PHP version check
-if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300)
+if( defined( 'PHP_VERSION_ID' ) && PHP_VERSION_ID >= 50300 )
 {
     $phpver = "<img src='installer/images/check.png' height='18px' width='18px' />";
 }
