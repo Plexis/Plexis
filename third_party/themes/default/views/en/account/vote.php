@@ -1,7 +1,7 @@
 <div class="left-box">
     <h2>Vote Menu</h2>
     <div class="left-box-content">
-        <table style="clear: both; text-align: center;">
+        <table id="vote-table" style="clear: both; text-align: center;">
             <thead>
                 <tr>
                     <th scope="col">Site</th>
@@ -20,7 +20,7 @@
                             <td>{points}</td>
                         <?php endif; ?>
                         <td>{time_left}</td>
-                        <td><button id="vote" name="{id}" class="button" {disabled}>Vote</button></td>
+                        <td><button name="{id}" class="button" {disabled}>Vote</button></td>
                     </tr>
                 {/sites}
             </tbody>

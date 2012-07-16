@@ -17,7 +17,7 @@ $().ready(function()
 		}]
 	});
     
-    $("#vote").click(function() 
+    $("#vote-table button").click(function() 
     {
         // Start by getting out ID out of the button name
         var id = this.name;
