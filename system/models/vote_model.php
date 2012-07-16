@@ -90,6 +90,11 @@ class Vote_Model extends Core\Model
 */
     public function create($hostname, $votelink, $image_url, $points, $reset_time)
     {
+		// Make sure the urls passed are valid to use in html image and <a> tags
+		$regex = '@^(\{BASE_URL\}|\{SITE_URL\}|ftp://|http(s)?://)@i';
+		if(!preg_match($regex, $votelink)) $votelink = 'http://'. $votelink;
+		if(!empty($image_url) && !preg_match($regex, $image_url)) $image_url = 'http://'. $image_url;
+		
         // Build out insert data
         $data = array(
             'hostname' => $hostname,
@@ -121,6 +126,11 @@ class Vote_Model extends Core\Model
 */
     public function update($id, $hostname, $votelink, $image_url, $points, $reset_time)
     {
+		// Make sure the urls passed are valid to use in html image and <a> tags
+		$regex = '@^(\{BASE_URL\}|\{SITE_URL\}|ftp://|http(s)?://)@i';
+		if(!preg_match($regex, $votelink)) $votelink = 'http://'. $votelink;
+		if(!empty($image_url) && !preg_match($regex, $image_url)) $image_url = 'http://'. $image_url;
+		
         // Build out insert data
         $data = array(
             'hostname' => $hostname,
