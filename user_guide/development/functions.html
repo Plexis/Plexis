@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Function List :: Plexis CMS Documentation</title>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Plexis</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>List of Plexis Functions</h1>
+	<p>
+		Bwlow is a full list of functions that plexis defines. Each function will have a description of what it does, all parameters explained, and the return values.
+	</p>
+	
+	
+	<!-- Path -->
+	<h2>path()</h2>
+	<p>
+		The path() function is used to create paths to file and folders, using the correct directory separator for the operating system. Putting 3 parameters ('test', 'folder', 'file')
+		would return a string like so "test/folder/file". It is important to use this function because it will put the correct operating system specific directory separator (/ or \) between
+		the paths given. This function will also check for illegal characters in filepaths, and show an error if there is any found.
+	</p>
+	<code>
+		path( <i>array of</i> <var>$params</var>);
+	</code>
+	<h5><u>Parameters:</u></h5>
+	<p>
+        <ol>
+            <li> <var>$params</var> [Type: String | Array]: A folder or filename. Can also be passed as an array of folders and/or a filename as well.</li>
+        </ol>
+    </p>
+	<h5><u>Return Values:</u></h5> (String) Returns the parameters as a filepath, with the correct operating system directory separator.
+	
+	<!-- load_class -->
+	<h2>load_class()</h2>
+	<p>
+		This function is used to load and store core classes statically that need to be loaded for use. If loading the same class twice with this function, it will return the 
+		same instance as before. This function should only be used to load classes from the 'system/core' folder. Library classes should be loaded via the 
+		<a href="../core_classes/loader.html">Loader class</a>.
+	</p>
+	<code>
+		load_class(<var>$className</var>, <dfn>$type</dfn>, <dfn>$supress</dfn>);
+	</code>
+	<h5><u>Parameters:</u></h5>
+	<p>
+        <ol>
+            <li> <var>$className</var> [Type: String]: The class name we are trying to load.</li>
+			<li> <dfn>$type</dfn> [Type: String, Default: 'core']: The type of class (library, core, etc etc)</li>
+			<li> 
+				<dfn>$supress</dfn> [Type: Bool, Default: false]: Supress error on failed initialization. Setting to true, will not show an error screen if the class fails to start 
+				(IE: an exception was thrown in the constructor)
+			</li>
+        </ol>
+    </p>
+	<h5><u>Return Values:</u></h5> (Object | false) Returns the class object, or false if the class failed to initialize
+	
+	
+	<!-- show_error -->
+	<h2>show_error()</h2>
+	<p>
+		This function sends an error to be logged, and / or displays an error message on the screen, depending on the cms enviorment (production, or development).
+	</p>
+	<code>
+		show_error(<var>$message</var>, <dfn>$args</dfn>, <dfn>$level</dfn>, <dfn>$fatal</dfn>);
+	</code>
+	<h5><u>Parameters:</u></h5>
+	<p>
+        <ol>
+            <li> <var>$message</var> [Type: String]: This would be the array key in the 'messages.php' language file, or custom error text.</li>
+			<li> <dfn>$args</dfn> [Type: Array, Default: Null]: An array of arguments to replace the "%s"'s in the error message. Set to false or null to skip.</li>
+			<li> 
+				<dfn>$level</dfn> [Type: Constant, Default: E_ERROR]: The error level of this error. The constant passed is the same as any php error constant, 
+				Ex: E_ERROR shows an error, and E_WARNING shows a warning message. The level of the error determines IF an error is displayed to the user, and whether 
+				the script stops and quits the rest of the page load (Depending on the enviroment). Errors can be silenced using the debug "silent_mode()" method.
+			</li>
+			<li> <dfn>$fatal</dfn> [Type: Bool, Default: false]: If set to true, then "silent_mode()" will automatically be set false, and will display the error indefinatly.</li>
+        </ol>
+    </p>
+	<h5><u>Return Values:</u></h5> (None).
+	
+	
+	<!-- show_404() -->
+	<h2>show_404()</h2>
+	<p>
+		This function stops script execution, and displays the 404 page.
+	</p>
+	<code>
+		show_404();
+	</code>
+	<h5><u>Parameters:</u></h5>
+	<p>
+        (None)
+    </p>
+	<h5><u>Return Values:</u></h5> (None)
+	
+	
+	<!-- log_message -->
+	<h2>log_message()</h2>
+	<p>
+		This function logs a system message into the system_logs.log file. These message can be of 2 type's, error or info. Error message are for logging none fetal, class error's, and info
+		messages to be logged for any reason, such as why a class method is preforming an action a certain way. Each time this function is called, it adds a new line to the log file.
+	</p>
+	<code>
+		log_message(<var>$type</var>, <var>$message</var>);
+	</code>
+	<h5><u>Parameters:</u></h5>
+	<p>
+        <ol>
+			<li> <var>$type</var> [Type: String]: The message type (info | error)</li>
+            <li> <var>$message</var> [Type: String]: The message to be logged in the log file</li>
+        </ol>
+    </p>
+	<h5><u>Return Values:</u></h5> (Bool) True on success, false if writting to logfile failed
+	
+	
+	<!-- get_instance -->
+	<h2>get_instance()</h2>
+	<p>
+		This function returns the current loaded controller instance. All class variables and methods will be publically accessable.
+	</p>
+	<code>
+		$Controller = get_instance();
+	</code>
+	<h5><u>Parameters:</u></h5>
+	<p>
+        (None)
+    </p>
+	<h5><u>Return Values:</u></h5> (Object) Returns the controller class instance
+	
+	
+	<!-- register_instance -->
+	<h2>register_instance()</h2>
+	<p>
+		This function sets the instance of the controller, to the specified class object. Future calls to the 'get_instance()' function will return the object given here
+	</p>
+	<code>
+		register_instance(<var>$Object</var>);
+	</code>
+	<h5><u>Parameters:</u></h5>
+	<p>
+        <ol>
+			<li> <var>$Object</var> [Type: Object]: The object we are setting as the global instance of the controller</li>
+        </ol>
+    </p>
+	<h5><u>Return Values:</u></h5> (None)
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<!-- Next Topic:&nbsp;&nbsp;<a href="config.html">Config Class</a> -->
+	</p>
+	<p>
+		Frostbite Framework &copy; 2011 - 2012, Steven Wilson | Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
+		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
+	</p>
+</div>
+
+</body>
+</html>
