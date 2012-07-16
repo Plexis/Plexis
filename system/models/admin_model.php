@@ -27,10 +27,9 @@ class Admin_Model extends Core\Model
     {
         // Load required Libs
         parent::__construct();
-        $this->Session = $this->load->library('Session');
         
         // Init a session var
-        $this->user = $this->Session->get('user');
+        $this->user = $this->User->data;
         
         // Make sure the user has admin access'
         if( !($this->user['is_admin'] == 1 || $this->user['is_super_admin'] == 1) )
