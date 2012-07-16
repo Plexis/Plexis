@@ -43,7 +43,7 @@ class Ajax_Model extends Core\Model
         $Ajax = get_instance();
         
         // Init a session var
-        $this->user = $Ajax->Session->get('user');
+        $this->user = $Ajax->User->data;
         if($this->user['is_admin'] != 1 || $this->user['is_super_admin'] != 1)
         {
             return FALSE;
