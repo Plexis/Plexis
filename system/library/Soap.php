@@ -148,11 +148,11 @@ class Soap
             }
             catch(\Exception $e)
             {
-                $session = get_instance()->Session->get('user');
+                $username = get_instance()->User->username;
                 $this->console_return = $e->getMessage();
                 $this->debug[] = 'Server Error Response: '.$this->console_return;
                 $this->debug[] = 'Command Used: '.$command;
-                $this->debug[] = 'Username: '. $session['username'];
+                $this->debug[] = 'Username: '. $username;
                 $this->debug[] = 'User\' IP: '.$_SERVER['REMOTE_ADDR'];
                 $this->write_log();
                 $return = FALSE;             
