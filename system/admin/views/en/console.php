@@ -54,12 +54,3 @@
         </div>
     </div>
 </div>
-
-<!-- Add the console css to the head tag -->
-<pcms::eval>
-    <?php
-        $this->append_metadata('');
-        $this->append_metadata('<!-- Include console css file -->');
-        $this->append_metadata('<link rel="stylesheet" href="'. SITE_URL .'/application/admin/css/console.css"/>'); 
-    ?>
-</pcms::eval>

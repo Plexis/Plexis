@@ -193,7 +193,7 @@ class User
             // Good to go, Update the last seen if its more then 5 minutes ago
             if((strtotime($result['last_seen']) + 300) < time())
             {
-                $this->DB->query("UPDATE `pcms_accounts` SET `last_seen` = NOW() WHERE `id`=".$userid);
+                $this->DB->update('pcms_accounts', array('last_seen' => date('Y-m-d H:i:s', time())), "`id`=". $userid);
             }
             
             // Load our perms into a different var and unset
@@ -347,7 +347,7 @@ class User
             $this->DB->insert('pcms_sessions', $data);
 
             // Update user with new session id
-            $this->DB->update('pcms_accounts', array('last_seen' => $time), "`id`=". $result['id']);
+            $this->DB->update('pcms_accounts', array('last_seen' => date('Y-m-d H:i:s', $time)), "`id`=". $result['id']);
             
             // Custom variable for QA checking
             ($result['_account_recovery'] == NULL) ? $set = false : $set = TRUE;
