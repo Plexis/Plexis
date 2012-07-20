@@ -6,7 +6,7 @@
 |
 | --------------------------------------------------------------
 |
-| Author:       Tony Hudgins
+| Author:       Wilson212
 | Copyright:    Copyright (c) 2012, Steven Wilson, Tony Hudgins
 | License:      GNU GPL v3
 |
@@ -18,10 +18,10 @@ namespace Wowlib\_default;
 class Characters
 {
     // Our DB Connection
-    protected $DB;
+    public $DB;
     
     // Array of classes, races, and genders
-    protected $info = array(
+    public $info = array(
         'race' => array(
             1 => 'Human',
             2 => 'Orc',
@@ -52,6 +52,10 @@ class Characters
             1 => 'Female',
             2 => 'None'
         ),
+        'faction' => array(
+            0 => 'Horde',
+            1 => 'Alliance'
+        ),
         'reset_position' => array(
             // Position X, Position Y, Position Z, Orientation, Map ID
             0 => array(1629.36, -4373.39, 31.2564, 3.54839, 1), // Orgrimmar for Horde
@@ -65,44 +69,15 @@ class Characters
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($connection, $wdb)
+    public function __construct($connection)
     {
         // Set oru database conntection, which is passed when this class is Init.
         $this->DB = $connection;
-        
-        // Load the loader class
-        $this->load = load_class('Loader');
-    }
-    
-/*
-| -------------------------------------------------------------------------------------------------
-|                               CHARACTER DATABASE FUNCTIONS
-| -------------------------------------------------------------------------------------------------
-*/
-
-    
-/*
-| ---------------------------------------------------------------
-| Method: is_online
-| ---------------------------------------------------------------
-|
-| This method is used to determine if a character is online or not
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun:(Bool): TRUE if the cahracter is online, FALSE otherwise
-|
-*/     
-    public function is_online($id)
-    {
-        // Build our query
-        $query = "SELECT `online` FROM `characters` WHERE `guid`=?";
-        $online = $this->DB->query( $query, array($id) )->fetch_column();
-        return (bool) $online;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: name_exists
+| Method: nameExists
 | ---------------------------------------------------------------
 |
 | This method is used to determine if a character name is available
@@ -111,7 +86,7 @@ class Characters
 | @Retrun:(Bool): TRUE if the name is available, FALSE otherwise
 |
 */     
-    public function name_exists($name)
+    public function nameExists($name)
     {
         // Build our query
         $query = "SELECT `guid` FROM `characters` WHERE `name`=?";
@@ -127,184 +102,25 @@ class Characters
 | This method is used to return an array of character information
 |
 | @Param: (Int) $id - The character ID
-| @Retrun:(Array): False if the character doesnt exist, Otherwise
-|   array(
-|       'account' => The account ID the character belongs too
-|       'id' => Character Id
-|       'name' => The characters name
-|       'race' => The characters race id
-|       'class' => The characters class id
-|       'gender' => Gender
-|       'level' => Level
-|       'money' => characters money
-|       'xp' => Characters current level expierience
-|       'online' => 1 if character online, 0 otherwise
-|       'zone' => The zone ID the character is in
-|   );
+| @Retrun: (Object) Returns a Character Object class
 |
 */  
     public function fetch($id)
     {
         // Build our query
-        $query = "SELECT `guid` as `id`, `account`, `name`, `race`, `class`, `gender`, `level`, `money`, `xp`, `online`, `zone` FROM `characters` WHERE `guid`=?";
-        return $this->DB->query( $query, array($id) )->fetch_row();
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: get_account_id
-| ---------------------------------------------------------------
-|
-| This method is used to get the account id tied to the character
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun: (Int): the account id on success, FALSE otherwise
-|
-*/     
-    public function get_account_id($id)
-    {
-        // Build our query
-        $query = "SELECT `account` FROM `characters` WHERE `guid`=?";
-        return $this->DB->query( $query, array($id) )->fetch_column();
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: get_name
-| ---------------------------------------------------------------
-|
-| This method is used to get the characters name
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun: (Int): Returns the characters name on success, FALSE otherwise
-|
-*/     
-    public function get_name($id)
-    {
-        // Build our query
-        $query = "SELECT `name` FROM `characters` WHERE `guid`=?";
-        return $this->DB->query( $query, array($id) )->fetch_column();
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: get_level
-| ---------------------------------------------------------------
-|
-| This method is used to get the level of a character
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun: (Int): The characters level on success, FALSE otherwise
-|
-*/     
-    public function get_level($id)
-    {
-        // Build our query
-        $query = "SELECT `level` FROM `characters` WHERE `guid`=?";
-        return $this->DB->query( $query, array($id) )->fetch_column();
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: get_race
-| ---------------------------------------------------------------
-|
-| This method is used to get the race ID of a character
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun: (Int): The characters race ID on success, FALSE otherwise
-|
-*/     
-    public function get_race($id)
-    {
-        // Build our query
-        $query = "SELECT `race` FROM `characters` WHERE `guid`=?";
-        return $this->DB->query( $query, array($id) )->fetch_column();
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: get_class
-| ---------------------------------------------------------------
-|
-| This method is used to get the class ID of a character
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun: (Int): The characters class ID on success, FALSE otherwise
-|
-*/     
-    public function get_class($id)
-    {
-        // Build our query
-        $query = "SELECT `class` FROM `characters` WHERE `guid`=?";
-        return $this->DB->query( $query, array($id) )->fetch_column();
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: get_gender
-| ---------------------------------------------------------------
-|
-| This method is used to get the gender of a character
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun: (Int): The characters gender (0=male, 1=female) on success, 
-|   FALSE otherwise
-|
-*/  
-    public function get_gender($id)
-    {
-        // Build our query
-        $query = "SELECT `gender` FROM `characters` WHERE `guid`=?";
-        return $this->DB->query( $query, array($id) )->fetch_column();
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: get_faction
-| ---------------------------------------------------------------
-|
-| Gets the faction for character id.
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun: (Int): Returns 1 = Ally, 0 = horde on success, 
-|   FALSE otherwise (use the "===" to tell 0 from false)
-|
-*/ 
-    public function get_faction($id)
-    {
-        // Frist we make an array of alliance race's
-        $ally = array("1", "3", "4", "7", "11");
+        try {
+            $character = new Character($id, $this);
+        }
+        catch (\Exception $e) {
+            $character = false;
+        }
         
-        // Get our characters current race
-        $row = $this->get_race($id);
-        if($row == FALSE) return FALSE;
-
-        // Now we check to see if the characters race is in the array we made before
-        return (in_array($row, $ally)) ? 1 : 0;
+        return $character;
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: get_gold
-| ---------------------------------------------------------------
-|
-| Returns the amount of gold a character has.
-|
-| @Param: (Int) $id - The character id we are looking up
-| @Retrun: (Int): Returns the amount on success, FALSE otherwise
-|
-*/     
-    public function get_gold($id)
-    {
-        // First we check to make sure the character exists!
-        $query = "SELECT `money` FROM `characters` WHERE `guid`=?";
-        return $this->DB->query( $query, array($id) )->fetch_column();
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: get_online_count
+| Method: getOnlineCount
 | ---------------------------------------------------------------
 |
 | Returns the amount of characters currently online
@@ -313,7 +129,7 @@ class Characters
 | @Retrun: (Int): Returns the amount on success, FALSE otherwise
 |
 */     
-    public function get_online_count($faction = 0)
+    public function getOnlineCount($faction = 0)
     {
         
         if($faction == 1) // Alliance
@@ -329,7 +145,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: list_characters
+| Method: listCharacters
 | ---------------------------------------------------------------
 |
 | This method is used to list all the characters from the characters
@@ -341,7 +157,7 @@ class Characters
 | @Retrun: (Array): An array of characters
 |
 */
-    public function list_characters($limit = 50, $start = 0)
+    public function listCharacters($limit = 50, $start = 0)
     {        
         // Build our query, and query the database
         $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zone` FROM `characters` LIMIT ".$start.", ".$limit;
@@ -353,7 +169,7 @@ class Characters
 
 /*
 | ---------------------------------------------------------------
-| Method: get_online_list
+| Method: getOnlineList
 | ---------------------------------------------------------------
 |
 | This method returns a list of characters online
@@ -365,7 +181,7 @@ class Characters
 | @Retrun: (Array): An array of characters
 |
 */     
-    public function get_online_list($limit = 100, $start = 0, $faction = 0)
+    public function getOnlineList($limit = 100, $start = 0, $faction = 0)
     {
         switch($faction)
         {
@@ -391,7 +207,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: get_list_datatables
+| Method: listCharactersDatatables
 | ---------------------------------------------------------------
 |
 | This method returns a list of characters
@@ -400,10 +216,10 @@ class Characters
 | @Retrun: (Array): An array of characters
 |
 */     
-    public function get_list_datatables($online = false)
+    public function listCharactersDatatables($online = false)
     {
         // Load the ajax model
-        $ajax = $this->load->model("Ajax_Model", "ajax");
+        $ajax = load_class('Loader')->model("Ajax_Model", "ajax");
   
         /* 
         * Dwsc: Array of database columns which should be read and sent back to DataTables. 
@@ -426,7 +242,7 @@ class Characters
 
 /*
 | ---------------------------------------------------------------
-| Method: get_faction_top_kills
+| Method: topKills
 | ---------------------------------------------------------------
 |
 | This method returns a list of the top chacters with kills
@@ -438,7 +254,7 @@ class Characters
 | @Retrun: (Array): An array of characters ORDERED by kills
 |
 */      
-    function top_kills($faction, $limit, $start)
+    function topKills($faction, $limit, $start)
 	{
 		// Alliance
 		if($faction == 1)
@@ -455,208 +271,7 @@ class Characters
         // Return the query result
         return $this->DB->query( $query )->fetch_array();
 	}
-    
-/*
-| ---------------------------------------------------------------
-| Method: set_info
-| ---------------------------------------------------------------
-|
-| This method is used to set an array of character information
-|
-| @Param: (Int) $id - The character ID
-| @Param:(Array): $info - an array of fields to set... This includes
-| these fields (NOTE: you need not set all of these, just the ones
-|   you are updating)
-|   array(
-|       'account' => The account ID the character belongs too
-|       'name' => The characters name
-|       'gender' => Gender
-|       'level' => Level
-|       'money' => characters money
-|       'xp' => Characters current level expierience
-|   );
-|
-*/  
-    public function set($id, $info)
-    {
-        // First we check to make sure the character exists!
-        $query = "SELECT `account`, `name`, `gender`, `level`, `money`, `xp` FROM `characters` WHERE `guid`=?";
-        $char = $this->DB->query( $query, array($id) )->fetch_row();
-        if($char === false)
-        {
-            // Character doesnt exist or is online
-            return false;
-        }
-        else
-        {
-            // If the name changed, check to make sure a different char doesnt have that name
-            if(isset($info['name']))
-            {
-                if($char['name'] != $info['name'])
-                {
-                    if($this->name_exists($info['name'])) return false;
-                }
-            }
-            
-            // Build our data array ( 'column_name' => $info['infoid'] )
-            // We need to check if each field is set, if not, use $char default
-            $data = array(
-                'account'   => (isset($info['account'])) ? $info['account'] : $char['account'],
-                'name'      => (isset($info['name']))    ? $info['name']    : $char['name'],
-                'gender'    => (isset($info['gender']))  ? $info['gender']  : $char['gender'],
-                'level'     => (isset($info['level']))   ? $info['level']   : $char['level'],
-                'money'     => (isset($info['money']))   ? $info['money']   : $char['money'],
-                'xp'        => (isset($info['xp']))      ? $info['xp']      : $char['xp']
-            );
-            
-            // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
-            return $this->DB->update('characters', $data, "`guid`=".$id);
-        }
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: set_level
-| ---------------------------------------------------------------
-|
-| This method is used to set a characters level
-|
-| @Param: (Int) $id - The character id we are updating
-| @Param: (Int) $new_level - The characters new level
-| @Retrun: (Bool): True on success, FALSE otherwise
-|
-*/    
-    public function set_level($id, $new_level)
-    {
-        // First we check to make sure the character exists!
-        $query = "SELECT `online` FROM `characters` WHERE `guid`=?";
-        $online = $this->DB->query( $query, array($id) )->fetch_column();
-        if($online === FALSE)
-        {
-            // Character doesnt exist if we get a staight up FALSE
-            return FALSE;
-        }
-
-        // Update the 'characters' table, SET 'level' => $new_level WHERE guid(id) => $id
-        return $this->DB->update('characters', array('level' => $new_level), "`guid`=".$id);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: set_name
-| ---------------------------------------------------------------
-|
-| This method is used to set a characters name
-|
-| @Param: (Int) $id - The character id we are updating
-| @Param: (Int) $new_name - The characters new name
-| @Retrun: (Bool): True on success, FALSE otherwise
-|
-*/    
-    public function set_name($id, $new_name)
-    {
-        // First we check to make sure the character exists!
-        $query = "SELECT `online` FROM `characters` WHERE `guid`=?";
-        $online = $this->DB->query( $query, array($id) )->fetch_column();
-        if($online === FALSE)
-        {
-            // Character doesnt exist if we get a staight up FALSE
-            return FALSE;
-        }
-        
-        // Update the 'characters' table, SET 'name' => $new_name WHERE guid(id) => $id
-        return $this->DB->update('characters', array('level' => $new_level), "`guid`=".$id);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: set_name
-| ---------------------------------------------------------------
-|
-| This method is used to set a characters account ID
-|
-| @Param: (Int) $id - The character id we are updating
-| @Param: (Int) $account - The new account id
-| @Retrun: (Bool): True on success, FALSE otherwise
-|
-*/    
-    public function set_account_id($id, $account)
-    {
-        // First we check to make sure the character exists!
-        $query = "SELECT `online` FROM `characters` WHERE `guid`=?";
-        $online = $this->DB->query( $query, array($id) )->fetch_column();
-        if($online === FALSE)
-        {
-            // Character doesnt exist if we get a staight up FALSE
-            return FALSE;
-        }
-
-        // Update the 'characters' table, SET 'account' => $new_account WHERE guid(id) => $id
-        return $this->DB->update('characters', array('account' => $account), "`guid`=".$id);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: adjust_level
-| ---------------------------------------------------------------
-|
-| This method is used to adjust a characters level by the $mod
-|
-| @Param: (Int) $id - The character id we are updating
-| @Param: (Int) $mod - The characters modification amount to level
-| @Retrun: (Bool): True on success, FALSE otherwise
-|
-*/
-    public function adjust_level($id, $mod)
-    {
-        // First we check to make sure the character exists!
-        $query = "SELECT `level` FROM `characters` WHERE `guid`=?";
-        $lvl = $this->DB->query( $query, array($id) )->fetch_column();
-        if($lvl == FALSE)
-        {
-            return FALSE;
-        }
-        else
-        {
-            // Adjust the level
-            $newlvl = $lvl + $mod;
-
-            // Update the 'characters' table, SET 'level' => $new_level WHERE guid(id) => $id
-            return $this->DB->update('characters', array('level' => $new_level), "`guid`=".$id);
-        }
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: adjust_gold
-| ---------------------------------------------------------------
-|
-| This method is used to adjust a characters gold by the $mod
-|
-| @Param: (Int) $id - The character id we are updating
-| @Param: (Int) $mod - The characters modification amount to gold
-| @Retrun: (Bool): True on success, FALSE otherwise
-|
-*/ 
-    public function adjust_gold($id, $mod)
-    {
-        // First we check to make sure the character exists!
-        $query = "SELECT `money` FROM `characters` WHERE `guid`=?";
-        $gold = $this->DB->query( $query, array($id) )->fetch_column();
-        if($gold == FALSE)
-        {
-            return FALSE;
-        }
-        else
-        {
-            // Adjust the gold
-            $new = $gold + $mod;
-
-            // Update the 'characters' table, SET 'level' => $new_level WHERE guid(id) => $id
-            return $this->DB->update('characters', array('money' => $new), "`guid`=".$id);
-        }
-    }
-    
+ 
 /*
 | ---------------------------------------------------------------
 | Method: delete
@@ -684,31 +299,6 @@ class Characters
         
         return true;
     }
-    
-/*
-| ---------------------------------------------------------------
-| Method: reset_position
-| ---------------------------------------------------------------
-|
-| This method unstuck's a character, by resetting thier position
-| to thier factions main city
-|
-| @Param: (Int) $id - The character id we are deleteing
-| @Retrun: (Bool): True on success, FALSE otherwise
-|
-*/ 
-    public function reset_poistion($id)
-    {
-        // First, get the race id
-        $race = $this->get_faction($id);
-        if(!$race) return false; // Character doesnt exist
-        
-        // Now we reset the position based off of the race ID
-        list($x, $y, $z, $o, $m) = $this->info['reset_position'][$race];
-        $data = array('position_x' => $x, 'position_y' => $y, 'position_z' => $z, 'orientation' => $o, 'map' => $m);
-        return $this->DB->update('characters', $data, "`guid`={$id}");
-    }
-
 
 
 /*
@@ -720,7 +310,7 @@ class Characters
 
 /*
 | ---------------------------------------------------------------
-| Method: login_flags()
+| Method: loginFlags()
 | ---------------------------------------------------------------
 |
 | This method is used to return a list of "at login" flags this
@@ -730,7 +320,7 @@ class Characters
 | @Retrun: (Array): An array of true / false flags
 |
 */ 
-    public function login_flags()
+    public function loginFlags()
     {
         return array(
             'rename' => true,
@@ -745,7 +335,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: flag_to_bit()
+| Method: flagToBit()
 | ---------------------------------------------------------------
 |
 | This method is used to return the bitmask flag for the givin flag 
@@ -755,7 +345,7 @@ class Characters
 | @Retrun: (Int | Bool): The bitmask on success, False otherwise
 |
 */
-    public function flag_to_bit($flag)
+    public function flagToBit($flag)
     {
         // only list available flags
         $flags = array(
@@ -769,33 +359,493 @@ class Characters
         return (isset($flags[ $flag ])) ? $flags[ $flag ] : false;
     }
     
+    
+/*
+| -------------------------------------------------------------------------------------------------
+|                               HELPER FUNCTIONS
+| -------------------------------------------------------------------------------------------------
+*/
+
+
+    public function raceToText($id)
+    {
+        // Check if the race is set, if not then Unknown
+        if(isset($this->info['race'][$id]))
+        {
+            return $this->info['race'][$id];
+        }
+        return "Unknown";
+    }
+
+    public function classToText($id)
+    {
+        // Check if the class is set, if not then Unknown
+        if(isset($this->info['class'][$id]))
+        {
+            return $this->info['class'][$id];
+        }
+        return "Unknown";
+    }
+
+    public function genderToText($id)
+    {
+        // Check if the gender is set, if not then Unknown
+        if(isset($this->info['gender'][$id]))
+        {
+            return $this->info['gender'][$id];
+        }
+        return "Unknown";
+    }
+}
+
+
+
+
+/* 
+| -------------------------------------------------------------- 
+| Character Object Class
+| --------------------------------------------------------------
+|
+| Author:       Wilson212
+| Copyright:    Copyright (c) 2012, Steven Wilson, Tony Hudgins
+| License:      GNU GPL v3
+|
+*/
+class Character
+{
+    // Our DB Connection and Characters parent class
+    protected $DB;
+    protected $parent;
+    
+    // Our character variables
+    protected $guid;
+    protected $data = array();
+    
 /*
 | ---------------------------------------------------------------
-| Method: set_login_flag()
+| Constructor
+| ---------------------------------------------------------------
+|
+*/
+    public function __construct($guid, $parent)
+    {
+        // Set oru database conntection, which is passed when this class is Init.
+        $this->DB = $parent->DB;
+        $this->parent = $parent;
+        $this->guid = $guid;
+        
+        // Load the character
+        $query = "SELECT 
+            `account`, 
+            `name`, 
+            `race`, 
+            `class`, 
+            `gender`, 
+            `level`, 
+            `xp`, 
+            `money`, 
+            `position_x`, 
+            `position_y`, 
+            `position_z`, 
+            `map`, 
+            `orientation`,
+            `online`,
+            `totaltime`,
+            `at_login`,
+            `zone`,
+            `arenaPoints`,
+            `totalHonorPoints`,
+            `totalKills`
+            FROM `characters` WHERE `guid`= $guid;";
+        $this->data = $this->DB->query($query)->fetch_row();
+        
+        // Make sure we didnt get a false return
+        if(!is_array($this->data)) throw new \Exception('Character doesnt exist');
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: save()
+| ---------------------------------------------------------------
+|
+| This method saves the current characters data in the database
+|
+| @Retrun: (Bool): An array of true / false flags
+|
+*/ 
+    public function save()
+    {
+        // Update all the characters data in the DB
+        return $this->DB->update('characters', $this->data, "`guid`= $this->guid");
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: isOnline
+| ---------------------------------------------------------------
+|
+| This method returns a bool based on if a character is online.
+|
+| @Retrun: (Bool) TRUE if the cahracter is online, FALSE otherwise
+|
+*/  
+    public function isOnline()
+    {
+        return (bool) $this->data['online'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getAccountId
+| ---------------------------------------------------------------
+|
+| This method returns the account ID that belongs to this character
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getAccountId()
+    {
+        return (int) $this->data['account'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getName
+| ---------------------------------------------------------------
+|
+| This method returns the characters name
+|
+| @Retrun: (String)
+|
+*/  
+    public function getName()
+    {
+        return (string) $this->data['name'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getLevel
+| ---------------------------------------------------------------
+|
+| This method returns the characters level
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getLevel()
+    {
+        return (int) $this->data['level'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getClass
+| ---------------------------------------------------------------
+|
+| This method returns the characters class
+|
+| @Param: (Bool) $asText - Return the class text name?
+| @Retrun: (String | Int)
+|
+*/  
+    public function getClass($asText = false)
+    {
+        return ($asText == true) ? $this->parent->classToText($this->data['class']) : (int) $this->data['class'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getRace
+| ---------------------------------------------------------------
+|
+| This method returns the characters race
+|
+| @Param: (Bool) $asText - Return the race text name?
+| @Retrun: (String | Int)
+|
+*/  
+    public function getRace($asText = false)
+    {
+        return ($asText == true) ? $this->parent->raceToText($this->data['race']) : (int) $this->data['race'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getGender
+| ---------------------------------------------------------------
+|
+| This method returns the characters gender
+|
+| @Param: (Bool) $asText - Return the gender text name?
+| @Retrun: (String | Int)
+|
+*/  
+    public function getGender($asText = false)
+    {
+        return ($asText == true) ? $this->parent->genderToText($this->data['gender']) : (int) $this->data['gender'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getFaction
+| ---------------------------------------------------------------
+|
+| Gets the faction for character id.
+|
+| @Retrun: (Int): Returns 1 = Ally, 0 = horde on success, 
+|   FALSE otherwise (use the "===" to tell 0 from false)
+|
+*/ 
+    public function getFaction()
+    {
+        // Frist we make an array of alliance race's
+        $ally = array("1", "3", "4", "7", "11");
+
+        // Now we check to see if the characters race is in the array we made before
+        return (in_array($this->getRace(), $ally)) ? 1 : 0;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getXp
+| ---------------------------------------------------------------
+|
+| This method returns the characters current xp
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getXp()
+    {
+        return (int) $this->data['xp'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getMoney
+| ---------------------------------------------------------------
+|
+| This method returns the characters current money
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getMoney()
+    {
+        return (int) $this->data['money'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getPosition
+| ---------------------------------------------------------------
+|
+| This method returns the characters position and map / zone ID
+| in an array
+|
+| @Retrun: (Array)
+|
+*/  
+    public function getPosition()
+    {
+        return array(
+            'x' => $this->data['position_x'],
+            'y' => $this->data['position_y'],
+            'z' => $this->data['position_z'],
+            'orientation' => $this->data['orientation'],
+            'map' => $this->data['map'],
+            'zone' => $this->data['zone']
+        );
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getTimePlayed
+| ---------------------------------------------------------------
+|
+| This method returns the characters total time played
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getTimePlayed()
+    {
+        return (int) $this->data['timeplayed'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getTotalKills
+| ---------------------------------------------------------------
+|
+| This method returns the characters total pvp kills
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getTotalKills()
+    {
+        return (int) $this->data['totalKills'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getTotalKills
+| ---------------------------------------------------------------
+|
+| This method returns the characters total honor points
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getHonorPoints()
+    {
+        return (int) $this->data['totalHonorPoints'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getTotalKills
+| ---------------------------------------------------------------
+|
+| This method returns the characters total arena points
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getArenaPoints()
+    {
+        return (int) $this->data['arenaPoints'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getLoginFlags()
+| ---------------------------------------------------------------
+|
+| This method is used to return all login flags the character has
+|
+| @Retrun: (Array): An array of true / false flags
+|
+*/ 
+    public function getLoginFlags()
+    {
+        // Build the dummy array
+        $flags = array();
+        
+        // Loop through each supported flag, and assign a false value
+        $supported = $this->parent->loginFlags();
+        foreach($supported as $key => $flag)
+        {
+            $flags[$key] = false;
+        }
+
+        // Is there any flags set?
+        $cflags = (int)$this->data['at_login'];
+        if( $cflags == 0 ) return $flags;
+        
+        // Determine if each flag is true or false
+        foreach($flags as $key => $flag)
+        {
+            $bit = $this->parent->flagToBit($key);
+            $flags[$key] = ($cflags & $bit) ? true : false;
+        }
+        
+        return $flags;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: hasLoginFlag()
+| ---------------------------------------------------------------
+|
+| This method is used to return a if a character has the specified
+| login flag enabled
+|
+| @Param: (String) $name - The flag name we are getting
+| @Retrun: (Bool): True if the character has the flag, False otherwise
+|
+*/ 
+    public function hasLoginFlag($name)
+    {
+        // Convert flags to an int, and get our bit id
+        $flags  = (int) $this->data['at_login'];
+        $flagid = (int) $this->parent->flagToBit($name);
+        
+        // Make sure this feature is supported
+        if($flagid == 0) return false;
+        
+        // Check, if the flag is set, return true
+        return ($flags & $flagid) ? true : false;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: resetPosition
+| ---------------------------------------------------------------
+|
+| This method unstuck's a character, by resetting thier position
+| to their herthstone bind position
+|
+| @Retrun: (Bool)
+|
+*/ 
+    public function resetPoistion()
+    {
+        // Now we reset the position based off of the race ID
+        $query = "SELECT * FROM `character_homebind` WHERE `guid`=$this->guid";
+        $pos = $this->DB->query($query)->fetch_row();
+        
+        // Set the position
+        return $this->setPosition($pos['position_x'], $pos['position_y'], $pos['position_z'], $this->data['orientation'], $pos['map']);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setPosition
+| ---------------------------------------------------------------
+|
+| This method sets a characters position based off of parameters
+|
+| @Param: (Int) $x - Position of the character relative to the $map's x-axis.
+| @Param: (Int) $y - Position of the character relative to the $map's y-axis.
+| @Param: (Int) $z - Position of the character relative to the $map's z-axis.
+| @Param: (Float) $o - The direction the character is facing.
+| @Param: (Int) $map - The map the character will be on.
+| @Retrun: (Bool)
+|
+*/ 
+    public function setPoistion($x, $y, $z, $o, $map)
+    {
+        $this->data['position_x'] = $x;
+        $this->data['position_y'] = $y;
+        $this->data['position_z'] = $z;
+        $this->data['orientation'] = $o;
+        $this->data['map'] = $map;
+        return true;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setLoginFlag()
 | ---------------------------------------------------------------
 |
 | This method is used to return a list of "at login" flags this
 | core / revision is able to do. Please note, the functions must
 | exist!
 |
-| @Param: (Int) $id - The character id
 | @Param: (String) $name - The flag name we are settings
 | @Param: (Bool) $status - True to enable flag, false to remove it
 | @Retrun: (Bool): True on success, False otherwise
 |
 */ 
-    public function set_login_flag($id, $name, $status)
+    public function setLoginFlag($name, $status)
     {
-        // First, get current login flags
-        $query = "SELECT `at_login` FROM `characters` WHERE `guid`=?";
-        $flags = $this->DB->query( $query, array($id) )->fetch_column();
-        
-        // Make sure we didnt get a false return!
-        if( $flags === false ) return false;
-        
         // Convert flags to an int, and get our bit id
-        $flags  = (int) $flags;
-        $flagid = (int) $this->flag_to_bit($name);
+        $flags  = (int) $this->data['at_login'];
+        $flagid = (int) $this->parent->flagToBit($name);
         
         // Make sure this feature is supported
         if($flagid == 0) return false;
@@ -818,116 +868,153 @@ class Characters
             $newflags = $flags - $flagid;
         }
         
-        // Update the database setting the new flag
-        return $this->DB->update('characters', array('at_login' => $newflags), "`guid`=$id");
+        // Update the data array
+        $this->data['at_login'] = $newflags;
+        return true;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: has_login_flag()
+| Method: setAccountId
 | ---------------------------------------------------------------
 |
-| This method is used to return a if a character has the specified
-| login flag enabled
+| This method sets the account ID that belongs to this character
 |
-| @Param: (Int) $id - The character id
-| @Param: (String) $name - The flag name we are getting
-| @Retrun: (Bool): True if the character has the flag, False otherwise
+| @Param: (Int) $id - The new account id
+| @Retrun: (Bool)
 |
-*/ 
-    public function has_login_flag($id, $name)
+*/  
+    public function setAccountId($id)
     {
-        // First, get current login flags
-        $query = "SELECT `at_login` FROM `characters` WHERE `guid`=?";
-        $flags = $this->DB->query( $query, array($id) )->fetch_column();
-        
-        // Is there any flags set?
-        if( $flags == false ) return false;
-        
-        // Convert flags to an int, and get our bit id
-        $flags  = (int) $flags;
-        $flagid = (int) $this->flag_to_bit($name);
-        
-        // Make sure this feature is supported
-        if($flagid == 0) return false;
-        
-        // Check, if the flag is set, return true
-        return ($flags & $flagid) ? true : false;
+        if(!is_numeric($id)) return false;
+        $this->data['account'] = (int) $id;
+        return true;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_login_flags()
+| Method: setName
 | ---------------------------------------------------------------
 |
-| This method is used to return all login flags the character has
+| This method sets the characters name
 |
-| @Param: (Int) $id - The character id
-| @Retrun: (Array): An array of true / false flags
+| @Param: (String) $name - The new name of the character
+| @Retrun: (Bool) True on success, false if name already exists
 |
-*/ 
-    public function get_login_flags($id)
+*/  
+    public function setName($name)
     {
-        // Build the dummy array
-        $flags = array();
-        $supported = $this->login_flags();
-        foreach($supported as $key => $flag)
-        {
-            $flags[$key] = false;
-        }
-        
-        // First, get current login flags
-        $query = "SELECT `at_login` FROM `characters` WHERE `guid`=?";
-        $cflags = $this->DB->query( $query, array($id) )->fetch_column();
-        
-        // Is there any flags set?
-        if( $cflags == false ) return $flags;
-        
-        // Determine if each flag is true or false
-        foreach($flags as $key => $flag)
-        {
-            $bit = $this->flag_to_bit($key);
-            $flags[$key] = ($cflags & $bit) ? true : false;
-        }
-        
-        return $flags;
+        // Make sure the name exists already!!
+        if($this->parent->nameExists($name)) return false;
+        $this->data['name'] = $name;
+        return true;
     }
-    
     
 /*
-| -------------------------------------------------------------------------------------------------
-|                               HELPER FUNCTIONS
-| -------------------------------------------------------------------------------------------------
-*/
-
-
-    public function race_to_text($id)
+| ---------------------------------------------------------------
+| Method: setLevel
+| ---------------------------------------------------------------
+|
+| This method sets the characters level
+|
+| @Param: (Int) $lvl - The new level of the character
+| @Retrun: (Bool)
+|
+*/  
+    public function setLevel($lvl)
     {
-        // Check if the race is set, if not then Unknown
-        if(isset($this->info['race'][$id]))
-        {
-            return $this->info['race'][$id];
-        }
-        return "Unknown";
+        if(!is_numeric($lvl)) return false;
+        $this->data['level'] = (int) $lvl;
+        return true;
     }
-
-    public function class_to_text($id)
+    
+/*
+| ---------------------------------------------------------------
+| Method: setXp
+| ---------------------------------------------------------------
+|
+| This sets the characters current xp
+|
+| @Param: (Int) $xp - The new character xp amount
+| @Retrun: (Bool)
+|
+*/  
+    public function setXp($xp)
     {
-        // Check if the class is set, if not then Unknown
-        if(isset($this->info['class'][$id]))
-        {
-            return $this->info['class'][$id];
-        }
-        return "Unknown";
+        if(!is_numeric($xp)) return false;
+        $this->data['xp'] = (int) $xp;
+        return true;
     }
-
-    public function gender_to_text($id)
+    
+/*
+| ---------------------------------------------------------------
+| Method: setMoney
+| ---------------------------------------------------------------
+|
+| This method sets the characters current money
+|
+| @Param: (Int) $money - The new amount of copper this character has
+| @Retrun: (Bool)
+|
+*/  
+    public function setMoney($money)
     {
-        // Check if the gender is set, if not then Unknown
-        if(isset($this->info['gender'][$id]))
-        {
-            return $this->info['gender'][$id];
-        }
-        return "Unknown";
+        if(!is_numeric($money)) return false;
+        $this->data['money'] = (int) $money;
+        return true;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setTotalKills
+| ---------------------------------------------------------------
+|
+| This method sets the characters total pvp kills
+|
+| @Param: (Int) $kills - The new amount of total kills
+| @Retrun: (Bool)
+|
+*/  
+    public function setTotalKills($kills)
+    {
+        if(!is_numeric($kills)) return false;
+        $this->data['totalKills'] = (int) $kills;
+        return true;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setTotalKills
+| ---------------------------------------------------------------
+|
+| This method sets the characters total honor points
+|
+| @Param: (Int) $points - The new amount of honor points
+| @Retrun: (Bool)
+|
+*/  
+    public function setHonorPoints($points)
+    {
+        if(!is_numeric($points)) return false;
+        $this->data['totalHonorPoints'] = (int) $points;
+        return true;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setTotalKills
+| ---------------------------------------------------------------
+|
+| This method sets the characters total arena points
+|
+| @Param: (Int) $points - The new amount of arena points
+| @Retrun: (Bool)
+|
+*/  
+    public function setArenaPoints($points)
+    {
+        if(!is_numeric($points)) return false;
+        $this->data['arenaPoints'] = (int) $points;
+        return true;
     }
 }

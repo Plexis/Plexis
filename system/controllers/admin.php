@@ -899,8 +899,8 @@ class Admin extends Core\Controller
             
             // Get alist of login flags
             $flags = array();
-            $aflags   = $Lib->characters->login_flags();
-            $has_flag = $Lib->characters->get_login_flags($character);
+            $aflags   = $Lib->characters->loginFlags();
+            $has_flag = $char->getLoginFlags();
             
             // Loop through each flag so we can set the proper enabled : disabled at login select options
             foreach($aflags as $key => $flag)
@@ -914,15 +914,22 @@ class Admin extends Core\Controller
             }
             
             // Build our page title / desc, then load the view
+            $pos = $char->getPosition();
             $data = array(
                 'page_title' => "Character Editor",
                 'page_desc' => "This page allows you to edit character information.",
                 'flags' => $flags,
-                'character' => $char,
-                'account' => $this->realm->get_account_name($char['account']),
-                'race' => $Lib->characters->race_to_text($char['race']),
-                'class' => $Lib->characters->class_to_text($char['class']),
-                'zone' => $Lib->zone->name($char['zone']),
+                'character' => array(
+                    'id' => $character,
+                    'name' => $char->getName(),
+                    'level' => $char->getLevel(),
+                    'money' => $char->getMoney(),
+                    'xp' => $char->getXp(),
+                ),
+                'account' => $this->realm->get_account_name($char->getAccountId()),
+                'race' => $char->getRace(true),
+                'class' => $char->getClass(true),
+                'zone' => $Lib->zone->name($pos['zone']),
                 'realm' => $realmid
             );
             $this->load->view('edit_character', $data);

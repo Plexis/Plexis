@@ -680,7 +680,7 @@ class Admin_ajax extends Core\Controller
             $this->load->wowlib($realm, 'wowlib');
             if(is_object($this->wowlib))
             {
-                $output = $this->wowlib->characters->get_list_datatables();
+                $output = $this->wowlib->characters->listCharactersDatatables();
                 
                 // Loop, each character, and format the rows accordingly
                 foreach($output['aaData'] as $key => $value)
@@ -688,8 +688,8 @@ class Admin_ajax extends Core\Controller
                     $u = $this->realm->fetch_account($value[7]);
                     $g = $value[5]; // Gender
                     $r = $value[3]; // Race
-                    $race = $this->wowlib->characters->race_to_text($r);
-                    $class = $this->wowlib->characters->class_to_text($value[4]);
+                    $race = $this->wowlib->characters->raceToText($r);
+                    $class = $this->wowlib->characters->classToText($value[4]);
                     $zone = $this->wowlib->zone->name($value[6]);
                     $output['aaData'][$key][3] = '<center><img src="'. BASE_URL .'/assets/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
                     $output['aaData'][$key][4] = '<center><img src="'. BASE_URL .'/assets/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
@@ -724,22 +724,22 @@ class Admin_ajax extends Core\Controller
     
             // Load the wowlib for this realm
             $Lib = $this->load->wowlib($realm, false);
-            if($Lib == false)
+            if(!is_object($Lib))
             {
                 $this->output(false, "Unable to connect to character and/or world databases");
                 die();
             }
             
             // Fetch character
-            $char = $Lib->characters->get_character_info($id);
-            if($char == false)
+            $Char = $Lib->characters->fetch($id);
+            if(!is_object($Char))
             {
                 $this->output(false, "Character ID: Does not exist!");
                 die();
             }
             
             // Make sure the character isnt online
-            if($char['online'] == 1)
+            if($Char->isOnline())
             {
                 $this->output(false, "Character is online. You cannot edit characters while they are in game.", 'warning');
                 die();
@@ -756,47 +756,30 @@ class Admin_ajax extends Core\Controller
                     $r = get_realm($realm);
                     
                     // Log action
-                    $this->log('Edited character '. $char['name'] .' from realm '. $r['name']);
+                    $this->log('Edited character '. $Char->getName() .' from realm '. $r['name']);
                     
                     // Update the character data
-                    $info = array(
-                        'name' => $this->Input->post('name', true),
-                        'level' => $this->Input->post('level', true),
-                        'gender' => $this->Input->post('gender', true),
-                        'money' => $this->Input->post('money', true),
-                        'xp' => $this->Input->post('xp', true)
-                    );
-                    $result = $Lib->characters->set($id, $info);
-                    
-                    // make sure we didnt fail here
-                    if($result === false)
-                    {
-                        $this->output(false, "There was an error updating the character information. Please check your error logs");
-                        die();
-                    }
+                    $Char->setName( $this->Input->post('name', true) );
+                    $Char->setLevel( $this->Input->post('level', true) );
+                    //$Char->setGender( $this->Input->post('gender', true) );
+                    $Char->setMoney( $this->Input->post('money', true) );
+                    $Char->setXp( $this->Input->post('xp', true) );
                     
                     // Get the characters flags
-                    $change = false;
-                    $flags = $Lib->characters->get_login_flags($id);
+                    $flags = $Char->getLoginFlags();
                     foreach($flags as $key => $val)
                     {
                         // Updates?
-                        if(isset($_POST[ $key ]) && (bool)$_POST[ $key ] != $val)
-                        {
-                            $change = true;
-                            $Lib->characters->set_login_flag($id, $key, $_POST[ $key ]);
-                        }
+                        $bool = (bool)$_POST[ $key ];
+                        if(isset($_POST[ $key ]) && $bool != $val)
+                            $Char->setLoginFlag($key, $bool);
                     }
                     
                     // Any successfull changes?
-                    if($result === 0 && $change == false)
-                    {
-                        $this->output(false, "Character data not updated. This may be due to no changes being made.", 'warning');
-                    }
-                    else
-                    {
+                    if($Char->save() !== false)  
                         $this->output(true, "Character updated successfully!");
-                    }
+                    else
+                        $this->output(false, "There was an error updating the character information. Please check your error logs");
                     break;
                     
                 case "delete":

@@ -74,15 +74,15 @@ class Ajax extends Core\Controller
 
         // Load the WoWLib
         $this->load->wowlib($realm, 'wowlib');
-        $output = $this->wowlib->characters->get_list_datatables(true);
+        $output = $this->wowlib->characters->listCharactersDatatables(true);
         
         // Loop, and add options
         foreach($output['aaData'] as $key => $value)
         {
             $g = $value[5];
             $r = $value[3];
-            $race = $this->wowlib->characters->race_to_text($r);
-            $class = $this->wowlib->characters->class_to_text($value[4]);
+            $race = $this->wowlib->characters->raceToText($r);
+            $class = $this->wowlib->characters->classToText($value[4]);
             $zone = $this->wowlib->zone->name($value[6]);
             $output['aaData'][$key][3] = '<img src="'. BASE_URL .'/assets/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'">';
             $output['aaData'][$key][4] = '<img src="'. BASE_URL .'/assets/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'">';
