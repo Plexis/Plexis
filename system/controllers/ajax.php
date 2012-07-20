@@ -74,7 +74,7 @@ class Ajax extends Core\Controller
 
         // Load the WoWLib
         $this->load->wowlib($realm, 'wowlib');
-        $output = $this->wowlib->characters->listCharactersDatatables(true);
+        $output = $this->wowlib->characters->listCharactersDatatables(0, true);
         
         // Loop, and add options
         foreach($output['aaData'] as $key => $value)

@@ -127,41 +127,18 @@ class Characters
     public function getOnlineCount($faction = 0)
     {
         
-        if($faction == 1) // Alliance
+        if($faction == 1): // Alliance
             $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1' AND (`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11)";
-        elseif($faction == 2) // Horde
+        elseif($faction == 2): // Horde
             $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1' AND (`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10)";
-        else // Both
+        else: // Both
             $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1'";
+        endif;
         
         // Return the query result
         return $this->DB->query( $query )->fetch_column();
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: listCharacters
-| ---------------------------------------------------------------
-|
-| This method is used to list all the characters from the characters
-| database.
-|
-| @Param: (Int) $limit - The number of results we are recieveing
-| @Param: (Int) $start - The result we start from (example: $start = 50
-|   would return results 50-100)
-| @Retrun: (Array): An array of characters
-|
-*/
-    public function listCharacters($limit = 50, $start = 0)
-    {        
-        // Build our query, and query the database
-        $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zone` FROM `characters` LIMIT ".$start.", ".$limit;
-        $list = $this->DB->query( $query )->fetch_array();
-        
-        // If we have a false return, then there was nothing to select
-        return ($list === FALSE) ? array() : $list;
-    }
-
 /*
 | ---------------------------------------------------------------
 | Method: getOnlineList
@@ -202,16 +179,51 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
+| Method: listCharacters
+| ---------------------------------------------------------------
+|
+| This method is used to list all the characters from the characters
+| database.
+|
+| @Param: (Int) $acct - The account ID. 0 = all characters from all
+|   accounts
+| @Param: (Int) $limit - The number of results we are recieveing
+| @Param: (Int) $start - The result we start from (example: $start = 50
+|   would return results 50-100)
+| @Retrun: (Array): An array of characters
+|
+*/
+    public function listCharacters($acct = 0, $limit = 50, $start = 0)
+    {        
+        // Build our query
+        if($acct == 0):
+            $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zone` FROM `characters` LIMIT {$start}, {$limit}";
+        else:
+            $query = "SELECT `guid`, `name`, `race`, `gender`, `class`, `level`, `zone` FROM `characters` WHERE `account`= {$acct} LIMIT {$start}, {$limit}";
+        endif;
+        
+        // Query the database
+        $list = $this->DB->query( $query )->fetch_array();
+        
+        // If we have a false return, then there was nothing to select
+        return ($list === FALSE) ? array() : $list;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: listCharactersDatatables
 | ---------------------------------------------------------------
 |
-| This method returns a list of characters
+| This method returns a list of characters, formatted for datatables
+| ajax.
 |
+| @Param: (Int) $acct - The account ID. 0 = all characters from all
+|   accounts
 | @Param: (Bool) $online - Only list online players?
 | @Retrun: (Array): An array of characters
 |
 */     
-    public function listCharactersDatatables($online = false)
+    public function listCharactersDatatables($acct = 0, $online = false)
     {
         // Load the ajax model
         $ajax = load_class('Loader')->model("Ajax_Model", "ajax");
@@ -230,6 +242,9 @@ class Characters
         
         /* where statment */
         $where = ($online == true) ? '`online` = 1' : '';
+        
+        /* And Where statment */
+        if($acct != 0) $where .= ($online == true) ? ' AND `account` = '. $acct : '`account` = '. $acct;
         
         /* Process the request */
         return $ajax->process_datatables($cols, $index, $table, $where, $this->DB);
@@ -816,11 +831,11 @@ class Character
 */ 
     public function setPoistion($x, $y, $z, $o, $map)
     {
-        $this->data['position_x'] = $x;
-        $this->data['position_y'] = $y;
-        $this->data['position_z'] = $z;
-        $this->data['orientation'] = $o;
-        $this->data['map'] = $map;
+        $this->data['position_x'] = (float) $x;
+        $this->data['position_y'] = (float) $y;
+        $this->data['position_z'] = (float) $z;
+        $this->data['orientation'] = (float) $o;
+        $this->data['map'] = (int) $map;
         return true;
     }
     
