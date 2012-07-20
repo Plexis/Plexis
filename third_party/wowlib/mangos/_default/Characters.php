@@ -55,11 +55,6 @@ class Characters
         'faction' => array(
             0 => 'Horde',
             1 => 'Alliance'
-        ),
-        'reset_position' => array(
-            // Position X, Position Y, Position Z, Orientation, Map ID
-            0 => array(1629.36, -4373.39, 31.2564, 3.54839, 1), // Orgrimmar for Horde
-            1 => array(-8833.38, 628.628, 94.0066, 1.06535, 0)  // Stormwind for Alliance
         )
     );
     
@@ -824,9 +819,9 @@ class Character
 |
 | This method sets a characters position based off of parameters
 |
-| @Param: (Int) $x - Position of the character relative to the $map's x-axis.
-| @Param: (Int) $y - Position of the character relative to the $map's y-axis.
-| @Param: (Int) $z - Position of the character relative to the $map's z-axis.
+| @Param: (Float) $x - Position of the character relative to the $map's x-axis.
+| @Param: (Float) $y - Position of the character relative to the $map's y-axis.
+| @Param: (Float) $z - Position of the character relative to the $map's z-axis.
 | @Param: (Float) $o - The direction the character is facing.
 | @Param: (Int) $map - The map the character will be on.
 | @Retrun: (Bool)

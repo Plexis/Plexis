@@ -821,9 +821,9 @@ class Character
 |
 | This method sets a characters position based off of parameters
 |
-| @Param: (Int) $x - Position of the character relative to the $map's x-axis.
-| @Param: (Int) $y - Position of the character relative to the $map's y-axis.
-| @Param: (Int) $z - Position of the character relative to the $map's z-axis.
+| @Param: (Float) $x - Position of the character relative to the $map's x-axis.
+| @Param: (Float) $y - Position of the character relative to the $map's y-axis.
+| @Param: (Float) $z - Position of the character relative to the $map's z-axis.
 | @Param: (Float) $o - The direction the character is facing.
 | @Param: (Int) $map - The map the character will be on.
 | @Retrun: (Bool)
