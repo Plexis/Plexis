@@ -680,22 +680,22 @@ class Admin_ajax extends Core\Controller
             $this->load->wowlib($realm, 'wowlib');
             if(is_object($this->wowlib))
             {
-                $output = $this->wowlib->characters->get_character_list_datatables();
+                $output = $this->wowlib->characters->get_list_datatables();
                 
                 // Loop, each character, and format the rows accordingly
                 foreach($output['aaData'] as $key => $value)
                 {
                     $u = $this->realm->fetch_account($value[7]);
-                    $g = $value[5];
-                    $r = $value[3];
+                    $g = $value[5]; // Gender
+                    $r = $value[3]; // Race
                     $race = $this->wowlib->characters->race_to_text($r);
                     $class = $this->wowlib->characters->class_to_text($value[4]);
                     $zone = $this->wowlib->zone->name($value[6]);
-                    $output['aaData'][$key][3] = '<center><img src="'. SITE_URL .'/assets/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
-                    $output['aaData'][$key][4] = '<center><img src="'. SITE_URL .'/assets/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
+                    $output['aaData'][$key][3] = '<center><img src="'. BASE_URL .'/assets/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
+                    $output['aaData'][$key][4] = '<center><img src="'. BASE_URL .'/assets/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
                     $output['aaData'][$key][5] = $zone;
-                    $output['aaData'][$key][6] = '<a href="'. SITE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
-                    $output['aaData'][$key][7] = '<a href="'. SITE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
+                    $output['aaData'][$key][6] = '<a href="'. BASE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
+                    $output['aaData'][$key][7] = '<a href="'. BASE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
                     unset($output['aaData'][$key][8]);
                 }
                 
@@ -766,7 +766,7 @@ class Admin_ajax extends Core\Controller
                         'money' => $this->Input->post('money', true),
                         'xp' => $this->Input->post('xp', true)
                     );
-                    $result = $Lib->characters->set_character_info($id, $info);
+                    $result = $Lib->characters->set($id, $info);
                     
                     // make sure we didnt fail here
                     if($result === false)
@@ -808,7 +808,7 @@ class Admin_ajax extends Core\Controller
                     
                     // Log action
                     $this->log('Deleted character '. $char['name'] .' from realm '. $r['name']);
-                    $result = $Lib->characters->delete_character( $this->Input->post('id', true) );
+                    $result = $Lib->characters->delete( $this->Input->post('id', true) );
                     ($result == true) ? $this->output(true, "Character deleted successfully!") : $this->output(false, "There was an error deleting the character!");
                     break;
                     

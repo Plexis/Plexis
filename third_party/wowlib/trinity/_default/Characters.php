@@ -51,6 +51,11 @@ class Characters
             0 => 'Male',
             1 => 'Female',
             2 => 'None'
+        ),
+        'reset_position' => array(
+            // Position X, Position Y, Position Z, Orientation, Map ID
+            0 => array(1629.36, -4373.39, 31.2564, 3.54839, 1), // Orgrimmar for Horde
+            1 => array(-8833.38, 628.628, 94.0066, 1.06535, 0)  // Stormwind for Alliance
         )
     );
     
@@ -78,7 +83,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: character_online
+| Method: is_online
 | ---------------------------------------------------------------
 |
 | This method is used to determine if a character is online or not
@@ -87,23 +92,17 @@ class Characters
 | @Retrun:(Bool): TRUE if the cahracter is online, FALSE otherwise
 |
 */     
-    public function character_online($id)
+    public function is_online($id)
     {
         // Build our query
         $query = "SELECT `online` FROM `characters` WHERE `guid`=?";
         $online = $this->DB->query( $query, array($id) )->fetch_column();
-        if($online == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // If we are here, we have the characters status
-        return $online;
+        return (bool) $online;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: character_name_exists
+| Method: name_exists
 | ---------------------------------------------------------------
 |
 | This method is used to determine if a character name is available
@@ -112,23 +111,17 @@ class Characters
 | @Retrun:(Bool): TRUE if the name is available, FALSE otherwise
 |
 */     
-    public function character_name_exists($name)
+    public function name_exists($name)
     {
         // Build our query
         $query = "SELECT `guid` FROM `characters` WHERE `name`=?";
         $exists = $this->DB->query( $query, array($name) )->fetch_column();
-        if($exists !== FALSE)
-        {
-            return TRUE;
-        }
-        
-        // If we are here, the name is available
-        return FALSE;
+        return ($exists !== false) ? true : false;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_character_info
+| Method: fetch
 | ---------------------------------------------------------------
 |
 | This method is used to return an array of character information
@@ -150,23 +143,16 @@ class Characters
 |   );
 |
 */  
-    public function get_character_info($id)
+    public function fetch($id)
     {
         // Build our query
         $query = "SELECT `guid` as `id`, `account`, `name`, `race`, `class`, `gender`, `level`, `money`, `xp`, `online`, `zone` FROM `characters` WHERE `guid`=?";
-        $account = $this->DB->query( $query, array($id) )->fetch_row();
-        if($account == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // If we are here, then we have the account ID. return it
-        return $account;
+        return $this->DB->query( $query, array($id) )->fetch_row();
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_character_account_id
+| Method: get_account_id
 | ---------------------------------------------------------------
 |
 | This method is used to get the account id tied to the character
@@ -175,23 +161,16 @@ class Characters
 | @Retrun: (Int): the account id on success, FALSE otherwise
 |
 */     
-    public function get_character_account_id($id)
+    public function get_account_id($id)
     {
         // Build our query
         $query = "SELECT `account` FROM `characters` WHERE `guid`=?";
-        $account = $this->DB->query( $query, array($id) )->fetch_column();
-        if($account == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // If we are here, then we have the account ID. return it
-        return $account;
+        return $this->DB->query( $query, array($id) )->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_character_name
+| Method: get_name
 | ---------------------------------------------------------------
 |
 | This method is used to get the characters name
@@ -200,23 +179,16 @@ class Characters
 | @Retrun: (Int): Returns the characters name on success, FALSE otherwise
 |
 */     
-    public function get_character_name($id)
+    public function get_name($id)
     {
         // Build our query
         $query = "SELECT `name` FROM `characters` WHERE `guid`=?";
-        $result = $this->DB->query( $query, array($id) )->fetch_column();
-        if($result == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // If we are here, then we have the name. return it
-        return $result;
+        return $this->DB->query( $query, array($id) )->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_character_level
+| Method: get_level
 | ---------------------------------------------------------------
 |
 | This method is used to get the level of a character
@@ -225,23 +197,16 @@ class Characters
 | @Retrun: (Int): The characters level on success, FALSE otherwise
 |
 */     
-    public function get_character_level($id)
+    public function get_level($id)
     {
         // Build our query
         $query = "SELECT `level` FROM `characters` WHERE `guid`=?";
-        $result = $this->DB->query( $query, array($id) )->fetch_column();
-        if($result == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // If we are here, then we have the result. return it
-        return $result;
+        return $this->DB->query( $query, array($id) )->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_character_race
+| Method: get_race
 | ---------------------------------------------------------------
 |
 | This method is used to get the race ID of a character
@@ -250,23 +215,16 @@ class Characters
 | @Retrun: (Int): The characters race ID on success, FALSE otherwise
 |
 */     
-    public function get_character_race($id)
+    public function get_race($id)
     {
         // Build our query
         $query = "SELECT `race` FROM `characters` WHERE `guid`=?";
-        $result = $this->DB->query( $query, array($id) )->fetch_column();
-        if($result == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // If we are here, then we have the result. return it
-        return $result;
+        return $this->DB->query( $query, array($id) )->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_character_class
+| Method: get_class
 | ---------------------------------------------------------------
 |
 | This method is used to get the class ID of a character
@@ -275,23 +233,16 @@ class Characters
 | @Retrun: (Int): The characters class ID on success, FALSE otherwise
 |
 */     
-    public function get_character_class($id)
+    public function get_class($id)
     {
         // Build our query
         $query = "SELECT `class` FROM `characters` WHERE `guid`=?";
-        $result = $this->DB->query( $query, array($id) )->fetch_column();
-        if($result == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // If we are here, then we have the result. return it
-        return $result;
+        return $this->DB->query( $query, array($id) )->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_character_gender
+| Method: get_gender
 | ---------------------------------------------------------------
 |
 | This method is used to get the gender of a character
@@ -301,23 +252,16 @@ class Characters
 |   FALSE otherwise
 |
 */  
-    public function get_character_gender($id)
+    public function get_gender($id)
     {
         // Build our query
         $query = "SELECT `gender` FROM `characters` WHERE `guid`=?";
-        $result = $this->DB->query( $query, array($id) )->fetch_column();
-        if($result == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // If we are here, then we have the result. return it
-        return $result;
+        return $this->DB->query( $query, array($id) )->fetch_column();
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: get_character_faction
+| Method: get_faction
 | ---------------------------------------------------------------
 |
 | Gets the faction for character id.
@@ -327,36 +271,22 @@ class Characters
 |   FALSE otherwise (use the "===" to tell 0 from false)
 |
 */ 
-    public function get_character_faction($id)
+    public function get_faction($id)
     {
         // Frist we make an array of alliance race's
         $ally = array("1", "3", "4", "7", "11");
         
         // Get our characters current race
-        $row = $this->get_character_race($id);
-        if($row == FALSE)
-        {
-            return FALSE;
-        }
-        else
-        {
-            // Now we check to see if the characters race is in the array we made before
-            if(in_array($row, $ally))
-            {
-                // Return that the race is alliance
-                return 1;
-            } 
-            else 
-            {
-                // Race is Horde
-                return 0;
-            }
-        }
+        $row = $this->get_race($id);
+        if($row == FALSE) return FALSE;
+
+        // Now we check to see if the characters race is in the array we made before
+        return (in_array($row, $ally)) ? 1 : 0;
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: get_character_gold
+| Method: get_gold
 | ---------------------------------------------------------------
 |
 | Returns the amount of gold a character has.
@@ -365,19 +295,11 @@ class Characters
 | @Retrun: (Int): Returns the amount on success, FALSE otherwise
 |
 */     
-    public function get_character_gold($id)
+    public function get_gold($id)
     {
         // First we check to make sure the character exists!
         $query = "SELECT `money` FROM `characters` WHERE `guid`=?";
-        $gold = $this->DB->query( $query, array($id) )->fetch_column();
-        if($gold == FALSE)
-        {
-            return FALSE;
-        }
-        else
-        {
-            return $gold;
-        }
+        return $this->DB->query( $query, array($id) )->fetch_column();
     }
 
 /*
@@ -393,23 +315,13 @@ class Characters
 */     
     public function get_online_count($faction = 0)
     {
-        // Alliance
-        if($faction == 1)
-        {
+        
+        if($faction == 1) // Alliance
             $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1' AND (`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11)";
-        }
-
-        // Horde
-        elseif($faction == 2)
-        {
+        elseif($faction == 2) // Horde
             $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1' AND (`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10)";
-        }
-
-        // Both factions
-        else
-        {
+        else // Both
             $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1'";
-        }
         
         // Return the query result
         return $this->DB->query( $query )->fetch_column();
@@ -436,11 +348,7 @@ class Characters
         $list = $this->DB->query( $query )->fetch_array();
         
         // If we have a false return, then there was nothing to select
-        if($list === FALSE)
-        {
-            return array();
-        }
-        return $list;
+        return ($list === FALSE) ? array() : $list;
     }
 
 /*
@@ -459,24 +367,22 @@ class Characters
 */     
     public function get_online_list($limit = 100, $start = 0, $faction = 0)
     {
-        // Alliance Only
-        if($faction == 1)
+        switch($faction)
         {
-            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' AND 
-                (`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11) LIMIT $start, $limit";
-        }
-        
-        // Horde Only
-        elseif($faction == 2)
-        {
-            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' AND 
-                (`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10) LIMIT $start, $limit";
-        }
-        
-        // Both factions
-        else
-        {
-            $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' LIMIT $start, $limit";
+            case 1:
+                // Alliance Only
+                $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' AND 
+                    (`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11) LIMIT $start, $limit";
+                break;
+            case 2:
+                // Horde Only
+                $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' AND 
+                    (`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10) LIMIT $start, $limit";
+                break;
+            default :
+                // Both factions
+                $query = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level`, `zone`  FROM `characters` WHERE `online`='1' LIMIT $start, $limit";
+                break;
         }
         
         // Return the query result
@@ -485,49 +391,18 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: get_online_list_datatables
-| ---------------------------------------------------------------
-|
-| This method returns a list of characters online
-|
-| @Retrun: (Array): An array of characters
-|
-*/     
-    public function get_online_list_datatables()
-    {
-        $ajax = $this->load->model("Ajax_Model", "ajax");
-  
-        /* 
-        * Dwsc: Array of database columns which should be read and sent back to DataTables. 
-        * Format: id, name, character level, race ID, class ID, Gender ID, and Zone ID
-        */
-        $cols = array( 'guid', 'name', 'level', 'race', 'class', 'gender', 'zone' );
-        
-        /* Character ID column name */
-        $index = "guid";
-        
-        /* characters table name to use */
-        $table = "characters";
-        
-        /* add where */
-        $where = '`online` = 1';
-        
-        /* Process the request */
-        return $ajax->process_datatables($cols, $index, $table, $where, $this->DB);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: get_character_list_datatables
+| Method: get_list_datatables
 | ---------------------------------------------------------------
 |
 | This method returns a list of characters
-
+|
+| @Param: (Bool) $online - Only list online players?
 | @Retrun: (Array): An array of characters
 |
 */     
-    public function get_character_list_datatables()
+    public function get_list_datatables($online = false)
     {
+        // Load the ajax model
         $ajax = $this->load->model("Ajax_Model", "ajax");
   
         /* 
@@ -543,7 +418,7 @@ class Characters
         $table = "characters";
         
         /* where statment */
-        $where = '';
+        $where = ($online == true) ? '`online` = 1' : '';
         
         /* Process the request */
         return $ajax->process_datatables($cols, $index, $table, $where, $this->DB);
@@ -563,7 +438,7 @@ class Characters
 | @Retrun: (Array): An array of characters ORDERED by kills
 |
 */      
-    function get_faction_top_kills($faction, $limit, $start)
+    function top_kills($faction, $limit, $start)
 	{
 		// Alliance
 		if($faction == 1)
@@ -583,7 +458,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: set_character_info
+| Method: set_info
 | ---------------------------------------------------------------
 |
 | This method is used to set an array of character information
@@ -602,7 +477,7 @@ class Characters
 |   );
 |
 */  
-    public function set_character_info($id, $info)
+    public function set($id, $info)
     {
         // First we check to make sure the character exists!
         $query = "SELECT `account`, `name`, `gender`, `level`, `money`, `xp` FROM `characters` WHERE `guid`=?";
@@ -619,7 +494,7 @@ class Characters
             {
                 if($char['name'] != $info['name'])
                 {
-                    if($this->character_name_exists($info['name'])) return false;
+                    if($this->name_exists($info['name'])) return false;
                 }
             }
             
@@ -641,7 +516,7 @@ class Characters
 
 /*
 | ---------------------------------------------------------------
-| Method: set_character_level
+| Method: set_level
 | ---------------------------------------------------------------
 |
 | This method is used to set a characters level
@@ -651,7 +526,7 @@ class Characters
 | @Retrun: (Bool): True on success, FALSE otherwise
 |
 */    
-    public function set_character_level($id, $new_level)
+    public function set_level($id, $new_level)
     {
         // First we check to make sure the character exists!
         $query = "SELECT `online` FROM `characters` WHERE `guid`=?";
@@ -668,7 +543,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: set_character_name
+| Method: set_name
 | ---------------------------------------------------------------
 |
 | This method is used to set a characters name
@@ -678,7 +553,7 @@ class Characters
 | @Retrun: (Bool): True on success, FALSE otherwise
 |
 */    
-    public function set_character_name($id, $new_name)
+    public function set_name($id, $new_name)
     {
         // First we check to make sure the character exists!
         $query = "SELECT `online` FROM `characters` WHERE `guid`=?";
@@ -695,7 +570,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: set_character_name
+| Method: set_name
 | ---------------------------------------------------------------
 |
 | This method is used to set a characters account ID
@@ -705,7 +580,7 @@ class Characters
 | @Retrun: (Bool): True on success, FALSE otherwise
 |
 */    
-    public function set_character_account_id($id, $account)
+    public function set_account_id($id, $account)
     {
         // First we check to make sure the character exists!
         $query = "SELECT `online` FROM `characters` WHERE `guid`=?";
@@ -722,7 +597,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: adjust_character_level
+| Method: adjust_level
 | ---------------------------------------------------------------
 |
 | This method is used to adjust a characters level by the $mod
@@ -732,7 +607,7 @@ class Characters
 | @Retrun: (Bool): True on success, FALSE otherwise
 |
 */
-    public function adjust_character_level($id, $mod)
+    public function adjust_level($id, $mod)
     {
         // First we check to make sure the character exists!
         $query = "SELECT `level` FROM `characters` WHERE `guid`=?";
@@ -753,7 +628,7 @@ class Characters
 
 /*
 | ---------------------------------------------------------------
-| Method: adjust_character_gold
+| Method: adjust_gold
 | ---------------------------------------------------------------
 |
 | This method is used to adjust a characters gold by the $mod
@@ -763,7 +638,7 @@ class Characters
 | @Retrun: (Bool): True on success, FALSE otherwise
 |
 */ 
-    public function adjust_character_gold($id, $mod)
+    public function adjust_gold($id, $mod)
     {
         // First we check to make sure the character exists!
         $query = "SELECT `money` FROM `characters` WHERE `guid`=?";
@@ -784,7 +659,7 @@ class Characters
     
 /*
 | ---------------------------------------------------------------
-| Method: delete_character
+| Method: delete
 | ---------------------------------------------------------------
 |
 | This method removes the character from the characters DB
@@ -793,7 +668,7 @@ class Characters
 | @Retrun: (Bool): True on success, FALSE otherwise
 |
 */ 
-    public function delete_character($id)
+    public function delete($id)
     {
         // A list of (table => character_id_col_name) to remove character info from
         // The more tables listed, the more we can delete this character
@@ -810,7 +685,29 @@ class Characters
         return true;
     }
     
-    public function reset_poistion($id){}
+/*
+| ---------------------------------------------------------------
+| Method: reset_position
+| ---------------------------------------------------------------
+|
+| This method unstuck's a character, by resetting thier position
+| to thier factions main city
+|
+| @Param: (Int) $id - The character id we are deleteing
+| @Retrun: (Bool): True on success, FALSE otherwise
+|
+*/ 
+    public function reset_poistion($id)
+    {
+        // First, get the race id
+        $race = $this->get_faction($id);
+        if(!$race) return false; // Character doesnt exist
+        
+        // Now we reset the position based off of the race ID
+        list($x, $y, $z, $o, $m) = $this->info['reset_position'][$race];
+        $data = array('position_x' => $x, 'position_y' => $y, 'position_z' => $z, 'orientation' => $o, 'map' => $m);
+        return $this->DB->update('characters', $data, "`guid`={$id}");
+    }
 
 
 

@@ -882,7 +882,7 @@ class Admin extends Core\Controller
             }
             
             // Fetch character
-            $char = $Lib->characters->get_character_info($character);
+            $char = $Lib->characters->fetch($character);
             if($char == false)
             {
                 // Give the admin an error
