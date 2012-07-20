@@ -790,7 +790,7 @@ class Admin_ajax extends Core\Controller
                     $r = get_realm($realm);
                     
                     // Log action
-                    $this->log('Deleted character '. $char['name'] .' from realm '. $r['name']);
+                    $this->log('Deleted character '. $Char->getName() .' from realm '. $r['name']);
                     $result = $Lib->characters->delete( $this->Input->post('id', true) );
                     ($result == true) ? $this->output(true, "Character deleted successfully!") : $this->output(false, "There was an error deleting the character!");
                     break;
@@ -798,7 +798,14 @@ class Admin_ajax extends Core\Controller
                 case "unstuck":
                     // Make sure this person has permission to do this!
                     $this->check_permission('manage_characters');
-                    $this->output(false, "This feature is incomplete.", 'warning');
+                    
+                    // Get our realm name
+                    $r = get_realm($realm);
+                    
+                    // Log action
+                    $this->log('Reset character position of "'. $Char->getName() .'" from realm '. $r['name']);
+                    $Char->resetPosition();
+                    ($Char->save() !== false) ? $this->output(true, "Character position reset successfully") : $this->output(false, "Failed to reset Characters position", 'error');
                     break;
                     
             }
