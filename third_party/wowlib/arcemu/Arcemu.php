@@ -291,7 +291,7 @@ class Arcemu
     public function get_account_name($id)
     {
         // Build our query
-        $query = "SELECT `username` FROM `accounts` WHERE `acct`= ?";
+        $query = "SELECT `login` FROM `accounts` WHERE `acct`= ?";
         $temp = $this->DB->query( $query, array($id) )->fetch_column();
         
         return ($temp == false) ? false : $temp;

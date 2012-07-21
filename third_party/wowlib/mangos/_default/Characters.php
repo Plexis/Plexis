@@ -128,11 +128,11 @@ class Characters
     {
         
         if($faction == 1): // Alliance
-            $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1' AND (`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11)";
+            $query = "SELECT COUNT(`online`) FROM `characters` WHERE `online`='1' AND (`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11)";
         elseif($faction == 2): // Horde
-            $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1' AND (`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10)";
+            $query = "SELECT COUNT(`online`) FROM `characters` WHERE `online`='1' AND (`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10)";
         else: // Both
-            $query = "SELECT COUNT(*) FROM `characters` WHERE `online`='1'";
+            $query = "SELECT COUNT(`online`) FROM `characters` WHERE `online`='1'";
         endif;
         
         // Return the query result
@@ -802,7 +802,7 @@ class Character
 | @Retrun: (Bool)
 |
 */ 
-    public function resetPoistion()
+    public function resetPosition()
     {
         // Now we reset the position based off of the race ID
         $query = "SELECT * FROM `character_homebind` WHERE `guid`=$this->guid";
@@ -827,7 +827,7 @@ class Character
 | @Retrun: (Bool)
 |
 */ 
-    public function setPoistion($x, $y, $z, $o, $map)
+    public function setPosition($x, $y, $z, $o, $map)
     {
         $this->data['position_x'] = (float) $x;
         $this->data['position_y'] = (float) $y;

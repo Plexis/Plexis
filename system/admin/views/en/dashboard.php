@@ -125,7 +125,7 @@
                 <li>
                     <a href="{SITE_URL}/admin/support">
                         <img src="{TEMPLATE_URL}/img/icons/faq-icon.png">
-                        Manage Site Support / Faq's
+                        Manage Site Support / FAQs
                     </a>
                 </li>
                 <li>

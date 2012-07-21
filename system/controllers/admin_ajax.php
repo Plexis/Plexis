@@ -874,8 +874,10 @@ class Admin_ajax extends Core\Controller
                 $where = '';
                 
                 /* Process the request */
-                $output = $this->model->process_datatables($cols, $index, $table, $where, $this->RDB);
-                
+				if( config( "emulator" ) != "arcemu" )
+					$output = $this->model->process_datatables($cols, $index, $table, $where, $this->RDB);
+				else
+					$output = array( "aaData" => array(), "iTotalDisplayRecords" => 0, "iTotalRecords" => 0, "ssEcho" => intval( $_POST["sEcho"] ) );
                 
                 // Get our installed realms
                 $realms = $output['aaData'];
