@@ -60,7 +60,7 @@ class Ajax_Model extends Core\Model
 		$password = array( $input->post('password1', TRUE), $input->post('password2', TRUE) );
         
         // Grab the user account
-        $account = $this->realm->fetch_account($id);
+        $Account = $this->realm->fetchAccount($id);
 
         // Update password if there was a change
         if(!empty($password[0]) && !empty($password[1]))
@@ -68,7 +68,7 @@ class Ajax_Model extends Core\Model
             if( $password[0] == $password[1] )
             {
                 $changes = TRUE;
-                $result = $this->realm->change_password($id, $password[0]);
+                $result = $Account->setPassword($password[0]);
                 if( $result === FALSE )
                 {
                     $Ajax->output(false, 'account_update_error');
@@ -86,10 +86,10 @@ class Ajax_Model extends Core\Model
         }	
         
         // Update expansion
-        if( $expansion != $account['expansion'])
+        if($expansion != $Account->getExpansion())
         {
             $changes = TRUE;
-            $result = $this->realm->update_expansion($expansion, $id);
+            $result = $Account->setExpansion($expansion);
             if( $result === FALSE )
             {
                 $Ajax->output(false, 'account_update_error');
@@ -106,8 +106,19 @@ class Ajax_Model extends Core\Model
                 $data[$key] = $value;
                 
                 // Fire change email event if changed
-                if($key == 'email') load_class('Events')->trigger('email_change', array($id, $user['email'], $value));
+                if($key == 'email')
+                {
+                    $Account->setEmail($value);
+                    load_class('Events')->trigger('email_change', array($id, $user['email'], $value));
+                }
             }
+        }
+        
+        // Save the account
+        if($changes && !$Account->save())
+        {
+            $Ajax->output(false, 'account_update_error');
+            return;
         }
         
         // If we have updates for the plexis DB, make them

@@ -65,25 +65,21 @@ class Account extends Core\Controller
         }
         
         // Fetch account data from the realm
-        $data = $this->realm->fetch_account($this->user['id']);
+        $Account = $this->realm->fetchAccount($this->user['id']);
         
         // Get our banned / active / locked status
-        if($data['banned'] == true)
-        {
+        if($this->realm->accountBanned($this->user['id']))
             $status = '<font color="red">Banned</font>';
-        }
-        elseif($data['locked'] == true)
-        {
+        elseif($Account->isLocked())
             $status = '<font color="red">Locked</font>';
-        }
         else
-        {
             $status = '<font color="green">Active</font>';
-        }
         
         // Add out custom data
-        $data['joindate'] = date('F j, Y', strtotime($this->user['registered']));
-        $data['status'] = $status;
+        $data = array(
+            'status' => $status,
+            'joindate' => date('F j, Y', strtotime($this->user['registered'])),
+        );
         
         // Load the page, and we are done :)
         $this->load->view('index', $data);
@@ -750,7 +746,7 @@ class Account extends Core\Controller
                         }
                         
                         // Tell the realm to validate the provided password
-                        $valid = $this->realm->validate_login($this->user['username'], $oldpass);
+                        $valid = $this->realm->validate($this->user['username'], $oldpass);
                         if(!$valid)
                         {
                             output_message('error', 'account_update_login_failed');
@@ -758,8 +754,12 @@ class Account extends Core\Controller
                             return;
                         }
                         
+                        // Load the user
+                        $Account = $this->realm->fetchAccount($this->user['id']);
+                        $Account->setPassword($password);
+                        
                         // we are good, change the password
-                        if($this->realm->change_password($this->user['id'], $password))
+                        if($Account->save())
                         {
                             // Check if the admin wants the user to get the new password in email
                             if(config('send_email_pass_change') == TRUE)
@@ -829,7 +829,7 @@ class Account extends Core\Controller
                         $new = $this->Input->post('new_email', TRUE);
 
                         // Tell the realm to validate the provided password
-                        $valid = $this->realm->validate_login($this->user['username'], $password);
+                        $valid = $this->realm->validate($this->user['username'], $password);
                         if(!$valid)
                         {
                             output_message('error', 'account_update_login_failed');
@@ -864,8 +864,9 @@ class Account extends Core\Controller
                         SetEmail:
                         {
                             // Update the realm database with the new email
-                            $r = $this->realm->change_email($this->user['id'], $new);
-                            if($r == FALSE)
+                            $Account = $this->realm->fetchAccount($this->user['id']);
+                            $Account->setEmail($new);
+                            if(!$Account->save())
                             {
                                 output_message('error', 'account_update_email_failed');
                                 $this->load->view('blank');

@@ -179,22 +179,21 @@ class Admin extends Core\Controller
             else
             {
                 // Use the realm database to grab user information first
-                $user2 = $this->realm->fetch_account($user['id']);
-				$data['expansion_data'] = $this->realm->get_expansion_info();
+                $Account = $this->realm->fetchAccount($user['id']);
+				$data['expansion_data'] = $this->realm->expansions();
                 
                 // Use the additional inforamation from the realm DB
-                if($user2 !== FALSE)
+                if(is_object($Account))
                 {
                     // Determine out Account status
-                    $status = $this->realm->account_banned($user['id']);
-                    if($status == FALSE)
+                    if(!$this->realm->accountBanned($user['id']))
                     {
                         // Set ban status to Ban
                         $data['account_ban_button'] = "ban";
                         $data['account_ban_button_text'] = "Ban Account";
                         
                         // Load lock status
-                        if($user2['locked'] == FALSE)
+                        if(!$Account->isLocked())
                         {
                             $user['status'] = 'Active';
                             $data['account_lock_button'] = "lock";
@@ -215,7 +214,11 @@ class Admin extends Core\Controller
                         $data['account_lock_button'] = "lock";
                         $data['account_lock_button_text'] = "Lock Account";
                     }
-                    $user = array_merge($user2, $user);
+                    
+                    // Assign more user variables
+                    $user['expansion'] = $Account->getExpansion();
+                    $user['joindate'] = $Account->joinDate();
+                    $user['last_login'] = $Account->lastLogin();
                     
                     // Set some JS vars
                     $this->Template->setjs('userid', $user['id']);

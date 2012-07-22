@@ -257,7 +257,7 @@ class User
         
         // If the Emulator cant match the passwords, or user doesnt exist,
         // Then we spit out an error and return false
-        $account_id = $this->realm->validate_login($username, $password);
+        $account_id = $this->realm->validate($username, $password);
         if($account_id === false)
         {
             // Add trace for debugging
@@ -283,13 +283,13 @@ class User
             {
                 // Add trace for debugging
                 \Debug::trace("User account '{$username}' doesnt exist in Plexis database, fetching account from realm", __FILE__, __LINE__);
-                $r_data = $this->realm->fetch_account($account_id);
+                $Account = $this->realm->fetchAccount($account_id);
                 $data = array(
                     'id' => $account_id, 
                     'username' => ucfirst(strtolower($username)), 
-                    'email' => $r_data['email'], 
+                    'email' => $Account->getEmail(), 
                     'activated' => 1,
-                    'registered' => ($r_data['joindate'] == false) ? date("Y-m-d H:i:s", time()) : $r_data['joindate'],
+                    'registered' => ($Account->joinDate() == false) ? date("Y-m-d H:i:s", time()) : $Account->joinDate(),
                     'registration_ip' => $this->data['ip_address']
                 );
                 $this->DB->insert( 'pcms_accounts', $data );
@@ -416,7 +416,7 @@ class User
         \Debug::trace("Registering account '{$username}'...", __FILE__, __LINE__);
         
         // Make sure the users IP isnt blocked
-        if($this->realm->ip_banned( $this->data['ip_address'] ) == TRUE)
+        if($this->realm->ipBanned( $this->data['ip_address'] ) == TRUE)
         {
             // Add trace for debugging
             \Debug::trace("Ip address is banned. Registration failed", __FILE__, __LINE__);
@@ -425,7 +425,7 @@ class User
         }
         
         // If the result is not was false, then the username already exists
-        if($this->realm->username_exists($username))
+        if($this->realm->accountExists($username))
         {
             // Add trace for debugging
             \Debug::trace("Account '{$username}' already exists. Registration failed", __FILE__, __LINE__);
@@ -437,7 +437,7 @@ class User
         else
         {
             // Try and create the account through the emulator class
-            $id = $this->realm->create_account($username, $password, $email, $this->data['ip_address']);
+            $id = $this->realm->createAccount($username, $password, $email, $this->data['ip_address']);
             
             // If insert into Realm Database is a success, move on
             if($id !== false)
@@ -452,7 +452,9 @@ class User
                 // Process account verification
                 if( config('reg_email_verification') )
                 {
-                    $this->realm->lock_account($id);
+                    $User = $this->realm->fetchAccount($id);
+                    $User->setLocked(true);
+                    $User->save();
                     $activated = 0;
                 }
                 

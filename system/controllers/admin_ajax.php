@@ -111,7 +111,7 @@ class Admin_ajax extends Core\Controller
                     $banip = (isset($_POST['banip'])) ? $this->Input->post('banip', true) : FALSE;
                     
                     // Process the Ban, and process the return result
-                    $result = $this->realm->ban_account($id, $reason, $date, $this->user['username'], $banip);
+                    $result = $this->realm->banAccount($id, $reason, $date, $this->user['username'], $banip);
                     ($result == TRUE) ? $this->output(true, 'account_ban_success') : $this->output(false, 'account_ban_error');
                     break;
                     
@@ -123,7 +123,7 @@ class Admin_ajax extends Core\Controller
                     $this->log('Un-Banned user account '. $user['username']);
                     
                     // Unban the account
-                    $result = $this->realm->unban_account($id);
+                    $result = $this->realm->unbanAccount($id);
                     ($result == TRUE) ? $this->output(true, 'account_unban_success') : $this->output(false, 'account_unban_error');
                     break;
                     
@@ -132,7 +132,9 @@ class Admin_ajax extends Core\Controller
                     $this->log('Locked user account '. $user['username']);
                     
                     // Lock account
-                    $result = $this->realm->lock_account($id);
+                    $Account = $this->realm->fetchAccount($id);
+                    $Account->setLocked(true);
+                    $result = $Account->save();
                     ($result == TRUE) ? $this->output(true, 'account_lock_success') : $this->output(false, 'account_lock_error');
                     break;
                     
@@ -141,7 +143,9 @@ class Admin_ajax extends Core\Controller
                     $this->log('Un-Locked user account '. $user['username']);
                     
                     // Unlock the account
-                    $result = $this->realm->unlock_account($id);
+                    $Account = $this->realm->fetchAccount($id);
+                    $Account->setLocked(false);
+                    $result = $Account->save();
                     ($result == TRUE) ? $this->output(true, 'account_unlock_success') : $this->output(false, 'account_unlock_error');
                     break;
                     
@@ -150,7 +154,7 @@ class Admin_ajax extends Core\Controller
                     ($user['is_admin'] == 1) ? $this->check_permission('delete_admin_account') : $this->check_permission('delete_user_account');
                     
                     // Continue
-                    if( $this->realm->delete_account($id) )
+                    if( $this->realm->deleteAccount($id) )
                     {
                         // Log action
                         $this->log('Deleted user account '. $user['username']);
@@ -168,13 +172,13 @@ class Admin_ajax extends Core\Controller
                     
                 case "account-status":
                     // Use the realm database to grab user information first
-                    $profile = $this->realm->fetch_account($id);
-                    if($profile !== FALSE)
+                    $Account = $this->realm->fetchAccount($id);
+                    if(is_object($Account))
                     {
-                        $status = $this->realm->account_banned($profile['id']);
+                        $status = $this->realm->accountBanned($Account->getId());
                         if($status == FALSE)
                         {
-                            ($profile['locked'] == FALSE) ? $status = 'Active' : $status = 'Locked';
+                            (!$Account->isLocked()) ? $status = 'Active' : $status = 'Locked';
                         }
                         else
                         {

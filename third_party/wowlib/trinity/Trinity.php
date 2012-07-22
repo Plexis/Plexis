@@ -25,7 +25,7 @@ class Trinity
     function __construct()
     {
         $this->load = load_class('Loader');
-        $this->DB = $this->load->database( 'RDB' );
+        $this->DB = $this->load->database('RDB');
     }
     
 /*
@@ -47,7 +47,7 @@ class Trinity
     
 /*
 | ---------------------------------------------------------------
-| Method: fetch_realm()
+| Method: fetchRealm()
 | ---------------------------------------------------------------
 |
 | This function gets the realm cols. from the realmlist table
@@ -56,7 +56,7 @@ class Trinity
 | @Return (Array) - Returns an array of cols. for the realm id
 |
 */
-    public function fetch_realm($id)
+    public function fetchRealm($id)
     {
         // Grab Realms
         $query = "SELECT * FROM `realmlist` WHERE `id`=?";
@@ -84,7 +84,7 @@ class Trinity
     
 /*
 | ---------------------------------------------------------------
-| Method: create_account()
+| Method: createAccount()
 | ---------------------------------------------------------------
 |
 | This function creates an account using the provided username
@@ -97,16 +97,15 @@ class Trinity
 | @Return (Mixed) - Returns the new Account ID on success, FALSE otherwise
 |
 */
-    public function create_account($username, $password, $email = NULL, $ip = '0.0.0.0')
+    public function createAccount($username, $password, $email = NULL, $ip = '0.0.0.0')
     {
         // Make sure the username doesnt exist, just incase the script didnt check yet!
-        if($this->username_exists($username) == TRUE)
-        {
-            return FALSE;
-        }
+        if($this->accountExists($username)) return false;
         
         // SHA1 the password
-        $password = $this->encrypt_password($username, $password);
+        $user = strtoupper($username);
+        $pass = strtoupper($password);
+        $password = sha1($user.':'.$pass);
         
         // Build our tables and values for Database insertion
         $data = array(
@@ -120,19 +119,15 @@ class Trinity
         $this->DB->insert("account", $data);
         
         // If we have an affected row, then we return TRUE
-        if($this->DB->num_rows() > 0)
-        {
-            return $this->DB->last_insert_id();
-        }
-        return FALSE;
+        return ($this->DB->num_rows() > 0) ? $this->DB->last_insert_id() : false;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: validate_login()
+| Method: validate()
 | ---------------------------------------------------------------
 |
-| This function takes a username and password, and logins in with
+| This method takes a username and password, and logins in with
 |   that information. If the password matches the pasword in the
 |   database, we return the account id. Else we return FALSE,
 |
@@ -141,217 +136,76 @@ class Trinity
 | @Return (Mixed) - Returns account ID on success, FALSE otherwise
 |
 */
-    public function validate_login($username, $password)
+    public function validate($username, $password)
     {
         // Make sure the username doesnt exist, just incase the script didnt check yet!
-        if($this->username_exists($username) == FALSE)
-        {
-            return FALSE;
-        }
+        if(!$this->accountExists($username)) return false;
         
         // SHA1 the password
-        $password = $this->encrypt_password($username, $password);
+        $user = strtoupper($username);
+        $pass = strtoupper($password);
+        $password = sha1($user.':'.$pass);
         
         // Load the users info from the Realm DB
         $query = "SELECT `id`, `sha_pass_hash` FROM `account` WHERE `username`=?";
         $result = $this->DB->query( $query, array($username) )->fetch_row();
         
         // If the result was false, then username is no good. Also match passwords.
-        return ( $result['sha_pass_hash'] == $password ) ? $result['id'] : FALSE;
+        return ( $result['sha_pass_hash'] == $password ) ? $result['id'] : false;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: change_password()
-| ---------------------------------------------------------------
-|
-| This function changes the password to an account
-|
-| @Param: (Int) $id - The account id
-| @Param: (String) $password - The new account (unencrypted) password
-| @Return (Bool) - TRUE if the password is a success, FALSE otherwise
-|
-*/
-    public function change_password($id, $password)
-    {
-        // Get our news posts out of the database
-        $query = "SELECT `username`,`sha_pass_hash` FROM `account` WHERE `id`=?";
-        $user = $this->DB->query( $query, array($id) )->fetch_row();
-        
-        // If didnt find the username, return FALSE
-        if($user == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // SHA1 the password
-        $password = $this->encrypt_password($user['username'], $password);
-        
-        // Check for a password change, If old password matches current, no need to query the DB
-        if($password == $user['sha_pass_hash']) return TRUE;
-        
-        // Build our tables and values for Database insertion
-        $data = array(
-            'sha_pass_hash' => $password, 
-            'sessionkey' => NULL, 
-            'v' => NULL, 
-            's' => NULL
-        );
-        
-        // Update account information
-        $this->DB->update("account", $data, "`id`=".$id);
-        
-        // If we have an affected row, then we return TRUE
-        return ($this->DB->num_rows() > 0);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: change_email()
-| ---------------------------------------------------------------
-|
-| This function changes the email to an account
-|
-| @Param: (Int) $id - The account id
-| @Param: (String) $email - The new account email
-| @Return (Bool) - TRUE if the change is a success, FALSE otherwise
-|
-*/
-    public function change_email($id, $email)
-    {
-        // If didnt find the account, return FALSE
-        if($this->account_exists($id) == FALSE)
-        {
-            return FALSE;
-        }
-        
-        // Update account information
-        $this->DB->update("account", array('email' => $email), "`id`=".$id);
-        
-        // If we have an affected row, then we return TRUE
-        return ($this->DB->num_rows() > 0);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: fetch_account()
+| Method: fetchAccount()
 | ---------------------------------------------------------------
 |
 | This function queries the accounts table and pulls all the users
-|   information in a formated array
+|   information into an object
 |
 | @Param: (Int) $id - The account ID we are loading
-| @Return (Array) - returns the array of columns, FALSE otherwise
-|   @Return = array(
-|       'id' => Account Unique ID
-|       'username' => Account Unsername
-|       'email' => Account email
-|       'gmlevel' => GM level, in ManGOS Format (1 -4, no A-Z shit here)
-|       'joindate' => When the user joined***
-|       'locked' => Is the account locked? (1 = yes, 0 = no)
-|       'banned' => Is the account banned? (1 = yes, 0 = no)
-|       'last_login' => Users last login***
-|       'last_ip' => Users last seen IP
-|       'Expansion' => Expansion ID
-|   );
-|
-|   *** Date formated as so! (mysql timestamp) = date("Y-m-d H:i:s", $timestamp)
+| @Return (Object) - returns the account object
 |
 */
-    public function fetch_account($id)
+    public function fetchAccount($id)
     {
-        // Check the Realm DB for this username
-        $query = "SELECT * FROM `account` WHERE `id`= ?";
-        $temp = $this->DB->query( $query, array($id) )->fetch_row();
-        
-        // If the result is NOT false, we have a match, username is taken
-        if($temp !== FALSE)
-        {
-            return array(
-                'id' => $temp['id'],
-                'username' => $temp['username'],
-                'email' => $temp['email'],
-                //'gmlevel' => $temp['gmlevel'],
-                'joindate' => $temp['joindate'],
-                'locked' => $temp['locked'],
-                'banned' => (int) $this->account_banned($temp['id']),
-                'last_login' => $temp['last_login'],
-                'last_ip' => $temp['last_ip'],
-                'expansion' => $temp['expansion']
-            );
+        try {
+            $account = new Account($id, $this);
         }
-        return FALSE;
+        catch(\Exception $e) {
+            $account = false;
+        }
+        return $account;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_account_name()
-| ---------------------------------------------------------------
-|
-| This function queries the accounts table and gets the username
-| to the specific account ID
-|
-| @Param: (Int) $id - The id for the account
-| @Return (String) - Returns the account name, FALSE otherwise
-|
-*/
-    public function get_account_name($id)
-    {
-        // Build our query
-        $query = "SELECT `username` FROM `account` WHERE `id`= ?";
-        $temp = $this->DB->query( $query, array($id) )->fetch_column();
-        
-        return ($temp == false) ? false : $temp;
-    }
-    
-    
-/*
-| ---------------------------------------------------------------
-| Method: username_exists()
-| ---------------------------------------------------------------
-|
-| This function queries the accounts table and finds if the given
-|   username is already taken.
-|
-| @Param: (String) $username - The username we are checking for
-| @Return (Bool) - TRUE if the username is used already, FALSE otherwise
-|
-*/
-    public function username_exists($username)
-    {
-        // Check the Realm DB for this username
-        $query = "SELECT `id` FROM `account` WHERE `username`=?";
-        $res = $this->DB->query( $query, array($username) )->fetch_column();
-        
-        // If the result is NOT false, we have a match, username is taken
-        return ($res !== FALSE);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: account_exists()
+| Method: accountExists()
 | ---------------------------------------------------------------
 |
 | This function queries the accounts table and finds if the given
 |   account ID exists.
 |
-| @Param: (Int) $id - The account ID we are checking for
+| @Param: (Int | String) $id - The account ID we are checking for,
+|   or the account username
 | @Return (Bool) - TRUE if the id exists, FALSE otherwise
 |
 */
-    public function account_exists($id)
+    public function accountExists($id)
     {
-        // Check the Realm DB for this username
-        $query = "SELECT `username` FROM `account` WHERE `id`=?";
-        $res = $this->DB->query( $query, array($id) )->fetch_column();
-        
+        // Check the Realm DB for this username / account ID
+        if(is_numeric($id))
+            $query = "SELECT `username` FROM `account` WHERE `id`=?";
+        else
+            $query = "SELECT `id` FROM `account` WHERE `username` LIKE ? LIMIT 1";
+
         // If the result is NOT false, we have a match, username is taken
-        return ($res !== FALSE);
+        $res = $this->DB->query( $query, array($id) )->fetch_column();
+        return ($res !== false);
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: email_exists()
+| Method: emailExists()
 | ---------------------------------------------------------------
 |
 | This function queries the accounts table and finds if the given
@@ -361,14 +215,14 @@ class Trinity
 | @Return (Bool) - TRUE if the id exists, FALSE otherwise
 |
 */
-    public function email_exists($email)
+    public function emailExists($email)
     {
         // Check the Realm DB for this username
         $query = "SELECT `username` FROM `account` WHERE `email`=?";
         $res = $this->DB->query( $query, array($email) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        return ($res !== FALSE);
+        return ($res !== false);
     }
 
 /*
@@ -382,18 +236,11 @@ class Trinity
 | @Return (Bool) Returns TRUE if the account is banned
 |
 */
-    public function account_banned($account_id)
+    public function accountBanned($account_id)
     {
         $query = "SELECT COUNT(*) FROM `account_banned` WHERE `active`=1 AND `id`=?";
         $check = $this->DB->query( $query, array($account_id) )->fetch_column();
-        if ($check !== FALSE && $check > 0)
-        {
-            return TRUE; // Account is banned
-        }
-        else
-        {
-            return FALSE; // Account is not banned
-        }
+        return ($check !== FALSE && $check > 0) ? true : false;
     }
 
 /*
@@ -407,43 +254,11 @@ class Trinity
 | @Return (Bool) Returns TRUE if the account is banned
 |
 */
-    public function ip_banned($ip)
+    public function ipBanned($ip)
     {
         $query = "SELECT COUNT(*) FROM `ip_banned` WHERE `ip`=?";
         $check = $this->DB->query( $query, array($ip) )->fetch_column();
-        if ($check !== FALSE && $check > 0)
-        {
-            return TRUE; // Ip is banned
-        }
-        else
-        {
-            return FALSE; // Ip is not banned
-        }
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: account_locked()
-| ---------------------------------------------------------------
-|
-| Checks the realm database if the account is locked
-|
-| @Param: (Int) $account_id - The account id we are checking
-| @Return (Bool) Returns TRUE if the account is banned
-|
-*/
-    public function account_locked($account_id)
-    {
-        $query = "SELECT `locked` FROM `account` WHERE `id`=?";
-        $check = $this->DB->query( $query, array($account_id) )->fetch_column();
-        if($check !== FALSE && $check == 1)
-        {
-            return TRUE; // Account is locked
-        }
-        else
-        {
-            return FALSE; // Account is not locked
-        }
+        return ($check !== FALSE && $check > 0) ? true : false;
     }
     
 /*
@@ -461,14 +276,11 @@ class Trinity
 | @Return (Bool) TRUE on success, FALSE on failure
 |
 */ 
-    public function ban_account($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = FALSE)
+    public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = false)
     {
         
         // Check for account existance
-        if(!$this->account_exists($id))
-        {
-            return FALSE;
-        }
+        if(!$this->accountExists($id)) return false;
 
         // Make sure our unbandate is set, 1 year default
         ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
@@ -483,9 +295,9 @@ class Trinity
         $result = $this->DB->insert('account_banned', $data);
         
         // Do we ban the IP as well?
-        if($banip == TRUE && $result == TRUE)
+        if($banip == true && $result == true)
         {
-            return $this->ban_account_ip($id, $banreason, $unbandate, $bannedby);
+            return $this->banAccountIp($id, $banreason, $unbandate, $bannedby);
         }
         return $result;
     }
@@ -504,18 +316,15 @@ class Trinity
 | @Return (Bool) TRUE on success, FALSE on failure
 |
 */ 
-    public function ban_account_ip($id, $banreason, $unbandate = NULL, $bannedby = 'Admin')
+    public function banAccountIp($id, $banreason, $unbandate = NULL, $bannedby = 'Admin')
     {
         // Check for account existance
         $query = "SELECT `last_ip` FROM `account` WHERE `id`=?";
         $ip = $this->DB->query( $query, array($id) )->fetch_column();
-        if(!$ip)
-        {
-            return FALSE;
-        }
+        if(!$ip) return false;
         
         // Check if the IP is already banned or not
-        if( $this->ip_banned($ip) ) return TRUE;
+        if( $this->ipBanned($ip) ) return true;
 
         // Make sure our unbandate is set, 1 year default
         ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
@@ -531,7 +340,7 @@ class Trinity
     
 /*
 | ---------------------------------------------------------------
-| Method: unban_account()
+| Method: unbanAccount()
 | ---------------------------------------------------------------
 |
 | Un-Bans a user account
@@ -540,10 +349,10 @@ class Trinity
 | @Return (Bool) TRUE on success, FALSE on failure
 |
 */ 
-    public function unban_account($id)
+    public function unbanAccount($id)
     {
         // Check if the account is not Banned
-        if( !$this->account_banned($id) ) return TRUE;
+        if( !$this->accountBanned($id) ) return true;
         
         // Check for account existance
         return $this->DB->update("account_banned", array('active' => 0), "`id`=".$id);
@@ -560,18 +369,15 @@ class Trinity
 | @Return (Bool) TRUE on success, FALSE on failure
 |
 */ 
-    public function unban_account_ip($id)
+    public function unbanAccountIp($id)
     {
         // Check for account existance
         $query = "SELECT `last_ip` FROM `accounts` WHERE `id`=?";
         $ip = $this->DB->query( $query, array($id) )->fetch_column();
-        if(!$ip)
-        {
-            return FALSE;
-        }
+        if(!$ip) return false;
         
         // Check if the IP is banned or not
-        if( !$this->ip_banned($ip) ) return TRUE;
+        if( !$this->ipBanned($ip) ) return true;
         
         // Check for account existance
         return $this->DB->delete("ip_banned", "`ip`=".$ip);
@@ -588,10 +394,10 @@ class Trinity
 | @Return (Bool) TRUE on success, FALSE on failure
 |
 */ 
-    public function delete_account($id)
+    public function deleteAccount($id)
     {
         // Delete any bans
-        $this->unban_account($id);
+        $this->unbanAccount($id);
         
         // Delete the account
         return $this->DB->delete("account", "`id`=".$id);
@@ -599,76 +405,22 @@ class Trinity
     
 /*
 | ---------------------------------------------------------------
-| Method: lock_account()
+| Function: expansions()
 | ---------------------------------------------------------------
 |
-| Locks a user account
+| Returns an array of supported expansions by this realm. Donot
+| include expansions that arent supported in this array!
 |
-| @Param: (Int) $id - The account ID
-| @Return (Bool) TRUE on success, FALSE on failure
-|
-*/ 
-    public function lock_account($id)
-    {
-        // Check if the account is not Banned
-        if( $this->account_locked($id) ) return TRUE;
-        
-        // Check for account existance
-        return $this->DB->update("account", array('locked' => 1), "`id`=".$id);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: unlock_account()
-| ---------------------------------------------------------------
-|
-| UnLocks a user account
-|
-| @Param: (Int) $id - The account ID
-| @Return (Bool) TRUE on success, FALSE on failure
-|
-*/ 
-    public function unlock_account($id)
-    {
-        // Check if the account is not Banned
-        if( !$this->account_locked($id) ) return TRUE;
-        
-        // Check for account existance
-        return $this->DB->update("account", array('locked' => 0), "`id`=".$id);
-    }
-   
-/*
-| ---------------------------------------------------------------
-| Function: encrypt_password()
-| ---------------------------------------------------------------
-|
-|  Converts the Username / Password into a server specific encryption
-|
-| @Param: (String) $login - The username
-| @Param: (String) $pass - The password
-| @Return (Mixed) Returns the SHA1
-|
-*/
-    public function encrypt_password($login, $pass)
-    {
-        $user = strtoupper($login);
-        $pass = strtoupper($pass);
-        return SHA1($user.':'.$pass);
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: get_expansion_info()
-| ---------------------------------------------------------------
-|
-|  Gets information about account expansions.
-|
-| @Return (Array) Returns an array containing the expansions and 
-|    all relevant information.
+| @Return (Array)
+|   0 => None, Base Game
+|   1 => Burning Crusade
+|   2 => WotLK
+|   3 => Cata (If Supported)
+|   4 => MoP (If Supported)
 |
 */
     
-    public function get_expansion_info()
+    public function expansions()
     {
         // Expansion ID => Expansion Name
         return array(
@@ -680,65 +432,46 @@ class Trinity
     
 /*
 | ---------------------------------------------------------------
-| Function: get_expansion()
+| Function: expansionToText()
 | ---------------------------------------------------------------
 |
-|  Returns the name of the expansion from the given ID.
+| Returns the expansion text name
 |
-| @Param: (Int) $id - The account ID.
-| @Param: (Bool) $string - Whether or not to return the expansion ID 
-|   or the name of the expansion.
-| @Return (Mixed) Returns the current expansion (ID number or name) 
-|   on success, FALSE on failure.
+| @Return (String) Returns false if the expansion doesnt exist
 |
 */
     
-    public function get_expansion($id, $string = FALSE)
+    public function expansionToText($id = 0)
     {
-        // Fetch account, if it doesnt exists, return FALSE
-        $account = $this->fetch_account($id);
-        if( !$account ) return FALSE;
-        
-        // Do we return as a string, or expansion ID?
-        if( !$string )
-        {
-            return $account['expansion'];
-        }
-        else
-        {
-            // Get the expansion name string, and return it if it exists
-            $expansion_data = $this->get_expansion_info();
-            if( array_key_exists($expansion_data, $id) )
-            {
-                return $expansion_data[$id];
-            }
-            else
-            {
-                return FALSE;
-            }
-        }
+        // return all expansions if no id is passed
+        $exp = $this->expansions();
+        return (isset($exp[$id])) ? $exp[$id] : false;
     }
     
 /*
 | ---------------------------------------------------------------
-| Function: update_expansion()
+| Function: expansionToBit()
 | ---------------------------------------------------------------
 |
-|  Sets the expansion on the specified account.
+| Returns the Database ID of the given expansion
 |
-| @Param: (Int) $id - The expansion ID.
-| @Param: (Int) $account - The account ID.
-| @Return (Bool) FALSE on failure, TRUE on success.
+| @Return (Int)
 |
 */
     
-    public function update_expansion($id, $account)
+    public function expansionToBit($e)
     {
-        // If the account doesnt exist, return FALSE
-        if( !$this->account_exists($account) ) return FALSE;
-
-        // Update the account expansion
-        return $this->DB->update("account", array('expansion' => $id), "`id` = '$account'");
+        switch($e)
+        {
+            case 0: // Base Game
+                return 0;
+            case 1: // Burning Crusade
+                return 1;
+            case 2: // WotLK
+                return 2;
+            default: // WotLK
+                return 2;
+        }
     }
     
 /*
@@ -746,7 +479,7 @@ class Trinity
 | Function: get_account_count()
 | ---------------------------------------------------------------
 |
-|  This methods returns the number of accounts in the accounts table.
+| This methods returns the number of accounts in the accounts table.
 |
 | @Return (Int) The number of accounts
 |
@@ -762,7 +495,7 @@ class Trinity
 | Function: get_banned_count()
 | ---------------------------------------------------------------
 |
-|  This methods returns the number of accounts in the accounts table.
+| This methods returns the number of accounts in the accounts table.
 |
 | @Return (Int) The number of accounts
 |
@@ -778,7 +511,7 @@ class Trinity
 | Function: get_inactive_account_count()
 | ---------------------------------------------------------------
 |
-|  This methods returns the number of accounts that havent logged
+| This methods returns the number of accounts that havent logged
 |   in withing the last 3 months
 |
 | @Return (Int) The number of accounts
@@ -798,7 +531,7 @@ class Trinity
 | Function: get_active_account_count()
 | ---------------------------------------------------------------
 |
-|  This methods returns the number of accounts that have logged
+| This methods returns the number of accounts that have logged
 |   in withing the last 24 hours
 |
 | @Return (Int) The number of accounts
@@ -811,6 +544,317 @@ class Trinity
         $time = date("Y-m-d H:i:s", time() - 86400);
         $query = "SELECT COUNT(*) FROM `account` WHERE `last_login` BETWEEN  '$time' AND NOW()";
         return $this->DB->query( $query )->fetch_column();
+    }
+}
+
+/* 
+| -------------------------------------------------------------- 
+| Account Object
+| --------------------------------------------------------------
+|
+| Author:       Wilson212
+| Copyright:    Copyright (c) 2011, Steven Wilson
+| License:      GNU GPL v3
+|
+*/
+class Account
+{
+    // Our Parent wowlib class and Database connection
+    protected $DB;
+    protected $parent;
+    
+    // Have we changed our username? If so, we must have set a password!
+    protected $changed = false;
+    
+    // Our temporary password when the setPassword method is called
+    protected $password;
+    
+    // Account ID and User data array
+    protected $id;
+    protected $data = array();
+/*
+| ---------------------------------------------------------------
+| Constructor
+| ---------------------------------------------------------------
+|
+*/
+    public function __construct($acct, $parent)
+    {
+        // Load the realm database connection
+        $this->load = load_class('Loader');
+        $this->DB = $this->load->database('RDB');
+        
+        // Setup local user variables
+        $this->id = $acct;
+        $this->parent = $parent;
+        
+        // Load the user
+        // Check the Realm DB for this username
+        $query = "SELECT
+            `username`,
+            `sha_pass_hash`,
+            `sessionkey`,
+            `v`,
+            `s`,
+            `email`,
+            `joindate`,
+            `last_ip`,
+            `locked`,
+            `last_login`,
+            `expansion`
+            FROM `account` WHERE `id`= ?";
+        $this->data = $this->DB->query( $query, array($acct) )->fetch_row();
+        
+        // If the result is NOT false, we have a match, username is taken
+        if(!is_array($this->data)) throw new \Exception('User Doesnt Exist');
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: save()
+| ---------------------------------------------------------------
+|
+| This method saves the current account data in the database
+|
+| @Retrun: (Bool): If the save is successful, returns TRUE
+|
+*/ 
+    public function save()
+    {
+        // First we have to check if the username was changed
+        if($this->changed)
+        {
+            if(empty($this->password)) return false;
+            
+            // Make sure the sha hash is set correctly
+            $this->setPassword($this->password);
+        }
+        
+        return ($this->DB->update('account', $this->data, "`id`= $this->id") !== false);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getId()
+| ---------------------------------------------------------------
+|
+| This method returns the account id
+|
+| @Return (Int)
+|
+*/
+    public function getId()
+    {
+        return (int) $this->id;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getUsername()
+| ---------------------------------------------------------------
+|
+| This method returns the account username
+|
+| @Return (String)
+|
+*/
+    public function getUsername()
+    {
+        return $this->data['username'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getUsername()
+| ---------------------------------------------------------------
+|
+| This method returns the account email address
+|
+| @Return (String)
+|
+*/
+    public function getEmail()
+    {
+        return $this->data['email'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: joinDate()
+| ---------------------------------------------------------------
+|
+| This method returns the joindate for this account
+|
+| @Return (mixed)
+|
+*/
+    public function joinDate($asTimestamp = false)
+    {
+        return ($asTimestamp == true) ? strtotime($this->data['joindate']) : $this->data['joindate'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: lastLogin()
+| ---------------------------------------------------------------
+|
+| This method returns the last login date / time for this account
+|
+| @Return (Mixed)
+|
+*/
+    public function lastLogin($asTimestamp = false)
+    {
+        return ($asTimestamp == true) ? strtotime($this->data['last_login']) : $this->data['last_login'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getLastIp()
+| ---------------------------------------------------------------
+|
+| This method returns the accounts last seen IP
+|
+| @Return (String)
+|
+*/
+    public function getLastIp()
+    {
+        return $this->data['last_ip'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: isLocked()
+| ---------------------------------------------------------------
+|
+| This method returns if the account is locked
+|
+| @Return (Bool)
+|
+*/
+    public function isLocked()
+    {
+        return (bool) $this->data['locked'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getExpansion()
+| ---------------------------------------------------------------
+|
+| This method returns the accounts expansion ID
+|
+| @Return (Int)
+|
+*/
+    public function getExpansion($asText = false)
+    {
+        return ($asText == true) ? $this->parent->expansionToText($this->data['expansion']) : (int) $this->data['expansion'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setPassword()
+| ---------------------------------------------------------------
+|
+| This method sets the password to the account.
+|
+| @Param: (String) $password - The new account (unencrypted) password
+| @Return (Bool) - Returns false only if password is less then 3 chars.
+|
+*/
+    public function setPassword($password)
+    {
+        // Remove whitespace in password
+        $password = trim($password);
+        if(strlen($password) < 3) return false;
+        
+        // Set our passwords
+        $this->password = $password;
+        $this->data['sha_pass_hash'] = sha1( strtoupper($this->data['username'] .':'. $password) );
+        $this->data['sessionkey'] = null;
+        $this->data['v'] = null;
+        $this->data['s'] = null;
+        return true;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setUsername()
+| ---------------------------------------------------------------
+|
+| This method sets the username to the account.
+|
+| @Param: (String) $username - The new account username / login
+| @Return (Bool) - Returns false only if username is less then 3 chars.
+|
+*/
+    public function setUsername($username)
+    {
+        // Remove whitespace
+        $username = trim($username);
+        if(strlen($username) < 3) return false;
+        
+        // Set our username if its not the same as before
+        if($username != $this->data['username'])
+        {
+            $this->changed = true;
+            $this->data['username'] = $username;
+            return true;
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setEmail()
+| ---------------------------------------------------------------
+|
+| This method sets an accounts email address
+|
+| @Return (None)
+|
+*/
+    public function setEmail($email)
+    {
+        $this->data['email'] = $email;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setExpansion()
+| ---------------------------------------------------------------
+|
+| This method sets the expansion to the account.
+|
+| @Param: (Int) $e - Sets the expansion level of the account
+|   0 => None, Base Game
+|   1 => Burning Crusade
+|   2 => WotLK
+|   3 => Cata (If Supported)
+|   4 => MoP (If Supported)
+| @Return (None)
+|
+*/
+    public function setExpansion($e)
+    {
+        $this->data['expansion'] = $this->parent->expansionToBit($e);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: setLocked()
+| ---------------------------------------------------------------
+|
+| This method sets the locked status of an account
+|
+| @Return (None)
+|
+*/
+    public function setLocked($locked)
+    {
+        // Set to an integer
+        $this->data['locked'] = ($locked == true) ? 1 : 0;
     }
 }
 // EOF
