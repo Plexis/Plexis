@@ -4,6 +4,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<title>Frostbite :: 404 - Not Found</title>
 	<link rel="stylesheet" href="<?php echo $site_url; ?>/system/errors/css/404.css" type="text/css"/>
+	<style type="text/css">
+		@font-face {
+			font-family: Square;
+			src: url( '<?php echo $site_url; ?>/system/library/fonts/Square.ttf' );
+		}
+	</style>
 </head>
 <body>
 	<div id="container">
