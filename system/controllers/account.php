@@ -519,17 +519,31 @@ class Account extends Core\Controller
                     $sa = $this->Input->post('answer', TRUE);
                     
                     // Fetch account data from the realm
-                    $data = $this->realm->fetch_account($this->user['id']);
+                    $Account = $this->realm->fetchAccount($this->user['id']);
 
                     // Secret question / answer processing
                     if($sq != NULL && $sa != NULL)
                     {
                         // Set recovery data
-                        $set = $this->account->set_recovery_data($data['username'], $sq, $sa);
+                        $set = $this->account->set_recovery_data($Account->getUsername(), $sq, $sa);
                         
                         // Process the result
                         if($set == TRUE)
                         {
+                            // Get our banned / active / locked status
+                            if($this->realm->accountBanned($this->user['id']))
+                                $status = '<font color="red">Banned</font>';
+                            elseif($Account->isLocked())
+                                $status = '<font color="red">Locked</font>';
+                            else
+                                $status = '<font color="green">Active</font>';
+                            
+                            // Add out custom data
+                            $data = array(
+                                'status' => $status,
+                                'joindate' => date('F j, Y', strtotime($this->user['registered'])),
+                            );
+                            
                             // Load the account dashboard, and we are done :)
                             output_message('success', 'account_recovery_set_success');
                             $this->load->view('index', $data);
