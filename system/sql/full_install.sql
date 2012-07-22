@@ -20,7 +20,7 @@ CREATE TABLE `pcms_accounts` (
   `vote_points_earned` int(10) unsigned NOT NULL DEFAULT '0',
   `vote_points_spent` int(10) unsigned NOT NULL DEFAULT '0',
   `donations` float NOT NULL DEFAULT '0',
-  `_account_recovery` text COMMENT '// Hashed account revcovery question and answer',
+  `_account_recovery` text COMMENT 'Hashed account revcovery question and answer',
   `_activation_code` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -215,7 +215,7 @@ CREATE TABLE `pcms_reg_keys` (
   `key` varchar(30) NOT NULL,
   `assigned` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'If set to 1, this key has already been giving away, and waiting to be used.',
   `sponser` int(11) NOT NULL COMMENT 'Account ID of the sponser',
-  `usedby` int(11) NOT NULL COMMENT 'The account ID of the user who registered with this code (for stat tracking purposes).',
+  `usedby` int(11) NOT NULL DEFAULT '0' COMMENT 'The account ID of the user who registered with this code (for stat tracking purposes).',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- ----------------------------
@@ -269,7 +269,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.18');
+INSERT INTO `pcms_versions` VALUES ('database', '0.19');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`
