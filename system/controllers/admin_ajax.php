@@ -689,7 +689,7 @@ class Admin_ajax extends Core\Controller
                 // Loop, each character, and format the rows accordingly
                 foreach($output['aaData'] as $key => $value)
                 {
-                    $u = $this->realm->fetch_account($value[7]);
+                    $Account = $this->realm->fetchAccount($value[7]);
                     $g = $value[5]; // Gender
                     $r = $value[3]; // Race
                     $race = $this->wowlib->characters->raceToText($r);
@@ -698,7 +698,7 @@ class Admin_ajax extends Core\Controller
                     $output['aaData'][$key][3] = '<center><img src="'. BASE_URL .'/assets/images/icons/race/'. $r .'-'. $g .'.gif" title="'.$race.'" alt="'.$race.'"></center>';
                     $output['aaData'][$key][4] = '<center><img src="'. BASE_URL .'/assets/images/icons/class/'. $value[4] .'.gif" title="'.$class.'" alt="'.$class.'"></center>';
                     $output['aaData'][$key][5] = $zone;
-                    $output['aaData'][$key][6] = '<a href="'. BASE_URL .'/admin/users/'. $u['username'] .'">'. $u['username'] .'</a>';
+                    $output['aaData'][$key][6] = '<a href="'. BASE_URL .'/admin/users/'. $Account->getUsername() .'">'. $Account->getUsername() .'</a>';
                     $output['aaData'][$key][7] = '<a href="'. BASE_URL .'/admin/characters/'. $realm .'/'. $value[0] .'">Edit Character</a>';
                     unset($output['aaData'][$key][8]);
                 }

@@ -21,7 +21,6 @@ if( !defined('CMS_VERSION') ) die('Unauthorized');
 class Wowlib
 {
     // Our DB Connections
-    protected $DB;
     protected $CDB;
     protected $WDB;
     
@@ -43,10 +42,6 @@ class Wowlib
     {
         // Load the Loader class
         $this->load = load_class('Loader');
-        
-        // Load the Database and Realm database connections
-        $this->DB = $this->load->database('DB');
-        $this->realm = $this->load->realm();
         
         // Turn our connection info into an array
         $world = unserialize($data['world_db']);
@@ -77,10 +72,7 @@ class Wowlib
     public function __get($name)
     {
         // Just return the extension if it exists
-        if(isset($this->{$name}) && is_object($this->{$name}))
-        {
-            return $this->{$name};
-        }
+        if(isset($this->{$name}) && is_object($this->{$name})) return $this->{$name};
         
         // Create our classname
         $class = ucfirst( strtolower($name) );
@@ -96,7 +88,7 @@ class Wowlib
         {
             // Extension doesnt exists :O
             show_error('Failed to load wowlib extentsion %s', array($name), E_ERROR);
-            return FALSE;
+            return false;
         }
         
         // Load the class

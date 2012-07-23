@@ -916,8 +916,11 @@ class Admin extends Core\Controller
                 $flags[] = array('label' => $key, 'name' => $name, 'enabled' => $has_flag[$key]);
             }
             
-            // Build our page title / desc, then load the view
+            // Fetch account and character postion
+            $Account = $this->realm->fetchAccount($char->getAccountId());
             $pos = $char->getPosition();
+            
+            // Build our page title / desc, then load the view
             $data = array(
                 'page_title' => "Character Editor",
                 'page_desc' => "This page allows you to edit character information.",
@@ -929,7 +932,7 @@ class Admin extends Core\Controller
                     'money' => $char->getMoney(),
                     'xp' => $char->getXp(),
                 ),
-                'account' => $this->realm->get_account_name($char->getAccountId()),
+                'account' => $Account->getUsername(),
                 'race' => $char->getRace(true),
                 'class' => $char->getClass(true),
                 'zone' => $Lib->zone->name($pos['zone']),
