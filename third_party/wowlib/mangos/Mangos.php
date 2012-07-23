@@ -7,7 +7,7 @@
 | --------------------------------------------------------------
 |
 | Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
@@ -552,7 +552,7 @@ class Mangos
 | --------------------------------------------------------------
 |
 | Author:       Wilson212
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */

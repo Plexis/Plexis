@@ -7,7 +7,7 @@
 | --------------------------------------------------------------
 |
 | Author:       Tony Hudgins
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
@@ -277,7 +277,6 @@ class Arcemu
 */ 
     public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = FALSE)
     {
-        
         // Check for account existance
         if(!$this->accountExists($id)) return false;
 
@@ -292,7 +291,7 @@ class Arcemu
         // Do we ban the IP as well?
         if($banip == TRUE && $result == TRUE)
         {
-            return $this->ban_account_ip($id, $banreason, $unbandate, $bannedby);
+            return $this->banAccountIp($id, $banreason, $unbandate, $bannedby);
         }
         return $result;
     }
@@ -389,9 +388,6 @@ class Arcemu
 */ 
     public function deleteAccount($id)
     {
-        // Delete any bans
-        $this->unban_account($id);
-        
         // Delete the account
         return $this->DB->delete("accounts", "`acct`=".$id);
     }
@@ -576,8 +572,8 @@ class Arcemu
 | Account Object
 | --------------------------------------------------------------
 |
-| Author:       Wilson212
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Author:       Steven Wilson
+| Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */

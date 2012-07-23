@@ -24,8 +24,7 @@ class Wowlib
     protected $CDB;
     protected $WDB;
     
-    // Out realm and realm info arrays
-    protected $realm;
+    // Out realm info array
     protected $realm_info;
     
     // Our emulator
