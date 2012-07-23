@@ -30,9 +30,6 @@ class Realm implements iRealm
         // Load our realm dataabase connetion
         $this->load = load_class('Loader');
         $this->DB = $this->load->database('RDB');
-        
-        // Include the iAccount Interface
-        require_once path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iAccount.php');
     }
     
 /*
@@ -580,6 +577,10 @@ class Realm implements iRealm
 | License:      GNU GPL v3
 |
 */
+
+// Include the iAccount Interface before loading the class
+require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iAccount.php');
+
 class Account implements iAccount
 {
     // Our Parent wowlib class and Database connection

@@ -76,10 +76,6 @@ class Wowlib
             return false;
         }
         
-        // Include the interface for the class if it exists!
-        $path = path( ROOT, 'third_party', 'wowlib', 'interfaces', "i{$class}.php");
-        if( file_exists( $path ) ) include_once($path);
-        
         // Load the extension file
         require_once( $file );
         
