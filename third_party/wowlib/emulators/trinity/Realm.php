@@ -6,14 +6,17 @@
 |
 | --------------------------------------------------------------
 |
-| Author:       Tony Hudgins
+| Author:       Steven Wilson
 | Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
 namespace Wowlib;
 
-class Arcemu
+// Include the iRealm Interface before loading the class
+require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iRealm.php');
+
+class Realm implements iRealm
 {
 
 /*
@@ -22,10 +25,11 @@ class Arcemu
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
+        // Load our realm dataabase connetion
         $this->load = load_class('Loader');
-        $this->DB = $this->load->database( 'RDB' );
+        $this->DB = $this->load->database('RDB');
     }
     
 /*
@@ -41,11 +45,8 @@ class Arcemu
     public function realmlist()
     {
         // Grab Realms
-        //$query = "SELECT * FROM `realmlist`";
-        //return $this->DB->query( $query )->fetch_array();
-        
-        //This function doesn't return anything since ArcEmu doesn't store the realms in a data table.
-        return array();
+        $query = "SELECT * FROM `realmlist` ORDER BY `id`";
+        return $this->DB->query( $query )->fetch_array();
     }
     
 /*
@@ -62,11 +63,8 @@ class Arcemu
     public function fetchRealm($id)
     {
         // Grab Realms
-        //$query = "SELECT * FROM `realmlist` WHERE `id`=?";
-        //return $this->DB->query( $query, array($id) )->fetch_row();
-        
-        //Again, doesn't return anything.
-        return array();
+        $query = "SELECT * FROM `realmlist` WHERE `id`=?";
+        return $this->DB->query( $query, array($id) )->fetch_row();
     }
     
 /*
@@ -82,7 +80,10 @@ class Arcemu
 */
     public function uptime($id)
     {
-        return FALSE;
+        // Grab Realms
+        $query = "SELECT MAX(`starttime`) FROM `uptime` WHERE `realmid`=?";
+        $result = $this->DB->query( $query, array($id) )->fetch_column();
+        return (time() - $result);
     }
     
 /*
@@ -97,7 +98,7 @@ class Arcemu
 | @Param: (String) $password - The new account (unencrypted) password
 | @Param: (String) $email - The new account email
 | @Param: (String) $ip - The Registeree's IP address
-| @Return: Returns the new Account ID on success, FALSE otherwise
+| @Return (Mixed) - Returns the new Account ID on success, FALSE otherwise
 |
 */
     public function createAccount($username, $password, $email = NULL, $ip = '0.0.0.0')
@@ -108,19 +109,18 @@ class Arcemu
         // SHA1 the password
         $user = strtoupper($username);
         $pass = strtoupper($password);
-        $sha = sha1($user.':'.$pass);
+        $password = sha1($user.':'.$pass);
         
         // Build our tables and values for Database insertion
         $data = array(
-            'login' => $username, 
-            'password' => $password, 
-            'encrypted_password' => $sha,
+            'username' => $username, 
+            'sha_pass_hash' => $password, 
             'email' => $email, 
-            'lastip' => $ip
+            'last_ip' => $ip
         );
         
         // Insert into the database
-        $this->DB->insert("accounts", $data);
+        $this->DB->insert("account", $data);
         
         // If we have an affected row, then we return TRUE
         return ($this->DB->num_rows() > 0) ? $this->DB->last_insert_id() : false;
@@ -131,26 +131,31 @@ class Arcemu
 | Method: validate()
 | ---------------------------------------------------------------
 |
-| This function takes a username and password, and logins in with
+| This method takes a username and password, and logins in with
 |   that information. If the password matches the pasword in the
 |   database, we return the account id. Else we return FALSE,
 |
 | @Param: (String) $username - The account username
 | @Param: (String) $password - The account (unencrypted) password
-| @Return (Mixed) - Returns account ID on success, FALSE otherwise
+| @Return (Bool) - Returns TRUE on success, FALSE otherwise
 |
 */
     public function validate($username, $password)
     {
+        // SHA1 the password
+        $user = strtoupper($username);
+        $pass = strtoupper($password);
+        $password = sha1($user.':'.$pass);
+        
         // Load the users info from the Realm DB
-        $query = "SELECT `acct`, `password` FROM `accounts` WHERE `login`=?";
+        $query = "SELECT `id`, `sha_pass_hash` FROM `account` WHERE `username`=?";
         $result = $this->DB->query( $query, array($username) )->fetch_row();
         
         // Make sure the username exists!
         if(!is_array($result)) return false;
         
         // If the result was false, then username is no good. Also match passwords.
-        return ( $result['password'] == $password ) ? $result['acct'] : false;
+        return ( $result['sha_pass_hash'] == $password ) ? $result['id'] : false;
     }
     
 /*
@@ -161,12 +166,13 @@ class Arcemu
 | This function queries the accounts table and pulls all the users
 |   information into an object
 |
-| @Param: (Int) $id - The account ID we are loading
+| @Param: (Int | String) $id - The account ID or Username we are loading
 | @Return (Object) - returns the account object
 |
 */
     public function fetchAccount($id)
     {
+        // Try to load the class
         try {
             $account = new Account($id, $this);
         }
@@ -186,16 +192,16 @@ class Arcemu
 |
 | @Param: (Int | String) $id - The account ID we are checking for,
 |   or the account username
-| @Return (Bool) - TRUE if the id exists, FALSE otherwise
+| @Return (Int) - TRUE if the id exists, FALSE otherwise
 |
 */
     public function accountExists($id)
     {
         // Check the Realm DB for this username / account ID
         if(is_numeric($id))
-            $query = "SELECT `login` FROM `accounts` WHERE `id`=?";
+            $query = "SELECT `username` FROM `account` WHERE `id`=?";
         else
-            $query = "SELECT `id` FROM `accounts` WHERE `username` LIKE ? LIMIT 1";
+            $query = "SELECT `id` FROM `account` WHERE `username` LIKE ? LIMIT 1";
 
         // If the result is NOT false, we have a match, username is taken
         $res = $this->DB->query( $query, array($id) )->fetch_column();
@@ -217,16 +223,16 @@ class Arcemu
     public function emailExists($email)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `login` FROM `accounts` WHERE `email`=?";
+        $query = "SELECT `username` FROM `account` WHERE `email`=?";
         $res = $this->DB->query( $query, array($email) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        return ($res !== FALSE);
+        return ($res !== false);
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: accountBanned()
+| Function: account_banned()
 | ---------------------------------------------------------------
 |
 | Checks the realm database if the account is banned
@@ -237,14 +243,14 @@ class Arcemu
 */
     public function accountBanned($account_id)
     {
-        $query = "SELECT COUNT(*) FROM `accounts` WHERE `banned` > 0 AND `acct` = ?;";
+        $query = "SELECT COUNT(*) FROM `account_banned` WHERE `active`=1 AND `id`=?";
         $check = $this->DB->query( $query, array($account_id) )->fetch_column();
         return ($check !== FALSE && $check > 0) ? true : false;
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: ipBanned()
+| Function: ip_banned()
 | ---------------------------------------------------------------
 |
 | Checks the realm database if the users IP is banned
@@ -255,14 +261,14 @@ class Arcemu
 */
     public function ipBanned($ip)
     {
-        $query = "SELECT COUNT(*) FROM `ipbans` WHERE `ip`=?";
+        $query = "SELECT COUNT(*) FROM `ip_banned` WHERE `ip`=?";
         $check = $this->DB->query( $query, array($ip) )->fetch_column();
         return ($check !== FALSE && $check > 0) ? true : false;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: banAccount()
+| Method: ban_account()
 | ---------------------------------------------------------------
 |
 | Bans a user account
@@ -275,26 +281,34 @@ class Arcemu
 | @Return (Bool) TRUE on success, FALSE on failure
 |
 */ 
-    public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = FALSE)
+    public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = false)
     {
         // Check for account existance
         if(!$this->accountExists($id)) return false;
 
         // Make sure our unbandate is set, 1 year default
-        if($unbandate == NULL) $unbandate = (time() + 31556926);
+        ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
         $data = array(
-            'banned' => $unbandate, 
-            'banreason' => $banreason
+            'id' => $id,
+            'bandate' => time(), 
+            'unbandate' => $unbandate, 
+            'bannedby' => $bannedby, 
+            'banreason' => $banreason, 
+            'active' => 1
         ); 
-        $result = $this->DB->update('accounts', $data, "`acct` = '$id'");
+        $result = $this->DB->insert('account_banned', $data);
         
         // Do we ban the IP as well?
-        return ($banip == true) ? $this->banAccountIp($id, $banreason, $unbandate, $bannedby) : $result;
+        if($banip == true && $result == true)
+        {
+            return $this->banAccountIp($id, $banreason, $unbandate, $bannedby);
+        }
+        return $result;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: banAccountIp()
+| Method: ban_account_ip()
 | ---------------------------------------------------------------
 |
 | Bans an accounts IP address
@@ -309,7 +323,7 @@ class Arcemu
     public function banAccountIp($id, $banreason, $unbandate = NULL, $bannedby = 'Admin')
     {
         // Check for account existance
-        $query = "SELECT `lastip` FROM `accounts` WHERE `acct`=?";
+        $query = "SELECT `last_ip` FROM `account` WHERE `id`=?";
         $ip = $this->DB->query( $query, array($id) )->fetch_column();
         if(!$ip) return false;
         
@@ -317,13 +331,15 @@ class Arcemu
         if( $this->ipBanned($ip) ) return true;
 
         // Make sure our unbandate is set, 1 year default
-        if($unbandate == NULL) $unbandate = (time() + 31556926);
+        ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
         $data = array(
             'ip' => $ip,
-            'expire' => $unbandate,
+            'bandate' => time(), 
+            'unbandate' => $unbandate, 
+            'bannedby' => $bannedby, 
             'banreason' => $banreason, 
         ); 
-        return $this->DB->insert('ipbans', $data);
+        return $this->DB->insert('ip_banned', $data);
     }
     
 /*
@@ -343,12 +359,12 @@ class Arcemu
         if( !$this->accountBanned($id) ) return true;
         
         // Check for account existance
-        return $this->DB->update("accounts", array('banned' => 0, 'banreason' => ''), "`acct`=".$id);
+        return $this->DB->update("account_banned", array('active' => 0), "`id`=".$id);
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: unbanAccountIp()
+| Method: unban_account_ip()
 | ---------------------------------------------------------------
 |
 | Un-Bans a users account IP
@@ -360,7 +376,7 @@ class Arcemu
     public function unbanAccountIp($id)
     {
         // Check for account existance
-        $query = "SELECT `lastip` FROM `accounts` WHERE `acct`=?";
+        $query = "SELECT `last_ip` FROM `accounts` WHERE `id`=?";
         $ip = $this->DB->query( $query, array($id) )->fetch_column();
         if(!$ip) return false;
         
@@ -368,12 +384,12 @@ class Arcemu
         if( !$this->ipBanned($ip) ) return true;
         
         // Check for account existance
-        return $this->DB->delete("ipbans", "`ip`=".$ip);
+        return $this->DB->delete("ip_banned", "`ip`=".$ip);
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: deleteAccount()
+| Method: delete_account()
 | ---------------------------------------------------------------
 |
 | Un-Bans a users account IP
@@ -384,8 +400,11 @@ class Arcemu
 */ 
     public function deleteAccount($id)
     {
+        // Delete any bans
+        $this->unbanAccount($id);
+        
         // Delete the account
-        return $this->DB->delete("accounts", "`acct`=".$id);
+        return $this->DB->delete("account", "`id`=".$id);
     }
     
 /*
@@ -451,39 +470,9 @@ class Arcemu
             case 0: // Base Game
                 return 0;
             case 1: // Burning Crusade
-                return 8;
-            case 2: // WotLK
-                return 24;
-            default: // WotLK
-                return 24;
-        }
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Function: expansionToBit()
-| ---------------------------------------------------------------
-|
-| Returns the expansion ID based off of the given Database ID of 
-|   expansion. This only reflects Arcemu really...
-|
-| @Return (Int)
-|
-*/
-    
-    public function bitToExpansion($e)
-    {
-        switch($e)
-        {
-            case 0: // Base Game
-                return 0;
-            case 8: // Burning Crusade
                 return 1;
-            case 16: // WotLK (no BC)
-            case 24: // WotLK
+            case 2: // WotLK
                 return 2;
-            case 36:
-                return 3;
             default: // WotLK
                 return 2;
         }
@@ -502,7 +491,7 @@ class Arcemu
     
     public function numAccounts()
     {
-        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts`")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`id`) FROM `account`")->fetch_column();
     }
     
 /*
@@ -518,7 +507,7 @@ class Arcemu
     
     public function numBannedAccounts()
     {
-        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts` WHERE `banned` > 0")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`id`) FROM `account_banned` WHERE `active` = 1")->fetch_column();
     }
     
 /*
@@ -537,7 +526,7 @@ class Arcemu
     {
         // 90 days or older
         $time = time() - 7776000;
-        $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE UNIX_TIMESTAMP(`lastlogin`) <  $time";
+        $query = "SELECT COUNT(`id`) FROM `account` WHERE UNIX_TIMESTAMP(`last_login`) <  $time";
         return $this->DB->query( $query )->fetch_column();
     }
     
@@ -557,23 +546,26 @@ class Arcemu
     {
         // 90 days or older
         $time = date("Y-m-d H:i:s", time() - 86400);
-        $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE `lastlogin` BETWEEN  '$time' AND NOW()";
+        $query = "SELECT COUNT(`id`) FROM `account` WHERE `last_login` BETWEEN  '$time' AND NOW()";
         return $this->DB->query( $query )->fetch_column();
     }
 }
-
 
 /* 
 | -------------------------------------------------------------- 
 | Account Object
 | --------------------------------------------------------------
 |
-| Author:       Steven Wilson
+| Author:       Wilson212
 | Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
-class Account
+
+// Include the iAccount Interface before loading the class
+require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iAccount.php');
+
+class Account implements iAccount
 {
     // Our Parent wowlib class and Database connection
     protected $DB;
@@ -586,7 +578,6 @@ class Account
     protected $password;
     
     // Account ID and User data array
-    protected $id;
     protected $data = array();
 /*
 | ---------------------------------------------------------------
@@ -604,22 +595,24 @@ class Account
         $this->parent = $parent;
         
         // Prepare the column name for the WHERE statement based off of $acct type
-        $col = (is_numeric($acct)) ? 'acct' : 'login';
+        $col = (is_numeric($acct)) ? 'id' : 'username';
         
         // Load the user
         // Check the Realm DB for this username
         $query = "SELECT
-            `acct`,
-            `login`,
-            `password`,
-            `encrypted_password`,
-            `banned`,
+            `id`,
+            `username`,
+            `sha_pass_hash`,
+            `sessionkey`,
+            `v`,
+            `s`,
             `email`,
-            `lastip`,
+            `joindate`,
+            `last_ip`,
             `locked`,
-            `lastlogin`,
-            `flags`
-            FROM `accounts` WHERE `{$col}`= ?";
+            `last_login`,
+            `expansion`
+            FROM `account` WHERE `{$col}`= ?";
         $this->data = $this->DB->query( $query, array($acct) )->fetch_row();
         
         // If the result is NOT false, we have a match, username is taken
@@ -647,7 +640,7 @@ class Account
             $this->setPassword($this->password);
         }
         
-        return ($this->DB->update('accounts', $this->data, "`acct`= $this->id") !== false);
+        return ($this->DB->update('account', $this->data, "`id`= $this->id") !== false);
     }
     
 /*
@@ -662,7 +655,7 @@ class Account
 */
     public function getId()
     {
-        return (int) $this->data['acct'];
+        return (int) $this->data['id'];
     }
     
 /*
@@ -670,19 +663,19 @@ class Account
 | Method: getUsername()
 | ---------------------------------------------------------------
 |
-| This method returns the account login
+| This method returns the account username
 |
 | @Return (String)
 |
 */
     public function getUsername()
     {
-        return $this->data['login'];
+        return $this->data['username'];
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: getEmail()
+| Method: getUsername()
 | ---------------------------------------------------------------
 |
 | This method returns the account email address
@@ -707,8 +700,7 @@ class Account
 */
     public function joinDate($asTimestamp = false)
     {
-        // Arcemu does not support this
-        return false;
+        return ($asTimestamp == true) ? strtotime($this->data['joindate']) : $this->data['joindate'];
     }
     
 /*
@@ -723,7 +715,7 @@ class Account
 */
     public function lastLogin($asTimestamp = false)
     {
-        return ($asTimestamp == true) ? strtotime($this->data['lastlogin']) : $this->data['lastlogin'];
+        return ($asTimestamp == true) ? strtotime($this->data['last_login']) : $this->data['last_login'];
     }
     
 /*
@@ -738,7 +730,7 @@ class Account
 */
     public function getLastIp()
     {
-        return $this->data['lastip'];
+        return $this->data['last_ip'];
     }
     
 /*
@@ -753,7 +745,7 @@ class Account
 */
     public function isLocked()
     {
-        return (bool) $this->data['banned'];
+        return (bool) $this->data['locked'];
     }
     
 /*
@@ -768,8 +760,7 @@ class Account
 */
     public function getExpansion($asText = false)
     {
-        $id = $this->bitToExpansion($this->data['flags']);
-        return ($asText == true) ? $this->parent->expansionToText($id) : $id;
+        return ($asText == true) ? $this->parent->expansionToText($this->data['expansion']) : (int) $this->data['expansion'];
     }
     
 /*
@@ -791,8 +782,10 @@ class Account
         
         // Set our passwords
         $this->password = $password;
-        $this->data['encrypted_password'] = sha1( strtoupper($this->data['login'] .':'. $password) );
-        $this->data['password'] = $password;
+        $this->data['sha_pass_hash'] = sha1( strtoupper($this->data['username'] .':'. $password) );
+        $this->data['sessionkey'] = null;
+        $this->data['v'] = null;
+        $this->data['s'] = null;
         return true;
     }
     
@@ -814,10 +807,10 @@ class Account
         if(strlen($username) < 3) return false;
         
         // Set our username if its not the same as before
-        if($username != $this->data['login'])
+        if($username != $this->data['username'])
         {
             $this->changed = true;
-            $this->data['login'] = $username;
+            $this->data['username'] = $username;
             return true;
         }
     }
@@ -855,7 +848,7 @@ class Account
 */
     public function setExpansion($e)
     {
-        $this->data['flags'] = $this->parent->expansionToBit($e);
+        $this->data['expansion'] = $this->parent->expansionToBit($e);
     }
     
 /*
@@ -870,8 +863,8 @@ class Account
 */
     public function setLocked($locked)
     {
-        // Arcemu doesnt support this
-        return false;
+        // Set to an integer
+        $this->data['locked'] = ($locked == true) ? 1 : 0;
     }
 }
 // EOF

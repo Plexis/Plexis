@@ -4,8 +4,7 @@
             <h1>Remote Updater</h1><span></span>
         </div>
         <div class="block-content">
-            <div class="alert warning">Please note this is still in development and may cause errors!</div>
-            
+
             <!-- Progess of update -->
             <div id="update" style="display: none; padding: 25px;">
                 <p><center>Updating... Please do not refresh the screen!</center></p>

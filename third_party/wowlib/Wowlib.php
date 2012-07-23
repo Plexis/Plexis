@@ -21,13 +21,12 @@ if( !defined('CMS_VERSION') ) die('Unauthorized');
 class Wowlib
 {
     // Our DB Connections
-    protected $CDB;
-    protected $WDB;
+    public $RDB;
+    public $CDB;
+    public $WDB;
     
-    // Out realm info array
-    protected $realm_info;
-    
-    // Our emulator
+    // Out wowlib driver and emulator
+    protected $driver;
     protected $emulator;
     
 
@@ -37,29 +36,19 @@ class Wowlib
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($data)
+    public function __construct($driver, $char, $world)
     {
         // Load the Loader class
         $this->load = load_class('Loader');
         
-        // Turn our connection info into an array
-        $world = unserialize($data['world_db']);
-        $char = unserialize($data['char_db']);
-        
         // Set the connections into the connection variables
+        $this->RDB = $this->load->database('RDB', false, true);
         $this->CDB = $this->load->database($char, false, true);
         $this->WDB = $this->load->database($world, false, true);
-        
-        // Throw an exception if we cant establish connections
-        if(!$this->CDB || !$this->WDB)
-        {
-            throw new \Exception('Failed to load database connections.');
-            return;
-        }
-        
-        // Finally set our class realm variable
-        $this->realm_info = $data;
+
+        // Finally set our emulator and driver variables
         $this->emulator = config('emulator');
+        $this->driver = $driver;
     }
     
 /*
@@ -71,27 +60,37 @@ class Wowlib
     public function __get($name)
     {
         // Just return the extension if it exists
-        if(isset($this->{$name}) && is_object($this->{$name})) return $this->{$name};
+        $name = strtolower($name);
+        if(isset($this->{$name})) return $this->{$name};
         
         // Create our classname
-        $class = ucfirst( strtolower($name) );
-        $libname = strtolower($this->realm_info['driver']);
+        $class = ucfirst( $name );
+        $driver = strtolower($this->driver);
         
         // Check for the extension
-		$file = path( ROOT, "third_party", "wowlib", $this->emulator, $libname, $class . ".php" );
-        if( !file_exists( $file ) ) 
+		$file = path( ROOT, 'third_party', 'wowlib', 'emulators', $this->emulator, $driver, $class .'.php' );
+        if( !file_exists( $file ) )
         {
             // Extension doesnt exists :O
             show_error('Failed to load wowlib extentsion %s', array($name), E_ERROR);
             return false;
         }
         
+        // Include the interface for the class if it exists!
+        $path = path( ROOT, 'third_party', 'wowlib', 'interfaces', "i{$class}.php");
+        if( file_exists( $path ) ) include_once($path);
+        
         // Load the extension file
         require_once( $file );
         
         // Load the class
-        $class = "\\Wowlib\\". ucfirst($this->realm_info['driver']) ."\\". $class;
-        $this->{$name} = new $class($this->CDB, $this->WDB);
+        $class = "\\Wowlib\\{$this->driver}\\". $class;
+        try {
+            $this->{$name} = new $class($this);
+        }
+        catch(\Exception $e) {
+            $this->{$name} = false;
+        }
         return $this->{$name};
     }
 }

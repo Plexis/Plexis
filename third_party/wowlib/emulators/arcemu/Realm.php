@@ -6,14 +6,17 @@
 |
 | --------------------------------------------------------------
 |
-| Author:       Steven Wilson
+| Author:       Tony Hudgins
 | Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
 namespace Wowlib;
 
-class Mangos
+// Include the iRealm Interface before loading the class
+require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iRealm.php');
+
+class Realm implements iRealm
 {
 
 /*
@@ -22,10 +25,14 @@ class Mangos
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
+        // Load our realm dataabase connetion
         $this->load = load_class('Loader');
         $this->DB = $this->load->database('RDB');
+        
+        // Include the iAccount Interface
+        require_once path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iAccount.php');
     }
     
 /*
@@ -41,8 +48,11 @@ class Mangos
     public function realmlist()
     {
         // Grab Realms
-        $query = "SELECT * FROM `realmlist` ORDER BY `id`";
-        return $this->DB->query( $query )->fetch_array();
+        //$query = "SELECT * FROM `realmlist`";
+        //return $this->DB->query( $query )->fetch_array();
+        
+        //This function doesn't return anything since ArcEmu doesn't store the realms in a data table.
+        return array();
     }
     
 /*
@@ -59,8 +69,11 @@ class Mangos
     public function fetchRealm($id)
     {
         // Grab Realms
-        $query = "SELECT * FROM `realmlist` WHERE `id`=?";
-        return $this->DB->query( $query, array($id) )->fetch_row();
+        //$query = "SELECT * FROM `realmlist` WHERE `id`=?";
+        //return $this->DB->query( $query, array($id) )->fetch_row();
+        
+        //Again, doesn't return anything.
+        return array();
     }
     
 /*
@@ -76,10 +89,7 @@ class Mangos
 */
     public function uptime($id)
     {
-        // Grab Realms
-        $query = "SELECT MAX(`starttime`) FROM `uptime` WHERE `realmid`=?";
-        $result = $this->DB->query( $query, array($id) )->fetch_column();
-        return (time() - $result);
+        return FALSE;
     }
     
 /*
@@ -94,7 +104,7 @@ class Mangos
 | @Param: (String) $password - The new account (unencrypted) password
 | @Param: (String) $email - The new account email
 | @Param: (String) $ip - The Registeree's IP address
-| @Return (Mixed) - Returns the new Account ID on success, FALSE otherwise
+| @Return: Returns the new Account ID on success, FALSE otherwise
 |
 */
     public function createAccount($username, $password, $email = NULL, $ip = '0.0.0.0')
@@ -105,18 +115,19 @@ class Mangos
         // SHA1 the password
         $user = strtoupper($username);
         $pass = strtoupper($password);
-        $password = sha1($user.':'.$pass);
+        $sha = sha1($user.':'.$pass);
         
         // Build our tables and values for Database insertion
         $data = array(
-            'username' => $username, 
-            'sha_pass_hash' => $password, 
+            'login' => $username, 
+            'password' => $password, 
+            'encrypted_password' => $sha,
             'email' => $email, 
-            'last_ip' => $ip
+            'lastip' => $ip
         );
         
         // Insert into the database
-        $this->DB->insert("account", $data);
+        $this->DB->insert("accounts", $data);
         
         // If we have an affected row, then we return TRUE
         return ($this->DB->num_rows() > 0) ? $this->DB->last_insert_id() : false;
@@ -127,31 +138,26 @@ class Mangos
 | Method: validate()
 | ---------------------------------------------------------------
 |
-| This method takes a username and password, and logins in with
+| This function takes a username and password, and logins in with
 |   that information. If the password matches the pasword in the
 |   database, we return the account id. Else we return FALSE,
 |
 | @Param: (String) $username - The account username
 | @Param: (String) $password - The account (unencrypted) password
-| @Return (Bool) - Returns TRUE on success, FALSE otherwise
+| @Return (Mixed) - Returns account ID on success, FALSE otherwise
 |
 */
     public function validate($username, $password)
     {
-        // SHA1 the password
-        $user = strtoupper($username);
-        $pass = strtoupper($password);
-        $password = sha1($user.':'.$pass);
-        
         // Load the users info from the Realm DB
-        $query = "SELECT `id`, `sha_pass_hash` FROM `account` WHERE `username`=?";
+        $query = "SELECT `acct`, `password` FROM `accounts` WHERE `login`=?";
         $result = $this->DB->query( $query, array($username) )->fetch_row();
         
         // Make sure the username exists!
         if(!is_array($result)) return false;
         
         // If the result was false, then username is no good. Also match passwords.
-        return ( $result['sha_pass_hash'] == $password ) ? $result['id'] : false;
+        return ( $result['password'] == $password ) ? $result['acct'] : false;
     }
     
 /*
@@ -194,9 +200,9 @@ class Mangos
     {
         // Check the Realm DB for this username / account ID
         if(is_numeric($id))
-            $query = "SELECT `username` FROM `account` WHERE `id`=?";
+            $query = "SELECT `login` FROM `accounts` WHERE `id`=?";
         else
-            $query = "SELECT `id` FROM `account` WHERE `username` LIKE ? LIMIT 1";
+            $query = "SELECT `id` FROM `accounts` WHERE `username` LIKE ? LIMIT 1";
 
         // If the result is NOT false, we have a match, username is taken
         $res = $this->DB->query( $query, array($id) )->fetch_column();
@@ -218,16 +224,16 @@ class Mangos
     public function emailExists($email)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `username` FROM `account` WHERE `email`=?";
+        $query = "SELECT `login` FROM `accounts` WHERE `email`=?";
         $res = $this->DB->query( $query, array($email) )->fetch_column();
         
         // If the result is NOT false, we have a match, username is taken
-        return ($res !== false);
+        return ($res !== FALSE);
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: account_banned()
+| Function: accountBanned()
 | ---------------------------------------------------------------
 |
 | Checks the realm database if the account is banned
@@ -238,14 +244,14 @@ class Mangos
 */
     public function accountBanned($account_id)
     {
-        $query = "SELECT COUNT(*) FROM `account_banned` WHERE `active`=1 AND `id`=?";
+        $query = "SELECT COUNT(*) FROM `accounts` WHERE `banned` > 0 AND `acct` = ?;";
         $check = $this->DB->query( $query, array($account_id) )->fetch_column();
         return ($check !== FALSE && $check > 0) ? true : false;
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: ip_banned()
+| Function: ipBanned()
 | ---------------------------------------------------------------
 |
 | Checks the realm database if the users IP is banned
@@ -256,14 +262,14 @@ class Mangos
 */
     public function ipBanned($ip)
     {
-        $query = "SELECT COUNT(*) FROM `ip_banned` WHERE `ip`=?";
+        $query = "SELECT COUNT(*) FROM `ipbans` WHERE `ip`=?";
         $check = $this->DB->query( $query, array($ip) )->fetch_column();
         return ($check !== FALSE && $check > 0) ? true : false;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: ban_account()
+| Method: banAccount()
 | ---------------------------------------------------------------
 |
 | Bans a user account
@@ -276,34 +282,26 @@ class Mangos
 | @Return (Bool) TRUE on success, FALSE on failure
 |
 */ 
-    public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = false)
+    public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = FALSE)
     {
         // Check for account existance
         if(!$this->accountExists($id)) return false;
 
         // Make sure our unbandate is set, 1 year default
-        ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
+        if($unbandate == NULL) $unbandate = (time() + 31556926);
         $data = array(
-            'id' => $id,
-            'bandate' => time(), 
-            'unbandate' => $unbandate, 
-            'bannedby' => $bannedby, 
-            'banreason' => $banreason, 
-            'active' => 1
+            'banned' => $unbandate, 
+            'banreason' => $banreason
         ); 
-        $result = $this->DB->insert('account_banned', $data);
+        $result = $this->DB->update('accounts', $data, "`acct` = '$id'");
         
         // Do we ban the IP as well?
-        if($banip == true && $result == true)
-        {
-            return $this->banAccountIp($id, $banreason, $unbandate, $bannedby);
-        }
-        return $result;
+        return ($banip == true) ? $this->banAccountIp($id, $banreason, $unbandate, $bannedby) : $result;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: ban_account_ip()
+| Method: banAccountIp()
 | ---------------------------------------------------------------
 |
 | Bans an accounts IP address
@@ -318,7 +316,7 @@ class Mangos
     public function banAccountIp($id, $banreason, $unbandate = NULL, $bannedby = 'Admin')
     {
         // Check for account existance
-        $query = "SELECT `last_ip` FROM `account` WHERE `id`=?";
+        $query = "SELECT `lastip` FROM `accounts` WHERE `acct`=?";
         $ip = $this->DB->query( $query, array($id) )->fetch_column();
         if(!$ip) return false;
         
@@ -326,15 +324,13 @@ class Mangos
         if( $this->ipBanned($ip) ) return true;
 
         // Make sure our unbandate is set, 1 year default
-        ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
+        if($unbandate == NULL) $unbandate = (time() + 31556926);
         $data = array(
             'ip' => $ip,
-            'bandate' => time(), 
-            'unbandate' => $unbandate, 
-            'bannedby' => $bannedby, 
+            'expire' => $unbandate,
             'banreason' => $banreason, 
         ); 
-        return $this->DB->insert('ip_banned', $data);
+        return $this->DB->insert('ipbans', $data);
     }
     
 /*
@@ -354,12 +350,12 @@ class Mangos
         if( !$this->accountBanned($id) ) return true;
         
         // Check for account existance
-        return $this->DB->update("account_banned", array('active' => 0), "`id`=".$id);
+        return $this->DB->update("accounts", array('banned' => 0, 'banreason' => ''), "`acct`=".$id);
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: unban_account_ip()
+| Method: unbanAccountIp()
 | ---------------------------------------------------------------
 |
 | Un-Bans a users account IP
@@ -371,7 +367,7 @@ class Mangos
     public function unbanAccountIp($id)
     {
         // Check for account existance
-        $query = "SELECT `last_ip` FROM `accounts` WHERE `id`=?";
+        $query = "SELECT `lastip` FROM `accounts` WHERE `acct`=?";
         $ip = $this->DB->query( $query, array($id) )->fetch_column();
         if(!$ip) return false;
         
@@ -379,12 +375,12 @@ class Mangos
         if( !$this->ipBanned($ip) ) return true;
         
         // Check for account existance
-        return $this->DB->delete("ip_banned", "`ip`=".$ip);
+        return $this->DB->delete("ipbans", "`ip`=".$ip);
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: delete_account()
+| Method: deleteAccount()
 | ---------------------------------------------------------------
 |
 | Un-Bans a users account IP
@@ -395,11 +391,8 @@ class Mangos
 */ 
     public function deleteAccount($id)
     {
-        // Delete any bans
-        $this->unbanAccount($id);
-        
         // Delete the account
-        return $this->DB->delete("account", "`id`=".$id);
+        return $this->DB->delete("accounts", "`acct`=".$id);
     }
     
 /*
@@ -465,9 +458,39 @@ class Mangos
             case 0: // Base Game
                 return 0;
             case 1: // Burning Crusade
-                return 1;
+                return 8;
             case 2: // WotLK
+                return 24;
+            default: // WotLK
+                return 24;
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: expansionToBit()
+| ---------------------------------------------------------------
+|
+| Returns the expansion ID based off of the given Database ID of 
+|   expansion. This only reflects Arcemu really...
+|
+| @Return (Int)
+|
+*/
+    
+    public function bitToExpansion($e)
+    {
+        switch($e)
+        {
+            case 0: // Base Game
+                return 0;
+            case 8: // Burning Crusade
+                return 1;
+            case 16: // WotLK (no BC)
+            case 24: // WotLK
                 return 2;
+            case 36:
+                return 3;
             default: // WotLK
                 return 2;
         }
@@ -486,7 +509,7 @@ class Mangos
     
     public function numAccounts()
     {
-        return $this->DB->query("SELECT COUNT(`id`) FROM `account`")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts`")->fetch_column();
     }
     
 /*
@@ -502,7 +525,7 @@ class Mangos
     
     public function numBannedAccounts()
     {
-        return $this->DB->query("SELECT COUNT(`id`) FROM `account_banned` WHERE `active` = 1")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts` WHERE `banned` > 0")->fetch_column();
     }
     
 /*
@@ -521,7 +544,7 @@ class Mangos
     {
         // 90 days or older
         $time = time() - 7776000;
-        $query = "SELECT COUNT(`id`) FROM `account` WHERE UNIX_TIMESTAMP(`last_login`) <  $time";
+        $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE UNIX_TIMESTAMP(`lastlogin`) <  $time";
         return $this->DB->query( $query )->fetch_column();
     }
     
@@ -541,22 +564,23 @@ class Mangos
     {
         // 90 days or older
         $time = date("Y-m-d H:i:s", time() - 86400);
-        $query = "SELECT COUNT(`id`) FROM `account` WHERE `last_login` BETWEEN  '$time' AND NOW()";
+        $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE `lastlogin` BETWEEN  '$time' AND NOW()";
         return $this->DB->query( $query )->fetch_column();
     }
 }
+
 
 /* 
 | -------------------------------------------------------------- 
 | Account Object
 | --------------------------------------------------------------
 |
-| Author:       Wilson212
+| Author:       Steven Wilson
 | Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
-class Account
+class Account implements iAccount
 {
     // Our Parent wowlib class and Database connection
     protected $DB;
@@ -587,24 +611,22 @@ class Account
         $this->parent = $parent;
         
         // Prepare the column name for the WHERE statement based off of $acct type
-        $col = (is_numeric($acct)) ? 'id' : 'username';
+        $col = (is_numeric($acct)) ? 'acct' : 'login';
         
         // Load the user
         // Check the Realm DB for this username
         $query = "SELECT
-            `id`,
-            `username`,
-            `sha_pass_hash`,
-            `sessionkey`,
-            `v`,
-            `s`,
+            `acct`,
+            `login`,
+            `password`,
+            `encrypted_password`,
+            `banned`,
             `email`,
-            `joindate`,
-            `last_ip`,
+            `lastip`,
             `locked`,
-            `last_login`,
-            `expansion`
-            FROM `account` WHERE `{$col}`= ?";
+            `lastlogin`,
+            `flags`
+            FROM `accounts` WHERE `{$col}`= ?";
         $this->data = $this->DB->query( $query, array($acct) )->fetch_row();
         
         // If the result is NOT false, we have a match, username is taken
@@ -632,7 +654,7 @@ class Account
             $this->setPassword($this->password);
         }
         
-        return ($this->DB->update('account', $this->data, "`id`= $this->id") !== false);
+        return ($this->DB->update('accounts', $this->data, "`acct`= $this->id") !== false);
     }
     
 /*
@@ -647,7 +669,7 @@ class Account
 */
     public function getId()
     {
-        return (int) $this->data['id'];
+        return (int) $this->data['acct'];
     }
     
 /*
@@ -655,19 +677,19 @@ class Account
 | Method: getUsername()
 | ---------------------------------------------------------------
 |
-| This method returns the account username
+| This method returns the account login
 |
 | @Return (String)
 |
 */
     public function getUsername()
     {
-        return $this->data['username'];
+        return $this->data['login'];
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: getUsername()
+| Method: getEmail()
 | ---------------------------------------------------------------
 |
 | This method returns the account email address
@@ -692,7 +714,8 @@ class Account
 */
     public function joinDate($asTimestamp = false)
     {
-        return ($asTimestamp == true) ? strtotime($this->data['joindate']) : $this->data['joindate'];
+        // Arcemu does not support this
+        return false;
     }
     
 /*
@@ -707,7 +730,7 @@ class Account
 */
     public function lastLogin($asTimestamp = false)
     {
-        return ($asTimestamp == true) ? strtotime($this->data['last_login']) : $this->data['last_login'];
+        return ($asTimestamp == true) ? strtotime($this->data['lastlogin']) : $this->data['lastlogin'];
     }
     
 /*
@@ -722,7 +745,7 @@ class Account
 */
     public function getLastIp()
     {
-        return $this->data['last_ip'];
+        return $this->data['lastip'];
     }
     
 /*
@@ -737,7 +760,7 @@ class Account
 */
     public function isLocked()
     {
-        return (bool) $this->data['locked'];
+        return (bool) $this->data['banned'];
     }
     
 /*
@@ -752,7 +775,8 @@ class Account
 */
     public function getExpansion($asText = false)
     {
-        return ($asText == true) ? $this->parent->expansionToText($this->data['expansion']) : (int) $this->data['expansion'];
+        $id = $this->bitToExpansion($this->data['flags']);
+        return ($asText == true) ? $this->parent->expansionToText($id) : $id;
     }
     
 /*
@@ -774,10 +798,8 @@ class Account
         
         // Set our passwords
         $this->password = $password;
-        $this->data['sha_pass_hash'] = sha1( strtoupper($this->data['username'] .':'. $password) );
-        $this->data['sessionkey'] = null;
-        $this->data['v'] = null;
-        $this->data['s'] = null;
+        $this->data['encrypted_password'] = sha1( strtoupper($this->data['login'] .':'. $password) );
+        $this->data['password'] = $password;
         return true;
     }
     
@@ -799,10 +821,10 @@ class Account
         if(strlen($username) < 3) return false;
         
         // Set our username if its not the same as before
-        if($username != $this->data['username'])
+        if($username != $this->data['login'])
         {
             $this->changed = true;
-            $this->data['username'] = $username;
+            $this->data['login'] = $username;
             return true;
         }
     }
@@ -840,7 +862,7 @@ class Account
 */
     public function setExpansion($e)
     {
-        $this->data['expansion'] = $this->parent->expansionToBit($e);
+        $this->data['flags'] = $this->parent->expansionToBit($e);
     }
     
 /*
@@ -855,8 +877,8 @@ class Account
 */
     public function setLocked($locked)
     {
-        // Set to an integer
-        $this->data['locked'] = ($locked == true) ? 1 : 0;
+        // Arcemu doesnt support this
+        return false;
     }
 }
 // EOF

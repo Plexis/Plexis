@@ -7,7 +7,7 @@
 | --------------------------------------------------------------
 |
 | Author:       Tony Hudgins
-| Copyright:    Copyright (c) 2012, Steven Wilson, Tony Hudgins
+| Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
@@ -15,7 +15,18 @@
 // All namespace paths must be Uppercase first letter! Format: "Wowlib\<wowlib_name>"
 namespace Wowlib\_default;
 
-class Characters
+// Require our 2 class interfaces
+require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iCharacters.php');
+require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iCharacter.php');
+
+
+/*
+| ---------------------------------------------------------------
+| Characters CLass
+| ---------------------------------------------------------------
+|
+*/
+class Characters implements \Wowlib\iCharacters
 {
     // Our DB Connection
     public $DB;
@@ -64,10 +75,13 @@ class Characters
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($connection)
+    public function __construct($parent)
     {
-        // Set oru database conntection, which is passed when this class is Init.
-        $this->DB = $connection;
+        // If the characters database is offline, throw an exception!
+        if(!is_object($parent->CDB)) throw new \Exception('Character database offline');
+        
+        // Set our database conntection
+        $this->DB = $parent->CDB;
     }
     
 /*

@@ -372,7 +372,7 @@ class Loader
         }
         
         // Make sure the wowlib exists
-		$path = path( ROOT, 'third_party', 'wowlib', config("emulator"), $realm["driver"] );
+		$path = path( ROOT, 'third_party', 'wowlib', 'emulators', config('emulator'), $realm["driver"] );
         if( !is_dir( $path ) )
         {
             $language = load_language_file('messages');
@@ -384,9 +384,13 @@ class Loader
         // Include the wowlib file
         require_once path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
         
+        // Unserialize our database information
+        $char = unserialize($realm['char_db']);
+        $world = unserialize($realm['world_db']);
+        
         // Try to init the class
         try{
-            $class = new \Wowlib\Wowlib($realm);
+            $class = new \Wowlib\Wowlib($realm['driver'], $char, $world);
         }
         catch(\Exception $e){
             $class = FALSE;
@@ -419,7 +423,7 @@ class Loader
         // Get our emulator from the Config File
         $emulator = ucfirst( config('emulator') );
         $class_name = "Emulator_".$emulator;
-        $file = ROOT . DS . 'third_party'. DS .'wowlib' . DS . strtolower($emulator) . DS . $emulator . '.php';
+        $file = path( ROOT, 'third_party', 'wowlib', 'emulators', strtolower($emulator), 'Realm.php');
         
         // Make sure we havent loaded the lib already
         $class = \Registry::load($class_name);
@@ -432,7 +436,7 @@ class Loader
         elseif(file_exists($file))
         {
             include_once $file;
-            $name = "\\Wowlib\\". $emulator;
+            $name = "\\Wowlib\\Realm";
             $class = new $name();
             
             // Store the class statically and return the class

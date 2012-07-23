@@ -13,7 +13,10 @@
 */
 namespace Wowlib;
 
-class Trinity
+// Include the iRealm Interface before loading the class
+require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iRealm.php');
+
+class Realm implements iRealm
 {
 
 /*
@@ -22,10 +25,14 @@ class Trinity
 | ---------------------------------------------------------------
 |
 */
-    function __construct()
+    public function __construct()
     {
+        // Load our realm dataabase connetion
         $this->load = load_class('Loader');
         $this->DB = $this->load->database('RDB');
+        
+        // Include the iAccount Interface
+        require_once path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iAccount.php');
     }
     
 /*
@@ -162,7 +169,7 @@ class Trinity
 | This function queries the accounts table and pulls all the users
 |   information into an object
 |
-| @Param: (Int | String) $id - The account ID or Username we are loading
+| @Param: (Int) $id - The account ID we are loading
 | @Return (Object) - returns the account object
 |
 */
@@ -187,7 +194,7 @@ class Trinity
 |
 | @Param: (Int | String) $id - The account ID we are checking for,
 |   or the account username
-| @Return (Int) - TRUE if the id exists, FALSE otherwise
+| @Return (Bool) - TRUE if the id exists, FALSE otherwise
 |
 */
     public function accountExists($id)
@@ -556,7 +563,7 @@ class Trinity
 | License:      GNU GPL v3
 |
 */
-class Account
+class Account implements iAccount
 {
     // Our Parent wowlib class and Database connection
     protected $DB;
@@ -569,6 +576,7 @@ class Account
     protected $password;
     
     // Account ID and User data array
+    protected $id;
     protected $data = array();
 /*
 | ---------------------------------------------------------------
