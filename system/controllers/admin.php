@@ -1032,10 +1032,10 @@ class Admin extends Core\Controller
             'page_title' => "Statistics",
             'page_desc' => "This page allows you to see various statistics about page views and user accounts.",
             'months' => $results,
-            'account_count' => $this->realm->get_account_count(),
-            'accounts_banned' => $this->realm->get_banned_count(),
-            'inactive_accounts' => $this->realm->get_inactive_account_count(),
-            'active_accounts' => $this->realm->get_active_account_count(),
+            'account_count' => $this->realm->numAccounts(),
+            'accounts_banned' => $this->realm->numBannedAccounts(),
+            'inactive_accounts' => $this->realm->numInactiveAccounts(),
+            'active_accounts' => $this->realm->numActiveAccounts(),
             'accounts_active' => $active,
             'hits' => $this->Statistics->get_hits()
         );

@@ -79,16 +79,15 @@ class Wowlib
         
         // Check for the extension
 		$file = path( ROOT, "third_party", "wowlib", $this->emulator, $libname, $class . ".php" );
-        if( file_exists( $file ) ) 
-        {
-            require_once( $file );
-        }
-        else
+        if( !file_exists( $file ) ) 
         {
             // Extension doesnt exists :O
             show_error('Failed to load wowlib extentsion %s', array($name), E_ERROR);
             return false;
         }
+        
+        // Load the extension file
+        require_once( $file );
         
         // Load the class
         $class = "\\Wowlib\\". ucfirst($this->realm_info['driver']) ."\\". $class;

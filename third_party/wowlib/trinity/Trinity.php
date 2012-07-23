@@ -475,7 +475,7 @@ class Trinity
     
 /*
 | ---------------------------------------------------------------
-| Function: get_account_count()
+| Function: numAccounts()
 | ---------------------------------------------------------------
 |
 | This methods returns the number of accounts in the accounts table.
@@ -484,14 +484,14 @@ class Trinity
 |
 */
     
-    public function get_account_count()
+    public function numAccounts()
     {
-        return $this->DB->query("SELECT count(id) FROM `account`")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`id`) FROM `account`")->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Function: get_banned_count()
+| Function: numBannedAccounts()
 | ---------------------------------------------------------------
 |
 | This methods returns the number of accounts in the accounts table.
@@ -500,14 +500,14 @@ class Trinity
 |
 */
     
-    public function get_banned_count()
+    public function numBannedAccounts()
     {
-        return $this->DB->query("SELECT count(id) FROM `account_banned` WHERE `active` = 1")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`id`) FROM `account_banned` WHERE `active` = 1")->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Function: get_inactive_account_count()
+| Function: numInactiveAccounts()
 | ---------------------------------------------------------------
 |
 | This methods returns the number of accounts that havent logged
@@ -517,17 +517,17 @@ class Trinity
 |
 */
     
-    public function get_inactive_account_count()
+    public function numInactiveAccounts()
     {
         // 90 days or older
         $time = time() - 7776000;
-        $query = "SELECT COUNT(*) FROM `pcms_accounts` WHERE UNIX_TIMESTAMP(`last_seen`) <  $time";
-        return $this->DB->query("SELECT count(id) FROM `account`")->fetch_column();
+        $query = "SELECT COUNT(`id`) FROM `account` WHERE UNIX_TIMESTAMP(`last_login`) <  $time";
+        return $this->DB->query( $query )->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Function: get_active_account_count()
+| Function: numActiveAccounts()
 | ---------------------------------------------------------------
 |
 | This methods returns the number of accounts that have logged
@@ -537,11 +537,11 @@ class Trinity
 |
 */
     
-    public function get_active_account_count()
+    public function numActiveAccounts()
     {
         // 90 days or older
         $time = date("Y-m-d H:i:s", time() - 86400);
-        $query = "SELECT COUNT(*) FROM `account` WHERE `last_login` BETWEEN  '$time' AND NOW()";
+        $query = "SELECT COUNT(`id`) FROM `account` WHERE `last_login` BETWEEN  '$time' AND NOW()";
         return $this->DB->query( $query )->fetch_column();
     }
 }

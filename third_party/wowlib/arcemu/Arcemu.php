@@ -289,11 +289,7 @@ class Arcemu
         $result = $this->DB->update('accounts', $data, "`acct` = '$id'");
         
         // Do we ban the IP as well?
-        if($banip == TRUE && $result == TRUE)
-        {
-            return $this->banAccountIp($id, $banreason, $unbandate, $bannedby);
-        }
-        return $result;
+        return ($banip == true) ? $this->banAccountIp($id, $banreason, $unbandate, $bannedby) : $result;
     }
     
 /*
@@ -495,73 +491,73 @@ class Arcemu
     
 /*
 | ---------------------------------------------------------------
-| Function: get_account_count()
+| Function: numAccounts()
 | ---------------------------------------------------------------
 |
-|  This methods returns the number of accounts in the accounts table.
+| This methods returns the number of accounts in the accounts table.
 |
 | @Return (Int) The number of accounts
 |
 */
     
-    public function get_account_count()
+    public function numAccounts()
     {
-        return $this->DB->query("SELECT count(acct) FROM `accounts`")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts`")->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Function: get_banned_count()
+| Function: numBannedAccounts()
 | ---------------------------------------------------------------
 |
-|  This methods returns the number of accounts in the accounts table.
+| This methods returns the number of accounts in the accounts table.
 |
 | @Return (Int) The number of accounts
 |
 */
     
-    public function get_banned_count()
+    public function numBannedAccounts()
     {
-        return $this->DB->query("SELECT count(acct) FROM `accounts` WHERE NOT `banned` = 0;")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts` WHERE `banned` > 0")->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Function: get_inactive_account_count()
+| Function: numInactiveAccounts()
 | ---------------------------------------------------------------
 |
-|  This methods returns the number of accounts that havent logged
+| This methods returns the number of accounts that havent logged
 |   in withing the last 3 months
 |
 | @Return (Int) The number of accounts
 |
 */
     
-    public function get_inactive_account_count()
+    public function numInactiveAccounts()
     {
         // 90 days or older
         $time = time() - 7776000;
-        $query = "SELECT COUNT(*) FROM `pcms_accounts` WHERE UNIX_TIMESTAMP(`last_seen`) <  $time";
-        return $this->DB->query("SELECT count(acct) FROM `accounts`")->fetch_column();
+        $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE UNIX_TIMESTAMP(`lastlogin`) <  $time";
+        return $this->DB->query( $query )->fetch_column();
     }
     
 /*
 | ---------------------------------------------------------------
-| Function: get_active_account_count()
+| Function: numActiveAccounts()
 | ---------------------------------------------------------------
 |
-|  This methods returns the number of accounts that have logged
+| This methods returns the number of accounts that have logged
 |   in withing the last 24 hours
 |
 | @Return (Int) The number of accounts
 |
 */
     
-    public function get_active_account_count()
+    public function numActiveAccounts()
     {
         // 90 days or older
         $time = date("Y-m-d H:i:s", time() - 86400);
-        $query = "SELECT COUNT(*) FROM `accounts` WHERE `lastlogin` BETWEEN  '$time' AND NOW()";
+        $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE `lastlogin` BETWEEN  '$time' AND NOW()";
         return $this->DB->query( $query )->fetch_column();
     }
 }
