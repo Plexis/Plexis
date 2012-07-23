@@ -15,17 +15,6 @@
 // All namespace paths must be Uppercase first letter! Format: "Wowlib\<wowlib_name>"
 namespace Wowlib\_default;
 
-// Require our 2 class interfaces
-require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iCharacters.php');
-require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iCharacter.php');
-
-
-/*
-| ---------------------------------------------------------------
-| Characters CLass
-| ---------------------------------------------------------------
-|
-*/
 class Characters implements \Wowlib\iCharacters
 {
     // Our DB Connection

@@ -29,6 +29,9 @@ class Wowlib
     protected $driver;
     protected $emulator;
     
+    // Have we loaded interfaces?
+    protected static $loaded = false;
+    
 
 /*
 | ---------------------------------------------------------------
@@ -49,6 +52,18 @@ class Wowlib
         // Finally set our emulator and driver variables
         $this->emulator = config('emulator');
         $this->driver = $driver;
+        
+        // Autoload all interfaces just once ;)
+        if(!self::$loaded)
+        {
+            $path = path( ROOT, 'third_party', 'wowlib', 'interfaces' );
+            $list = $this->load->library('Filesystem')->list_files($path);
+            foreach($list as $interface)
+            {
+                include_once($path . DS . $interface);
+            }
+            self::$loaded = true;
+        }
     }
     
 /*
