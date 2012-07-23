@@ -776,7 +776,8 @@ class Account
 */
     public function getExpansion($asText = false)
     {
-        return ($asText == true) ? $this->parent->expansionToText($this->data['flags']) : (int) $this->data['flags'];
+        $id = $this->bitToExpansion($this->data['flags']);
+        return ($asText == true) ? $this->parent->expansionToText($id) : $id;
     }
     
 /*
