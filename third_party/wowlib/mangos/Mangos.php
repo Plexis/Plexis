@@ -133,14 +133,11 @@ class Mangos
 |
 | @Param: (String) $username - The account username
 | @Param: (String) $password - The account (unencrypted) password
-| @Return (Mixed) - Returns account ID on success, FALSE otherwise
+| @Return (Bool) - Returns TRUE on success, FALSE otherwise
 |
 */
     public function validate($username, $password)
     {
-        // Make sure the username doesnt exist, just incase the script didnt check yet!
-        if(!$this->accountExists($username)) return false;
-        
         // SHA1 the password
         $user = strtoupper($username);
         $pass = strtoupper($password);
@@ -149,6 +146,9 @@ class Mangos
         // Load the users info from the Realm DB
         $query = "SELECT `id`, `sha_pass_hash` FROM `account` WHERE `username`=?";
         $result = $this->DB->query( $query, array($username) )->fetch_row();
+        
+        // Make sure the username exists!
+        if(!is_array($result)) return false;
         
         // If the result was false, then username is no good. Also match passwords.
         return ( $result['sha_pass_hash'] == $password ) ? $result['id'] : false;
@@ -278,7 +278,6 @@ class Mangos
 */ 
     public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = false)
     {
-        
         // Check for account existance
         if(!$this->accountExists($id)) return false;
 
@@ -585,12 +584,15 @@ class Account
         $this->DB = $this->load->database('RDB');
         
         // Setup local user variables
-        $this->id = $acct;
         $this->parent = $parent;
+        
+        // Prepare the column name for the WHERE statement based off of $acct type
+        $col = (is_numeric($acct)) ? 'id' : 'username';
         
         // Load the user
         // Check the Realm DB for this username
         $query = "SELECT
+            `id`,
             `username`,
             `sha_pass_hash`,
             `sessionkey`,
@@ -602,7 +604,7 @@ class Account
             `locked`,
             `last_login`,
             `expansion`
-            FROM `account` WHERE `id`= ?";
+            FROM `account` WHERE `{$col}`= ?";
         $this->data = $this->DB->query( $query, array($acct) )->fetch_row();
         
         // If the result is NOT false, we have a match, username is taken
@@ -645,7 +647,7 @@ class Account
 */
     public function getId()
     {
-        return (int) $this->id;
+        return (int) $this->data['id'];
     }
     
 /*

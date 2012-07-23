@@ -179,10 +179,8 @@ class User
         else
         {
             // Build our query
-            $query = "SELECT * FROM `pcms_accounts` 
-                INNER JOIN `pcms_account_groups` ON 
-                pcms_accounts.group_id = pcms_account_groups.group_id 
-                WHERE `id` = '". $userid ."'";
+            $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 
+                pcms_accounts.group_id = pcms_account_groups.group_id WHERE `id` = '{$userid}'";
             
             // Query our database and get the users information
             $result = $this->DB->query( $query )->fetch_row();
@@ -257,8 +255,7 @@ class User
         
         // If the Emulator cant match the passwords, or user doesnt exist,
         // Then we spit out an error and return false
-        $account_id = $this->realm->validate($username, $password);
-        if($account_id === false)
+        if(!$this->realm->validate($username, $password))
         {
             // Add trace for debugging
             \Debug::trace("Failed to validate password for account '{$username}'. Login failed", __FILE__, __LINE__);
@@ -269,21 +266,21 @@ class User
         // Username exists and password is correct, Lets log in
         else
         {
+            // Fetch account
+            $Account = $this->realm->fetchAccount($username);
+            
             // Build our query	
-            $query = "SELECT * FROM `pcms_accounts` 
-                INNER JOIN `pcms_account_groups` ON 
-                pcms_accounts.group_id = pcms_account_groups.group_id 
-                WHERE id = ?";
+            $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 
+                pcms_accounts.group_id = pcms_account_groups.group_id WHERE id = ?";
             
             // Query our database and get the users information
-            $result = $this->DB->query( $query, array($account_id) )->fetch_row();
+            $result = $this->DB->query( $query, array($Account->getId()) )->fetch_row();
             
             // If the user doesnt exists in the table, we need to insert it
             if($result === false)
             {
                 // Add trace for debugging
                 \Debug::trace("User account '{$username}' doesnt exist in Plexis database, fetching account from realm", __FILE__, __LINE__);
-                $Account = $this->realm->fetchAccount($account_id);
                 $data = array(
                     'id' => $account_id, 
                     'username' => ucfirst(strtolower($username)), 
