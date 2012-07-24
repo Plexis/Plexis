@@ -359,6 +359,14 @@ class Loader
         $Obj = \Registry::load('Wowlib_r'.$id);
         if($Obj !== NULL) return $Obj;
         
+        // Make sure the wowlib is initialized
+        if(!class_exists('Wowlib', false))
+        {
+            // Include the wowlib file
+            require path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
+            \Wowlib::Init();
+        }
+        
         // Load our driver name
         $DB = $this->database('DB', FALSE);
         $realm = $DB->query("SELECT `id`, `name`, `driver`, `char_db`, `world_db` FROM `pcms_realms` WHERE `id`=".$id)->fetch_row();
@@ -372,7 +380,7 @@ class Loader
         }
         
         // Make sure the wowlib exists
-		$path = path( ROOT, 'third_party', 'wowlib', 'emulators', config('emulator'), $realm["driver"] );
+		$path = path( ROOT, 'third_party', 'wowlib', 'drivers', config('emulator'), $realm["driver"] );
         if( !is_dir( $path ) )
         {
             $language = load_language_file('messages');
@@ -380,21 +388,13 @@ class Loader
             show_error($message, array($realm['driver']), E_ERROR);
             return false;
         }
-
-        // Include the wowlib file
-        require_once path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
         
         // Unserialize our database information
         $char = unserialize($realm['char_db']);
         $world = unserialize($realm['world_db']);
         
-        // Try to init the class
-        try{
-            $class = new \Wowlib\Wowlib($realm['driver'], $char, $world);
-        }
-        catch(\Exception $e){
-            $class = FALSE;
-        }
+        // Init the driver
+        $class = \Wowlib::load($realm['driver'], $char, $world);
         
         // Store the class statically and return the class
         \Registry::store('Wowlib_r'.$id, $class);
@@ -423,44 +423,44 @@ class Loader
         // Get our emulator from the Config File
         $emulator = ucfirst( config('emulator') );
         $class_name = "Emulator_".$emulator;
-        $file = path( ROOT, 'third_party', 'wowlib', 'emulators', strtolower($emulator), 'Realm.php');
         
         // Make sure we havent loaded the lib already
-        $class = \Registry::load($class_name);
-        if($class !== NULL)
-        {
-            goto Instance;
-        }
+        $realm = \Registry::load($class_name);
+        if($realm !== NULL) goto Instance;
 
-        // Load the lib file
-        elseif(file_exists($file))
+        // Init the class if it doesnt exist
+        if(!class_exists('Wowlib', false))
         {
-            include_once $file;
-            $name = "\\Wowlib\\Realm";
-            $class = new $name();
-            
-            // Store the class statically and return the class
-            \Registry::store($class_name, $class);
-            
-            // Instance
-            Instance:
-            {
-                if($instance == TRUE)
-                {
-                    $FB = get_instance();
-                    if(is_object($FB)) $FB->realm = $class;
-                }
-            }
-            
-            // Return the class
-            return $class;
+            // Include the wowlib file
+            require path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
+            \Wowlib::Init();
         }
-        else
+        
+        // Fetch the emulator class
+        $realm = \Wowlib::getRealm();
+        
+        // Store the class statically and return the class
+        \Registry::store($class_name, $realm);
+        
+        // Instance
+        Instance:
+        {
+            if($instance == TRUE)
+            {
+                $FB = get_instance();
+                if(is_object($FB)) $FB->realm = $realm;
+            }
+        }
+        
+        // We need to make sure the realm loaded ok, or thrown an error
+        if(!is_object($realm))
         {
             $language = load_language_file('messages');
             $message = $language['emulator_doesnt_exist'];
             show_error($message, array($emulator), E_ERROR);
         }
+        
+        return $realm;
     }
 }
 // EOF

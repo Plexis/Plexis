@@ -12,25 +12,22 @@
 |
 */
 
-// All namespace paths must be Uppercase first letter!
-namespace Wowlib;
-
 // Kill the script if its a direct link!
 if( !defined('CMS_VERSION') ) die('Unauthorized');
 
 class Wowlib
 {
-    // Our DB Connections
-    public $RDB;
-    public $CDB;
-    public $WDB;
+    // Our DB Connections and loader
+    public static $RDB;
+    protected static $load;
     
-    // Out wowlib driver and emulator
-    protected $driver;
-    protected $emulator;
+    // Current wowlib driver
+    public static $driver;
     
-    // Have we loaded interfaces?
-    protected static $loaded = false;
+    // Static Instances
+    public static $rootPath = false;
+    public static $emulator;
+    protected static $realm;
     
 
 /*
@@ -39,70 +36,72 @@ class Wowlib
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($driver, $char, $world)
+    public static function Init()
     {
-        // Load the Loader class
-        $this->load = load_class('Loader');
-        
-        // Set the connections into the connection variables
-        $this->RDB = $this->load->database('RDB', false, true);
-        $this->CDB = $this->load->database($char, false, true);
-        $this->WDB = $this->load->database($world, false, true);
-
-        // Finally set our emulator and driver variables
-        $this->emulator = config('emulator');
-        $this->driver = $driver;
-        
-        // Autoload all interfaces just once ;)
-        if(!self::$loaded)
+        // Load some things just once
+        if(self::$rootPath === false)
         {
-            $path = path( ROOT, 'third_party', 'wowlib', 'interfaces' );
-            $list = $this->load->library('Filesystem')->list_files($path);
+            self::$load = load_class('Loader');
+            
+            // Set path to prevent future loading
+            self::$rootPath = path( ROOT, 'third_party', 'wowlib' );
+            
+            // Set the connections into the connection variables
+            self::$RDB = self::$load->database('RDB', false, true);
+            
+            // Set Emulator Variable
+            self::$emulator = load_class('Config')->get('emulator');
+            
+            // Autoload
+            $path = path( self::$rootPath, 'interfaces' );
+            $list = self::$load->library('Filesystem')->list_files($path);
             foreach($list as $interface)
             {
-                include_once($path . DS . $interface);
+                include ($path . DS . $interface);
             }
-            self::$loaded = true;
+            
+            // Load the emulator, and the driver class
+            require_once path(self::$rootPath, 'drivers', 'Driver.php');
+            $file = path(self::$rootPath, 'emulators', self::$emulator, 'Emulator.php');
+            if(!file_exists($file)) throw new Exception("Emulator '". self::$emulator ."' Doesnt Exist");
+            require_once $file;
+            
+            // Init the realm class
+            try {
+                self::$realm = new \Wowlib\Emulator( self::$RDB );
+            }
+            catch( \Exception $e) {
+                self::$realm = false;
+            }
         }
     }
     
 /*
 | ---------------------------------------------------------------
-| Extenstion loader
+| Driver Loader
 | ---------------------------------------------------------------
 |
 */
-    public function __get($name)
+    public static function load($driver, $char = null, $world = null)
     {
-        // Just return the extension if it exists
-        $name = strtolower($name);
-        if(isset($this->{$name})) return $this->{$name};
+        // Make sure we are loaded here!
+        if(self::$rootPath === false) throw new Exception('Cannot load driver, Wowlib was never initialized!');
         
-        // Create our classname
-        $class = ucfirst( $name );
-        $driver = strtolower($this->driver);
-        
-        // Check for the extension
-		$file = path( ROOT, 'third_party', 'wowlib', 'emulators', $this->emulator, $driver, $class .'.php' );
-        if( !file_exists( $file ) )
-        {
-            // Extension doesnt exists :O
-            show_error('Failed to load wowlib extentsion %s', array($name), E_ERROR);
-            return false;
-        }
-        
-        // Load the extension file
-        require_once( $file );
-        
-        // Load the class
-        $class = "\\Wowlib\\{$this->driver}\\". $class;
-        try {
-            $this->{$name} = new $class($this);
-        }
-        catch(\Exception $e) {
-            $this->{$name} = false;
-        }
-        return $this->{$name};
+        // Load a new instance of the Driver class
+        return new \Wowlib\Driver($driver, $char, $world);
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Realm Loader
+| ---------------------------------------------------------------
+|
+*/
+    public static function getRealm()
+    {
+        // Make sure we are loaded here!
+        if(self::$rootPath === false) throw new Exception('Cannot fetch realm, Wowlib was never initialized!');
+        return self::$realm;
     }
 }
 ?>
