@@ -18,6 +18,8 @@ require_once  path( ROOT, 'third_party', 'wowlib', 'interfaces', 'iRealm.php');
 
 class Realm implements iRealm
 {
+    // Our DB Connection
+    public $DB;
 
 /*
 | ---------------------------------------------------------------
@@ -44,10 +46,6 @@ class Realm implements iRealm
 */
     public function realmlist()
     {
-        // Grab Realms
-        //$query = "SELECT * FROM `realmlist`";
-        //return $this->DB->query( $query )->fetch_array();
-        
         //This function doesn't return anything since ArcEmu doesn't store the realms in a data table.
         return array();
     }
@@ -57,20 +55,16 @@ class Realm implements iRealm
 | Method: fetchRealm()
 | ---------------------------------------------------------------
 |
-| This function gets the realm cols. from the realmlist table
+| This function gets the realm ID into an object
 |
 | @Param: (Int) $id - The realm ID we are requesting the information from
-| @Return (Array) - Returns an array of cols. for the realm id
+| @Return (Object) - Returns the RealmId Object, or false on failure
 |
 */
     public function fetchRealm($id)
     {
-        // Grab Realms
-        //$query = "SELECT * FROM `realmlist` WHERE `id`=?";
-        //return $this->DB->query( $query, array($id) )->fetch_row();
-        
-        //Again, doesn't return anything.
-        return array();
+        // Again, doesn't return anything.
+        return false;
     }
     
 /*
@@ -86,7 +80,7 @@ class Realm implements iRealm
 */
     public function uptime($id)
     {
-        return FALSE;
+        return false;
     }
     
 /*
@@ -604,9 +598,8 @@ class Account implements iAccount
 */
     public function __construct($acct, $parent)
     {
-        // Load the realm database connection
-        $this->load = load_class('Loader');
-        $this->DB = $this->load->database('RDB');
+        // Get Our realm DB Connection
+        $this->DB = $parent->DB;
         
         // Setup local user variables
         $this->parent = $parent;
