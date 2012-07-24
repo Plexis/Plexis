@@ -25,6 +25,7 @@ interface iCharacter
     public function getTotalKills();
     public function getHonorPoints();
     public function getArenaPoints();
+    public function getEquippedItems();
     public function getLoginFlags();
     public function hasLoginFlag($name);
     public function resetPosition();

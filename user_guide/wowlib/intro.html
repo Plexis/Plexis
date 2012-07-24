@@ -38,7 +38,7 @@
 	</p>
     <br />
     <p>
-        Each folder in the "third_party/wowlib" directory is treated as an emulator. Each emulator must contain at least 1 default wowlib, 
+        Each folder in the "third_party/wowlib/emulators" directory is an emulator. Each emulator must contain at least 1 default wowlib, 
         or else selecting the emulator will cause the cms errors! All emulators in this directory, will automatically be listed as a
         selectable emulator in the admin panel of this cms. Each wowlib in the emulator folders is optimized
         for a certain span of core revisions... Whenever a core update happens, that changes a table
@@ -47,7 +47,7 @@
     </p>
     <br />
     <p>
-        Each emulator, must contain a "realm" or "core" class ( {emulator}/{Emulator}.php ). The realm class is
+        Each emulator, must contain a "Realm" class ( emulators/{emulator}/Realm.php ). The realm class is
         used to provide basic realm and account actions, such as getting a formated realmlist, verifying login information, 
         banning accounts, and changing an account password / email. The realm class needs to be namespaced in the "Wowlib" namespace. 
         To get an idea of what you need to do to add a custom emulator, its best to just copy an emulator in 

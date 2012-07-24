@@ -268,22 +268,22 @@ class Characters implements \Wowlib\iCharacters
 |
 */      
     public function topKills($faction, $limit, $start)
-	{
-		// Alliance
-		if($faction == 1)
-		{			
-			$row = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level` FROM `characters` WHERE `totalkills` > 0 AND (
-				`race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11) ORDER BY `totalkills` DESC LIMIT $start, $limit";
-		}
-		else # Horde
-		{			
-			$row = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level` FROM `characters` WHERE `totalkills` > 0 AND (
-				`race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10) ORDER BY `totalkills` DESC LIMIT $start, $limit";
-		}
-		
+    {
+        // Alliance
+        if($faction == 1)
+        {			
+            $row = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level` FROM `characters` WHERE `totalkills` > 0 AND (
+                `race` = 1 OR `race` = 3 OR `race` = 4 OR `race` = 7 OR `race` = 11) ORDER BY `totalkills` DESC LIMIT $start, $limit";
+        }
+        else # Horde
+        {			
+            $row = "SELECT `guid`, `name`, `race`, `class`, `gender`, `level` FROM `characters` WHERE `totalkills` > 0 AND (
+                `race` = 2 OR `race` = 5 OR `race` = 6 OR `race` = 8 OR `race` = 10) ORDER BY `totalkills` DESC LIMIT $start, $limit";
+        }
+        
         // Return the query result
         return $this->DB->query( $query )->fetch_array();
-	}
+    }
  
 /*
 | ---------------------------------------------------------------
@@ -435,6 +435,30 @@ class Character implements \Wowlib\iCharacter
     // Our character variables
     protected $guid;
     protected $data = array();
+    
+    // Equiped items variables
+    protected $fetchedEquippedItems = false;
+    protected $equipped = array(
+        'head' => 0,
+        'neck' => 0,
+        'shoulders' => 0,
+        'body' => 0,
+        'chest' => 0,
+        'waist' => 0,
+        'legs' => 0,
+        'feet' => 0,
+        'wrists' => 0,
+        'hands' => 0,
+        'finger1' => 0,
+        'finger2' => 0,
+        'trinket1' => 0,
+        'trinket2' => 0,
+        'back' => 0,
+        'mainhand' => 0,
+        'offhand' => 0,
+        'ranged' => 0,
+        'tabard' => 0
+    );
     
 /*
 | ---------------------------------------------------------------
@@ -733,6 +757,80 @@ class Character implements \Wowlib\iCharacter
     public function getArenaPoints()
     {
         return (int) $this->data['arenaPoints'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getEquippedItems
+| ---------------------------------------------------------------
+|
+| This method returns the characters equipped items in an array
+|
+| @Retrun: (Array)
+|
+*/
+    public function getEquippedItems()
+    {
+        // Check if we have fetched this character items or not
+        if(!$this->fetchedEquippedItems)
+        {
+            $query = "SELECT `item_instance`.`itemEntry`, `ci`.`slot` FROM `item_instance` 
+                RIGHT JOIN `character_inventory` AS `ci` ON `ci`.`item` = `item_instance`.`guid` 
+                WHERE `ci`.`guid` ={$this->guid} AND `ci`.`bag` =0 AND `ci`.`slot` < 19;";
+            $items = $this->DB->query($query)->fetch_array();
+
+            // Add each item to the $equipped array
+            if(is_array($items))
+            {
+                foreach($items as $item)
+                {
+                    $key = $this->getSlotKeyById($item['slot']);
+                    $this->equipped[$key] = (int) $item['itemEntry'];
+                }
+            }
+            
+            // Prevent future queries
+            $this->fetchedEquippedItems = true;
+        }
+        
+        return $this->equipped;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getSlotKeyById
+| ---------------------------------------------------------------
+|
+| This method is a private method used to convert a slot ID from
+| the database, into an array key for that slot
+|
+| @Retrun: (String)
+|
+*/
+    protected function getSlotKeyById($id)
+    {
+        switch($id)
+        {
+            case 0: return 'head';
+            case 1: return 'neck';
+            case 2: return 'shoulders';
+            case 3: return 'body';
+            case 4: return 'chest';
+            case 5: return 'waist';
+            case 6: return 'legs';
+            case 7: return 'feet';
+            case 8: return 'wrists';
+            case 9: return 'hands';
+            case 10: return 'finger1';
+            case 11: return 'finger2';
+            case 12: return 'trinket1';
+            case 13: return 'trinket2';
+            case 14: return 'back';
+            case 15: return 'mainhand';
+            case 16: return 'offhand';
+            case 17: return 'ranged';
+            case 18: return 'tabard';
+        }
     }
     
 /*
