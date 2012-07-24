@@ -21,9 +21,6 @@ class Wowlib
     public static $RDB;
     protected static $load;
     
-    // Current wowlib driver
-    public static $driver;
-    
     // Static Instances
     public static $rootPath = false;
     public static $emulator;

@@ -31,8 +31,8 @@ class Emulator implements iEmulator
         
         // Load our extensions needed
         $root = \Wowlib::$rootPath;
-        require_once path($root, 'emulators', 'trinity', 'Account.php');
-        require_once path($root, 'emulators', 'trinity', 'Realm.php');
+        require_once path($root, 'emulators', 'mangos', 'Account.php');
+        require_once path($root, 'emulators', 'mangos', 'Realm.php');
     }
     
 /*

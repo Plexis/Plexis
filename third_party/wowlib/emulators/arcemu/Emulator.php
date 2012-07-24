@@ -31,7 +31,7 @@ class Emulator implements iEmulator
         
         // Load our extensions needed
         $root = \Wowlib::$rootPath;
-        require_once path($root, 'emulators', 'trinity', 'Account.php');
+        require_once path($root, 'emulators', 'arcemu', 'Account.php');
     }
     
 /*
