@@ -426,6 +426,30 @@ class Character
     protected $guid;
     protected $data = array();
     
+    // Equiped items variables
+    protected $fetchedEquippedItems = false;
+    protected $equipped = array(
+        'head' => 0,
+        'neck' => 0,
+        'shoulders' => 0,
+        'body' => 0,
+        'chest' => 0,
+        'waist' => 0,
+        'legs' => 0,
+        'feet' => 0,
+        'wrists' => 0,
+        'hands' => 0,
+        'finger1' => 0,
+        'finger2' => 0,
+        'trinket1' => 0,
+        'trinket2' => 0,
+        'back' => 0,
+        'mainhand' => 0,
+        'offhand' => 0,
+        'ranged' => 0,
+        'tabard' => 0
+    );
+    
 /*
 | ---------------------------------------------------------------
 | Constructor
@@ -728,6 +752,78 @@ class Character
     public function getArenaPoints()
     {
         return (int) $this->data['arenaPoints'];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getEquippedItems
+| ---------------------------------------------------------------
+|
+| This method returns the characters equipped items in an array
+|
+| @Retrun: (Array)
+|
+*/
+    public function getEquippedItems()
+    {
+        // Check if we have fetched this character items or not
+        if(!$this->fetchedEquippedItems)
+        {
+            $query = "SELECT `entry`, `slot` FROM `playeritems` WHERE `ownerguid`={$this->guid} AND `containerslot`='-1' AND `slot` < 19;";
+            $items = $this->DB->query($query)->fetch_array();
+
+            // Add each item to the $equipped array
+            if(is_array($items))
+            {
+                foreach($items as $item)
+                {
+                    $key = $this->getSlotKeyById($item['slot']);
+                    $this->equipped[$key] = (int) $item['entry'];
+                }
+            }
+            
+            // Prevent future queries
+            $this->fetchedEquippedItems = true;
+        }
+        
+        return $this->equipped;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getSlotKeyById
+| ---------------------------------------------------------------
+|
+| This method is a private method used to convert a slot ID from
+| the database, into an array key for that slot
+|
+| @Retrun: (String)
+|
+*/
+    protected function getSlotKeyById($id)
+    {
+        switch($id)
+        {
+            case 0: return 'head';
+            case 1: return 'neck';
+            case 2: return 'shoulders';
+            case 3: return 'body';
+            case 4: return 'chest';
+            case 5: return 'waist';
+            case 6: return 'legs';
+            case 7: return 'feet';
+            case 8: return 'wrists';
+            case 9: return 'hands';
+            case 10: return 'finger1';
+            case 11: return 'finger2';
+            case 12: return 'trinket1';
+            case 13: return 'trinket2';
+            case 14: return 'back';
+            case 15: return 'mainhand';
+            case 16: return 'offhand';
+            case 17: return 'ranged';
+            case 18: return 'tabard';
+        }
     }
     
 /*
