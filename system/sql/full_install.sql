@@ -130,7 +130,7 @@ CREATE TABLE `pcms_news` (
   `id` tinyint(3) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `author` varchar(255) NOT NULL,
-  `posted` varchar(255) NOT NULL,
+  `posted` int(10) NOT NULL,
   `body` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -138,7 +138,7 @@ CREATE TABLE `pcms_news` (
 -- ----------------------------
 -- Records of pcms_news
 -- ----------------------------
-INSERT INTO `pcms_news` VALUES ('1', 'Welcome to Plexis CMS!', 'wilson212', '1324062007', '<p>Thank you for downloading Plexis Cms. Plexis is a professional WoW pirvate server CMS with tons of tools. Since we are in the Alpha stages, your feedback is <span style=\"color: #ff0000;\"><strong>critical</strong></span>. Please note that i donot recomend this site going live because of the due fact that there are not alot of features available.</p>');
+INSERT INTO `pcms_news` (`id`, `title`, `author`, `posted`, `body`) VALUES (1, 'Welcome to Plexis CMS!', 'Plexis', '1323129600', '<p>\r\nThank you for choosing Plexis CMS! Plexis is a professional WoW private server CMS with tons of tools, made possible by the <a href="https://github.com/wilson212/Frostbite-Framework" target="_blank">Frostbite Framework</a> and <a href="https://github.com/Plexis/Wowlib" target="_blank">WoWLib Library</a>.\r\nPlexis is still currently in the beta testing stage, and your feedback is <span style="color: #FF0000; font-weight: bold;">critical</span>. Please note that the Plexis team does not recommend using this CMS on a live site at this time.\r\n<br /><br />\r\nIf you are interested in customizing your website, please refer to the <a href="http://plexis.github.com/Plexis/" target="_blank">documentation</a>, if you would like to contribute please see <a href="https://github.com/Plexis/Plexis/blob/master/README.md#becoming-a-developer" target="_blank">this page</a>.\r\n<br /><br />\r\nIf you find any bugs or would like to request features, please start a new issue <a href="https://github.com/Plexis/Plexis/issues/new" target="_blank">here</a>.\r\n</p>');
 
 -- ----------------------------
 -- Table structure for `pcms_permissions`

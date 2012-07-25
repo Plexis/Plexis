@@ -1,1 +1,1 @@
-[{"status":"M","file":"README.md"},{"status":"M","file":"index.php"}]
+[{"status":"A","file":"system\/sql\/updates\/update_0.20.sql"},{"status":"M","file":"system\/controllers\/admin.php"},{"status":"M","file":"system\/sql\/full_install.sql"},{"status":"M","file":"index.php"}]

@@ -160,7 +160,7 @@ class Admin extends Core\Controller
             // by the PDO class when bound to the "?".
             $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 
                 pcms_accounts.group_id = pcms_account_groups.group_id WHERE `username` = ?";
-            $user = $this->DB->query( $query, array($username) )->fetch_row();
+            $user = $this->DB->query( $query, array($username) )->fetchRow();
             
             // If $user isnt an array, we failed to load the user
             if(!is_array($user))
@@ -308,7 +308,7 @@ class Admin extends Core\Controller
                     
                     // Load the perms for this group
                     $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=?";
-                    $group = $this->DB->query( $query, array($id) )->fetch_row();
+                    $group = $this->DB->query( $query, array($id) )->fetchRow();
                     $perms = unserialize($group['permissions']);
                     unset($group['permissions']); 
                     if($perms == FALSE) $perms = array();
@@ -433,7 +433,7 @@ class Admin extends Core\Controller
                 if($drivers == FALSE) $drivers = array();
                 
                 // Load our installed realm info
-                $realm = $this->DB->query("SELECT * FROM `pcms_realms` WHERE `id`=?", array($id))->fetch_row();
+                $realm = $this->DB->query("SELECT * FROM `pcms_realms` WHERE `id`=?", array($id))->fetchRow();
 
                 // Redirect if this realm doesnt exist / isnt installed
                 if($realm == FALSE) redirect('admin/realms');
