@@ -102,7 +102,7 @@ class Forum_Model extends Core\Model
         if($insert_topic != FALSE)
         {
             // Get our topic ID from the last commit
-            $topicid = $this->DB->last_insert_id();
+            $topicid = $this->DB->lastInsertId();
             
             // Insert the actual post
             $insert_post = $this->DB->insert("pcms_forum_posts", array(
@@ -116,7 +116,7 @@ class Forum_Model extends Core\Model
             if($insert_post != FALSE)
             {
                 // Get the insert post ID so we can update the forum last post info
-                $lastpost_id = $this->DB->last_insert_id();
+                $lastpost_id = $this->DB->lastInsertId();
                 
                 // Update the forum count
                 $rows = $this->DB->update("pcms_forum_forums", array( 
@@ -188,7 +188,7 @@ class Forum_Model extends Core\Model
             if($insert_post != FALSE)
             {
                 // Get our post ID from last insert
-                $postid = $this->DB->last_insert_id();
+                $postid = $this->DB->lastInsertId();
             
                 // Insert into topics
                 $update_topic = $this->DB->update("pcms_forum_topics", array(

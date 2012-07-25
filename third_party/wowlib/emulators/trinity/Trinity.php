@@ -2,7 +2,7 @@
 /* 
 | --------------------------------------------------------------
 | 
-| Plexis
+| WowLib Framework for WoW Private Server CMS'
 |
 | --------------------------------------------------------------
 |
@@ -13,7 +13,7 @@
 */
 namespace Wowlib;
 
-class Emulator implements iEmulator
+class Trinity implements iEmulator
 {
     // Our DB Connection
     public $DB;

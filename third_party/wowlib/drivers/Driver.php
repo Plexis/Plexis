@@ -2,7 +2,7 @@
 /* 
 | --------------------------------------------------------------
 | 
-| Plexis
+| WowLib Framework for WoW Private Server CMS'
 |
 | --------------------------------------------------------------
 |
@@ -34,7 +34,7 @@ class Driver
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($driver, $char, $world)
+    public function __construct($emulator, $driver, $char, $world)
     {
         // Load the Loader class
         $this->load = load_class('Loader');
@@ -44,7 +44,7 @@ class Driver
         $this->WDB = $this->load->database($world, false, true);
 
         // Finally set our emulator and driver variables
-        $this->emulator = config('emulator');
+        $this->emulator = $emulator;
         $this->driver = $driver;
     }
     

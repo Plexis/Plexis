@@ -2,18 +2,18 @@
 /* 
 | --------------------------------------------------------------
 | 
-| Plexis
+| WowLib Framework for WoW Private Server CMS'
 |
 | --------------------------------------------------------------
 |
-| Author:       Steven Wilson
+| Author:       Tony Hudgins
 | Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
 namespace Wowlib;
 
-class Emulator implements iEmulator
+class Arcemu implements iEmulator
 {
     // Our DB Connection
     public $DB;
@@ -31,8 +31,7 @@ class Emulator implements iEmulator
         
         // Load our extensions needed
         $root = \Wowlib::$rootPath;
-        require_once path($root, 'emulators', 'mangos', 'Account.php');
-        require_once path($root, 'emulators', 'mangos', 'Realm.php');
+        require_once path($root, 'emulators', 'arcemu', 'Account.php');
     }
     
 /*
@@ -47,9 +46,8 @@ class Emulator implements iEmulator
 */
     public function realmlist()
     {
-        // Grab Realms
-        $query = "SELECT * FROM `realmlist` ORDER BY `id`";
-        return $this->DB->query( $query )->fetchAll();
+        //This function doesn't return anything since ArcEmu doesn't store the realms in a data table.
+        return array();
     }
     
 /*
@@ -65,13 +63,8 @@ class Emulator implements iEmulator
 */
     public function fetchRealm($id)
     {
-        try {
-            $realm = new Realm($id, $this);
-        }
-        catch (\Exception $e) {
-            $realm = false;
-        }
-        return $realm;
+        // Again, doesn't return anything.
+        return false;
     }
     
 /*
@@ -87,10 +80,7 @@ class Emulator implements iEmulator
 */
     public function uptime($id)
     {
-        // Grab Realms
-        $query = "SELECT MAX(`starttime`) FROM `uptime` WHERE `realmid`=?";
-        $result = $this->DB->query( $query, array($id) )->fetchColumn();
-        return (time() - $result);
+        return false;
     }
     
 /*
@@ -105,7 +95,7 @@ class Emulator implements iEmulator
 | @Param: (String) $password - The new account (unencrypted) password
 | @Param: (String) $email - The new account email
 | @Param: (String) $ip - The Registeree's IP address
-| @Return (Mixed) - Returns the new Account ID on success, FALSE otherwise
+| @Return: Returns the new Account ID on success, FALSE otherwise
 |
 */
     public function createAccount($username, $password, $email = NULL, $ip = '0.0.0.0')
@@ -116,18 +106,19 @@ class Emulator implements iEmulator
         // SHA1 the password
         $user = strtoupper($username);
         $pass = strtoupper($password);
-        $password = sha1($user.':'.$pass);
+        $sha = sha1($user.':'.$pass);
         
         // Build our tables and values for Database insertion
         $data = array(
-            'username' => $username, 
-            'sha_pass_hash' => $password, 
+            'login' => $username, 
+            'password' => $password, 
+            'encrypted_password' => $sha,
             'email' => $email, 
-            'last_ip' => $ip
+            'lastip' => $ip
         );
         
         // Insert into the database
-        $this->DB->insert("account", $data);
+        $this->DB->insert("accounts", $data);
         
         // If we have an affected row, then we return TRUE
         return ($this->DB->numRows() > 0) ? $this->DB->lastInsertId() : false;
@@ -138,31 +129,26 @@ class Emulator implements iEmulator
 | Method: validate()
 | ---------------------------------------------------------------
 |
-| This method takes a username and password, and logins in with
+| This function takes a username and password, and logins in with
 |   that information. If the password matches the pasword in the
 |   database, we return the account id. Else we return FALSE,
 |
 | @Param: (String) $username - The account username
 | @Param: (String) $password - The account (unencrypted) password
-| @Return (Bool) - Returns TRUE on success, FALSE otherwise
+| @Return (Mixed) - Returns account ID on success, FALSE otherwise
 |
 */
     public function validate($username, $password)
     {
-        // SHA1 the password
-        $user = strtoupper($username);
-        $pass = strtoupper($password);
-        $password = sha1($user.':'.$pass);
-        
         // Load the users info from the Realm DB
-        $query = "SELECT `id`, `sha_pass_hash` FROM `account` WHERE `username`=?";
+        $query = "SELECT `acct`, `password` FROM `accounts` WHERE `login`=?";
         $result = $this->DB->query( $query, array($username) )->fetchRow();
         
         // Make sure the username exists!
         if(!is_array($result)) return false;
         
         // If the result was false, then username is no good. Also match passwords.
-        return ( $result['sha_pass_hash'] == $password ) ? $result['id'] : false;
+        return ( $result['password'] == $password ) ? $result['acct'] : false;
     }
     
 /*
@@ -205,9 +191,9 @@ class Emulator implements iEmulator
     {
         // Check the Realm DB for this username / account ID
         if(is_numeric($id))
-            $query = "SELECT `username` FROM `account` WHERE `id`=?";
+            $query = "SELECT `login` FROM `accounts` WHERE `id`=?";
         else
-            $query = "SELECT `id` FROM `account` WHERE `username` LIKE ? LIMIT 1";
+            $query = "SELECT `id` FROM `accounts` WHERE `username` LIKE ? LIMIT 1";
 
         // If the result is NOT false, we have a match, username is taken
         $res = $this->DB->query( $query, array($id) )->fetchColumn();
@@ -229,16 +215,16 @@ class Emulator implements iEmulator
     public function emailExists($email)
     {
         // Check the Realm DB for this username
-        $query = "SELECT `username` FROM `account` WHERE `email`=?";
+        $query = "SELECT `login` FROM `accounts` WHERE `email`=?";
         $res = $this->DB->query( $query, array($email) )->fetchColumn();
         
         // If the result is NOT false, we have a match, username is taken
-        return ($res !== false);
+        return ($res !== FALSE);
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: account_banned()
+| Function: accountBanned()
 | ---------------------------------------------------------------
 |
 | Checks the realm database if the account is banned
@@ -249,14 +235,14 @@ class Emulator implements iEmulator
 */
     public function accountBanned($account_id)
     {
-        $query = "SELECT COUNT(*) FROM `account_banned` WHERE `active`=1 AND `id`=?";
+        $query = "SELECT COUNT(*) FROM `accounts` WHERE `banned` > 0 AND `acct` = ?;";
         $check = $this->DB->query( $query, array($account_id) )->fetchColumn();
         return ($check !== FALSE && $check > 0) ? true : false;
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: ip_banned()
+| Function: ipBanned()
 | ---------------------------------------------------------------
 |
 | Checks the realm database if the users IP is banned
@@ -267,14 +253,14 @@ class Emulator implements iEmulator
 */
     public function ipBanned($ip)
     {
-        $query = "SELECT COUNT(*) FROM `ip_banned` WHERE `ip`=?";
+        $query = "SELECT COUNT(*) FROM `ipbans` WHERE `ip`=?";
         $check = $this->DB->query( $query, array($ip) )->fetchColumn();
         return ($check !== FALSE && $check > 0) ? true : false;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: ban_account()
+| Method: banAccount()
 | ---------------------------------------------------------------
 |
 | Bans a user account
@@ -287,34 +273,26 @@ class Emulator implements iEmulator
 | @Return (Bool) TRUE on success, FALSE on failure
 |
 */ 
-    public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = false)
+    public function banAccount($id, $banreason, $unbandate = NULL, $bannedby = 'Admin', $banip = FALSE)
     {
         // Check for account existance
         if(!$this->accountExists($id)) return false;
 
         // Make sure our unbandate is set, 1 year default
-        ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
+        if($unbandate == NULL) $unbandate = (time() + 31556926);
         $data = array(
-            'id' => $id,
-            'bandate' => time(), 
-            'unbandate' => $unbandate, 
-            'bannedby' => $bannedby, 
-            'banreason' => $banreason, 
-            'active' => 1
+            'banned' => $unbandate, 
+            'banreason' => $banreason
         ); 
-        $result = $this->DB->insert('account_banned', $data);
+        $result = $this->DB->update('accounts', $data, "`acct` = '$id'");
         
         // Do we ban the IP as well?
-        if($banip == true && $result == true)
-        {
-            return $this->banAccountIp($id, $banreason, $unbandate, $bannedby);
-        }
-        return $result;
+        return ($banip == true) ? $this->banAccountIp($id, $banreason, $unbandate, $bannedby) : $result;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: ban_account_ip()
+| Method: banAccountIp()
 | ---------------------------------------------------------------
 |
 | Bans an accounts IP address
@@ -329,7 +307,7 @@ class Emulator implements iEmulator
     public function banAccountIp($id, $banreason, $unbandate = NULL, $bannedby = 'Admin')
     {
         // Check for account existance
-        $query = "SELECT `last_ip` FROM `account` WHERE `id`=?";
+        $query = "SELECT `lastip` FROM `accounts` WHERE `acct`=?";
         $ip = $this->DB->query( $query, array($id) )->fetchColumn();
         if(!$ip) return false;
         
@@ -337,15 +315,13 @@ class Emulator implements iEmulator
         if( $this->ipBanned($ip) ) return true;
 
         // Make sure our unbandate is set, 1 year default
-        ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
+        if($unbandate == NULL) $unbandate = (time() + 31556926);
         $data = array(
             'ip' => $ip,
-            'bandate' => time(), 
-            'unbandate' => $unbandate, 
-            'bannedby' => $bannedby, 
+            'expire' => $unbandate,
             'banreason' => $banreason, 
         ); 
-        return $this->DB->insert('ip_banned', $data);
+        return $this->DB->insert('ipbans', $data);
     }
     
 /*
@@ -365,12 +341,12 @@ class Emulator implements iEmulator
         if( !$this->accountBanned($id) ) return true;
         
         // Check for account existance
-        return $this->DB->update("account_banned", array('active' => 0), "`id`=".$id);
+        return $this->DB->update("accounts", array('banned' => 0, 'banreason' => ''), "`acct`=".$id);
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: unban_account_ip()
+| Method: unbanAccountIp()
 | ---------------------------------------------------------------
 |
 | Un-Bans a users account IP
@@ -382,7 +358,7 @@ class Emulator implements iEmulator
     public function unbanAccountIp($id)
     {
         // Check for account existance
-        $query = "SELECT `last_ip` FROM `accounts` WHERE `id`=?";
+        $query = "SELECT `lastip` FROM `accounts` WHERE `acct`=?";
         $ip = $this->DB->query( $query, array($id) )->fetchColumn();
         if(!$ip) return false;
         
@@ -390,12 +366,12 @@ class Emulator implements iEmulator
         if( !$this->ipBanned($ip) ) return true;
         
         // Check for account existance
-        return $this->DB->delete("ip_banned", "`ip`=".$ip);
+        return $this->DB->delete("ipbans", "`ip`=".$ip);
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: delete_account()
+| Method: deleteAccount()
 | ---------------------------------------------------------------
 |
 | Un-Bans a users account IP
@@ -406,11 +382,8 @@ class Emulator implements iEmulator
 */ 
     public function deleteAccount($id)
     {
-        // Delete any bans
-        $this->unbanAccount($id);
-        
         // Delete the account
-        return $this->DB->delete("account", "`id`=".$id);
+        return $this->DB->delete("accounts", "`acct`=".$id);
     }
     
 /*
@@ -476,9 +449,39 @@ class Emulator implements iEmulator
             case 0: // Base Game
                 return 0;
             case 1: // Burning Crusade
-                return 1;
+                return 8;
             case 2: // WotLK
+                return 24;
+            default: // WotLK
+                return 24;
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Function: expansionToBit()
+| ---------------------------------------------------------------
+|
+| Returns the expansion ID based off of the given Database ID of 
+|   expansion. This only reflects Arcemu really...
+|
+| @Return (Int)
+|
+*/
+    
+    public function bitToExpansion($e)
+    {
+        switch($e)
+        {
+            case 0: // Base Game
+                return 0;
+            case 8: // Burning Crusade
+                return 1;
+            case 16: // WotLK (no BC)
+            case 24: // WotLK
                 return 2;
+            case 36:
+                return 3;
             default: // WotLK
                 return 2;
         }
@@ -497,7 +500,7 @@ class Emulator implements iEmulator
     
     public function numAccounts()
     {
-        return $this->DB->query("SELECT COUNT(`id`) FROM `account`")->fetchColumn();
+        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts`")->fetchColumn();
     }
     
 /*
@@ -513,7 +516,7 @@ class Emulator implements iEmulator
     
     public function numBannedAccounts()
     {
-        return $this->DB->query("SELECT COUNT(`id`) FROM `account_banned` WHERE `active` = 1")->fetchColumn();
+        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts` WHERE `banned` > 0")->fetchColumn();
     }
     
 /*
@@ -532,7 +535,7 @@ class Emulator implements iEmulator
     {
         // 90 days or older
         $time = time() - 7776000;
-        $query = "SELECT COUNT(`id`) FROM `account` WHERE UNIX_TIMESTAMP(`last_login`) <  $time";
+        $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE UNIX_TIMESTAMP(`lastlogin`) <  $time";
         return $this->DB->query( $query )->fetchColumn();
     }
     
@@ -552,7 +555,7 @@ class Emulator implements iEmulator
     {
         // 90 days or older
         $time = date("Y-m-d H:i:s", time() - 86400);
-        $query = "SELECT COUNT(`id`) FROM `account` WHERE `last_login` BETWEEN  '$time' AND NOW()";
+        $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE `lastlogin` BETWEEN  '$time' AND NOW()";
         return $this->DB->query( $query )->fetchColumn();
     }
 }
