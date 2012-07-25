@@ -31,7 +31,7 @@ function fetch_account($name)
 function create_account($username, $pass)
 {
 	global $Realm;
-	$password = sha1($username .':'. $pass);
+	$password = sha1( strtoupper( $username . ':' . $pass ) );
 	$result = $Realm->insert('account', array('username' => $username, 'sha_pass_hash' => $password));
 	return ($result !== false) ? true : false;
 }
