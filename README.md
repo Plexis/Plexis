@@ -3,14 +3,14 @@ Plexis CMS
 
 A professional content management system for World of Warcraft private servers built on a model-view-controller framework that aims to be compatible with any database structure via the extensible [WoWLib](https://github.com/Plexis/Wowlib)
 
-	* [Documentation](http://plexis.github.com/Plexis/)
-	
+* [Documentation](http://plexis.github.com/Plexis/)
+
 
 Requirements
 ------------
 
-	* PHP 5.3.0 or newer
-	* PHP PDO extension
+* PHP 5.3.0 or newer
+* PHP PDO extension
 	
 Becoming a developer
 --------------------
@@ -21,11 +21,11 @@ Interested in joining the team? Contact [Wilson212](https://github.com/wilson212
 The Team
 --------
 
-	* [Wilson212](https://github.com/wilson212)
-	* [Syke](https://github.com/Syke94)
-	* [Evairfairy](https://github.com/Evairfairy)
-	* [Faded](https://github.com/Faded)
-	
+* [Wilson212](https://github.com/wilson212)
+* [Syke](https://github.com/Syke94)
+* [Evairfairy](https://github.com/Evairfairy)
+* [Faded](https://github.com/Faded)
+
 Feedback
 --------
 
