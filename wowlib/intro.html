@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Wowlib Introduction :: Plexis CMS Documentation</title>
+
+	<style type='text/css' media='all'>@import url('./userguide.css');</style>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Plexis</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>WowLib</h1>
+
+	<p>
+		A wowlib, or Wow Library, is a framework that contains a list of methods that preform actions on the realm. It is best 
+        to describe the wowlib as a "go between", or connection between the cms, and the WoWserver databases. The cms calls 
+        upon the requested action to be preformed (A Method in the wowlib class), and the wowlib process the request best 
+        suited to the current revision of the core. Each realm can use its own Wowlib, which means you can have multiple 
+        realms, all different revisions (Ex: TrinityCore 3.1.3 & TrinityCore 3.3.5a), using its own Optimized wow library! 
+        Any core/emulator can be used as long as there is a Wowlib for it. By default, the cms will support Arcemu, TrinityCore, and Mangos.
+	</p>
+    <br />
+    <p>
+        Each folder in the "third_party/wowlib/emulators" directory is an emulator. Each emulator must contain at least 1 default wowlib, 
+        or else selecting the emulator will cause the cms errors! All emulators in this directory, will automatically be listed as a
+        selectable emulator in the admin panel of this cms. Each wowlib in the emulator folders is optimized
+        for a certain span of core revisions... Whenever a core update happens, that changes a table
+        for example, a new updated wowlib will need to be created so the cms will still be able to do
+        the requested actions without error.
+    </p>
+    <br />
+    <p>
+        Each emulator, must contain a "Realm" class ( emulators/{emulator}/Realm.php ). The realm class is
+        used to provide basic realm and account actions, such as getting a formated realmlist, verifying login information, 
+        banning accounts, and changing an account password / email. The realm class needs to be namespaced in the "Wowlib" namespace. 
+        To get an idea of what you need to do to add a custom emulator, its best to just copy an emulator in 
+        this directory, and use it as a template to make your own.
+    </p>
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		Previous Topic:&nbsp;&nbsp;<a href="#">Previous Class</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#">User Guide Home</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		Next Topic:&nbsp;&nbsp;<a href="#">Next Class</a>
+	</p>
+	<p>
+		Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
+		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
+	</p>
+</div>
+
+</body>
+</html>

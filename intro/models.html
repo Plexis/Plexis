@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Models :: Plexis CMS Documentation</title>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Plexis</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Models</h1>
+	<p>
+		In theory, Models are suppossed to be used as classes that are designed to work with information in your database. Models are also used as page specific function holders. Instead
+		of making a helper file for your page controller to use 1 function, you can also just store this function in a model and use it that way.
+	</p>
+	
+	
+	<!-- Example Model -->
+	<h2>An Example Model</h2>
+	<p>
+		Lets take a look at an example controller.
+	</p>
+	<pre>&lt;?php
+class Page_model extends System\Core\Model 
+{
+	function __construct()
+	{
+		// Call the Model constructor
+		parent::__construct();
+
+		// Establish a Database connection
+		$this->DB = $this->load->database('DB');
+	}
+	
+	public function get_news_posts()
+	{
+		$news = $this->DB->query("SELECT * FROM `news` LIMIT 5")->fetch_array();
+		
+		// Return the array of news posts
+		return $news;
+	}
+	
+	public function insert_news($news)
+	{
+		$result = $this->DB->insert('news_table', $news);
+		return $result;
+	}
+}
+?&gt;</pre>
+	
+	
+	<!-- In About -->
+	<h2>About Models</h2>
+	<p>
+		Models are stored in this location: "<dfn>application/models</dfn>". They can be nested in sub folders if you wish to organize like that. A basic Model looks like so:
+		<pre>&lt;?php
+class <var>Model_Name</var> extends System\Core\Model 
+{
+	function __construct()
+	{
+		// Call the Model constructor
+		<samp>parent::__construct();</samp>
+	}
+}
+?&gt;</pre>
+
+		In the example above, <var>Model_name</var> is the name of your model. Remember, all classes first letter MUST be capitalized, as well as the file name. Notice how i highlighted the parent::__construct()?
+		You need to do this to enable the loader by default. You dont have to extend the partent, But if you plan to use the loader, you might as well extend it.
+	</p>
+	
+	
+	<!-- Creating -->
+	<h2>Creating Models</h2>
+	<p>
+		Creating a model is just like creating a controller. The example below, goes in this file: "<dfn>application/models/</dfn><samp>test_model.php</samp>".
+		<p class="important"><strong>Note:</strong>&nbsp; Since models are NOT namespaced, the filename's are all lowercase!</p>
+		<pre>&lt;?php
+class <samp>Test_model</samp> extends System\Core\Model 
+{
+	function __construct()
+	{
+		// Call the Model constructor
+		parent::__construct();
+	}
+}
+?&gt;</pre>
+
+
+	<!-- Loading Models -->
+	<h2>Loading and Using Models</h2>
+	<p>
+		Below is an example of how to load the model in the controller:
+		<code>$this->load->model('<var>Model_name</var>'); </code>
+		
+		If your model is located in a sub-folder, include the relative path from your models folder. For example, if your model is located at "<dfn>application/models/page/test_model.php</dfn>" 
+		you'll load it using:
+		<code>$this->load->model('<var>page/test_model</var>'); </code>
+		Note above that the Model's name is lowercase. The first letter will be uppercase'd automatcially.
+		
+		Once you have loaded your model, you access it from the controller like so
+		<code>
+			$this->load->model('<var>Model_name</var>');<br /><br />
+			$this-><var>Model_name</var>->method();
+		</code>
+		
+		You may also instance your model under a different name if you wish like so:
+		<code>
+			$this->load->model('<var>Model_name</var>', '<dfn>test</dfn>');<br /><br />
+			$this-><dfn>test</dfn>->method();
+		</code>
+	</p>
+	
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		Previous Topic:&nbsp;&nbsp;<a href="#"> -- </a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="#">User Guide Home</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		Next Topic:&nbsp;&nbsp;<a href="flow_chart.html">Flow Chart</a>
+	</p>
+	<p>
+		Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
+		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
+	</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Events :: Plexis CMS Documentation</title>
+	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+		<tr>
+			<td><h1>Plexis</h1></td>
+			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
+		</tr>
+	</table>
+</div>
+<!-- END NAVIGATION -->
+
+<br clear="all" />
+
+<!-- START CONTENT -->
+<div id="content">
+	<h1>Events</h1>
+	<p>
+		Plexis uses an Event Handler, which allows callbacks to made once a particular action is made. This allows your plugins and modules to easily hook into
+        the system, and process actions at the optimal time. For more information on loading the class, and registering callbacks, please check out 
+        <a href="../core_classes/events.html">This Page</a>. Below is a list of events in Plexis CMS that your custom code can register to receieve a callback 
+        from. <u>Callback Recieved Arguments</u> is a list of arguments that are passed to your callback method when the event is triggered.
+	</p>
+	
+	
+	<!-- Pre Controller Init -->
+	<h2>Pre Controller Initialization</h2>
+	<p>
+		This event is triggered after the controller and action have been determined, but before the application controller is called and initialized. At this point of
+		time, the database has been connected to. To register for this event, 
+		use the following code:
+	</p>
+	<code>
+		$this->Events->register('<var>pre_controller</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        None
+    </p>
+
+	<!-- Controller Init -->
+	<h2>Post Controller Initialization</h2>
+	<p>This event is triggered once the application controller has finished constructing, but before the action method is ran. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>post_controller_init</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        None
+    </p>
+	
+	<!-- Post Action -->
+	<h2>Post Controller</h2>
+	<p>This event is triggered once the application controller has finished rendering the page, and the output sent to the browser. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>post_controller</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        None
+    </p>
+	
+	<!-- Logging In -->
+	<h2>User logging In</h2>
+	<p>This event is triggered when a user logs into his account. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>user_logged_in</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        <ol>
+            <li> [Type: Int]: ID of the account.</li>
+            <li> [Type: String]: Username of the account</li>
+        </ol>
+    </p>
+    
+    <!-- Logging Out -->
+	<h2>User logging Out</h2>
+	<p>This event is triggered when a user logs out of his account. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>user_logged_out</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        <ol>
+            <li> [Type: Int]: ID of the account.</li>
+            <li> [Type: String]: Username of the account</li>
+        </ol>
+    </p>
+    
+    <!-- Registering -->
+	<h2>New Account Registration</h2>
+	<p>This event is triggered when a new account is registered. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>account_created</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        <ol>
+            <li> [Type: Int]: ID of the account.</li>
+            <li> [Type: String]: Username of the account</li>
+            <li> [Type: String]: The account password</li>
+            <li> [Type: String]: Email Address to the account</li>
+            <li> [Type: String]: Users current IP address</li>
+        </ol>
+    </p>
+    
+    <!-- Password Change -->
+	<h2>Account Password Change</h2>
+	<p>This event is triggered when a user or admin changes the password of an account. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>password_change</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        <ol>
+            <li> [Type: Int]: ID of the account.</li>
+            <li> [Type: String]: New password to the account</li>
+        </ol>
+    </p>
+    
+    <!-- Email Change -->
+	<h2>Account Email Change</h2>
+	<p>This event is triggered when a user or admin changes the email address of an account. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>email_change</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        <ol>
+            <li> [Type: Int]: ID of the account.</li>
+            <li> [Type: String]: Old account email address</li>
+            <li> [Type: String]: New account email address</li>
+        </ol>
+    </p>
+    
+    <!-- Vote submission -->
+	<h2>Vote Submission</h2>
+	<p>This event is triggered when a user votes. To register for this event, use the following code:</p>
+	<code>
+		$this->Events->register('<var>user_voted</var>', '<var>$callback</var>');
+	</code>
+	<h5><u>Callback Recieved Arguments:</u></h5>
+	<p>
+        <ol>
+            <li> [Type: Int]: ID of the account.</li>
+            <li> [Type: Int]: The votesite ID</li>
+        </ol>
+    </p>
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+	<p>
+		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+		<!-- Next Topic:&nbsp;&nbsp;<a href="config.html">Config Class</a> -->
+	</p>
+	<p>
+		Frostbite Framework &copy; 2011 - 2012, Steven Wilson | Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
+		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
+	</p>
+</div>
+
+</body>
+</html>
