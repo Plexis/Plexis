@@ -88,7 +88,7 @@ class Characters implements \Wowlib\iCharacters
     {
         // Build our query
         $query = "SELECT `guid` FROM `characters` WHERE `name`=?";
-        $exists = $this->DB->query( $query, array($name) )->fetch_column();
+        $exists = $this->DB->query( $query, array($name) )->fetchColumn();
         return ($exists !== false) ? true : false;
     }
     
@@ -139,7 +139,7 @@ class Characters implements \Wowlib\iCharacters
         endif;
         
         // Return the query result
-        return $this->DB->query( $query )->fetch_column();
+        return $this->DB->query( $query )->fetchColumn();
     }
     
 /*
@@ -177,7 +177,7 @@ class Characters implements \Wowlib\iCharacters
         }
         
         // Return the query result
-        return $this->DB->query( $query )->fetch_array();
+        return $this->DB->query( $query )->fetchAll();
     }
     
 /*
@@ -206,7 +206,7 @@ class Characters implements \Wowlib\iCharacters
         endif;
         
         // Query the database
-        $list = $this->DB->query( $query )->fetch_array();
+        $list = $this->DB->query( $query )->fetchAll();
         
         // If we have a false return, then there was nothing to select
         return ($list === FALSE) ? array() : $list;
@@ -282,7 +282,7 @@ class Characters implements \Wowlib\iCharacters
 		}
 		
         // Return the query result
-        return $this->DB->query( $query )->fetch_array();
+        return $this->DB->query( $query )->fetchAll();
 	}
  
 /*
@@ -490,7 +490,7 @@ class Character
 			`bindpositionZ`,
 			`bindmapId`,
             FROM `characters` WHERE `guid`= $guid;";
-        $this->data = $this->DB->query($query)->fetch_row();
+        $this->data = $this->DB->query($query)->fetchRow();
         
         // Make sure we didnt get a false return
         if(!is_array($this->data)) throw new \Exception('Character doesnt exist');
@@ -770,7 +770,7 @@ class Character
         if(!$this->fetchedEquippedItems)
         {
             $query = "SELECT `entry`, `slot` FROM `playeritems` WHERE `ownerguid`={$this->guid} AND `containerslot`='-1' AND `slot` < 19;";
-            $items = $this->DB->query($query)->fetch_array();
+            $items = $this->DB->query($query)->fetchAll();
 
             // Add each item to the $equipped array
             if(is_array($items))

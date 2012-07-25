@@ -213,7 +213,7 @@ class Account extends Core\Controller
                 if( isset($_POST['key']) )
                 {
                     // If key is posted, If so we must validate it
-                    $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($_POST['key']))->fetch_row();
+                    $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($_POST['key']))->fetchRow();
                     
                     // 'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
                     if(!$result || $result['usedby'] >= 0) 
@@ -241,7 +241,7 @@ class Account extends Core\Controller
             else
             {
                 // Process if key is valid
-                $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($key))->fetch_row();
+                $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($key))->fetchRow();
                 
                 // 'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
                 if(!$result || $result['usedby'] >= 0) 
@@ -1070,7 +1070,7 @@ class Account extends Core\Controller
             
             // Get an array of all the users invite keys
             $query = "SELECT * FROM `pcms_reg_keys` WHERE `sponser`=? AND `assigned`= 0;";
-            $user_keys = $this->DB->query($query, array($this->user['id']))->fetch_array();
+            $user_keys = $this->DB->query($query, array($this->user['id']))->fetchAll();
             
             // Prepare for output
             $data['keys'] = (sizeof( $user_keys ) > 0) ? $user_keys : array();

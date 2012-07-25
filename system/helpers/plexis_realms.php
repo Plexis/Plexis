@@ -19,7 +19,7 @@
             // We need to make sure the realm is still installed
             $DB = load_class('Loader')->database( 'DB' );
             $query = "SELECT `name` FROM `pcms_realms` WHERE `id`=?";
-            $result = $DB->query( $query, array($return) )->fetch_column();
+            $result = $DB->query( $query, array($return) )->fetchColumn();
             
             // If false, Hard set the cookie to default
             if($result == FALSE) goto SetDefault;
@@ -54,7 +54,7 @@
         
         // Build our query
         $query = "SELECT * FROM `pcms_realms`";
-        return $DB->query( $query )->fetch_array();
+        return $DB->query( $query )->fetchAll();
     }
     
 /*
@@ -74,7 +74,7 @@
         
         // Build our query
         $query = "SELECT `name` FROM `pcms_realms` WHERE `id`=?";
-        $result = $DB->query( $query, array($id) )->fetch_column();
+        $result = $DB->query( $query, array($id) )->fetchColumn();
         
         // Make our return
         if($result == FALSE)
@@ -101,7 +101,7 @@
         
         // Build our query
         $query = "SELECT * FROM `pcms_realms` WHERE `id`=?";
-        $result = $DB->query( $query, array($id) )->fetch_row();
+        $result = $DB->query( $query, array($id) )->fetchRow();
         
         // Make our return
         return $result;
@@ -144,7 +144,7 @@
             }
             
             // fetch the array of realms
-            $realms = $DB->query( $query )->fetch_array();
+            $realms = $DB->query( $query )->fetchAll();
             
             // Dont log errors
             $Debug->silent_mode(true);

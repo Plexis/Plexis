@@ -59,7 +59,7 @@ class Account implements iAccount
             `last_login`,
             `expansion`
             FROM `account` WHERE `{$col}`= ?";
-        $this->data = $this->DB->query( $query, array($acct) )->fetch_row();
+        $this->data = $this->DB->query( $query, array($acct) )->fetchRow();
         
         // If the result is NOT false, we have a match, username is taken
         if(!is_array($this->data)) throw new \Exception('User Doesnt Exist');

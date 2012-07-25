@@ -46,7 +46,7 @@ class News_Model extends Core\Model
         
         // Get our news posts out of the database
         $query = "SELECT `id`, `title`, `author`, `posted`, `body` FROM `pcms_news` ORDER BY id DESC ".$limit;
-        $posts = $this->DB->query( $query )->fetch_array();
+        $posts = $this->DB->query( $query )->fetchAll();
         
         // If we have no results, return an empty array
         if($posts == FALSE)
@@ -72,7 +72,7 @@ class News_Model extends Core\Model
     {
         // Get our news posts out of the database
         $query = "SELECT `id`, `title`, `author`, `posted`, `body` FROM `pcms_news` WHERE `id`=".$id;
-        $post = $this->DB->query( $query )->fetch_row();
+        $post = $this->DB->query( $query )->fetchRow();
         
         // If we have no results, return an empty array
         if($post == FALSE)

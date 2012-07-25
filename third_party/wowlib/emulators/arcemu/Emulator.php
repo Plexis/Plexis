@@ -121,7 +121,7 @@ class Emulator implements iEmulator
         $this->DB->insert("accounts", $data);
         
         // If we have an affected row, then we return TRUE
-        return ($this->DB->num_rows() > 0) ? $this->DB->last_insert_id() : false;
+        return ($this->DB->numRows() > 0) ? $this->DB->last_insert_id() : false;
     }
     
 /*
@@ -142,7 +142,7 @@ class Emulator implements iEmulator
     {
         // Load the users info from the Realm DB
         $query = "SELECT `acct`, `password` FROM `accounts` WHERE `login`=?";
-        $result = $this->DB->query( $query, array($username) )->fetch_row();
+        $result = $this->DB->query( $query, array($username) )->fetchRow();
         
         // Make sure the username exists!
         if(!is_array($result)) return false;
@@ -196,7 +196,7 @@ class Emulator implements iEmulator
             $query = "SELECT `id` FROM `accounts` WHERE `username` LIKE ? LIMIT 1";
 
         // If the result is NOT false, we have a match, username is taken
-        $res = $this->DB->query( $query, array($id) )->fetch_column();
+        $res = $this->DB->query( $query, array($id) )->fetchColumn();
         return ($res !== false);
     }
     
@@ -216,7 +216,7 @@ class Emulator implements iEmulator
     {
         // Check the Realm DB for this username
         $query = "SELECT `login` FROM `accounts` WHERE `email`=?";
-        $res = $this->DB->query( $query, array($email) )->fetch_column();
+        $res = $this->DB->query( $query, array($email) )->fetchColumn();
         
         // If the result is NOT false, we have a match, username is taken
         return ($res !== FALSE);
@@ -236,7 +236,7 @@ class Emulator implements iEmulator
     public function accountBanned($account_id)
     {
         $query = "SELECT COUNT(*) FROM `accounts` WHERE `banned` > 0 AND `acct` = ?;";
-        $check = $this->DB->query( $query, array($account_id) )->fetch_column();
+        $check = $this->DB->query( $query, array($account_id) )->fetchColumn();
         return ($check !== FALSE && $check > 0) ? true : false;
     }
 
@@ -254,7 +254,7 @@ class Emulator implements iEmulator
     public function ipBanned($ip)
     {
         $query = "SELECT COUNT(*) FROM `ipbans` WHERE `ip`=?";
-        $check = $this->DB->query( $query, array($ip) )->fetch_column();
+        $check = $this->DB->query( $query, array($ip) )->fetchColumn();
         return ($check !== FALSE && $check > 0) ? true : false;
     }
     
@@ -308,7 +308,7 @@ class Emulator implements iEmulator
     {
         // Check for account existance
         $query = "SELECT `lastip` FROM `accounts` WHERE `acct`=?";
-        $ip = $this->DB->query( $query, array($id) )->fetch_column();
+        $ip = $this->DB->query( $query, array($id) )->fetchColumn();
         if(!$ip) return false;
         
         // Check if the IP is already banned or not
@@ -359,7 +359,7 @@ class Emulator implements iEmulator
     {
         // Check for account existance
         $query = "SELECT `lastip` FROM `accounts` WHERE `acct`=?";
-        $ip = $this->DB->query( $query, array($id) )->fetch_column();
+        $ip = $this->DB->query( $query, array($id) )->fetchColumn();
         if(!$ip) return false;
         
         // Check if the IP is banned or not
@@ -500,7 +500,7 @@ class Emulator implements iEmulator
     
     public function numAccounts()
     {
-        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts`")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts`")->fetchColumn();
     }
     
 /*
@@ -516,7 +516,7 @@ class Emulator implements iEmulator
     
     public function numBannedAccounts()
     {
-        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts` WHERE `banned` > 0")->fetch_column();
+        return $this->DB->query("SELECT COUNT(`acct`) FROM `accounts` WHERE `banned` > 0")->fetchColumn();
     }
     
 /*
@@ -536,7 +536,7 @@ class Emulator implements iEmulator
         // 90 days or older
         $time = time() - 7776000;
         $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE UNIX_TIMESTAMP(`lastlogin`) <  $time";
-        return $this->DB->query( $query )->fetch_column();
+        return $this->DB->query( $query )->fetchColumn();
     }
     
 /*
@@ -556,7 +556,7 @@ class Emulator implements iEmulator
         // 90 days or older
         $time = date("Y-m-d H:i:s", time() - 86400);
         $query = "SELECT COUNT(`acct`) FROM `accounts` WHERE `lastlogin` BETWEEN  '$time' AND NOW()";
-        return $this->DB->query( $query )->fetch_column();
+        return $this->DB->query( $query )->fetchColumn();
     }
 }
 // EOF

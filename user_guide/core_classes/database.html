@@ -199,14 +199,33 @@
 	<!-- Fetching Results -->
 	<h2>Fetching Results</h2>
 	<p>
-		There is actually 2 ways of getting results from the query
+		There is actually 3 ways of getting results from the query
 	</p>
 	
 		<!-- Fetch_array() -->
-		<h3>fetch_array()</h3>
+		<h3>fetchArray()</h3>
 		<p>This method is great when using a Select statement and expect multiple rows of data.</p>
 		<code>
-			$result = $connection->fetch_array('<dfn>$type</dfn>');
+			$result = $connection->fetchArray('<dfn>$type</dfn>');
+		</code>
+		<h5><u>Arguments:</u></h5>
+		<p>
+			<ol>
+				<li>
+					<dfn>$type</dfn> [Type: String, Default: "ASSOC"]: This is the return type of the array. It uses the same constants as the PDO fetchAll() method
+					( <a href='http://www.php.net/manual/en/pdostatement.fetchall.php'>Php PDO::Fetch</a> ). Just remember you just need the end of the fetch 
+					constant name ( PDO::FETCH_* ). For example: to use PDO::FECTH_BOTH, you query like this: $connection->fetchArray('BOTH'); <dfn>$type</dfn>
+					is not case sensitive.
+				</li>
+			</ol>
+		</p>
+		<!-- END Fetch_array -->
+        
+        <!-- FetchRow() -->
+		<h3>fetchRow()</h3>
+		<p>This method is great when using a Select statement and expect 1 row of data.</p>
+		<code>
+			$result = $connection->fetchRow('<dfn>$type</dfn>');
 		</code>
 		<h5><u>Arguments:</u></h5>
 		<p>
@@ -214,18 +233,18 @@
 				<li>
 					<dfn>$type</dfn> [Type: String, Default: "ASSOC"]: This is the return type of the array. It uses the same constants as the PDO fetch() method
 					( <a href='http://www.php.net/manual/en/pdostatement.fetch.php'>Php PDO::Fetch</a> ). Just remember you just need the end of the fetch 
-					constant name ( PDO::FETCH_* ). For example: to use PDO::FECTH_BOTH, you query like this: $connection->fetch_array('BOTH'); <dfn>$type</dfn>
+					constant name ( PDO::FETCH_* ). For example: to use PDO::FECTH_BOTH, you query like this: $connection->fetchRow('BOTH'); <dfn>$type</dfn>
 					is not case sensitive.
 				</li>
 			</ol>
 		</p>
-		<!-- END Fetch_array -->
+		<!-- END FetchRow -->
 		
 		<!-- Fetch_column() -->
-		<h3>fetch_column()</h3>
+		<h3>fetchColumn()</h3>
 		<p>This method is perfect for COUNT() queries or queries where you need just need 1 value from a single cell.</p>
 		<code>
-			$result = $connection->fetch_column();
+			$result = $connection->fetchColumn();
 		</code>
 		<!-- END Fetch_column() -->
 	
@@ -239,7 +258,7 @@
 		in the last queries result array, depending on the type of query.
 	</p>
 	<code>
-		$connection->num_rows();
+		$connection->numRows();
 	</code>
 	<!-- END Num Rows -->
 	
@@ -249,7 +268,7 @@
 		This method will return the insert id of the last Insert. Equivelant to mysql_insert_id()
 	</p>
 	<code>
-		$connection->last_insert_id('<dfn>$name</dfn>');
+		$connection->lastInsertId('<dfn>$name</dfn>');
 	</code>
 	<h5><u>Arguments:</u></h5>
 		<p>
@@ -289,7 +308,7 @@
 		Returns an array of all the queries ran on the current connection. (Format: array( $key => array('time', 'query')))
 	</p>
 	<code>
-		$connection->get_all_queries();
+		$connection->getAllQueries();
 	</code>
 	<!-- END Getting Queries -->
 

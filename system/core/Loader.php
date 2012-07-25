@@ -369,7 +369,7 @@ class Loader
         
         // Load our driver name
         $DB = $this->database('DB', FALSE);
-        $realm = $DB->query("SELECT `id`, `name`, `driver`, `char_db`, `world_db` FROM `pcms_realms` WHERE `id`=".$id)->fetch_row();
+        $realm = $DB->query("SELECT `id`, `name`, `driver`, `char_db`, `world_db` FROM `pcms_realms` WHERE `id`=".$id)->fetchRow();
         
         // Make sure we didnt get a false DB return
         if($realm === FALSE)

@@ -38,7 +38,7 @@
         
         // Build our query
         $query = "SELECT * FROM `pcms_templates` WHERE `status` = 1";
-        return $DB->query( $query )->fetch_array();
+        return $DB->query( $query )->fetchAll();
     }
     
 /*
@@ -59,6 +59,6 @@
         
         // Build our query
         $query = "SELECT `status` FROM `pcms_templates` WHERE `name`=?";
-        $result = $DB->query( $query, array($name) )->fetch_column();
+        $result = $DB->query( $query, array($name) )->fetchColumn();
         return ($result == FALSE) ? FALSE : TRUE;
     }

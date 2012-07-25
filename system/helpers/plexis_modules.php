@@ -61,7 +61,7 @@
         
         // Build our query
         $query = "SELECT * FROM `pcms_modules`";
-        return $DB->query( $query )->fetch_array();
+        return $DB->query( $query )->fetchAll();
     }
     
 /*
@@ -82,6 +82,6 @@
         
         // Build our query
         $query = "SELECT `uri` FROM `pcms_modules` WHERE `name`=?";
-        $result = $DB->query( $query, array($name) )->fetch_column();
+        $result = $DB->query( $query, array($name) )->fetchColumn();
         return ($result == FALSE) ? FALSE : TRUE;
     }

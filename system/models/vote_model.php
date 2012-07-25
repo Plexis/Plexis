@@ -47,7 +47,7 @@ class Vote_Model extends Core\Model
     {
         // Get our news posts out of the database
         $query = "SELECT * FROM `pcms_vote_sites` WHERE `id`=".$id;
-        $post = $this->DB->query( $query )->fetch_row();
+        $post = $this->DB->query( $query )->fetchRow();
         
         // If we have no results, return false, else return votesite
         return ($post == false) ? false : $post;
@@ -67,7 +67,7 @@ class Vote_Model extends Core\Model
     {
         // Get our news posts out of the database
         $query = "SELECT * FROM `pcms_vote_sites`";
-        $post = $this->DB->query( $query )->fetch_array();
+        $post = $this->DB->query( $query )->fetchAll();
         
         // If we have no results, return an empty array, else return votesite
         return ($post == false) ? array() : $post;
@@ -181,7 +181,7 @@ class Vote_Model extends Core\Model
         
         // Get our current vote site
         $query = "SELECT `points`, `reset_time` FROM `pcms_vote_sites` WHERE `id`=?";
-        $site = $this->DB->query( $query, array($site_id) )->fetch_row();
+        $site = $this->DB->query( $query, array($site_id) )->fetchRow();
         
         // If our $timer is false, vote site doesnt exist
         if($site == FALSE) return FALSE;
@@ -266,7 +266,7 @@ class Vote_Model extends Core\Model
 
         // Get alist of installed vote sites!
         $query = "SELECT `id` FROM `pcms_vote_sites`";
-        $result = $this->DB->query( $query )->fetch_array();
+        $result = $this->DB->query( $query )->fetchAll();
         $list = array();
         foreach($result as $temp)
         {

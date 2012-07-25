@@ -32,13 +32,13 @@ class Utilities
 
 /*
 | ---------------------------------------------------------------
-| Function: run_sql_file()
+| Function: runSqlFile()
 | ---------------------------------------------------------------
 |
 | Runs a sql file on the database
 |
 */
-    public function run_sql_file($file)
+    public function runSqlFile($file)
     {
         // Open the sql file, and add each line to an array
         $handle = @fopen($file, "r");

@@ -41,7 +41,7 @@ class Wowlib
             self::$load = load_class('Loader');
             
             // Set path to prevent future loading
-            self::$rootPath = path( ROOT, 'third_party', 'wowlib' );
+            self::$rootPath = dirname(__FILE__);
             
             // Set the connections into the connection variables
             self::$RDB = self::$load->database('RDB', false, true);

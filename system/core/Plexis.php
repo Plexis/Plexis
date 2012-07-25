@@ -151,7 +151,7 @@ class Plexis
         
         // Check to see if the URI belongs to a module
         $query = "SELECT * FROM `pcms_modules` WHERE `uri`=? OR `uri`=?";
-        $result = $this->DB->query( $query, array($uri1, $uri2) )->fetch_row();
+        $result = $this->DB->query( $query, array($uri1, $uri2) )->fetchRow();
         
         // If our result is an array, Then we load it as a module
         if(is_array($result))

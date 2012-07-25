@@ -75,7 +75,7 @@ class Account_Model extends Core\Model
     {
         // Build the query, and grab the data
         $query = 'SELECT `id`, `email`, `_account_recovery` FROM `pcms_accounts` WHERE `username`=?';
-        $info = $this->DB->query( $query, array($username))->fetch_row();
+        $info = $this->DB->query( $query, array($username))->fetchRow();
         
         // See if the recovery data is NULL
         if($info === FALSE || $info['_account_recovery'] == NULL)
@@ -115,7 +115,7 @@ class Account_Model extends Core\Model
         if($old == NULL)
         {
             $query = 'SELECT `id`, `email` FROM `pcms_accounts` WHERE `username`=?';
-            $old = $this->DB->query( $query, array($username))->fetch_row();
+            $old = $this->DB->query( $query, array($username))->fetchRow();
         }
         
         // Build our recovery data string
@@ -200,7 +200,7 @@ class Account_Model extends Core\Model
     {
         // Build our query, fetch the key
         $query = "SELECT * FROM `pcms_reg_keys` WHERE `id` = ?";
-        $result = $this->DB->query($query, array($keyid))->fetch_row();
+        $result = $this->DB->query($query, array($keyid))->fetchRow();
         
         // Check to make sure the query didn't fail.
         if( $result !== false )
@@ -245,7 +245,7 @@ class Account_Model extends Core\Model
     public function get_profile($id)
     {
         $this->DB->query("SELECT * FROM `pcms_accounts` WHERE `id`=?", array($id));
-        return $this->DB->fetch_row();
+        return $this->DB->fetchRow();
     }
 }
 // EOF

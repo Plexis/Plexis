@@ -52,7 +52,7 @@ class Admin_Model extends Core\Model
     {
         // Process installed realms
         $query = "SELECT `id`, `name` FROM `pcms_realms`";
-        $result = $this->DB->query( $query )->fetch_array();
+        $result = $this->DB->query( $query )->fetchAll();
         
         // Create our realms options
         if($result != FALSE && !empty($result))

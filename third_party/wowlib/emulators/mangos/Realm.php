@@ -42,7 +42,7 @@ class Realm implements iRealm
             `population`,
             `gamebuild`
             FROM `realmlist` WHERE `id`= ?";
-        $this->data = $this->DB->query( $query, array($id) )->fetch_row();
+        $this->data = $this->DB->query( $query, array($id) )->fetchRow();
         
         // If the result is NOT false, we have a match, username is taken
         if(!is_array($this->data)) throw new \Exception('Realm Doesnt Exist');

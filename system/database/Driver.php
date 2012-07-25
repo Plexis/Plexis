@@ -49,24 +49,14 @@ class Driver extends \PDO
 */
     public function __construct($i)
     {
-        // Create our DSN based off our driver
-        if($i['driver'] == 'sqlite')
-        {
-            $dsn = 'sqlite:dbname='. $i['database'];
-        }
-        else
-        {
-            $dsn = $i['driver'] .':host='.$i['host'] .';port='.$i['port'] .';dbname='.$i['database'];
-        }
+        // Create our DSN string
+        $dsn = $i['driver'] .':host='.$i['host'] .';port='.$i['port'] .';dbname='.$i['database'];
         
-        // Try and Connect to the database
-        try 
-        {
-            // Connect using the PDO Constructor
+        // Connect using the PDO Constructor
+        try {
             parent::__construct($dsn, $i['username'], $i['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
         }
-        catch (\PDOException $e)
-        {
+        catch (\PDOException $e) {
             throw new \Exception( $e->getMessage() );
         }
     }
@@ -86,7 +76,7 @@ class Driver extends \PDO
 | @Param: (Bool) $report_error - Trigger an error upon error?
 |
 */
-    public function query($query, $sprints = NULL, $report_error = TRUE)
+    public function query($query, $sprints = null, $report_error = true)
     {
         // Add query to the last query and benchmark
         $bench['query'] = $this->last_query = $query;
@@ -101,29 +91,29 @@ class Driver extends \PDO
         $start = microtime(true);
         try {
             $this->result->execute($sprints);
-            $failed = FALSE;
+            $failed = false;
         }
-        catch (\PDOException $e) { 
-            if($report_error == TRUE) $this->trigger_error();
-            $failed = TRUE;
+        catch (\PDOException $e) {
+            if($report_error == true) $this->triggerError();
+            $failed = true;
         }
         $end = microtime(true);
         
         // Get our benchmark time
-        $bench['time'] = round($end - $start, 5);
+        $bench['time'] = round($end - $start, 6);
 
         // Add the query to the list of queries
         $this->queries[] = $bench;
 
         // Up our statistic count
-        $this->statistics['total_queries']++;
+        ++$this->statistics['total_queries'];
         $this->statistics['total_time'] = ($this->statistics['total_time'] + $bench['time']);
         
         // Check for false return
-        if($failed == TRUE)
+        if($failed)
         {
             // Set our result to FALSE
-            $this->result = FALSE;
+            $this->result = false;
             $this->num_rows = 0;
         }
         else
@@ -149,7 +139,7 @@ class Driver extends \PDO
 | @Return: (Mixed) FALSE on error, otherwise nuber of rows affected
 |
 */
-    public function exec($query, $report_error = TRUE)
+    public function exec($query, $report_error = true)
     {
         // Add query to the last query and benchmark
         $bench['query'] = $this->last_query = $query;
@@ -158,50 +148,44 @@ class Driver extends \PDO
         $start = microtime(true);
         try {
             $result = parent::exec($query);
-            $failed = FALSE;
+            $failed = false;
         }
-        catch (\PDOException $e) { 
-            if($report_error == TRUE) $this->trigger_error();
-            $failed = TRUE;
+        catch (\PDOException $e) {
+            if($report_error == true) $this->triggerError();
+            $failed = true;
         }
         $end = microtime(true);
 
         // Get our benchmark time
-        $bench['time'] = round($end - $start, 5);
+        $bench['time'] = round($end - $start, 6);
 
         // Add the query to the list of queries
         $this->queries[] = $bench;
 
         // Up our statistic count
-        $this->statistics['total_queries']++;
+        ++$this->statistics['total_queries'];
         $this->statistics['total_time'] = ($this->statistics['total_time'] + $bench['time']);
         
         // Just return an absolute false (bool) on error
-        if($failed == TRUE) return FALSE;
-
-        // Return
-        return $result;
+        return ($failed) ? false : $result;
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: fetch_array()
+| Function: fetchAll()
 | ---------------------------------------------------------------
 |
-| fetch_array fetches a multi demensional array (multiple rows)
+| this method fetches a multi demensional array (multiple rows)
 |   of data from the database.
 |
 */
-    public function fetch_array($type = 'ASSOC', $param = NULL)
+    public function fetchAll($type = 'ASSOC', $param = null)
     {
         // Make sure we dont have a false return
-        if($this->result == FALSE || $this->result == NULL) return FALSE;
+        if($this->result == false || $this->result == null) return false;
         
         // Get our real type if we dont already have it
-        if(!is_int($type))
-        {
-            $type = $this->get_fetch_type($type);
-        }
+        if(!is_numeric($type)) $type = $this->getFetchType($type);
         
         // Fetch the result array
         if($param !== NULL)
@@ -213,81 +197,61 @@ class Driver extends \PDO
 
 /*
 | ---------------------------------------------------------------
-| Function: fetch_row()
+| Function: fetchRow()
 | ---------------------------------------------------------------
 |
-| fetch_row return just 1 row of data
+| this method returns just 1 row of data
 |
 */
-    public function fetch_row($type = 'ASSOC', $row = 0)
+    public function fetchRow($type = 'ASSOC')
     {
         // Make sure we dont have a false return
-        if($this->result == FALSE || $this->result == NULL) return FALSE;
+        if($this->result == false || $this->result == null) return false;
         
         // Get our real type if we dont already have it
-        if(!is_numeric($type))
-        {
-            $type = $this->get_fetch_type($type);
-        }
+        if(!is_numeric($type)) $type = $this->getfetchType($type);
         
         // Fetch the result array
-        return $this->result->fetch($type, $row);
+        return $this->result->fetch($type);
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: fetch_column()
+| Function: fetchColumn()
 | ---------------------------------------------------------------
 |
 | fetchs the first column from the last array.
 |
 */
-    public function fetch_column($col = 0)
+    public function fetchColumn($col = 0)
     {
         // Make sure we dont have a false return
-        if($this->result == FALSE || $this->result == NULL) return FALSE;
+        if($this->result == false || $this->result == null) return false;
         return $this->result->fetchColumn($col);
     }
 
 /*
 | ---------------------------------------------------------------
-| Function: get_fetch_type()
+| Function: getFetchType()
 | ---------------------------------------------------------------
 |
 | Return the PDO fetch type
 |
 */
-    public function get_fetch_type($type)
+    public function getFetchType($type)
     {
         $type = strtoupper($type);
         switch($type)
         {
-            case "ASSOC":
-                return \PDO::FETCH_ASSOC;
-
-            case "NUM":
-                return \PDO::FETCH_NUM;
-
-            case "BOTH":
-                return \PDO::FETCH_BOTH;
-
-            case "COLUMN":
-                return \PDO::FETCH_COLUMN;
-
-            case "CLASS":
-                return \PDO::FETCH_CLASS;
-
-            case "LAZY":
-                return \PDO::FETCH_LAZY;
-
-            case "INTO":
-                return \PDO::FETCH_INTO;
-
-            case "OBJ":
-                return \PDO::FETCH_OBJ;
-                
-            default:
-                return \PDO::FETCH_ASSOC;
+            case "ASSOC": return \PDO::FETCH_ASSOC;
+            case "NUM": return \PDO::FETCH_NUM;
+            case "BOTH": return \PDO::FETCH_BOTH;
+            case "COLUMN": return \PDO::FETCH_COLUMN;
+            case "CLASS": return \PDO::FETCH_CLASS;
+            case "LAZY": return \PDO::FETCH_LAZY;
+            case "INTO": return \PDO::FETCH_INTO;
+            case "OBJ": return \PDO::FETCH_OBJ;   
+            default: return \PDO::FETCH_ASSOC;
         }
     }
 
@@ -385,27 +349,7 @@ class Driver extends \PDO
         $this->num_rows = $this->exec('DELETE FROM ' . $table . ($where != '' ? ' WHERE ' . $where : ''));
 
         // Return TRUE or FALSE
-        if($this->num_rows > 0)
-        {
-            return TRUE;
-        }
-        return FALSE;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Function: last_insert_id()
-| ---------------------------------------------------------------
-|
-| The equivelant to mysql_insert_id(); This functions get the last
-| primary key from a previous insert
-|
-| @Return: (Int) Returns the insert id of the last insert
-|
-*/
-    public function last_insert_id($colname = NULL)
-    {
-        return $this->lastInsertId($colname);
+        return ($this->num_rows > 0) ? true : false;
     }
 
 /*
@@ -423,23 +367,20 @@ class Driver extends \PDO
 | @Return: (Int) Returns the number of rows in the last query
 |
 */
-    public function num_rows($real = FALSE)
+    public function numRows($real = false)
     {
         // If we are getting a real count, we need to query the
         // DB again as some DB's dont return the correct selected
         // amount of rows in a SELECT query result
-        if($real == TRUE)
+        if($real)
         {
             $regex = '/^SELECT (.*) FROM (.*)$/i';
             
             // Make sure this is a SELECT statement we are dealing with
-            if(preg_match($regex, $this->last_query, $output) != FALSE) 
-            { 
+            if(preg_match($regex, $this->last_query, $output) != false) 
+            {
                 // Query and get our count
                 $this->last_query = $bench['query'] = "SELECT COUNT(*) FROM ". $output[2];
-                
-                // Get our sprints
-                $sprints = $this->sprints;
                 
                 // Prepar1 the statment
                 $stmt = $this->prepare( $this->last_query );
@@ -447,10 +388,10 @@ class Driver extends \PDO
                 // Time our query
                 $start = microtime(true);
                 try {
-                    $stmt->execute($sprints);
+                    $stmt->execute( $this->sprints );
                 }
                 catch (\PDOException $e) { 
-                    $this->trigger_error();
+                    $this->triggerError();
                 }
                 $end = microtime(true);
                 
@@ -477,7 +418,7 @@ class Driver extends \PDO
 | @Return: (Array)
 |
 */ 
-    public function server_info()
+    public function serverInfo()
     {
         return array(
             'driver' => \PDO::getAttribute( \PDO::ATTR_DRIVER_NAME ),
@@ -509,7 +450,7 @@ class Driver extends \PDO
 | @Return: (Array)
 |
 */ 
-    public function get_all_queries()
+    public function getAllQueries()
     {
         return $this->queries;
     }
@@ -547,26 +488,21 @@ class Driver extends \PDO
     public function __get($name)
     {
         // Just return the extension if it exists
-        if(isset($this->$name))
-        {
-            return $this->$name;
-        }
+        if(isset($this->$name)) return $this->$name;
         
         // Create our classname
         $class = ucfirst($name);
         
-        // Check for the extension
+        // Check for the extension, if not found, doesnt exists :O
 		$file = path(SYSTEM_PATH, 'database', 'extensions', $class . '.php');
-        if(file_exists( $file ))
+        if(!file_exists( $file ))
         {
-            require_once($file);
-        }
-        else
-        {
-            // Extension doesnt exists :O
             show_error('db_autoload_failed', array($name), E_ERROR);
-            return FALSE;
+            return false;
         }
+        
+        // Include the File
+        require_once($file);
         
         // Load the class
         $class = "\\Database\\".$class;
@@ -576,14 +512,14 @@ class Driver extends \PDO
 
 /*
 | ---------------------------------------------------------------
-| Function: trigger_error()
+| Function: triggerError()
 | ---------------------------------------------------------------
 |
 | Trigger a Core error using a custom error message
 |
 */
 
-    protected function trigger_error() 
+    protected function triggerError() 
     {
         // Get our driver name and error information
         $errInfo = $this->result->errorInfo();

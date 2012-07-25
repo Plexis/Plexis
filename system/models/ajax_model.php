@@ -356,7 +356,7 @@ class Ajax_Model extends Core\Model
             
             // Fetch the array of realms
             $query = "SELECT `id`, `name`, `type`, `address`, `port`, `max_players` FROM `pcms_realms`";
-            $realms = $this->DB->query( $query )->fetch_array();
+            $realms = $this->DB->query( $query )->fetchAll();
             if($realms == FALSE) $realms = array();
             
             // Loop through each realm, and get its status
@@ -515,13 +515,13 @@ class Ajax_Model extends Core\Model
         /* SQL queries, Get data to display */
         $columns = "`". str_replace(",``", " ", implode("`, `", $aColumns)) ."`";
         $sQuery = "SELECT SQL_CALC_FOUND_ROWS {$columns} FROM {$sTable} {$sWhere} {$sOrder} {$sLimit}";
-        $rResult = $DB->query( $sQuery )->fetch_array('BOTH');
+        $rResult = $DB->query( $sQuery )->fetchAll();
         
         /* Data set length after filtering */
-        $iFilteredTotal = $DB->query( "SELECT FOUND_ROWS()" )->fetch_column();
+        $iFilteredTotal = $DB->query( "SELECT FOUND_ROWS()" )->fetchColumn();
         
         /* Total data set length */
-        $iTotal = $DB->query( "SELECT COUNT(`".$sIndexColumn."`) FROM   $sTable" )->fetch_column();
+        $iTotal = $DB->query( "SELECT COUNT(`".$sIndexColumn."`) FROM   $sTable" )->fetchColumn();
 
         /* Output */
         $output = array(

@@ -162,7 +162,7 @@ class Controller
     {
         // For starts, get our current database version
         $query = "SELECT `value` FROM `pcms_versions` WHERE `key`='database'";
-        $version = real_ver( $this->DB->query( $query )->fetch_column() );
+        $version = real_ver( $this->DB->query( $query )->fetchColumn() );
         if($version < real_ver( REQ_DB_VERSION ))
         {
             $updates = array();
@@ -200,7 +200,7 @@ class Controller
                 // Process updates
                 foreach($updates as $update)
                 {
-                    if( !$this->DB->utilities->run_sql_file($path . DS . $update['file']) )
+                    if( !$this->DB->utilities->runSqlFile($path . DS . $update['file']) )
                     {
                         // Add trace for debugging
                         \Debug::trace('Database update to version '. $version .' failed!', __FILE__, __LINE__);

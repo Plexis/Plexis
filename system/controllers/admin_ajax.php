@@ -86,7 +86,7 @@ class Admin_ajax extends Core\Controller
                 INNER JOIN `pcms_account_groups` ON 
                 pcms_accounts.group_id = pcms_account_groups.group_id 
                 WHERE id = ?";
-            $user = $this->DB->query( $query, array($id) )->fetch_row();
+            $user = $this->DB->query( $query, array($id) )->fetchRow();
             $id = $user['id'];
    
             // Make sure the current user has privileges to execute an ajax
@@ -223,7 +223,7 @@ class Admin_ajax extends Core\Controller
             $output = $this->ajax->process_datatables($cols, $index, $table, $where, $this->DB);
             
             // Get our user groups
-            $Groups = $this->DB->query("SELECT `group_id`,`title` FROM `pcms_account_groups`")->fetch_array();
+            $Groups = $this->DB->query("SELECT `group_id`,`title` FROM `pcms_account_groups`")->fetchAll();
             foreach($Groups as $value)
             {
                 $groups[ $value['group_id'] ] = $value['title'];
@@ -319,7 +319,7 @@ class Admin_ajax extends Core\Controller
                     // Load the group
                     $id = $this->Input->post('id', TRUE);
                     $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=?";
-                    $group = $this->DB->query( $query, array($id) )->fetch_row();
+                    $group = $this->DB->query( $query, array($id) )->fetchRow();
                     unset($group['permissions']);
                     
                     // Get our group type

@@ -58,7 +58,7 @@ class Admin extends Core\Controller
     public function index() 
     {
         // Get our PHP and DB versions
-        $info = $this->DB->server_info();
+        $info = $this->DB->serverInfo();
         $rewrite = (isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'On') ? 'On' : 'Off';
         
         // Add our build var
@@ -230,7 +230,7 @@ class Admin extends Core\Controller
                     $data['page_title'] = ucfirst( strtolower($username) )." (Account ID: ".$user['id'].")";
                     $data['page_desc'] = "Here you can manage the account of all your users.";
                     $data['user'] = $user;
-                    $data['groups'] = $this->DB->query("SELECT * FROM `pcms_account_groups`")->fetch_array();
+                    $data['groups'] = $this->DB->query("SELECT * FROM `pcms_account_groups`")->fetchAll();
                     
                     // Load the view
                     $this->load->view('user_manage', $data);
@@ -315,7 +315,7 @@ class Admin extends Core\Controller
                     
                     // Get all permissions in the database for all modules etc
                     $query = "SELECT `key`, `name`, `description`, `module` FROM `pcms_permissions` ORDER BY `id` ASC";
-                    $perms_list = $this->DB->query( $query, array($id) )->fetch_array();
+                    $perms_list = $this->DB->query( $query, array($id) )->fetchAll();
                     foreach($perms_list as $key => $p)
                     {
                         if( !isset($perms[$p['key']]) )
@@ -602,7 +602,7 @@ class Admin extends Core\Controller
         
         // Get installed templates
         $query = "SELECT * FROM `pcms_templates` WHERE `type`='site'";
-        $templates = $this->DB->query( $query )->fetch_array();
+        $templates = $this->DB->query( $query )->fetchAll();
         foreach($templates as $t)
         {
             $aa[] = $t['name'];

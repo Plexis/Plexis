@@ -117,7 +117,7 @@ class User
 
         // Get the database result
         $query = "SELECT * FROM `pcms_sessions` WHERE `token` = ?";
-        $session = $this->DB->query( $query, array($token) )->fetch_row();
+        $session = $this->DB->query( $query, array($token) )->fetchRow();
         
         // Unserialize the user_data array
         if($session !== false)
@@ -158,7 +158,7 @@ class User
                 $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=1";
                 
                 // Query our database set default guest information
-                $result = $this->DB->query( $query )->fetch_row();			
+                $result = $this->DB->query( $query )->fetchRow();			
                 $result['username'] = "Guest";
                 $result['logged_in'] = false;
                 
@@ -183,7 +183,7 @@ class User
                 pcms_accounts.group_id = pcms_account_groups.group_id WHERE `id` = '{$userid}'";
             
             // Query our database and get the users information
-            $result = $this->DB->query( $query )->fetch_row();
+            $result = $this->DB->query( $query )->fetchRow();
             
             // Make sure user wasnt deleted!
             if($result == false) goto Guest;
@@ -274,7 +274,7 @@ class User
                 pcms_accounts.group_id = pcms_account_groups.group_id WHERE id = ?";
             
             // Query our database and get the users information
-            $result = $this->DB->query( $query, array($Account->getId()) )->fetch_row();
+            $result = $this->DB->query( $query, array($Account->getId()) )->fetchRow();
             
             // If the user doesnt exists in the table, we need to insert it
             if($result === false)
@@ -290,7 +290,7 @@ class User
                     'registration_ip' => $this->data['ip_address']
                 );
                 $this->DB->insert( 'pcms_accounts', $data );
-                $result = $this->DB->query( $query )->fetch_row();
+                $result = $this->DB->query( $query )->fetchRow();
                 
                 // If the insert failed, we have a fatal error
                 if($result === false)
@@ -511,7 +511,7 @@ class User
         
         // Get alist of all permissions
         $query = "SELECT `key` FROM `pcms_permissions`";
-        $r = $this->DB->query( $query )->fetch_array();
+        $r = $this->DB->query( $query )->fetchAll();
         
         // Fix array keys
         foreach($r as $p)

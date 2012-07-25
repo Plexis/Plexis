@@ -90,7 +90,7 @@ class Statistics
                         // Set a new cookie and update current records, expire time 3 years :)
                         $this->Input->set_cookie('visitor_id', $Ip ."_". $Time, ($Time + 94608000));
                         $query = "UPDATE `pcms_hits` SET `ip` = '$Ip', `lastseen` = '".$Time ."' WHERE `ip` = ?";
-                        $result = $this->DB->query( $query, array($i) )->num_rows();
+                        $result = $this->DB->query( $query, array($i) )->numRows();
                         
                         // If the update failed, just insert new record
                         if($result == false)

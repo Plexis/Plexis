@@ -25,7 +25,7 @@ class Forum_Model extends Core\Model
     public function get_categories()
     {
         // Get the list of forum categories from the DB
-        return $this->DB->query("SELECT * FROM `pcms_forum_categories`")->fetch_array();
+        return $this->DB->query("SELECT * FROM `pcms_forum_categories`")->fetchAll();
     }
     
 /*
@@ -43,7 +43,7 @@ class Forum_Model extends Core\Model
     {
         // Get the list of forum categories from the DB
         $query = "SELECT * FROM `pcms_forum_forums` WHERE cat_id=?";
-        return $this->DB->query($query, array($c_id))->fetch_array();
+        return $this->DB->query($query, array($c_id))->fetchAll();
     }
  
 /*
@@ -167,7 +167,7 @@ class Forum_Model extends Core\Model
         
         // get our topic subject and forum id
         $query = "SELECT `topic_subject`, `topic_forum` FROM `pcms_forum_topics` WHERE `topic_id`=?";
-        $topic = $this->DB->query($query, array($topic_id))->fetch_row();
+        $topic = $this->DB->query($query, array($topic_id))->fetchRow();
         
         // False return?
         if($topic != FALSE)
