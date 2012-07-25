@@ -130,7 +130,7 @@ class Emulator implements iEmulator
         $this->DB->insert("account", $data);
         
         // If we have an affected row, then we return TRUE
-        return ($this->DB->numRows() > 0) ? $this->DB->last_insert_id() : false;
+        return ($this->DB->numRows() > 0) ? $this->DB->lastInsertId() : false;
     }
     
 /*
