@@ -68,8 +68,6 @@ class Wowlib
         {
             // Init a start time for benchmarking
             $start = microtime(1);
-            
-            \Debug::trace('one');
 
             // Set emulator paths, and scan to see which emulators exist
             $path = path( WOWLIB_ROOT, 'emulators' );

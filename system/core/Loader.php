@@ -360,12 +360,7 @@ class Loader
         if($Obj !== NULL) return $Obj;
         
         // Make sure the wowlib is initialized
-        if(!class_exists('Wowlib', false))
-        {
-            // Include the wowlib file
-            require path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
-            \Wowlib::Init( config('emulator'), 'RDB' );
-        }
+        if(!class_exists('Wowlib', false)) $this->_initWowlib();
         
         // Load our driver name
         $DB = $this->database('DB', FALSE);
@@ -379,16 +374,6 @@ class Loader
             show_error($message, array($id), E_ERROR);
         }
         
-        // Make sure the wowlib exists
-		$path = path( ROOT, 'third_party', 'wowlib', 'drivers', config('emulator'), $realm["driver"] );
-        if( !is_dir( $path ) )
-        {
-            $language = load_language_file('messages');
-            $message = $language['wowlib_driver_doesnt_exist'];
-            show_error($message, array($realm['driver']), E_ERROR);
-            return false;
-        }
-        
         // Unserialize our database information
         $char = unserialize($realm['char_db']);
         $world = unserialize($realm['world_db']);
@@ -400,10 +385,7 @@ class Loader
         \Registry::store('Wowlib_r'.$id, $class);
         
         // Check to see if the user wants to instance
-        if($instance_as !== FALSE)
-        {
-            get_instance()->$instance_as = $class;
-        }
+        if($instance_as !== FALSE) get_instance()->$instance_as = $class;
         return $class;
     }
     
@@ -429,15 +411,16 @@ class Loader
         if($realm !== NULL) goto Instance;
 
         // Init the class if it doesnt exist
-        if(!class_exists('Wowlib', false))
-        {
-            // Include the wowlib file
-            require path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
-            \Wowlib::Init( config('emulator'), 'RDB' );
-        }
+        if(!class_exists('Wowlib', false)) $this->_initWowlib();
         
         // Fetch the emulator class
-        $realm = \Wowlib::getRealm();
+        try {
+            $realm = \Wowlib::getRealm(0, 'RDB');
+        }
+        catch(\Exception $e) {
+            \Debug::silent_mode(false);
+            show_error('Wowlib Error: '. $e->getMessage(), false, E_ERROR);
+        }
         
         // Store the class statically and return the class
         \Registry::store($class_name, $realm);
@@ -461,6 +444,21 @@ class Loader
         }
         
         return $realm;
+    }
+    
+    protected function _initWowlib()
+    {
+        // Include the wowlib file
+        require path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
+        
+        // Try to init the wowlib
+        try {
+            \Wowlib::Init( config('emulator') );
+        }
+        catch(Exception $e) {
+            \Debug::silent_mode(false);
+            show_error('Wowlib Error: '. $e->getMessage(), false, E_ERROR);
+        }
     }
 }
 // EOF
