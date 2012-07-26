@@ -142,6 +142,7 @@ function process()
                     {
                         // Show that there we cant connect to the update server
                         update_error = true;
+                        update_message = status;
                         show_ajax_error(status);
                     }
                 });
@@ -155,59 +156,12 @@ function process()
             {
                 // Update the status
                 $('#update-state').html('<center>Finalizing update... Please wait.</center>');
-            
-                $.ajax({
-                    type: "POST",
-                    url: Plexis.url + '/admin_ajax/update',
-                    data: { action: 'finalize' },
-                    dataType: "json",
-                    timeout: 5000, // in milliseconds
-                    success: function(result) 
-                    {
-                        if(typeof result.php_error != "undefined" && result.php_error == true)
-                        {
-                            data = result.php_error_data;
-                            update_error = true;
-                            update_message = data.message;
-                            
-                            $.msgbox('Update failed because a PHP error was encountered!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
-                                type : 'error'
-                            });
-                        }
-                        else
-                        {
-                            if(result.success == false)
-                            {
-                                update_error = true;
-                                update_message = result.message;
-                            }
-                        }
-                    }
-                });
-            }
-            
-            // unlcok site
-            $.ajax({
-                type: "POST",
-                url: Plexis.url + '/admin_ajax/update',
-                data: { action: 'finish' },
-                dataType: "json",
-                timeout: 5000, // in milliseconds
-                success: function(result) {}
-            });
-            
-            // Process out message back to the user based on if we had errors
-            if(update_error == false)
-            {
-                $('#update').fadeOut(300, function(){
-                    $('#update-finished').fadeIn(300);
-                });
+                
+                finalize_update();
             }
             else
             {
-                $('#update').fadeOut(300, function(){
-                    $('#update-finished').html('<p><div class="alert error">'+ update_message +'</div></p>').fadeIn(300);
-                });
+                finalize(true, update_message);
             }
         },
         error: function(request, status, err) 
@@ -216,4 +170,65 @@ function process()
             $('#js_message').html('<font color="orange">Unable to connect to update server.</font>');
         }
     });
+    
+    function finalize_update()
+    {
+        $.ajax({
+            type: "POST",
+            url: Plexis.url + '/admin_ajax/update',
+            data: { action: 'finalize' },
+            dataType: "json",
+            timeout: 8000, // in milliseconds
+            success: function(result) 
+            {
+                if(typeof result.php_error != "undefined" && result.php_error == true)
+                {
+                    data = result.php_error_data;
+                    update_error = true;
+                    update_message = data.message;
+                    
+                    $.msgbox('Update failed because a PHP error was encountered!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
+                        type : 'error'
+                    });
+                }
+                else
+                {
+                    if(result.success == false)
+                    {
+                        update_error = true;
+                        update_message = result.message;
+                    }
+                }
+                
+                finalize(false, false);
+            }
+        });
+    }
+    
+    function finalize(update_error, message)
+    {
+        // unlcok site
+        $.ajax({
+            type: "POST",
+            url: Plexis.url + '/admin_ajax/update',
+            data: { action: 'finish' },
+            dataType: "json",
+            timeout: 5000, // in milliseconds
+            success: function(result) {
+                // Process out message back to the user based on if we had errors
+                if(update_error == false)
+                {
+                    $('#update').fadeOut(300, function(){
+                        $('#update-finished').fadeIn(300);
+                    });
+                }
+                else
+                {
+                    $('#update').fadeOut(300, function(){
+                        $('#update-finished').html('<p><div class="alert error">'+ message +'</div></p>').fadeIn(300);
+                    });
+                }
+            }
+        });
+    }
 }
