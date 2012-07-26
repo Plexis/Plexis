@@ -40,9 +40,10 @@ class User
     
     // Clients IP address
     protected $data = array(
+        'logged_in' => false,
+        'id' => 0,
         'username' => 'Guest',
         'ip_address' => '0.0.0.0',
-        'logged_in' => false,
     );
 
 /*
@@ -120,11 +121,8 @@ class User
         $session = $this->DB->query( $query, array($token) )->fetchRow();
         
         // Unserialize the user_data array
-        if($session !== false)
+        if(is_array($session))
         {
-            // Compatability till next update
-            if(!isset($session['expire_time'])) goto Guest;
-            
             // check users IP address to prevent cookie stealing
             if( $session['ip_address'] != $this->data['ip_address'] )
             {
@@ -159,69 +157,29 @@ class User
                 
                 // Query our database set default guest information
                 $result = $this->DB->query( $query )->fetchRow();			
-                $result['username'] = "Guest";
-                $result['logged_in'] = false;
                 
                 // Load our perms into a different var and unset
                 $perms = unserialize( $result['permissions'] );
                 unset( $result['permissions'] );
                 
-                // Set Guest Data
-                $result['username'] = 'Guest';
-                $result['logged_in'] = false;
-                
                 // Merge and set the data
-                $this->data = array_merge($this->data, $result);
+                $this->data = array_merge(array(
+                    'logged_in' => false,
+                    'id' => 0,
+                    'username' => 'Guest',
+                    'ip_address' => $this->data['ip_address'],
+                ), $result);
+                
+                // Load the permissions
+                $this->load_permissions( $result['group_id'], $perms );
             }
         }
         
         // Everything is good, user is valid, but we need to load his information
         else
         {
-            // Build our query
-            $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 
-                pcms_accounts.group_id = pcms_account_groups.group_id WHERE `id` = '{$userid}'";
-            
-            // Query our database and get the users information
-            $result = $this->DB->query( $query )->fetchRow();
-            
-            // Make sure user wasnt deleted!
-            if($result == false) goto Guest;
-            
-            // Good to go, Update the last seen if its more then 5 minutes ago
-            if((strtotime($result['last_seen']) + 300) < time())
-            {
-                $this->DB->update('pcms_accounts', array('last_seen' => date('Y-m-d H:i:s', time())), "`id`=". $userid);
-            }
-            
-            // Load our perms into a different var and unset
-            $perms = unserialize( $result['permissions'] );
-            unset( $result['permissions'] );
-            
-            // Custom variable for QA checking
-            ($result['_account_recovery'] == NULL) ? $set = false : $set = TRUE;
-          
-            // Loop through and remove private columns (underscore as first character)
-            foreach($result as $key => $value)
-            {
-                if(!strncmp($key, "_", 1))
-                {
-                    unset($result[$key]);
-                }
-            }
-            
-            // Add back our account recovery stuff
-            $result['_account_recovery'] = $set;
-            
-            // Set our users info up the the session and carry onwards :D
-            $this->data = array_merge($this->data, $result);
-            
-            // Add trace for debugging
-            \Debug::trace('Loaded user '. $result['username'], __FILE__, __LINE__);
+            if(!$this->_init_user($userid)) goto Guest;
         }
-        
-        // Load the permissions
-        $this->load_permissions( $result['group_id'], $perms );
     }
 
 /*
@@ -267,65 +225,7 @@ class User
         else
         {
             // Fetch account
-            $Account = $this->realm->fetchAccount($username);
-            
-            // Build our query	
-            $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 
-                pcms_accounts.group_id = pcms_account_groups.group_id WHERE id = ?";
-            
-            // Query our database and get the users information
-            $result = $this->DB->query( $query, array($Account->getId()) )->fetchRow();
-            
-            // If the user doesnt exists in the table, we need to insert it
-            if($result === false)
-            {
-                // Add trace for debugging
-                \Debug::trace("User account '{$username}' doesnt exist in Plexis database, fetching account from realm", __FILE__, __LINE__);
-                $data = array(
-                    'id' => $account_id, 
-                    'username' => ucfirst(strtolower($username)), 
-                    'email' => $Account->getEmail(), 
-                    'activated' => 1,
-                    'registered' => ($Account->joinDate() == false) ? date("Y-m-d H:i:s", time()) : $Account->joinDate(),
-                    'registration_ip' => $this->data['ip_address']
-                );
-                $this->DB->insert( 'pcms_accounts', $data );
-                $result = $this->DB->query( $query )->fetchRow();
-                
-                // If the insert failed, we have a fatal error
-                if($result === false)
-                {
-                    // Add trace for debugging
-                    \Debug::trace("There was a fatal error trying to insert account data into the plexis database", __FILE__, __LINE__);
-                    show_error('fatal_error', false, E_ERROR);
-                    return false;
-                }
-            }
-            
-            // Load our perms into a different var and unset
-            $perms = unserialize( $result['permissions'] );
-            unset( $result['permissions'] );
-            
-            // Make sure we have access to our account, we have to do this after saving the session unfortunatly
-            if( (!isset($perms['account_access']) || $perms['account_access'] == 0) && $result['is_super_admin'] == 0)
-            {
-                // Add trace for debugging
-                \Debug::trace("User has no permission to access account. Login failed.", __FILE__, __LINE__);
-                output_message('warning', 'account_access_denied');
-                return false;
-            }
-            
-            // We are good, save permissions for this user
-            $this->load_permissions($result['group_id'], $perms);
-            
-            // Make sure the account isnt locked due to verification
-            if($result['activated'] == false && config('reg_email_verification') == TRUE)
-            {
-                // Add trace for debugging
-                \Debug::trace("Account '{$username}' is unactivated. Login failed.", __FILE__, __LINE__);
-                output_message('warning', 'login_failed_account_unactivated');
-                return false;
-            }
+            if(!$this->_init_user($username)) return false;
             
             // Generate a completely random session id
             $time = microtime(1);
@@ -344,25 +244,7 @@ class User
             $this->DB->insert('pcms_sessions', $data);
 
             // Update user with new session id
-            $this->DB->update('pcms_accounts', array('last_seen' => date('Y-m-d H:i:s', $time)), "`id`=". $result['id']);
-            
-            // Custom variable for QA checking
-            ($result['_account_recovery'] == NULL) ? $set = false : $set = TRUE;
-          
-            // Loop through and remove private columns (underscore as first character)
-            foreach($result as $key => $value)
-            {
-                if(!strncmp($key, "_", 1))
-                {
-                    unset($result[$key]);
-                }
-            }
-            
-            // Add back our account recovery stuff
-            $result['_account_recovery'] = $set;
-            
-            // Set our users info up the the session and carry onwards :D
-            $this->data = array_merge($this->data, $result);
+            $this->DB->update('pcms_accounts', array('last_seen' => date('Y-m-d H:i:s', $time)), "`id`=". $this->data['id']);
             
             // Set cookie
             $token = base64_encode($this->data['id'] .'::'. $this->sessionid);
@@ -526,7 +408,7 @@ class User
         {
             if( !isset($list[ $key ]) )
             {
-                $dif = TRUE;
+                $dif = true;
                 unset($perms[ $key ]);
             }
         }
@@ -559,11 +441,7 @@ class User
         if($this->data['is_super_admin']) return 1;
         
         // Not a super admin, continue
-        if(array_key_exists($key, $this->permissions))
-        {
-            return $this->permissions[$key];
-        }
-        return 0;
+        return (array_key_exists($key, $this->permissions)) ? $this->permissions[$key] : 0;
     }
 
 /*
@@ -620,6 +498,123 @@ class User
             return $this->data;
         else
             return (array_key_exists($var, $this->data)) ? $this->data[$var] : false;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: _init_user
+| ---------------------------------------------------------------
+|
+| This method is used to initiate a user when an ID or username
+| is determined
+|
+| @Return (Bool)
+|
+*/
+    protected function _init_user($userid)
+    {
+        // Fetch account
+        $Account = $this->realm->fetchAccount($userid);
+        if(!is_object($Account))
+        {
+            // Add trace for debugging
+            \Debug::trace("Account id {$userid} doesnt exist in the realm database. Failed to init user account", __FILE__, __LINE__);
+            return false;
+        }
+        
+        // Build our rediculas query
+        $query = "SELECT 
+                `activated`, 
+                `pcms_accounts`.`group_id`, 
+                `last_seen`, 
+                `registered`, 
+                `registration_ip`, 
+                `language`, 
+                `selected_theme`, 
+                `votes`, 
+                `vote_points`, 
+                `vote_points_earned`, 
+                `vote_points_spent`, 
+                `donations`, 
+                `_account_recovery`,
+                `pcms_account_groups`.`title`,
+                `pcms_account_groups`.`is_banned`,
+                `pcms_account_groups`.`is_user`,
+                `pcms_account_groups`.`is_admin`,
+                `pcms_account_groups`.`is_super_admin`,
+                `pcms_account_groups`.`permissions`
+            FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 
+            pcms_accounts.group_id = pcms_account_groups.group_id WHERE `id` = ?";
+        
+        // Query our database and get the users information
+        $result = $this->DB->query( $query, array($Account->getId()), false )->fetchRow();
+        
+        // If the user doesnt exists in the table, we need to insert it
+        if($result === false)
+        {
+            // Add trace for debugging
+            \Debug::trace("User account '{$Account->getUsername()}' doesnt exist in Plexis database, fetching account from realm", __FILE__, __LINE__);
+            $data = array(
+                'id' => $Account->getId(), 
+                'username' => ucfirst(strtolower($Account->getUsername())), 
+                'email' => $Account->getEmail(), 
+                'activated' => 1,
+                'registered' => ($Account->joinDate() == false) ? date("Y-m-d H:i:s", time()) : $Account->joinDate(),
+                'registration_ip' => $this->data['ip_address']
+            );
+            $this->DB->insert( 'pcms_accounts', $data );
+            $result = $this->DB->query( $query )->fetchRow();
+            
+            // If the insert failed, we have a fatal error
+            if($result === false)
+            {
+                // Add trace for debugging
+                \Debug::trace("There was a fatal error trying to insert account data into the plexis database", __FILE__, __LINE__);
+                show_error('fatal_error', false, E_ERROR);
+                return false;
+            }
+        }
+        
+        // Load our perms into a different var and unset
+        $perms = unserialize( $result['permissions'] );
+        unset( $result['permissions'] );
+        
+        // Make sure we have access to our account, we have to do this after saving the session unfortunatly
+        if( (!isset($perms['account_access']) || $perms['account_access'] == 0) && $result['is_super_admin'] == 0)
+        {
+            // Add trace for debugging
+            \Debug::trace("User has no permission to access account. Login failed.", __FILE__, __LINE__);
+            output_message('warning', 'account_access_denied');
+            return false;
+        }
+        
+        // We are good, save permissions for this user
+        $this->load_permissions($result['group_id'], $perms);
+        
+        // Make sure the account isnt locked due to verification
+        if($result['activated'] == false && config('reg_email_verification') == TRUE)
+        {
+            // Add trace for debugging
+            \Debug::trace("Account '{$username}' is unactivated. Login failed.", __FILE__, __LINE__);
+            output_message('warning', 'login_failed_account_unactivated');
+            return false;
+        }
+        
+        // Custom variable for QA checking
+        $result['_account_recovery'] = ($result['_account_recovery'] != null && strlen($result['_account_recovery']) > 10);
+        
+        // Set our users info up the the session and carry onwards :D
+        $this->data = array_merge( array(
+            'logged_in' => true,
+            'id' => $Account->getId(), 
+            'username' => ucfirst( strtolower($Account->getUsername()) ),
+            'email' => $Account->getEmail(),
+            'ip_address' => $this->data['ip_address']
+        ), $result);
+        
+        // Add trace for debugging
+        \Debug::trace('Loaded user '. $Account->getUsername(), __FILE__, __LINE__);
+        return true;
     }
 }
 // EOF

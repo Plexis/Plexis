@@ -180,7 +180,7 @@ class Admin extends Core\Controller
             {
                 // Use the realm database to grab user information first
                 $Account = $this->realm->fetchAccount($user['id']);
-				$data['expansion_data'] = $this->realm->expansions();
+                $data['expansion_data'] = $this->realm->expansions();
                 
                 // Use the additional inforamation from the realm DB
                 if(is_object($Account))
@@ -557,30 +557,30 @@ class Admin extends Core\Controller
                     
                     // Run the module installer
                     $result = $module->admin();
-					
-					if( $result == false )
-					{
-						// Correct the module view path'
-						$this->Template->set_controller('Admin', false);
+                    
+                    if( $result == false )
+                    {
+                        // Correct the module view path'
+                        $this->Template->set_controller('Admin', false);
 
-						// Build our page title / desc, then load the view
-						$this->Template->set( 'page_title', "Error Loading Module");
-						$this->Template->set( 'page_desc', "");
-						$this->load->view('module_load_error');
-						return;
-					}
+                        // Build our page title / desc, then load the view
+                        $this->Template->set( 'page_title', "Error Loading Module");
+                        $this->Template->set( 'page_desc', "");
+                        $this->load->view('module_load_error');
+                        return;
+                    }
                 }
             }
         }
-		else
-		{
-			$data = array(
-				"page_title" => "Module Management",
-				"page_desc" => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
-			);
-			
-			$this->load->view( "module_index", $data );
-		}
+        else
+        {
+            $data = array(
+                "page_title" => "Module Management",
+                "page_desc" => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
+            );
+            
+            $this->load->view( "module_index", $data );
+        }
     }
 
 /*

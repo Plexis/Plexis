@@ -36,7 +36,7 @@
             // Failed to load class all together.
             show_error('autoload_failed', array( addslashes($className) ), E_ERROR);
         }
-		
+        
         require_once $file;
     }
     
@@ -123,7 +123,7 @@
 | @Param: (Bool) $fatal - If set to true, error cannot be silenced
 | @Return: (None)
 |
-*/	
+*/
     function show_error($err_message = 'none', $args = null, $lvl = E_ERROR, $fatal = false)
     {
         // Let get a backtrace for deep debugging
@@ -145,7 +145,7 @@
         if($fatal) \Debug::silent_mode(false);
         \Debug::trigger_error($lvl, $message, $calling['file'], $calling['line']);
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Function: show_404()
@@ -155,7 +155,7 @@
 |
 | @Return: (None)
 |
-*/	
+*/
     function show_404()
     {
         \Debug::show_error(404);
@@ -172,12 +172,12 @@
 | @Param: (String) $message - The message
 | @Return: (None)
 |
-*/	
+*/
     function log_message($type, $message)
     {
         \Debug::log($type, $message);
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Function: get_instance()
@@ -187,7 +187,7 @@
 |
 | @Return: (Object) - Return the instnace of the Controller
 |
-*/	
+*/
     function get_instance()
     {
         if(isset($GLOBALS['_instance']) && is_object($GLOBALS['_instance']))
@@ -217,7 +217,7 @@
     {
         $GLOBALS['_instance'] = $Obj;
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Function: path()
