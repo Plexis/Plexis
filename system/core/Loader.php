@@ -88,10 +88,10 @@ class Loader
         
         // Check the registry
         $Obj = \Registry::load($class);
-        if($Obj !== NULL)
-        {
-            return $Obj;
-        }
+        if($Obj !== NULL) return $Obj;
+        
+        // Add debug tracer
+        \Debug::trace("Loading model \"{$name}\"...", __FILE__, __LINE__);
         
 		$model_path = "";
         // Include the model page
@@ -105,9 +105,11 @@ class Loader
         // Load the class
         try{
             $Obj = new $class();
+            \Debug::trace("Successfully loaded model \"{$name}\"", __FILE__, __LINE__);
         }
         catch(\Exception $e) {
             $Obj = FALSE;
+            \Debug::trace("Model \"{$name}\" failed to initialize. Message given: ". $e->getMessage(), __FILE__, __LINE__);
         }
         
         // Instnace the Model in the controller
@@ -183,11 +185,16 @@ class Loader
                 if($instance != FALSE) goto Instance;
                 return $Obj;
             }
+            
+            // Add Trace
+            \Debug::trace("Loading database connection \"{$args}\"...", __FILE__, __LINE__);
         
             // Get the DB connection information
             $info = load_class('Config')->get($args, 'DB');
             if($info === NULL)
             {
+                // Add Trace
+                \Debug::trace("Failed to load database connection preset \"{$args}\" because it doesnt exist in the config", __FILE__, __LINE__);
                 show_error('db_key_not_found', array($args), E_ERROR);
             }
         }
@@ -204,6 +211,9 @@ class Loader
             {
                 $args = $instance;
             }
+            
+            // Add Trace
+            \Debug::trace("Loading custom database connection...", __FILE__, __LINE__);
         }
         
         // Check for a DB class in the Application, and system core folder
@@ -217,9 +227,13 @@ class Loader
         $dispatch = "Database\\Driver";
         try{
             $Obj = new $dispatch( $info );
+            \Debug::trace("Successfully connected to database", __FILE__, __LINE__);
         }
         catch(\Exception $e) {
-            $Obj = FALSE;
+            $Obj = false;
+            
+            // Add Trace
+            \Debug::trace("Failed to load database connection. Message given: ". $e->getMessage(), __FILE__, __LINE__);
         }
         
         // Error?
@@ -272,9 +286,14 @@ class Loader
         // Lowercase the name because it isnt a class file!
         $name = strtolower($name);
         
+        // Add debug tracer
+        \Debug::trace('Loading helper "'. $name .'"...', __FILE__, __LINE__);
+        
         // Make sure this helper isnt already loaded
         if(in_array($name, $loaded))
         {
+            // Add debug tracer
+            \Debug::trace('Helper "'. $name .'" already loaded, returning false.', __FILE__, __LINE__);
             return;
         }
         else
@@ -309,6 +328,9 @@ class Loader
         $Obj = \Registry::load($store_name);
         if( $Obj === null )
         {
+            // Add debug tracer
+            \Debug::trace('Loading plugin "'. $name .'"...', __FILE__, __LINE__);
+        
             // We have to manually load the plugin
             $file = path( ROOT, 'third_party', 'plugins', $name .'.php');
             if(!file_exists($file))
@@ -324,10 +346,17 @@ class Loader
             try {
                 $className = "\Plugins\\". $name;
                 $Obj = new $className();
+                
+                // Add debug tracer
+                \Debug::trace('Plugin "'. $name .'" was loaded successfully', __FILE__, __LINE__);
             } 
             catch(\Exception $e) {
                 $Obj = false;
-                show_error('plugin_failed_init', array($name, $e->getMessage()), E_WARNING);
+                $message = $e->getMessage();
+                
+                // Add debug tracer
+                \Debug::trace('Plugin "$name" failed to initialize. Message given was: '. $message, __FILE__, __LINE__);
+                show_error('plugin_failed_init', array($name, $message), E_WARNING);
             }
             
             // Store the object
@@ -374,6 +403,9 @@ class Loader
             show_error($message, array($id), E_ERROR);
         }
         
+        // Add debug tracer
+        \Debug::trace('Loading Wowlib driver "'. $realm['driver'] .'"', __FILE__, __LINE__);
+        
         // Unserialize our database information
         $char = unserialize($realm['char_db']);
         $world = unserialize($realm['world_db']);
@@ -413,13 +445,20 @@ class Loader
         // Init the class if it doesnt exist
         if(!class_exists('Wowlib', false)) $this->_initWowlib();
         
+        // Add debug tracer
+        \Debug::trace('Loading Realm from Wowlib', __FILE__, __LINE__);
+        
         // Fetch the emulator class
         try {
             $realm = \Wowlib::getRealm(0, 'RDB');
         }
         catch(\Exception $e) {
             \Debug::silent_mode(false);
-            show_error('Wowlib Error: '. $e->getMessage(), false, E_ERROR);
+            $message = 'Wowlib Error: '. $e->getMessage();
+            
+            // Add debug tracer
+            \Debug::trace($message, __FILE__, __LINE__);
+            show_error($message, false, E_ERROR);
         }
         
         // Store the class statically and return the class
@@ -438,9 +477,14 @@ class Loader
         // We need to make sure the realm loaded ok, or thrown an error
         if(!is_object($realm))
         {
-            $language = load_language_file('messages');
-            $message = $language['emulator_doesnt_exist'];
-            show_error($message, array($emulator), E_ERROR);
+            // Add debug tracer
+            $message = 'Wowlib failed to fetch realm. Assuming the realm database is offline.';
+            \Debug::trace($message, __FILE__, __LINE__);
+            show_error($message, false, E_ERROR);
+        }
+        else
+        {
+            \Debug::trace('Successfully fetched the realm connection from the Wowlib', __FILE__, __LINE__);
         }
         
         return $realm;
@@ -451,12 +495,17 @@ class Loader
         // Include the wowlib file
         require path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
         
+        // Add Trace
+        \Debug::trace('Initializing Wowlib...', __FILE__, __LINE__);
+        
         // Try to init the wowlib
         try {
             \Wowlib::Init( config('emulator') );
+            \Debug::trace('Wowlib Initialized successfully', __FILE__, __LINE__);
         }
         catch(Exception $e) {
             \Debug::silent_mode(false);
+            \Debug::trace('Wowlib failed to initialize. Message thrown was: '. $e->getMessage(), __FILE__, __LINE__);
             show_error('Wowlib Error: '. $e->getMessage(), false, E_ERROR);
         }
     }

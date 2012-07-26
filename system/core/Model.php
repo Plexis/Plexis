@@ -28,6 +28,6 @@ class Model
         $this->realm = $this->load->realm();
         
         // Add trace for debugging
-        \Debug::trace('Model class initialized', __FILE__, __LINE__);
+        \Debug::trace('Base model class initialized', __FILE__, __LINE__);
     }
 }
