@@ -116,11 +116,11 @@ class Statistics
     {
         // Unique views
         $query = "SELECT COUNT(ip) FROM `pcms_hits`";
-        $unique = $this->DB->query( $query )->fetch_column();
+        $unique = $this->DB->query( $query )->fetchColumn();
         
         // Vists in the last 24 hours
         $query = "SELECT COUNT(ip) FROM `pcms_hits` WHERE `lastseen` > ". (time() - 86400);
-        $vists = $this->DB->query( $query )->fetch_column();
+        $vists = $this->DB->query( $query )->fetchColumn();
         
         // Return the results :)
         return array('unique' => $unique, 'today' => $vists);
