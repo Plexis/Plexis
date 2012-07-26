@@ -1018,14 +1018,14 @@ class Admin extends Core\Controller
             }
             
             // Get our registered stats for this month
-            $value = $this->DB->query( $query )->fetch_column();
+            $value = $this->DB->query( $query )->fetchColumn();
             $results[] = array('name' => $months[$m], 'value' => $value);
         }
         
         // Active in the last 24
         $time = date("Y-m-d H:i:s", time() - 86400 );
         $query = "SELECT COUNT(*) FROM `pcms_accounts` WHERE `last_seen` BETWEEN '$time' AND NOW()";
-        $active = $this->DB->query( $query )->fetch_column();
+        $active = $this->DB->query( $query )->fetchColumn();
 
         // Build our page title / desc, then load the view
         $data = array(
