@@ -388,36 +388,22 @@ class User
         // Add trace for debugging
         \Debug::trace('Loading permissions for group id: '. $gid, __FILE__, __LINE__);
         
-        // set to empty array if false
-        if($perms == false) $perms = array();
+        // set to empty array if false, else we need the keys for comparison
+        $perms = ($perms == false) ? array() : array_keys($perms);
         
         // Get alist of all permissions
         $query = "SELECT `key` FROM `pcms_permissions`";
-        $r = $this->DB->query( $query )->fetchAll();
-        
-        // Fix array keys
-        foreach($r as $p)
-        {
-            $list[ $p['key'] ] = $p;
-        }
-        unset($r);
+        $list = $this->DB->query( $query )->fetchAll( \PDO::FETCH_COLUMN );
         
         // Unset old perms that dont exist anymore
-        $dif = false;
-        foreach($perms as $key => $value)
-        {
-            if( !isset($list[ $key ]) )
-            {
-                $dif = true;
-                unset($perms[ $key ]);
-            }
-        }
+        $dif = array_diff($perms, $list);
         
         // Update the DB if there are any changes
-        if($dif)
+        if(!empty($dif))
         {
-            $p = serialize($perms);
-            $this->DB->update('pcms_account_groups', array('permissions' => $p), "`group_id`=".$gid);
+            $newperms = array_intersect($perms, $list);
+            foreach($newperms as $perm) $p[$perm] = 1;
+            $this->DB->update('pcms_account_groups', array('permissions' => serialize( $p )), "`group_id`=".$gid);
         }
         
         // Set this users permissions
@@ -431,17 +417,17 @@ class User
 |
 | Used to find if user has a specified permission
 |
-| @Return (Int) 1 if the user has permission, else 0
+| @Return (Bool)
 |
 */
 
     public function has_permission($key)
     {
         // Super admin always wins
-        if($this->data['is_super_admin']) return 1;
+        if($this->data['is_super_admin']) return true;
         
         // Not a super admin, continue
-        return (array_key_exists($key, $this->permissions)) ? $this->permissions[$key] : 0;
+        return (bool) (array_key_exists($key, $this->permissions)) ? $this->permissions[$key] : false;
     }
 
 /*
