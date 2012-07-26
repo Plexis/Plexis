@@ -152,10 +152,7 @@ class Admin_Model extends Core\Model
     {
         // Load the module admin controller
         $file = path( ROOT, "third_party", "modules", $name, "admin.php" );
-        if(!file_exists($file))
-        {
-            return true;
-        }
+        if(!file_exists($file)) return false;
         require $file;
         
         // Init the module into a variable
@@ -164,24 +161,22 @@ class Admin_Model extends Core\Model
         
         // Run the module installer
         $result = $module->install();
-        if($result == FALSE) return FALSE;
-        
-        // Make sure we have a fixed URI
-        $uri = rtrim($uri, '/');
-        $uri = ltrim($uri, '/');
-        if(strpos($uri, '/') === FALSE)
-        {
-            $uri = $uri .'/index';
-        }
+        if($result == FALSE) return false;
         
         // Build out insert data
         $data['name'] = $name;
-        $data['uri'] = $uri;
-        $data['method'] = $method;
+        $data['uri1'] = $uri;
+        $data['uri2'] = $method;
         $data['has_admin'] = (method_exists($module, 'admin')) ? 1 : 0;
         
         // Insert our post
-        return $this->DB->insert('pcms_modules', $data);
+        $result = $this->DB->insert('pcms_modules', $data);
+        if($result === false)
+        {
+            $module->uninstall();
+            return false;
+        }
+        return true;
     }
     
 /*
@@ -201,7 +196,7 @@ class Admin_Model extends Core\Model
         $file = path( ROOT, "third_party", "modules", $name, "admin.php" );
         if(!file_exists($file))
         {
-            return true;
+            return $this->DB->delete('pcms_modules', "`name`='$name'");
         }
         require $file;
         

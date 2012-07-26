@@ -110,17 +110,18 @@ CREATE TABLE `pcms_hits` (
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_modules`;
 CREATE TABLE `pcms_modules` (
-  `uri` varchar(255) NOT NULL,
-  `name` varchar(255)  NOT NULL,
-  `method` varchar(255) NOT NULL DEFAULT 'index',
+  `id` tinyint(3) NOT NULL AUTO_INCREMENT, 
+  `uri1` varchar(24) NOT NULL,
+  `uri2` varchar(50) NOT NULL,
+  `name` varchar(24)  NOT NULL,
   `has_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Has admin controller for this module',
-  PRIMARY KEY (`uri`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pcms_modules
 -- ----------------------------
-INSERT INTO `pcms_modules` VALUES ('devtest/index', 'Devtest', 'index', '1');
+INSERT INTO `pcms_modules` VALUES (1, 'devtest', '*', 'Devtest', '1');
 
 -- ----------------------------
 -- Table structure for `pcms_news`
@@ -269,7 +270,7 @@ CREATE TABLE `pcms_versions` (
 -- ----------------------------
 -- Records of pcms_versions
 -- ----------------------------
-INSERT INTO `pcms_versions` VALUES ('database', '0.19');
+INSERT INTO `pcms_versions` VALUES ('database', '0.21');
 
 -- ----------------------------
 -- Table structure for `pcms_vote_data`

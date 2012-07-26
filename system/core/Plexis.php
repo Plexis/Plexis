@@ -145,44 +145,51 @@ class Plexis
         // Load database
         $this->DB = $this->load->database('DB');
         
-        // Build our array to get out current URI's module if one exists
-        $uri1 = $name .'/*';
-        $uri2 = $name .'/'. $this->action;
-        
         // Check to see if the URI belongs to a module
-        $query = "SELECT * FROM `pcms_modules` WHERE `uri`=? OR `uri`=?";
-        $result = $this->DB->query( $query, array($uri1, $uri2) )->fetchRow();
+        $query = "SELECT `name`, `uri2` FROM `pcms_modules` WHERE (`uri1`=? AND `uri2`='*') OR `uri1`=?";
+        $result = $this->DB->query( $query, array($name, $name) )->fetchAll();
         
         // If our result is an array, Then we load it as a module
         if(is_array($result))
         {
-            // Handle the method, if method is an astricks, then the module will handle all requests
-            if($result['method'] == '*')
+            $found = false;
+            foreach($result as $module)
             {
-                $result['method'] = $this->action;
+                // Handle the method, if method is an astricks, then the module will handle all requests
+                if($module['uri2'] == '*' || $module['uri2'] == $this->action)
+                {
+                    $found = true;
+                    $controller = $module['name'];
+                    break;
+                }
+                
+                // If the method is an array (imploded with a comma), we see if the action is in the array
+                elseif(strpos($module['uri2'], ',') !== FALSE)
+                {
+                    // Remove any spaces, and convert to an array
+                    $array = explode(',', $module['uri2']);
+                    if(!in_array($this->action, $array))
+                    {
+                        // The action IS NOT in the array, Next result set
+                        continue;
+                    }
+                    else
+                    {
+                        // The action is in the array, so we set it as that
+                        $found = true;
+                        $controller = $module['name'];
+                        break;
+                    }
+                }
             }
             
-            // If the method is an array (imploded with a comma), we see if the action is in the array
-            elseif(strpos($result['method'], ',') !== FALSE)
-            {
-                // Remove any spaces, and convert to an array
-                $array = str_replace(' ', '', explode(',', $result['method']));
-                if(!in_array($this->action, $array))
-                {
-                    // The action IS NOT in the array, load default controller
-                    goto Skip;
-                }
-                else
-                {
-                    // The action is in the array, so we set it as that
-                    $result['method'] = $this->action;
-                }
-            }
+            // If we didnt find a module for this URI, load the default controller
+            if(!$found) goto Skip;
 
             // Define out globals and this controller/action
             $GLOBALS['is_module'] = TRUE;
-            $this->controller  = $GLOBALS['controller'] = ucfirst($result['name']);
-            $this->action = $GLOBALS['action'] = $result['method'];
+            $this->controller  = $GLOBALS['controller'] = ucfirst($controller);
+            $GLOBALS['action'] = $this->action;
             
             // Add trace for debugging
             \Debug::trace("Found module route in database. Using {$this->controller} as controller, and {$this->action} as method", __FILE__, __LINE__);

@@ -11,8 +11,8 @@
                 <thead>
                     <tr>
                         <th>Module Name</th>
-                        <th>Uri</th>
-                        <th>Method(s)</th>
+                        <th>Uri Segement</th>
+                        <th>Sub Uri Segement(s)</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -38,15 +38,15 @@
         
             <p>
                 <div>
-                    <label for="uri">Uri</label>
-                    <input id="uri" name="uri" class="required" type="text" value="" />
+                    <label for="uri">Uri Segment</label>
+                    <input id="uri" name="uri1" class="required" type="text" value="" />
                 </div>
             </p>
             
             <p>
                 <div>
-                    <label for="function">function</label>
-                    <input id="function" name="function" class="required" type="text" value="" />
+                    <label for="function">Sub Uri segements</label>
+                    <input id="function" name="uri2" class="required" type="text" value="" />
                 </div>
             </p>
 

@@ -60,8 +60,8 @@ $().ready(function() {
         $('#js_install_message').hide();
         $('#install-form').show();
         $('input[name=module]').val( name );
-        $('input[name=function]').val( 'index' );
-        $('input[name=uri]').val( 'seg1/seg2' );
+        $('input[name=function]').val( '' );
+        $('input[name=uri]').val( '' );
         
         // Open the Modal Window
 		Modal.dialog("option", {
@@ -132,7 +132,7 @@ $().ready(function() {
             else
             {
                 // Display our Success message, and ReDraw the table so we imediatly see our action
-                $('#js_install_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300).delay(3000).slideUp(600);
+                $('#js_install_message').attr('class', 'alert ' + result.type).html(result.message).slideDown(300);
                 if (result.success == true)
                 {
                     modtable.fnDraw();

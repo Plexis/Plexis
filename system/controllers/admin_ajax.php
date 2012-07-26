@@ -1118,14 +1118,81 @@ class Admin_ajax extends Core\Controller
                     $this->load->library('validation');
                     
                     // Tell the validator that the username and password must NOT be empty
-                    $this->validation->set( array('uri' => 'required', 'function' => 'required', 'module' => 'required') );
+                    $this->validation->set( array('uri1' => 'required', 'uri2' => 'required', 'module' => 'required') );
                     
                     // If both the username and password pass validation
                     if( $this->validation->validate() == TRUE )
                     {
+                        // define local vars
+                        $name = $this->Input->post('module', true);
+                        $uri = preg_replace('/\s+/', '', $this->Input->post('uri1', true));
+                        $uri2 = preg_replace('/\s+/', '', $this->Input->post('uri2', true));
+                        $method = false;
+                        
+                        // Convert to array
+                        if(strpos($uri2, ',') !== false) $method = explode(',', $uri2);
+                        
+                        // Make sure these URI' arent taken
+                        $query = "SELECT `name`, `uri2` FROM `pcms_modules` WHERE (`uri1`=? AND `uri2`='*') OR `uri1`= ?";
+                        $result = $this->DB->query( $query, array($uri, $uri), false )->fetchAll();
+                        if(is_array($result))
+                        {
+                            $found = false;
+                            foreach($result as $module)
+                            {
+                                // Do we have a completly bound module?
+                                if($module['uri2'] == '*')
+                                {
+                                    $name = $module['name'];
+                                    $segment = '*';
+                                    $found = true;
+                                    break;
+                                }
+                                // If this module has an array of sub uri's
+                                elseif(strpos($module['uri2'], ',') !== false)
+                                {
+                                    // Convert to an array
+                                    $array = explode(',', $module['uri2']);
+                                    if(is_array($method)) 
+                                    {
+                                        $compare = array_interect($method, $array);
+                                        if(!empty($compare))
+                                        {
+                                            $name = $module['name'];
+                                            $segment = $compare[0];
+                                            $found = true;
+                                            break;
+                                        }
+                                    }
+                                    elseif(in_array($uri2, $array))
+                                    {
+                                        $name = $module['name'];
+                                        $segment = $uri2;
+                                        $found = true;
+                                        break;
+                                    }
+                                }
+                                elseif((is_array($method) && in_array($module['uri2'], $method)) || $module['uri2'] == $uri2)
+                                {
+                                    $found = true;
+                                    $name = $module['name'];
+                                    $segment = $module['uri2'];
+                                    break;
+                                }
+                            }
+                            
+                            // We find the URI segement already?
+                            if($found) 
+                            {
+                                $message = "Unable to install module because module \"$name\" is already bound to the \"$uri/$segment\" sub url segment.";
+                                $this->output(false, $message, 'warning');
+                                return;
+                            }
+                        }
+                        
                         // Log action
                         $this->log('Installed module "'. $this->Input->post('module', true) .'"');
-                        $result = $this->model->install_module($this->Input->post('module', true), $this->Input->post('uri', true), $this->Input->post('function', true));
+                        $result = $this->model->install_module($name, $uri, $uri2);
                         ($result == TRUE) ? $this->output(true, 'module_install_success') : $this->output(false, 'module_install_error');
                     }
                     
@@ -1153,8 +1220,8 @@ class Admin_ajax extends Core\Controller
                     $this->load->model("Ajax_Model", "ajax");
                     
                     // Prepare DataTables
-                    $cols = array( 'name', 'uri', 'method', 'has_admin' );
-                    $index = "name";
+                    $cols = array( 'name', 'uri1', 'uri2', 'has_admin', 'id' );
+                    $index = "id";
                     $table = "pcms_modules";
                     $where = '';
 
@@ -1163,26 +1230,26 @@ class Admin_ajax extends Core\Controller
                     
                     // Get our NON installed modules
                     $mods = get_modules();
-
+                    $installed = array();
+                    
                     // Loop, and add options
                     foreach($output['aaData'] as $key => $module)
                     {
                         // Easier to write
                         $name = $module[0];
-                        $key = array_search($name, $mods);
-                        unset( $mods[ $key ] );
-
+                        $installed[] = $name;
+                        $output['aaData'][$key][2] = str_replace(',', ', ', $module[2]);
                         $output['aaData'][$key][3] = "<font color='green'>Installed</font>";
                         $output['aaData'][$key][4] = "<a class=\"un-install\" name=\"".$name."\" href=\"javascript:void(0);\">Uninstall</a>";
                         
                         // Add admin link
                         if($module[3] == TRUE) $output['aaData'][$key][4] .= " - <a href=\"". SITE_URL ."/admin/modules/".$name."\">Configure</a>"; 
                     }
-
+                    
                     $i = 0;
-                    foreach($mods as $mod)
+                    $non = array_diff($mods, $installed);
+                    foreach($non as $mod)
                     {
-                        ++$i;
                         $output['aaData'][] = array(
                             0 => $mod,
                             1 => "N/A",
@@ -1190,11 +1257,9 @@ class Admin_ajax extends Core\Controller
                             3 => "<font color='red'>Not Installed</font>",
                             4 => "<a class=\"install\" name=\"".$mod."\" href=\"javascript:void(0);\">Install</a>"
                         );
+                        ++$output["iTotalRecords"];
+                        ++$output["iTotalDisplayRecords"];
                     }
-					
-                    // add totals
-                    $output["iTotalRecords"] = $i + $output["iTotalRecords"];
-                    $output["iTotalDisplayRecords"] = $i + $output["iTotalDisplayRecords"];
                     
                     // Push the output in json format
                     echo json_encode($output);
