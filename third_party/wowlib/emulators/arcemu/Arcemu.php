@@ -30,8 +30,7 @@ class Arcemu implements iEmulator
         $this->DB = $DB;
         
         // Load our extensions needed
-        $root = \Wowlib::$rootPath;
-        require_once path($root, 'emulators', 'arcemu', 'Account.php');
+        require_once path( WOWLIB_ROOT, 'emulators', 'arcemu', 'Account.php' );
     }
     
 /*
@@ -166,7 +165,7 @@ class Arcemu implements iEmulator
     public function fetchAccount($id)
     {
         try {
-            $account = new Account($id, $this);
+            $account = new Arcemu\Account($id, $this);
         }
         catch(\Exception $e) {
             $account = false;

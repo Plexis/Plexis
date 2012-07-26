@@ -30,9 +30,8 @@ class Trinity implements iEmulator
         $this->DB = $DB;
         
         // Load our extensions needed
-        $root = \Wowlib::$rootPath;
-        require_once path($root, 'emulators', 'trinity', 'Account.php');
-        require_once path($root, 'emulators', 'trinity', 'Realm.php');
+        require_once path( WOWLIB_ROOT, 'emulators', 'trinity', 'Account.php' );
+        require_once path( WOWLIB_ROOT, 'emulators', 'trinity', 'Realm.php' );
     }
     
 /*
@@ -66,7 +65,7 @@ class Trinity implements iEmulator
     public function fetchRealm($id)
     {
         try {
-            $realm = new Realm($id, $this);
+            $realm = new Trinity\Realm($id, $this);
         }
         catch (\Exception $e) {
             $realm = false;
@@ -181,7 +180,7 @@ class Trinity implements iEmulator
     {
         // Try to load the class
         try {
-            $account = new Account($id, $this);
+            $account = new Trinity\Account($id, $this);
         }
         catch(\Exception $e) {
             $account = false;

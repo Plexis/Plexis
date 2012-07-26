@@ -1,7 +1,7 @@
 <?php
 /* 
 | -------------------------------------------------------------- 
-| Account Object
+| Trinity Account Object
 | --------------------------------------------------------------
 |
 | Author:       Wilson212
@@ -9,9 +9,11 @@
 | License:      GNU GPL v3
 |
 */
-namespace Wowlib;
 
-class Account implements iAccount
+// All namespace paths are uppercase first. Format: Wowlib\<Emulator>;
+namespace Wowlib\Trinity;
+
+class Account implements \Wowlib\iAccount
 {
     // Our Parent wowlib class and Database connection
     protected $DB;

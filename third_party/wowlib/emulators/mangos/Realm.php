@@ -1,7 +1,7 @@
 <?php
 /* 
 | -------------------------------------------------------------- 
-| RealmId Object
+| Mangos Realm Object
 | --------------------------------------------------------------
 |
 | Author:       Wilson212
@@ -9,9 +9,11 @@
 | License:      GNU GPL v3
 |
 */
-namespace Wowlib;
 
-class Realm implements iRealm
+// All namespace paths are uppercase first. Format: Wowlib\<Emulator>;
+namespace Wowlib\Mangos;
+
+class Realm implements \Wowlib\iRealm
 {
     // Our Parent wowlib class and Database connection
     protected $DB;

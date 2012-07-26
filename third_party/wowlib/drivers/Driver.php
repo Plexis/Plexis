@@ -63,21 +63,19 @@ class Driver
         // Create our classname
         $class = ucfirst( $name );
         $driver = strtolower($this->driver);
+        $ucEmu = ucfirst($this->emulator);
         
         // Check for the extension
-		$file = path( \Wowlib::$rootPath, 'drivers', $this->emulator, $driver, $class .'.php' );
-        if( !file_exists( $file ) )
-        {
-            // Extension doesnt exists :O
-            show_error('Failed to load wowlib extentsion %s', array($name), E_ERROR);
-            return false;
-        }
+		$file = path( WOWLIB_ROOT, 'drivers', $this->emulator, $driver, $class .'.php' );
+        
+        // If extension doesnt exist, return false
+        if( !file_exists( $file ) ) return false;
         
         // Load the extension file
         require_once( $file );
         
         // Load the class
-        $class = "\\Wowlib\\{$this->driver}\\". $class;
+        $class = "\\Wowlib\\{$ucEmu}\\{$this->driver}\\{$class}";
         try {
             $this->{$name} = new $class($this);
         }

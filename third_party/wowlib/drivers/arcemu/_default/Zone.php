@@ -12,8 +12,8 @@
 |
 */
 
-// All namespace paths must be Uppercase first letter! Format: "Wowlib\<wowlib_name>"
-namespace Wowlib\_default;
+// All namespace paths must be Uppercase first letter! Format: "Wowlib\<Emulator>\<Wowlib_name>"
+namespace Wowlib\Arcemu\_default;
 
 class Zone
 {

@@ -364,7 +364,7 @@ class Loader
         {
             // Include the wowlib file
             require path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
-            \Wowlib::Init();
+            \Wowlib::Init( config('emulator'), 'RDB' );
         }
         
         // Load our driver name
@@ -433,7 +433,7 @@ class Loader
         {
             // Include the wowlib file
             require path( ROOT, 'third_party', 'wowlib', 'Wowlib.php' );
-            \Wowlib::Init();
+            \Wowlib::Init( config('emulator'), 'RDB' );
         }
         
         // Fetch the emulator class

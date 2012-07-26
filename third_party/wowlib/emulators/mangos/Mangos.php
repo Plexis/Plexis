@@ -30,9 +30,8 @@ class Mangos implements iEmulator
         $this->DB = $DB;
         
         // Load our extensions needed
-        $root = \Wowlib::$rootPath;
-        require_once path($root, 'emulators', 'mangos', 'Account.php');
-        require_once path($root, 'emulators', 'mangos', 'Realm.php');
+        require_once path( WOWLIB_ROOT, 'emulators', 'mangos', 'Account.php' );
+        require_once path( WOWLIB_ROOT, 'emulators', 'mangos', 'Realm.php' );
     }
     
 /*
@@ -66,7 +65,7 @@ class Mangos implements iEmulator
     public function fetchRealm($id)
     {
         try {
-            $realm = new Realm($id, $this);
+            $realm = new Mangos\Realm($id, $this);
         }
         catch (\Exception $e) {
             $realm = false;
@@ -180,7 +179,7 @@ class Mangos implements iEmulator
     public function fetchAccount($id)
     {
         try {
-            $account = new Account($id, $this);
+            $account = new Mangos\Account($id, $this);
         }
         catch(\Exception $e) {
             $account = false;
