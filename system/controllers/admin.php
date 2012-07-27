@@ -1,9 +1,9 @@
 <?php
-/* 
+/*
 | --------------------------------------------------------------
 | Plexis
 | --------------------------------------------------------------
-| Author:       Steven Wilson 
+| Author:       Steven Wilson
 | Author:       Tony (Syke)
 | Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
@@ -31,16 +31,16 @@
 | P18 - Plugins
 |
 */
-class Admin extends Core\Controller 
+class Admin extends Core\Controller
 {
     public function __construct()
     {
         // Build the Core Controller
         parent::__construct();
-        
+
         // Load user data
         $this->user = $this->User->data;
-        
+
         // Make sure the user has admin access'
         if( !$this->User->has_permission('admin_access') )
         {
@@ -55,18 +55,18 @@ class Admin extends Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    public function index() 
+    public function index()
     {
         // Get our PHP and DB versions
         $info = $this->DB->serverInfo();
         $rewrite = (isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'On') ? 'On' : 'Off';
-        
+
         // Add our build var
         $this->Template->setjs('Build', CMS_BUILD);
-        
+
         // Proccess DB red font if out of date
         $db = (REQ_DB_VERSION != CMS_DB_VERSION) ? '<font color="red">'. REQ_DB_VERSION .'</font> (Manual update Required)' : REQ_DB_VERSION;
-        
+
         // Set our page data
         $data = array(
             'page_title' => "Dashboard",
@@ -79,7 +79,7 @@ class Admin extends Core\Controller
             'CMS_BUILD' => CMS_BUILD,
             'CMS_DB_VERSION' => $db
         );
-        
+
         // Load the page, and we are done :)
         $this->load->view('dashboard', $data);
     }
@@ -89,8 +89,8 @@ class Admin extends Core\Controller
 | P02: PHPinfo Page
 | ---------------------------------------------------------------
 |
-*/ 
-    public function phpinfo($plain = FALSE) 
+*/
+    public function phpinfo($plain = FALSE)
     {
         if($plain == 'html')
         {
@@ -101,7 +101,7 @@ class Admin extends Core\Controller
             // Set our page title and desc
             $data['page_title'] = "Php Info";
             $data['page_desc'] = "You are viewing this servers phpinfo";
-            
+
             // Load the page, and we are done :)
             $this->load->view('phpinfo', $data);
         }
@@ -112,7 +112,7 @@ class Admin extends Core\Controller
 | P03: News Managment Page
 | ---------------------------------------------------------------
 |
-*/ 
+*/
     public function news()
     {
         // Make sure the user can view this page
@@ -126,7 +126,7 @@ class Admin extends Core\Controller
             'page_title' => "Manage News",
             'page_desc' => "From here, you can Edit, Delete, or create a new news post."
         );
-        
+
         // Load the view
         $this->load->view('news', $data);
     }
@@ -136,7 +136,7 @@ class Admin extends Core\Controller
 | P04: Manage Users
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function users($username = NULL)
     {
         // Make sure the user can view this page
@@ -152,22 +152,22 @@ class Admin extends Core\Controller
             );
             $this->load->view('users_index', $data);
         }
-        
+
         // We have a username, Load the user
         else
         {
             // Get users information. We can use GET because the queries second param will be cleaned
             // by the PDO class when bound to the "?".
-            $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON 
+            $query = "SELECT * FROM `pcms_accounts` INNER JOIN `pcms_account_groups` ON
                 pcms_accounts.group_id = pcms_account_groups.group_id WHERE `username` = ?";
             $user = $this->DB->query( $query, array($username) )->fetchRow();
-            
+
             // If $user isnt an array, we failed to load the user
             if(!is_array($user))
             {
                 // Load the page, and we are done :)
                 output_message('error', 'user_not_found_1');
-                
+
                 // Build our page title / desc, then load the view
                 $data = array(
                     'page_title' => "Loading",
@@ -181,7 +181,7 @@ class Admin extends Core\Controller
                 // Use the realm database to grab user information first
                 $Account = $this->realm->fetchAccount($user['id']);
                 $data['expansion_data'] = $this->realm->expansions();
-                
+
                 // Use the additional inforamation from the realm DB
                 if(is_object($Account))
                 {
@@ -191,7 +191,7 @@ class Admin extends Core\Controller
                         // Set ban status to Ban
                         $data['account_ban_button'] = "ban";
                         $data['account_ban_button_text'] = "Ban Account";
-                        
+
                         // Load lock status
                         if(!$Account->isLocked())
                         {
@@ -214,24 +214,24 @@ class Admin extends Core\Controller
                         $data['account_lock_button'] = "lock";
                         $data['account_lock_button_text'] = "Lock Account";
                     }
-                    
+
                     // Assign more user variables
                     $user['expansion'] = $Account->getExpansion();
                     $user['joindate'] = $Account->joinDate();
                     $user['last_login'] = $Account->lastLogin();
-                    
+
                     // Set some JS vars
                     $this->Template->setjs('userid', $user['id']);
                     $this->Template->setjs('username', $user['username']);
                     $this->Template->setjs('level', $this->user['group_id']);
                     $this->Template->setjs('is_super', $this->user['is_super_admin']);
-                    
+
                     // Finish Building our data array
                     $data['page_title'] = ucfirst( strtolower($username) )." (Account ID: ".$user['id'].")";
                     $data['page_desc'] = "Here you can manage the account of all your users.";
                     $data['user'] = $user;
                     $data['groups'] = $this->DB->query("SELECT * FROM `pcms_account_groups`")->fetchAll();
-                    
+
                     // Load the view
                     $this->load->view('user_manage', $data);
                 }
@@ -239,10 +239,10 @@ class Admin extends Core\Controller
                 {
                     // Load the page, and we are done :)
                     output_message('error', 'user_not_found_2');
-                    
+
                     // Build our page title / desc, then load the view
                     $data = array('page_title' => "", 'page_desc' => "");
-                    
+
                     // Load the error page, no redirect
                     $this->load->view('redirect', $data);
                     return;
@@ -250,13 +250,13 @@ class Admin extends Core\Controller
             }
         }
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P05: Site Settings
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function settings()
     {
         // Make sure the user can view this page
@@ -264,11 +264,11 @@ class Admin extends Core\Controller
 
         // Load our config class
         $Config = load_class('Config');
-        
+
         // Use admin model to process and make our "select option" fields
         $this->load->model('Admin_model', 'model');
         $options = $this->model->site_settings_options();
-        
+
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Site Settings",
@@ -284,7 +284,7 @@ class Admin extends Core\Controller
 | P06: User Groups and Permissions
 | ---------------------------------------------------------------
 |
-*/     
+*/
     public function groups($sub1 = NULL, $id = NULL)
     {
         // Make sure user is super admin for ajax
@@ -293,26 +293,26 @@ class Admin extends Core\Controller
             $this->show_403();
             return;
         }
-        
+
         // Make sure we have a page, and group ID
         if($sub1 != NULL && $id != NULL)
         {
             switch($sub1)
             {
-                case "permissions":   
+                case "permissions":
                     // Default vars
                     $changed = FALSE;
                     $list = array();
                     $permissions = array('admin' => array(), 'core' => array());
                     $sections = array('admin', 'core');
-                    
+
                     // Load the perms for this group
                     $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=?";
                     $group = $this->DB->query( $query, array($id) )->fetchRow();
                     $perms = unserialize($group['permissions']);
-                    unset($group['permissions']); 
+                    unset($group['permissions']);
                     if($perms == FALSE) $perms = array();
-                    
+
                     // Get all permissions in the database for all modules etc
                     $query = "SELECT `key`, `name`, `description`, `module` FROM `pcms_permissions` ORDER BY `id` ASC";
                     $perms_list = $this->DB->query( $query, array($id) )->fetchAll();
@@ -326,21 +326,21 @@ class Admin extends Core\Controller
                         $list[$p['key']] = $p;
                     }
                     unset($perms_list);
-                    
+
                     // Remove old unused permissions, and order the permissions by group
                     foreach($perms as $key => $p)
                     {
                         if(!isset($list[$key]))
                         {
                             $changed = TRUE;
-                            unset($perms[$key]); 
+                            unset($perms[$key]);
                             continue;
                         }
                         $g = $list[$key]['module'];
                         $permissions[$g][$key] = $p;
                         if(!in_array($g, $sections)) $sections[] = $g;
                     }
-                    
+
                     // Update permissions if we had to remove an unused perm
                     if($changed == TRUE)
                     {
@@ -353,7 +353,7 @@ class Admin extends Core\Controller
                         $i['permissions'] = serialize($update);
                         $this->DB->update('pcms_account_groups', $i, "`group_id`=$id");
                     }
-                    
+
                     // Build our page title / desc, then load the view
                     $data = array(
                         'page_title' => "Group Permissions",
@@ -382,7 +382,7 @@ class Admin extends Core\Controller
 | P07: Registration Settigns
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function registration()
     {
         // Make sure the user can view this page
@@ -390,7 +390,7 @@ class Admin extends Core\Controller
 
         // Load our config class
         $Config = load_class('Config');
-        
+
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Registration Settings",
@@ -405,7 +405,7 @@ class Admin extends Core\Controller
 | P08: Realm Managment
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function realms($subpage = 'index', $id = NULL)
     {
         // Make sure the user can view this page
@@ -422,7 +422,7 @@ class Admin extends Core\Controller
                 );
                 $this->load->view('realms_index', $data);
                 break;
-            
+
             // EDITING
             case "edit":
                 // Make sure we have an id!
@@ -431,18 +431,18 @@ class Admin extends Core\Controller
                 // Load installed drivers
                 $drivers = get_wowlib_drivers();
                 if($drivers == FALSE) $drivers = array();
-                
+
                 // Load our installed realm info
                 $realm = $this->DB->query("SELECT * FROM `pcms_realms` WHERE `id`=?", array($id))->fetchRow();
 
                 // Redirect if this realm doesnt exist / isnt installed
                 if($realm == FALSE) redirect('admin/realms');
-                
+
                 // Unserialize our DB realms connection information
                 $realm['cdb'] = unserialize($realm['char_db']);
                 $realm['wdb'] = unserialize($realm['world_db']);
                 $realm['ra'] = unserialize($realm['ra_info']);
-                
+
                 // Build our page title / desc, then load the view
                 $data = array(
                     'page_title' => "Edit Realm",
@@ -452,40 +452,47 @@ class Admin extends Core\Controller
                 );
                 $this->load->view('realms_edit', $data);
                 break;
-            
+
             // INSTALL
             case "install":
                 // Load installed drivers
                 $drivers = get_wowlib_drivers();
                 if($drivers == FALSE) $drivers = array();
-                
+
                 // Build our page title / desc
                 $data = array(
                     'page_title' => "Realm Installation",
-                    'page_desc' => "On this page you will be able to install a new realm for use on the site. Installing a realm allows you as well as users to 
+                    'page_desc' => "On this page you will be able to install a new realm for use on the site. Installing a realm allows you as well as users to
                         see statistics about the realm, view online characters, and user character tools such as Character Rename.",
                     'drivers' => $drivers
                 );
-                
+
                 // check for an existing install
                 if($id != NULL)
                 {
                     // Make sure the realm isnt already installed
                     $installed = get_installed_realms();
                     $irealms = array();
-                    
+
                     // Build an array of installed IDs
                     foreach($installed as $realm)
                     {
                         $irealms[] = $realm['id'];
                     }
                     if(in_array($id, $irealms)) redirect('admin/realms/edit/'.$id);
-                    
+
                     // Get realm information
-                    $realm = $this->realm->fetch_realm($id);
-                    
+                    $realm = $this->realm->fetchRealm($id);
+
+                    $data["realm"] = array(
+                        "name" => $realm->getName(),
+                        "address" => $realm->getAddress(),
+                        "port" => $realm->getPort(),
+                        "type" => $realm->getType(),
+                        "population" => $realm->getPopulation(),
+                    );
+
                     // Load the view
-                    $data = $data + array('realm' => $realm);
                     $this->load->view('realms_install', $data);
                 }
                 else
@@ -493,13 +500,13 @@ class Admin extends Core\Controller
                     $this->load->view('realms_install_manual', $data);
                 }
                 break;
-                
+
             default:
                 redirect('admin/realms');
                 break;
         }
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P09: Vote
@@ -516,7 +523,7 @@ class Admin extends Core\Controller
             'page_title' => "Manage Vote Sites",
             'page_desc' => "Create, Edit, or Delete vote sites that your users will use to vote for your server."
         );
-        
+
         // Load the view
         $this->load->view('vote', $data);
     }
@@ -526,12 +533,12 @@ class Admin extends Core\Controller
 | P10: Modules
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function modules($name = null, $subpage = null)
     {
         // Make sure the user can view this page
         if( !$this->check_permission('manage_modules')) return;
-        
+
         if($name != null)
         {
             // Make sure the module is installed!
@@ -547,17 +554,17 @@ class Admin extends Core\Controller
                     // Init the module into a variable
                     $class = ucfirst($name);
                     $module = new $class( true );
-                    
+
                     // Correct the module view path'
                     $this->Template->set_controller($class, true);
 
                     // Build our page title / desc, then load the view
                     $this->Template->set( 'page_title', $class ." Config");
                     $this->Template->set( 'page_desc', "On this page, you can configure this module.");
-                    
+
                     // Run the module installer
                     $result = $module->admin();
-                    
+
                     if( $result == false )
                     {
                         // Correct the module view path'
@@ -578,7 +585,7 @@ class Admin extends Core\Controller
                 "page_title" => "Module Management",
                 "page_desc" => "On this page, you can install and manage your installed modules. You may also edit module config files here.",
             );
-            
+
             $this->load->view( "module_index", $data );
         }
     }
@@ -588,7 +595,7 @@ class Admin extends Core\Controller
 | P11: Templates
 | ---------------------------------------------------------------
 |
-*/     
+*/
     public function templates()
     {
         // Make sure the user can view this page
@@ -599,7 +606,7 @@ class Admin extends Core\Controller
             'page_title' => "Template Manager",
             'page_desc' => "This page allows you to manage your templates, which includes uploading, installation, and un-installation.",
         );
-        
+
         // Get installed templates
         $query = "SELECT * FROM `pcms_templates` WHERE `type`='site'";
         $templates = $this->DB->query( $query )->fetchAll();
@@ -607,7 +614,7 @@ class Admin extends Core\Controller
         {
             $aa[] = $t['name'];
         }
-        
+
         // Scan and get a list of all templates
         $list = scandir( path( ROOT, "third_party", "themes" ) );
         foreach($list as $file)
@@ -629,16 +636,16 @@ class Admin extends Core\Controller
                 }
             }
         }
-        
+
         $this->load->view('templates', $data);
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P12: Console
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function console()
     {
         // Make sure the user can view this page
@@ -658,7 +665,7 @@ class Admin extends Core\Controller
             $selector .= "\t<option value='0'>No Realms Installed</option>\n";
         }
         $selector .= "</select>\n";
-        
+
         // Tell the template system to add the console css file
         $this->Template->add_css('console.css');
 
@@ -676,7 +683,7 @@ class Admin extends Core\Controller
 | P13: Update
 | ---------------------------------------------------------------
 |
-*/     
+*/
     public function update()
     {
         // Make sure user is super admin for ajax
@@ -685,13 +692,13 @@ class Admin extends Core\Controller
             $this->show_403();
             return;
         }
-        
+
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Remote Updater",
             'page_desc' => "This script allows you to update your CMS with just a click of a button.",
         );
-        
+
         // cURL exist? If not we need to verify the user has openssl installed and https support
         $curl = function_exists('curl_exec');
         if(!$curl)
@@ -705,7 +712,7 @@ class Admin extends Core\Controller
                 $this->load->view('blank', $data);
                 return;
             }
-            
+
             // Check for https support
             if(!in_array('https', stream_get_wrappers()))
             {
@@ -714,30 +721,30 @@ class Admin extends Core\Controller
                 return;
             }
         }
-        
+
         // Make sure the client server allows fopen of urls
         if(ini_get('allow_url_fopen') == 1 || $curl == true)
         {
             // Include the URL helper
             $this->load->helper('Url');
-            
+
             // Get the file changes from github
             $start = microtime(1);
             \Debug::silent_mode(true);
             $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30', false);
             \Debug::silent_mode(false);
             $stop = microtime(1);
-            
+
             // Granted we have page contents
             if($page)
             {
                 // Decode the results
                 $commits = json_decode($page, TRUE);
-                
+
                 // Defaults
                 $count = 0;
                 $latest = 0;
-                
+
                 // Get the latest build
                 $message = $commits[0]['commit']['message'];
                 if(preg_match('/([0-9]+)/', $message, $latest))
@@ -765,12 +772,12 @@ class Admin extends Core\Controller
                 ($count == 0) ? $next = $commits[0] : $next = $commits[$count-1];
                 $d = new DateTime($next['commit']['author']['date']);
                 $date = $d->format("M j, Y - g:i a");
-                
+
                 // Set JS vars
                 $this->Template->setjs('update_sha', $next['sha']);
                 $this->Template->setjs('update_url', $next['url']);
 
-                
+
                 // Build our page data
                 $data['time'] = round($stop - $start, 5);
                 $data['count'] = $count;
@@ -781,7 +788,7 @@ class Admin extends Core\Controller
                 $data['more_info'] = "https://github.com/Plexis/Plexis/commit/". $next['sha'];
                 $data['CMS_BUILD'] = CMS_BUILD;
                 unset($commits);
-                
+
                 // No updates has a different view
                 if($count == 0)
                 {
@@ -815,12 +822,12 @@ class Admin extends Core\Controller
 | P14: ErrorLogs
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function errorlogs()
     {
         // Make sure the user can view this page
         if( !$this->check_permission('manage_error_logs')) return;
-        
+
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "View Error Logs",
@@ -828,18 +835,18 @@ class Admin extends Core\Controller
         );
         $this->load->view('errorlogs', $data);
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P15: Characters
 | ---------------------------------------------------------------
 |
-*/ 
+*/
     public function characters($realmid = 0, $character = 0)
     {
         // Make sure the user can view this page
         if( !$this->check_permission('manage_characters')) return;
-        
+
         // Set new realm
         if( $realmid != 0 && realm_installed($realmid) )
         {
@@ -852,7 +859,7 @@ class Admin extends Core\Controller
 
         // Get our installed realms
         $realms = get_installed_realms();
-        
+
         // If no realms installed, display a message instead
         if(empty($realms))
         {
@@ -864,7 +871,7 @@ class Admin extends Core\Controller
             $this->load->view('no_realms', $data);
             return;
         }
-        
+
         // Editing a character?
         if($character != 0)
         {
@@ -874,7 +881,7 @@ class Admin extends Core\Controller
             {
                 // Give the admin an error
                 output_message('warning', 'Unable to load wowlib for this realm. Please make sure the character and world databases are online');
-                
+
                 // Build our page title / desc, then load the view
                 $data = array(
                     'page_title' => "Character Editor",
@@ -883,14 +890,14 @@ class Admin extends Core\Controller
                 $this->load->view('blank', $data);
                 return;
             }
-            
+
             // Fetch character
             $char = $Lib->characters->fetch($character);
             if($char == false)
             {
                 // Give the admin an error
                 output_message('error', 'Character Doesnt Exist!');
-                
+
                 // Build our page title / desc, then load the view
                 $data = array(
                     'page_title' => "Character Editor",
@@ -899,27 +906,27 @@ class Admin extends Core\Controller
                 $this->load->view('blank', $data);
                 return;
             }
-            
+
             // Get alist of login flags
             $flags = array();
             $aflags   = $Lib->characters->loginFlags();
             $has_flag = $char->getLoginFlags();
-            
+
             // Loop through each flag so we can set the proper enabled : disabled at login select options
             foreach($aflags as $key => $flag)
             {
                 // Dont show flags that arent enabled by this realm
                 if($flag == false) continue;
-                
+
                 // Create a name, and add to the flags array
                 $name = str_replace('_', ' ', ucfirst($key));
                 $flags[] = array('label' => $key, 'name' => $name, 'enabled' => $has_flag[$key]);
             }
-            
+
             // Fetch account and character postion
             $Account = $this->realm->fetchAccount($char->getAccountId());
             $pos = $char->getPosition();
-            
+
             // Build our page title / desc, then load the view
             $data = array(
                 'page_title' => "Character Editor",
@@ -941,7 +948,7 @@ class Admin extends Core\Controller
             $this->load->view('edit_character', $data);
             return;
         }
-        
+
         // Otherwise, list
         $array = array();
         $set = false;
@@ -952,11 +959,11 @@ class Admin extends Core\Controller
             {
                 $selected = 'selected="selected" ';
             }
-            
+
             // Add the language folder to the array
             $array[] = '<option value="'.$realm['id'].'" '. $selected .'>'.$realm['name'].'</option>';
         }
-        
+
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "Character Editor",
@@ -965,26 +972,26 @@ class Admin extends Core\Controller
         );
         $this->load->view('characters', $data);
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P16: Statistics
 | ---------------------------------------------------------------
 |
-*/ 
+*/
     public function statistics()
     {
         // Add visualize
         $this->Template->add_script( 'jquery.visualize.js' );
-        
+
         // Array of months
         $months = array('', 'January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-        
+
         // Get current month and year
         $date = date('n-Y');
         list($data['month'], $data['year']) = explode('-', $date);
         $results = array();
-        
+
         // Start back 5 months, and get stats for that month
         for($i = 5; $i >= 0; $i--)
         {
@@ -993,14 +1000,14 @@ class Admin extends Core\Controller
             $y = $data['year'];
             $nm = $m + 1;
             $ny = $y;
-            
+
             // If month is negative, add 12 months and subtract a year
             if($m < 1)
             {
                 $m = $m + 12;
                 --$y;
             }
-            
+
             // Only do up to the current time stamp if we are at this month!
             if($i == 0)
             {
@@ -1016,12 +1023,12 @@ class Admin extends Core\Controller
                 }
                 $query = "SELECT COUNT(id) AS `count` FROM `pcms_accounts` WHERE `registered` BETWEEN '$y-$m-00 00:00:00' AND '$ny-$nm-00 00:00:00'";
             }
-            
+
             // Get our registered stats for this month
             $value = $this->DB->query( $query )->fetchColumn();
             $results[] = array('name' => $months[$m], 'value' => $value);
         }
-        
+
         // Active in the last 24
         $time = date("Y-m-d H:i:s", time() - 86400 );
         $query = "SELECT COUNT(*) FROM `pcms_accounts` WHERE `last_seen` BETWEEN '$time' AND NOW()";
@@ -1041,18 +1048,18 @@ class Admin extends Core\Controller
         );
         $this->load->view('stats', $data);
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P17: AdminLogs
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function adminlogs()
     {
         // Make sure the user can view this page
         if( !$this->check_permission('view_admin_logs')) return;
-        
+
         // Build our page title / desc, then load the view
         $data = array(
             'page_title' => "View Admin Logs",
@@ -1060,7 +1067,7 @@ class Admin extends Core\Controller
         );
         $this->load->view('adminlogs', $data);
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P18: Plugins
@@ -1077,19 +1084,19 @@ class Admin extends Core\Controller
             'page_title' => "Manage Plugins",
             'page_desc' => "This page lets you configure which plugins to run during each page load."
         );
-        
+
         // Load the view
         $this->load->view('plugins', $data);
     }
- 
+
 /*
 | ---------------------------------------------------------------
 | UNFINISHED PAGES
 | ---------------------------------------------------------------
 |
 */
-    
-    
+
+
     function shop()
     {
         // Build our page title / desc, then load the view
@@ -1099,7 +1106,7 @@ class Admin extends Core\Controller
         );
         $this->load->view('under_construction', $data);
     }
-    
+
     function donate()
     {
         // Build our page title / desc, then load the view
@@ -1109,7 +1116,7 @@ class Admin extends Core\Controller
         );
         $this->load->view('under_construction', $data);
     }
-    
+
     function support()
     {
         // Build our page title / desc, then load the view
@@ -1118,14 +1125,14 @@ class Admin extends Core\Controller
             'page_desc' => "Here you can manage the support page as well as the FAQ's",
         );
         $this->load->view('under_construction', $data);
-    } 
+    }
 
 /*
 | ---------------------------------------------------------------
 | METHODS
 | ---------------------------------------------------------------
 */
-    
+
 /*
 | ---------------------------------------------------------------
 | Method: check_permission
@@ -1134,7 +1141,7 @@ class Admin extends Core\Controller
 | Displays a 403 if the user doesnt have access to this page
 | @Param: (Bool) $s403 - Show 403?
 |
-*/ 
+*/
     protected function check_permission($perm, $s403 = TRUE)
     {
         if( !$this->User->has_permission($perm))
@@ -1144,19 +1151,19 @@ class Admin extends Core\Controller
         }
         return TRUE;
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | 403 Page
 | ---------------------------------------------------------------
 |
-*/ 
+*/
     protected function show_403()
     {
         // Set our page title and desc
         $data['page_title'] = "Access Denied";
         $data['page_desc'] = "Your account does not have sufficient rights to view this page.";
-        
+
         // Load the page, and we are done :)
         $this->load->view('blank', $data);
     }
