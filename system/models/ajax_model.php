@@ -453,12 +453,15 @@ class Ajax_Model extends Core\Model
     {
         /* DB Setup */
         if(!is_object($DB)) $DB = $this->$DB;
+        
+        /* Lighten the load by defining this early */
+        $aColumnCount = count($aColumns);
 
         /* Paging */
         $sLimit = "";
-        if ( isset( $_POST['iDisplayStart'] ) && $_POST['iDisplayLength'] != '-1' )
+        if( isset( $_POST['iDisplayStart'] ) && $_POST['iDisplayLength'] != '-1' )
         {
-            $sLimit = "LIMIT ". addslashes( $_POST['iDisplayStart'] ) .", ". addslashes( $_POST['iDisplayLength'] );
+            $sLimit = "LIMIT ". intval( $_POST['iDisplayStart'] ) .", ". intval( $_POST['iDisplayLength'] );
         }
         
         /*  Ordering */
@@ -470,7 +473,8 @@ class Ajax_Model extends Core\Model
             {
                 if( $_POST[ 'bSortable_'. intval($_POST['iSortCol_'.$i]) ] == "true" )
                 {
-                    $sOrder .= "`". $aColumns[ intval( $_POST['iSortCol_'.$i] ) ]."`". addslashes( $_POST['sSortDir_'.$i] ) .", ";
+                    $sortDir = (strcasecmp($_POST['sSortDir_'.$i], 'ASC') == 0) ? 'ASC' : 'DESC';
+                    $sOrder .= "`". $aColumns[ intval( $_POST['iSortCol_'.$i] ) ]."` ". $sortDir .", ";
                 }
             }
             
@@ -488,21 +492,21 @@ class Ajax_Model extends Core\Model
         if( isset($_POST['sSearch']) && $_POST['sSearch'] != "" )
         {
             $sWhere = "WHERE (";
-            for ($i = 0; $i < count($aColumns); $i++)
+            for ($i = 0; $i < $aColumnCount; $i++)
             {
-                $sWhere .= "`". $aColumns[$i]."` LIKE '%". addslashes( $_POST['sSearch'] ) ."%' OR ";
+                $sWhere .= "`". $aColumns[$i]."` LIKE :search OR ";
             }
             $sWhere = substr_replace( $sWhere, "", -3 );
             $sWhere .= ')';
         }
         
         /* Individual column filtering */
-        for($i = 0; $i < count($aColumns); $i++)
+        for($i = 0; $i < $aColumnCount; $i++)
         {
             if( isset($_POST['bSearchable_'.$i]) && $_POST['bSearchable_'.$i] == "true" && $_POST['sSearch_'.$i] != '' )
             {
                 $sWhere .= ($sWhere == "") ? "WHERE " : " AND ";
-                $sWhere .= "`".$aColumns[$i]."` LIKE '%". addslashes($_POST['sSearch_'.$i]) ."%' ";
+                $sWhere .= "`".$aColumns[$i]."` LIKE :search".$i." ";
             }
         }
         
@@ -513,12 +517,25 @@ class Ajax_Model extends Core\Model
         }
         
         /* SQL queries, Get data to display */
-        $columns = "`". str_replace(",``", " ", implode("`, `", $aColumns)) ."`";
-        $sQuery = "SELECT SQL_CALC_FOUND_ROWS {$columns} FROM {$sTable} {$sWhere} {$sOrder} {$sLimit}";
-        $rResult = $DB->query( $sQuery )->fetchAll();
+        $sQuery = "SELECT `".str_replace(" , ", " ", implode("`, `", $aColumns))."` FROM `".$sTable."` ".$sWhere." ".$sOrder." ".$sLimit;
+        $Statement = $DB->prepare($sQuery);
         
-        /* Data set length after filtering */
-        $iFilteredTotal = $DB->query( "SELECT FOUND_ROWS()" )->fetchColumn();
+        // Bind parameters
+        if( isset($_POST['sSearch']) && $_POST['sSearch'] != "" ) 
+        {
+            $Statement->bindValue(':search', '%'.$_POST['sSearch'].'%', \PDO::PARAM_STR);
+        }
+        for( $i=0; $i < $aColumnCount; $i++ ) 
+        {
+            if( isset($_POST['bSearchable_'.$i]) && $_POST['bSearchable_'.$i] == "true" && $_POST['sSearch_'.$i] != '' ) 
+            {
+                $Statement->bindValue(':search'.$i, '%'.$_POST['sSearch_'.$i].'%', \PDO::PARAM_STR);
+            }
+        }
+        
+        // Execute our statement
+        $Statement->execute();
+        $rResult = $Statement->fetchAll();
         
         /* Total data set length */
         $iTotal = $DB->query( "SELECT COUNT(`".$sIndexColumn."`) FROM   $sTable" )->fetchColumn();
@@ -527,14 +544,15 @@ class Ajax_Model extends Core\Model
         $output = array(
             "sEcho" => intval($_POST['sEcho']),
             "iTotalRecords" => intval($iTotal),
-            "iTotalDisplayRecords" => $iFilteredTotal,
+            "iTotalDisplayRecords" => intval(count($rResult)),
             "aaData" => array()
         );
         
+        // Now add each row to the aaData
         foreach( $rResult as $aRow )
         {
             $row = array();
-            for($i = 0; $i < count($aColumns); $i++)
+            for($i = 0; $i < $aColumnCount; $i++)
             {
                 if( $aColumns[$i] == "version" )
                 {

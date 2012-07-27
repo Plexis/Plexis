@@ -16,7 +16,7 @@
             <!-- Update details -->
             <div id="details">
                 <br />
-                <b><u><font color="green"><center>There are {count} Updates available!</center></font></u></b>
+               <div class="alert info">There is <b>{count}</b> update(s) available! Click the "Update CMS" button, and Plexis will update itself to the next version.</div>
                 <br />
                 <h2>Next Update:</h2>
 
