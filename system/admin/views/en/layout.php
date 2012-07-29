@@ -1,7 +1,7 @@
 <?php
     // First we setup the menu ID to false
     $a = $b = $c = $d = $e = $f = $g = FALSE;
-    
+
     // Determine our action to highlight our navigation pane
     switch($GLOBALS['action'])
     {
@@ -50,17 +50,17 @@
 
     <!-- Begin of #container -->
     <div id="container">
-    
+
         <!-- Begin of #header -->
         <div id="header-surround">
             <header id="header">
-            
+
                 <!-- Logo -->
                 <img src="{TEMPLATE_URL}/img/logo.png" alt="Plexis" class="logo">
-                
+
                 <!-- Update Panel -->
                 <div id="update_info" title="Update Information" style="display: none;">
-                    <p> 
+                    <p>
                         <b>Current Build:</b> @current <br />
                         <b>Lastest Build:</b> @build <br /><br />
                         <b>Latest Commit Message:</b><br />@message<br /><br />
@@ -68,38 +68,38 @@
                     </p>
                     <br />
                     <div>
-                        <center> 
+                        <center>
                             <a href="https://github.com/Plexis/Plexis/zipball/master" class="button">Download Zip</a>&nbsp;&nbsp;&nbsp;
-                            <a href="{SITE_URL}/admin/update" class="button">Remote Updater</a> 
+                            <a href="{SITE_URL}/admin/update" class="button">Remote Updater</a>
                         </center>
                     </div>
                 </div>
-                
+
                 <!-- Begin of #user-info -->
                 <div id="user-info">
                     <p>
                         <a href="{SITE_URL}" class="button grey">Return To Site</a> <a href="{SITE_URL}/account/logout" class="button red">Logout</a>
                     </p>
-                </div> 
+                </div>
                 <!--! end of #user-info -->
-            
+
             </header>
-        </div> 
+        </div>
         <!--! end of #header -->
-        
+
         <div class="fix-shadow-bottom-height"></div>
-        
+
         <!-- Begin of Sidebar -->
         <aside id="sidebar">
-            
+
             <!-- Search -->
             <div id="search-bar">
                 <form id="search-form" name="search-form" action="search.php" method="post">
                     <input type="text" id="query" name="query" value="" autocomplete="off" placeholder="Search">
                 </form>
-            </div> 
+            </div>
             <!--! end of #search-bar -->
-            
+
             <!-- Begin of #login-details -->
             <section id="login-details">
                 <img class="img-left framed" src="{TEMPLATE_URL}/img/misc/avatar_small.png" alt="Hello Admin">
@@ -109,13 +109,13 @@
                     <li><a href="{SITE_URL}/account">Manage Account</a></li>
                     <li><a href="{SITE_URL}/account/logout">Logout</a></li>
                 </ul>
-                
+
                 <div class="clearfix"></div>
-            </section> 
+            </section>
             <!--! end of #login-details -->
-            
+
             <!-- Begin of Navigation -->
-            <nav id="nav">
+            <nav id="nav" style="padding-bottom: 24px;">
                 <ul class="menu collapsible shadow-bottom">
                     <li>
                         <a href="{SITE_URL}/admin" <?php if($a == TRUE) echo 'class="current"';?>>
@@ -135,7 +135,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);" <?php if($d == TRUE) echo 'class="current"'; ?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/clipboard-list.png">Site Managment</a>
+                        <img src="{TEMPLATE_URL}/img/icons/small/clipboard-list.png">Site Management</a>
                         <ul class="sub">
                             <li><a href="{SITE_URL}/admin/news">News Posts</a></li>
                             <li><a href="{SITE_URL}/admin/groups">User Groups</a></li>
@@ -150,7 +150,7 @@
                     </li>
                     <li>
                         <a href="{SITE_URL}/admin/realms" <?php if($e == TRUE) echo 'class="current"'; ?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/chart.png">Realm Managment</a>
+                        <img src="{TEMPLATE_URL}/img/icons/small/chart.png">Realm Management</a>
                     </li>
                     <li>
                         <a href="{SITE_URL}/admin/characters" <?php if($f == TRUE) echo 'class="current"'; ?>>
@@ -168,13 +168,13 @@
                         </ul>
                     </li>
                 </ul>
-            </nav> 
-        </aside> 
+            </nav>
+        </aside>
         <!--! end of #sidebar -->
-        
+
         <!-- Begin of #main -->
         <div id="main" role="main">
-            
+
             <!-- Begin of titlebar/breadcrumbs -->
             <div id="title-bar">
                 <ul id="breadcrumbs">
@@ -211,11 +211,11 @@
                         }
                     ?>
                 </ul>
-            </div> 
+            </div>
             <!--! end of #title-bar -->
-            
+
             <div class="shadow-bottom shadow-titlebar"></div>
-            
+
             <!-- Begin of #main-content -->
             <div id="main-content">
                 <div class="container_12">
@@ -224,20 +224,20 @@
                         <h1>{page_title}</h1>
                         <p>{page_desc}</p>
                     </div>
-                    
+
                     <!-- Global Messages -->
                     <div class="grid_12">
                         <pcms::global_messages />
                     </div>
-                
+
                     <!-- Contents -->
                     <pcms::page_contents />
-                </div> 
+                </div>
                 <div class="clear height-fix"></div>
             </div>
             <!--! end of #main-content -->
-            
-        </div> 
+
+        </div>
         <!--! end of #main -->
 
         <!-- Footer -->
@@ -248,7 +248,7 @@
             <div class="right">
                 <a href="#top" title="Scroll to Top"><span class="to-top"></span></a>
             </div>
-            
+
             <!-- Info dialog -->
             <div id="cms-info-dialog" title="Plexis CMS" style="display: none;">
                 <p>
@@ -258,9 +258,9 @@
             </div>
         </footer>
 
-    </div> 
+    </div>
     <!--! end of #container -->
-    
+
     <!-- Hidden Ajax Loading Page -->
     <div id="AjaxLoadImg" style="display: none;"><img src="{TEMPLATE_URL}/img/ajax.gif"></div>
 </body>

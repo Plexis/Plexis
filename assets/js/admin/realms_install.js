@@ -4,38 +4,39 @@ $().ready(function() {
     $('select[name=ra_type]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
     $('input[name=ra_username]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
     $('input[name=ra_urn]').tipsy({trigger: 'hover', gravity: 's', delayIn: 500, delayOut: 500});
-    
+
     /* Tabs */
     $("#tab-panel-1").createTabs();
-    
+
     // Form validation
     $("#install-form").validate({
         rules: {
             name: {
                 required: true,
-                minlength: 3
+                minlength: 1
             },
             address: {
-                required: true
+                required: true,
+                minlength: 3
             },
             port: {
                 required: true,
-                minlength: 2
+                minlength: 1
             },
             max_players: {
                 required: true
             },
             c_address: {
                 required: true,
-                minlength: 8
+                minlength: 3
             },
             c_port: {
                 required: true,
-                minlength: 2
+                minlength: 1
             },
             c_address: {
                 required: true,
-                minlength: 8
+                minlength: 3
             },
             c_username: {
                 required: true
@@ -48,15 +49,15 @@ $().ready(function() {
             },
             w_address: {
                 required: true,
-                minlength: 8
+                minlength: 3
             },
             w_port: {
                 required: true,
-                minlength: 2
+                minlength: 1
             },
             w_address: {
                 required: true,
-                minlength: 8
+                minlength: 3
             },
             w_username: {
                 required: true
@@ -69,9 +70,9 @@ $().ready(function() {
             },
         }
     });
-    
+
     // ===============================================
-    // bind the Install form using 'ajaxForm' 
+    // bind the Install form using 'ajaxForm'
     $('#install-form').ajaxForm({
         beforeSubmit: function (arr, data, options)
         {
@@ -79,8 +80,8 @@ $().ready(function() {
             $("html, body").animate({ scrollTop: 0 }, "slow");
             return true;
         },
-        success: function (response, statusText, xhr, $form)  
-        { 
+        success: function (response, statusText, xhr, $form)
+        {
             // Parse the JSON response
             var result = jQuery.parseJSON(response);
             if(typeof result.php_error != "undefined" && result.php_error == true)
@@ -104,6 +105,6 @@ $().ready(function() {
         error: function () {
             $.msgbox('An error ocurred while sending the ajax request.', {type : 'error'});
         },
-        timeout: 5000 
+        timeout: 5000
     });
 });

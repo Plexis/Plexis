@@ -16,7 +16,7 @@
 |
 */
     function load_module_config($module, $name = 'mod', $filename = 'config.php', $array = FALSE)
-    {	
+    {
         // Get our filename and use the load_config method
 		$file = path( ROOT, "modules", $module, "config", $filename );
         config_load($file, $name, $array);
@@ -58,18 +58,18 @@
     {
         $load = load_class('Loader');
         $DB = $load->database( 'DB' );
-        
+
         // Build our query
         $query = "SELECT * FROM `pcms_modules`";
         return $DB->query( $query )->fetchAll();
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Function: module_installed()
 | ---------------------------------------------------------------
 |
-| This function is used to find out if a module is installed based 
+| This function is used to find out if a module is installed based
 | on the module name
 |
 | @Return: (Bool) True if the module is installed, FALSE otherwise
@@ -79,9 +79,9 @@
     {
         $load = load_class('Loader');
         $DB = $load->database( 'DB' );
-        
+
         // Build our query
-        $query = "SELECT `uri` FROM `pcms_modules` WHERE `name`=?";
+        $query = "SELECT `id` FROM `pcms_modules` WHERE `name`=?";
         $result = $DB->query( $query, array($name) )->fetchColumn();
         return ($result == FALSE) ? FALSE : TRUE;
     }

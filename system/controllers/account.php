@@ -1,9 +1,9 @@
 <?php
-/* 
+/*
 | --------------------------------------------------------------
 | Plexis
 | --------------------------------------------------------------
-| Author:       Steven Wilson 
+| Author:       Steven Wilson
 | Author:       Tony (Syke)
 | Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
@@ -24,7 +24,7 @@
 | P11 - Invitation Keys
 |
 */
-class Account extends Core\Controller 
+class Account extends Core\Controller
 {
 
 /*
@@ -37,7 +37,7 @@ class Account extends Core\Controller
     {
         // Build the Core Controller
         parent::__construct();
-        
+
         // Make the user info a little easier to get
         $this->user = $this->User->data;
     }
@@ -48,7 +48,7 @@ class Account extends Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    public function index() 
+    public function index()
     {
         // Redirect to the login page if the user is not logged in
         if($this->user['logged_in'] == FALSE)
@@ -56,17 +56,17 @@ class Account extends Core\Controller
             redirect('account/login');
             die();
         }
-        
+
         // If the users account revovery QA isnt set, they need to... NOW!
         if($this->user['_account_recovery'] == FALSE)
         {
             redirect('account/recover/set');
             return;
         }
-        
+
         // Fetch account data from the realm
         $Account = $this->realm->fetchAccount($this->user['id']);
-        
+
         // Get our banned / active / locked status
         if($this->realm->accountBanned($this->user['id']))
             $status = '<font color="red">Banned</font>';
@@ -74,13 +74,13 @@ class Account extends Core\Controller
             $status = '<font color="red">Locked</font>';
         else
             $status = '<font color="green">Active</font>';
-        
+
         // Add out custom data
         $data = array(
             'status' => $status,
             'joindate' => date('F j, Y', strtotime($this->user['registered'])),
         );
-        
+
         // Load the page, and we are done :)
         $this->load->view('index', $data);
     }
@@ -91,7 +91,7 @@ class Account extends Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    public function login() 
+    public function login()
     {
         // If the user is logged in, we dint need to be here
         if($this->user['logged_in'] == TRUE)
@@ -104,23 +104,23 @@ class Account extends Core\Controller
         {
             // Load the Form Validation script
             $this->load->library('validation');
-            
+
             // Tell the validator that the username and password must NOT be empty
             $this->validation->set( array(
-                'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]', 
-                'password' => 'required|min[3]|max[24]') 
+                'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]',
+                'password' => 'required|min[3]|max[24]')
             );
-            
+
             // If both the username and password pass validation
             if( $this->validation->validate() == TRUE )
             {
                 // Load the input cleaner
                 $this->input = load_class('Input');
-        
+
                 // Use the XSS filter on these!
                 $username = $this->input->post('username', TRUE);
                 $password = $this->input->post('password', TRUE);
-                
+
                 if($this->User->login($username, $password))
                 {
                     // Success
@@ -139,7 +139,7 @@ class Account extends Core\Controller
                 $this->load->view('login');
             }
         }
-        
+
         // Just load the login page
         else
         {
@@ -153,14 +153,14 @@ class Account extends Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    public function logout() 
+    public function logout()
     {
         // Redirect to the login page if the user is not logged in
         if( !$this->user['logged_in'] ) redirect('account/login');
-        
+
         // Destroy the users session
         $this->User->logout();
-        
+
         // Load the page, and we are done :)
         (isset($_SERVER['HTTP_REFERER'])) ? redirect( $_SERVER['HTTP_REFERER'] ) : redirect( SITE_URL );
     }
@@ -171,11 +171,11 @@ class Account extends Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    public function register() 
+    public function register()
     {
         // Redirect to the users dashboard if already logged in
         if($this->user['logged_in']) redirect('account');
-        
+
         // Make sure the config says we can register
         if( config('allow_registration') == FALSE )
         {
@@ -183,7 +183,7 @@ class Account extends Core\Controller
             $this->load->view('blank');
             return;
         }
-        
+
         // Do our captcha check
         $enable_captcha = config('enable_captcha');
         if( $enable_captcha )
@@ -198,10 +198,10 @@ class Account extends Core\Controller
             }
             unset($Captcha);
         }
-        
+
         // Load our secret questions
         $data['secret_questions'] = get_secret_questions();
-        
+
         // See if the admin requires a registration key, and IF there is one
         if( config('reg_registration_key') )
         {
@@ -214,9 +214,9 @@ class Account extends Core\Controller
                 {
                     // If key is posted, If so we must validate it
                     $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($_POST['key']))->fetchRow();
-                    
+
                     // 'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
-                    if(!$result || $result['usedby'] >= 0) 
+                    if(!$result || $result['usedby'] >= 0)
                     {
                         // Key form
                         output_message('error', 'reg_failed_invalid_key');
@@ -242,9 +242,9 @@ class Account extends Core\Controller
             {
                 // Process if key is valid
                 $result = $this->DB->query("SELECT * FROM `pcms_reg_keys` WHERE `key`=?", array($key))->fetchRow();
-                
+
                 // 'usedby' will only not equal -1 if someone has already signed up with it, so we need to prevent further use of the key.
-                if(!$result || $result['usedby'] >= 0) 
+                if(!$result || $result['usedby'] >= 0)
                 {
                     // Reset the Registration key and start over... load the Key form
                     $this->Input->set_cookie('reg_key', $key, (time() -1));
@@ -259,7 +259,7 @@ class Account extends Core\Controller
                 }
             }
         }
-        
+
         // Registrer keys disabled
         else
         {
@@ -277,24 +277,24 @@ class Account extends Core\Controller
                 }
             }
         }
-        
+
         // Our main registration processing station
         Process:
         {
             // Load the Form Validation script
             $this->load->library('validation');
-            
+
             // Tell the validator that the username and password must NOT be empty, as well
             // as match a pattern. Same goes for the email field.
             ($enable_captcha == TRUE) ? $add = array('sa' => 'required|min[3]|max[24]') : $add = array();
             $this->validation->set( array(
-                'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]', 
+                'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]',
                 'password1' => 'required|min[3]|max[24]',
                 'password2' => 'required|min[3]|max[24]',
                 'email' => 'required|email'
                 ) + $add
             );
-            
+
             // If everything passes validation, we are good to go
             if( $this->validation->validate() )
             {
@@ -309,7 +309,7 @@ class Account extends Core\Controller
                         return;
                     }
                 }
-                
+
                 // Use the XSS filter on these!
                 $username = $this->Input->post('username', TRUE);
                 $password = $this->Input->post('password1', TRUE);
@@ -317,7 +317,7 @@ class Account extends Core\Controller
                 $email = $this->Input->post('email', TRUE);
                 $sq = $this->Input->post('sq');
                 $sa = $this->Input->post('sa', TRUE);
-                
+
                 // Check that the 2 passwords matched
                 if($password != $password2)
                 {
@@ -325,7 +325,7 @@ class Account extends Core\Controller
                     $this->load->view('register');
                     return;
                 }
-                
+
                 // Check if the email is already in use
                 if( config('reg_unique_email') == TRUE )
                 {
@@ -337,7 +337,7 @@ class Account extends Core\Controller
                         return;
                     }
                 }
-                
+
                 // Use the AUTH class to register the user officially
                 $id = $this->User->register($username, $password, $email, $sq, $sa);
                 if($id != false)
@@ -349,7 +349,7 @@ class Account extends Core\Controller
                         $this->DB->update("pcms_reg_keys", array('usedby' => $id), "`key` = '$key'");
 						$this->Input->set_cookie('reg_key', $key, (time() -1));
                     }
-                    
+
                     // Check for email verification
                     if( config('reg_email_verification') )
                     {
@@ -357,7 +357,7 @@ class Account extends Core\Controller
                         $path = path(SYSTEM_PATH, 'language', $GLOBALS['language'], 'emails.xml');
                         $XML = simplexml_load_file( $path );
                         $this->email = $this->load->library('email');
-                        
+
                         // Generate a activation key
                         $genkey = $this->account->create_key($username);
 
@@ -371,7 +371,7 @@ class Account extends Core\Controller
                         $this->email->from( config('site_support_email'), config('site_title') );
                         $this->email->subject( $XML->account_activation_req->subject );
                         $this->email->message( $message );
-                        
+
                         // Send the email
                         ($this->email->send(true) == true) ? output_message('success', 'reg_success_activation_required') : output_message('warning', 'reg_success_email_error');
 						$this->load->view('blank');
@@ -397,39 +397,39 @@ class Account extends Core\Controller
             }
         }
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P05: Account Activation Page
 | ---------------------------------------------------------------
 |
 */
-    public function activate($key = FALSE) 
+    public function activate($key = FALSE)
     {
         // Make sure we have a key
         if($key == FALSE || strlen( trim($key) ) != 30) goto Invalid;
-        
+
         // Load the account model
         $this->load->model('Account_model', 'account');
-        
+
         // Verify the key
         $username = $this->account->verify_key($key);
         if($username == FALSE) goto Invalid;
-        
+
         // We have a valid key, now activate the account
         if($this->DB->update('pcms_accounts', array('activated' => 1), "`username`='".$username."'"))
         {
             // Unlock account
             $query = "SELECT `id` FROM `pcms_accounts` WHERE `username`=?";
-            $result = $this->DB->query( $query, array($username) )->fetch_column();
+            $result = $this->DB->query( $query, array($username) )->fetchColumn();
             $this->realm->unlock_account($result);
-            
+
             // Output a success message
             output_message('success', 'account_activate_success');
             $this->load->view('blank');
             return;
         }
-        
+
         // Process an invalid key
         Invalid:
         {
@@ -438,14 +438,14 @@ class Account extends Core\Controller
             return;
         }
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P06: Account Recovery
 | ---------------------------------------------------------------
 |
 */
-    public function recover($mode = NULL) 
+    public function recover($mode = NULL)
     {
         // Check to see if we have a mode!
         if($mode != NULL)
@@ -455,18 +455,18 @@ class Account extends Core\Controller
                 case "set":
                     // Shouldnt be here if we arent logged in!
                     if($this->user['logged_in'] == FALSE) goto Step1;
-                    
+
                     // Make sure Users QA isnt set.. If it is then he shouldnt be here!
                     if($this->user['_account_recovery'] == TRUE) redirect('account');
-                    
+
                     // Check for posted data
                     if(isset($_POST['action'])) goto Process;
-                    
+
                     // Get our questions and load the page
                     $data['secret_questions'] = get_secret_questions();
                     $this->load->view('secret_questions', $data);
                     break;
-                
+
                 default:
                     if($this->user['logged_in'] == FALSE) goto Step1;
                     redirect('account');
@@ -477,19 +477,19 @@ class Account extends Core\Controller
         {
             // If the user is logged in, we dont need to be here
             if($this->user['logged_in']) redirect('account');
-        
+
             // Do we have login information?
             if(isset($_POST['action'])) goto Process;
         }
-        
-        
+
+
         // Recovery Form, Step 1
         Step1:
         {
             $this->load->view('recover');
             return;
         }
-        
+
         // Recovery Form, Step 2
         Step2:
         {
@@ -500,24 +500,24 @@ class Account extends Core\Controller
             $this->load->view('recover_step2', $data );
             return;
         }
-        
+
         // Our process post processing
         Process:
         {
             if(!isset($_POST['action'])) goto Step1;
-            
+
             // Load the account Model
             $this->load->model('account_model', 'account');
-            
+
             switch($_POST['action'])
             {
                 case "set":
-                    
+
                     // Load the input class and use the XSS filter on these!
                     $this->Input = load_class('Input');
                     $sq = $this->Input->post('question', TRUE);
                     $sa = $this->Input->post('answer', TRUE);
-                    
+
                     // Fetch account data from the realm
                     $Account = $this->realm->fetchAccount($this->user['id']);
 
@@ -526,7 +526,7 @@ class Account extends Core\Controller
                     {
                         // Set recovery data
                         $set = $this->account->set_recovery_data($Account->getUsername(), $sq, $sa);
-                        
+
                         // Process the result
                         if($set == TRUE)
                         {
@@ -537,13 +537,13 @@ class Account extends Core\Controller
                                 $status = '<font color="red">Locked</font>';
                             else
                                 $status = '<font color="green">Active</font>';
-                            
+
                             // Add out custom data
                             $data = array(
                                 'status' => $status,
                                 'joindate' => date('F j, Y', strtotime($this->user['registered'])),
                             );
-                            
+
                             // Load the account dashboard, and we are done :)
                             output_message('success', 'account_recovery_set_success');
                             $this->load->view('index', $data);
@@ -564,7 +564,7 @@ class Account extends Core\Controller
                         goto Step1;
                     }
                     break;
-                    
+
                 case "recover":
                     // Get our current step
                     if( !isset($_POST['step']) ) goto Step1;
@@ -576,11 +576,11 @@ class Account extends Core\Controller
                             // Load the validation script and set our rules
                             $this->load->library('validation');
                             $this->validation->set( array(
-                                'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]', 
+                                'username' => 'required|pattern[(^[A-Za-z0-9_-]{3,24}$)]',
                                 'email' => 'required|email'
-                                ) 
+                                )
                             );
-                            
+
                             // Check to make sure we pass validation
                             if($this->validation->validate() == TRUE)
                             {
@@ -588,7 +588,7 @@ class Account extends Core\Controller
                                 $this->Input = load_class('Input');
                                 $username = $this->Input->post('username', TRUE);
                                 $email = $this->Input->post('email', TRUE);
-                                
+
                                 // Load recovery data
                                 $r_data = $this->account->get_recovery_data($username);
                                 if(!is_array($r_data))
@@ -605,14 +605,14 @@ class Account extends Core\Controller
                                         $this->load->view('blank');
                                     }
                                 }
-                                
+
                                 // Make sure the emails match! Else, back to step 1
                                 if($r_data['registration_email'] != $email)
                                 {
                                     output_message('error', 'account_recover_invalid_email');
                                     goto Step1;
                                 }
-                                
+
                                 // Good to go to step 2
                                 goto Step2;
                             }
@@ -627,12 +627,12 @@ class Account extends Core\Controller
                         case 2:
                             // Make sure we have post data
                             if(!isset($_POST['answer'])) goto Step1;
-                            
+
                             // load the input class
                             $this->Input = load_class('Input');
                             $username = $this->Input->post('username', TRUE);
                             $answer = $this->Input->post('answer', TRUE);
-                            
+
                             // Load recovery data
                             $r_data = $this->account->get_recovery_data($username);
                             if(!is_array($r_data))
@@ -655,7 +655,7 @@ class Account extends Core\Controller
                             {
                                 // Load the account model as it holds the code to change the password etc
                                 $result = $this->account->process_recovery($r_data['id'], $username, $r_data['email']);
-                                
+
                                 // Output our message
                                 if($result !== false)
                                 {
@@ -666,11 +666,11 @@ class Account extends Core\Controller
                                 {
                                     output_message('error', 'account_recover_pass_failed');
                                 }
-                                
+
                                 // The message will be there if we whether we failed or succeded
                                 $this->load->view('blank');
                                 return;
-                                
+
                             }
                             else
                             {
@@ -679,53 +679,53 @@ class Account extends Core\Controller
                                 goto Step2;
                             }
                             break;
-                            
+
                         default:
                             goto Step1;
                             break;
-                        
+
                     }
                     break;
-                    
+
                 default:
                     goto Step1;
                     break;
             }
         }
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P07: Account Update (password / email) Pages
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function update($mode = NULL)
     {
         // Make sure we have a directive
         if($mode == NULL) redirect('/');
-        
+
         // Make sure we are logged in
         if($this->user['logged_in'] == FALSE) redirect('/');
-        
+
         // Check for POST data, if we have some skip to Process
         if(isset($_POST['action'])) goto Process;
-        
+
         // Load our page based off our current mode
         switch($mode)
         {
             case "password":
                 $this->load->view('change_password');
                 return;
-                
+
             case "email":
                 $this->load->view('change_email');
                 return;
-                
+
             default:
                 show_404();
         }
-        
+
         // Main processing form
         Process:
         {
@@ -741,7 +741,7 @@ class Account extends Core\Controller
                         'password2' => 'required|min[3]|max[24]',
                         'old_password' => 'required'
                     ));
-                    
+
                     // validate our post data was filled out correctly
                     if($this->validation->validate() == TRUE)
                     {
@@ -750,7 +750,7 @@ class Account extends Core\Controller
                         $password = $this->Input->post('password1', TRUE);
                         $password2 = $this->Input->post('password2', TRUE);
                         $oldpass = $this->Input->post('old_password', TRUE);
-                        
+
                         // Make sure the new passwords match
                         if($password != $password2)
                         {
@@ -758,7 +758,7 @@ class Account extends Core\Controller
                             $this->load->view('change_password');
                             return;
                         }
-                        
+
                         // Tell the realm to validate the provided password
                         $valid = $this->realm->validate($this->user['username'], $oldpass);
                         if(!$valid)
@@ -767,11 +767,11 @@ class Account extends Core\Controller
                             $this->load->view('change_password');
                             return;
                         }
-                        
+
                         // Load the user
                         $Account = $this->realm->fetchAccount($this->user['id']);
                         $Account->setPassword($password);
-                        
+
                         // we are good, change the password
                         if($Account->save())
                         {
@@ -801,16 +801,16 @@ class Account extends Core\Controller
                                     if( !$this->email->send(true) ) log_message("Failed to send email to $email, about account password change", 'error.log');
                                 }
                             }
-                            
+
                             // Fire the change password event
                             load_class('Events')->trigger('password_change', array($this->user['id'], $password));
-                            
+
                             // Inform the user the pass change was successfull
                             output_message('success', 'account_update_pass_success');
                             $this->load->view('blank');
                             return;
                         }
-                        
+
                         // Else we failed :(
                         output_message('error', 'account_update_pass_failed');
                         $this->load->view('blank');
@@ -824,7 +824,7 @@ class Account extends Core\Controller
                         return;
                     }
                     break;
-                    
+
                 case "change-email":
                     // Set our validation rules
                     $this->validation->set( array(
@@ -832,7 +832,7 @@ class Account extends Core\Controller
                         'old_email' => 'required|email',
                         'new_email' => 'required|email'
                     ));
-                    
+
                     // validate our post data was filled out correctly
                     if($this->validation->validate() == TRUE)
                     {
@@ -850,7 +850,7 @@ class Account extends Core\Controller
                             $this->load->view('change_email');
                             return;
                         }
-                        
+
                         // If the email didnt change, then say so
                         if($old == $new)
                         {
@@ -858,14 +858,14 @@ class Account extends Core\Controller
                             $this->load->view('change_email');
                             return;
                         }
-                        
+
                         // If an email wasnt set, the just set the damn thing
                         $result = $this->DB->query('SELECT `email` FROM `pcms_accounts` WHERE `id`=?', array($this->user['id']))->fetch_column();
                         if($result == NULL)
                         {
                             goto SetEmail;
                         }
-                        
+
                         // Verify the email addresses are the same
                         if($old != $result)
                         {
@@ -873,7 +873,7 @@ class Account extends Core\Controller
                             $this->load->view('change_email');
                             return;
                         }
-                        
+
                         // Our set email process
                         SetEmail:
                         {
@@ -884,25 +884,25 @@ class Account extends Core\Controller
                             {
                                 output_message('error', 'account_update_email_failed');
                                 $this->load->view('blank');
-                                return; 
+                                return;
                             }
-                            
+
                             // Now update the cms accounts table with the new email
                             $r = $this->DB->update('pcms_accounts', array('email' => $new), "`id`=".$this->user['id']);
                             if($r == FALSE)
                             {
                                 output_message('error', 'account_update_email_failed');
                                 $this->load->view('blank');
-                                return; 
+                                return;
                             }
-                            
+
                             // Fire the change email event
                             load_class('Events')->trigger('email_change', array($this->user['id'], $old, $new));
-                            
+
                             // If we are here, we have a success!
                             output_message('success', 'account_update_email_success');
                             $this->load->view('blank');
-                            return; 
+                            return;
                         }
 
                     }
@@ -914,7 +914,7 @@ class Account extends Core\Controller
                         return;
                     }
                     break;
-                    
+
                 default:
                     // By default, just reload the page
                     $this->load->view('change_email');
@@ -928,7 +928,7 @@ class Account extends Core\Controller
 | P08: Captcha Image Page
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function captcha()
     {
         // Load the captcha Library
@@ -943,22 +943,22 @@ class Account extends Core\Controller
         // Store the Captcha string into an array for verification later on.
         $_SESSION['Captcha'] = $this->Captcha->get_string();
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P09: Vote
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function vote($action = NULL, $id = 0)
     {
         // Make sure the user is logged in HERE!
         if($this->user['logged_in'] == FALSE) redirect('account/login');
-        
+
         // Load the vote model, and time helper
         $this->load->model('Vote_Model', 'model');
         $this->load->helper('Time');
-        
+
         // See if we need redirecting!
         if($action == 'out' && $id != 0)
         {
@@ -966,20 +966,20 @@ class Account extends Core\Controller
             redirect( $site['votelink'] );
             die();
         }
-        
+
         // Load this users vote data
         $vote_data = $this->model->get_data( $this->user['id'] );
-        
+
         // Get all the vote sites information
         $list = $this->model->get_vote_sites();
         $sites = array();
-        
+
         // Correct the array keys
         foreach($list as $site)
         {
             $sites[ $site['id'] ] = $site;
         }
-        
+
         // Process the time left for each site
         $time = time();
         foreach($vote_data as $key => $value)
@@ -999,27 +999,27 @@ class Account extends Core\Controller
                 $sites[$key]['time_left'] = "N/A";
             }
         }
-        
+
         // Prepare for view
         $data['sites'] = $sites;
         $this->load->view('vote', $data);
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P10: Donate
 | ---------------------------------------------------------------
 |
-*/    
+*/
     public function donate()
     {
         // Make sure the user is logged in HERE!
         if($this->user['logged_in'] == FALSE) redirect('account/login');
-        
+
         // Prepare for view
         $this->load->view('donate');
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | P11: Invitation Keys
@@ -1031,10 +1031,10 @@ class Account extends Core\Controller
         // get permissions
         $enabled = config('reg_registration_key');
         $create_keys = $this->User->has_permission('create_invite_keys');
-        
+
         // Load the account model
         $this->load->model('account_model', 'model');
-        
+
         // Only process the mode IF we allow users to create keys!
         if($enabled == 1 && $create_keys == 1)
         {
@@ -1043,12 +1043,12 @@ class Account extends Core\Controller
             {
                 // Make sure the user hasnt created too many keys
                 $query = "SELECT COUNT(*) FROM `pcms_reg_keys` WHERE `sponser` = ? AND `assigned` = 0";
-                $result = (int) $this->DB->query( $query, array($this->user['id']) )->fetch_column();
+                $result = (int) $this->DB->query( $query, array($this->user['id']) )->fetchColumn();
                 if($result < 3)
                 {
                     // Send the request to the model
                     $this->model->create_invite_key($this->user['id']);
-                    
+
                     // Redirect back to /account/invite_keys/ so that F5 won't resubmit the form.
                     redirect("account/invite_keys");
                 }
@@ -1057,27 +1057,27 @@ class Account extends Core\Controller
                     output_message('warning', 'You have reached your limit of unassigned keys (3)');
                 }
             }
-            
+
             // Process key deletion next.
             if( $mode == "delete" && $key_id !== NULL )
             {
                 // Send the request to the model
                 $this->model->delete_invite_key($this->user['id'], $key_id);
-                
+
                 // Redirect back to /account/invite_keys/ so that F5 won't resubmit the form.
                 redirect("account/invite_keys");
             }
-            
+
             // Get an array of all the users invite keys
             $query = "SELECT * FROM `pcms_reg_keys` WHERE `sponser`=? AND `assigned`= 0;";
             $user_keys = $this->DB->query($query, array($this->user['id']))->fetchAll();
-            
+
             // Prepare for output
             $data['keys'] = (sizeof( $user_keys ) > 0) ? $user_keys : array();
             $this->load->view("reg_keys", $data);
             return;
         }
-        
+
         // User isnt allowed to create keys
         redirect( 'account' );
     }

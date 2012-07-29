@@ -1,7 +1,7 @@
 <?php
-/* 
+/*
 | --------------------------------------------------------------
-| 
+|
 | Frostbite Framework
 |
 | --------------------------------------------------------------
@@ -66,7 +66,7 @@ class Forge
         {
             $sql = "`$name` ";
         }
-        
+
         // Process our column definition
         switch($type)
         {
@@ -76,7 +76,7 @@ class Forge
                 $len = ( !is_null($length)) ?  $length  : 255;
                 $sql .= "varchar(". $len .")";
                 break;
-                
+
             case "int":
             case "integer":
                 // Build the SQL
@@ -84,40 +84,40 @@ class Forge
                 $sql .= "int(". $len .")";
                 $type = 'int';
                 break;
-                
+
             case "float":
                 // Build the SQL
                 $len = ( !is_null($length)) ?  $length  : 11;
                 $sql .= "float(". $len .")";
                 break;
-                
+
             case "text":
                 // Build the SQL
-                $sql = "text";
+                $sql .= "text";
                 break;
-                
+
             case "timestamp":
                 $sql .= "timestamp";
                 if( !isset($options['default'])) $options['default'] = "CURRENT_TIMESTAMP";
                 break;
-                
+
             default:
                 return FALSE;
                 break;
         }
-        
+
         // Set binary / unsigned
         if($type == 'int' && isset($options['unsigned']) && $options['unsigned'] == TRUE)
         {
             $sql .= " unsigned";
         }
-        
+
         // Set allow Null
         if(isset($options['allow_null']) && $options['allow_null'] == FALSE)
         {
             $sql .= " NOT NULL";
         }
-        
+
         // Add default, use array_key_exists in case of NULL
         if(array_key_exists('default', $options))
         {
@@ -131,36 +131,36 @@ class Forge
             }
             $sql .= " DEFAULT ". $d;
         }
-        
+
         // Auto increment
         if($type == 'int' && isset($options['increments']) && $options['increments'] == TRUE)
         {
             $sql .= " AUTO_INCREMENT";
         }
-        
+
         // Add unique
         if(isset($options['unique']) && $options['unique'] == TRUE)
         {
             $sql .= " UNIQUE";
         }
-        
+
         // Add comment if one exists
         if(isset($options['comment']))
         {
             $sql .= " COMMENT '". $options['comment'] ."'";
         }
-        
+
         // Add keys
         if(isset($options['primary']) && $options['primary'] == TRUE)
         {
             $this->keys[] = $name;
         }
-        
+
         $this->lines[] = $sql;
         return $this;
     }
 
- 
+
 /*
 | ---------------------------------------------------------------
 | Function: create_table()
@@ -186,7 +186,7 @@ class Forge
         $this->table_options = array('if_not_exists' => $if_not_exists) + $options;
         return $this;
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Function: alter_table
@@ -269,7 +269,7 @@ class Forge
         }
         return FALSE;
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Function: execute()
@@ -286,7 +286,7 @@ class Forge
             show_error('You cannot call this method without first selecting a mode and table, and adding columns or dropping them.', FALSE, E_ERROR);
             return FALSE;
         }
-        
+
         switch($this->mode)
         {
             case "create":
@@ -296,26 +296,26 @@ class Forge
                     show_error('You must first add a primary key before creating a table', FALSE, E_ERROR);
                     return FALSE;
                 }
-                
+
                 // NOW, we can continue with creating the table
                 $sql = 'CREATE TABLE ';
 
                 // Add IF NOT EXISTS if set to true
                 if($this->table_options['if_not_exists'] == TRUE) $sql .= 'IF NOT EXISTS ';
-                
+
                 // Add the table name
                 $sql .= "`$this->table` (". PHP_EOL;
-                
+
                 // Loop through and add each column to the sql
                 foreach($this->lines as $line)
                 {
                     // Add this row to the sql
                     $sql .= "\t". $line .",". PHP_EOL;
                 }
-                
+
                 // Add primary keys
                 $sql .= "\tPRIMARY KEY (`". implode('`, `', $this->keys) ."`)". PHP_EOL . ")";
-                
+
                 // Finish
                 if( !empty($this->table_options))
                 {
@@ -324,19 +324,19 @@ class Forge
                     {
                         $sql .= "ENGINE=". $this->table_options['engine'] ." ";
                     }
-                    
+
                     // Check for charset
                     if(isset($this->table_options['charset']))
                     {
                         $sql .= "DEFAULT CHARSET=". $this->table_options['charset'] ." ";
                     }
-                    
+
                     // Check forcollate
                     if(isset($this->table_options['collate']))
                     {
                         $sql .= "COLLATE=". $this->table_options['collate'] ." ";
                     }
-                    
+
                     // Check for charset
                     if(isset($this->table_options['row_format']))
                     {
@@ -344,7 +344,7 @@ class Forge
                     }
                 }
                 break;
-                
+
             case "alter":
                 // Start things off
                 $sql = "ALTER TABLE `$this->table`". PHP_EOL;
@@ -360,16 +360,16 @@ class Forge
                     ++$i;
                 }
                 break;
-                
+
         }
-        
+
         // Remove extra whitespace and close
         $sql = trim($sql);
         $sql .= ";";
-        
+
         // Unset the keys and columns for the next one
         $this->reset();
-        
+
         // Send the sql and return the result
         $result = $this->DB->exec( $sql, FALSE );
         return ($result === FALSE) ? FALSE : TRUE;
