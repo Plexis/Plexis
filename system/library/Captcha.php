@@ -1,9 +1,9 @@
 <?php
-/* 
+/*
 | --------------------------------------------------------------
 | Plexis
 | --------------------------------------------------------------
-| Author:       Steven Wilson 
+| Author:       Steven Wilson
 | Copyright:    Copyright (c) 2011-2012, Steven Wilson
 | License:      GNU GPL v3
 | ---------------------------------------------------------------
@@ -34,15 +34,17 @@ class Captcha
     public function __construct()
     {
         // Define where out fonts are stored, and load them
-        $this->fontpath = path( SYSTEM_PATH, "library", "fonts" ); 
-        
-        // Make sure we can even run this show!
-        if(!function_exists('imagettftext'))
+        $this->fontpath = path( SYSTEM_PATH, "library", "fonts" );
+
+        //Check to see if PHP GD is installed.
+        if( !extension_loaded( "gd" ) || !function_exists( "imagettftext" ) )
         {
-            log_message('error', 'imagettftext() not found. GD library must not be installed. Captcha failed to start.');
-            throw new \Exception('imagettftext() not found. GD library must not be installed. Captcha failed to start.');
+            $Message = "The PHP GD extension is not loaded, please enable GD or disable Captchas.";
+
+            log_message( "error", $Message );
+            throw new \Exception( $Message );
         }
-        
+
         // Check for error
         if(!$this->load_fonts())
         {
@@ -57,42 +59,42 @@ class Captcha
 |
 | This method loads all the .ttf files from the font Dir.
 |
-*/	
+*/
     protected function load_fonts()
     {
         // Initiate our array of fonts, and open the font directory
-        $fonts = array();    
+        $fonts = array();
         if ($handle = @opendir($this->fontpath))
         {
             // Start the loop, add each file to the list of ttf files.
             while(($file = readdir($handle)) !== FALSE)
-            {      
+            {
                 // Get the ext of each file
                 $parts = explode('.', $file);
-       
+
                 // Only allow .ttf files
                 if(end($parts) == 'ttf')
-                {         	
+                {
                     $this->fonts[] = $file;
                 }
             }
             closedir($handle);
         }
-        
-        // Couldnt open the Dir. 
+
+        // Couldnt open the Dir.
         else
-        {     	
+        {
             log_message('error', 'Bad captcha font directory '. $this->fontpath);
             return false;
         }
-      
+
         // Make sure we have 1 or more fonts
         if(count($this->fonts) == 0)
         {
             log_message('error', 'No fonts found in the system/library/fonts/ folder.');
-            return false;          
+            return false;
         }
-        
+
         return true;
     }
 
@@ -103,10 +105,10 @@ class Captcha
 |
 | This method returns a random font to be used in the captcha
 |
-*/	
+*/
     protected function get_random_font()
-    {   
-        return $this->fontpath . DS . $this->fonts[ mt_rand(0, count($this->fonts) - 1) ];   
+    {
+        return $this->fontpath . DS . $this->fonts[ mt_rand(0, count($this->fonts) - 1) ];
     }
 
 /*
@@ -125,7 +127,7 @@ class Captcha
     protected function generate_string($length, $lc, $uc, $nbrs)
     {
         $list = array();
-        
+
         // Add uppercase, lowercase, and numbers based on users preference
         ($lc == TRUE) ? $list = array_merge($list, range('a', 'z')) : '';
         ($uc == TRUE) ? $list = array_merge($list, range('A', 'Z')) : '';
@@ -139,7 +141,7 @@ class Captcha
         {
             $this->_string .= $list[mt_rand(0, $size)];
         }
-        
+
         // Return the string :p
         return $this->_string;
     }
@@ -165,7 +167,7 @@ class Captcha
         // Generate a random string
         $string = $this->generate_string($length, $lowercase, $uppercase, $numbers);
         $string_length = strlen($string);
-        
+
         // Create image sizes, Length extends with more letters
         ($imagelength == NULL) ? $imagelength = ($length * 25) + 25 : '';
 
@@ -198,7 +200,7 @@ class Captcha
         }
 
         // Create the image png and destroy our temp image
-        imagepng($image);      
+        imagepng($image);
         imagedestroy($image);
     }
 
@@ -209,12 +211,12 @@ class Captcha
 |
 | Returns the Catcha String
 |
-*/	
+*/
     public function get_string()
     {
         return $this->_string;
     }
-	
+
 /*
 | ---------------------------------------------------------------
 | Function: add_bg_letters()
@@ -222,16 +224,16 @@ class Captcha
 |
 | This method adds the background characters in the image
 |
-*/    
+*/
     protected function add_bg_letters($image, $font, $passes = 3)
     {
         // Get our image demensions
         $w = imagesx($image);
         $h = imagesy($image);
-        
+
         // Set our font color to grey
         $fontcolor = imagecolorallocate($image, 150, 150, 150);
-        
+
         // Get out list of letters we will use
         $letters = range('A', 'Z');
         $size = count($letters);
@@ -242,10 +244,10 @@ class Captcha
             // Create some random X and Y's to a random letter placement
             $X = mt_rand(1, $w);
             $Y = mt_rand(1, $h);
-            
+
             // Random amout of letters created this pass.
             $amount = mt_rand(1, 10);
-        
+
             // Now loop through the amount of letters this pass.
             for($ii = 0; $ii < $amount; $ii++)
             {

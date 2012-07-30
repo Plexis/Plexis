@@ -59,7 +59,7 @@ class Admin extends Core\Controller
     {
         // Get our PHP and DB versions
         $info = $this->DB->serverInfo();
-        $rewrite = (isset($_SERVER['HTTP_MOD_REWRITE']) && $_SERVER['HTTP_MOD_REWRITE'] == 'On') ? 'On' : 'Off';
+        $rewrite = ( MOD_REWRITE ) ? 'On' : 'Off';
 
         // Add our build var
         $this->Template->setjs('Build', CMS_BUILD);

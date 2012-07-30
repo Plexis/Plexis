@@ -8,22 +8,22 @@
     <!--
         // Slide Show
         jQuery(function( $ ){
-            $('#slide') 
-            .after('<div id="slide-tabs">') 
-            .cycle({ 
-                fx:     'fade', 
-                speed:  'slow', 
-                timeout: 3500, 
+            $('#slide')
+            .after('<div id="slide-tabs">')
+            .cycle({
+                fx:     'fade',
+                speed:  'slow',
+                timeout: 3500,
                 pager:  '#slide-tabs'
             });
         });
-        
+
         // Setup our form validator error style class
-        jQuery.validator.setDefaults({ 
+        jQuery.validator.setDefaults({
             errorClass: "input-error",
             errorElement: "div"
         });
-        
+
         $().ready(function() {
             // Load the realm status Ajax reuqests
             // @Param1: id of the "loop block", @Param2: the loading gif div id.
@@ -34,7 +34,8 @@
 </head>
 
 <!-- This template doesnt work for Internet Explorer, so we show a message to IE users -->
-<div style="position:fixed;background-color:#eee;width:100%;height:100%;z-index:99999;display:none;text-align:center;font-size:24px;color:#333;padding-top:10%" id="ie">
+<!--[if IE]>
+<div style="position:fixed;background-color:#eee;width:100%;height:100%;z-index:99999;text-align:center;font-size:24px;color:#333;padding-top:10%">
 	<h1 style="margin-bottom:5px;font-size:52px;">Dear Internet Explorer user...</h1>
 	<h2 style="font-size:40px; margin-top: 100px;">Your browser is not supported!</h2>
 	<h2 style="font-size:20px;margin-top:30px;">Please upgrade to a more modern browser. These are our recommendations:</h2>
@@ -46,11 +47,6 @@
 		<a href="http://www.opera.com/"><img src="{TEMPLATE_URL}/images/ie_splash/opera.jpg" /></a>
 	</div>
 </div>
-	
-<!--[if IE]>
-<script type="text/javascript">
-	$("#ie").show()
-</script>
 <![endif]-->
 
 <body>
@@ -59,13 +55,13 @@
         <!-- Header -->
         <header id="header">
             <div id="logo">
-                <a href="#"><img src="{TEMPLATE_URL}/images/logo.png" alt="Plexis CMS" /></a>
+                <a href="{SITE_URL}"><img src="{TEMPLATE_URL}/images/logo.png" alt="Plexis CMS" /></a>
             </div>
         </header>
 
         <!-- Main contentent box -->
         <div id="content-container">
-        
+
             <!-- Navigation -->
             <nav id="nav">
                 <ul class="navigation">
@@ -98,11 +94,11 @@
                             <li><a href="{SITE_URL}/support/howtoplay">Connection Guide</a></li>
                         </ul>
                     </li>
-                    
+
                     <!-- Account / Register link -->
                     <?php if( $session['user']['logged_in'] == FALSE): ?>
                         <li><a href="{SITE_URL}/account/register">Register</a></li>
-                        
+
                     <?php else: ?>
                         <li><a href="#">Account</a>
                             <ul class="subnav">
@@ -112,10 +108,10 @@
                                 <li><a href="{SITE_URL}/account/logout">Logout</a></li>
                             </ul>
                         </li>
-                        
-                    <?php endif; ?>	
+
+                    <?php endif; ?>
                     <!-- End Account / Register Link -->
-                    
+
                     <!-- Admin -->
                     <?php if( $session['user']['is_admin'] == TRUE || $session['user']['is_super_admin'] == TRUE): ?>
                         <li><a href="{SITE_URL}/admin">Admin Panel</a></li>
@@ -127,23 +123,23 @@
 
             <!-- Main Box -->
             <div id="main" class="clearfix">
-            
+
                 <!-- Right Side -->
                 <div id="right">
-                    
+
                     <?php if( $session['user']['logged_in'] == FALSE): ?>
                         <!-- Account Login -->
                         <div class="right-box">
                             <h3>Login / Register</h3>
                             <p>
-                                <form method="post" action="{SITE_URL}/account/login" id="form">		
-                                    <fieldset class="login-right">	
-                                        <label for="username" class="top-label">Username:</label> 
+                                <form method="post" action="{SITE_URL}/account/login" id="form">
+                                    <fieldset class="login-right">
+                                        <label for="username" class="top-label">Username:</label>
                                         <input type="text" name="username" id="username" value="" size="32" tabindex="10" />
-                                        
-                                        <label for="password" class="top-label">Password:</label> 
+
+                                        <label for="password" class="top-label">Password:</label>
                                         <input type="password" name="password" id="password" value="" size="32" tabindex="11" />
-                                        
+
                                         <center>
                                             <input type="submit" name="submit" value="Login" class="button" tabindex="12"/>
                                             <input type="button" class ="button" name="register" value="Register" onClick="window.location='{SITE_URL}/account/register'" tabindex="13">
@@ -154,7 +150,7 @@
                                 </form>
                             </p>
                         </div>
-                        <!-- /Account Login -->  
+                        <!-- /Account Login -->
                     <?php else: ?>
                         <!-- Account Box -->
                         <div class="right-box">
@@ -174,7 +170,7 @@
                             </p>
                         </div>
                         <!-- /Account Box -->
-                    <?php endif; ?>	
+                    <?php endif; ?>
 
                     <!-- Realm Status -->
                     <div class="right-box">
@@ -202,7 +198,7 @@
                     <!-- /Realm Status -->
                 </div>
                 <!-- /Right Side -->
-                
+
                 <!-- MAIN CONTENT -->
                 <div id="left">
                     <?php if($GLOBALS['controller'] == 'welcome'): ?>
@@ -212,7 +208,7 @@
                         </div>
                         <!-- /Slide -->
                     <?php endif; ?>
-                    
+
                     <!--# Here we tell our compile engine to replace these with messages and page content #-->
                     <pcms::global_messages />
                     <pcms::page_contents />
@@ -221,7 +217,7 @@
 
             </div>
             <!-- /main -->
-            
+
             <!-- FOOTER -->
             <footer id="footer">
                 <p id="footer-left">&copy; 2012 Plexis.</p>

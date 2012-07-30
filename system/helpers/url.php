@@ -16,7 +16,7 @@ if(!function_exists('get_url_info'))
         return load_class('Router')->get_url_info();
     }
 }
-    
+
 /*
 | ---------------------------------------------------------------
 | Function: uri_segment
@@ -25,7 +25,7 @@ if(!function_exists('get_url_info'))
 | This function is used to exctract a specific piece of the url.
 |
 | @Param: (String) $index: The zero-based index of the url part to return.
-| @Return: (String / Null) String containing the specified url part, 
+| @Return: (String / Null) String containing the specified url part,
 |   null if the index it out of bounds of the array.
 |
 */
@@ -57,7 +57,7 @@ if(!function_exists('redirect'))
         if(!preg_match('@^(mailto|ftp|http(s)?)://@i', $url))
         {
             $info = load_class('Router')->get_url_info();
-            $url = trim($info['site_url'], '/') .'/'. ltrim($url, '/');
+            $url = trim ( $info["site_url"], "/" ) . ( ( !MOD_REWRITE ) ? "?url=/" : "/" ) . ltrim( $url, "/" );
         }
 
         // Check for refresh or straight redirect
@@ -72,7 +72,7 @@ if(!function_exists('redirect'))
         }
     }
 }
-    
+
 /*
 | ---------------------------------------------------------------
 | Method: getPageContents()
@@ -88,9 +88,9 @@ if(!function_exists('getPageContents'))
         // Properly format our url
         $url = str_replace(' ', '%20', $url);
         $results = false;
-        
+
         // Try to fetch the page with cURL
-        if( function_exists('curl_exec') ) 
+        if( function_exists('curl_exec') )
         {
             $curl_handle = curl_init();
             curl_setopt($curl_handle, CURLOPT_URL, $url);
@@ -98,10 +98,10 @@ if(!function_exists('getPageContents'))
             curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 3);
             curl_setopt($curl_handle, CURLOPT_TIMEOUT, 10);
             curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-            
+
             // Fetch page
             $results = curl_exec($curl_handle);
-            
+
             // Check if any error occured
             if(curl_errno($curl_handle)) return false;
 
@@ -109,13 +109,13 @@ if(!function_exists('getPageContents'))
             if($asArray == true) $results = explode("\n", trim($results));
             curl_close($curl_handle);
         }
-        
+
         // Try file() first
-        elseif( ini_get('allow_url_fopen') ) 
+        elseif( ini_get('allow_url_fopen') )
         {
             $results = ($asArray == true) ? @file($url) : @file_get_contents($url, false);
         }
-        
+
         // Return the page
         return $results;
     }

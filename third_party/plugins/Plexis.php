@@ -1,9 +1,9 @@
 <?php
-/* 
+/*
 | --------------------------------------------------------------
 | Plexis
 | --------------------------------------------------------------
-| Author:       Steven Wilson 
+| Author:       Steven Wilson
 | Author:       Tony (Syke)
 | Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
@@ -20,28 +20,29 @@ namespace Plugins;
 
 class Plexis
 {
-    public function __construct()
-    {
-        // Check for database online, surpress errors
-        $DB = load_class('Loader')->database('DB', false, true);
-        
-        // Check if the install directory exists
-        $installer = is_dir( ROOT . DS . 'install' );
-        
-        // Check if installer files are present
-        $locked = file_exists( ROOT . DS . 'install'. DS .'install.lock' );
-        
-        // Check if the install folder is still local
-        if($DB == false && $locked == false && $installer == true)
-        {
-            header('Location: '. SITE_URL .'/install/index.php');
-            die();
-        }
+	public function __construct()
+	{
+		// Check for database online, surpress errors
+		$DB = load_class('Loader')->database('DB', false, true);
+
+		// Check if the install directory exists
+		$installer = is_dir( ROOT . DS . 'install' );
+
+		// Check if installer files are present
+		$locked = file_exists( ROOT . DS . 'install'. DS .'install.lock' );
+
+		// Check if the install folder is still local
+		if($DB == false && $locked == false && $installer == true)
+		{
+			$url = ( !MOD_REWRITE) ? str_replace( "?url=", "", SITE_URL ) : SITE_URL;
+			header('Location: ' . $url . 'install/index.php');
+			die();
+		}
 		elseif($locked == false && $installer == true)
 		{
 			//Warn that the installer is accessible.
 			$GLOBALS["template_messages"][] = "<div class=\"alert error\">The installer is publicly accessible! Please rename, delete or re-lock your install folder.</div>";
 		}
-    }
+	}
 }
 ?>
