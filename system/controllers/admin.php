@@ -59,7 +59,6 @@ class Admin extends Core\Controller
     {
         // Get our PHP and DB versions
         $info = $this->DB->serverInfo();
-        $rewrite = ( MOD_REWRITE ) ? 'On' : 'Off';
 
         // Add our build var
         $this->Template->setjs('Build', CMS_BUILD);
@@ -73,7 +72,7 @@ class Admin extends Core\Controller
             'page_desc' => "Here you have a quick overview of some features",
             'driver' => ucfirst( $info['driver'] ),
             'php_version' => phpversion(),
-            'mod_rewrite' => $rewrite,
+            'mod_rewrite' => ( MOD_REWRITE ) ? "Enabled" : "Disabled",
             'database_version' => $info['version'],
             'CMS_VERSION' => CMS_VERSION,
             'CMS_BUILD' => CMS_BUILD,
@@ -90,16 +89,14 @@ class Admin extends Core\Controller
 | ---------------------------------------------------------------
 |
 */
-    public function phpinfo($plain = FALSE)
+    public function phpinfo( $mode = null )
     {
-        if($plain == 'html')
-        {
+        if( $mode == "html" || $mode == "basic" || $mode == "plain" )
             echo phpinfo();
-        }
         else
         {
             // Set our page title and desc
-            $data['page_title'] = "Php Info";
+            $data['page_title'] = "PHP Info";
             $data['page_desc'] = "You are viewing this servers phpinfo";
 
             // Load the page, and we are done :)
