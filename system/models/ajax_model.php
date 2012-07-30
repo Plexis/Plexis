@@ -230,7 +230,7 @@ class Ajax_Model extends Core\Model
                 else
                 {
                     $highest = end( $installed );
-                    $id = $highest['id']; + 1;
+                    $id = $highest['id'] + 1;
                 }
             }
         }
