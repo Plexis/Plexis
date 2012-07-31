@@ -735,7 +735,7 @@ class Admin_ajax extends Core\Controller
             }
             
             // Fetch character
-            $Char = $Lib->characters->fetch($id);
+            $Char = $Lib->characters->fetch((int)$id);
             if(!is_object($Char))
             {
                 $this->output(false, "Character ID: Does not exist!");
