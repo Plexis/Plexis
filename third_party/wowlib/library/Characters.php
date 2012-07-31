@@ -502,7 +502,7 @@ class Characters implements iCharacters
         // Get all races from the config file
         $horde = $this->config['race']['horde'];
         $ally = $this->config['race']['alliance'];
-        $races = array_merge($ally, $horde);
+        $races = $ally + $horde;
         
         // Check if the race is set, if not then Unknown
         if(isset($races[$id]))
