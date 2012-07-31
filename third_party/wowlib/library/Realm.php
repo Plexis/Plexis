@@ -1,7 +1,7 @@
 <?php
 /* 
 | -------------------------------------------------------------- 
-| Mangos Realm Object
+| Realm Object
 | --------------------------------------------------------------
 |
 | Author:       Wilson212
@@ -9,45 +9,39 @@
 | License:      GNU GPL v3
 |
 */
+namespace Wowlib;
 
-// All namespace paths are uppercase first. Format: Wowlib\<Emulator>;
-namespace Wowlib\Mangos;
-
-class Realm implements \Wowlib\iRealm
+class Realm implements iRealm
 {
     // Our Parent wowlib class and Database connection
     protected $DB;
     protected $parent;
+    protected $config;
     
-    // Account ID and User data array
+    // Realm data array
     protected $data = array();
+    
+    // Array of coulmns
+    protected $cols = array();
+    
 /*
 | ---------------------------------------------------------------
 | Constructor
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($id, $parent)
+    public function __construct($data, $parent)
     {
-        // Load the realm database connection
-        $this->DB = $parent->DB;
-        
-        // Load the user
-        // Check the Realm DB for this username
-        $query = "SELECT
-            `id`,
-            `name`,
-            `address`,
-            `port`,
-            `icon`,
-            `flag`,
-            `population`,
-            `gamebuild`
-            FROM `realmlist` WHERE `id`= ?";
-        $this->data = $this->DB->query( $query, array($id) )->fetchRow();
-        
         // If the result is NOT false, we have a match, username is taken
-        if(!is_array($this->data)) throw new \Exception('Realm Doesnt Exist');
+        if(!is_array($data)) throw new \Exception('Realm Doesnt Exist');
+        
+        // Load the realm database connection
+        $this->DB = $parent->getDB();
+        $this->data = $data;
+        
+        // Get our array of columns
+        $this->config = $this->parent->getConfig();
+        $this->cols = $this->config['realmColumns'];
     }
     
 /*
@@ -62,7 +56,10 @@ class Realm implements \Wowlib\iRealm
 */ 
     public function save()
     {
-        return ($this->DB->update('realmlist', $this->data, "`id`= ".$this->data['id']) !== false);
+        // Fetch our table name, and ID column for the query
+        $table = $this->config['realmTable'];
+        $col = $this->cols['id'];
+        return ($this->DB->update($table, $this->data, "`{$col}`= ".$this->data[$col]) !== false);
     }
     
 /*
@@ -77,7 +74,9 @@ class Realm implements \Wowlib\iRealm
 */
     public function getName()
     {
-        return $this->data['name'];
+        // Fetch our column name
+        $col = $this->cols['name'];
+        return $this->data[$col];
     }
     
 /*
@@ -92,7 +91,9 @@ class Realm implements \Wowlib\iRealm
 */
     public function getAddress()
     {
-        return $this->data['address'];
+        // Fetch our column name
+        $col = $this->cols['address'];
+        return $this->data[$col];
     }
     
 /*
@@ -107,7 +108,9 @@ class Realm implements \Wowlib\iRealm
 */
     public function getPort()
     {
-        return $this->data['port'];
+        // Fetch our column name
+        $col = $this->cols['port'];
+        return $this->data[$col];
     }
     
 /*
@@ -122,7 +125,9 @@ class Realm implements \Wowlib\iRealm
 */
     public function getType()
     {
-        return (int) $this->data['icon'];
+        // Fetch our column name
+        $col = $this->cols['type'];
+        return (int) $this->data[$col];
     }
     
 /*
@@ -137,7 +142,9 @@ class Realm implements \Wowlib\iRealm
 */
     public function getPopulation()
     {
-        return (float) $this->data['population'];
+        // Fetch our column name
+        $col = $this->cols['population'];
+        return (float) $this->data[$col];
     }
     
 /*
@@ -152,7 +159,9 @@ class Realm implements \Wowlib\iRealm
 */
     public function getBuild()
     {
-        return (int) $this->data['gamebuild'];
+        // Fetch our column name
+        $col = $this->cols['gamebuild'];
+        return (int) $this->data[$col];
     }
     
 /*
@@ -167,9 +176,12 @@ class Realm implements \Wowlib\iRealm
 */
     public function getStatus($timeout = 3)
     {
-        // If we have the flag of 2, then we are offline no matter what
-        if((int)$this->data['flag'] == 2) return 0;
-        $status = @fsockopen($this->data['address'], $this->data['port'], $err, $estr, $timeout);
+        // Fetch our column names
+        $add = $this->cols['address'];
+        $port = $this->cols['port'];
+        
+        // Check status
+        $status = @fsockopen($this->data[$add], $this->data[$port], $err, $estr, $timeout);
         return (int)($handle !== false);
     }
     
@@ -187,7 +199,7 @@ class Realm implements \Wowlib\iRealm
     public function setName($name)
     {
         if(!is_string($name) || strlen($name) > 32) return false;
-        $this->data['name'] = $name;
+        $this->data[ $this->cols['name'] ] = $name;
         return true;
     }
     
@@ -204,7 +216,7 @@ class Realm implements \Wowlib\iRealm
 */
     public function setAddress($address)
     {
-        $this->data['address'] = $address;
+        $this->data[ $this->cols['address'] ] = $address;
         return true;
     }
     
@@ -222,7 +234,7 @@ class Realm implements \Wowlib\iRealm
     public function setPort($port)
     {
         if(!is_numeric($port)) return false;
-        $this->data['port'] = (int) $port;
+        $this->data[ $this->cols['port'] ] = (int) $port;
         return true;
     }
     
@@ -240,6 +252,6 @@ class Realm implements \Wowlib\iRealm
     {
         $i = (int) $icon;
         if($i != 0 || $i != 1 || $i != 4 || $i != 6 || $i != 8) return false;
-        $this->data['icon'] = $i;
+        $this->data[ $this->cols['type'] ] = $i;
     }
 }

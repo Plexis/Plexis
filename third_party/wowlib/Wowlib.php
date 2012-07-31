@@ -17,30 +17,28 @@ class Wowlib
 {
     /*
         Constant: VERSION
-        Contains the wowlib version. This constant only changes when the wowlib makes a change, 
-        that could cause drivers to not be fully compatible via the interface templates (Ex:
-        a new method is added to the Characters class)
+        Contains the wowlib version. This constant only changes when the wowlib has a massive update,
+        or makes a change, that could cause drivers to not be fully compatible anymore.
     */
-    const VERSION = '1.2';
+    const VERSION = '2.0';
     
     /*
         Constant: REVISION
         Contains the wowlib revision. This number changes with each wowlib update, but only reflects
         minor changes, that will not affect the wowlib drivers in any way.
     */
-    const REVISION = 15;
+    const REVISION = 17;
     
     // Static Variables
-    public static $emulator;                // Emulator string name
-    public static $emulators;               // Array of installed emulators
-    public static $initTime;                // Initilize time for the wowlib constructor
+    public static $emulator = '';           // Emulator string name
+    public static $emulators = array();     // Array of installed emulators
+    public static $initTime = 0;            // Initilize time for the wowlib constructor
     protected static $initilized = false;   // Wowlib initialized?
     protected static $realm = array();      // Array of loaded realm instances
     
     // Plexis CMS Version Variables
     protected static $load;
     protected static $Fs;
-    
 
 /*
 | ---------------------------------------------------------------
@@ -48,70 +46,49 @@ class Wowlib
 | ---------------------------------------------------------------
 |
 | @Param: (String) $emulator - The emulator name
-| @Param: (Array) $DB - An array of database connection information
-|   As defined below:
-|       array(
-|           'driver' - Mysql, Postgres etc etc
-|           'host' - Hostname
-|           'port' - Port Number
-|           'database' - Database name
-|           'username' - Database username
-|           'password' - Password to the database username
-|       )
 | @Return (None) - nothing is returned
 |
 */
-    public static function Init($emulator, $DB = array())
+    public static function Init($emulator = '')
     {
-        // Load some things just once
-        if(!self::$initilized)
-        {
-            // Init a start time for benchmarking
-            $start = microtime(1);
+        // Init the wowlib jsut once
+        if(self::$initilized) return;
+        
+        // Init a start time for benchmarking
+        $start = microtime(1);
 
-            // Set emulator paths, and scan to see which emulators exist
-            $path = path( WOWLIB_ROOT, 'emulators' );
-            self::$load = load_class('Loader');
-            self::$Fs = self::$load->library('Filesystem');
-            self::$emulators = self::$Fs->list_folders($path);
-            
-            // Make sure the emulator exists before defining it
-            if(!is_array(self::$emulators))
-                throw new Exception('Unable to open the wowlib emulators folder. Please corretly set your permissions.', 2);
-            elseif(!in_array($emulator, self::$emulators))
-                throw new Exception('Emulator '. $emulator .' not found in the emulators folder.', 3);
-            else
-                self::$emulator = strtolower($emulator);
-                
-            
-            // Get a full list of interfaces
-            $path = path( WOWLIB_ROOT, 'interfaces' );
-            $list = self::$Fs->list_files($path);
-            if(!is_array($list))
-                throw new Exception('Unable to open the wowlib interfaces folder. Please corretly set your permissions.', 4);
-                
-            
-            // Autload each interface so the class' dont have to
-            foreach($list as $file) include path($path, $file);
-            
-            // Set that we are initialized
-            self::$initilized = true;
-            
-            // If DB information was passed, then init a new realm connection
-            if(!empty($DB))
-            {
-                try {
-                    self::getRealm(0, $DB);
-                }
-                catch( Exception $e ) {
-                    // Pass the exception up
-                    throw $e;
-                }
-            }
-            
-            // Set Init time
-            self::$initTime = round( microtime(1) - $start, 5);
+        // Set emulator paths, and scan to see which emulators exist
+        $path = path( WOWLIB_ROOT, 'library' );
+        self::$load = load_class('Loader');
+        self::$Fs = self::$load->library('Filesystem');
+        self::$emulators = self::$Fs->list_folders($path);
+        
+        // Make sure the emulator exists before defining it
+        if(!is_array(self::$emulators))
+        {
+            throw new Exception('Unable to open the wowlib/library folder. Please corretly set your permissions.', 2);
         }
+        elseif(!empty($emulator))
+        {
+            if(!in_array($emulator, self::$emulators)) {
+                throw new Exception('Emulator '. $emulator .' not found in the emulators folder.', 3);
+            }
+            self::$emulator = strtolower($emulator);
+        }
+        
+        // Get a full list of interfaces
+        $path = path( WOWLIB_ROOT, 'interfaces' );
+        $list = self::$Fs->list_files($path);
+        if(!is_array($list)) {
+            throw new Exception('Unable to open the wowlib interfaces folder. Please corretly set your permissions.', 4);
+        }
+        
+        // Autload each interface so the class' dont have to
+        foreach($list as $file) include($path . DS . $file);
+        
+        // Set that we are initialized, and get our init time for benchmarking
+        self::$initilized = true;
+        self::$initTime = round( microtime(1) - $start, 5);
     }
     
 /*
@@ -150,29 +127,40 @@ class Wowlib
         // If this realm is already set, then just return this realm
         if(isset(self::$realm[$id])) return self::$realm[$id];
         
-        // Make sure we have DB conection info
-        if(empty($DB)) throw new Exception('No Database information supplied. Unable to load realm.');
-        
         // Check if the user is quick changing realms
         if(!empty($emu) && !in_array($emu, self::$emulators)) return false;
         
-        // Load the emulator class
+        // Make sure we have DB conection info
+        if(empty($DB)) throw new Exception('No Database information supplied. Unable to load realm.');
+        
+        // Make sure we have an emulator
+        if(empty(self::$emulator))
+        {
+            if(empty($emu)) throw new Exception('An emulator must be selected before fetching a realm.', 1);
+            self::$emulator = strtolower($emu);
+        }
+        
+        // Set our Emu var to the current selected emulator
         if(empty($emu)) $emu = self::$emulator;
         $ucEmu = ucfirst($emu);
-        $class = "\\Wowlib\\". $ucEmu;
         
-        // Check and see of the class is already loaded
-        if(!class_exists($class, false))
+        // Check for custom emulator class
+        $class = "\\Wowlib\\Emulator";
+        $file = path( WOWLIB_ROOT, 'library', $emu, $ucEmu .'.php' );
+        if(file_exists($file))
         {
-            $file = path( WOWLIB_ROOT, 'emulators', $emu, $ucEmu .'.php' );
-            if(!file_exists($file)) return false;
-            require $file;
+            require_once $file;
+            $class = "\\Wowlib\\". $ucEmu;
+        }
+        elseif(!class_exists($class, false))
+        {
+            require path( WOWLIB_ROOT, 'library', 'Emulator.php' );
         }
         
         // Init the realm class
         try {
             $DB = self::$load->database($DB);
-            self::$realm[$id] = new $class( $DB );
+            self::$realm[$id] = new $class( $emu, $DB );
         }
         catch( \Exception $e) {
             self::$realm[$id] = false;
@@ -254,5 +242,6 @@ class Wowlib
 // Define wowlib constants, and load the wowlib required files
 if(!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
 if(!defined('WOWLIB_ROOT')) define('WOWLIB_ROOT', dirname(__FILE__));
+require WOWLIB_ROOT . DS .'inc'. DS .'Functions.php';
 require WOWLIB_ROOT . DS .'drivers'. DS .'Driver.php';
 ?>

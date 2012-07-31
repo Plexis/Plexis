@@ -2,20 +2,19 @@
 /* 
 | --------------------------------------------------------------
 | 
-| Plexis
+| WowLib Framework for WoW Private Server CMS'
 |
 | --------------------------------------------------------------
 |
+| Author:       Steven Wilson
 | Author:       Tony Hudgins
-| Copyright:    Copyright (c) 2012, Steven Wilson, Tony Hudgins
+| Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
+namespace Wowlib;
 
-// All namespace paths must be Uppercase first letter! Format: "Wowlib\<Emulator>\<Wowlib_name>"
-namespace Wowlib\Arcemu\_default;
-
-class Zone
+class Zone implements iZone
 {
     // Array of zones, See function __construct()
     protected $zones;

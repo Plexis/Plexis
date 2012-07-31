@@ -9,19 +9,17 @@
 | License:      GNU GPL v3
 |
 */
+namespace Wowlib;
 
-// All namespace paths must be Uppercase first letter! Format: "Wowlib\<Emulator>\<Wowlib_name>"
-namespace Wowlib\Trinity\_default;
-
-class Character implements \Wowlib\iCharacter
+class Character implements iCharacter
 {
     // Our DB Connection and Characters parent class
     protected $DB;
     protected $parent;
     
-    // Our character variables
-    protected $guid;
+    // Our character variables, and columns
     protected $data = array();
+    protected $cols;
     
     // Equiped items variables
     protected $fetchedEquippedItems = false;
@@ -53,40 +51,16 @@ class Character implements \Wowlib\iCharacter
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($guid, $parent)
+    public function __construct($data, $parent, $cols)
     {
-        // Set oru database conntection, which is passed when this class is Init.
-        $this->DB = $parent->DB;
-        $this->parent = $parent;
-        $this->guid = $guid;
-        
-        // Load the character
-        $query = "SELECT 
-            `account`, 
-            `name`, 
-            `race`, 
-            `class`, 
-            `gender`, 
-            `level`, 
-            `xp`, 
-            `money`, 
-            `position_x`, 
-            `position_y`, 
-            `position_z`, 
-            `map`, 
-            `orientation`,
-            `online`,
-            `totaltime`,
-            `at_login`,
-            `zone`,
-            `arenaPoints`,
-            `totalHonorPoints`,
-            `totalKills`
-            FROM `characters` WHERE `guid`= $guid;";
-        $this->data = $this->DB->query($query)->fetchRow();
-        
         // Make sure we didnt get a false return
-        if(!is_array($this->data)) throw new \Exception('Character doesnt exist');
+        if(!is_array($data)) throw new \Exception('Character doesnt exist');
+        
+        // Set oru database conntection, which is passed when this class is Init.
+        $this->DB = $parent->getDB();
+        $this->parent = $parent;
+        $this->data = $data;
+        $this->cols = $cols;
     }
     
 /*
@@ -102,7 +76,8 @@ class Character implements \Wowlib\iCharacter
     public function save()
     {
         // Update all the characters data in the DB
-        return $this->DB->update('characters', $this->data, "`guid`= $this->guid");
+        $col = $this->cols['guid'];
+        return $this->DB->update('characters', $this->data, "`{$col}`= {$this->data[$col]}");
     }
     
 /*
@@ -117,7 +92,22 @@ class Character implements \Wowlib\iCharacter
 */  
     public function isOnline()
     {
-        return (bool) $this->data['online'];
+        return (bool) $this->data[ $this->cols['online'] ];
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: getId
+| ---------------------------------------------------------------
+|
+| This method returns the characters ID.
+|
+| @Retrun: (Int)
+|
+*/  
+    public function getId()
+    {
+        return (int) $this->data[ $this->cols['guid'] ];
     }
     
 /*
@@ -132,7 +122,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getAccountId()
     {
-        return (int) $this->data['account'];
+        return (int) $this->data[ $this->cols['account'] ];
     }
     
 /*
@@ -147,7 +137,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getName()
     {
-        return (string) $this->data['name'];
+        return (string) $this->data[ $this->cols['name'] ];
     }
     
 /*
@@ -162,7 +152,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getLevel()
     {
-        return (int) $this->data['level'];
+        return (int) $this->data[ $this->cols['level'] ];
     }
     
 /*
@@ -178,7 +168,8 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getClass($asText = false)
     {
-        return ($asText == true) ? $this->parent->classToText($this->data['class']) : (int) $this->data['class'];
+        $col = $this->cols['class'];
+        return ($asText == true) ? $this->parent->classToText($this->data[$col]) : (int) $this->data[$col];
     }
     
 /*
@@ -194,7 +185,8 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getRace($asText = false)
     {
-        return ($asText == true) ? $this->parent->raceToText($this->data['race']) : (int) $this->data['race'];
+        $col = $this->cols['race'];
+        return ($asText == true) ? $this->parent->raceToText($this->data[$col]) : (int) $this->data[$col];
     }
     
 /*
@@ -210,7 +202,8 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getGender($asText = false)
     {
-        return ($asText == true) ? $this->parent->genderToText($this->data['gender']) : (int) $this->data['gender'];
+        $col = $this->cols['gender'];
+        return ($asText == true) ? $this->parent->genderToText($this->data[$col]) : (int) $this->data[$col];
     }
     
 /*
@@ -245,7 +238,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getXp()
     {
-        return (int) $this->data['xp'];
+        return (int) $this->data[ $this->cols['xp'] ];
     }
     
 /*
@@ -260,7 +253,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getMoney()
     {
-        return (int) $this->data['money'];
+        return (int) $this->data[ $this->cols['money'] ];
     }
     
 /*
@@ -277,12 +270,12 @@ class Character implements \Wowlib\iCharacter
     public function getPosition()
     {
         return array(
-            'x' => $this->data['position_x'],
-            'y' => $this->data['position_y'],
-            'z' => $this->data['position_z'],
-            'orientation' => $this->data['orientation'],
-            'map' => $this->data['map'],
-            'zone' => $this->data['zone']
+            'x' => $this->data[ $this->cols['posX'] ],
+            'y' => $this->data[ $this->cols['posY'] ],
+            'z' => $this->data[ $this->cols['posZ'] ],
+            'orientation' => $this->data[ $this->cols['orientation'] ],
+            'map' => $this->data[ $this->cols['mapId'] ],
+            'zone' => $this->data[ $this->cols['zoneId'] ]
         );
     }
     
@@ -298,7 +291,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getTimePlayed()
     {
-        return (int) $this->data['timeplayed'];
+        return (int) $this->data[ $this->cols['timeplayed'] ];
     }
     
 /*
@@ -313,7 +306,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getTotalKills()
     {
-        return (int) $this->data['totalKills'];
+        return (int) $this->data[ $this->cols['totalKills'] ];
     }
     
 /*
@@ -328,7 +321,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getHonorPoints()
     {
-        return (int) $this->data['totalHonorPoints'];
+        return (int) $this->data[ $this->cols['totalHonorPoints'] ];
     }
     
 /*
@@ -343,7 +336,7 @@ class Character implements \Wowlib\iCharacter
 */  
     public function getArenaPoints()
     {
-        return (int) $this->data['arenaPoints'];
+        return (int) $this->data[ $this->cols['arenaPoints'] ];
     }
     
 /*
@@ -361,9 +354,8 @@ class Character implements \Wowlib\iCharacter
         // Check if we have fetched this character items or not
         if(!$this->fetchedEquippedItems)
         {
-            $query = "SELECT `item_instance`.`itemEntry`, `ci`.`slot` FROM `item_instance` 
-                RIGHT JOIN `character_inventory` AS `ci` ON `ci`.`item` = `item_instance`.`guid` 
-                WHERE `ci`.`guid` ={$this->guid} AND `ci`.`bag` =0 AND `ci`.`slot` < 19;";
+            $query = "SELECT i.itemEntry, c.slot FROM item_instance i, character_inventory c 
+                WHERE i.guid = c.item AND c.guid = {$this->data[ $this->cols['guid'] ]} AND c.bag = 0 AND c.slot < 19";
             $items = $this->DB->query($query)->fetchAll();
 
             // Add each item to the $equipped array
@@ -443,7 +435,7 @@ class Character implements \Wowlib\iCharacter
         }
 
         // Is there any flags set?
-        $cflags = (int)$this->data['at_login'];
+        $cflags = (int)$this->data[ $this->cols['loginFlags'] ];
         if( $cflags == 0 ) return $flags;
         
         // Determine if each flag is true or false
@@ -471,7 +463,7 @@ class Character implements \Wowlib\iCharacter
     public function hasLoginFlag($name)
     {
         // Convert flags to an int, and get our bit id
-        $flags  = (int) $this->data['at_login'];
+        $flags  = (int) $this->data[ $this->cols['loginFlags'] ];
         $flagid = (int) $this->parent->flagToBit($name);
         
         // Make sure this feature is supported
@@ -495,11 +487,12 @@ class Character implements \Wowlib\iCharacter
     public function resetPosition()
     {
         // Now we reset the position based off of the race ID
-        $query = "SELECT * FROM `character_homebind` WHERE `guid`=$this->guid";
+        $col = $this->cols['guid'];
+        $query = "SELECT * FROM `character_homebind` WHERE `{$col}`={$this->data[$col]}";
         $pos = $this->DB->query($query)->fetchRow();
         
         // Set the position
-        return $this->setPosition($pos['posX'], $pos['posY'], $pos['posZ'], $this->data['orientation'], $pos['mapId']);
+        return $this->setPosition($pos['posX'], $pos['posY'], $pos['posZ'], $this->data[ $this->cols['orientation'] ], $pos['mapId']);
     }
     
 /*
@@ -519,11 +512,11 @@ class Character implements \Wowlib\iCharacter
 */ 
     public function setPosition($x, $y, $z, $o, $map)
     {
-        $this->data['position_x'] = (float) $x;
-        $this->data['position_y'] = (float) $y;
-        $this->data['position_z'] = (float) $z;
-        $this->data['orientation'] = (float) $o;
-        $this->data['map'] = (int) $map;
+        $this->data[ $this->cols['posX'] ] = (float) $x;
+        $this->data[ $this->cols['posY'] ] = (float) $y;
+        $this->data[ $this->cols['posZ'] ] = (float) $z;
+        $this->data[ $this->cols['orientation'] ] = (float) $o;
+        $this->data[ $this->cols['mapId'] ] = (int) $map;
         return true;
     }
     
@@ -544,7 +537,7 @@ class Character implements \Wowlib\iCharacter
     public function setLoginFlag($name, $status)
     {
         // Convert flags to an int, and get our bit id
-        $flags  = (int) $this->data['at_login'];
+        $flags  = (int) $this->data[ $this->cols['loginFlags'] ];
         $flagid = (int) $this->parent->flagToBit($name);
         
         // Make sure this feature is supported
@@ -569,7 +562,7 @@ class Character implements \Wowlib\iCharacter
         }
         
         // Update the data array
-        $this->data['at_login'] = $newflags;
+        $this->data[ $this->cols['loginFlags'] ] = $newflags;
         return true;
     }
     
@@ -587,7 +580,7 @@ class Character implements \Wowlib\iCharacter
     public function setAccountId($id)
     {
         if(!is_numeric($id)) return false;
-        $this->data['account'] = (int) $id;
+        $this->data[ $this->cols['account'] ] = (int) $id;
         return true;
     }
     
@@ -606,7 +599,7 @@ class Character implements \Wowlib\iCharacter
     {
         // Make sure the name exists already!!
         if($this->parent->nameExists($name)) return false;
-        $this->data['name'] = $name;
+        $this->data[ $this->cols['name'] ] = $name;
         return true;
     }
     
@@ -624,7 +617,7 @@ class Character implements \Wowlib\iCharacter
     public function setLevel($lvl)
     {
         if(!is_numeric($lvl)) return false;
-        $this->data['level'] = (int) $lvl;
+        $this->data[ $this->cols['level'] ] = (int) $lvl;
         return true;
     }
     
@@ -642,7 +635,7 @@ class Character implements \Wowlib\iCharacter
     public function setXp($xp)
     {
         if(!is_numeric($xp)) return false;
-        $this->data['xp'] = (int) $xp;
+        $this->data[ $this->cols['xp'] ] = (int) $xp;
         return true;
     }
     
@@ -660,7 +653,7 @@ class Character implements \Wowlib\iCharacter
     public function setMoney($money)
     {
         if(!is_numeric($money)) return false;
-        $this->data['money'] = (int) $money;
+        $this->data[ $this->cols['money'] ] = (int) $money;
         return true;
     }
     
@@ -678,7 +671,7 @@ class Character implements \Wowlib\iCharacter
     public function setTotalKills($kills)
     {
         if(!is_numeric($kills)) return false;
-        $this->data['totalKills'] = (int) $kills;
+        $this->data[ $this->cols['totalKills'] ] = (int) $kills;
         return true;
     }
     
@@ -696,7 +689,7 @@ class Character implements \Wowlib\iCharacter
     public function setHonorPoints($points)
     {
         if(!is_numeric($points)) return false;
-        $this->data['totalHonorPoints'] = (int) $points;
+        $this->data[ $this->cols['totalHonorPoints'] ] = (int) $points;
         return true;
     }
     
@@ -714,7 +707,7 @@ class Character implements \Wowlib\iCharacter
     public function setArenaPoints($points)
     {
         if(!is_numeric($points)) return false;
-        $this->data['arenaPoints'] = (int) $points;
+        $this->data[ $this->cols['arenaPoints'] ] = (int) $points;
         return true;
     }
 }

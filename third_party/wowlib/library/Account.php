@@ -1,23 +1,25 @@
 <?php
 /* 
 | -------------------------------------------------------------- 
-| Arcemu Account Object
+| Account Object
 | --------------------------------------------------------------
 |
-| Author:       Steven Wilson
+| Author:       Wilson212
 | Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 |
 */
+namespace Wowlib;
 
-// All namespace paths are uppercase first. Format: Wowlib\<Emulator>;
-namespace Wowlib\Arcemu;
-
-class Account implements \Wowlib\iAccount
+class Account implements iAccount
 {
     // Our Parent wowlib class and Database connection
     protected $DB;
     protected $parent;
+    
+    // Our config and column names
+    protected $config = array();
+    protected $cols = array();
     
     // Have we changed our username? If so, we must have set a password!
     protected $changed = false;
@@ -34,35 +36,21 @@ class Account implements \Wowlib\iAccount
 | ---------------------------------------------------------------
 |
 */
-    public function __construct($acct, $parent)
+    public function __construct($data, $parent)
     {
+        // If the result is NOT false, we have a match, username is taken
+        if(!is_array($data)) throw new \Exception('Account Doesnt Exist');
+        
         // Get Our realm DB Connection
-        $this->DB = $parent->DB;
+        $this->DB = $parent->getDB();
         
         // Setup local user variables
         $this->parent = $parent;
+        $this->data = $data;
         
-        // Prepare the column name for the WHERE statement based off of $acct type
-        $col = (is_numeric($acct)) ? 'acct' : 'login';
-        
-        // Load the user
-        // Check the Realm DB for this username
-        $query = "SELECT
-            `acct`,
-            `login`,
-            `password`,
-            `encrypted_password`,
-            `banned`,
-            `email`,
-            `lastip`,
-            `locked`,
-            `lastlogin`,
-            `flags`
-            FROM `accounts` WHERE `{$col}`= ?";
-        $this->data = $this->DB->query( $query, array($acct) )->fetchRow();
-        
-        // If the result is NOT false, we have a match, username is taken
-        if(!is_array($this->data)) throw new \Exception('User Doesnt Exist');
+        // Get our array of columns
+        $this->config = $this->parent->getConfig();
+        $this->cols = $this->config['accountColumns'];
     }
     
 /*
@@ -86,7 +74,11 @@ class Account implements \Wowlib\iAccount
             $this->setPassword($this->password);
         }
         
-        return ($this->DB->update('accounts', $this->data, "`acct`= ". $this->data['acct']) !== false);
+        // Fetch our table name, and ID column for the query
+        $table = $this->config['accountTable'];
+        $col = $this->cols['id'];
+        
+        return ($this->DB->update($table, $this->data, "`{$col}`= ". $this->data[$col]) !== false);
     }
     
 /*
@@ -101,7 +93,9 @@ class Account implements \Wowlib\iAccount
 */
     public function getId()
     {
-        return (int) $this->data['acct'];
+        // Fetch our column name
+        $col = $this->cols['id'];
+        return (int) $this->data[$col];
     }
     
 /*
@@ -109,19 +103,21 @@ class Account implements \Wowlib\iAccount
 | Method: getUsername()
 | ---------------------------------------------------------------
 |
-| This method returns the account login
+| This method returns the account username
 |
 | @Return (String)
 |
 */
     public function getUsername()
     {
-        return $this->data['login'];
+        // Fetch our column name
+        $col = $this->cols['username'];
+        return $this->data[$col];
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: getEmail()
+| Method: getUsername()
 | ---------------------------------------------------------------
 |
 | This method returns the account email address
@@ -131,7 +127,11 @@ class Account implements \Wowlib\iAccount
 */
     public function getEmail()
     {
-        return $this->data['email'];
+        // Fetch our column name
+        $col = $this->cols['email'];
+        if(!$col) return false;
+        
+        return $this->data[$col];
     }
     
 /*
@@ -146,8 +146,11 @@ class Account implements \Wowlib\iAccount
 */
     public function joinDate($asTimestamp = false)
     {
-        // Arcemu does not support this
-        return false;
+        // Fetch our column name
+        $col = $this->cols['joindate'];
+        if(!$col) return false;
+        
+        return ($asTimestamp == true) ? strtotime($this->data[$col]) : $this->data[$col];
     }
     
 /*
@@ -162,7 +165,11 @@ class Account implements \Wowlib\iAccount
 */
     public function lastLogin($asTimestamp = false)
     {
-        return ($asTimestamp == true) ? strtotime($this->data['lastlogin']) : $this->data['lastlogin'];
+        // Fetch our column name
+        $col = $this->cols['lastLogin'];
+        if(!$col) return false;
+        
+        return ($asTimestamp == true) ? strtotime($this->data[$col]) : $this->data[$col];
     }
     
 /*
@@ -177,7 +184,11 @@ class Account implements \Wowlib\iAccount
 */
     public function getLastIp()
     {
-        return $this->data['lastip'];
+        // Fetch our column name
+        $col = $this->cols['lastIp'];
+        if(!$col) return false;
+        
+        return $this->data[$col];
     }
     
 /*
@@ -192,7 +203,11 @@ class Account implements \Wowlib\iAccount
 */
     public function isLocked()
     {
-        return (bool) $this->data['banned'];
+        // Fetch our column name
+        $col = $this->cols['locked'];
+        if(!$col) return false;
+        
+        return (bool) $this->data[$col];
     }
     
 /*
@@ -207,8 +222,11 @@ class Account implements \Wowlib\iAccount
 */
     public function getExpansion($asText = false)
     {
-        $id = $this->bitToExpansion($this->data['flags']);
-        return ($asText == true) ? $this->parent->expansionToText($id) : $id;
+        // We need to convert the bit value to normal
+        $exp = $this->data[ $this->cols['expansion'] ];
+        $val = array_search($exp, $this->config['expansionToBit']);
+        
+        return ($asText == true) ? expansionToText($val) : (int) $val;
     }
     
 /*
@@ -230,8 +248,12 @@ class Account implements \Wowlib\iAccount
         
         // Set our passwords
         $this->password = $password;
-        $this->data['encrypted_password'] = sha1( strtoupper($this->data['login'] .':'. $password) );
-        $this->data['password'] = $password;
+        if($this->cols['shaPassword']) 
+            $this->data[ $this->cols['shaPassword'] ] = sha1(strtoupper($this->data['username'] .':'. $password));
+        if($this->cols['password']) $this->data[ $this->cols['password'] ] = $password;
+        if($this->cols['sessionkey']) $this->data[ $this->cols['sessionkey'] ] = null;
+        if($this->cols['v']) $this->data[ $this->cols['v'] ] = null;
+        if($this->cols['s']) $this->data[ $this->cols['s'] ] = null;
         return true;
     }
     
@@ -253,10 +275,10 @@ class Account implements \Wowlib\iAccount
         if(strlen($username) < 3) return false;
         
         // Set our username if its not the same as before
-        if($username != $this->data['login'])
+        if($username != $this->data['username'])
         {
             $this->changed = true;
-            $this->data['login'] = $username;
+            $this->data[ $this->cols['username'] ] = $username;
             return true;
         }
     }
@@ -273,7 +295,8 @@ class Account implements \Wowlib\iAccount
 */
     public function setEmail($email)
     {
-        $this->data['email'] = $email;
+        if(!$this->cols['email']) return false;
+        $this->data[ $this->cols['email'] ] = $email;
     }
     
 /*
@@ -294,7 +317,8 @@ class Account implements \Wowlib\iAccount
 */
     public function setExpansion($e)
     {
-        $this->data['flags'] = $this->parent->expansionToBit($e);
+        if(!$this->cols['expansion']) return false;
+        $this->data[ $this->cols['expansion'] ] = $this->parent->expansionToBit($e);
     }
     
 /*
@@ -309,7 +333,11 @@ class Account implements \Wowlib\iAccount
 */
     public function setLocked($locked)
     {
-        // Arcemu doesnt support this
-        return false;
+        // Get our column name
+        $col = $this->cols['locked'];
+        if(!$col) return false;
+        
+        // Set to an integer
+        $this->data[ $col ] = ($locked == true) ? 1 : 0;
     }
 }
