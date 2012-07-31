@@ -689,7 +689,7 @@ class Admin_ajax extends Core\Controller
                 // Loop, each character, and format the rows accordingly
                 foreach($output['aaData'] as $key => $value)
                 {
-                    $Account = $this->realm->fetchAccount($value[7]);
+                    $Account = $this->realm->fetchAccount((int)$value[7]);
                     $g = $value[5]; // Gender
                     $r = $value[3]; // Race
                     $race = $this->wowlib->characters->raceToText($r);
