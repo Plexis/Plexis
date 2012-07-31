@@ -520,9 +520,9 @@ class Characters implements iCharacters
     public function classToText($id)
     {
         // Check if the class is set, if not then Unknown
-        if(isset($this->config['class']))
+        if(isset($this->config['class'][$id]))
         {
-            return $this->config['class'];
+            return $this->config['class'][$id];
         }
         return "Unknown";
     }
@@ -535,9 +535,9 @@ class Characters implements iCharacters
     public function genderToText($id)
     {
         // Check if the gender is set, if not then Unknown
-        if(isset($this->config['gender']))
+        if(isset($this->config['gender'][$id]))
         {
-            return $this->config['gender'];
+            return $this->config['gender'][$id];
         }
         return "Unknown";
     }
