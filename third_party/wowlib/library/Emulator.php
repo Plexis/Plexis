@@ -87,8 +87,8 @@ class Emulator implements iEmulator
     {
         // Build config
         $config = $this->queryConfig;
-        $col = $this->config['accountColumns']['id'];
-        $config['where'] = "`{$col}`={$id}";
+        $col = (is_int($id)) ? $this->config['accountColumns']['id'] : $this->config['accountColumns']['username'];
+        $config['where'] = "`{$col}`='{$id}'";
         
         // Grab Realms
         $query = $this->_buildQuery('A', $config);
@@ -321,7 +321,7 @@ class Emulator implements iEmulator
         $passcol = ($cols['shaPassword'] != false) ? $cols['shaPassword'] : $cols['password'];
         
         // Load the users info from the Realm DB
-        $query = "SELECT `{$cols['id']}` AS `id`, `{$passcol}` AS `password` FROM `{$table}` WHERE `{$col['username']}`=?";
+        $query = "SELECT `{$cols['id']}` AS `id`, `{$passcol}` AS `password` FROM `{$table}` WHERE `{$cols['username']}`=?";
         $result = $this->DB->query( $query, array($username) )->fetchRow();
         
         // Make sure the username exists!

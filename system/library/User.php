@@ -111,6 +111,7 @@ class User
         $cookie = base64_decode( $cookie );
         if(strpos($cookie, '::') != false):
             list($userid, $token) = explode('::', $cookie);
+            $userid = (int) $userid;
         else:
             $this->logout(false);
             goto Guest;
