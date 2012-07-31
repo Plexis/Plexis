@@ -205,7 +205,7 @@ class Ajax_Model extends Core\Model
         // If manually installing, lets get our unique id
         if($action == 'manual-install')
         {
-            $result = $this->realm->realmlist();
+            $result = $this->realm->getRealmlist();
             $installed = get_installed_realms();
             
             if( !empty($result) )
@@ -213,12 +213,12 @@ class Ajax_Model extends Core\Model
                 $highest = end($result);
                 if( empty($installed) )
                 {
-                    $id = $highest['id'] + 1;
+                    $id = ($highest->getId() + 1);
                 }
                 else
                 {
                     $high2 = end($installed);
-                    ($highest['id'] > $high2['id']) ? $id = $highest['id'] + 1 : $id = $high2['id'] + 1;
+                    ($highest->getId() > $high2['id']) ? $id = ($highest->getId() + 1) : $id = $high2['id'] + 1;
                 }
             }
             else

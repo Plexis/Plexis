@@ -176,8 +176,15 @@ class Admin extends Core\Controller
             else
             {
                 // Use the realm database to grab user information first
-                $Account = $this->realm->fetchAccount($user['id']);
-                $data['expansion_data'] = $this->realm->expansions();
+                $Account = $this->realm->fetchAccount($user['username']);
+                $data['expansion_data'] = array();
+                $level = $this->realm->expansionLevel();
+                
+                // Add expansion data to the exp_data array
+                for($i = 0; $i <= $level; $i++)
+                {
+                    $data['expansion_data'][$i] = expansionToText($i);
+                }
 
                 // Use the additional inforamation from the realm DB
                 if(is_object($Account))

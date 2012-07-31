@@ -64,6 +64,23 @@ class Realm implements iRealm
     
 /*
 | ---------------------------------------------------------------
+| Method: getId()
+| ---------------------------------------------------------------
+|
+| This method returns the realms id
+|
+| @Return (Int)
+|
+*/
+    public function getId()
+    {
+        // Fetch our column name
+        $col = $this->cols['id'];
+        return (int) $this->data[$col];
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: getName()
 | ---------------------------------------------------------------
 |

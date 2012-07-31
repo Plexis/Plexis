@@ -93,7 +93,7 @@
     function get_emulators()
     {
         $reallist = array();
-        $path = path( ROOT, 'third_party', 'wowlib', 'emulators' );
+        $path = path( ROOT, 'third_party', 'wowlib', 'library' );
         $list = load_class('Filesystem', 'library')->list_folders( $path );
         foreach($list as $file)
         {
