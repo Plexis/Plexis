@@ -222,7 +222,7 @@ class Emulator implements iEmulator
         $realms = array();
         while($row = $statement->fetch())
         {
-            $realms[] = new $clas($row, $this);
+            $realms[] = new $class($row, $this);
         }
         
         return $realms;

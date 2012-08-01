@@ -40,7 +40,7 @@ class Realm implements iRealm
         $this->data = $data;
         
         // Get our array of columns
-        $this->config = $this->parent->getConfig();
+        $this->config = $parent->getConfig();
         $this->cols = $this->config['realmColumns'];
     }
     
