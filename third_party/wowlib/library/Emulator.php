@@ -242,7 +242,7 @@ class Emulator implements iEmulator
     public function uptime($id)
     {
         // Get our table and column names
-        $table = $this->config['accountTable'];
+        $table = $this->config['uptimeTable'];
         $rid = $this->config['uptimeColumns']['realmId'];
         $cid = $this->config['uptimeColumns']['startTime'];
         if($table == false) return false;
