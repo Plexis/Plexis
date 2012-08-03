@@ -61,7 +61,7 @@
         'port' => 'port',
         'type' => 'icon',
         'population' => 'population',
-        'gamebuild' => 'gamebuild'
+        'gamebuild' => 'realmbuilds'
     );
     
 /*

@@ -147,10 +147,43 @@
     $config['loginFlags'] = array(
         'rename' => 1,
         'customize' => 8,
-        'change_race' => false,
-        'change_faction' => false,
+        'change_race' => 128,
+        'change_faction' => 64,
         'reset_spells' => 2,
         'reset_talents' => 4,
         'reset_pet_talents' => 16
+    );
+    
+/*
+| ---------------------------------------------------------------
+| Config > guildTable
+| ---------------------------------------------------------------
+|
+| This is the guilds table name, where all the guild data is set
+| NOTE: this is not the members data, just guild data
+*/
+    $config['guildTable'] = 'guild';
+    
+/*
+| ---------------------------------------------------------------
+| Config > guildComlumns
+| ---------------------------------------------------------------
+|
+| This config var is an  array of 'column ID' => 'column Name' of
+| the guilds table. Donot change the array keys! as they are 
+| used to fetch the individual column names. set value to false if 
+| a column name cant be supplied
+*/
+    $config['guildComlumns'] = array(
+        'id' => 'guildid',
+        'name' => 'name',
+        'leaderId' => 'leaderguid',
+        'emblemStyle' => 'EmblemStyle',
+        'emblemColor' => 'EmblemColor',
+        'borderStyle' => 'BorderStyle',
+        'borderColor' => 'BorderColor',
+        'motd' => 'motd',
+        'createTime' => 'createdate',
+        'bankMoney' => 'BankMoney'
     );
 ?>
