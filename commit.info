@@ -1,1 +1,1 @@
-[{"status":"M","file":"system\/config\/config.php"},{"status":"M","file":"system\/controllers\/admin_ajax.php"},{"status":"M","file":"system\/models\/ajax_model.php"},{"status":"M","file":"index.php"}]
+[{"status":"M","file":"system\/controllers\/admin.php"},{"status":"M","file":"index.php"}]

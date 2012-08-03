@@ -489,6 +489,7 @@ class Admin extends Core\Controller
                     $realm = $this->realm->fetchRealm($id);
 
                     $data["realm"] = array(
+                        "id" => $realm->getId(),
                         "name" => $realm->getName(),
                         "address" => $realm->getAddress(),
                         "port" => $realm->getPort(),
