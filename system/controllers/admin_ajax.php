@@ -682,7 +682,7 @@ class Admin_ajax extends Core\Controller
 
             // Load the WoWLib
             $this->load->wowlib($realm, 'wowlib');
-            if(is_object($this->wowlib))
+            if(is_object($this->wowlib) && is_object($this->wowlib->characters))
             {
                 $output = $this->wowlib->characters->listCharactersDatatables();
                 
@@ -830,7 +830,7 @@ class Admin_ajax extends Core\Controller
         $action = $this->Input->post('action');
         
         // Get our realm ID
-        $id = $this->Input->post('id', true);
+        $id = (int) $this->Input->post('id', true);
         
         // Make sure use has perms
         $this->check_permission('manage_realms');

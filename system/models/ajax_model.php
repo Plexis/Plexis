@@ -374,7 +374,7 @@ class Ajax_Model extends Core\Model
                 $wowlib = $this->load->wowlib($realm['id']);
 
                 // Build our realms return
-                if($status == 1 && is_object($wowlib))
+                if($status == 1 && is_object($wowlib) && is_object($wowlib->characters))
                 {
                     // Get our realm uptime
                     $uptime = $this->realm->uptime( $realm['id'] );
