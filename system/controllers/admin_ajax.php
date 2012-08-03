@@ -433,7 +433,7 @@ class Admin_ajax extends Core\Controller
                     
                     // Get the group title
                     $query = "SELECT `title` FROM `pcms_groups` WHERE `group_id`=?";
-                    $title = $this->DB->query($query, array($id))->fetch_column();
+                    $title = $this->DB->query($query, array($id))->fetchColumn();
                     
                     // Log action
                     $this->log('Deleted user group "'. $title .'"');
@@ -462,7 +462,7 @@ class Admin_ajax extends Core\Controller
         
         // Get the group title
         $query = "SELECT `title` FROM `pcms_account_groups` WHERE `group_id`=?";
-        $title = $this->DB->query($query, array($id))->fetch_column();
+        $title = $this->DB->query($query, array($id))->fetchColumn();
         
         // Log action
         $this->log('Edited permissions for group "'. $title .'"');
@@ -567,7 +567,7 @@ class Admin_ajax extends Core\Controller
                     {
                         // Get the news title
                         $query = "SELECT `title` FROM `pcms_news` WHERE `id`=?";
-                        $title = $this->DB->query($query, array( $this->Input->post('id', true) ))->fetch_column();
+                        $title = $this->DB->query($query, array( $this->Input->post('id', true) ))->fetchColumn();
                         
                         // Log action
                         $this->log('Modified news post with title: "'. $title .'"');
@@ -588,7 +588,7 @@ class Admin_ajax extends Core\Controller
                 case "delete":
                     // Get the news title
                     $query = "SELECT `title` FROM `pcms_news` WHERE `id`=?";
-                    $title = $this->DB->query($query, array( $this->Input->post('id', true) ))->fetch_column();
+                    $title = $this->DB->query($query, array( $this->Input->post('id', true) ))->fetchColumn();
                     
                     // Log action
                     $this->log('Deleted news post with title: "'. $title .'"');
@@ -1313,7 +1313,7 @@ class Admin_ajax extends Core\Controller
                     
                     // Dont allow the default template to be uninstalled!
                     $query = "SELECT `name` FROM `pcms_templates` WHERE `id`=?";
-                    $name = $this->DB->query( $query, array($id) )->fetch_column();
+                    $name = $this->DB->query( $query, array($id) )->fetchColumn();
                     if($default == $name)
                     {
                         $this->output(false, 'template_uninstall_default_warning', 'warning');
@@ -1339,7 +1339,7 @@ class Admin_ajax extends Core\Controller
                     
                     // Get the template name
                     $query = "SELECT `name` FROM `pcms_templates` WHERE `id`=?";
-                    $name = $this->DB->query( $query, array($id) )->fetch_column();
+                    $name = $this->DB->query( $query, array($id) )->fetchColumn();
                     
                     // Log action
                     $this->log('Changed default template to "'. $name .'"');

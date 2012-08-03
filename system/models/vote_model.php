@@ -233,13 +233,13 @@ class Vote_Model extends Core\Model
         
         // Find the IP's donation status
         $query = "SELECT `data` FROM `pcms_vote_data` WHERE `ip_address`=?";
-        $data = $this->DB->query( $query, array($ip) )->fetch_column();
+        $data = $this->DB->query( $query, array($ip) )->fetchColumn();
         
         // If we have a false result using the IP address, then try the account ID
         if($data === FALSE)
         {
             $query2 = "SELECT `data` FROM `pcms_vote_data` WHERE `account_id`=?";
-            $data = $this->DB->query( $query, array($id) )->fetch_column();
+            $data = $this->DB->query( $query, array($id) )->fetchColumn();
             
             // If this result is false as well, then just create new data
             if($data === FALSE)

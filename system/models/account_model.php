@@ -59,7 +59,7 @@ class Account_Model extends Core\Model
     public function verify_key($key)
     {
         // make sure this key doesnt already exist
-        $result = $this->DB->query("SELECT `username` FROM `pcms_accounts` WHERE `_activation_code`=?", array($key))->fetch_column();
+        $result = $this->DB->query("SELECT `username` FROM `pcms_accounts` WHERE `_activation_code`=?", array($key))->fetchColumn();
         return ($result !== FALSE) ? $result : false;
     }
     
@@ -228,7 +228,7 @@ class Account_Model extends Core\Model
     public function get_id($name)
     {
         $this->DB->query("SELECT `id` FROM `pcms_accounts` WHERE `username` LIKE :name LIMIT 1", array(':name' => $name));
-        return $this->DB->fetch_column();
+        return $this->DB->fetchColumn();
     }
 
 /*

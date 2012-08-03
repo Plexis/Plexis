@@ -860,7 +860,7 @@ class Account extends Core\Controller
                         }
 
                         // If an email wasnt set, the just set the damn thing
-                        $result = $this->DB->query('SELECT `email` FROM `pcms_accounts` WHERE `id`=?', array($this->user['id']))->fetch_column();
+                        $result = $this->DB->query('SELECT `email` FROM `pcms_accounts` WHERE `id`=?', array($this->user['id']))->fetchColumn();
                         if($result == NULL)
                         {
                             goto SetEmail;

@@ -135,7 +135,7 @@ class Controller
             {
                 // Make sure the tempalate exists before setting the theme
                 $query  = "SELECT `status` FROM `pcms_templates` WHERE `name`=?";
-                $status = $this->DB->query( $query, array($user['selected_theme']) )->fetch_column();
+                $status = $this->DB->query( $query, array($user['selected_theme']) )->fetchColumn();
                 
                 // If the template exists, and is enabled for site use
                 if($status)
