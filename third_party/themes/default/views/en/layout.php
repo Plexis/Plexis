@@ -66,7 +66,7 @@
             <nav id="nav">
                 <ul class="navigation">
                     <li><a href="{SITE_URL}">Home</a></li>
-                    <li><a href="http://wilson212.net/forum">Forums</a></li>
+                    <li><a href="http://plexis.tk/forum/">Forums</a></li>
                     <li><a href="{SITE_URL}/account/vote">Vote</a></li>
                     <li><a href="{SITE_URL}/account/donate">Donate</a></li>
                     <li><a href="{SITE_URL}/server">Server</a>

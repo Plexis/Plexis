@@ -4,7 +4,8 @@ Plexis CMS
 A professional content management system for World of Warcraft private servers built on a model-view-controller framework that aims to be compatible with any database structure via the extensible [WoWLib](https://github.com/Plexis/Wowlib).
 
 * [Documentation](http://plexis.github.com/Plexis/)
-* [Live Demo](http://demo.wilson212.net)
+* [Live Demo](http://plexis.tk/demo/)
+* [Official Forums](http://plexis.tk/forum/)
 
 Requirements
 ------------
@@ -15,7 +16,7 @@ Requirements
 Becoming a developer
 --------------------
 
-Interested in joining the team? Contact [Wilson212](https://github.com/wilson212) via email at wilson.steven10@yahoo.com, or via Windows Live Messenger at wilson212@live.com or contact [Syke](https://github.com/Syke94) via email at js.pwns@gmail.com, Windows Live Messenger at glitcher123@gmail.com or via Skype at Syke2401.
+Interested in joining the team? Check out the [official forums](http://plexis.tk/forum/) for information on applying and available positions.
 
 The Team
 --------
@@ -28,4 +29,4 @@ The Team
 Feedback
 --------
 
-Please open a new issue to request a feature or report a bug. Or contact Wilson212 or Syke (contact information above), we'd love to head from you!
+Please open a new issue to request a feature or report a bug or head on over to our [forums](http://plexis.tk/forum/), we'd love to hear from you!
