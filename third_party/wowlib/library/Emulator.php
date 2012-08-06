@@ -290,7 +290,7 @@ class Emulator implements iEmulator
         // Condition based columns
         if($cols['password']) $data[ $cols['password'] ] = $password;
         if($cols['shaPassword']) $data[ $cols['shaPassword'] ] = $shap;
-        if($cols['lastIp']) $data[ $cols['laspIp'] ] = $ip;
+        if($cols['lastIp']) $data[ $cols['lastIp'] ] = $ip;
         
         // Insert into the database
         $this->DB->insert("account", $data);

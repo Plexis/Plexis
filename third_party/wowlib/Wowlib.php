@@ -27,7 +27,7 @@ class Wowlib
         Contains the wowlib revision. This number changes with each wowlib update, but only reflects
         minor changes, that will not affect the wowlib drivers in any way.
     */
-    const REVISION = 25;
+    const REVISION = 26;
     
     // Static Variables
     public static $emulator = '';           // Emulator string name
