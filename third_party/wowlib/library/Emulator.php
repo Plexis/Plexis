@@ -85,12 +85,12 @@ class Emulator implements iEmulator
 */
     public function fetchAccount($id)
     {
-        // Build config
+        // Build config, and our where statement
         $config = $this->queryConfig;
         $col = (is_int($id)) ? $this->config['accountColumns']['id'] : $this->config['accountColumns']['username'];
         $config['where'] = "`{$col}`='{$id}'";
         
-        // Grab Realms
+        // Grab our account query, and execute it
         $query = $this->_buildQuery('A', $config);
         $row = $this->DB->query( $query )->fetchRow();
         if(!is_array($row)) return false;
@@ -162,12 +162,12 @@ class Emulator implements iEmulator
         // Make sure this emulator support realmlists!
         if(!$this->config['realmTable']) return array();
         
-        // Build config
+        // Build config, and our where statement
         $config = $this->queryConfig;
         $col = $this->config['realmColumns']['id'];
         $config['where'] = "`{$col}`={$id}";
         
-        // Grab Realms
+        // Grab our realm query, and exeute it
         $query = $this->_buildQuery('R', $config);
         $row = $this->DB->query( $query )->fetchRow();
         if(!is_array($row)) return false;
@@ -328,17 +328,17 @@ class Emulator implements iEmulator
         if(!is_array($result)) return false;
         
         // SHA1 the password check
-        if($cols['shaPassword'] != false)
+        if($cols['shaPassword'] != false && strlen($result['password']) == 40)
         {
             $user = strtoupper($username);
             $pass = strtoupper($password);
             $password = sha1($user.':'.$pass);
             
             // If the result was false, then username is no good. Also match passwords.
-            return ( strtolower($result['password']) == $password ) ? (int) $result['id'] : false;
+            return ( strtolower($result['password']) == $password );
         }
         
-        return ( $result['password'] == $password ) ? true : false;
+        return ( $result['password'] == $password );
     }
     
 /*
@@ -372,7 +372,7 @@ class Emulator implements iEmulator
         if(!is_array($result)) return false;
         
         // SHA1 the password check
-        if($cols['shaPassword'] != false)
+        if($cols['shaPassword'] != false && strlen($result[$passcol]) == 40)
         {
             $user = strtoupper($username);
             $pass = strtoupper($password);
@@ -446,10 +446,10 @@ class Emulator implements iEmulator
         // Get our table and column names
         $table = $this->config['accountTable'];
         $colid = $this->config['accountColumns']['email'];
-        $username = $this->config['accountColumns']['username'];
+        $id = $this->config['accountColumns']['id'];
         
         // Check the Realm DB for this username
-        $query = "SELECT `{$username}` FROM `{$table}` WHERE `{$colid}`=?";
+        $query = "SELECT `{$id}` FROM `{$table}` WHERE `{$colid}`=?";
         $res = $this->DB->query( $query, array($email) )->fetchColumn();
         
         // If the result is NOT false, we have a match, username is taken
@@ -576,12 +576,12 @@ class Emulator implements iEmulator
         if( $this->ipBanned($ip) ) return true;
         
         // Get our table and column names
-        $cols = $this->config['bannedColumns'];
+        $cols = $this->config['ipBannedColumns'];
         $table = $this->config['ipBannedTable'];
 
         // Make sure our unbandate is set, 1 year default
         ($unbandate == NULL) ? $unbandate = (time() + 31556926) : '';
-        $data = array("{$cols['ip']}" => $ip); 
+        $data = array("{$cols['ip']}" => $ip);
         
         // Add supported columns
         if($cols['banTime']) $data[ $cols['banTime'] ] = time();
@@ -609,8 +609,12 @@ class Emulator implements iEmulator
         // Check if the account is not Banned
         if( !$this->accountBanned($id) ) return true;
         
+        // Get our table and column names
+        $cols = $this->config['bannedColumns'];
+        $table = $this->config['bannedTable'];
+        
         // Check for account existance
-        return $this->DB->update("account_banned", array('active' => 0), "`id`=".$id);
+        return $this->DB->update($table, array("{$cols['active']}" => 0), "`{$cols['accountId']}`={$id}");
     }
     
 /*

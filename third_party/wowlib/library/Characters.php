@@ -99,11 +99,19 @@ class Characters implements iCharacters
     {
         // Array of columns that our query needs
         $table = $this->config['characterTable'];
-        $cols = $this->config['characterColumns'];
+        $columns = array();
         
         // Prepare the column name for the WHERE statement based off of $id type
         $col = (is_int($id)) ? $cols['guid'] : $cols['name'];
-        $cols = "`". implode('`, `', $cols) ."`";
+        
+        // Filter out false columns
+        foreach($this->cols as $c)
+        {
+            if($c != false) $columns[] = $c;
+        }
+        
+        // Create our columns string
+        $cols = "`". implode('`, `', $columns) ."`";
     
         // Load the character
         $query = "SELECT {$cols} FROM `{$table}` WHERE `{$col}`= ?;";
