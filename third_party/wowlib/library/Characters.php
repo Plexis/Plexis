@@ -102,7 +102,7 @@ class Characters implements iCharacters
         $columns = array();
         
         // Prepare the column name for the WHERE statement based off of $id type
-        $col = (is_int($id)) ? $cols['guid'] : $cols['name'];
+        $col = (is_int($id)) ? $this->cols['guid'] : $this->cols['name'];
         
         // Filter out false columns
         foreach($this->cols as $c)
