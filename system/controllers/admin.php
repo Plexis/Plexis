@@ -179,7 +179,7 @@ class Admin extends Core\Controller
                 $Account = $this->realm->fetchAccount($user['username']);
                 $data['expansion_data'] = array();
                 $level = $this->realm->expansionLevel();
-                
+
                 // Add expansion data to the exp_data array
                 for($i = 0; $i <= $level; $i++)
                 {
@@ -704,119 +704,115 @@ class Admin extends Core\Controller
             'page_desc' => "This script allows you to update your CMS with just a click of a button.",
         );
 
-        // cURL exist? If not we need to verify the user has openssl installed and https support
-        $curl = function_exists('curl_exec');
-        if(!$curl)
+        if( !extension_loaded( "curl" ) )
         {
-            // Make sure the Openssl extension is loaded
-            if(!extension_loaded('openssl'))
-            {
-                $message = 'Openssl extension not found. Please enable the openssl extension in your php.ini file (extension=php_openssl.dll).'.
-                    'You must enable openssl before using the remote updater';
-                output_message('warning', $message);
-                $this->load->view('blank', $data);
-                return;
-            }
-
-            // Check for https support
-            if(!in_array('https', stream_get_wrappers()))
-            {
-                output_message('warning', 'Unable to find the stream wrapper "https" - did you forget to enable it when you configured PHP?');
-                $this->load->view('blank', $data);
-                return;
-            }
+            $Message = "cURL extension not found. Please enable cURL in your php.ini file (extension=php_curl.dll on Windows or extensions=curl.so on Linux).";
+            output_message( "warning", $Message );
+            $this->load->view( "blank", $data );
+            return;
+        }
+        elseif( !extension_loaded( "openssl" ) )
+        {
+            $Message = "Open SSL extension not found. Please enable Open SSL in your php.ini file (extension=php_openssl.dll on Windows or extensions=openssl.so on Linux).";
+            output_message( "warning", $Message );
+            $this->load->view( "blank", $data );
+            return;
+        }
+        elseif( ini_get( "allow_url_fopen" ) != 1 )
+        {
+            $Message = "Please enable allow_url_fopen in your php.ini file and try again.";
+            output_message( "warning", $Message );
+            $this->load->view( "blank", $data );
+            return;
+        }
+        elseif( !in_array( "https", stream_get_wrappers() ) ) //We shouldn't arive here, as Open SSL adds the HTTPS stream wrapper.
+        {
+            $Message = "HTTPS support could not be detected, please allow HTTPS streams and then try again.";
+            output_message( "warning", $Message );
+            $this->load->view( "blank", $data );
+            return;
         }
 
-        // Make sure the client server allows fopen of urls
-        if(ini_get('allow_url_fopen') == 1 || $curl == true)
+        // Include the URL helper
+        $this->load->helper('Url');
+
+        // Get the file changes from github
+        $start = microtime(1);
+        \Debug::silent_mode(true);
+        $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30', false);
+        \Debug::silent_mode(false);
+        $stop = microtime(1);
+
+        // Granted we have page contents
+        if($page)
         {
-            // Include the URL helper
-            $this->load->helper('Url');
+            // Decode the results
+            $commits = json_decode($page, TRUE);
 
-            // Get the file changes from github
-            $start = microtime(1);
-            \Debug::silent_mode(true);
-            $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30', false);
-            \Debug::silent_mode(false);
-            $stop = microtime(1);
+            // Defaults
+            $count = 0;
+            $latest = 0;
 
-            // Granted we have page contents
-            if($page)
+            // Get the latest build
+            $message = $commits[0]['commit']['message'];
+            if(preg_match('/([0-9]+)/', $message, $latest))
             {
-                // Decode the results
-                $commits = json_decode($page, TRUE);
-
-                // Defaults
-                $count = 0;
-                $latest = 0;
-
-                // Get the latest build
-                $message = $commits[0]['commit']['message'];
-                if(preg_match('/([0-9]+)/', $message, $latest))
+                $latest = $latest[0];
+                if(CMS_BUILD < $latest)
                 {
-                    $latest = $latest[0];
-                    if(CMS_BUILD < $latest)
+                    $count = ($latest - CMS_BUILD);
+                    if($count > 29)
                     {
-                        $count = ($latest - CMS_BUILD);
-                        if($count > 29)
-                        {
-                            output_message('warning', 'Your cms is out of date by more than 30 updates. You will need to manually update.');
-                            $this->load->view('blank', $data);
-                            return;
-                        }
+                        output_message('warning', 'Your cms is out of date by more than 30 updates. You will need to manually update.');
+                        $this->load->view('blank', $data);
+                        return;
                     }
-                }
-                else
-                {
-                    output_message('warning', 'Unable to determine latest build');
-                    $this->load->view('blank', $data);
-                    return;
-                }
-
-                // Simple
-                ($count == 0) ? $next = $commits[0] : $next = $commits[$count-1];
-                $d = new DateTime($next['commit']['author']['date']);
-                $date = $d->format("M j, Y - g:i a");
-
-                // Set JS vars
-                $this->Template->setjs('update_sha', $next['sha']);
-                $this->Template->setjs('update_url', $next['url']);
-
-
-                // Build our page data
-                $data['time'] = round($stop - $start, 5);
-                $data['count'] = $count;
-                $data['latest'] = $latest;
-                $data['message'] = preg_replace('/([\[0-9\]]+)/', '', htmlspecialchars($next['commit']['message']), 1);
-                $data['date'] = $date;
-                $data['author'] = '<a href="https://github.com/'. $next['author']['login'] .'" target="_blank">'. ucfirst($next['author']['login']) .'</a>';
-                $data['more_info'] = "https://github.com/Plexis/Plexis/commit/". $next['sha'];
-                $data['CMS_BUILD'] = CMS_BUILD;
-                unset($commits);
-
-                // No updates has a different view
-                if($count == 0)
-                {
-                    $this->load->view('no_updates', $data);
-                }
-                else
-                {
-                    // Add the progress bar
-                    $this->Template->add_script('progressbar_mini.js');
-                    $this->Template->add_css('progressbar.css');
-                    $this->load->view('updates', $data);
                 }
             }
             else
             {
-                output_message('warning', 'Unable to fetch updates from Github.');
+                output_message('warning', 'Unable to determine latest build');
                 $this->load->view('blank', $data);
                 return;
+            }
+
+            // Simple
+            ($count == 0) ? $next = $commits[0] : $next = $commits[$count-1];
+            $d = new DateTime($next['commit']['author']['date']);
+            $date = $d->format("M j, Y - g:i a");
+
+            // Set JS vars
+            $this->Template->setjs('update_sha', $next['sha']);
+            $this->Template->setjs('update_url', $next['url']);
+
+
+            // Build our page data
+            $data['time'] = round($stop - $start, 5);
+            $data['count'] = $count;
+            $data['latest'] = $latest;
+            $data['message'] = preg_replace('/([\[0-9\]]+)/', '', htmlspecialchars($next['commit']['message']), 1);
+            $data['date'] = $date;
+            $data['author'] = '<a href="https://github.com/'. $next['author']['login'] .'" target="_blank">'. ucfirst($next['author']['login']) .'</a>';
+            $data['more_info'] = "https://github.com/Plexis/Plexis/commit/". $next['sha'];
+            $data['CMS_BUILD'] = CMS_BUILD;
+            unset($commits);
+
+            // No updates has a different view
+            if($count == 0)
+            {
+                $this->load->view('no_updates', $data);
+            }
+            else
+            {
+                // Add the progress bar
+                $this->Template->add_script('progressbar_mini.js');
+                $this->Template->add_css('progressbar.css');
+                $this->load->view('updates', $data);
             }
         }
         else
         {
-            output_message('warning', 'allow_url_fopen is not enabled in the php.ini file. Unable to continue.');
+            output_message('warning', 'Unable to fetch updates from Github.');
             $this->load->view('blank', $data);
             return;
         }
