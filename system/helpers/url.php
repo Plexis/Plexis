@@ -86,7 +86,7 @@ if(!function_exists('getPageContents'))
     function getPageContents($url, $asArray = false)
     {
         // Properly format our url
-        $url = urlencode( $url );
+        $url = str_replace( ' ', '%20', $url );
         $results = false;
 
         // Try to fetch the page with cURL
