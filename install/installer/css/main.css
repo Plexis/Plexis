@@ -26,13 +26,21 @@ body
 	font: 12px/1.7em arial, sans-serif;
 	padding: 0;
 	margin: auto auto;
-	width: 500px;
+	width: 625px;
 }
 
 h1,h2,h3,h4,h5,h6
 { 
 	color: #111; 
 	margin-bottom: .75em; 
+}
+
+hr
+{
+	border: none;
+	height: 1px;
+	background: #999;
+	margin-top: 27px;
 }
 
 h1	{ font-size: 24px; line-height: 1em; }
@@ -140,7 +148,7 @@ button.btn-sec span { background-position: left -100px !important; }
 #page
  {
 	background-color: #FFF;
-	width: 500px; 
+	width: 625px; 
 	margin: 0 auto; 
 	border: 1px solid #CCC; 
 	-moz-border-radius: 6px;
@@ -244,7 +252,7 @@ button.btn-sec span { background-position: left -100px !important; }
 .main-content
 { 	
 	padding: 15px; 
-	position: relative; 
+	position: relative;
 }	
 	
 
@@ -258,9 +266,36 @@ button.btn-sec span { background-position: left -100px !important; }
 .form span.label { margin-right: 10px; padding-right: 5px; width: 130px; display: block; float: left;  font-weight: bold; text-align: right; position: relative; }
 .form label em, 
 .form span.label em { position: absolute; right: 0; font-size: 120%; font-style: normal; color: #C00; }
+.form input,.form input.error,.form textarea
+{
+	outline:none;
+    transition: all 0.25s ease-in-out;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    border-radius:3px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border:1px solid rgba(0,0,0, 0.2);
+}
 .form input:focus,
 .form input.error:focus, 
-.form textarea:focus {	background-color: #FFC; border-color: #FC6; }
+.form textarea:focus 
+{
+	outline:0;
+	color:#333;
+	border-color:#56b4ef;
+	-webkit-box-shadow:inset 0 1px 3px rgba(0,0,0,.05),0 0 8px rgba(82,168,236,1);
+	-moz-box-shadow:inset 0 1px 3px rgba(0,0,0,.05),0 0 8px rgba(82,168,236,1);
+	box-shadow:inset 0 1px 3px rgba(0,0,0,.05),0 0 8px rgba(82,168,236,1);
+}
+.form div.field label
+{
+	margin-top: 6px;
+}
+.form div.field
+{
+	margin-left: 87px;
+}
 .form div.controlset label, 
 .form div.controlset input { display: inline; float: none; }
 .form .controlset div { margin-left: 145px; }
@@ -274,9 +309,9 @@ button.btn-sec span { background-position: left -100px !important; }
 .form .field input
 {
 	padding: 4px;
-	border: 1px solid #999;
+	/*border: 1px solid #999;
 	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+	-webkit-border-radius: 3px;*/
 }
 .form .tiny { width: 25px; }
 .form .xsmall { width: 50px; }

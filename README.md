@@ -7,6 +7,8 @@ A professional content management system for World of Warcraft private servers b
 * [Live Demo](http://plexis.tk/demo/)
 * [Official Forums](http://plexis.tk/forum/)
 
+**Pease note that Plexis is still in a development phase, all features, including the CMS itself should be treated as expiramental, we do *not* recommend using Plexis on a live website in it's present state.**
+
 Requirements
 ------------
 

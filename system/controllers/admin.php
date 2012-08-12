@@ -704,33 +704,29 @@ class Admin extends Core\Controller
             'page_desc' => "This script allows you to update your CMS with just a click of a button.",
         );
 
+        //Try cURL first.
         if( !extension_loaded( "curl" ) )
         {
-            $Message = "cURL extension not found. Please enable cURL in your php.ini file (extension=php_curl.dll on Windows or extensions=curl.so on Linux).";
-            output_message( "warning", $Message );
-            $this->load->view( "blank", $data );
-            return;
-        }
-        elseif( !extension_loaded( "openssl" ) )
-        {
-            $Message = "Open SSL extension not found. Please enable Open SSL in your php.ini file (extension=php_openssl.dll on Windows or extensions=openssl.so on Linux).";
-            output_message( "warning", $Message );
-            $this->load->view( "blank", $data );
-            return;
-        }
-        elseif( ini_get( "allow_url_fopen" ) != 1 )
-        {
-            $Message = "Please enable allow_url_fopen in your php.ini file and try again.";
-            output_message( "warning", $Message );
-            $this->load->view( "blank", $data );
-            return;
-        }
-        elseif( !in_array( "https", stream_get_wrappers() ) ) //We shouldn't arive here, as Open SSL adds the HTTPS stream wrapper.
-        {
-            $Message = "HTTPS support could not be detected, please allow HTTPS streams and then try again.";
-            output_message( "warning", $Message );
-            $this->load->view( "blank", $data );
-            return;
+            $ssl   = true;
+            $fopen = true;
+
+            //Fall back on OpenSSL and allow_url_fopen before failing.
+            if( !extension_loaded( "openssl" ) || !in_array( "https", stream_get_wrappers() ) )
+                $ssl = false;
+
+            if( ini_get( "allow_url_fopen" ) != 1 )
+                $fopen = false;
+
+            if( !$ssl || !$fopen )
+            {
+                $Message  = "The Plexis remote updater requires either cURL or OpenSSL and allow_url_fopen, please enable cURL or OpenSSL and allow_url_fopen.<br /><br />cURL: Disabled";
+                $Message .= "<br />OpenSSL: " . $ssl ? "Enabled" : "Disabled";
+                $Message .= "<br />allow_url_fopen" . $fopen ? "Enabled" : "Disabled";
+
+                output_message( "warning", $Message );
+                $this->load->view( "blank", $data );
+                return;
+            }
         }
 
         // Include the URL helper
@@ -739,7 +735,7 @@ class Admin extends Core\Controller
         // Get the file changes from github
         $start = microtime(1);
         \Debug::silent_mode(true);
-        $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30', false);
+        $page = getPageContents('https://api.github.com/repos/Plexis/Plexis/commits?per_page=30');
         \Debug::silent_mode(false);
         $stop = microtime(1);
 
