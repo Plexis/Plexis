@@ -52,6 +52,9 @@ class Debug
     
     // Output sent to browser?
     protected static $outputSent = false;
+    
+    // Remote debugger variables
+    protected static $debugging = true;
 
 
 /*
@@ -73,10 +76,14 @@ class Debug
         self::$LogDebug = $Config->get('enable_debug_logs', 'Core');
         self::$Environment = $Config->get('environment', 'Core');
         self::$catchFatalErrors = $Config->get('catch_fatal_errors', 'Core');
+        self::$debugging = $Config->get('enable_remote_debugger', 'Core');
         
         // Get our URL info
         self::$urlInfo = load_class('Router')->get_url_info();
         self::$ajaxRequest = load_class('Input')->is_ajax();
+        
+        // Debugging
+        if(self::$debugging && !isset($_GET['debug'])) self::$debugging = false;
         
         // Add this to the trace
         self::trace('Debug class initialized successfully', __FILE__, __LINE__);
@@ -484,6 +491,132 @@ class Debug
             default: $string = 'PHP Fatal Error ['. $level .']'; break;
         }
         return $string;
+    }
+
+
+
+
+
+
+
+
+/*
+| ---------------------------------------------------------------
+| Method: mark()
+| ---------------------------------------------------------------
+|
+*/
+    public static function mark($params, $file, $line)
+    {
+        // Check for a killswitch
+        if(self::$debugging == false) return;
+        
+        // Load our Cache file, and write the new contents
+        $Cache = load_class('Cache', 'Library');
+        $debug = array(
+            'flags' => 0,
+            'next_step' => false,
+            'file' => str_replace( ROOT . DS, '', $file),
+            'line' => $line,
+            'variable' => null,
+            'variable_in' => null,
+            'variable_mode' => null,
+            'output' => null,
+        );
+        $Cache->save('debugger', $debug);
+        
+        // Keep looping until either the debugging is disabled, or the step_next is enabled
+        for($i = 0;; $i++)
+        {
+            // Load the debugger.cache contents
+            if($i > 0) $debug = $Cache->get('debugger');
+            
+            // Check for a quit debugging flag
+            if($debug['flags'] == 1)
+            {
+                self::$debugging = false;
+                break;
+            }
+            
+            // Check for a kill script
+            if($debug['flags'] == 2) die('Application was killed by the remote debugger at '. date("F j, Y, g:i a", time()));
+            
+            // Check for a next step
+            if($debug['next_step']) break;
+            
+            // Check variable changes / requests
+            if($debug['variable'] != null)
+            {
+                // remove the $
+                $debug['variable'] = ltrim($debug['variable'], '$');
+                
+                /* 
+                    First we need to explode array keys. So $array[key1][key2] turns into a real array like so 
+                    array(array, key1, key2);
+                */
+                $find = array('"', "'", '[]', ']');
+                $v_keys = explode('[', str_replace($find, '', $debug['variable']));
+                $num_of_keys = count($v_keys);
+                $parts = '';
+                
+                // Build out array parts as a string
+                for($i = 0; $i < $num_of_keys; $i++)
+                {
+                    $s = $v_keys[$i];
+                    $parts .= (is_numeric($s)) ? '['. $s .']' : '[\''. $s .'\']';
+                }
+                
+                // Make sure the variable exists
+                $isset = eval('return isset($params'. $parts .');');
+                if(!$isset)
+                {
+                    $debug['variable'] = null;
+                    $debug['variable_in'] = null; 
+                    $debug['output'] = "\${$debug['variable']} = Undefined Variable";
+                    $Cache->save('debugger', $debug);
+                }
+                elseif($debug['variable_mode'] == 'get')
+                {
+                    // Get our variable
+                    $var = eval('return $params'. $parts .';');
+                    
+                    // If we have an array or an object, then we use print_r to pring out the array/class all nice and neet
+                    if (is_array($var) || is_object($var)) $var = print_r($var, true);
+
+                    // Prepare DB update
+                    $find = array('"', "\r", "\n", "\t", "(", ")", "'", "\\", " ");
+                    $replace = array("&#34;", "<br />", "<br />", "&nbsp;&nbsp;&nbsp;&nbsp;", "&#40;", "&#41;", "&#39;", "&#92;", "&nbsp;");
+                    $var = "\${$debug['variable']} = ". str_replace($find, $replace, $var);
+                    
+                    // Update
+                    $debug['variable'] = null;
+                    $debug['output'] = $var;
+                    $Cache->save('debugger', $debug);
+                }
+                elseif($debug['variable_mode'] == 'set' && $debug['variable_in'] != null)
+                {
+                    $var = $debug['variable_in'];
+                    switch($var['type'])
+                    {
+                        case 'int': $val = (int) $var['value']; break;
+                        case 'float': $val = (float) $var['value']; break;
+                        case 'double': $val = (double) $var['value']; break;
+                        case 'bool': $val = (bool) $var['value']; break;
+                        default: $val = $var['value']; break;
+                    }
+                    
+                    // set the value
+                    eval('$params'. $parts .' = $val;');
+                    $debug['variable'] = null;
+                    $debug['variable_in'] = null; 
+                    $debug['output'] = 1;
+                    $Cache->save('debugger', $debug);
+                }
+            }
+            
+            // sleep for 2 seconds
+            usleep(2000);
+        }
     }
 }
 

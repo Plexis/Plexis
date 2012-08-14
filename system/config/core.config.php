@@ -52,12 +52,22 @@ $config['enable_debug_logs'] = true;
 | Catch_fatal_errors
 | ---------------------------------------------------------------
 |
-| Set to 1 to catch fatal errors and parse errors. Best to disable
+| Set to true to catch fatal errors and parse errors. Best to disable
 | if already using a special debugger such as Xdebug
 |
 */
 
-$config['catch_fatal_errors'] = 1;
+$config['catch_fatal_errors'] = true;
+
+
+/*
+| ---------------------------------------------------------------
+| 'Enable_remote_debugger'
+| ---------------------------------------------------------------
+|
+| Set to true to enable debugging via the remote debugger Gui
+*/
+$config['enable_remote_debugger'] = false;
 
 
 /*
