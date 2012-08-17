@@ -82,8 +82,9 @@ class Debug
         self::$urlInfo = load_class('Router')->get_url_info();
         self::$ajaxRequest = load_class('Input')->is_ajax();
         
-        // Debugging
-        if(self::$debugging && !isset($_GET['debug'])) self::$debugging = false;
+        // Debugging setup, Make sure we have a trigger, and set the script time limit
+        if(self::$debugging) 
+            (!isset($_GET['debug'])) ? self::$debugging = false : set_time_limit(600);
         
         // Add this to the trace
         self::trace('Debug class initialized successfully', __FILE__, __LINE__);
@@ -97,6 +98,25 @@ class Debug
 */
     public static function Shutdown()
     {
+        // Stop debugging if we are doing so
+        // Check for a killswitch
+        if(self::$debugging)
+        {
+            // Load our Cache file, and write the new contents
+            $Cache = load_class('Cache', 'Library');
+            $debug = array(
+                'flags' => 2,
+                'next_step' => false,
+                'file' => null,
+                'line' => null,
+                'variable' => null,
+                'variable_in' => null,
+                'variable_mode' => null,
+                'output' => null,
+            );
+            $Cache->save('debugger', $debug, 3);
+        }
+        
         // Generate the debug log
         $error = error_get_last();
         
@@ -570,10 +590,9 @@ class Debug
                 $isset = eval('return isset($params'. $parts .');');
                 if(!$isset)
                 {
+                    $debug['output'] = "\${$debug['variable']} = Undefined Variable";
                     $debug['variable'] = null;
                     $debug['variable_in'] = null; 
-                    $debug['output'] = "\${$debug['variable']} = Undefined Variable";
-                    $Cache->save('debugger', $debug);
                 }
                 elseif($debug['variable_mode'] == 'get')
                 {
@@ -585,13 +604,12 @@ class Debug
 
                     // Prepare DB update
                     $find = array('"', "\r", "\n", "\t", "(", ")", "'", "\\", " ");
-                    $replace = array("&#34;", "<br />", "<br />", "&nbsp;&nbsp;&nbsp;&nbsp;", "&#40;", "&#41;", "&#39;", "&#92;", "&nbsp;");
+                    $replace = array("&#34;", "<br/>", "<br/>", "&nbsp;&nbsp;&nbsp;&nbsp;", "&#40;", "&#41;", "&#39;", "&#92;", "&nbsp;");
                     $var = "\${$debug['variable']} = ". str_replace($find, $replace, $var);
                     
                     // Update
                     $debug['variable'] = null;
                     $debug['output'] = $var;
-                    $Cache->save('debugger', $debug);
                 }
                 elseif($debug['variable_mode'] == 'set' && $debug['variable_in'] != null)
                 {
@@ -607,15 +625,29 @@ class Debug
                     
                     // set the value
                     eval('$params'. $parts .' = $val;');
+                    
+                    // Now fetch that variable for a return
+                    $var = eval('return $params'. $parts .';');
+                    
+                    // If we have an array or an object, then we use print_r to pring out the array/class all nice and neet
+                    if (is_array($var) || is_object($var)) $var = print_r($var, true);
+
+                    // Prepare DB update
+                    $find = array('"', "\r", "\n", "\t", "(", ")", "'", "\\", " ");
+                    $replace = array("&#34;", "<br/>", "<br/>", "&nbsp;&nbsp;&nbsp;&nbsp;", "&#40;", "&#41;", "&#39;", "&#92;", "&nbsp;");
+                    $var = "\${$debug['variable']} = ". str_replace($find, $replace, $var);
+                    
+                    // Prepare save
                     $debug['variable'] = null;
                     $debug['variable_in'] = null; 
-                    $debug['output'] = 1;
-                    $Cache->save('debugger', $debug);
+                    $debug['output'] = $var;
                 }
             }
+
+            $Cache->save('debugger', $debug, 2);
             
-            // sleep for 2 seconds
-            usleep(2000);
+            // sleep for 0.5 seconds
+            usleep(500000);
         }
     }
 }

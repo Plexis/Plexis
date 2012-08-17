@@ -398,17 +398,20 @@ class User
         
         // Unset old perms that dont exist anymore
         $dif = array_diff($perms, $list);
+        $perms = array_intersect($perms, $list);
+        
+        // Build a list of current permissions
+        $p = array();
+        foreach($perms as $perm) $p[$perm] = 1;
         
         // Update the DB if there are any changes
         if(!empty($dif))
         {
-            $newperms = array_intersect($perms, $list);
-            foreach($newperms as $perm) $p[$perm] = 1;
             $this->DB->update('pcms_account_groups', array('permissions' => serialize( $p )), "`group_id`=".$gid);
         }
         
         // Set this users permissions
-        $this->permissions = $perms;
+        $this->permissions = $p;
     }
     
 /*

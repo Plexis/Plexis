@@ -45,6 +45,9 @@ class Plexis
 
         // Tell the router to process the URL for us
         $routes = $this->Router->get_url_info();
+        
+        foreach(get_defined_vars() as $key => $v) $defined_vars[$key] =& $$key;
+        \Debug::mark($defined_vars, __FILE__, __LINE__);
 
         // Initialize some important routing variables
         $this->controller  = $routes['controller'];
@@ -215,6 +218,9 @@ class Plexis
                     $GLOBALS['is_module'] = FALSE;
                     $GLOBALS['controller'] = $this->controller;
                     $GLOBALS['action'] = $this->action;
+                    
+                    foreach(get_defined_vars() as $key => $v) $defined_vars[$key] =& $$key;
+                    \Debug::mark($defined_vars, __FILE__, __LINE__);
 
                     // Add trace for debugging
                     \Debug::trace("No module found for url route, using default contoller from the system/controllers folder", __FILE__, __LINE__);
