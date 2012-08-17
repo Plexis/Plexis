@@ -545,6 +545,13 @@ class Debug
         );
         $Cache->save('debugger', $debug);
         
+        // Make sure our global variables are set
+        $globals = array('GLOBALS', '_SERVER', '_ENV', '_POST', '_GET', '_COOKIE');
+        foreach($globals as $param)
+        {
+            if(!isset($params[$param])) $params[$param] = $GLOBALS[$param];
+        }
+        
         // Keep looping until either the debugging is disabled, or the step_next is enabled
         for($i = 0;; $i++)
         {
