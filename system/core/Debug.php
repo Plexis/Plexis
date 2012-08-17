@@ -608,11 +608,20 @@ class Debug
                     
                     // If we have an array or an object, then we use print_r to pring out the array/class all nice and neet
                     if (is_array($var) || is_object($var)) $var = print_r($var, true);
-
-                    // Prepare DB update
-                    $find = array('"', "\r", "\n", "\t", "(", ")", "'", "\\", " ");
-                    $replace = array("&#34;", "<br/>", "<br/>", "&nbsp;&nbsp;&nbsp;&nbsp;", "&#40;", "&#41;", "&#39;", "&#92;", "&nbsp;");
-                    $var = "\${$debug['variable']} = ". str_replace($find, $replace, $var);
+                    
+                    // If the value if a bool, manually print true / false
+                    if(is_bool($var))
+                    {
+                        $mode = ($var == true) ? 'true' : 'false';
+                        $var = "\${$debug['variable']} = {$mode}";
+                    }
+                    else
+                    {
+                        // Prepare DB update
+                        $find = array('"', "\r", "\n", "\t", "(", ")", "'", "\\", " ");
+                        $replace = array("&#34;", "<br/>", "<br/>", "&nbsp;&nbsp;&nbsp;&nbsp;", "&#40;", "&#41;", "&#39;", "&#92;", "&nbsp;");
+                        $var = "\${$debug['variable']} = ". str_replace($find, $replace, $var);
+                    }
                     
                     // Update
                     $debug['variable'] = null;
