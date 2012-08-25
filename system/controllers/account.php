@@ -330,7 +330,7 @@ class Account extends Core\Controller
                 if( config('reg_unique_email') == TRUE )
                 {
                     // Check the DB for the email address
-                    if($this->realm->email_exists($email))
+                    if($this->realm->emailExists($email))
                     {
                         output_message('error', 'reg_failed_email_exists');
                         $this->load->view('register', $data);
