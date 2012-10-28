@@ -1,9 +1,9 @@
 <?php
-/* 
+/*
 | --------------------------------------------------------------
 | Plexis
 | --------------------------------------------------------------
-| Author:       Steven Wilson 
+| Author:       Steven Wilson
 | Author:       Tony (Syke)
 | Copyright:    Copyright (c) 2011-2012, Plexis
 | License:      GNU GPL v3
@@ -14,7 +14,7 @@
 | Model for the Account::vote / Admin controller
 |
 */
-class Vote_Model extends Core\Model 
+class Vote_Model extends Core\Model
 {
     // IP address of our voter
     protected $ip = NULL;
@@ -48,11 +48,11 @@ class Vote_Model extends Core\Model
         // Get our news posts out of the database
         $query = "SELECT * FROM `pcms_vote_sites` WHERE `id`=".$id;
         $post = $this->DB->query( $query )->fetchRow();
-        
+
         // If we have no results, return false, else return votesite
         return ($post == false) ? false : $post;
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Method: get_all_votesites()
@@ -68,11 +68,11 @@ class Vote_Model extends Core\Model
         // Get our news posts out of the database
         $query = "SELECT * FROM `pcms_vote_sites`";
         $post = $this->DB->query( $query )->fetchAll();
-        
+
         // If we have no results, return an empty array, else return votesite
         return ($post == false) ? array() : $post;
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Method: create()
@@ -94,7 +94,7 @@ class Vote_Model extends Core\Model
 		$regex = '@^(\{BASE_URL\}|\{SITE_URL\}|ftp://|http(s)?://)@i';
 		if(!preg_match($regex, $votelink)) $votelink = 'http://'. $votelink;
 		if(!empty($image_url) && !preg_match($regex, $image_url)) $image_url = 'http://'. $image_url;
-		
+
         // Build out insert data
         $data = array(
             'hostname' => $hostname,
@@ -103,11 +103,11 @@ class Vote_Model extends Core\Model
             'points' => $points,
             'reset_time' => $reset_time
         );
-        
+
         // Insert our post
         return $this->DB->insert('pcms_vote_sites', $data);
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Method: update()
@@ -130,7 +130,7 @@ class Vote_Model extends Core\Model
 		$regex = '@^(\{BASE_URL\}|\{SITE_URL\}|ftp://|http(s)?://)@i';
 		if(!preg_match($regex, $votelink)) $votelink = 'http://'. $votelink;
 		if(!empty($image_url) && !preg_match($regex, $image_url)) $image_url = 'http://'. $image_url;
-		
+
         // Build out insert data
         $data = array(
             'hostname' => $hostname,
@@ -139,11 +139,11 @@ class Vote_Model extends Core\Model
             'points' => $points,
             'reset_time' => $reset_time
         );
-        
+
         // Update our post
         return $this->DB->update('pcms_vote_sites', $data, "`id`=$id");
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Method: delete()
@@ -160,7 +160,7 @@ class Vote_Model extends Core\Model
         // Delete our post and return the result
         return $this->DB->delete('pcms_vote_sites', "`id`=$id");
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Method: submit()
@@ -178,43 +178,43 @@ class Vote_Model extends Core\Model
         // If we are still false, then just go to inserting the new data
         $data = $this->get_data($id);
         $reset = $data[ $site_id ];
-        
+
         // Get our current vote site
         $query = "SELECT `points`, `reset_time` FROM `pcms_vote_sites` WHERE `id`=?";
         $site = $this->DB->query( $query, array($site_id) )->fetchRow();
-        
+
         // If our $timer is false, vote site doesnt exist
         if($site == FALSE) return FALSE;
-        
+
         // Time check, return FALSE if there is time left before reset
         if( time() < $reset ) return FALSE;
-        
+
         // If we are still kickin, then we are good to give the user his reward
         $data[ $site_id ] = time() + $site['reset_time'];
         $data = serialize($data);
         $update = $this->DB->update('pcms_vote_data', array('data' => $data), "`ip_address`='".$this->ip."'");
-        
+
         // Return FALSE if the update was false
         if($update === FALSE)
         {
             return FALSE;
         }
-        
+
         // Return the result of web points givin IF enabled
         if(config('web_points_enabled') == TRUE)
         {
-            $query = "UPDATE `pcms_accounts` SET 
-                `vote_points` = (`vote_points` + ".$site['points']."), 
+            $query = "UPDATE `pcms_accounts` SET
+                `vote_points` = (`vote_points` + ".$site['points']."),
                 `votes` = (`votes` + 1),
                 `vote_points_earned` = (`vote_points_earned` + ".$site['points'].")
             WHERE `id`=".$id;
             return $this->DB->query( $query );
         }
-        
+
         // Return TRUE if we made it this far
         return TRUE;
     }
-    
+
 /*
 | ---------------------------------------------------------------
 | Method: get_data()
@@ -230,17 +230,17 @@ class Vote_Model extends Core\Model
     {
         // Get the Users IP addy
         $ip = $this->ip = load_class('Input')->ip_address();
-        
+
         // Find the IP's donation status
         $query = "SELECT `data` FROM `pcms_vote_data` WHERE `ip_address`=?";
         $data = $this->DB->query( $query, array($ip) )->fetchColumn();
-        
+
         // If we have a false result using the IP address, then try the account ID
         if($data === FALSE)
         {
             $query2 = "SELECT `data` FROM `pcms_vote_data` WHERE `account_id`=?";
             $data = $this->DB->query( $query, array($id) )->fetchColumn();
-            
+
             // If this result is false as well, then just create new data
             if($data === FALSE)
             {
@@ -254,7 +254,7 @@ class Vote_Model extends Core\Model
             }
             else
             {
-                // Update our account ID with the new Ip 
+                // Update our account ID with the new Ip
                 $this->DB->update('pcms_vote_data', array('ip_address' => $ip), "`account_id`=".$id);
                 $data = unserialize($data);
             }
@@ -272,14 +272,14 @@ class Vote_Model extends Core\Model
         {
             $list[] = $temp['id'];
         }
-        
+
         // If we dont have data, init an empty one
         if(!is_array($data))
         {
             $data = array();
             goto Add;
         }
-        
+
         // Remove all Old vote sites that are no longer installed
         foreach($data as $key => $value)
         {
@@ -288,7 +288,7 @@ class Vote_Model extends Core\Model
             if($k !== FALSE)
             {
                 // remove this site from the "list" becuase its still installed
-               unset($list[$k]); 
+               unset($list[$k]);
             }
             else
             {
@@ -296,7 +296,7 @@ class Vote_Model extends Core\Model
                 unset($data[$key]);
             }
         }
-        
+
         Add:
         {
             // Now we need to add whatever is left in the list of installed sites
@@ -305,7 +305,7 @@ class Vote_Model extends Core\Model
                 foreach($list as $site)
                 {
                     // Add the site and set the reset time to now
-                    $data[ $site['id'] ] =  time();
+                    $data[ $site ] =  time();
                 }
             }
         }

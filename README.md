@@ -12,21 +12,31 @@ A professional content management system for World of Warcraft private servers b
 Requirements
 ------------
 
-* PHP 5.3.0 or newer
-* PHP PDO extension
+* PHP 5.3.0 or newer (PHP 5.4.X tested and working).
+* PHP PDO extension (PDO w/ MySQL required, other database servers untested).
+* .htaccess support.
+* Access to [fsockopen()](http://php.net/manual/en/function.fsockopen.php)
+
+*Optional modules*
+The following extensions/features are **not** required by Plexis, however some features will be unavailable without them.
+
+* PHP OpenSSL extension **or** PHP cURL extension - *Remote updater*
+* [allow_url_fopen](http://www.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen) php.ini setting - *Remote updater*
+* Apache's rewrite module - *SEO friendly URLs*
+* PHP socket & SOAP extensions - *Remote administration console*
 
 Becoming a developer
 --------------------
 
-Interested in joining the team? Check out the [official forums](http://plexis.tk/forum/) for information on applying and available positions.
+Interested in joining the team? Check out the [official forums](http://plexis.tk/forum/showthread.php?tid=4) for information on applying and available positions.
 
 The Team
 --------
 
-* [Wilson212](https://github.com/wilson212)
-* [Syke](https://github.com/Syke94)
-* [Evairfairy](https://github.com/Evairfairy)
-* [Faded](https://github.com/Faded)
+* [Wilson212](https://github.com/wilson212) - Lead developer and project manager *Temporary hiatus*
+* [Syke](https://github.com/Syke94) - Developer and project manager **Active**
+* [Evairfairy](https://github.com/Evairfairy) - Developer *Inactive*
+* [Faded](https://github.com/Faded) - Developer *Inactive*
 
 Feedback
 --------
