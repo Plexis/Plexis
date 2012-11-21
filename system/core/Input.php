@@ -1,15 +1,11 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
-| Frostbite Framework
-|
+| Plexis Core
 | --------------------------------------------------------------
-|
 | Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
-|
 | ---------------------------------------------------------------
 | Class: Input
 | ---------------------------------------------------------------
@@ -23,56 +19,40 @@ namespace Core;
 class Input
 {
 
-    // Cookie expire time
-    protected $time;
-
-    // Cookie path
-    protected $cookie_path;
-
-    // Cookie domain
-    protected $cookie_domain;
-
     // Users IP address and Browser info
-    protected $user_agent = FALSE;
-    protected $ip_address = FALSE;
+    protected static $user_agent = false;
+    protected static $ip_address = false;
 
     // Array of tags and attributes
-    protected $tagsArray = array();
-    protected $attrArray = array();
-
-    // Our tagging methods
-    protected $tagsMethod = 0;
-    protected $attrMethod = 0;
-
-    // Use the xss cleaner
-    protected $xssAuto = 1;
-
-    // Blacklist of tags and attributes
-    protected $tagBlacklist = array('applet', 'body', 'bgsound', 
-        'base', 'basefont', 'embed', 'frame', 'frameset', 'head', 'html', 'id', 'iframe', 
-        'ilayer', 'layer', 'link', 'meta', 'name', 'object', 'script', 'style', 'title', 'xml'
-    );
-    protected $attrBlacklist = array('action', 'background', 'codebase', 'dynsrc', 'lowsrc');
+    protected static $tagsArray = array();
+    protected static $attrArray = array();
+    
+    // Our tag and attribute cleaning methods
+    protected static $tagsMethod = 0;
+    protected static $attrMethod = 0;
+    
+    // Out xss cleaning method
+    protected static $xssAuto = 1;
 
 /*
 | ---------------------------------------------------------------
 | Constructor
 | ---------------------------------------------------------------
 */
-    public function __construct()
+    public static function Init()
     {
-        // Set Cookie Defaults
-        $this->time = ( time() + (60 * 60 * 24 * 365) );
-        $this->cookie_path =  "/";
-        $this->cookie_domain = rtrim($_SERVER['HTTP_HOST'], '/');
+        // Load the config file for this
+        $path = path( SYSTEM_PATH, 'config', 'input.class.php' );
+        if(!Config::Load($path, 'InputClass', false, true, false))
+            throw new SystemError('Missing Input class configuration file.');
         
         // Add trace for debugging
-        \Debug::trace('Input class initiated successfully', __FILE__, __LINE__);
+        // \Debug::trace('Input class initiated successfully', __FILE__, __LINE__);
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: post()
+| Method: Post()
 | ---------------------------------------------------------------
 |
 | Returns a $_POST variable
@@ -82,25 +62,18 @@ class Input
 | @Return (Mixed) Returns the value of $_POST[$var]
 |
 */
-    public function post($var, $xss = FALSE)
+    public static function Post($var, $xss = false)
     {
         if(isset($_POST[$var]))
         {
-            if($xss == FALSE)
-            {
-                return $_POST[$var];
-            }
-            else
-            {
-                return $this->clean($_POST[$var]);
-            }
+            return ($xss == false) ? $_POST[$var] : self::Clean($_POST[$var]);
         }
-        return FALSE;
+        return false;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get()
+| Method: Get()
 | ---------------------------------------------------------------
 |
 | Returns a $_GET variable
@@ -110,25 +83,18 @@ class Input
 | @Return (Mixed) Returns the value of $_GET[$var]
 |
 */
-    public function get($var, $xss = FALSE)
+    public static function Get($var, $xss = false)
     {
         if(isset($_GET[$var]))
         {
-            if($xss == FALSE)
-            {
-                return $_GET[$var];
-            }
-            else
-            {
-                return $this->clean($_GET[$var]);
-            }
+            return ($xss == false) ? $_GET[$var] : self::Clean($_GET[$var]);
         }
-        return FALSE;
+        return false;
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: cookie()
+| Method: GetCookie()
 | ---------------------------------------------------------------
 |
 | Returns a $_COOKIE variable
@@ -138,25 +104,18 @@ class Input
 | @Return (Mixed) Returns the value of $_COOKIE[$var]
 |
 */
-    public function cookie($name, $xss = FALSE)
+    public static function GetCookie($name, $xss = false)
     {
         if(isset($_COOKIE[$name]))
         {
-            if($xss == FALSE)
-            {
-                return $_COOKIE[$name];
-            }
-            else
-            {
-                return $this->clean($_COOKIE[$name]);
-            }
+            return ($xss == false)? $_COOKIE[$name] : self::Clean($_COOKIE[$name]);
         }
-        return FALSE;
+        return false;
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: set_cookie()
+| Method: SetCookie()
 | ---------------------------------------------------------------
 |
 | Sets a cookie
@@ -167,64 +126,64 @@ class Input
 | @Return (None)
 |
 */
-    function set_cookie($key, $val, $time = NULL)
+    public static function SetCookie($key, $val, $time = null)
     {
-        if($time === NULL)
+        if($time === null)
         {
-            $time = $this->time;
+            $time = time() + Config::GetVar('cookieExpireTime', 'InputClass');
         }
-        // setcookie( $key, $val, $time, $this->cookie_path, $this->cookie_domain, false, true);
-        setcookie( $key, $val, $time, $this->cookie_path );
+        
+        setcookie( $key, $val, $time, '/' );
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: is_ajax()
+| Method: IsAjaxRequest()
 | ---------------------------------------------------------------
 |
 | @Return (Bool) Return's whether this is an AJAX request or no
 |
 */
-    public function is_ajax()
+    public static function IsAjaxRequest()
     {
         return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: user_agent()
+| Method: UserAgent()
 | ---------------------------------------------------------------
 |
 | @Return (String) Returns the users browser info
 |
 */
-    public function user_agent()
+    public static function UserAgent()
     {
-        if($this->user_agent == FALSE)
+        if(self::$user_agent == false)
         {
-            $this->user_agent = ( isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : FALSE );
+            self::$user_agent = ( isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : false );
         }
-        return $this->user_agent;
+        return self::$user_agent;
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: ip_address()
+| Method: IpAddress()
 | ---------------------------------------------------------------
 |
 | @Return (Mixed) Returns the users IP address, or 0.0.0.0 if
 |   unable to determine. Order is in trust/use order top to bottom
 |
 */
-    public function ip_address()
+    public static function IpAddress()
     {
         // Return it if we already determined the IP
-        if($this->ip_address === FALSE)
+        if(self::$ip_address === false)
         {  
             // Check to see if the server has the IP address
-            if(isset($_SERVER['HTTP_CLIENT_IP']) && $this->valid_ip($_SERVER['HTTP_CLIENT_IP']))
+            if(isset($_SERVER['HTTP_CLIENT_IP']) && self::IsValidIp($_SERVER['HTTP_CLIENT_IP']))
             {
-                $this->ip_address = $_SERVER['HTTP_CLIENT_IP'];
+                self::$ip_address = $_SERVER['HTTP_CLIENT_IP'];
             }
             elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
             {
@@ -232,47 +191,47 @@ class Input
                 $ips = explode(",", $_SERVER['HTTP_X_FORWARDED_FOR']);
                 foreach($ips as $ip_add) 
                 {
-                    if($this->valid_ip($ip_add))
+                    if(self::IsValidIp($ip_add))
                     {
-                        $this->ip_address = $ip;
+                        self::$ip_address = $ip;
                         break;
                     }
                 }
             }
-            elseif(isset($_SERVER['HTTP_X_FORWARDED']) && $this->valid_ip($_SERVER['HTTP_X_FORWARDED']))
+            elseif(isset($_SERVER['HTTP_X_FORWARDED']) && self::IsValidIp($_SERVER['HTTP_X_FORWARDED']))
             {
-                $this->ip_address = $_SERVER['HTTP_X_FORWARDED'];
+                self::$ip_address = $_SERVER['HTTP_X_FORWARDED'];
             }
-            elseif(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) && $this->valid_ip($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']))
+            elseif(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) && self::IsValidIp($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']))
             {
-                $this->ip_address = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+                self::$ip_address = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
             }
-            elseif(isset($_SERVER['HTTP_FORWARDED_FOR']) && $this->valid_ip($_SERVER['HTTP_FORWARDED_FOR']))
+            elseif(isset($_SERVER['HTTP_FORWARDED_FOR']) && self::IsValidIp($_SERVER['HTTP_FORWARDED_FOR']))
             {
-                $this->ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
+                self::$ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
             }
-            elseif(isset($_SERVER['HTTP_FORWARDED']) && $this->valid_ip($_SERVER['HTTP_FORWARDED']))
+            elseif(isset($_SERVER['HTTP_FORWARDED']) && self::IsValidIp($_SERVER['HTTP_FORWARDED']))
             {
-                $this->ip_address = $_SERVER['HTTP_FORWARDED'];
+                self::$ip_address = $_SERVER['HTTP_FORWARDED'];
             }
-            elseif(isset($_SERVER['HTTP_VIA']) && $this->valid_ip($_SERVER['HTTP_VIAD']))
+            elseif(isset($_SERVER['HTTP_VIA']) && self::IsValidIp($_SERVER['HTTP_VIAD']))
             {
-                $this->ip_address = $_SERVER['HTTP_VIA'];
+                self::$ip_address = $_SERVER['HTTP_VIA'];
             }
             elseif(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
             {
-                $this->ip_address = $_SERVER['REMOTE_ADDR'];
+                self::$ip_address = $_SERVER['REMOTE_ADDR'];
             }
 
-            // If we still have a FALSE IP address, then set to 0's
-            if($this->ip_address === FALSE) $this->ip_address = '0.0.0.0';
+            // If we still have a false IP address, then set to 0's
+            if(self::$ip_address === false) self::$ip_address = '0.0.0.0';
         }
-        return $this->ip_address;
+        return self::$ip_address;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: valid_ip()
+| Method: IsValidIp()
 | ---------------------------------------------------------------
 |
 | Returns if the given IP address is a valid, Non-Private IP
@@ -280,7 +239,7 @@ class Input
 | @Return (Bool)
 |
 */
-    public function valid_ip($ip)
+    public static function IsValidIp($ip)
     {
         // Trim the ip address
         $ip = trim($ip);
@@ -332,7 +291,7 @@ class Input
 
 /*
 | ---------------------------------------------------------------
-| Method: set_rules
+| Method: SetRules
 | ---------------------------------------------------------------
 |
 | Sets the cleaning rules such as allowed tags etc.
@@ -345,7 +304,7 @@ class Input
 | @Return (None)
 |
 */
-    public function set_rules($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1) 
+    public static function SetRules($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1) 
     {	
         // Count how many are in each for out loops
         $countTags = count($tagsArray);
@@ -364,16 +323,16 @@ class Input
         }
         
         // Set our class variables
-        $this->tagsArray = $tagsArray;
-        $this->attrArray = $attrArray;
-        $this->tagsMethod = $tagsMethod;
-        $this->attrMethod = $attrMethod;
-        $this->xssAuto = $xssAuto;
+        self::$tagsArray = $tagsArray;
+        self::$attrArray = $attrArray;
+        self::$tagsMethod = $tagsMethod;
+        self::$attrMethod = $attrMethod;
+        self::$xssAuto = $xssAuto;
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: clean()
+| Method: Clean()
 | ---------------------------------------------------------------
 |
 | Main call function. Used to clean user input
@@ -382,7 +341,7 @@ class Input
 | @Return (Mixed) Returns the cleaned source of $source
 |
 */
-    public function clean($source) 
+    public static function Clean($source) 
     {
         // If in array, clean each value
         if(is_array($source)) 
@@ -392,7 +351,7 @@ class Input
                 if(is_string($value)) 
                 {
                     // filter element for XSS and other 'bad' code etc.
-                    $source[$key] = $this->remove($this->decode($value));
+                    $source[$key] = self::Remove(self::Decode($value));
                 }
             }
             return $source;
@@ -400,14 +359,14 @@ class Input
         elseif(is_string($source)) 
         {
             // filter element for XSS and other 'bad' code etc.
-            return $this->remove($this->decode($source));
+            return self::Remove(self::Decode($source));
         } 
         return $source;
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: remove()
+| Method: Remove()
 | ---------------------------------------------------------------
 |
 | Removes all unwanted tags and attributes
@@ -416,12 +375,12 @@ class Input
 | @Return (Mixed) Returns the cleaned source of $source
 |
 */
-    protected function remove($source) 
+    protected static function Remove($source) 
     {
         $loopCounter = 0;
-        while($source != $this->filterTags($source)) 
+        while($source != self::FilterTags($source)) 
         {
-            $source = $this->filterTags($source);
+            $source = self::FilterTags($source);
             $loopCounter++;
         }
         return $source;
@@ -429,7 +388,7 @@ class Input
 
 /*
 | ---------------------------------------------------------------
-| Method: filterTags()
+| Method: FilterTags()
 | ---------------------------------------------------------------
 |
 | Internal method to strip a string of certain tags
@@ -438,7 +397,7 @@ class Input
 | @Return (Mixed) Returns the cleaned source of $source
 |
 */
-    protected function filterTags($source) 
+    protected static function FilterTags($source) 
     {
         $preTag = NULL;
         $postTag = $source;
@@ -447,7 +406,7 @@ class Input
         $tagOpen_start = strpos($source, '<');
         
         // interate through string until no tags left
-        while($tagOpen_start !== FALSE) 
+        while($tagOpen_start !== false) 
         {
             // process tag interatively
             $preTag .= substr($postTag, 0, $tagOpen_start);
@@ -493,12 +452,12 @@ class Input
             // is start tag
             else 
             {
-                $isCloseTag = FALSE;
+                $isCloseTag = false;
                 list($tagName) = explode(' ', $currentTag);
             }	
 
             // excludes all "non-regular" tagnames OR no tagname OR remove if xssauto is on and tag is blacklisted
-            if((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName)) || (!$tagName) || ((in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto))) 
+            if(!preg_match("/^[a-z][a-z0-9]*$/i", $tagName) || !$tagName || ((in_array(strtolower($tagName), Config::GetVar('tagBlacklist', 'InputClass'))) && self::$xssAuto)) 
             { 				
                 $postTag = substr($postTag, ($tagLength + 2));
                 $tagOpen_start = strpos($postTag, '<');
@@ -506,7 +465,7 @@ class Input
             }
             
             // this while is needed to support attribute values with spaces in!
-            while($currentSpace !== FALSE) 
+            while($currentSpace !== false) 
             {
                 $fromSpace = substr($tagLeft, ($currentSpace+1));
                 $nextSpace = strpos($fromSpace, ' ');
@@ -514,10 +473,10 @@ class Input
                 $closeQuotes = strpos(substr($fromSpace, ($openQuotes+1)), '"') + $openQuotes + 1;
                 
                 // another equals exists
-                if(strpos($fromSpace, '=') !== FALSE) 
+                if(strpos($fromSpace, '=') !== false) 
                 {
                     // opening and closing quotes exists
-                    if(($openQuotes !== FALSE) && (strpos(substr($fromSpace, ($openQuotes+1)), '"') !== FALSE))
+                    if(($openQuotes !== false) && (strpos(substr($fromSpace, ($openQuotes+1)), '"') !== false))
                     {
                         $attr = substr($fromSpace, 0, ($closeQuotes+1));
                     }
@@ -550,15 +509,15 @@ class Input
             }
             
             // appears in array specified by user
-            $tagFound = in_array(strtolower($tagName), $this->tagsArray);
+            $tagFound = in_array(strtolower($tagName), self::$tagsArray);
 
             // remove this tag on condition			
-            if((!$tagFound && $this->tagsMethod) || ($tagFound && !$this->tagsMethod)) 
+            if((!$tagFound && self::$tagsMethod || ($tagFound && !self::$tagsMethod)))
             {
                 // reconstruct tag with allowed attributes
                 if(!$isCloseTag) 
                 {
-                    $attrSet = $this->filterAttr($attrSet);
+                    $attrSet = self::FilterAttr($attrSet);
                     $preTag .= '<' . $tagName;
                     for($i = 0; $i < count($attrSet); $i++)
                     {
@@ -595,7 +554,7 @@ class Input
 
 /*
 | ---------------------------------------------------------------
-| Method: filterAttr()
+| Method: FilterAttr()
 | ---------------------------------------------------------------
 |
 | Internal method to strip a tag of certain attributes
@@ -604,7 +563,7 @@ class Input
 | @Return (Mixed) Returns the cleaned source of $source
 |
 */
-    protected function filterAttr($attrSet) 
+    protected static function FilterAttr($attrSet) 
     {	
         $newSet = array();
         
@@ -622,7 +581,7 @@ class Input
             list($attrSubSet[0]) = explode(' ', $attrSubSet[0]);
             
             // removes all "non-regular" attr names AND also attr blacklisted
-            if ((!preg_match("/^[a-z]*$/i", $attrSubSet[0])) || (($this->xssAuto) && ((in_array(strtolower($attrSubSet[0]), $this->attrBlacklist)) || (substr($attrSubSet[0], 0, 2) == 'on'))))
+            if ((!preg_match("/^[a-z]*$/i", $attrSubSet[0])) || (self::$xssAuto && ((in_array(strtolower($attrSubSet[0]), Config::GetVar('attrBlacklist', 'InputClass'))) || (substr($attrSubSet[0], 0, 2) == 'on'))))
             {
                 continue;
             }
@@ -660,10 +619,10 @@ class Input
             ) continue;
             
             // if matches user defined array
-            $attrFound = in_array(strtolower($attrSubSet[0]), $this->attrArray);
+            $attrFound = in_array(strtolower($attrSubSet[0]), self::$attrArray);
             
             // keep this attr on condition
-            if((!$attrFound && $this->attrMethod) || ($attrFound && !$this->attrMethod)) 
+            if((!$attrFound && self::$attrMethod) || ($attrFound && !self::$attrMethod)) 
             {
                 // attr has value
                 if($attrSubSet[1])
@@ -689,7 +648,7 @@ class Input
 
 /*
 | ---------------------------------------------------------------
-| Method: decode()
+| Method: Decode()
 | ---------------------------------------------------------------
 |
 | Converts to plain text
@@ -698,7 +657,7 @@ class Input
 | @Return (Mixed) Returns the cleaned source of $source
 |
 */
-    protected function decode($source) 
+    protected static function Decode($source) 
     {
         $source = html_entity_decode($source, ENT_QUOTES, "ISO-8859-1");
         $source = preg_replace('/&#(\d+);/me',"chr(\\1)", $source);
@@ -706,4 +665,8 @@ class Input
         return $source;
     }
 }
+
+// Init the class
+Input::Init();
+
 // EOF 

@@ -1,9 +1,7 @@
 <?php
 /*
 | --------------------------------------------------------------
-|
-| Plexis CMS
-|
+| Plexis Core, Multiple Application Platform
 | --------------------------------------------------------------
 |
 | Author:       Steven (Wilson212)
@@ -13,11 +11,13 @@
 |
 */
 
-// Define CMS versions
-define('CMS_VERSION', 'Beta 1');
-define('CMS_BUILD', 348);
-define('REQ_DB_VERSION', '0.21');
-
+// Make sure we are running php version 5.3.0 or newer!!!!
+if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50302)
+    die('PHP version 5.3.2 or newer required to run Plexis Core. Your version: '. PHP_VERSION);
+    
+// Get a most accurate start time
+define('TIME_START', microtime(true));
+    
 // Define a smaller Directory seperater and ROOT, SYSTEM paths
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__));
@@ -25,20 +25,11 @@ define('SYSTEM_PATH', ROOT . DS .'system');
 
 // Point php to our own php error log
 ini_set('error_log', SYSTEM_PATH . DS .'logs'. DS .'php_errors.log');
+	
+// Include the required script to run the system
+require SYSTEM_PATH . DS .'core'. DS .'Common.php';
+require SYSTEM_PATH . DS .'core'. DS .'AutoLoader.php';
+require SYSTEM_PATH . DS .'System.php';
 
-// Make sure we are running php version 5.3.0 or newer!!!!
-if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300):
-    die('PHP version 5.3.0 or newer required to run Plexis cms. Your version: '. PHP_VERSION);
-endif;
-
-// Include required scripts to run the system
-require (SYSTEM_PATH . DS .'core'. DS .'Common.php');
-require (SYSTEM_PATH . DS .'core'. DS .'Registry.php');
-require (SYSTEM_PATH . DS .'core'. DS .'Debug.php');
-
-// Initiate the system start time
-load_class('Benchmark')->start('system');
-
-// Initiate the framework and let it do the rest ;)
-load_class('Plexis')->Init();
-?>
+// Run the system. Application will be run on success
+System::Run();

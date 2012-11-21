@@ -1,0 +1,35 @@
+[21-Nov-2012 17:57:30 UTC] PHP Parse error:  syntax error, unexpected ':' in C:\wamp\www\NewCms\plexis\library\View.php on line 81
+[21-Nov-2012 17:57:30 UTC] PHP Stack trace:
+[21-Nov-2012 17:57:30 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[21-Nov-2012 17:57:30 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:35
+[21-Nov-2012 17:57:30 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:50
+[21-Nov-2012 17:57:30 UTC] PHP   4. Core\AutoLoader::LoadClass() C:\wamp\www\NewCms\system\System.php:0
+[21-Nov-2012 17:57:44 UTC] PHP Parse error:  syntax error, unexpected '<' in C:\wamp\www\NewCms\plexis\library\View.php(84) : eval()'d code on line 1
+[21-Nov-2012 17:57:44 UTC] PHP Stack trace:
+[21-Nov-2012 17:57:44 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[21-Nov-2012 17:57:44 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:35
+[21-Nov-2012 17:57:44 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:50
+[21-Nov-2012 17:57:44 UTC] PHP   4. Library\View->__toString() C:\wamp\www\NewCms\system\System.php:63
+[21-Nov-2012 17:58:13 UTC] PHP Parse error:  syntax error, unexpected '<' in C:\wamp\www\NewCms\plexis\library\View.php(84) : eval()'d code on line 1
+[21-Nov-2012 17:58:13 UTC] PHP Stack trace:
+[21-Nov-2012 17:58:13 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[21-Nov-2012 17:58:13 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:35
+[21-Nov-2012 17:58:13 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:50
+[21-Nov-2012 17:58:13 UTC] PHP   4. Library\View->__toString() C:\wamp\www\NewCms\system\System.php:63
+[21-Nov-2012 18:04:14 UTC] PHP Fatal error:  Class 'Template' not found in C:\wamp\www\NewCms\plexis\Plexis.php on line 63
+[21-Nov-2012 18:04:14 UTC] PHP Stack trace:
+[21-Nov-2012 18:04:14 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[21-Nov-2012 18:04:14 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:35
+[21-Nov-2012 18:04:14 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:50
+[21-Nov-2012 18:14:05 UTC] PHP Fatal error:  Class 'Library\InvalidThemePathError' not found in C:\wamp\www\NewCms\plexis\library\Template.php on line 27
+[21-Nov-2012 18:14:05 UTC] PHP Stack trace:
+[21-Nov-2012 18:14:05 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[21-Nov-2012 18:14:05 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:35
+[21-Nov-2012 18:14:05 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:50
+[21-Nov-2012 18:14:05 UTC] PHP   4. Library\Template::SetThemePath() C:\wamp\www\NewCms\plexis\Plexis.php:65
+[21-Nov-2012 18:44:16 UTC] PHP Parse error:  syntax error, unexpected T_STRING, expecting T_VARIABLE in C:\wamp\www\NewCms\plexis\library\Template.php on line 19
+[21-Nov-2012 18:44:16 UTC] PHP Stack trace:
+[21-Nov-2012 18:44:16 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[21-Nov-2012 18:44:16 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:35
+[21-Nov-2012 18:44:16 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:50
+[21-Nov-2012 18:44:16 UTC] PHP   4. Core\AutoLoader::LoadClass() C:\wamp\www\NewCms\system\System.php:0

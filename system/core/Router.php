@@ -1,15 +1,11 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
-| Frostbite Framework
-|
+| Plexis Core
 | --------------------------------------------------------------
-|
 | Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
-|
 | ---------------------------------------------------------------
 | Class: Router
 | ---------------------------------------------------------------
@@ -23,47 +19,32 @@ namespace Core;
 class Router
 {
     // Have we routed the url yet?
-    public $routed = false;
+    public static $routed = false;
     
     // Our http protocol (https or http)
-    protected $protocol;
+    protected static $protocol;
     
     // Our hostname
-    protected $http_host;
+    protected static $http_host;
     
     // Our Site URL
-    protected $site_url;
+    protected static $site_url;
     
     // The requested URI
-    protected $uri;
+    protected static $uri;
     
     // Our site directory
-    protected $site_dir;
+    protected static $site_dir;
     
     // Our controller name
-    protected $controller;
+    protected static $controller;
 
     // Our action (sub page)
-    protected $action;
+    protected static $action;
 
     // The querystring
-    protected $queryString;
- 
-/*
-| ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-|
-*/ 
-    public function __construct()
-    {
-        // Load the config and input class'
-        $this->config = load_class('Config');
-        $this->input = load_class('Input');
-        
-        // Add trace for debugging
-        \Debug::trace('Router class initialized successfully', __FILE__, __LINE__);
-    }
+    protected static $queryString;
+
 
 /*
 | ---------------------------------------------------------------
@@ -76,66 +57,62 @@ class Router
 | @Return (Array) Returns an array of controller, action and queryString
 |
 */
-    public function route_url() 
+    public static function RouteUrl() 
     {
+        // Make sure we only route once
+        if(self::$routed) return;
+        
         // Add trace for debugging
-        \Debug::trace('Routing url...', __FILE__, __LINE__);
+        // \Debug::trace('Routing url...', __FILE__, __LINE__);
         
         // Determine our http hostname, and site directory
-        $this->http_host = rtrim($_SERVER['HTTP_HOST'], '/');
-        $this->site_dir = dirname( $_SERVER['PHP_SELF'] );
+        self::$http_host = rtrim($_SERVER['HTTP_HOST'], '/');
+        self::$site_dir = dirname( $_SERVER['PHP_SELF'] );
         
         // Detect our protocol
         if(isset($_SERVER['HTTPS']))
         {
-            if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
-            {
-                $this->protocol = 'https';
-            }
-            else
-            {
-                $this->protocol = 'http';
-            }
+            self::$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
         }
         else
         {
-            $this->protocol = 'http';
+            self::$protocol = 'http';
         }
         
         // Build our Full Base URL
-        $site_url = $this->http_host .'/'. $this->site_dir;
-        while(strpos($site_url, '//') !== FALSE) $site_url = str_replace('//', '/', $site_url);
-        $this->site_url = str_replace( '\\', '', $this->protocol .'://' . rtrim($site_url, '/') );
+        $site_url = self::$http_host .'/'. self::$site_dir;
+        while(strpos($site_url, '//') !== false) $site_url = str_replace('//', '/', $site_url);
+        self::$site_url = str_replace( '\\', '', self::$protocol .'://' . rtrim($site_url, '/') );
 
         // Process the site URI
-        if( !$this->config->get('enable_query_strings', 'Core'))
+        if( !Config::GetVar('enable_query_strings', 'System'))
         {
             // Get our current url, which is passed on by the 'url' param
-            $this->uri = (isset($_GET['url'])) ? $this->input->get('url', TRUE) : '';   
+            self::$uri = (isset($_GET['url'])) ? Input::Get('url', true) : '';   
         }
         else
         {
             // Define our needed vars
-            $c_param =  $this->config->get('controller_param', 'Core');
-            $a_param = $this->config->get('action_param', 'Core');
+            $c_param = Config::GetVar('controller_param', 'System');
+            $a_param = Config::GetVar('action_param', 'System');
             
             // Make sure we have a controller at least
-            $c = $this->input->get($c_param, TRUE );
+            $c = Input::Get($c_param, true );
             if( !$c )
             {
-                $this->uri = '';
+                self::$uri = '';
             }
             else
             {
                 // Get our action
-                $a = $this->input->get( $a_param, TRUE );
-                if( !$a ) $a = $this->config->get('default_action', 'Core'); // Default Action
+                $a = Input::Get( $a_param, true );
+                if( !$a ) $a = Config::GetVar('default_action', 'System'); // Default Action
                 
                 // Init the uri
-                $this->uri = $c .'/'. $a;
+                self::$uri = $c .'/'. $a;
                 
                 // Clean the query string
-                $qs = $this->input->clean( $_SERVER['QUERY_STRING'] );
+                $qs = Input::Clean( $_SERVER['QUERY_STRING'] );
                 $qs = explode('&', $qs);
                 foreach($qs as $string)
                 {
@@ -146,17 +123,17 @@ class Router
                     if($string[0] == $c_param || $string[0] == $a_param) continue;
                     
                     // Append the uri vraiable
-                    $this->uri .= '/'. $string[1];
+                    self::$uri .= '/'. $string[1];
                 }
             }
         }
         
         // If the URI is empty, then load defaults
-        if(empty($this->uri)) 
+        if(empty(self::$uri)) 
         {
             // Set our Controller / Action to the defaults
-            $controller = $this->config->get('default_controller', 'Core'); // Default Controller
-            $action = $this->config->get('default_action', 'Core'); // Default Action
+            $controller = Config::GetVar('default_controller', 'System'); // Default Controller
+            $action = Config::GetVar('default_action', 'System'); // Default Action
             $queryString = array(); // Default query string
         }
         
@@ -164,11 +141,11 @@ class Router
         else 
         {
             // Remove any left slashes or double slashes
-            $this->uri = ltrim( str_replace('//', '/', $this->uri), '/');
+            self::$uri = ltrim( str_replace('//', '/', self::$uri), '/');
 
             // We will start by bulding our controller, action, and querystring
             $urlArray = array();
-            $urlArray = explode("/", $this->uri);
+            $urlArray = explode("/", self::$uri);
             $controller = $urlArray[0];
             
             // If there is an action, then lets set that in a variable
@@ -182,7 +159,7 @@ class Router
             // If there is no action, load the default 'index'.
             else 
             {
-                $action = $this->config->get('default_action', 'Core'); // Default Action
+                $action = Config::GetVar('default_action', 'System'); // Default Action
             }
             
             // $queryString is what remains
@@ -190,28 +167,28 @@ class Router
         }
         
         // Tell the system we've routed
-        $this->routed = true;  
+        self::$routed = true;  
         
         // Make sure the first character of the controller is not an _ !
         if( strncmp($controller, '_', 1) == 0 || strncmp($action, '_', 1) == 0 )
         {
             // Add this to the trace
-            \Debug::trace('Controller or action contains a private prefix "_", showing 404' , __FILE__, __LINE__);
+            // \Debug::trace('Controller or action contains a private prefix "_", showing 404' , __FILE__, __LINE__);
             show_404();
         }
         
         // Set static Variables
-        $this->controller = $controller;
-        $this->action = $action;
-        $this->queryString = $queryString;
+        self::$controller = $controller;
+        self::$action = $action;
+        self::$queryString = $queryString;
         
         // Add trace for debugging
-        \Debug::trace("Url routed successfully. Found controller: {$this->controller}; Action: {$this->action}; Querystring: ". implode('/', $this->queryString), __FILE__, __LINE__);
+        // \Debug::trace("Url routed successfully. Found controller: ". self::$controller ."; Action: ". self::$action ."; Querystring: ". implode('/', self::$queryString), __FILE__, __LINE__);
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: get_url_info()
+| Method: GetUrlInfo()
 | ---------------------------------------------------------------
 |
 | This method returns all the url information
@@ -219,40 +196,36 @@ class Router
 | @Return (Array) Returns an array of all url related info
 |
 */    
-    public function get_url_info()
+    public static function GetUrlInfo()
     {
         // Make sure we've at least routed the url here;
-        if(!$this->routed) $this->route_url();
+        if(!self::$routed) self::RouteUrl();
+        
         return array(
-            'protocol' => $this->protocol,
-            'http_host' => $this->http_host,
-            'site_url' => $this->site_url,
-            'site_dir' => $this->site_dir,
-            'uri' => $this->uri,
-            'controller' => $this->controller,
-            'action' => $this->action,
-            'querystring' => $this->queryString
+            'protocol' => self::$protocol,
+            'http_host' => self::$http_host,
+            'site_url' => self::$site_url,
+            'site_dir' => self::$site_dir,
+            'uri' => self::$uri,
+            'controller' => self::$controller,
+            'action' => self::$action,
+            'querystring' => self::$queryString
         );
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get_uri_segement()
+| Method: GetUriSegement()
 | ---------------------------------------------------------------
 |
 | This method returns the specified URI segement
 |
-| @Return (String) Returns the segement, or FALSE
+| @Return (String) Returns the segement, or false
 |
 */    
-    public function get_uri_segement($index)
+    public static function GetUriSegement($index)
     {
-        // Return the URI
-        if(isset($this->uri[$index]))
-        {
-            return $this->uri[$index];
-        }
-        return FALSE;
+        return (isset(self::$uri[$index])) ? self::$uri[$index] : false;
     }
 }
 // EOF

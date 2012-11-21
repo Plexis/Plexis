@@ -1,17 +1,13 @@
 <?php
 /* 
 | --------------------------------------------------------------
-| 
-| Frostbite Framework
-|
+| Plexis Core
 | --------------------------------------------------------------
-|
 | Author:       Steven Wilson
 | Copyright:    Copyright (c) 2011, Steven Wilson
 | License:      GNU GPL v3
-|
 | ---------------------------------------------------------------
-| Class: Config()
+| Class: Config
 | ---------------------------------------------------------------
 |
 | Main Config class. used to load, set, and save variables used
@@ -23,107 +19,56 @@ namespace Core;
 class Config
 {
     // An array of all out stored containers / variables
-    protected $data = array();
+    protected static $data = array();
 
     // A list of our loaded config files
-    protected $files = array();
+    protected static $files = array();
+
 
 /*
 | ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-*/
-    public function __construct() 
-    {
-        // Add trace for debugging
-        \Debug::trace('Initializing config class...', __FILE__, __LINE__);
-        
-        // Set default files
-        $this->files['app']['file_path'] = SYSTEM_PATH . DS . 'config' . DS . 'config.php';
-        $this->files['core']['file_path'] = SYSTEM_PATH . DS . 'config' . DS . 'core.config.php';
-        $this->files['db']['file_path'] = SYSTEM_PATH . DS . 'config' . DS . 'database.config.php';
-        
-        // Lets roll!
-        $this->Init();
-        
-        // Add trace for debugging
-        \Debug::trace('Config class initiated successfully', __FILE__, __LINE__);
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: Init()
-| ---------------------------------------------------------------
-|
-| Initiates the default config files (App, Core, and DB)
-|
-| @Return: (None)
-|
-*/
-    protected function Init() 
-    {
-        // Load the APP config.php and add the defined vars
-        $this->load($this->files['app']['file_path'], 'app');
-        
-        // Load the core.config.php and add the defined vars
-        $this->load($this->files['core']['file_path'], 'core', 'config');
-        
-        // Load the database.config.php and add the defined vars
-        $this->load($this->files['db']['file_path'], 'db', 'DB_configs');
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: get()
+| Method: GetVar()
 | ---------------------------------------------------------------
 |
 | Returns the variable ($key) value in the config file.
 |
 | @Param: (String) $key - variable name. Value is returned
-| @Param: (Mixed) $type - config variable container name
+| @Param: (Mixed) $name - config variable container name
 | @Return: (Mixed) May return NULL if the var is not set
 |
 */
-    public function get($key, $type = 'App') 
+    public static function GetVar($key, $name) 
     {
         // Lowercase the type
-        $type = strtolower($type);
+        $name = strtolower($name);
         
         // Check if the variable exists
-        if(isset($this->data[$type][$key])) 
-        {
-            return $this->data[$type][$key];
-        }
-        return NULL;
+        return (isset(self::$data[$name][$key])) ? self::$data[$name][$key] : NULL;
     }
     
 /*
 | ---------------------------------------------------------------
-| Method: get()
+| Method: FetchVars()
 | ---------------------------------------------------------------
 |
 | Returns all variables in an array from the the config file.
 |
-| @Param: (Mixed) $type - config variable container name
+| @Param: (Mixed) $name - config variable container name
 | @Return: (Array) May return NULL if the var is not set
 |
 */
-    public function get_all($type = 'App') 
+    public static function FetchVars($name) 
     {
         // Lowercase the type
-        $type = strtolower($type);
+        $name = strtolower($name);
         
         // Check if the variable exists
-        if(isset($this->data[$type]))
-        {
-            return $this->data[$type];
-        }
-        return NULL;
+        return (isset(self::$data[$name])) ? self::$data[$name] : NULL;
     }
 
 /*
 | ---------------------------------------------------------------
-| Method: set()
+| Method: SetVar()
 | ---------------------------------------------------------------
 |
 | Sets the variable ($key) value. If not saved, default value
@@ -132,26 +77,32 @@ class Config
 | @Param: (String or Array) $key - variable name to be set
 | @Param: (Mixed) $value - new value of the variable
 | @Param: (Mixed) $name - The container name for the $key variable
-| @Return: (None)
+| @Return: (Bool) Returns false if the config file denies set perms
 |
 */
-    public function set($key, $val = false, $name = 'App') 
+    public static function SetVar($key, $val = false, $name) 
     {
         // Lowercase the $name
         $name = strtolower($name);
+        
+        // Make sure this config has set permissions
+        if(!self::$files[$name]['allow_set'])
+            return false;
         
         // If we have array, loop through and set each
         if(is_array($key))
         {
             foreach($key as $k => $v)
             {
-                $this->data[$name][$k] = $v;
+                self::$data[$name][$k] = $v;
             }
         }
         else
         {
-            $this->data[$name][$key] = $val;
+            self::$data[$name][$key] = $val;
         }
+        
+        return true;
     }
 
 /*
@@ -162,34 +113,49 @@ class Config
 | Load a config file, and adds its defined variables to the $data
 |   array
 |
-| @Param: (String) $_file - Full path to the config file, includeing name
-| @Param: (String) $_name - The container name we are storing this configs
+| @Param: (String) $_Cfile - Full path to the config file, includeing name
+| @Param: (String) $_Cname - The container name we are storing this configs
 |   variables to.
-| @Param: (String) $_array - If the config vars are stored in an array, whats
-|   the array variable name?
-| @Return: (None)
+| @Param: (String) $_Carray - If all of the config vars are stored in an array, 
+|   whats the array variable name? Default is false
+| @Param: (Bool) $_CallowSet - If set to false, config values are readonly, and cannot
+|   be set via the 'SetVar' method. 
+| @Param: (Bool) $_CallowSave - If set to true, the config file cannot be written
+|   to by the 'Save' method. Also, if $_CallowSet is false, this value is
+|   false as well, no matter the actual set value.
+| @Return: (Bool)
 |
 */
-    public function load($_file, $_name, $_array = FALSE) 
+    public static function Load($_Cfile, $_Cname, $_Carray = false, $_CallowSet = true, $_CallowSave = true) 
     {
         // Lowercase the $name
-        $_name = strtolower($_name);
+        $_Cname = strtolower($_Cname);
+        
+        // Donot load the config twice!
+        if(array_key_exists($_Cname, self::$files))
+            return true;
         
         // Add trace for debugging
-        \Debug::trace('Loading config "'. $_name .'" from: '. $_file, __FILE__, __LINE__);
+        // \Debug::trace('Loading config "'. $_name .'" from: '. $_file, __FILE__, __LINE__);
         
         // Include file and add it to the $files array
-        if(!file_exists($_file)) return FALSE;
-        include( $_file );
-        $this->files[$_name]['file_path'] = $_file;
-        $this->files[$_name]['config_key'] = $_array;
+        if(!file_exists($_Cfile)) 
+            return false;
+        include( $_Cfile );
+        
+        // Set config file flags
+        self::$files[$_Cname]['file_path'] = $_Cfile;
+        self::$files[$_Cname]['config_key'] = $_Carray;
+        self::$files[$_Cname]['allow_set'] = $_CallowSet;
+        self::$files[$_Cname]['allow_save'] = $_CallowSave;
         
         // Get defined variables
         $vars = get_defined_vars();
-        if($_array != FALSE) $vars = $vars[$_array];
-        
-        // Unset the passes vars
-        unset($vars['_file'], $vars['_name'], $vars['_array']);
+        if($_Carray != false) 
+            $vars = $vars[$_Carray];
+        else
+            // Unset the passes vars
+            unset($vars['_Cfile'], $vars['_Cname'], $vars['_Carray'], $vars['_CallowSet'], $vars['_CallowSave']);
         
         // Add the variables to the $data[$name] array
         if(count($vars) > 0)
@@ -198,11 +164,28 @@ class Config
             {
                 if($key != 'this' && $key != 'data') 
                 {
-                    $this->data[$_name][$key] = $val;
+                    self::$data[$_Cname][$key] = $val;
                 }
             }
         }
-        return;
+        
+        return true;
+    }
+	
+/*
+| ---------------------------------------------------------------
+| Method: UnLoad()
+| ---------------------------------------------------------------
+|
+| This method is used to unload a config
+|
+| @Param: (String) $name - Name of the container holding the variables
+| @Return: (None)
+|
+*/
+    public static function UnLoad($name) 
+    {
+        unset(self::$data[$name]);
     }
 
 /*
@@ -214,30 +197,32 @@ class Config
 | a backup of the current config file
 |
 | @Param: (String) $name - Name of the container holding the variables
-| @Return: (Bool) TRUE on success, FALSE otherwise
+| @Param: (Bool) $useRegex - If enabled, Regex will be used to set
+|   variables. This preserves comments, but is slower
+| @Return: (Bool) true on success, false otherwise
 |
 */
-    public function save($name) 
+    public static function Save($name) 
     {
         // Lowercase the $name
         $name = strtolower($name);
         
         // Add trace for debugging
-        \Debug::trace('Saving config: '. $name, __FILE__, __LINE__);
+        // \Debug::trace('Saving config: '. $name, __FILE__, __LINE__);
         
         // Check to see if we need to put this in an array
-        $ckey = $this->files[$name]['config_key'];
-        if($ckey != FALSE)
+        $ckey = self::$files[$name]['config_key'];
+        if($ckey != false)
         {
-            $Old_Data = $this->data[$name];
-            $this->data[$name] = array("$ckey" => $this->data[$name]);
+            $Old_Data = self::$data[$name];
+            self::$data[$name] = array("$ckey" => self::$data[$name]);
         }
 
         // Create our new file content
         $cfg  = "<?php\n";
 
         // Loop through each var and write it
-        foreach( $this->data[$name] as $key => $val )
+        foreach( self::$data[$name] as $key => $val )
         {
             switch( gettype($val) )
             {
@@ -250,7 +235,7 @@ class Config
                     $cfg .= "\$$key = " . $val . ";\n";
                     break;
                 case "array":
-                    $val = var_export($val, TRUE);
+                    $val = var_export($val, true);
                     $cfg .= "\$$key = " . $val . ";\n";
                     break;
                 case "NULL":
@@ -267,22 +252,22 @@ class Config
         $cfg .= "?>";
         
         // Add the back to non array if we did put it in one
-        if($ckey != FALSE) $this->data[$name] = $Old_Data;
+        if($ckey != false) self::$data[$name] = $Old_Data;
         
         // Copy the current config file for backup, 
         // and write the new config values to the new config
-        copy($this->files[$name]['file_path'], $this->files[$name]['file_path'].'.bak');
-        if(file_put_contents( $this->files[$name]['file_path'], $cfg )) 
+        copy(self::$files[$name]['file_path'], self::$files[$name]['file_path'].'.bak');
+        if(file_put_contents( self::$files[$name]['file_path'], $cfg )) 
         {
             // Add trace for debugging
-            \Debug::trace('Successfully Saved config: '. $name, __FILE__, __LINE__);
-            return TRUE;
+            // \Debug::trace('Successfully Saved config: '. $name, __FILE__, __LINE__);
+            return true;
         } 
         else 
         {
             // Add trace for debugging
-            \Debug::trace('Failed to save config: '. $name, __FILE__, __LINE__);
-            return FALSE;
+            // \Debug::trace('Failed to save config: '. $name, __FILE__, __LINE__);
+            return false;
         }
     }
     
@@ -295,13 +280,13 @@ class Config
 |   in the config folder
 |
 | @Param: (String) $name - Name of the container holding the variables
-| @Return: (Bool) TRUE on success, FALSE otherwise
+| @Return: (Bool) true on success, false otherwise
 |
 */
-    public function restore($name) 
+    public static function Restore($name) 
     {
         // Copy the backup config file nd write the config values to the current config
-        return copy($this->files[$name]['file_path'].'bak', $this->files[$name]['file_path']);
+        return copy(self::$files[$name]['file_path'].'bak', self::$files[$name]['file_path']);
     }
 }
 // EOF
