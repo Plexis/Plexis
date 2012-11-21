@@ -3,10 +3,15 @@
 | --------------------------------------------------------------
 | Plexis Core
 | --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Driver
+| ---------------------------------------------------------------
 |
-| Author: 		Steven Wilson
-| Copyright:	Copyright (c) 2012, Plexis Dev Team
-| License: 		GNU GPL v3
+| PDO extension driver, which is passed when a new DB connection
+| is made from the Database Factory
 |
 */
 namespace Database;

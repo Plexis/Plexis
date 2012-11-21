@@ -41,7 +41,7 @@ class Template
             if(!is_string($contents) && !(is_object($contents) && ($contents instanceof View)))
                 throw new InvalidPageContents('Page contents must be a string, or an object extending the "View" class');
                 
-            self::$buffer += (string) $contents;
+            self::$buffer .= (string) $contents;
         }
     }
     

@@ -1,4 +1,20 @@
 <?php
+/* 
+| --------------------------------------------------------------
+| Plexis Core
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: AutoLoader
+| ---------------------------------------------------------------
+|
+| This class is an advanced autolaoder for missing class references.
+| Able to register namespace specific paths, as well as prefix
+| specific paths.
+|
+*/
 namespace Core;
 
 class AutoLoader
