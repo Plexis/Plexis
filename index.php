@@ -25,7 +25,7 @@ define('SYSTEM_PATH', ROOT . DS .'system');
 
 // Point php to our own php error log
 ini_set('error_log', SYSTEM_PATH . DS .'logs'. DS .'php_errors.log');
-	
+    
 // Include the required script to run the system
 require SYSTEM_PATH . DS .'core'. DS .'Common.php';
 require SYSTEM_PATH . DS .'core'. DS .'AutoLoader.php';

@@ -39,14 +39,14 @@ class ErrorHandler
     }
     
     protected static function DisplayError($lvl, $message, $file, $line, $php = false, $exception = false)
-	{
-		// Clear out all the old junk so we don't get 2 pages all fused together
+    {
+        // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_length() != 0) ob_end_clean();
         
         // Set mode
         $mode = ($exception == true) ? "Exception" : "Error";
-		
-		// Will make this fancy later
+        
+        // Will make this fancy later
         if($php == true)
             $title = "PHP {$mode} Thrown: ";
         else
@@ -58,7 +58,7 @@ class ErrorHandler
         $page = str_replace('{FILE}', $file, $page);
         $page = str_replace('{LINE}', $line, $page);
         die($page);
-	}
+    }
 }
 
 ErrorHandler::Init();

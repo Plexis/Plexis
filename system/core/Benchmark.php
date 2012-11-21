@@ -108,7 +108,7 @@ class Benchmark
             $usage = round($mem_usage/1024, 2)." Kilobytes"; 
         else
             $usage = round($mem_usage/1048576, 2)." Megabytes"; 
-			
+            
         return $usage;
     }
 }

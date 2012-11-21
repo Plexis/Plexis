@@ -492,7 +492,7 @@ class Driver extends \PDO
         $class = ucfirst($name);
         
         // Check for the extension, if not found, doesnt exists :O
-		$file = path(SYSTEM_PATH, 'database', 'extensions', $class . '.php');
+        $file = path(SYSTEM_PATH, 'database', 'extensions', $class . '.php');
         if(!file_exists( $file ))
         {
             show_error('db_autoload_failed', array($name), E_ERROR);

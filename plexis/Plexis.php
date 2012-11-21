@@ -24,23 +24,23 @@ class Plexis
 {
     private static $isRunning = false;
     
-	public static function Run()
-	{
+    public static function Run()
+    {
         // Make sure only one instance of the cms is running at a time
         if(self::$isRunning) return;
         
         // We are now running
-		self::$isRunning = true;
+        self::$isRunning = true;
         
         // Tell the autoloader something
         AutoLoader::RegisterNamespace('Library', path( ROOT, "plexis", "library" ));
         
-		// Import the constants file
-		require path(ROOT, "plexis", "constants.php");
-		
-		// Just a default output for now
+        // Import the constants file
+        require path(ROOT, "plexis", "constants.php");
+        
+        // Just a default output for now
         $url = Router::GetUrlInfo();
-		echo "<center>New Plexis Version: ". CMS_MAJOR_VER .".". CMS_MINOR_VER .".". CMS_MINOR_REV;
+        echo "<center>New Plexis Version: ". CMS_MAJOR_VER .".". CMS_MINOR_VER .".". CMS_MINOR_REV;
         echo "<br />Url: ", $url['site_url'];
         
         // More stuff
@@ -66,14 +66,14 @@ class Plexis
         catch( ViewNotFoundException $e ) {
             echo "<br /><br />". $e->getMessage();
         }
-		
-		// Show our elapsed time
+        
+        // Show our elapsed time
         Template::Render();
-		echo "<br /><br /><small>Page Loaded In: ". Benchmark::ElapsedTime('total_script_exec', 5);
-		
-		// Practice error
-		//throw new ApplicationError('Test Error Message');
-	}
+        echo "<br /><br /><small>Page Loaded In: ". Benchmark::ElapsedTime('total_script_exec', 5);
+        
+        // Practice error
+        //throw new ApplicationError('Test Error Message');
+    }
 }
 
 // Any and all exceptions thrown from the Application should extend the ApplicationError class
