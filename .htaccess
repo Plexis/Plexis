@@ -3,13 +3,17 @@
     
     # Tell PHP that the mod_rewrite module is ENABLED.
     SetEnv HTTP_MOD_REWRITE On
+    
+    # We dont want to pass calls to css, script, and image files to the index, 
+    # whether they exist or not
+    RewriteRule ^.*\.(gif|png|jpe?g|bmp|css|js|swf|wav|avi|mpg)$ - [NC,L]
 
-    # Dont redirect direct links to files or directories to the index.php
+    # Dont redirect direct links to non-existant files or directories to the index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-
+    
     # Rewrite all other URLs to index.php/URL
-    RewriteRule ^(.*)$ index.php?url=$1 [PT,L]
+    RewriteRule ^(.*)$ index.php?uri=$1 [PT,L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>

@@ -44,7 +44,51 @@ class Router
 
     // The querystring
     protected static $queryString;
-
+    
+/*
+| ---------------------------------------------------------------
+| Method: GetUrlInfo()
+| ---------------------------------------------------------------
+|
+| This method returns all the url information
+|
+| @Return (Array) Returns an array of all url related info
+|
+*/    
+    public static function GetUrlInfo()
+    {
+        // Make sure we've at least routed the url here;
+        if(!self::$routed) self::RouteUrl();
+        
+        return array(
+            'protocol' => self::$protocol,
+            'http_host' => self::$http_host,
+            'site_url' => self::$site_url,
+            'site_dir' => self::$site_dir,
+            'uri' => self::$uri,
+            'controller' => self::$controller,
+            'action' => self::$action,
+            'querystring' => self::$queryString
+        );
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: GetUriSegement()
+| ---------------------------------------------------------------
+|
+| This method returns the specified URI segement
+|
+| @Return (String) Returns the segement, or false
+|
+*/    
+    public static function GetUriSegement($index)
+    {
+        // Make sure we've at least routed the url here;
+        if(!self::$routed) self::RouteUrl();
+        
+        return (isset(self::$uri[$index])) ? self::$uri[$index] : false;
+    }
 
 /*
 | ---------------------------------------------------------------
@@ -57,7 +101,7 @@ class Router
 | @Return (Array) Returns an array of controller, action and queryString
 |
 */
-    public static function RouteUrl() 
+    protected static function RouteUrl() 
     {
         // Make sure we only route once
         if(self::$routed) return;
@@ -88,7 +132,7 @@ class Router
         if( !Config::GetVar('enable_query_strings', 'System'))
         {
             // Get our current url, which is passed on by the 'url' param
-            self::$uri = (isset($_GET['url'])) ? Input::Get('url', true) : '';   
+            self::$uri = (isset($_GET['uri'])) ? Input::Get('uri', true) : '';   
         }
         else
         {
@@ -184,48 +228,6 @@ class Router
         
         // Add trace for debugging
         // \Debug::trace("Url routed successfully. Found controller: ". self::$controller ."; Action: ". self::$action ."; Querystring: ". implode('/', self::$queryString), __FILE__, __LINE__);
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: GetUrlInfo()
-| ---------------------------------------------------------------
-|
-| This method returns all the url information
-|
-| @Return (Array) Returns an array of all url related info
-|
-*/    
-    public static function GetUrlInfo()
-    {
-        // Make sure we've at least routed the url here;
-        if(!self::$routed) self::RouteUrl();
-        
-        return array(
-            'protocol' => self::$protocol,
-            'http_host' => self::$http_host,
-            'site_url' => self::$site_url,
-            'site_dir' => self::$site_dir,
-            'uri' => self::$uri,
-            'controller' => self::$controller,
-            'action' => self::$action,
-            'querystring' => self::$queryString
-        );
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: GetUriSegement()
-| ---------------------------------------------------------------
-|
-| This method returns the specified URI segement
-|
-| @Return (String) Returns the segement, or false
-|
-*/    
-    public static function GetUriSegement($index)
-    {
-        return (isset(self::$uri[$index])) ? self::$uri[$index] : false;
     }
 }
 // EOF

@@ -26,10 +26,14 @@ class Template
         // First, load the template xml config file
         self::LoadThemeConfig();
         
+        $c = file_get_contents(self::$themePath . DS . 'layout.tpl');
+        
+        $c = Parser::Parse($c, array('CONTENTS' => self::$buffer));
+        
         if($return)
-            return self::$buffer;
+            return $c;
         else
-            echo self::$buffer;
+            echo $c;
     }
     
     public static function Add()
@@ -54,9 +58,14 @@ class Template
         self::$themePath = $path;
     }
     
+    public static function ClearBuffer()
+    {
+        self::$buffer = null;
+    }
+    
     protected static function LoadThemeConfig()
     {
-        /* // Make sure a theme is set
+        // Make sure a theme is set
         if(empty(self::$themePath))
             throw new ThemeNotSetError('No theme selected!');
             
@@ -65,7 +74,6 @@ class Template
             throw new MissingThemeConfigError('Unable to load theme config file "'. $file .'"');
         
         self::$themeConfig = simplexml_load_file($file);
-        */
     }
 }
 

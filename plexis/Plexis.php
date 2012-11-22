@@ -23,6 +23,9 @@ use Library\ViewNotFoundException;
 class Plexis
 {
     private static $isRunning = false;
+    public static $modulePath;
+    public static $module;
+    public static $action;
     
     public static function Run()
     {
@@ -39,40 +42,66 @@ class Plexis
         require path(ROOT, "plexis", "constants.php");
         
         // Just a default output for now
-        $url = Router::GetUrlInfo();
         echo "<center>New Plexis Version: ". CMS_MAJOR_VER .".". CMS_MINOR_VER .".". CMS_MINOR_REV;
-        echo "<br />Url: ", $url['site_url'];
         
-        // More stuff
+        // Load the Plexis Config file
+        $file = path(ROOT, "plexis", "config", "config.php");
+        Config::Load($file, 'Plexis');
+        
+        // Load Database config file
         $file = path(ROOT, "plexis", "config", "database.config.php");
         Config::Load($file, 'DB', 'DB_Configs');
         
         // Test database connection
         $message = null;
         try {
-            Database::Connect('DB', Config::GetVar('PlexisDB', 'DB'));
+            // Database::Connect('DB', Config::GetVar('PlexisDB', 'DB'));
             $message = 'Database connection successful!';
         }
         catch( DatabaseConnectError $e ) {
             $message = $e->getMessage();
         }
         
-        // Load our view
-        try {
-            $view = new View( path(ROOT, "plexis", "TestView.tpl") );
-            $view->Set('message', $message);
-            Template::Add($view);
-        }
-        catch( ViewNotFoundException $e ) {
-            echo "<br /><br />". $e->getMessage();
-        }
+        // Load Auth class and User
+        
+        // Set default theme path
+        Template::SetThemePath( path(ROOT, "plexis", "third_party", "themes", "default") );
+        
+        // Load our controller etc etc
+        self::ProccessRoute();
         
         // Show our elapsed time
         Template::Render();
         echo "<br /><br /><small>Page Loaded In: ". Benchmark::ElapsedTime('total_script_exec', 5);
+    }
+    
+    public static function LoadModule($name, $args = array())
+    {
+        // HMVC method to run other modules internally, and capture the output
+    }
+    
+    protected static function ProccessRoute()
+    {
+        // Get URL info
+        $url = Router::GetUrlInfo();
         
-        // Practice error
-        //throw new ApplicationError('Test Error Message');
+        // For now, just load the default controller
+        $controller = Config::GetVar('default_controller', 'Plexis');
+        
+        // Define out module path, and our module controller path
+        self::$modulePath = path( ROOT, 'plexis', 'components', strtolower($controller) );
+        $path = path(self::$modulePath, 'controllers', $controller .'.php');
+        
+        // Require controller class
+        require $path;
+        
+        // Define our controller and index globablly
+        self::$module = $controller;
+        self::$action = $action = 'Index';
+        
+        // Init the new controller
+        $controller = new $controller();
+        $controller->{$action}();
     }
 }
 
