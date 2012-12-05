@@ -21,14 +21,31 @@ class Template
     protected static $themePath;
     protected static $themeConfig;
     
-    public static function Render($return = false)
+/*
+| ---------------------------------------------------------------
+| Method: Render()
+| ---------------------------------------------------------------
+|
+| This method sets variables to be replace in the view
+|
+| @Param: (Bool) $return - when set to true, final rendered template
+|   is returned instead of echo'ing it out.
+| @Return (None)
+|
+*/
+    public static function Render($return = false, $loadLayout = true)
     {
         // First, load the template xml config file
-        self::LoadThemeConfig();
+        if(empty(self::$themeConfig)) self::LoadThemeConfig();
         
-        $c = file_get_contents(self::$themePath . DS . 'layout.tpl');
-        
-        $c = Parser::Parse($c, array('CONTENTS' => self::$buffer));
+        // Load contents and parse the layout file
+        if($loadLayout)
+        {
+            $c = file_get_contents(self::$themePath . DS . 'layout.tpl');
+            $c = Parser::Parse($c, array('CONTENTS' => self::$buffer));
+        }
+        else
+            $c = self::$buffer;
         
         if($return)
             return $c;
@@ -36,6 +53,19 @@ class Template
             echo $c;
     }
     
+/*
+| ---------------------------------------------------------------
+| Method: Add()
+| ---------------------------------------------------------------
+|
+| Adds more to contents to be added into the contents section of
+| the final rendered template.
+|
+| @Return (None)
+| @Throws Library\InvalidPageContents if the contents is niether a string
+|   of a sub class of Library\View
+|
+*/
     public static function Add()
     {
         $parts = func_get_args();
@@ -49,29 +79,64 @@ class Template
         }
     }
     
+/*
+| ---------------------------------------------------------------
+| Method: SetThemePath()
+| ---------------------------------------------------------------
+|
+| Sets the path to the theme, in which holds the layout.tpl file
+|
+| @Param: (String) $path - the full path to the theme
+| @Return (None)
+| @Throws Library\InvalidThemePathException
+|
+*/
     public static function SetThemePath($path)
     {
         // Make sure the path exists!
         if(!file_exists($path))
-            throw new InvalidThemePathError('Invalid theme path "'. $path .'"');
+            throw new InvalidThemePathException('Invalid theme path "'. $path .'"');
             
         self::$themePath = $path;
     }
     
+/*
+| ---------------------------------------------------------------
+| Method: ClearBuffer()
+| ---------------------------------------------------------------
+|
+| Clears the current output buffer of the template
+|
+| @Return (None)
+|
+*/
     public static function ClearBuffer()
     {
         self::$buffer = null;
     }
     
+/*
+| ---------------------------------------------------------------
+| Method: LoadThemeConfig()
+| ---------------------------------------------------------------
+|
+| Internal method for loading the theme's config xml file
+|
+| @Return (None)
+| @Throws Library\ThemeNotSetException if the theme isnt set before rendering
+| @Throws Library\MissingThemeConfigException if the theme is missing its theme
+|   config file (theme.xml)
+|
+*/
     protected static function LoadThemeConfig()
     {
         // Make sure a theme is set
         if(empty(self::$themePath))
-            throw new ThemeNotSetError('No theme selected!');
+            throw new ThemeNotSetException('No theme selected!');
             
         $file = path(self::$themePath, 'theme.xml');
         if(!file_exists($file))
-            throw new MissingThemeConfigError('Unable to load theme config file "'. $file .'"');
+            throw new MissingThemeConfigException('Unable to load theme config file "'. $file .'"');
         
         self::$themeConfig = simplexml_load_file($file);
     }
@@ -79,10 +144,10 @@ class Template
 
 // Exceptions //
 
-class ThemeNotSetError extends \ApplicationError {}
+class ThemeNotSetException extends \ApplicationError {}
 
-class InvalidThemePathError extends \ApplicationError {}
+class InvalidThemePathException extends \ApplicationError {}
 
 class InvalidPageContents extends \ApplicationError {}
 
-class MissingThemeConfigError extends \ApplicationError {}
+class MissingThemeConfigException extends \ApplicationError {}

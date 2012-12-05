@@ -49,11 +49,8 @@ class System
         try {
             Plexis::Run();
         }
-        catch(ApplicationError $e) {
-            ErrorHandler::HandleException($e);
-        }
         catch(Exception $e) {
-            ErrorHandler::HandlePHPException($e);
+            ErrorHandler::HandleException($e);
         }
     }
     

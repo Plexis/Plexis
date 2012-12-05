@@ -187,6 +187,22 @@ class Config
     {
         unset(self::$data[$name]);
     }
+	
+/*
+| ---------------------------------------------------------------
+| Method: IsLoaded()
+| ---------------------------------------------------------------
+|
+| This method returns if a config name is loaded
+|
+| @Param: (String) $name - Name of the container holding the variables
+| @Return: (Bool)
+|
+*/
+	public static function IsLoaded($name)
+	{
+		return array_key_exists($name, self::$data);
+	}
 
 /*
 | ---------------------------------------------------------------

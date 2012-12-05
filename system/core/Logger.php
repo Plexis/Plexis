@@ -1,0 +1,1 @@
+<?phpnamespace Core;class Logger{	private static $isInit = false;		public static function Init()	{		if(self::$isInit) return;		self::$isInit = true;	}		public static function LogError($message)	{			}		public static function LogDebug($message)	{		}		public static function LogInfo($message)	{		}}Logger::Init();//EOF

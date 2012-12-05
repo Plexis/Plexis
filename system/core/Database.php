@@ -38,7 +38,8 @@ class Database
 |       'database'
 |       'username'
 |       'password'
-| @Return (Object) Returns a Database Driver Object
+| @Return: (Object) Returns a Database Driver Object
+| @Throws: DatabaseConnectError when a connection cannot be created
 |
 */ 
     public static function Connect($name, $info)

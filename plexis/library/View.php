@@ -29,6 +29,7 @@ class View
 | ---------------------------------------------------------------
 |
 | @Param: (String) $path - The full path to the view file
+| @Throws Library\ViewNotFoundException when the view file cannot be located.
 |
 */ 
     public function __construct($string, $isFile = true)
@@ -109,6 +110,8 @@ class View
 |   this view file. Must be a string, or an object extending the 
 |   this Class.
 | @Return (None)
+| @Throws Library\InvalidViewContents if the contents are not a string
+|   of a subclass of View
 |
 */
     public function SetContents($contents)

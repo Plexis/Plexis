@@ -11,7 +11,7 @@
 |
 */
 
-// Make sure we are running php version 5.3.0 or newer!!!!
+// Make sure we are running php version 5.3.2 or newer!!!!
 if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50302)
     die('PHP version 5.3.2 or newer required to run Plexis Core. Your version: '. PHP_VERSION);
     

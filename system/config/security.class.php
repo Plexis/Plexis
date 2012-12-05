@@ -1,7 +1,4 @@
 <?php
-// Expiration time for cookies set with the SetCookie method
-$cookieExpireTime = (60 * 60 * 24 * 365);
-
 // Blacklisted tags
 $tagBlacklist = array(
     'applet', 

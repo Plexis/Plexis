@@ -19,35 +19,23 @@ namespace Core;
 class Router
 {
     // Have we routed the url yet?
-    public static $routed = false;
-    
-    // Our http protocol (https or http)
-    protected static $protocol;
-    
-    // Our hostname
-    protected static $http_host;
-    
-    // Our Site URL
-    protected static $site_url;
-    
-    // The requested URI
-    protected static $uri;
-    
-    // Our site directory
-    protected static $site_dir;
+    protected static $routed = false;
     
     // Our controller name
     protected static $controller;
 
     // Our action (sub page)
     protected static $action;
+	
+	// The uri string
+	protected static $uri;
 
-    // The querystring
-    protected static $queryString;
+    // The querystring parameters
+    protected static $params;
     
 /*
 | ---------------------------------------------------------------
-| Method: GetUrlInfo()
+| Method: GetRequest()
 | ---------------------------------------------------------------
 |
 | This method returns all the url information
@@ -55,22 +43,59 @@ class Router
 | @Return (Array) Returns an array of all url related info
 |
 */    
-    public static function GetUrlInfo()
+    public static function GetRequest()
     {
-        // Make sure we've at least routed the url here;
-        if(!self::$routed) self::RouteUrl();
-        
         return array(
-            'protocol' => self::$protocol,
-            'http_host' => self::$http_host,
-            'site_url' => self::$site_url,
-            'site_dir' => self::$site_dir,
-            'uri' => self::$uri,
             'controller' => self::$controller,
             'action' => self::$action,
-            'querystring' => self::$queryString
+            'params' => self::$params
         );
     }
+	
+/*
+| ---------------------------------------------------------------
+| Method: GetController()
+| ---------------------------------------------------------------
+|
+| This method returns the controller name from the URI
+|
+| @Return (String)
+|
+*/
+	public static function GetController()
+	{
+		return self::$controller;
+	}
+	
+/*
+| ---------------------------------------------------------------
+| Method: GetAction()
+| ---------------------------------------------------------------
+|
+| This method returns the action name from the URI
+|
+| @Return (String)
+|
+*/
+	public static function GetAction()
+	{
+		return self::$action;
+	}
+	
+/*
+| ---------------------------------------------------------------
+| Method: GetParams()
+| ---------------------------------------------------------------
+|
+| This method returns the action parameters from the URI
+|
+| @Return (Array)
+|
+*/
+	public static function GetParams()
+	{
+		return self::$params;
+	}
     
 /*
 | ---------------------------------------------------------------
@@ -101,38 +126,19 @@ class Router
 | @Return (Array) Returns an array of controller, action and queryString
 |
 */
-    protected static function RouteUrl() 
+    public static function RouteUrl() 
     {
         // Make sure we only route once
         if(self::$routed) return;
         
         // Add trace for debugging
         // \Debug::trace('Routing url...', __FILE__, __LINE__);
-        
-        // Determine our http hostname, and site directory
-        self::$http_host = rtrim($_SERVER['HTTP_HOST'], '/');
-        self::$site_dir = dirname( $_SERVER['PHP_SELF'] );
-        
-        // Detect our protocol
-        if(isset($_SERVER['HTTPS']))
-        {
-            self::$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
-        }
-        else
-        {
-            self::$protocol = 'http';
-        }
-        
-        // Build our Full Base URL
-        $site_url = self::$http_host .'/'. self::$site_dir;
-        while(strpos($site_url, '//') !== false) $site_url = str_replace('//', '/', $site_url);
-        self::$site_url = str_replace( '\\', '', self::$protocol .'://' . rtrim($site_url, '/') );
 
         // Process the site URI
         if( !Config::GetVar('enable_query_strings', 'System'))
         {
             // Get our current url, which is passed on by the 'url' param
-            self::$uri = (isset($_GET['uri'])) ? Input::Get('uri', true) : '';   
+            self::$uri = (isset($_GET['uri'])) ? Security::Clean(Request::Query('uri')) : '';   
         }
         else
         {
@@ -141,7 +147,7 @@ class Router
             $a_param = Config::GetVar('action_param', 'System');
             
             // Make sure we have a controller at least
-            $c = Input::Get($c_param, true );
+            $c = Security::Clean(Request::Query($c_param));
             if( !$c )
             {
                 self::$uri = '';
@@ -149,14 +155,14 @@ class Router
             else
             {
                 // Get our action
-                $a = Input::Get( $a_param, true );
+                $a = Security::Clean(Request::Query($a_param));
                 if( !$a ) $a = Config::GetVar('default_action', 'System'); // Default Action
                 
                 // Init the uri
                 self::$uri = $c .'/'. $a;
                 
                 // Clean the query string
-                $qs = Input::Clean( $_SERVER['QUERY_STRING'] );
+                $qs = Security::Clean( $_SERVER['QUERY_STRING'] );
                 $qs = explode('&', $qs);
                 foreach($qs as $string)
                 {
@@ -178,7 +184,7 @@ class Router
             // Set our Controller / Action to the defaults
             $controller = Config::GetVar('default_controller', 'System'); // Default Controller
             $action = Config::GetVar('default_action', 'System'); // Default Action
-            $queryString = array(); // Default query string
+            $params = array(); // Default query string
         }
         
         // There is a URI, Lets load our controller and action
@@ -206,8 +212,8 @@ class Router
                 $action = Config::GetVar('default_action', 'System'); // Default Action
             }
             
-            // $queryString is what remains
-            $queryString = $urlArray;
+            // $params is what remains
+            $params = $urlArray;
         }
         
         // Tell the system we've routed
@@ -224,10 +230,14 @@ class Router
         // Set static Variables
         self::$controller = $controller;
         self::$action = $action;
-        self::$queryString = $queryString;
+        self::$params = $params;
         
         // Add trace for debugging
-        // \Debug::trace("Url routed successfully. Found controller: ". self::$controller ."; Action: ". self::$action ."; Querystring: ". implode('/', self::$queryString), __FILE__, __LINE__);
+        // \Debug::trace("Url routed successfully. Found controller: ". self::$controller ."; Action: ". self::$action ."; Querystring: ". implode('/', self::$params), __FILE__, __LINE__);
     }
 }
+
+// Init the class
+Router::RouteUrl();
+
 // EOF

@@ -7,22 +7,16 @@
 | Copyright:    Copyright (c) 2012, Plexis Dev Team
 | License:      GNU GPL v3
 | ---------------------------------------------------------------
-| Class: Input
+| Class: Security
 | ---------------------------------------------------------------
 |
-| This class handles client side information such as input, cookies,
-| $_POST vars, Ip address, browser etc etc.
+| This class is used for security cleaning of variables
 | 
 */
 namespace Core;
 
-class Input
+class Security
 {
-
-    // Users IP address and Browser info
-    protected static $user_agent = false;
-    protected static $ip_address = false;
-
     // Array of tags and attributes
     protected static $tagsArray = array();
     protected static $attrArray = array();
@@ -42,229 +36,12 @@ class Input
     public static function Init()
     {
         // Load the config file for this
-        $path = path( SYSTEM_PATH, 'config', 'input.class.php' );
-        if(!Config::Load($path, 'InputClass', false, true, false))
-            throw new SystemError('Missing Input class configuration file.');
+        $path = path( SYSTEM_PATH, 'config', 'security.class.php' );
+        if(!Config::Load($path, 'SecurityClass', false, true, false))
+            throw new SystemError('Missing Security class configuration file.');
         
         // Add trace for debugging
         // \Debug::trace('Input class initiated successfully', __FILE__, __LINE__);
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: Post()
-| ---------------------------------------------------------------
-|
-| Returns a $_POST variable
-|
-| @Param: (String) $var - variable name to be returned
-| @Param: (Bool) $xss - Check for XSS ?
-| @Return (Mixed) Returns the value of $_POST[$var]
-|
-*/
-    public static function Post($var, $xss = false)
-    {
-        if(isset($_POST[$var]))
-        {
-            return ($xss == false) ? $_POST[$var] : self::Clean($_POST[$var]);
-        }
-        return false;
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: Get()
-| ---------------------------------------------------------------
-|
-| Returns a $_GET variable
-|
-| @Param: (String) $var - variable name to be returned
-| @Param: (Bool) $xss - Check for XSS ?
-| @Return (Mixed) Returns the value of $_GET[$var]
-|
-*/
-    public static function Get($var, $xss = false)
-    {
-        if(isset($_GET[$var]))
-        {
-            return ($xss == false) ? $_GET[$var] : self::Clean($_GET[$var]);
-        }
-        return false;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: GetCookie()
-| ---------------------------------------------------------------
-|
-| Returns a $_COOKIE variable
-|
-| @Param: (String) $name - variable name to be returned
-| @Param: (Bool) $xss - Check for XSS ?
-| @Return (Mixed) Returns the value of $_COOKIE[$var]
-|
-*/
-    public static function GetCookie($name, $xss = false)
-    {
-        if(isset($_COOKIE[$name]))
-        {
-            return ($xss == false)? $_COOKIE[$name] : self::Clean($_COOKIE[$name]);
-        }
-        return false;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: SetCookie()
-| ---------------------------------------------------------------
-|
-| Sets a cookie
-|
-| @Param: (String) $key - Name of the cookie
-| @Param: (Mixed) $val - Value of the cookie
-| @Param: (Int) $time - Cookie expire time in Unix Timestamp
-| @Return (None)
-|
-*/
-    public static function SetCookie($key, $val, $time = null)
-    {
-        if($time === null)
-        {
-            $time = time() + Config::GetVar('cookieExpireTime', 'InputClass');
-        }
-        
-        setcookie( $key, $val, $time, '/' );
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: IsAjaxRequest()
-| ---------------------------------------------------------------
-|
-| @Return (Bool) Return's whether this is an AJAX request or no
-|
-*/
-    public static function IsAjaxRequest()
-    {
-        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: UserAgent()
-| ---------------------------------------------------------------
-|
-| @Return (String) Returns the users browser info
-|
-*/
-    public static function UserAgent()
-    {
-        if(self::$user_agent == false)
-        {
-            self::$user_agent = ( isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : false );
-        }
-        return self::$user_agent;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: IpAddress()
-| ---------------------------------------------------------------
-|
-| @Return (Mixed) Returns the users IP address, or 0.0.0.0 if
-|   unable to determine. Order is in trust/use order top to bottom
-|
-*/
-    public static function IpAddress()
-    {
-        // Return it if we already determined the IP
-        if(self::$ip_address === false)
-        {  
-            // Check to see if the server has the IP address
-            if(isset($_SERVER['HTTP_CLIENT_IP']) && self::IsValidIp($_SERVER['HTTP_CLIENT_IP']))
-            {
-                self::$ip_address = $_SERVER['HTTP_CLIENT_IP'];
-            }
-            elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
-            {
-                // HTTP_X_FORWARDED_FOR can be an array og IPs!
-                $ips = explode(",", $_SERVER['HTTP_X_FORWARDED_FOR']);
-                foreach($ips as $ip_add) 
-                {
-                    if(self::IsValidIp($ip_add))
-                    {
-                        self::$ip_address = $ip;
-                        break;
-                    }
-                }
-            }
-            elseif(isset($_SERVER['HTTP_X_FORWARDED']) && self::IsValidIp($_SERVER['HTTP_X_FORWARDED']))
-            {
-                self::$ip_address = $_SERVER['HTTP_X_FORWARDED'];
-            }
-            elseif(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) && self::IsValidIp($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']))
-            {
-                self::$ip_address = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
-            }
-            elseif(isset($_SERVER['HTTP_FORWARDED_FOR']) && self::IsValidIp($_SERVER['HTTP_FORWARDED_FOR']))
-            {
-                self::$ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
-            }
-            elseif(isset($_SERVER['HTTP_FORWARDED']) && self::IsValidIp($_SERVER['HTTP_FORWARDED']))
-            {
-                self::$ip_address = $_SERVER['HTTP_FORWARDED'];
-            }
-            elseif(isset($_SERVER['HTTP_VIA']) && self::IsValidIp($_SERVER['HTTP_VIAD']))
-            {
-                self::$ip_address = $_SERVER['HTTP_VIA'];
-            }
-            elseif(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
-            {
-                self::$ip_address = $_SERVER['REMOTE_ADDR'];
-            }
-
-            // If we still have a false IP address, then set to 0's
-            if(self::$ip_address === false) self::$ip_address = '0.0.0.0';
-        }
-        return self::$ip_address;
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: IsValidIp()
-| ---------------------------------------------------------------
-|
-| Returns if the given IP address is a valid, Non-Private IP
-|
-| @Return (Bool)
-|
-*/
-    public static function IsValidIp($ip)
-    {
-        // Trim the ip address
-        $ip = trim($ip);
-        if(!empty($ip) && ip2long($ip) != -1) 
-        {
-            $reserved_ips = array(
-                array('0.0.0.0','2.255.255.255'),
-                array('10.0.0.0','10.255.255.255'),
-                array('127.0.0.0','127.255.255.255'),
-                array('169.254.0.0','169.254.255.255'),
-                array('172.16.0.0','172.31.255.255'),
-                array('192.0.2.0','192.0.2.255'),
-                array('192.168.0.0','192.168.255.255'),
-                array('255.255.255.0','255.255.255.255')
-            );
-
-            foreach($reserved_ips as $r) 
-            {
-                $min = ip2long($r[0]);
-                $max = ip2long($r[1]);
-                if ((ip2long($ip) >= $min) && (ip2long($ip) <= $max)) return false;
-            }
-            return true;
-        }
-        return false;
     }
 
 /*
@@ -457,7 +234,7 @@ class Input
             }	
 
             // excludes all "non-regular" tagnames OR no tagname OR remove if xssauto is on and tag is blacklisted
-            if(!preg_match("/^[a-z][a-z0-9]*$/i", $tagName) || !$tagName || ((in_array(strtolower($tagName), Config::GetVar('tagBlacklist', 'InputClass'))) && self::$xssAuto)) 
+            if(!preg_match("/^[a-z][a-z0-9]*$/i", $tagName) || !$tagName || ((in_array(strtolower($tagName), Config::GetVar('tagBlacklist', 'SecurityClass'))) && self::$xssAuto)) 
             { 				
                 $postTag = substr($postTag, ($tagLength + 2));
                 $tagOpen_start = strpos($postTag, '<');
@@ -581,7 +358,7 @@ class Input
             list($attrSubSet[0]) = explode(' ', $attrSubSet[0]);
             
             // removes all "non-regular" attr names AND also attr blacklisted
-            if ((!preg_match("/^[a-z]*$/i", $attrSubSet[0])) || (self::$xssAuto && ((in_array(strtolower($attrSubSet[0]), Config::GetVar('attrBlacklist', 'InputClass'))) || (substr($attrSubSet[0], 0, 2) == 'on'))))
+            if ((!preg_match("/^[a-z]*$/i", $attrSubSet[0])) || (self::$xssAuto && ((in_array(strtolower($attrSubSet[0]), Config::GetVar('attrBlacklist', 'SecurityClass'))) || (substr($attrSubSet[0], 0, 2) == 'on'))))
             {
                 continue;
             }
@@ -667,6 +444,6 @@ class Input
 }
 
 // Init the class
-Input::Init();
+Security::Init();
 
 // EOF 

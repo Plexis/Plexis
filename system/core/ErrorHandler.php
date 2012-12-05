@@ -23,6 +23,11 @@ class ErrorHandler
         // Proccess error reporting levels and such
     }
     
+    public static function SetErrorHandler($controller, $action)
+    {
+    
+    }
+    
     public static function TriggerError($lvl, $message, $file, $line)
     {
         self::DisplayError($lvl, $message, $file, $line);

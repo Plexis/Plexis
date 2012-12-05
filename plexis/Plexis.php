@@ -15,10 +15,10 @@ use Core\Benchmark;
 use Core\Config;
 use Core\Database;
 use Core\DatabaseConnectError;
+use Core\Dispatch;
+use Core\Response;
 use Core\Router;
 use Library\Template;
-use Library\View;
-use Library\ViewNotFoundException;
 
 class Plexis
 {
@@ -26,7 +26,18 @@ class Plexis
     public static $modulePath;
     public static $module;
     public static $action;
+	
+	// Option variables for controllers
+	protected static $renderTemplate = true;
     
+/*
+| ---------------------------------------------------------------
+| Method: Run()
+| ---------------------------------------------------------------
+|
+| Main method for running the Plexis application
+|
+*/ 
     public static function Run()
     {
         // Make sure only one instance of the cms is running at a time
@@ -68,40 +79,61 @@ class Plexis
         Template::SetThemePath( path(ROOT, "plexis", "third_party", "themes", "default") );
         
         // Load our controller etc etc
-        self::ProccessRoute();
+        self::RunModule();
+		
+		// Do we render the template?
+		if(self::$renderTemplate)
+			Template::Render();
         
-        // Show our elapsed time
-        Template::Render();
+        // Show our elapsed time (testing purposes)
         echo "<br /><br /><small>Page Loaded In: ". Benchmark::ElapsedTime('total_script_exec', 5);
+		
+		//Send the response to the browser
+		Response::Send();
     }
+	
+/*
+| ---------------------------------------------------------------
+| Method: RenderTemplate()
+| ---------------------------------------------------------------
+|
+| Sets whether plexis should render the full template or not
+|
+*/
+	public static function RenderTemplate($bool = true)
+	{
+		if(!is_bool($bool)) return;
+		
+		self::$renderTemplate = $bool;
+	}
     
-    public static function LoadModule($name, $args = array())
-    {
-        // HMVC method to run other modules internally, and capture the output
-    }
-    
-    protected static function ProccessRoute()
+/*
+| ---------------------------------------------------------------
+| Method: RunModule()
+| ---------------------------------------------------------------
+|
+| Internal method for running the controller and action
+|
+*/
+    protected static function RunModule()
     {
         // Get URL info
-        $url = Router::GetUrlInfo();
+        $Request = Router::GetRequest();
         
         // For now, just load the default controller
-        $controller = Config::GetVar('default_controller', 'Plexis');
-        
-        // Define out module path, and our module controller path
-        self::$modulePath = path( ROOT, 'plexis', 'components', strtolower($controller) );
-        $path = path(self::$modulePath, 'controllers', $controller .'.php');
-        
-        // Require controller class
-        require $path;
+        $controller = ucfirst(Config::GetVar('default_controller', 'Plexis'));
         
         // Define our controller and index globablly
         self::$module = $controller;
         self::$action = $action = 'Index';
         
-        // Init the new controller
-        $controller = new $controller();
-        $controller->{$action}();
+        // Define out module path, and our module controller path
+        self::$modulePath = path( ROOT, 'plexis', 'components', strtolower($controller) );
+        
+        // Setup the dispatch, and run the module
+        Dispatch::SetControllerPath( path(self::$modulePath, 'controllers') );
+		Dispatch::SetController('frontpage');
+        Dispatch::Execute();
     }
 }
 
