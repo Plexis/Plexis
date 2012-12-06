@@ -20,6 +20,7 @@ use Core\NotFoundException;
 use Core\Request;
 use Core\Response;
 use Core\Router;
+use Library\Auth;
 use Library\Template;
 use Library\View;
 
@@ -27,6 +28,7 @@ class Plexis
 {
     private static $isRunning = false;
     public static $modulePath;
+    protected static $realm;
     
     // Option variables for controllers
     protected static $renderTemplate = true;
@@ -47,31 +49,12 @@ class Plexis
         // We are now running
         self::$isRunning = true;
         
-        // Tell the autoloader something
-        AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
-        
-        // Import the constants file
-        require path(SYSTEM_PATH, "Constants.php");
-        
-        // Load the Plexis Config file
-        $file = path(SYSTEM_PATH, "config", "config.php");
-        Config::Load($file, 'Plexis');
-        
-        // Load Database config file
-        $file = path(SYSTEM_PATH, "config", "database.config.php");
-        Config::Load($file, 'DB', 'DB_Configs');
-        
-        // Test database connection
-        $message = null;
-        try {
-            // Database::Connect('DB', Config::GetVar('PlexisDB', 'DB'));
-            $message = 'Database connection successful!';
-        }
-        catch( DatabaseConnectError $e ) {
-            $message = $e->getMessage();
-        }
+        // Init the configs and database connection
+        self::InitConfigsAndDatabase();
         
         // Load Auth class and User
+        self::LoadWowlib();
+        Auth::Init();
         
         // Set default theme path
         Template::SetThemePath( path(ROOT, "third_party", "themes", "default") );
@@ -118,6 +101,46 @@ class Plexis
     
 /*
 | ---------------------------------------------------------------
+| Method: ShowSiteOffline()
+| ---------------------------------------------------------------
+|
+| Displays the site offline page
+|
+*/
+    public static function ShowSiteOffline($message = null)
+    {
+        // Clean all current output
+        ob_clean();
+        
+        // Set our status code to 503 "Service Unavailable"
+        Response::StatusCode(503);
+        
+        // Get our 404 template contents
+        $View = new View( path(SYSTEM_PATH, "errors", "error_site_offline.php") );
+        $View->Set('site_url', Request::BaseUrl());
+        $View->Set('message', $message);
+        Response::Body($View);
+        
+        // Send response, and die
+        Response::Send();
+        die;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: GetRealm()
+| ---------------------------------------------------------------
+|
+| Returns the Realm Object
+|
+*/
+    public static function GetRealm()
+    {
+        return self::$realm;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: RenderTemplate()
 | ---------------------------------------------------------------
 |
@@ -146,15 +169,81 @@ class Plexis
         
         // Define out module path, and our module controller path
         self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($Request['controller']) );
-        
-        // Setup the dispatch, and run the module
         Dispatch::SetControllerPath( path(self::$modulePath, 'controllers') );
         
+        // Try to execute the controller, and catch any 404 error
         try {
             Dispatch::Execute();
         }
         catch( NotFoundException $e ) {
             self::Show404();
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: LoadWowlib()
+| ---------------------------------------------------------------
+|
+| Internal method for initiating the wowlib
+|
+*/
+    protected static function LoadWowlib()
+    {
+        // Load the wowlib class file
+        require path( SYSTEM_PATH, "wowlib", "wowlib.php" );
+        
+        // Try to init the wowlib
+        $message = null;
+        try {
+            Wowlib::Init( Config::GetVar('emulator', 'Plexis') );
+            self::$realm = Wowlib::GetRealm(0, Config::GetVar('RealmDB', 'DB'));
+        }
+        catch( Exception $e ) {
+            // Template::Message('error', 'Wowlib offline: '. $e->getMessage());
+            $message = $e->getMessage();
+            self::$realm = false;
+        }
+        
+        if(self::$realm === false)
+        {
+            if(empty($message)) $message = "Realm Database Offline";
+            //self::ShowSiteOffline($message);
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: InitConfigsAndDatabase()
+| ---------------------------------------------------------------
+|
+| Internal method for loading the plexis config files, and initializing
+| the Plexis database connection
+|
+*/
+    protected static function InitConfigsAndDatabase()
+    {
+        // Tell the autoloader something
+        AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
+        
+        // Import the constants file
+        require path(SYSTEM_PATH, "Constants.php");
+        
+        // Load the Plexis Config file
+        $file = path(SYSTEM_PATH, "config", "config.php");
+        Config::Load($file, 'Plexis');
+        
+        // Load Database config file
+        $file = path(SYSTEM_PATH, "config", "database.config.php");
+        Config::Load($file, 'DB', 'DB_Configs');
+        
+        // Init the database connection
+        try {
+            Database::Connect('DB', Config::GetVar('PlexisDB', 'DB'));
+        }
+        catch( DatabaseConnectError $e ) {
+            $message = $e->getMessage();
+            self::ShowSiteOffline('Plexis database offline');
         }
     }
 }

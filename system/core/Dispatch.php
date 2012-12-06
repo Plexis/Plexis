@@ -141,7 +141,7 @@ class Dispatch
 */
     public static function SetParams(array $params)
     {
-        self::$controller = $params;
+        self::$params = $params;
     }
 }
 

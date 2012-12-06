@@ -20,6 +20,7 @@ class Template
     protected static $buffer = null;
     protected static $themePath;
     protected static $themeConfig;
+    protected static $messages = array();
     
 /*
 | ---------------------------------------------------------------
@@ -41,8 +42,13 @@ class Template
         // Load contents and parse the layout file
         if($loadLayout)
         {
+            $buffer='';
+            foreach(self::$messages as $message)
+            {
+                $buffer .= "<div id=\"{$message[0]}\">{$message[1]}</div><br />";
+            }
             $c = file_get_contents(self::$themePath . DS . 'layout.tpl');
-            $c = Parser::Parse($c, array('CONTENTS' => self::$buffer));
+            $c = Parser::Parse($c, array('CONTENTS' => self::$buffer, 'GLOBAL_MESSAGES' => $buffer));
         }
         else
             $c = self::$buffer;
@@ -98,6 +104,21 @@ class Template
             throw new InvalidThemePathException('Invalid theme path "'. $path .'"');
             
         self::$themePath = $path;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: Message()
+| ---------------------------------------------------------------
+|
+| Adds a global message to be parsed into the template
+|
+| @Return (None)
+|
+*/
+    public static function Message($lvl, $message)
+    {
+        self::$messages[] = array($lvl, $message);
     }
     
 /*

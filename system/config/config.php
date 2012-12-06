@@ -5,3 +5,5 @@ $enable_query_strings = false;
 $controller_param = 'c';
 $action_param = 'a';
 $catch_fatal_errors = true;
+
+$emulator = 'trinity';
