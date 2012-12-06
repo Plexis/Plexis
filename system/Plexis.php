@@ -26,9 +26,9 @@ class Plexis
     public static $modulePath;
     public static $module;
     public static $action;
-	
-	// Option variables for controllers
-	protected static $renderTemplate = true;
+    
+    // Option variables for controllers
+    protected static $renderTemplate = true;
     
 /*
 | ---------------------------------------------------------------
@@ -47,20 +47,20 @@ class Plexis
         self::$isRunning = true;
         
         // Tell the autoloader something
-        AutoLoader::RegisterNamespace('Library', path( ROOT, "plexis", "library" ));
+        AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
         
         // Import the constants file
-        require path(ROOT, "plexis", "constants.php");
+        require path(SYSTEM_PATH, "constants.php");
         
         // Just a default output for now
         echo "<center>New Plexis Version: ". CMS_MAJOR_VER .".". CMS_MINOR_VER .".". CMS_MINOR_REV;
         
         // Load the Plexis Config file
-        $file = path(ROOT, "plexis", "config", "config.php");
+        $file = path(SYSTEM_PATH, "config", "config.php");
         Config::Load($file, 'Plexis');
         
         // Load Database config file
-        $file = path(ROOT, "plexis", "config", "database.config.php");
+        $file = path(SYSTEM_PATH, "config", "database.config.php");
         Config::Load($file, 'DB', 'DB_Configs');
         
         // Test database connection
@@ -76,22 +76,22 @@ class Plexis
         // Load Auth class and User
         
         // Set default theme path
-        Template::SetThemePath( path(ROOT, "plexis", "third_party", "themes", "default") );
+        Template::SetThemePath( path(ROOT, "third_party", "themes", "default") );
         
         // Load our controller etc etc
         self::RunModule();
-		
-		// Do we render the template?
-		if(self::$renderTemplate)
-			Template::Render();
+        
+        // Do we render the template?
+        if(self::$renderTemplate)
+            Template::Render();
         
         // Show our elapsed time (testing purposes)
         echo "<br /><br /><small>Page Loaded In: ". Benchmark::ElapsedTime('total_script_exec', 5);
-		
-		//Send the response to the browser
-		Response::Send();
+        
+        //Send the response to the browser
+        Response::Send();
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Method: RenderTemplate()
@@ -100,12 +100,12 @@ class Plexis
 | Sets whether plexis should render the full template or not
 |
 */
-	public static function RenderTemplate($bool = true)
-	{
-		if(!is_bool($bool)) return;
-		
-		self::$renderTemplate = $bool;
-	}
+    public static function RenderTemplate($bool = true)
+    {
+        if(!is_bool($bool)) return;
+        
+        self::$renderTemplate = $bool;
+    }
     
 /*
 | ---------------------------------------------------------------
@@ -128,11 +128,11 @@ class Plexis
         self::$action = $action = 'Index';
         
         // Define out module path, and our module controller path
-        self::$modulePath = path( ROOT, 'plexis', 'components', strtolower($controller) );
+        self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($controller) );
         
         // Setup the dispatch, and run the module
         Dispatch::SetControllerPath( path(self::$modulePath, 'controllers') );
-		Dispatch::SetController('frontpage');
+        Dispatch::SetController('frontpage');
         Dispatch::Execute();
     }
 }

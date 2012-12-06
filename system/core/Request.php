@@ -106,11 +106,11 @@ class Request
     public static function Referer()
     {
         $ref = null;
-		if(isset($_SERVER['HTTP_X_FORWARDED_HOST']))
-			$ref = $_SERVER['HTTP_X_FORWARDED_HOST'];
-		elseif(isset($_SERVER['HTTP_REFERER']))
-			$ref = $_SERVER['HTTP_REFERER'];
-		
+        if(isset($_SERVER['HTTP_X_FORWARDED_HOST']))
+            $ref = $_SERVER['HTTP_X_FORWARDED_HOST'];
+        elseif(isset($_SERVER['HTTP_REFERER']))
+            $ref = $_SERVER['HTTP_REFERER'];
+        
         return $ref;
     }
     
@@ -193,13 +193,13 @@ class Request
     public static function AcceptsLanguage($lang = null)
     {
         $accepts = preg_split('/[;,]/', self::Header('Accept-Language'));
-		foreach($accepts as &$accept) 
+        foreach($accepts as &$accept) 
         {
-			$accept = strtolower($accept);
-			if(strpos($accept, '_') !== false)
-				$accept = str_replace('_', '-', $accept);
-		}
-		return ($lang === null) ? $accepts : in_array($lang, $accepts);
+            $accept = strtolower($accept);
+            if(strpos($accept, '_') !== false)
+                $accept = str_replace('_', '-', $accept);
+        }
+        return ($lang === null) ? $accepts : in_array($lang, $accepts);
     }
     
 /*

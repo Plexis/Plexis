@@ -26,9 +26,9 @@ class Router
 
     // Our action (sub page)
     protected static $action;
-	
-	// The uri string
-	protected static $uri;
+    
+    // The uri string
+    protected static $uri;
 
     // The querystring parameters
     protected static $params;
@@ -51,7 +51,7 @@ class Router
             'params' => self::$params
         );
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Method: GetController()
@@ -62,11 +62,11 @@ class Router
 | @Return (String)
 |
 */
-	public static function GetController()
-	{
-		return self::$controller;
-	}
-	
+    public static function GetController()
+    {
+        return self::$controller;
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Method: GetAction()
@@ -77,11 +77,11 @@ class Router
 | @Return (String)
 |
 */
-	public static function GetAction()
-	{
-		return self::$action;
-	}
-	
+    public static function GetAction()
+    {
+        return self::$action;
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Method: GetParams()
@@ -92,10 +92,10 @@ class Router
 | @Return (Array)
 |
 */
-	public static function GetParams()
-	{
-		return self::$params;
-	}
+    public static function GetParams()
+    {
+        return self::$params;
+    }
     
 /*
 | ---------------------------------------------------------------
@@ -135,7 +135,7 @@ class Router
         // \Debug::trace('Routing url...', __FILE__, __LINE__);
 
         // Process the site URI
-        if( !Config::GetVar('enable_query_strings', 'System'))
+        if( !Config::GetVar('enable_query_strings', 'Plexis'))
         {
             // Get our current url, which is passed on by the 'url' param
             self::$uri = (isset($_GET['uri'])) ? Security::Clean(Request::Query('uri')) : '';   
@@ -143,8 +143,8 @@ class Router
         else
         {
             // Define our needed vars
-            $c_param = Config::GetVar('controller_param', 'System');
-            $a_param = Config::GetVar('action_param', 'System');
+            $c_param = Config::GetVar('controller_param', 'Plexis');
+            $a_param = Config::GetVar('action_param', 'Plexis');
             
             // Make sure we have a controller at least
             $c = Security::Clean(Request::Query($c_param));
@@ -156,7 +156,7 @@ class Router
             {
                 // Get our action
                 $a = Security::Clean(Request::Query($a_param));
-                if( !$a ) $a = Config::GetVar('default_action', 'System'); // Default Action
+                if( !$a ) $a = Config::GetVar('default_action', 'Plexis'); // Default Action
                 
                 // Init the uri
                 self::$uri = $c .'/'. $a;
@@ -182,8 +182,8 @@ class Router
         if(empty(self::$uri)) 
         {
             // Set our Controller / Action to the defaults
-            $controller = Config::GetVar('default_controller', 'System'); // Default Controller
-            $action = Config::GetVar('default_action', 'System'); // Default Action
+            $controller = Config::GetVar('default_controller', 'Plexis'); // Default Controller
+            $action = Config::GetVar('default_action', 'Plexis'); // Default Action
             $params = array(); // Default query string
         }
         
@@ -209,7 +209,7 @@ class Router
             // If there is no action, load the default 'index'.
             else 
             {
-                $action = Config::GetVar('default_action', 'System'); // Default Action
+                $action = Config::GetVar('default_action', 'Plexis'); // Default Action
             }
             
             // $params is what remains

@@ -37,14 +37,11 @@ class System
         set_exception_handler('Core\ErrorHandler::HandleException');
         set_error_handler('Core\ErrorHandler::HandlePHPError');
         
-        // Load system configs
-        Config::Load( path(SYSTEM_PATH, 'config', 'config.php'), 'System', 'config', true, false );
-        
         // We are initiated successfully
         self::$isInitiated = true;
         
         // Run the application
-        require path(ROOT, "plexis", "Plexis.php");
+        require path(SYSTEM_PATH, "Plexis.php");
         
         try {
             Plexis::Run();
@@ -52,11 +49,6 @@ class System
         catch(Exception $e) {
             ErrorHandler::HandleException($e);
         }
-    }
-    
-    public static function TriggerError($lvl, $message, $file, $line) 
-    {
-        ErrorHandler::TriggerError($lvl, $message, $file, $line);
     }
 }
 

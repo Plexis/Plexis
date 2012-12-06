@@ -17,7 +17,7 @@ class Response
     protected static $cookies = array();
     protected static $body = null;
     protected static $cacheDirectives = array();
-	protected static $outputSent = false;
+    protected static $outputSent = false;
     
     // Array of status codes
     protected static $statusCodes = array(
@@ -94,12 +94,12 @@ class Response
             self::SendHeader($key, $value);
 
         self::SendBody();
-		
-		// Set local var that output has been sent
-		self::$outputSent = true;
-		
-		// Disable output buffering
-		ob_end_flush();
+        
+        // Set local var that output has been sent
+        self::$outputSent = true;
+        
+        // Disable output buffering
+        ob_end_flush();
     }
     
 /*
@@ -117,14 +117,14 @@ class Response
 */
     public static function Body($content = null)
     {
-		// Are we setting or retrieving?
-		if(empty($content))
+        // Are we setting or retrieving?
+        if(empty($content))
             return self::$status;
-			
-		// Make sure the data wasnt sent already
-		if(self::$outputSent)
-			throw new OutputSentException('Cannot set body contents because the response headers have already been sent.');
-			
+            
+        // Make sure the data wasnt sent already
+        if(self::$outputSent)
+            throw new OutputSentException('Cannot set body contents because the response headers have already been sent.');
+            
         self::$body = (string) $content;
     }
     
@@ -142,10 +142,10 @@ class Response
 */
     public static function AppendBody($content)
     {
-		// Make sure the data wasnt sent already
-		if(self::$outputSent)
-			throw new OutputSentException('Cannot append body contents because the response headers have already been sent.');
-			
+        // Make sure the data wasnt sent already
+        if(self::$outputSent)
+            throw new OutputSentException('Cannot append body contents because the response headers have already been sent.');
+            
         self::$body .= (string) $content;
     }
     
@@ -162,17 +162,17 @@ class Response
 */
     public static function StatusCode($code = null)
     {
-		// Are we setting or retrieving?
+        // Are we setting or retrieving?
         if(empty($code))
         {
             return self::$status;
         }
         elseif(is_numeric($code) && array_key_exists($code, self::$statusCodes))
         {
-			// Make sure the data wasnt sent already
-			if(self::$outputSent)
-				throw new OutputSentException('Cannot set body contents because the response headers have already been sent.');
-			
+            // Make sure the data wasnt sent already
+            if(self::$outputSent)
+                throw new OutputSentException('Cannot set body contents because the response headers have already been sent.');
+            
             self::$status = $code;
             return true;
         }
@@ -193,14 +193,14 @@ class Response
 */
     public static function ContentType($val = null)
     {
-		// Are we setting or retrieving?
+        // Are we setting or retrieving?
         if($val == null)
             return self::$contentType;
-			
+            
         // Make sure the data wasnt sent already
-		if(self::$outputSent)
-			throw new OutputSentException('Cannot set content type because the response headers have already been sent.');
-			
+        if(self::$outputSent)
+            throw new OutputSentException('Cannot set content type because the response headers have already been sent.');
+            
         self::$contentType = $val;
     }
     
@@ -217,14 +217,14 @@ class Response
 */
     public static function Encoding($val = null)
     {
-		// Are we setting or retrieving?
+        // Are we setting or retrieving?
         if($val == null)
             return self::$charset;
         
-		// Make sure the data wasnt sent already
-		if(self::$outputSent)
-			throw new OutputSentException('Cannot set content encoding because the response headers have already been sent.');
-			
+        // Make sure the data wasnt sent already
+        if(self::$outputSent)
+            throw new OutputSentException('Cannot set content encoding because the response headers have already been sent.');
+            
         self::$charset = $val;
     }
     
@@ -242,10 +242,10 @@ class Response
 */
     public static function SetHeader($key, $value)
     {
-		// Make sure the data wasnt sent already
-		if(self::$outputSent)
-			throw new OutputSentException('Cannot set header because the response headers have already been sent.');
-			
+        // Make sure the data wasnt sent already
+        if(self::$outputSent)
+            throw new OutputSentException('Cannot set header because the response headers have already been sent.');
+            
         $key = str_replace('_', '-', $key);
         if($key == 'Content-Type') 
         {
@@ -277,18 +277,18 @@ class Response
 */
     public static function SetCookie($name, $value, $expires, $path = '/')
     {
-		// Make sure the data wasnt sent already
-		if(self::$outputSent)
-			throw new OutputSentException('Cannot set cookie because the response headers have already been sent.');
-			
+        // Make sure the data wasnt sent already
+        if(self::$outputSent)
+            throw new OutputSentException('Cannot set cookie because the response headers have already been sent.');
+            
         $_COOKIE[$name] = $value;
         self::$cookies[$name] = array(
             'value' => $value,
             'expires' => $expires,
-			'path' => $path
+            'path' => $path
         );
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Method: Protocol()
@@ -300,21 +300,21 @@ class Response
 | @Return (String | None) returns the current protocol if $code is null
 |
 */
-	public static function Protocol($code = null)
+    public static function Protocol($code = null)
     {
-		// Are we setting or retrieving?
-		if(empty($code))
+        // Are we setting or retrieving?
+        if(empty($code))
             return self::$protocol;
-			
-		// Make sure the data wasnt sent already
-		if(self::$outputSent)
-			throw new OutputSentException('Cannot set protocol because the response headers have already been sent.');
-			
-		// Make sure the protocol is valid!
-		$code = strtoupper(trim($code));
-		if($code !== self::HTTP_10 || $code !== self::HTTP_11)
-			return false;
-			
+            
+        // Make sure the data wasnt sent already
+        if(self::$outputSent)
+            throw new OutputSentException('Cannot set protocol because the response headers have already been sent.');
+            
+        // Make sure the protocol is valid!
+        $code = strtoupper(trim($code));
+        if($code !== self::HTTP_10 || $code !== self::HTTP_11)
+            return false;
+            
         self::$protocol = $code;
     }
     
@@ -396,7 +396,7 @@ class Response
     {
         self::$cookies = array();
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Method: OutputSent()
@@ -407,12 +407,12 @@ class Response
 | @Return (Bool)
 |
 */
-	public static function OutputSent()
-	{
-		return self::$outputSent;
-	}
+    public static function OutputSent()
+    {
+        return self::$outputSent;
+    }
     
-	
+    
 /*
 | ---------------------------------------------------------------
 | Internal Methods
@@ -429,7 +429,7 @@ class Response
     
     protected static function SendHeader($name, $value = null)
     {
-		// Make sure the headers havent been sent!
+        // Make sure the headers havent been sent!
         if (!headers_sent()) 
         {
             if (is_null($value)) 
@@ -445,7 +445,7 @@ class Response
     
     protected static function SendContentLength()
     {
-		// If we already have stuff in the buffer, append that lenght
+        // If we already have stuff in the buffer, append that lenght
         if(($len = ob_get_length()) != 0)
             self::$headers['Content-Length'] = $len + strlen(self::$body);
         else

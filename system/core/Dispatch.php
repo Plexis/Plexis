@@ -51,16 +51,16 @@ class Dispatch
             
             require $file;
         }
-		
-		// Create a reflection of the controller class
-		try {
-			$Dispatch = new \ReflectionMethod($controller, $action);
-		}
-		catch(\ReflectionException $e) {
-			throw new MethodNotFoundException("Controller \"{$controller}\" does not contain the method \"{$action}\"");
-		}
-		
-		return $Dispatch->invokeArgs(new $controller(), $params);
+        
+        // Create a reflection of the controller class
+        try {
+            $Dispatch = new \ReflectionMethod($controller, $action);
+        }
+        catch(\ReflectionException $e) {
+            throw new MethodNotFoundException("Controller \"{$controller}\" does not contain the method \"{$action}\"");
+        }
+        
+        return $Dispatch->invokeArgs(new $controller(), $params);
         
         // Load the class into a var
         //return call_user_func_array(array(new $controller, $action), $params);
@@ -95,7 +95,7 @@ class Dispatch
     {
         return (empty(self::$controllerDir)) ? false : self::$controllerDir;
     }
-	
+    
 /*
 | ---------------------------------------------------------------
 | Method: SetController()
@@ -107,11 +107,11 @@ class Dispatch
 | @Return: (None)
 |
 */
-	public static function SetController($name)
-	{
-		self::$controller = $name;
-	}
-	
+    public static function SetController($name)
+    {
+        self::$controller = $name;
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Method: SetAction()
@@ -123,11 +123,11 @@ class Dispatch
 | @Return: (None)
 |
 */
-	public static function SetAction($name)
-	{
-		self::$action = $name;
-	}
-	
+    public static function SetAction($name)
+    {
+        self::$action = $name;
+    }
+    
 /*
 | ---------------------------------------------------------------
 | Method: SetController()
@@ -139,10 +139,10 @@ class Dispatch
 | @Return: (None)
 |
 */
-	public static function SetParams(array $params)
-	{
-		self::$controller = $params;
-	}
+    public static function SetParams(array $params)
+    {
+        self::$controller = $params;
+    }
 }
 
 // Class Exceptions
