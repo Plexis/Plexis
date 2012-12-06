@@ -147,6 +147,8 @@ class Dispatch
 
 // Class Exceptions
 
-class ControllerNotFoundException extends \Exception {}
+class NotFoundException extends \Exception {}
 
-class MethodNotFoundException extends \Exception {}
+class ControllerNotFoundException extends NotFoundException {}
+
+class MethodNotFoundException extends NotFoundException {}

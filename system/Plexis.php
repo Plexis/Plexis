@@ -16,16 +16,17 @@ use Core\Config;
 use Core\Database;
 use Core\DatabaseConnectError;
 use Core\Dispatch;
+use Core\NotFoundException;
+use Core\Request;
 use Core\Response;
 use Core\Router;
 use Library\Template;
+use Library\View;
 
 class Plexis
 {
     private static $isRunning = false;
     public static $modulePath;
-    public static $module;
-    public static $action;
     
     // Option variables for controllers
     protected static $renderTemplate = true;
@@ -50,10 +51,7 @@ class Plexis
         AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
         
         // Import the constants file
-        require path(SYSTEM_PATH, "constants.php");
-        
-        // Just a default output for now
-        echo "<center>New Plexis Version: ". CMS_MAJOR_VER .".". CMS_MINOR_VER .".". CMS_MINOR_REV;
+        require path(SYSTEM_PATH, "Constants.php");
         
         // Load the Plexis Config file
         $file = path(SYSTEM_PATH, "config", "config.php");
@@ -94,6 +92,32 @@ class Plexis
     
 /*
 | ---------------------------------------------------------------
+| Method: Show404()
+| ---------------------------------------------------------------
+|
+| Displays the 404 page not found page
+|
+*/
+    public static function Show404()
+    {
+        // Clean all current output
+        ob_clean();
+        
+        // Set our status code to 404
+        Response::StatusCode(404);
+        
+        // Get our 404 template contents
+        $View = new View( path(SYSTEM_PATH, "errors", "error_404.php") );
+        $View->Set('site_url', Request::BaseUrl());
+        Response::Body($View);
+        
+        // Send response, and die
+        Response::Send();
+        die;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: RenderTemplate()
 | ---------------------------------------------------------------
 |
@@ -120,20 +144,18 @@ class Plexis
         // Get URL info
         $Request = Router::GetRequest();
         
-        // For now, just load the default controller
-        $controller = ucfirst(Config::GetVar('default_controller', 'Plexis'));
-        
-        // Define our controller and index globablly
-        self::$module = $controller;
-        self::$action = $action = 'Index';
-        
         // Define out module path, and our module controller path
-        self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($controller) );
+        self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($Request['controller']) );
         
         // Setup the dispatch, and run the module
         Dispatch::SetControllerPath( path(self::$modulePath, 'controllers') );
-        Dispatch::SetController('frontpage');
-        Dispatch::Execute();
+        
+        try {
+            Dispatch::Execute();
+        }
+        catch( NotFoundException $e ) {
+            self::Show404();
+        }
     }
 }
 

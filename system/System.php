@@ -32,6 +32,7 @@ class System
         
         // Make sure output buffering is enabled. This is pretty important
         ini_set('output_buffering', 'On');
+        ob_start();
         
         // Set our exception and error handler
         set_exception_handler('Core\ErrorHandler::HandleException');
