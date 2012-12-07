@@ -1,5 +1,20 @@
 <?php
-
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Request
+| ---------------------------------------------------------------
+|
+| This class provides information for the current Request such as
+| all the Post and GET data, the URI string, the Remote IP, Referer,
+| the base URL, website root, and more.
+|
+*/
 namespace Core;
 
 class Request

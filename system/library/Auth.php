@@ -19,6 +19,7 @@ namespace Library;
 
 // Bring some classes into scope
 use \Core\Database;
+use \Core\EventHandler;
 use \Core\Request;
 use \Plexis;
 
@@ -180,7 +181,7 @@ class Auth
 
 /*
 | ---------------------------------------------------------------
-| Method: login()
+| Method: Login()
 | ---------------------------------------------------------------
 |
 | The main login script!

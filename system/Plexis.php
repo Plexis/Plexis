@@ -50,10 +50,12 @@ class Plexis
         self::$isRunning = true;
         
         // Init the configs and database connection
-        self::InitConfigsAndDatabase();
+        self::Init();
         
         // Load Auth class and User
         self::LoadWowlib();
+        
+        // Start the Client Auth class
         Auth::Init();
         
         // Set default theme path
@@ -86,7 +88,8 @@ class Plexis
         // Clean all current output
         ob_clean();
         
-        // Set our status code to 404
+        // Reset all headers, and set our status code to 404
+        Response::Reset();
         Response::StatusCode(404);
         
         // Get our 404 template contents
@@ -112,10 +115,11 @@ class Plexis
         // Clean all current output
         ob_clean();
         
-        // Set our status code to 503 "Service Unavailable"
+        // Reset all headers, and set our status code to 503 "Service Unavailable"
+        Response::Reset();
         Response::StatusCode(503);
         
-        // Get our 404 template contents
+        // Get our site offline template contents
         $View = new View( path(SYSTEM_PATH, "errors", "error_site_offline.php") );
         $View->Set('site_url', Request::BaseUrl());
         $View->Set('message', $message);
@@ -214,14 +218,14 @@ class Plexis
     
 /*
 | ---------------------------------------------------------------
-| Method: InitConfigsAndDatabase()
+| Method: Init()
 | ---------------------------------------------------------------
 |
 | Internal method for loading the plexis config files, and initializing
 | the Plexis database connection
 |
 */
-    protected static function InitConfigsAndDatabase()
+    protected static function Init()
     {
         // Tell the autoloader something
         AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));

@@ -1,5 +1,20 @@
 <?php
-
+/* 
+| --------------------------------------------------------------
+| Plexis
+| --------------------------------------------------------------
+| Author:       Steven Wilson 
+| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
+| License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Response
+| ---------------------------------------------------------------
+|
+| This class is used to send a proper formated reponse to the client.
+| You can set headers, cookies, status codes, and protocol within
+| the class.
+|
+*/
 namespace Core;
 
 class Response
@@ -19,10 +34,13 @@ class Response
     protected static $cacheDirectives = array();
     protected static $outputSent = false;
     
-    // Array of status codes
+    // Array of status codes (Borrowed from Zend Framework)
     protected static $statusCodes = array(
+        // Informational 1xx
         100 => 'Continue',
         101 => 'Switching Protocols',
+
+        // Success 2xx
         200 => 'OK',
         201 => 'Created',
         202 => 'Accepted',
@@ -30,13 +48,17 @@ class Response
         204 => 'No Content',
         205 => 'Reset Content',
         206 => 'Partial Content',
+
+        // Redirection 3xx
         300 => 'Multiple Choices',
         301 => 'Moved Permanently',
-        302 => 'Found',
+        302 => 'Found',  // 1.1
         303 => 'See Other',
         304 => 'Not Modified',
         305 => 'Use Proxy',
         307 => 'Temporary Redirect',
+
+        // Client Error 4xx
         400 => 'Bad Request',
         401 => 'Unauthorized',
         402 => 'Payment Required',
@@ -45,21 +67,25 @@ class Response
         405 => 'Method Not Allowed',
         406 => 'Not Acceptable',
         407 => 'Proxy Authentication Required',
-        408 => 'Request Time-out',
+        408 => 'Request Timeout',
         409 => 'Conflict',
         410 => 'Gone',
         411 => 'Length Required',
         412 => 'Precondition Failed',
         413 => 'Request Entity Too Large',
-        414 => 'Request-URI Too Large',
+        414 => 'Request-URI Too Long',
         415 => 'Unsupported Media Type',
-        416 => 'Requested range not satisfiable',
+        416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
+
+        // Server Error 5xx
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
         502 => 'Bad Gateway',
         503 => 'Service Unavailable',
-        504 => 'Gateway Time-out'
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported',
+        509 => 'Bandwidth Limit Exceeded'
     );
     
 /*
@@ -395,6 +421,28 @@ class Response
     public static function ClearCookies()
     {
         self::$cookies = array();
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: Reset()
+| ---------------------------------------------------------------
+|
+| Removes all current changes to the response, including the current
+| body buffer
+|
+| @Return (None)
+|
+*/
+    public static function Reset()
+    {
+        self::$headers = array();
+        self::$cookies = array();
+        self::$protocol = self::HTTP_11;
+        self::$status = 200;
+        self::$contentType = 'text/html';
+        self::$charset = 'UTF-8';
+        self::$body = null;
     }
     
 /*

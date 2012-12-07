@@ -3,10 +3,14 @@
 | --------------------------------------------------------------
 | Plexis
 | --------------------------------------------------------------
-|
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
+| Author:       Steven Wilson 
+| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
 | License:      GNU GPL v3
+| ---------------------------------------------------------------
+| Class: Cache
+| ---------------------------------------------------------------
+|
+| A simple cache class for the CMS
 |
 */
 namespace Library;
