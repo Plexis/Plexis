@@ -19,6 +19,7 @@
 namespace Plugin;
 
 // Bring some classes into scope
+use \Plexis as App;
 use \Core\Config;
 use \Core\Database;
 use \Core\DatabaseConnectError;
@@ -31,11 +32,7 @@ class Plexis
     public function __construct()
     {
         // Check for database online, surpress errors
-        $DB = false;
-        try {
-            $DB = Database::Connect('DB', Config::GetVar('PlexisDB', 'DB'));
-        }
-        catch ( DatabaseConnectError $e ) {}
+        $DB = App::LoadDBConnection(false);
 
         // Check if the install directory exists
         $installer = is_dir( ROOT . DS . 'install' );
@@ -46,6 +43,7 @@ class Plexis
         // Check if the install folder is still local
         if($DB == false && $locked == false && $installer == true)
         {
+            // Temporary redirect (307)
             Response::Redirect('install/index.php', 307);
             die;
         }

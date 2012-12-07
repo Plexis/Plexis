@@ -4,7 +4,8 @@
 | System Controller
 | --------------------------------------------------------------
 |
-| The system acts as a base, and framework for the applications
+| The system acts as a  wrapper for plexis. It catches un-caught 
+| exceptions, and sets up a base for plexis to work on
 |
 */
 
@@ -24,10 +25,11 @@ class System
         // Dont allow the system to run twice
         if(self::$isInitiated) return;
         
-        // Define namespace for autloader
+        // Register the Core and Library namespaces with the autoloader
         AutoLoader::RegisterNamespace('Core', path(SYSTEM_PATH, 'core'));
+        AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
         
-        // Init System Benchmark //
+        // Init System Benchmark
         Benchmark::Start('system');
         
         // Make sure output buffering is enabled. This is pretty important

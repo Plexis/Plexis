@@ -49,9 +49,6 @@ class Plexis
         // We are now running
         self::$isRunning = true;
         
-        // Register the Library namespace with the autoloader
-        AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
-        
         // Set default theme path (temporary)
         Template::SetThemePath( path(ROOT, "third_party", "themes", "default") );
         
@@ -61,8 +58,8 @@ class Plexis
         // Load Plugins
         self::LoadPlugins();
         
-        // Load Auth class and User
-        self::LoadWowlib();
+        // Load the Wowlib
+        self::LoadWowlib(false);
         
         // Init the database connection, we check to see if it exists first, because
         // a plugin might have already loaded it
@@ -171,6 +168,31 @@ class Plexis
     
 /*
 | ---------------------------------------------------------------
+| Method: LoadDBConnection()
+| ---------------------------------------------------------------
+|
+| Internal method for loading the Plexis DB connection
+|
+*/
+    public static function LoadDBConnection($showOffline = true)
+    {
+        $conn = false;
+        try {
+            $conn = Database::Connect('DB', Config::GetVar('PlexisDB', 'DB'));
+        }
+        catch( DatabaseConnectError $e ) {
+            if($showOffline)
+            {
+                $message = $e->getMessage();
+                self::ShowSiteOffline('Plexis database offline');
+            }
+        }
+        
+        return $conn;
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: RunModule()
 | ---------------------------------------------------------------
 |
@@ -244,7 +266,7 @@ class Plexis
 | Internal method for initiating the wowlib
 |
 */
-    protected static function LoadWowlib()
+    protected static function LoadWowlib($showOffline = true)
     {
         // Load the wowlib class file
         require path( SYSTEM_PATH, "wowlib", "wowlib.php" );
@@ -261,10 +283,14 @@ class Plexis
             self::$realm = false;
         }
         
+        // If the realm is offline, show the site offline screen
         if(self::$realm === false)
         {
-            if(empty($message)) $message = "Realm Database Offline";
-            //self::ShowSiteOffline($message);
+            if($showOffline)
+            {
+                if(empty($message)) $message = "Realm Database Offline";
+                self::ShowSiteOffline($message);
+            }
         }
     }
     
@@ -294,25 +320,6 @@ class Plexis
             define('SITE_URL', Request::BaseUrl());
         else
             define('SITE_URL', Request::BaseUrl() .'/?uri=');
-    }
-    
-/*
-| ---------------------------------------------------------------
-| Method: LoadDBConnection()
-| ---------------------------------------------------------------
-|
-| Internal method for loading the Plexis DB connection
-|
-*/
-    protected static function LoadDBConnection()
-    {
-        try {
-            Database::Connect('DB', Config::GetVar('PlexisDB', 'DB'));
-        }
-        catch( DatabaseConnectError $e ) {
-            $message = $e->getMessage();
-            self::ShowSiteOffline('Plexis database offline');
-        }
     }
 }
 

@@ -42,13 +42,11 @@ class Template
         // Load contents and parse the layout file
         if($loadLayout)
         {
-            $buffer='';
-            foreach(self::$messages as $message)
-            {
-                $buffer .= "<div id=\"{$message[0]}\">{$message[1]}</div><br />";
-            }
-            $c = file_get_contents(self::$themePath . DS . 'layout.tpl');
-            $c = Parser::Parse($c, array('CONTENTS' => self::$buffer, 'GLOBAL_MESSAGES' => $buffer));
+            // Load the layout, and parse ot
+            $Layout = new View(self::$themePath . DS . 'layout.tpl');
+            $Layout->Set('CONTENTS', self::$buffer);
+            $Layout->Set('GLOBAL_MESSAGES', self::ProccessMessages());
+            $c = $Layout->Render();
         }
         else
             $c = self::$buffer;
@@ -134,6 +132,31 @@ class Template
     public static function ClearBuffer()
     {
         self::$buffer = null;
+    }
+    
+    protected static function ProccessMessages()
+    {
+        // Load the global_messages view
+        try {
+            $View = new View( path(self::$themePath, 'views', 'global_message.tpl') );
+        }
+        catch( ViewNotFoundException $e ) {
+            throw $e;
+        }
+        
+        // Loop through and add each message to the buffer
+        $buffer = '';
+        $size = sizeof(self::$messages);
+        foreach(self::$messages as $k => $m)
+        {
+            $View->Set('level', $m[0]);
+            $View->Set('message', $m[1]);
+            $buffer .= $View->Render();
+            if($k+1 != $size) 
+                $buffer .= PHP_EOL;
+        }
+        
+        return $buffer;
     }
     
 /*
