@@ -42,14 +42,21 @@ class Database
 | @Throws: DatabaseConnectError when a connection cannot be created
 |
 */ 
-    public static function Connect($name, $info)
+    public static function Connect($name, $info, $new = false)
     {
+        // If the connection already exists, and $new is false, return existing
+        if(isset(self::$connections[$name]) && !$new)
+            return self::$connections[$name];
+        
+        // Init a new connection
         try {
             self::$connections[$name] = new Driver($info);
         }
         catch( \Exception $e ) {
             throw new DatabaseConnectError($e->getMessage());
         }
+        
+        return self::$connections[$name];
     }
     
 /*

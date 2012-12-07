@@ -23,6 +23,9 @@ define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__));
 define('SYSTEM_PATH', ROOT . DS .'system');
 
+// Define if we are running a mod rewrite enviroment
+define('MOD_REWRITE', isset($_SERVER["HTTP_MOD_REWRITE"]) && $_SERVER["HTTP_MOD_REWRITE"] == "On");
+
 // Point php to our own php error log
 ini_set('error_log', SYSTEM_PATH . DS .'logs'. DS .'php_errors.log');
     

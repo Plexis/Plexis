@@ -49,17 +49,28 @@ class Plexis
         // We are now running
         self::$isRunning = true;
         
-        // Init the configs and database connection
-        self::Init();
+        // Register the Library namespace with the autoloader
+        AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
+        
+        // Set default theme path (temporary)
+        Template::SetThemePath( path(ROOT, "third_party", "themes", "default") );
+        
+        // Init the plexis config files
+        self::LoadConfigs();
+        
+        // Load Plugins
+        self::LoadPlugins();
         
         // Load Auth class and User
         self::LoadWowlib();
         
+        // Init the database connection, we check to see if it exists first, because
+        // a plugin might have already loaded it
+        if(Database::GetConnection('DB') === false)
+            self::LoadDBConnection();
+        
         // Start the Client Auth class
         Auth::Init();
-        
-        // Set default theme path
-        Template::SetThemePath( path(ROOT, "third_party", "themes", "default") );
         
         // Load our controller etc etc
         self::RunModule();
@@ -186,6 +197,47 @@ class Plexis
     
 /*
 | ---------------------------------------------------------------
+| Method: LoadPlugins()
+| ---------------------------------------------------------------
+|
+| Internal method for loading, and running all plugins
+|
+*/
+    protected static function LoadPlugins()
+    {
+        // Include our plugins file, and get the size
+        include path( SYSTEM_PATH, 'config', 'plugins.php' );
+        $OrigSize = sizeof($Plugins);
+        
+        // Loop through and run each plugin
+        $i = 0;
+        foreach($Plugins as $name)
+        {
+            $file = path( ROOT, 'third_party', 'plugins', $name .'.php');
+            if(!file_exists($file))
+            {
+                // Remove the plugin from the list
+                unset($Plugins[$i]);
+                continue;
+            }
+            
+            include $file;
+            $className = "Plugin\\". $name;
+            new $className();
+            $i++;
+        }
+        
+        // If we had to remove plugins, then save the plugins file
+        if(sizeof($Plugins) != $OrigSize)
+        {
+            $file = path( SYSTEM_PATH, 'config', 'plugins.php' );
+            $source = "<?php\n\$Plugins = ". var_export($Plugins, true) .";\n?>";
+            file_put_contents($file, $source);
+        }
+    }
+    
+/*
+| ---------------------------------------------------------------
 | Method: LoadWowlib()
 | ---------------------------------------------------------------
 |
@@ -218,20 +270,16 @@ class Plexis
     
 /*
 | ---------------------------------------------------------------
-| Method: Init()
+| Method: LoadConfigs()
 | ---------------------------------------------------------------
 |
-| Internal method for loading the plexis config files, and initializing
-| the Plexis database connection
+| Internal method for loading the plexis config files
 |
 */
-    protected static function Init()
+    protected static function LoadConfigs()
     {
-        // Tell the autoloader something
-        AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
-        
-        // Import the constants file
-        require path(SYSTEM_PATH, "Constants.php");
+        // Import the Versions file
+        require path(SYSTEM_PATH, "Versions.php");
         
         // Load the Plexis Config file
         $file = path(SYSTEM_PATH, "config", "config.php");
@@ -241,7 +289,23 @@ class Plexis
         $file = path(SYSTEM_PATH, "config", "database.config.php");
         Config::Load($file, 'DB', 'DB_Configs');
         
-        // Init the database connection
+        // Define our site url
+        if( MOD_REWRITE )
+            define('SITE_URL', Request::BaseUrl());
+        else
+            define('SITE_URL', Request::BaseUrl() .'/?uri=');
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Method: LoadDBConnection()
+| ---------------------------------------------------------------
+|
+| Internal method for loading the Plexis DB connection
+|
+*/
+    protected static function LoadDBConnection()
+    {
         try {
             Database::Connect('DB', Config::GetVar('PlexisDB', 'DB'));
         }

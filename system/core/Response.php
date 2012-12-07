@@ -349,7 +349,8 @@ class Response
 | Method: Redirect()
 | ---------------------------------------------------------------
 |
-| This method sets a redirect header, and status code
+| This method sets a redirect header, and status code. When this
+| method is called, headers will be sent
 |
 | @Param (String) $location - The redirect url
 | @Param (Int) $status - The status code to be set
@@ -358,8 +359,22 @@ class Response
 */
     public static function Redirect($location, $status = 301)
     {
-        self::status($status);
-        self::SetHeader('Location', $location);
+        // Make sure the data wasnt sent already
+        if(self::$outputSent)
+            throw new OutputSentException('Cannot set protocol because the response headers have already been sent.');
+            
+        // If we have a relative path, append the site url
+        $location = trim($location);
+        if(!preg_match('@^((|mailto|ftp|http(s)?)://|www\.)@i', $location))
+        {
+            $location = Request::BaseUrl() .'/'. ltrim($location, '/');
+        }
+        
+        // Reset all set data, and proccess the redirect immediately
+        self::Reset();
+        self::$status = $status;
+        self::$headers['Location'] = $location;
+        self::Send();
     }
     
 /*
