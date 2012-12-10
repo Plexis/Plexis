@@ -1,67 +1,65 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis
-| --------------------------------------------------------------
-| Author:       Steven Wilson 
-| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Cache
-| ---------------------------------------------------------------
-|
-| A simple cache class for the CMS
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Library/Cache.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Cache
+ */
 namespace Library;
 
+/**
+ * Simple Cache class for the CMS
+ *
+ * @author      Steven Wilson 
+ * @package     Library
+ */
 class Cache
 {
+    /**
+     * The cache path
+     * @var string
+     */
     protected static $path;
-
-/*
-| ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-*/
+    
+    /**
+     * Contructor method (called internally)
+     *
+     * Initiates the default cache path
+     *
+     * @return void
+     */
     public static function Init()
     {
         self::$path = path( SYSTEM_PATH, "cache" );
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: SetPath()
-| ---------------------------------------------------------------
-|
-| Sets the cache folder path
-|
-| @Param: (String) $path - The path to store cahce files.
-| @Return (None)
-|
-*/
+    
+    /**
+     * Sets the cache folder path
+     *
+     * @param string $path The path to the new cache folder
+     *
+     * @return void
+     */
     public static function SetPath($path)
     {
         // Remove any trailing slashes
         $path = rtrim($path, '/\\');
         self::$path = str_replace( array('\\', '/'), DS, $path );
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: get()
-| ---------------------------------------------------------------
-|
-| Reads and returns the contents of the cache file
-|
-| @Param: (String) $id - The id of the cache file
-| @Return (Mixed): Returns the files contents, false otherwise
-|
-*/
-    public static function Get($id)
+    
+    /**
+     * Reads and returns the contents of a cache file
+     *
+     * @param string $name The name of the cache file
+     *
+     * @return mixed Returns the cache files contents
+     */
+    public static function Get($name)
     {
         // Define a file path
-        $file = self::$path . DS . $id . '.cache';
+        $file = self::$path . DS . $name . '.cache';
         
         // check if our file exists
         if(file_exists($file))
@@ -80,24 +78,20 @@ class Cache
         }
         return false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: save()
-| ---------------------------------------------------------------
-|
-| Saves the contents into the given file id.
-|
-| @Param: (String) $id - The id of the cache file
-| @Param: (String) $contents - The contents to be stored in the cache
-| @Param: (Int) $expire - The expire time in seconds from now.
-| @Return (Bool): true upon success, false otherwise
-|
-*/
-    public static function Save($id, $contents, $expire = 86400)
+    
+    /**
+     * Reads and returns the contents of a cache file
+     *
+     * @param string $name The name of the cache file
+     * @param string $contents The contents to be stored in the cache
+     * @param int $expire The expire time in seconds from now
+     *
+     * @return bool Returns true if the save is successfull, false otherwise
+     */
+    public static function Save($name, $contents, $expire = 86400)
     {
         // Define a file path
-        $file = self::$path . DS . $id . '.cache';
+        $file = self::$path . DS . $name . '.cache';
         
         // Create our files contents
         $data = array(
@@ -114,22 +108,18 @@ class Cache
         }
         return false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: delete()
-| ---------------------------------------------------------------
-|
-| Deletes a cache file
-|
-| @Param: (String) $id - The id of the cache file
-| @Return (Bool): true upon success, false otherwise
-|
-*/
-    public static function Delete($id)
+    
+    /**
+     * Deletes a cache file
+     *
+     * @param string $name The name of the cache file
+     *
+     * @return bool Returns true of the delete was successfull, false otherwise
+     */
+    public static function Delete($name)
     {
         // Define a file path
-        $file = self::$path . DS . $id . '.cache';
+        $file = self::$path . DS . $name . '.cache';
         
         // Return the direct result of the deleting
         return unlink($file);
@@ -145,6 +135,11 @@ class Cache
 | @Return (Bool): true upon success
 |
 */
+    /**
+     * Deletes all cache files from the cache folder
+     *
+     * @return bool Returns true of the delete was successfull, false otherwise
+     */
     public static function Clear()
     {
         // get a list of all files and directories
@@ -163,21 +158,17 @@ class Cache
         return true;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: expire_time()
-| ---------------------------------------------------------------
-|
-| Reads and returns the expire time for the file in UNIX timestamp
-|
-| @Param: (String) $id - The id of the cache file
-| @Return (Int): Returns UNIX timestamp expire time
-|
-*/
-    public static function ExpireTime($id)
+    /**
+     * Reads and returns the expire time for the file in UNIX timestamp
+     *
+     * @param string $name The name of the cache file
+     *
+     * @return int Returns UNIX timestamp expire time
+     */
+    public static function ExpireTime($name)
     {
         // Define a file path
-        $file = self::$path . DS . $id . '.cache';
+        $file = self::$path . DS . $name . '.cache';
         
         // check if our file exists
         if(file_exists($file))

@@ -1,35 +1,28 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis Core
-| --------------------------------------------------------------
-| Author: 		Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
-| License: 		GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Filesystem
-| ---------------------------------------------------------------
-|
-| A class built to easily manage files and directories
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/Filesystem.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Filesystem
+ */
 namespace Core;
 
+/**
+ * A class built to easily manage files and directories
+ *
+ * @author      Steven Wilson 
+ * @package     Core
+ */
 class Filesystem
 {
-
-/*
-| ---------------------------------------------------------------
-| Method: IsWritable()
-| ---------------------------------------------------------------
-|
-| This method is used to return whether a file OR directory is
-| writable.
-|
-| @Param: $path - The complete path to the file or directory
-| @Return: (Bool) TRUE or FALSE
-|
-*/
+    /**
+     * This method is used to return whether a file OR directory is writable.
+     *
+     * @param string $path The complete path to the file or directory
+     * @return bool
+     */
     public static function IsWritable($path) 
     {
         // Correct path
@@ -65,19 +58,14 @@ class Filesystem
             return true;
         }
     }
-  
-/*
-| ---------------------------------------------------------------
-| Method: IsReadable()
-| ---------------------------------------------------------------
-|
-| This method is used to return whether a file OR directory is
-| readable and can be opened.
-|
-| @Param: $path - The complete path to the file or directory
-| @Return: (Bool) TRUE or FALSE
-|
-*/  
+    
+    /**
+     * This method is used to return whether a file OR directory is
+     * readable and can be opened.
+     *
+     * @param string $path The complete path to the file or directory
+     * @return bool
+     */
     public static function IsReadable($path) 
     {
         // Correct path
@@ -114,19 +102,14 @@ class Filesystem
             return true;
         }
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: CreateDir()
-| ---------------------------------------------------------------
-|
-| This method is used to create a new directory.
-|
-| @Param: $path - The complete path to the new directory
-| @Param: $chmod - The desired chmod on the folder
-| @Return: (Bool) TRUE or FALSE
-|
-*/
+    
+    /**
+     * Creates a new directory
+     *
+     * @param string $path  The complete path to the new directory
+     * @param int $chmod The desired chmod on the folder
+     * @return bool Returns true if the directory was created successfully.
+     */
     public static function CreateDir($path, $chmod = 0777)
     {
         // Correct path
@@ -148,20 +131,15 @@ class Filesystem
         umask($oldumask);
         return true;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: RemoveDir()
-| ---------------------------------------------------------------
-|
-| This method is used to remove a directory. You must use caution
-| with this method as its recursive, and will delete all sub files
-| and directories
-|
-| @Param: $path - The complete path to the directory
-| @Return: (Bool) TRUE or FALSE
-|
-*/
+    
+    /**
+     * Removes a directory. You must use caution
+     * with this method as its recursive, and will delete all sub files
+     * and directories
+     *
+     * @param string $path  The complete path to the directory
+     * @return bool Returns true if the directory was removed successfully.
+     */
     public static function RemoveDir($path)
     {
         // Correct path
@@ -216,31 +194,27 @@ class Filesystem
         return false;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ReadDir()
-| ---------------------------------------------------------------
-|
-| This method is used to get an array of folders and files within.
-|
-| @Param: $path - The complete path to the directory
-| @Param: $detailed - Detailed information about files and fodlers?
-| @Param: $recursive - Set the desired level or sub levels to read
-|   as well, -1 is unlimited.
-| @Return: (Array):
-|       array(
-|           'type' => "file" OR "folder"
-|           'name' => "Name of the file / folder"
-|           'path' => "/path/to/folder/" (with trailing slash)
-|           'file_list' => array() // Array of sub files and Dirs // Folders Only!
-|              
-|           IF $detailed is TRUE:
-|               'size' => (int) filesize // Files only!
-|               'modified' => (int) Last modification timestamp
-|               'accessed' => (int) Last accessed timestamp
-|       );
-|
-*/
+    /**
+     * Reads the contents a directory.
+     *
+     * @param string $path  The complete path to the directory
+     * @param bool $detailed Detailed information about files and fodlers?
+     * @param int $recursive Set the desired level or sub levels to read
+     * as well, -1 is unlimited.
+     * @return array[] | string[] <br />
+     *      <ul>
+     *           <li>'type' => "file" OR "folder"</li>
+     *           <li>'name' => "Name of the file / folder"</li>
+     *           <li>'path' => "/path/to/folder/" (with trailing slash)</li>
+     *           <li>'file_list' => array() // Array of sub files and Dirs // Folders Only!</li>
+     *      </ul>        
+     *      IF $detailed is TRUE:
+     *      <ul>
+     *           <li>'size' => (int) filesize // Files only!</li>
+     *           <li>'modified' => (int) Last modification timestamp</li>
+     *           <li>'accessed' => (int) Last accessed timestamp</li>
+     *      </ul>
+     */
     public static function ReadDir($path, $detailed = false, $recursive = false)
     {
         // Correct path
@@ -324,20 +298,16 @@ class Filesystem
         }
         return false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: CreateFile()
-| ---------------------------------------------------------------
-|
-| This method is used to create a new file, and place contents
-| within it (optional)
-|
-| @Param: $file - The complete path to the file
-| @Param: $contents - The contents to place inside
-| @Return: (Bool) TRUE or FALSE
-|
-*/
+    
+    /**
+     * Creates a new file.
+     *
+     * @param string $file The complete path to the new file
+     * @param string|mixed[] $contents The contents to place in the file.
+     *   If contents are an array, they will be serialized using the php
+     *   function <i>serialize()</i>. Default value is null
+     * @return bool Returns true if the file was created successfully
+     */
     public static function CreateFile($file, $contents = null)
     {
         // Correct path
@@ -368,18 +338,13 @@ class Filesystem
         // \Debug::trace("Creation of file '{$file}' failed.", __FILE__, __LINE__);
         return false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: DeleteFile()
-| ---------------------------------------------------------------
-|
-| This method is used to delete a file
-|
-| @Param: $file - The complete path to the file
-| @Return: (Bool) TRUE or FALSE
-|
-*/
+    
+    /**
+     * Deletes a file
+     *
+     * @param string $file The complete path to the file
+     * @return bool Returns true if the file was deleted successfully
+     */
     public static function DeleteFile($file)
     {
         // Correct path
@@ -398,17 +363,12 @@ class Filesystem
         return false;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ListFiles()
-| ---------------------------------------------------------------
-|
-| This method is used to list an array of file names in a directory
-|
-| @Param: $path - The complete path to the directory
-| @Return: (Array)
-|
-*/
+    /**
+     * Lists an array of files in a directory
+     *
+     * @param string $path The complete path to the directory
+     * @return string[] Returns an array of all the filenames in the directory
+     */
     public static function ListFiles($path)
     {
         // Correct path
@@ -449,27 +409,23 @@ class Filesystem
         }
         return false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: ListFolders()
-| ---------------------------------------------------------------
-|
-| This method is used to get an array of folders within a directory
-|
-| @Param: $path - The complete path to the directory
-| @Param: $recursive - Set the desired level or sub levels to read
-|   as well, -1 is unlimited.
-| @Return: (Array):
-|       array(
-|           0 => "foldername"
-|           1 => "foldername"
-|           2 => array(
-|               'name' => "foldername with sub dirs",
-|               'sub_dirs' => array()
-|       );
-|
-*/
+    
+    /**
+     * Lists an array of folders in a directory
+     *
+     * @param string $path The complete path to the directory
+     * @param int $recursive Set the desired level or sub levels to read
+     *    as well, -1 is unlimited.
+     * @return array <br />
+     *      <ul>
+     *          <li>No Sub-Directories => (String) foldername</li>
+     *          <li>With Sub-Directories => Array
+     *              <ul>
+     *                  <li>(String) Sub Directory Name</li>
+     *              </ul>
+     *          </li>
+     *      </ul>
+     */
     public static function ListFolders($path, $recursive = false)
     {
         // Correct path
@@ -518,19 +474,14 @@ class Filesystem
         }
         return false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: Size()
-| ---------------------------------------------------------------
-|
-| This method is used to get the size of a file or folder
-|
-| @Param: $path - The complete path to the directory / file
-| @Param: $format - Format the bytes into human readable? ( 11.7 MB )
-| @Return: (String)
-|
-*/
+    
+    /**
+     * Method is used to get the size of a file or folder
+     *
+     * @param string $path The complete path to the file / directory
+     * @param bool $format Format the bytes into human readable? ( 11.7 MB )
+     * @return int|string
+     */
     public static function Size($path, $format = false)
     {
         // Correct path
@@ -592,19 +543,13 @@ class Filesystem
         }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Copy()
-| ---------------------------------------------------------------
-|
-| A wrapper function for php's built in copy function. Includes
-| checking if the file exists
-|
-| @Param: $src - The complete path to the source file
-| @Param: $dest - The complete path to the destination file
-| @Return: (Bool) TRUE or FALSE
-|
-*/
+    /**
+     * Copies the contents of a source file, to another file
+     *
+     * @param string $src The complete path to the source file
+     * @param string $dest The complete path to the destination file
+     * @return bool Returns true on success, or false
+     */
     public static function Copy($src, $dest)
     {
         // Correct paths
@@ -631,20 +576,14 @@ class Filesystem
         }
         return true;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: Rename()
-| ---------------------------------------------------------------
-|
-| A wrapper function for php's built in rename function. Includes
-| checking if the file exists
-|
-| @Param: $src - The complete path to the source file / folder
-| @Param: $dest - The complete path to the destination file / folder
-| @Return: (Bool) TRUE or FALSE
-|
-*/
+    
+    /**
+     * Rename's a file
+     *
+     * @param string $src The complete path to the source file / folder
+     * @param string $dest The complete path to the destination file / folder
+     * @return bool Returns true on success, or false
+     */
     public static function Rename($src, $dest)
     {
         // Correct paths
@@ -666,20 +605,15 @@ class Filesystem
         return rename($src, $dest);
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Delete()
-| ---------------------------------------------------------------
-|
-| This function determines if the path given is a folder OR a file,
-|   and removes it accordinly using this class's remove_dir and
-|   delete_file methods
-|
-| @Param: $path - The complete path to the source file / folder
-| @Param: $files - An array of files / folders to remove
-| @Return: (Bool) TRUE or FALSE
-|
-*/
+    /**
+     * Determines if the path given is a folder OR a file,
+     * and removes it accordinly using this class's RemoveDir and
+     * DeleteFile methods
+     *
+     * @param string $path The complete path to the source file / folder
+     * @param string[] $files An array of files / folders to remove
+     * @return bool Returns true on success, or false
+     */
     public static function Delete($path, $files = array())
     {
         // Correct path
@@ -720,6 +654,12 @@ class Filesystem
         }
     }
     
+    /**
+     * Converts an int or float size into a human readable format
+     *
+     * @param int|float $size The size to be converted
+     * @return string The human readable size
+     */
     protected static function FormatSize($size)
     {
         $units = array(' B', ' KB', ' MB', ' GB', ' TB');

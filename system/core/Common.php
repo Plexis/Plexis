@@ -1,18 +1,25 @@
 <?php
-/*
-| ---------------------------------------------------------------
-| Function: path()
-| ---------------------------------------------------------------
-|
-| Combines several strings into a file path.
-|
-| @Params: (String | Array) - The pieces of the path, passed as 
-|   individual arguments. Each argument can be an array of paths,
-|   a string foldername, or a mixture of the two.
-| @Return: (String) - The path, with the corrected Directory Seperator
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/Common.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @author      Plexis Dev Team
+ * @package     Core
+ * @subpackage  Functions
+ */
 
+/**
+ * Combines several strings into a file path.
+ *
+ * @params string|string[] The pieces of the path, passed as 
+ * individual arguments. Each argument can be an array of paths,
+ * a string foldername, or a mixture of the two.
+ *
+ * @return string Full path using the correct system 
+ *   directory separater
+ */
     function path()
     {
         // Get our path parts
@@ -20,16 +27,13 @@
         return (is_array( $parts )) ? trim( implode(DS, $parts) ) : trim($parts);
     }
 	
-/*
-| ---------------------------------------------------------------
-| Function: isValidIp()
-| ---------------------------------------------------------------
-|
-| Returns if the given IP address is a valid, Non-Private IP
-|
-| @Return (Bool)
-|
-*/
+/**
+ * Checks an IP address, returning whether its a valid, Non-Private IP.
+ *
+ * @param string $ip The ip address to check.
+ *
+ * @return bool Returns true if the given IP address is a valid, Non-Private IP, false otherwise
+ */
     function isValidIp($ip)
     {
         // Trim the ip address
@@ -58,6 +62,13 @@
         return false;
     }
     
+/**
+ * Creates a number of html breaks to be repeated
+ *
+ * @param int $count The number of breaks
+ *
+ * @return string A string containing the number ($count) of breaks
+ */
     function br($count)
     {
         $buffer = '';

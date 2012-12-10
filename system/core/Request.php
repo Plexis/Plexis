@@ -1,22 +1,22 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis
-| --------------------------------------------------------------
-| Author:       Steven Wilson 
-| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Request
-| ---------------------------------------------------------------
-|
-| This class provides information for the current Request such as
-| all the Post and GET data, the URI string, the Remote IP, Referer,
-| the base URL, website root, and more.
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/Request.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Request
+ */
 namespace Core;
 
+/**
+ * This class provides information for the current Request. Such information
+ * like all the Post and GET data, the URI string, the Remote IP, Referer,
+ * the base URL, website root, and more.
+ *
+ * @author      Steven Wilson 
+ * @package     Core
+ */
 class Request
 {
     // Protocols
@@ -31,21 +31,50 @@ class Request
     const METHOD_PUT = 'PUT';
     const METHOD_DELETE = 'DELETE';    
     
-    // Protected methods
+    /**
+     * Current protocol
+     * @var string
+     */
     protected static $protocol = 'http';
+    
+    /**
+     * the site's base url (the root of the website)
+     * @var string
+     */
     protected static $baseurl;
+    
+    /**
+     * Http domain name (no trailing paths after the .com)
+     * @var string
+     */
     protected static $domain;
+    
+    /**
+     * The web root is the trailing path after the domain name.
+     * The base url is the Domain name, plus the webroot
+     * @var string
+     */
     protected static $webroot;
+    
+    /**
+     * The query string passed with the request
+     * @var string
+     */
     protected static $queryString;
+    
+    /**
+     * The remote IP address connected to this request
+     * @var string
+     */
     protected static $clientIp;
 
     
-/*
-| ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-|
-*/
+    /**
+     * Class Constructor (called automatically)
+     *
+     * Initializes the class properties
+     * @return void
+     */
     public static function Init()
     {
         if(empty(self::$domain))
@@ -72,31 +101,21 @@ class Request
         }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Input()
-| ---------------------------------------------------------------
-|
-| Returns data from the 'php://input'
-|
-| @Return (String)
-|
-*/
-    public static function Input($calllback = null)
+    /**
+     * Returns data from the 'php://input'
+     *
+     * @return string
+     */
+    public static function Input()
     {
         return file_get_contents('php://input');
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Method()
-| ---------------------------------------------------------------
-|
-| Returns the request http method
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the request http method (GET, POST, PUT etc)
+     *
+     * @return string
+     */
     public static function Method()
     {
         $val = null;
@@ -108,16 +127,11 @@ class Request
         return $val;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Referer()
-| ---------------------------------------------------------------
-|
-| Returns the referer
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the reffering website url
+     *
+     * @return string
+     */
     public static function Referer()
     {
         $ref = null;
@@ -129,16 +143,15 @@ class Request
         return $ref;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Query()
-| ---------------------------------------------------------------
-|
-| Returns the url query string
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the url query string
+     *
+     * @param string $key The GET array id to return. Leave null to return all GET data
+     * @param mixed $default The default return value if the GET array key doesnt
+     *    exist. Default is null.
+     * @return string|string[]|mixed Returns $default if the GET key doesnt exist. Returns a
+     *   string[] if no $key is provided, or the value of $key if the array key exists
+     */
     public static function Query($key = null, $default = null)
     {
         if($key == null)
@@ -147,16 +160,15 @@ class Request
         return (array_key_exists($key, $_GET)) ? $_GET[$key] : $default;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Post()
-| ---------------------------------------------------------------
-|
-| Returns the POST var specified
-|
-| @Return (Mixed)
-|
-*/
+    /**
+     * Returns the POST var specified, or all POST data
+     *
+     * @param string $key The POST array id to return. Leave null to return all POST data
+     * @param mixed $default The default return value if the POST array key doesnt
+     *    exist. Default is null.
+     * @return string|string[]|mixed Returns $default if the POST key doesnt exist. Returns a
+     *   string[] if no $key is provided, or the value of $key if the array key exists.
+     */
     public static function Post($key = null, $default = null)
     {
         if($key == null)
@@ -165,16 +177,15 @@ class Request
         return (array_key_exists($key, $_POST)) ? $_POST[$key] : $default;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Cookie()
-| ---------------------------------------------------------------
-|
-| Returns the value of a cookie
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the Cookie name specified, or all Cookie data
+     *
+     * @param string $key The cookie name to return. Leave null to return all cookie data
+     * @param mixed $default The default return value if the Cookie name doesnt
+     *    exist. Default is null.
+     * @return string|string[]|mixed Returns $default if the Cookie name doesnt exist. Returns a
+     *   string[] if no $key is provided, or the value of $key if the cookie exists.
+     */
     public static function Cookie($key = null, $default = null)
     {
         if($key == null)
@@ -183,28 +194,24 @@ class Request
         return (array_key_exists($key, $_COOKIE)) ? $_COOKIE[$key] : $default;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Accpets()
-| ---------------------------------------------------------------
-|
-| Returns the an array of what formats the client is accepting
-|
-| @Return (Array | Bool)
-|
-*/
+    /**
+     * Returns the an array of what formats the client is accepting
+     *
+     * @param string $type The type to return
+     * @todo Finish the method, and provide better description
+     * @return void
+     */
     public static function Accepts($type = null){}
     
-/*
-| ---------------------------------------------------------------
-| Method: AcceptsLanguage()
-| ---------------------------------------------------------------
-|
-| Returns the language in which the client accepts
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns a string or string[] of what languages the client accepts
+     *
+     * @param string $lang If a language is provided here, the method will return
+     *    true or false based on whehter the client accepts the language
+     * @return string|string[]|bool Returns the language, or an array of
+     * languages the client accpets. If $lang is set, then this method returns
+     * a bool based on whehter the client accepts the language
+     */
     public static function AcceptsLanguage($lang = null)
     {
         $accepts = preg_split('/[;,]/', self::Header('Accept-Language'));
@@ -217,17 +224,12 @@ class Request
         return ($lang === null) ? $accepts : in_array($lang, $accepts);
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ClientIp()
-| ---------------------------------------------------------------
-|
-| Returns the clients IP
-|
-| @Return (String)
-|
-*/
-    // The client IP
+    /**
+     * Returns the Remote connected IP address
+     *
+     * @return string The validated remote IP address. Returns 0.0.0.0 if
+     *   the IP address could not be determined
+     */
     public static function ClientIp()
     {
         // Return it if we already determined the IP
@@ -282,63 +284,43 @@ class Request
         return self::$clientIp;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: IsAjax()
-| ---------------------------------------------------------------
-|
-| Returns the whether the request is an ajax request
-|
-| @Return (Bool)
-|
-*/
+    /**
+     * Returns the whether the request is an ajax request
+     *
+     * @return bool If the requeset is an ajax request (HTTP_X_REQUESTED_WITH => xmlhttprequest)
+     */
     public static function IsAjax()
     {
         return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Header()
-| ---------------------------------------------------------------
-|
-| Returns the value of the specified header passed
-|
-| @Return (String)
-|
-*/
-    // Return header name value
+    /**
+     * Returns the value of the specified header passed
+     *
+     * @param string $name The header name to be returned
+     * @return string|bool Returns false if the header isnt set
+     */
     public static function Header($name)
     {
         $name = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
         return (!empty($_SERVER[$name])) ? $_SERVER[$name] : false;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: BaseUrl()
-| ---------------------------------------------------------------
-|
-| Returns the sites base url
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the site's base URL
+     *
+     * @return string
+     */
     public static function BaseUrl()
     {
         return self::$baseurl;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Protocol()
-| ---------------------------------------------------------------
-|
-| Returns the current requests protocol
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the current requests protocol
+     *
+     * @return string
+     */
     public static function Protocol()
     {
         return self::$protocol;

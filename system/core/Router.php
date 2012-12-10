@@ -1,48 +1,60 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis Core
-| --------------------------------------------------------------
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Router
-| ---------------------------------------------------------------
-|
-| This class is used to determine our controller / action. It is
-| also used for module checking, or spitting out 404's
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/Router.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Router
+ */
 namespace Core;
 
+/**
+ * This class is used to determine our controller / action. When called
+ * this object works with the Request object to determine the current
+ * url, and analyze it to determine which controller, and method the 
+ * Dispatch class will use.
+ *
+ * @author      Steven Wilson 
+ * @package     Core
+ */
 class Router
 {
-    // Have we routed the url yet?
+    /**
+     * Have we routed the url yet?
+     * @var bool
+     */
     protected static $routed = false;
     
-    // Our controller name
+    /**
+     * The requested cotnroller name
+     * @var string
+     */
     protected static $controller;
 
-    // Our action (sub page)
+    /**
+     * The requested method name
+     * @var string
+     */
     protected static $action;
     
-    // The uri string
+    /**
+     * The request uri
+     * @var string
+     */
     protected static $uri;
-
-    // The querystring parameters
+    
+    /**
+     * The querystring parameters
+     * @var string[]
+     */
     protected static $params;
     
-/*
-| ---------------------------------------------------------------
-| Method: GetRequest()
-| ---------------------------------------------------------------
-|
-| This method returns all the url information
-|
-| @Return (Array) Returns an array of all url related info
-|
-*/    
+    /**
+     * Returns all the url information
+     *
+     * @return string[] Returns array('controller' => , 'action' => , 'params' => );
+     */
     public static function GetRequest()
     {
         return array(
@@ -52,61 +64,42 @@ class Router
         );
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: GetController()
-| ---------------------------------------------------------------
-|
-| This method returns the controller name from the URI
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the controller name from the URI
+     *
+     * @return string
+     */
     public static function GetController()
     {
         return self::$controller;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: GetAction()
-| ---------------------------------------------------------------
-|
-| This method returns the action name from the URI
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the method name from the URI
+     *
+     * @return string
+     */
     public static function GetAction()
     {
         return self::$action;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: GetParams()
-| ---------------------------------------------------------------
-|
-| This method returns the action parameters from the URI
-|
-| @Return (Array)
-|
-*/
+    /**
+     * Returns the action parameters from the URI
+     *
+     * @return string[]
+     */
     public static function GetParams()
     {
         return self::$params;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: GetUriSegement()
-| ---------------------------------------------------------------
-|
-| This method returns the specified URI segement
-|
-| @Return (String) Returns the segement, or false
-|
-*/    
+    /**
+     * Returns the specified URI segement
+     *
+     * @param int $index The uri segement index
+     * @return string|bool Returns false if the URI index is out of range
+     */
     public static function GetUriSegement($index)
     {
         // Make sure we've at least routed the url here;
@@ -114,18 +107,13 @@ class Router
         
         return (isset(self::$uri[$index])) ? self::$uri[$index] : false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: route_url()
-| ---------------------------------------------------------------
-|
-| This method analyzes the url to determine the controller / action
-| and query string
-|
-| @Return (Array) Returns an array of controller, action and queryString
-|
-*/
+    
+    /**
+     * This method analyzes the url to determine the controller / action
+     * and query string
+     *
+     * @return void
+     */
     public static function RouteUrl() 
     {
         // Make sure we only route once

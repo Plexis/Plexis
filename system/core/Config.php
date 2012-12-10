@@ -1,42 +1,42 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis Core
-| --------------------------------------------------------------
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2011, Steven Wilson
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Config
-| ---------------------------------------------------------------
-|
-| Main Config class. used to load, set, and save variables used
-| in the config file.
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/Config.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Config
+ */
 namespace Core;
 
+/**
+ * Main Config class. Used to load, set, and save variables used
+ * in the config file.
+ *
+ * @author  Steven Wilson 
+ * @package Core
+ */
 class Config
 {
-    // An array of all out stored containers / variables
+    /**
+     * An array of all out stored containers / variables
+     * @var mixed[]
+     */
     protected static $data = array();
-
-    // A list of our loaded config files
+    
+    /**
+     * A list of our loaded config files
+     * @var array[]
+     */
     protected static $files = array();
-
-
-/*
-| ---------------------------------------------------------------
-| Method: GetVar()
-| ---------------------------------------------------------------
-|
-| Returns the variable ($key) value in the config file.
-|
-| @Param: (String) $key - variable name. Value is returned
-| @Param: (Mixed) $name - config variable container name
-| @Return: (Mixed) May return NULL if the var is not set
-|
-*/
+    
+    /**
+     * Returns the variable ($key) value in a config file.
+     *
+     * @param string $key Config variable name
+     * @param string $name Config id or name given when loaded
+     * @return mixed May return NULL if the var is not set
+     */
     public static function GetVar($key, $name) 
     {
         // Lowercase the type
@@ -46,17 +46,13 @@ class Config
         return (isset(self::$data[$name][$key])) ? self::$data[$name][$key] : NULL;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: FetchVars()
-| ---------------------------------------------------------------
-|
-| Returns all variables in an array from the the config file.
-|
-| @Param: (Mixed) $name - config variable container name
-| @Return: (Array) May return NULL if the var is not set
-|
-*/
+    /**
+     * Returns all variables in an array from the the config file.
+     *
+     * @param string $name Config id or name given when loaded
+     * @return array|null Array of variables ($key => $value). 
+     * May return NULL if the var is not set
+     */
     public static function FetchVars($name) 
     {
         // Lowercase the type
@@ -65,21 +61,17 @@ class Config
         // Check if the variable exists
         return (isset(self::$data[$name])) ? self::$data[$name] : NULL;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: SetVar()
-| ---------------------------------------------------------------
-|
-| Sets the variable ($key) value. If not saved, default value
-| will be returned as soon as page is re-loaded / changed.
-|
-| @Param: (String or Array) $key - variable name to be set
-| @Param: (Mixed) $value - new value of the variable
-| @Param: (Mixed) $name - The container name for the $key variable
-| @Return: (Bool) Returns false if the config file denies set perms
-|
-*/
+    
+    /**
+     * Sets the variable ($key) value. If not saved, default value
+     * will be returned as soon as page is re-loaded / changed.
+     *
+     * @param string|array $key Config variable name to be set, or an
+     * array of $key => $value
+     * @param string $val The config variable's new value
+     * @param string $name Config id or name given when loaded
+     * @return bool Returns false if the config file denies set perms
+     */
     public static function SetVar($key, $val = false, $name) 
     {
         // Lowercase the $name
@@ -104,28 +96,21 @@ class Config
         
         return true;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: Load()
-| ---------------------------------------------------------------
-|
-| Load a config file, and adds its defined variables to the $data
-|   array
-|
-| @Param: (String) $_Cfile - Full path to the config file, includeing name
-| @Param: (String) $_Cname - The container name we are storing this configs
-|   variables to.
-| @Param: (String) $_Carray - If all of the config vars are stored in an array, 
-|   whats the array variable name? Default is false
-| @Param: (Bool) $_CallowSet - If set to false, config values are readonly, and cannot
-|   be set via the 'SetVar' method. 
-| @Param: (Bool) $_CallowSave - If set to true, the config file cannot be written
-|   to by the 'Save' method. Also, if $_CallowSet is false, this value is
-|   false as well, no matter the actual set value.
-| @Return: (Bool)
-|
-*/
+    
+    /**
+     * Loads a config file, and adds its defined variables to the $data array
+     *
+     * @param string $_Cfile Full path to the config file, includeing name
+     * @param string $_Cname The container name we are storing this configs
+     * @param string $_Carray If all of the config vars are stored in an array, 
+     *    whats the array variable name?
+     * @param bool $_CallowSet If set to false, config values are readonly, and cannot
+     *    be set via the 'SetVar' method. 
+     * @param bool $_CallowSave If set to true, the config file cannot be written
+     *    to by the 'Save' method. Also, if $_CallowSet is false, this value is
+     *    false as well, no matter the actual set value. 
+     * @return bool Returns false if the config file cannot be found or read
+     */
     public static function Load($_Cfile, $_Cname, $_Carray = false, $_CallowSet = true, $_CallowSave = true) 
     {
         // Lowercase the $name
@@ -172,52 +157,35 @@ class Config
         return true;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: UnLoad()
-| ---------------------------------------------------------------
-|
-| This method is used to unload a config
-|
-| @Param: (String) $name - Name of the container holding the variables
-| @Return: (None)
-|
-*/
+    /**
+     * This method is used to unload a config
+     *
+     * @param string $name Config id or name given when loaded
+     * @return void
+     */
     public static function UnLoad($name) 
     {
         unset(self::$data[$name]);
     }
-	
-/*
-| ---------------------------------------------------------------
-| Method: IsLoaded()
-| ---------------------------------------------------------------
-|
-| This method returns if a config name is loaded
-|
-| @Param: (String) $name - Name of the container holding the variables
-| @Return: (Bool)
-|
-*/
+    
+    /**
+     * This method returns if a config name is loaded
+     *
+     * @param string $name Config id or name given when loaded
+     * @return bool
+     */
 	public static function IsLoaded($name)
 	{
 		return array_key_exists($name, self::$data);
 	}
-
-/*
-| ---------------------------------------------------------------
-| Method: Save()
-| ---------------------------------------------------------------
-|
-| Saves all set config variables to the config file, and makes 
-| a backup of the current config file
-|
-| @Param: (String) $name - Name of the container holding the variables
-| @Param: (Bool) $useRegex - If enabled, Regex will be used to set
-|   variables. This preserves comments, but is slower
-| @Return: (Bool) true on success, false otherwise
-|
-*/
+    
+    /**
+     * Saves all set config variables to the config file, and makes 
+     * a backup of the current config file
+     *
+     * @param string $name Config id or name given when loaded
+     * @return bool true on success, false otherwise
+     */ 
     public static function Save($name) 
     {
         // Lowercase the $name
@@ -287,18 +255,13 @@ class Config
         }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Restore()
-| ---------------------------------------------------------------
-|
-| This method is used to undo the last Save. .bak file must be
-|   in the config folder
-|
-| @Param: (String) $name - Name of the container holding the variables
-| @Return: (Bool) true on success, false otherwise
-|
-*/
+    /**
+     * This method is used to undo the last Save. .bak file must be
+     * in the config folder
+     *
+     * @param string $name Config id or name given when loaded
+     * @return bool true on success, false otherwise
+     */ 
     public static function Restore($name) 
     {
         // Copy the backup config file nd write the config values to the current config

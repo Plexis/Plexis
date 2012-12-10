@@ -1,22 +1,26 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis
-| --------------------------------------------------------------
-| Author:       Steven Wilson 
-| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Mime
-| ---------------------------------------------------------------
-|
-| An HTTP mime parser class
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Library/Mime.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Mime
+ */
 namespace Library;
 
+/**
+ * A File extension mime parser.
+ *
+ * @author      Steven Wilson 
+ * @package     Library
+ */
 class Mime
 {
+    /**
+     * An array of ext => (mime type | mime types[])
+     * @var string[]|array[]
+     */
     protected $mimeTypes = array(
         // Common Files
         'htm' => 'text/html',
@@ -130,40 +134,34 @@ class Mime
         'ppz' => 'application/vnd.ms-powerpoint',
     );
     
-/*
-| ---------------------------------------------------------------
-| Method: GetType()
-| ---------------------------------------------------------------
-|
-| Returns a mime type for the provided file extension
-|
-| @Param: (String) $ext - The file extension
-| @Return: (Array | String) Returns an array if there is more then
-|   1 mime type (Ordered by most common to least), or a string if
-|   there is only 1 mime type. Returns false if there is no entry
-|   for the given file extenstion
-|
-*/ 
+    /**
+     * Returns a mime type for the provided file extension
+     *
+     * @param string $ext The file extension
+     *
+     * @return string|string[] Returns an array if there is more then
+     * 1 mime type (Ordered by most common to least), or a string if
+     * there is only 1 mime type. Returns false if there is no entry
+     * for the given file extenstion
+     */
     public static function GetType($ext)
     {
+        // Remove the dot if it exists
+        $ext = ltrim($ext, '.');
         if(array_key_exists($ext, self::$mimeTypes))
             return self::$mimeTypes[$ext];
             
         return false;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: SetType()
-| ---------------------------------------------------------------
-|
-| Sets a mime type for the provided file extension
-|
-| @Param: (String) $ext - The file extension
-| @Param: (String | Array) $value - A string or array of mime types
-| @Return: (None)
-|
-*/ 
+    /**
+     * Sets a mime type for the provided file extension
+     *
+     * @param string $ext The file extension
+     * @param string|array $value A string or array of mime types
+     *
+     * @return void
+     */
     public static function SetType($ext, $value)
     {
         self::$mimeTypes[$ext] = $value;

@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\Benchmark</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">0</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_ElapsedTime" title="ElapsedTime :: Returns the final time from start to finish for a benchmark"><span class="description">Returns the final time from start to finish for a benchmark</span><pre>ElapsedTime()</pre></a></li>
+<li class="method public "><a href="#method_Init" title="Init :: When this method is called (automatically), the system start time is defined"><span class="description">When this method is called (automatically), the system start time is defined</span><pre>Init()</pre></a></li>
+<li class="method public "><a href="#method_MemoryUsage" title="MemoryUsage :: Returns the amount of memory the system has used to load the page"><span class="description">Returns the amount of memory the system has used to load the page</span><pre>MemoryUsage()</pre></a></li>
+<li class="method public "><a href="#method_Start" title="Start :: Starts a new timer"><span class="description">Starts a new timer</span><pre>Start()</pre></a></li>
+<li class="method public "><a href="#method_Stop" title="Stop :: Stops a defined timer"><span class="description">Stops a defined timer</span><pre>Stop()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_start" title="$start :: An array of benchmark start times ($name =&gt; time)"><span class="description"></span><pre>$start</pre></a></li>
+<li class="property protected "><a href="#property_stop" title="$stop :: An array of benchmark stop times ($name =&gt; time)"><span class="description"></span><pre>$stop</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\Benchmark"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.Benchmark.html">Benchmark</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">This class is used to benchmark certain parts of the system.</p>
+<div class="details">
+<div class="long_description"><p>You
+can define new start and stop times, and get elapsed times as well</p></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Core.html">Core</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_ElapsedTime"></a><div class="element clickable method public method_ElapsedTime" data-toggle="collapse" data-target=".method_ElapsedTime .collapse">
+<h2>Returns the final time from start to finish for a benchmark</h2>
+<pre>ElapsedTime(string $name, int $round, bool $stop) : float | bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name given for this benchmark timer</p></div>
+<div class="subelement argument">
+<h4>$round</h4>
+<code>int</code><p>How many numbers after the "." do we show?</p>
+</div>
+<div class="subelement argument">
+<h4>$stop</h4>
+<code>bool</code><p>Stop the timer as well?</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>float</code><code>bool</code>The time it took from start to finish. FALSE
+if no timer was set in the first place.</div>
+</div></div>
+</div>
+<a id="method_Init"></a><div class="element clickable method public method_Init" data-toggle="collapse" data-target=".method_Init .collapse">
+<h2>When this method is called (automatically), the system start time is defined</h2>
+<pre>Init() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_MemoryUsage"></a><div class="element clickable method public method_MemoryUsage" data-toggle="collapse" data-target=".method_MemoryUsage .collapse">
+<h2>Returns the amount of memory the system has used to load the page</h2>
+<pre>MemoryUsage() : float</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>float</code></div>
+</div></div>
+</div>
+<a id="method_Start"></a><div class="element clickable method public method_Start" data-toggle="collapse" data-target=".method_Start .collapse">
+<h2>Starts a new timer</h2>
+<pre>Start(string $name) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>When this method is called, a new timer will begin for the provided
+benchmark name</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name given for this benchmark timer</p></div>
+</div></div>
+</div>
+<a id="method_Stop"></a><div class="element clickable method public method_Stop" data-toggle="collapse" data-target=".method_Stop .collapse">
+<h2>Stops a defined timer</h2>
+<pre>Stop(string $name) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>When this method is called, the provided timer name will be stopped</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name given for this benchmark timer</p></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_start"> </a><div class="element clickable property protected property_start" data-toggle="collapse" data-target=".property_start .collapse">
+<h2></h2>
+<pre>$start : float[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_stop"> </a><div class="element clickable property protected property_stop" data-toggle="collapse" data-target=".property_stop .collapse">
+<h2></h2>
+<pre>$stop : float[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-12-09T23:53:06-06:00.<br></footer></div>
+</div>
+</body>
+</html>

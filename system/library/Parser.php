@@ -1,59 +1,58 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis
-| --------------------------------------------------------------
-|
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2012, Plexis Dev Team
-| License:      GNU GPL v3
-|
-| ---------------------------------------------------------------
-| Class: Parser
-| ---------------------------------------------------------------
-|
-| A simple source parser
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Library/Parser.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Parser
+ */
 namespace Library;
 
+/**
+ * A source parsing class
+ *
+ * @author      Steven Wilson 
+ * @package     Library
+ */
 class Parser
 {
-    // Our variable Delimiters
+    /**
+     * Left parsing delimiter
+     * @var string
+     */
     protected static $l_delim = '{';
+    
+    /**
+     * Right parsing delimeter
+     * @var string
+     */
     protected static $r_delim = '}';
-
-/*
-| ---------------------------------------------------------------
-| Function: set_delimiters()
-| ---------------------------------------------------------------
-|
-| Sets the template delimiters for psuedo blocks
-|
-| @Param: $l - The left delimiter
-| @Param: $r - The right delimiter
-|
-*/
+    
+    /**
+     * Sets the template delimiters for psuedo blocks
+     *
+     * @param string $l The left delimiter
+     * @param string $r The right delimiter
+     *
+     * @return void
+     */
     public static function SetDelimiters($l = '{', $r = '}')
     {
         self::$l_delim = $l;
         self::$r_delim = $r;
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: Parse()
-| ---------------------------------------------------------------
-|
-| This method uses all defined template assigned variables
-| to loop through and replace the Psuedo blocks that contain
-| variable names
-|
-| @Param: $source - The source with all the {variables}
-| @Param: $data - The array of variables
-| @Return (String) The parsed page
-|
-*/
+    
+    /**
+     * This method uses all defined template assigned variables
+     * to loop through and replace the Psuedo blocks that contain
+     * variable names
+     *
+     * @param string $source The source with all the {variables}
+     * @param mixed[] $data Array of variables to be parsed
+     *
+     * @return string The parsed contents are returned
+     */
     public static function Parse($source, $data)
     {
         // store the vars into $data, as its easier then $this->variables
@@ -184,18 +183,15 @@ class Parser
         // Return the parsed source
         return $source;
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: ParseArray()
-| ---------------------------------------------------------------
-|
-| Parses an array such as {user.userinfo.username}
-|
-| @Param: $key - The full unparsed array ( { something.else} )
-| @Param: $array - The actual array that holds the value of $key
-|
-*/
+    
+    /**
+     * Parses an array such as {user.userinfo.username}
+     *
+     * @param string $key The full unparsed array ( { something.else} )
+     * @param mixed[] $array The actual array that holds the value of $key
+     *
+     * @return string Returns the parsed value of the array key
+     */
     public static function ParseArray($key, $array)
     {
         // Check to see if this is even an array first
@@ -240,19 +236,15 @@ class Parser
         // Tell the requester that the array doesnt exist
         return "_PARSER_false_";
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: ParsePair()
-| ---------------------------------------------------------------
-|
-| Parses array blocks (  {key} ... {/key} ), sort of acts like 
-| a foreach loop
-|
-| @Param: $match - The preg_match of the block {key} (what we need) {/key}
-| @Param: $val - The array that contains the variables inside the blocks
-|
-*/
+    
+    /**
+     * Parses array blocks (  {key} ,,, {/key} ), acts like a foreach loop
+     *
+     * @param string $match The preg_match of the block {key} (what we need) {/key}
+     * @param mixed[] $val The array that contains the variables inside the blocks
+     *
+     * @return string Returns the parsed foreach loop block
+     */
     public static function ParsePair($match, $val)
     {	
         // Init the emtpy main block replacment

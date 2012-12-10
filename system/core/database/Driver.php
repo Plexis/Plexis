@@ -1,55 +1,75 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis Core
-| --------------------------------------------------------------
-| Author:       Steven Wilson 
-| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Driver
-| ---------------------------------------------------------------
-|
-| PDO extension driver, which is passed when a new DB connection
-| is made from the Database Factory
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/Database/Driver.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Driver
+ */
 namespace Database;
 
+/**
+ * PDO extension driver
+ *
+ * This class is returned from the Database::Connect() method
+ * @see \Core\Database::Connect()
+ *
+ * @author      Steven Wilson 
+ * @package     Database
+ */
 class Driver extends \PDO
 {
-    // Driver
+    /**
+     * The PDO object
+     * @var \PDO Object
+     */
     protected $driver;
     
-    // The most recen query
+    /**
+     * The last query string
+     * @var string
+     */
     protected $last_query = '';
-
-    // All sql statement that have been ran
+    
+    /**
+     * All sql statements that have been ran
+     * @var array[]
+     */
     protected $queries = array();
     
-    // Replacments for the last query
+    /**
+     * Replacements for the last query
+     * @var mixed[]
+     */
     protected $sprints;
-
-    // Our last queries number of rows / affected rows
+    
+    /**
+     * Our last queries number of rows / affected rows
+     * @var int
+     */
     protected $num_rows;
-
-    // Queries statistics.
+    
+    /**
+     * Queries statistics.
+     * @var int[]
+     */
     protected $statistics = array(
         'total_time' => 0,
         'total_queries' => 0,
     );
     
-    // result of the last query
+    /**
+     * The result of the last query
+     */
     public $result;
-
-/*
-| ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-|
-| Creates the connection to the database using PDO
-|
-*/
+    
+    /**
+     * Creates the connection to the database using PDO
+     *
+     * @param string[] $i The database connection info array
+     * @return void
+     */
     public function __construct($i)
     {
         // Create our DSN string
@@ -63,22 +83,17 @@ class Driver extends \PDO
             throw new \Exception( $e->getMessage() );
         }
     }
-
- 
-/*
-| ---------------------------------------------------------------
-| Function: query()
-| ---------------------------------------------------------------
-|
-| The main method for querying the database. This method also
-| benchmarks times for each query, as well as stores the query
-| in the $sql array.
-|
-| @Param: (String) $query - The full query statement
-| @Param: (Array) $sprints - An array or replacemtnts of (?)'s in the $query
-| @Param: (Bool) $report_error - Trigger an error upon error?
-|
-*/
+    
+    /**
+     * Main method for querying the database. This method also
+     * benchmarks times for each query, as well as stores the query
+     * in the $sql array.
+     *
+     * @param string $query The query to run
+     * @param mixed[] $sprints An array or replacemtnts of (?)'s in the $query
+     * @param bool $report_error Trigger an error upon error?
+     * @return object Returns this object
+     */
     public function query($query, $sprints = null, $report_error = true)
     {
         // Add query to the last query and benchmark
@@ -128,20 +143,16 @@ class Driver extends \PDO
         // Return
         return $this;
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: exec()
-| ---------------------------------------------------------------
-|
-| This method is the wrapper for PDO's exec method. We are intercepting
-| so we can add the query to our statistics, and catch errors
-|
-| @Param: (String) $query - The full query statement
-| @Param: (Bool) $report_error - Trigger an error upon error?
-| @Return: (Mixed) FALSE on error, otherwise nuber of rows affected
-|
-*/
+    
+    /**
+     * Wrapper for PDO's exec method. We are intercepting
+     * so we can add the query to our statistics, and catch errors
+     *
+     * @param string $query The query to run
+     * @param bool $report_error Trigger an error upon error?
+     * @return int|bool Returns false on error, or the number of rows affected
+     *   on success.
+     */
     public function exec($query, $report_error = true)
     {
         // Add query to the last query and benchmark
@@ -172,16 +183,15 @@ class Driver extends \PDO
         // Just return an absolute false (bool) on error
         return ($failed) ? false : $result;
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: fetchAll()
-| ---------------------------------------------------------------
-|
-| this method fetches a multi demensional array (multiple rows)
-|   of data from the database.
-|
-*/
+    
+    /**
+     * Fetches a multi demensional array (multiple rows) of data from the database.
+     *
+     * @param string $type The PDO array type to return
+     * @param string $param
+     * @return mixed[]|bool Returns false if there are no rows to return, or
+     *   an array of rows on success
+     */
     public function fetchAll($type = 'ASSOC', $param = null)
     {
         // Make sure we dont have a false return
@@ -197,15 +207,14 @@ class Driver extends \PDO
         }
         return $this->result->fetchAll($type);
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: fetchRow()
-| ---------------------------------------------------------------
-|
-| this method returns just 1 row of data
-|
-*/
+    
+    /**
+     * Fetches an array of columns from the database.
+     *
+     * @param string $type The PDO array type to return
+     * @return mixed[]|bool Returns false if there was no result, or
+     *   an array of columns on success
+     */
     public function fetchRow($type = 'ASSOC')
     {
         // Make sure we dont have a false return
@@ -217,30 +226,27 @@ class Driver extends \PDO
         // Fetch the result array
         return $this->result->fetch($type);
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: fetchColumn()
-| ---------------------------------------------------------------
-|
-| fetchs the first column from the last array.
-|
-*/
+    
+    /**
+     * Fetches a column from the last query result
+     *
+     * @param int $col The column index id
+     * @return mixed|bool Returns false if there was no result, or
+     *   the value of the column
+     */
     public function fetchColumn($col = 0)
     {
         // Make sure we dont have a false return
         if($this->result == false || $this->result == null) return false;
         return $this->result->fetchColumn($col);
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: getFetchType()
-| ---------------------------------------------------------------
-|
-| Return the PDO fetch type
-|
-*/
+    
+    /**
+     * Return the PDO fetch type
+     *
+     * @param string $type The PDO array type to return
+     * @return int The PDO fetch type ID
+     */
     public function getFetchType($type)
     {
         $type = strtoupper($type);
@@ -257,19 +263,14 @@ class Driver extends \PDO
             default: return \PDO::FETCH_ASSOC;
         }
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: insert()
-| ---------------------------------------------------------------
-|
-| An easy method that will insert data into a table
-|
-| @Param: (String) $table - The table name we are inserting into
-| @Param: (String) $data - An array of "column => value"'s
-| @Return: (Bool) Returns TRUE on success of FALSE on error
-|
-*/
+    
+    /**
+     * An easy method that will insert data into a table
+     *
+     * @param string $table The table name we are inserting into
+     * @param mixed[] $data An array of "column => value"'s
+     * @return bool Returns TRUE on success of FALSE on error
+     */
     public function insert($table, $data)
     {
         // enclose the column names in grave accents
@@ -294,20 +295,15 @@ class Driver extends \PDO
         
         return $this->num_rows; 
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: update()
-| ---------------------------------------------------------------
-|
-| An easy method that will update data in a table
-|
-| @Param: (String) $table - The table name we are inserting into
-| @Param: (Array) $data - An array of "column => value"'s
-| @Param: (String) $where - The where statement Ex: "id = 5"
-| @Return: (Bool) Returns TRUE on success of FALSE on error
-|
-*/
+    
+    /**
+     * An easy method that will update an existing row in a table
+     *
+     * @param string $table The table name we are updating
+     * @param mixed[] $data An array of "column => value"'s
+     * @param string $where The where statement Ex: "id = 5"
+     * @return bool Returns TRUE on success of FALSE on error
+     */
     public function update($table, $data, $where = '')
     {
         // Our string of columns
@@ -333,19 +329,14 @@ class Driver extends \PDO
         
         return $this->num_rows;
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: delete()
-| ---------------------------------------------------------------
-|
-| An easy method that will delete data from a table
-|
-| @Param: (String) $table - The table name we are inserting into
-| @Param: (String) $where - The where statement Ex: "id = 5"
-| @Return: (Bool) Returns TRUE on success of FALSE on error
-|
-*/
+    
+    /**
+     * An easy method that will delete data from a table
+     *
+     * @param string $table The table name we are updating
+     * @param string $where The where statement Ex: "id = 5"
+     * @return bool Returns TRUE on success of FALSE on error
+     */
     public function delete($table, $where = '')
     {
         // run the query
@@ -354,22 +345,20 @@ class Driver extends \PDO
         // Return TRUE or FALSE
         return ($this->num_rows > 0) ? true : false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: num_rows()
-| ---------------------------------------------------------------
-|
-| This method returns 1 of 2 things. A) either the number of
-| affected rows during the last insert/delete/update query. Or
-| B) The number of rows (count) in the result array.
-|
-| @Param: (Bool) $real - Setting this to TRUE will return The
-|   real number of rows. This is not needed unless the last
-|   query was a SELECT query.
-| @Return: (Int) Returns the number of rows in the last query
-|
-*/
+    
+    /**
+     * Returns the number of rows affected, or number of rows in the result.
+     *
+     * This method returns 1 of 2 things. A) either the number of
+     * affected rows during the last insert/delete/update query. Or
+     * B) The number of rows (count) in the result array.
+     *
+     * @param bool $real - Setting this to TRUE will return The
+     *   real number of rows. This is not needed unless the last
+     *   query was a SELECT query, and you are NOT using the mysql
+     *   driver.
+     * @return int Returns the number of rows in the last query
+     */
     public function numRows($real = false)
     {
         // If we are getting a real count, we need to query the
@@ -411,16 +400,12 @@ class Driver extends \PDO
         }
         return $this->num_rows;
     }
- 
-/*
-| ---------------------------------------------------------------
-| Function: server_info()
-| ---------------------------------------------------------------
-|
-| Returns the DB server information
-| @Return: (Array)
-|
-*/ 
+    
+    /**
+     * Returns the DB server information
+     *
+     * @return string[] Returns the driver, and database server version
+     */
     public function serverInfo()
     {
         return array(
@@ -429,46 +414,33 @@ class Driver extends \PDO
         );
     }
     
-/*
-| ---------------------------------------------------------------
-| Function: statistics()
-| ---------------------------------------------------------------
-|
-| Returns the statistic information of this connection
-| @Return: (Array)
-|
-*/ 
+    /**
+     * Returns the statistic information of this connection
+     *
+     * @return string[] Returns the total query time for all queries, and
+     *   total number of queries ran on this connection
+     */
     public function statistics()
     {
         return $this->statistics;
     }
     
-/*
-| ---------------------------------------------------------------
-| Function: get_all_queries()
-| ---------------------------------------------------------------
-|
-| Returns an array of all queries thus far and each quesries
-|   statistical data such as query time.
-| @Return: (Array)
-|
-*/ 
+    /**
+     * Returns an array of all queries thus far and each queries
+     * statistical data such as query time.
+     *
+     * @return array[]
+     */
     public function getAllQueries()
     {
         return $this->queries;
     }
     
-
-/*
-| ---------------------------------------------------------------
-| Function: reset()
-| ---------------------------------------------------------------
-|
-| Clears out and resets the query statistics
-|
-| @Return: (None)
-|
-*/
+    /**
+     * Clears out and resets the query statistics
+     *
+     * @return void
+     */
     public function reset()
     {
         $this->queries = array();
@@ -477,17 +449,14 @@ class Driver extends \PDO
             'total_queries' => 0
         );
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: __get()
-| ---------------------------------------------------------------
-|
-| Magic method to load driver extensions
-|
-| @Return: (None)
-|
-*/    
+    
+    /**
+     * Magic method to load driver extensions
+     *
+     * @param string $name Name of the extension we are searching for.
+     * @return object|bool Returns false if the extension class
+     *   doesnt exist
+     */
     public function __get($name)
     {
         // Just return the extension if it exists
@@ -512,16 +481,12 @@ class Driver extends \PDO
         $this->$name = new $class($this);
         return $this->$name;
     }
-
-/*
-| ---------------------------------------------------------------
-| Function: triggerError()
-| ---------------------------------------------------------------
-|
-| Trigger a Core error using a custom error message
-|
-*/
-
+    
+    /**
+     * Triggers a database error
+     *
+     * @return void
+     */
     protected function triggerError() 
     {
         // Get our driver name and error information

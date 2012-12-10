@@ -1,13 +1,11 @@
 <?php
-/*
-| --------------------------------------------------------------
-| Application Backend Controller
-| --------------------------------------------------------------
-|
-| The backend controller is the main method for running the 
-| Application
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Plexis.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ */
 
 // First, import some classes into scope
 use Core\AutoLoader;
@@ -24,23 +22,44 @@ use Library\Auth;
 use Library\Template;
 use Library\View;
 
+/**
+ * The backend controller is the main method for running the Application
+ *
+ * @author      Steven Wilson 
+ * @package     System
+ */
 class Plexis
 {
+    /**
+     * Internal var that prevents plexis from running twice
+     * @var bool
+     */
     private static $isRunning = false;
+    
+    /**
+     * Declares the root controller path for the current module
+     * @var string
+     */
     public static $modulePath;
+    
+    /**
+     * The Wowlib object
+     * @var \Wowlib\Realm
+     */
     protected static $realm;
     
-    // Option variables for controllers
+    /**
+     * Certain modules may not want the template to render.
+     * @var bool
+     */
     protected static $renderTemplate = true;
     
-/*
-| ---------------------------------------------------------------
-| Method: Run()
-| ---------------------------------------------------------------
-|
-| Main method for running the Plexis application
-|
-*/ 
+    
+    /**
+     * Main method for running the Plexis application
+     *
+     * @return void
+     */
     public static function Run()
     {
         // Make sure only one instance of the cms is running at a time
@@ -83,14 +102,11 @@ class Plexis
         Response::Send();
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Show404()
-| ---------------------------------------------------------------
-|
-| Displays the 404 page not found page
-|
-*/
+    /**
+     * Displays the 404 page not found page
+     *
+     * @return void
+     */
     public static function Show404()
     {
         // Clean all current output
@@ -110,14 +126,13 @@ class Plexis
         die;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ShowSiteOffline()
-| ---------------------------------------------------------------
-|
-| Displays the site offline page
-|
-*/
+    /**
+     * Displays the site offline page
+     *
+     * @param string $message The meesage to also be displayed with the
+     *   Site Offline page.
+     * @return void
+     */
     public static function ShowSiteOffline($message = null)
     {
         // Clean all current output
@@ -138,27 +153,23 @@ class Plexis
         die;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: GetRealm()
-| ---------------------------------------------------------------
-|
-| Returns the Realm Object
-|
-*/
+    /**
+     * Returns the Realm Object
+     *
+     * @return \Wowlib\Realm
+     */
     public static function GetRealm()
     {
         return self::$realm;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: RenderTemplate()
-| ---------------------------------------------------------------
-|
-| Sets whether plexis should render the full template or not
-|
-*/
+    /**
+     * Sets whether plexis should render the full template or not
+     *
+     * @param bool $bool Render the template?
+     *
+     * @return void
+     */
     public static function RenderTemplate($bool = true)
     {
         if(!is_bool($bool)) return;
@@ -166,14 +177,14 @@ class Plexis
         self::$renderTemplate = $bool;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: LoadDBConnection()
-| ---------------------------------------------------------------
-|
-| Internal method for loading the Plexis DB connection
-|
-*/
+    /**
+     * Internal method for loading the Plexis DB connection
+     *
+     * @param bool $showOffline If set to false, the Site Offline page will 
+     *   not be rendered if the plexis database connection is offline
+     *
+     * @return \Database\Driver
+     */
     public static function LoadDBConnection($showOffline = true)
     {
         $conn = false;
@@ -191,14 +202,11 @@ class Plexis
         return $conn;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: RunModule()
-| ---------------------------------------------------------------
-|
-| Internal method for running the controller and action
-|
-*/
+    /**
+     * Internal method for running the controller and action
+     *
+     * @return void
+     */
     protected static function RunModule()
     {
         // Get URL info
@@ -217,14 +225,11 @@ class Plexis
         }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: LoadPlugins()
-| ---------------------------------------------------------------
-|
-| Internal method for loading, and running all plugins
-|
-*/
+    /**
+     * Internal method for loading, and running all plugins
+     *
+     * @return void
+     */
     protected static function LoadPlugins()
     {
         // Include our plugins file, and get the size
@@ -258,14 +263,14 @@ class Plexis
         }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: LoadWowlib()
-| ---------------------------------------------------------------
-|
-| Internal method for initiating the wowlib
-|
-*/
+    /**
+     * Internal method for loading the wowlib
+     *
+     * @param bool $showOffline If set to false, the Site Offline page will 
+     *   not be rendered if the realm database connection is offline
+     *
+     * @return void
+     */
     protected static function LoadWowlib($showOffline = true)
     {
         // Load the wowlib class file
@@ -294,14 +299,11 @@ class Plexis
         }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: LoadConfigs()
-| ---------------------------------------------------------------
-|
-| Internal method for loading the plexis config files
-|
-*/
+    /**
+     * Internal method for loading the plexis config files
+     *
+     * @return void
+     */
     protected static function LoadConfigs()
     {
         // Import the Versions file
@@ -323,5 +325,13 @@ class Plexis
     }
 }
 
-// Any and all exceptions thrown from the Application should extend the ApplicationError class
+// Class Exceptions
+
+/**
+ * Any and all exceptions thrown from the Application should extend 
+ *   the ApplicationError class
+ * @package     System
+ * @subpackage  Exceptions
+ * @file        System/Plexis.php
+ */
 class ApplicationError extends Exception {}

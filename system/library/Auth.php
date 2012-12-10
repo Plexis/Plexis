@@ -1,62 +1,89 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis
-| --------------------------------------------------------------
-| Author:       Steven Wilson 
-| Author:       Tony (Syke)
-| Copyright:    Copyright (c) 2011-2012, Plexis
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Auth()
-| ---------------------------------------------------------------
-|
-| This class sets up the user, and processes permissions, logins,
-| logouts, and registration.
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Library/Auth.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Auth
+ * @contains    InvalidUsernameException
+ * @contains    InvalidPasswordException
+ * @contains    InvalidEmailException
+ * @contains    AccountBannedException
+ * @contains    IpBannedException
+ */
 namespace Library;
 
 // Bring some classes into scope
 use \Core\Database;
 use \Core\EventHandler;
 use \Core\Request;
+use \Exception;
 use \Plexis;
 
+/**
+ * Authorization and User class.
+ *
+ * This class is used to proccess user's, and thier permissions
+ *
+ * @author      Steven Wilson 
+ * @package     Library
+ */
 class Auth
 {
-    // Session started?
+    /**
+     * Session started? Used internally
+     * @var bool
+     */
     protected static $started = false;
-
-    // When the sessoin expires
+    
+    /**
+     * When the sessoin expires
+     * @var int
+     */
     protected static $expireTime;
 
-    // The databases and realm
+    /**
+     * Database Driver object for the Plexis database
+     * @var \Database\Driver
+     */
     protected static $DB;
+    
+    /**
+     * The Realm object from the wowlib
+     * @var \Wowlib\Realm
+     */
     protected static $realm;
 
-    // The session id
+    /**
+     * The sessions id
+     * @var string
+     */
     protected static $sessionid = 0;
     
-    // Users access permission
+    /**
+     * Current users access permissions
+     * @var int[]
+     */
     protected static $permissions;
     
-    // Clients IP address
+    /**
+     * Users data array
+     * @var mixed[]
+     */
     protected static $data = array(
         'logged_in' => false,
         'id' => 0,
         'username' => 'Guest',
     );
-
-/*
-| ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-|
-| Initiates the user sessions and such
-|
-*/
-
+    
+    /**
+     * Contructor method (called internally)
+     *
+     * Initiates the user sessions and such
+     *
+     * @return void
+     */
     public static function Init()
     {
         // Add trace for debugging
@@ -84,18 +111,14 @@ class Auth
         // Add trace for debugging
         // //\Debug::trace('User class initialized successfully', __FILE__, __LINE__);
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: StartSession()
-| ---------------------------------------------------------------
-|
-| This method checks to see if the user is logged in by session.
-| If not then a username, id, and account level are set at guest.
-| Also checks for login expire time.
-|
-*/
-
+    
+    /**
+     * Internal method used to check to if the user is logged in by session.
+     * If not then a username, id, and account level are set at guest.
+     * Also checks for login expire time.
+     *
+     * @return void
+     */
     protected static function StartSession()
     {
         // Check for a session cookie
@@ -178,20 +201,19 @@ class Auth
             if(!self::_initUser($userid)) goto Guest;
         }
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: Login()
-| ---------------------------------------------------------------
-|
-| The main login script!
-|
-| @Param: (String) $username - The username logging in
-| @Param: (String) $password - The unencrypted password
-| @Return (Bool) True upon success, false otherwise
-|
-*/
-
+    
+    /**
+     * Method used to proccess a user login
+     *
+     * @param string $username The username to proccess
+     * @param string $password Unencrypted password to the account
+     *
+     * @throws InvalidUsernameException if the account doesnt exist
+     * @throws InvalidPasswordException if the account password is incorrect
+     * @throws AccountBannedException if the account is banned
+     *
+     * @return bool Return true if the user is logged in, false otherwise
+     */
     public static function Login($username, $password)
     {
         // Remove white space in front and behind
@@ -257,23 +279,24 @@ class Auth
             return TRUE;
         }
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: register()
-| ---------------------------------------------------------------
-|
-| The main register script
-|
-| @Param: (String) $username - The username logging in
-| @Param: (String) $password - The unencrypted password
-| @Param: (String) $email - The email
-| @Param: (Int) $sq - The secret Question ID
-| @Param: (String) $sa - The secret Question answer
-| @Return (Int) Account ID upon success, false otherwise
-|
-*/
-
+    
+    /**
+     * Method used to create a new account
+     *
+     * @param string $username The account username to create
+     * @param string $password Unencrypted password to the account
+     * @param string $email New accounts email address
+     * @param int $sq The secret question ID. Leave null for no secrect question
+     * @param string $sa The secret question answer. Leave null for no secrect question
+     *
+     * @throws InvalidUsernameException if the username is invalid (too long or short)
+     * @throws InvalidPasswordException if the password is invalid (too long or short)
+     * @throws InvalidEmailException if the email is not a real email
+     * @throws AccountExistsException if the account name is already taken
+     * @throws IpBannedException if the ip address is banned
+     *
+     * @return int The account ID upon success, false otherwise
+     */
     public static function Register($username, $password, $email, $sq = NULL, $sa = NULL)
     {
         // Remove white space in front and behind
@@ -292,12 +315,9 @@ class Auth
         ////\Debug::trace("Registering account '{$username}'...", __FILE__, __LINE__);
         
         // Make sure the users IP isnt blocked
-        if(self::$realm->ipBanned( self::$data['ip_address'] ) == TRUE)
+        if(self::$realm->ipBanned( self::$data['ip_address'] ))
         {
-            // Add trace for debugging
-            ////\Debug::trace("Ip address is banned. Registration failed", __FILE__, __LINE__);
-            Template::Message('error', 'reg_failed_ip_banned');
-            return false;
+            throw new IpBannedException('');
         }
         
         // If the result is not was false, then the username already exists
@@ -305,8 +325,7 @@ class Auth
         {
             // Add trace for debugging
             ////\Debug::trace("Account '{$username}' already exists. Registration failed", __FILE__, __LINE__);
-            Template::Message('error', 'reg_failed_username_exists');
-            return false;
+            throw new AccountExistsException('');
         }
         
         // We are good to go, register the user
@@ -369,17 +388,14 @@ class Auth
         }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: PoadPermissions()
-| ---------------------------------------------------------------
-|
-| Loads the permissions specific to this user
-|
-| @Return (None)
-|
-*/
-
+    /**
+     * Loads the permissions specific to this user
+     *
+     * @param int $gid The group id
+     * @param int[] $perms The list of all permissions for the usergroup
+     *
+     * @return void
+     */
     protected static function LoadPermissions($gid, $perms)
     {
         // Add trace for debugging
@@ -410,17 +426,13 @@ class Auth
         self::$permissions = $p;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: HasPermissions()
-| ---------------------------------------------------------------
-|
-| Used to find if user has a specified permission
-|
-| @Return (Bool)
-|
-*/
-
+    /**
+     * Used to find if user has a specified permission
+     *
+     * @param string $key Permission name
+     *
+     * @return bool Returns true if the user has permissions, false otherwise
+     */
     public static function HasPermission($key)
     {
         // Super admin always wins
@@ -429,20 +441,15 @@ class Auth
         // Not a super admin, continue
         return (bool) (array_key_exists($key, self::$permissions)) ? self::$permissions[$key] : false;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: Logout()
-| ---------------------------------------------------------------
-|
-| Logs the user out and sets all session variables to Guest.
-|
-| @Param (Bool) $newSession - Init a new session? Should only
-|   be set internally in this class.
-| @Return (None)
-|
-*/
-
+    
+    /**
+     * Logs the user out and sets all session variables to Guest.
+     *
+     * @param bool $newSession Start a new session? Should only
+     * be set internally in this class.
+     *
+     * @return void
+     */
     public static function Logout($newSession = true)
     {
         // Make sure we are logged in first!
@@ -465,17 +472,13 @@ class Auth
         if($newSession == true) self::StartSession();
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: _initUser
-| ---------------------------------------------------------------
-|
-| This method is used to initiate a user when an ID or username
-| is determined
-|
-| @Return (Bool)
-|
-*/
+    /**
+     * This method is used to initiate a user when an ID or username is determined
+     *
+     * @param int $userid The account id
+     *
+     * @return bool
+     */
     protected static function _initUser($userid)
     {
         // Fetch account
@@ -582,4 +585,59 @@ class Auth
         return true;
     }
 }
+
+// Class exceptions
+
+/**
+ * Thrown by the Auth Class when the provided username is invalid in format (Too long, Too short)
+ * @package     Library
+ * @subpackage  Exceptions
+ * @file        System/Library/Auth.php
+ * @see         Auth
+ */
+class InvalidUsernameException extends Exception {}
+
+/**
+ * Thrown by the Auth Class when the provided password is invalid in format (Too long, Too short)
+ * @package     Library
+ * @subpackage  Exceptions
+ * @file        System/Library/Auth.php
+ * @see         Auth
+ */
+class InvalidPasswordException extends Exception {}
+
+/**
+ * Thrown by the Auth Class when the provided email is invalid.
+ * @package Library
+ * @subpackage Exceptions
+ * @see Auth
+ */
+class InvalidEmailException extends Exception {}
+
+/**
+ * Thrown by the Auth Class during the Register method, if the account name provided already exists
+ * @package     Library
+ * @subpackage  Exceptions
+ * @file        System/Library/Auth.php
+ * @see         Auth::Register()
+ */
+class AccountExistsException extends Exception {}
+
+/**
+ * Thrown by the Auth Class when logging in, and the account name is banned
+ * @package     Library
+ * @subpackage  Exceptions
+ * @file        System/Library/Auth.php
+ * @see         Auth::Login()
+ */
+class AccountBannedException extends Exception {}
+
+/**
+ * Thrown by the Auth Class when registering an account, and the Remote IP is banned.
+ * @package     Library
+ * @subpackage  Exceptions
+ * @file        System/Library/Auth.php
+ * @see         Auth::Register()
+ */
+class IpBannedException extends Exception {}
 // EOF

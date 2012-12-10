@@ -1,41 +1,38 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| 
-| Frostbite Framework
-|
-| --------------------------------------------------------------
-|
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2012, Steven Wilson
-| License:      GNU GPL v3
-|
-| ---------------------------------------------------------------
-| Class: Event
-| ---------------------------------------------------------------
-|
-| This class is used to register certain functions / class methods 
-| to be notified / called when an event name is fired.
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/EventHandler.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    EventHandler
+ * @contains    InvalidCallableException
+ */
 namespace Core;
 
+/**
+ * Responsible for initializing the controller, and
+ * calling on the action method.
+ *
+ * @author      Steven Wilson 
+ * @package     Core
+ */
 class EventHandler
 {
-	// Static array of events, and handlers
+	/**
+     * An array of eventname => callbacks[]
+     * @var callable[]
+     */
 	protected static $events = array();
-
-/*
-| ---------------------------------------------------------------
-| Method: trigger()
-| ---------------------------------------------------------------
-|
-| This method triggers an event
-|
-| @Param: (String) $event - Name of the event to be fired
-| @Param: (Array) $params - An array of params to be passed
-|
-*/
+    
+    /**
+     * Triggers an event.
+     *
+     * @param string $event The event name
+     * @param mixed[] $params Array of params to be passed to all callbacks
+     *    registered for this event.
+     * @return void
+     */
 	public static function Trigger($event, $params = array())
 	{
         // Get calling
@@ -89,20 +86,16 @@ class EventHandler
 		}
 		return false;
 	}
-
-/*
-| ---------------------------------------------------------------
-| Method: register()
-| ---------------------------------------------------------------
-|
-| Registers a new class->method / function to be called when an
-| event is fired.
-|
-| @Param: (String) $event - Name of the event that will be called
-| @Param: (Array | String) $callback - An array of ($Obj, method).. or
-|	function name to be called as a callback.
-|
-*/
+    
+    /**
+     * Registers a new class->method or function to be called when an
+     * event is fired.
+     *
+     * @param string $event Name of the event to register for
+     * @param callable $callback the callback to proccess the event when fired
+     * @return void
+     * @throws InvalidCallableException if the callback is not a callable
+     */
 	public static function Register($event, $callback)
 	{
         if(!is_callable($callback))
@@ -113,5 +106,11 @@ class EventHandler
 }
 
 // Class Exceptions
+
+/**
+ * Invalid Callable Exception, Thrown when a callback is invalid
+ * @package Core
+ * @subpackage Exceptions
+ */
 class InvalidCallableException extends \Exception {}
 // EOF 

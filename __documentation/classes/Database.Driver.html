@@ -1,0 +1,459 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Database\Driver</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">0</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: Creates the connection to the database using PDO"><span class="description">Creates the connection to the database using PDO</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method___get" title="__get :: Magic method to load driver extensions"><span class="description">Magic method to load driver extensions</span><pre>__get()</pre></a></li>
+<li class="method public "><a href="#method_delete" title="delete :: An easy method that will delete data from a table"><span class="description">An easy method that will delete data from a table</span><pre>delete()</pre></a></li>
+<li class="method public "><a href="#method_exec" title="exec :: Wrapper for PDO's exec method."><span class="description">Wrapper for PDO's exec method.</span><pre>exec()</pre></a></li>
+<li class="method public "><a href="#method_fetchAll" title="fetchAll :: Fetches a multi demensional array (multiple rows) of data from the database."><span class="description">Fetches a multi demensional array (multiple rows) of data from the database.</span><pre>fetchAll()</pre></a></li>
+<li class="method public "><a href="#method_fetchColumn" title="fetchColumn :: Fetches a column from the last query result"><span class="description">Fetches a column from the last query result</span><pre>fetchColumn()</pre></a></li>
+<li class="method public "><a href="#method_fetchRow" title="fetchRow :: Fetches an array of columns from the database."><span class="description">Fetches an array of columns from the database.</span><pre>fetchRow()</pre></a></li>
+<li class="method public "><a href="#method_getAllQueries" title="getAllQueries :: Returns an array of all queries thus far and each queries
+statistical data such as query time."><span class="description">Returns an array of all queries thus far and each queries
+statistical data such as query time.</span><pre>getAllQueries()</pre></a></li>
+<li class="method public "><a href="#method_getFetchType" title="getFetchType :: Return the PDO fetch type"><span class="description">Return the PDO fetch type</span><pre>getFetchType()</pre></a></li>
+<li class="method public "><a href="#method_insert" title="insert :: An easy method that will insert data into a table"><span class="description">An easy method that will insert data into a table</span><pre>insert()</pre></a></li>
+<li class="method public "><a href="#method_numRows" title="numRows :: Returns the number of rows affected, or number of rows in the result."><span class="description">Returns the number of rows affected, or number of rows in the result.</span><pre>numRows()</pre></a></li>
+<li class="method public "><a href="#method_query" title="query :: Main method for querying the database."><span class="description">Main method for querying the database.</span><pre>query()</pre></a></li>
+<li class="method public "><a href="#method_reset" title="reset :: Clears out and resets the query statistics"><span class="description">Clears out and resets the query statistics</span><pre>reset()</pre></a></li>
+<li class="method public "><a href="#method_serverInfo" title="serverInfo :: Returns the DB server information"><span class="description">Returns the DB server information</span><pre>serverInfo()</pre></a></li>
+<li class="method public "><a href="#method_statistics" title="statistics :: Returns the statistic information of this connection"><span class="description">Returns the statistic information of this connection</span><pre>statistics()</pre></a></li>
+<li class="method public "><a href="#method_update" title="update :: An easy method that will update an existing row in a table"><span class="description">An easy method that will update an existing row in a table</span><pre>update()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="method protected "><a href="#method_triggerError" title="triggerError :: Triggers a database error"><span class="description">Triggers a database error</span><pre>triggerError()</pre></a></li></ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul><li class="property public "><a href="#property_result" title="$result :: The result of the last query"><span class="description"></span><pre>$result</pre></a></li></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_driver" title="$driver :: The PDO object"><span class="description"></span><pre>$driver</pre></a></li>
+<li class="property protected "><a href="#property_last_query" title="$last_query :: The last query string"><span class="description"></span><pre>$last_query</pre></a></li>
+<li class="property protected "><a href="#property_num_rows" title="$num_rows :: Our last queries number of rows / affected rows"><span class="description"></span><pre>$num_rows</pre></a></li>
+<li class="property protected "><a href="#property_queries" title="$queries :: All sql statements that have been ran"><span class="description"></span><pre>$queries</pre></a></li>
+<li class="property protected "><a href="#property_sprints" title="$sprints :: Replacements for the last query"><span class="description"></span><pre>$sprints</pre></a></li>
+<li class="property protected "><a href="#property_statistics" title="$statistics :: Queries statistics."><span class="description"></span><pre>$statistics</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Database\Driver"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Database.html">Database</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Database.Driver.html">Driver</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">PDO extension driver</p>
+<div class="details">
+<div class="long_description"><p>This class is returned from the Database::Connect() method</p></div>
+<table class="table table-bordered">
+<tr>
+<th>see</th>
+<td><a href="core.Database.html#%5CCore%5CDatabase::Connect()">\Core\Database::Connect()</a></td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Database.html">Database</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Creates the connection to the database using PDO</h2>
+<pre>__construct(string[] $i) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$i</h4>
+<code>string[]</code><p>The database connection info array</p></div>
+</div></div>
+</div>
+<a id="method___get"></a><div class="element clickable method public method___get" data-toggle="collapse" data-target=".method___get .collapse">
+<h2>Magic method to load driver extensions</h2>
+<pre>__get(string $name) : object | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>Name of the extension we are searching for.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code><code>bool</code>Returns false if the extension class
+  doesnt exist</div>
+</div></div>
+</div>
+<a id="method_delete"></a><div class="element clickable method public method_delete" data-toggle="collapse" data-target=".method_delete .collapse">
+<h2>An easy method that will delete data from a table</h2>
+<pre>delete(string $table, string $where) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>The table name we are updating</p></div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code>string</code><p>The where statement Ex: "id = 5"</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns TRUE on success of FALSE on error</div>
+</div></div>
+</div>
+<a id="method_exec"></a><div class="element clickable method public method_exec" data-toggle="collapse" data-target=".method_exec .collapse">
+<h2>Wrapper for PDO's exec method.</h2>
+<pre>exec(string $query, bool $report_error) : int | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>We are intercepting
+so we can add the query to our statistics, and catch errors</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$query</h4>
+<code>string</code><p>The query to run</p></div>
+<div class="subelement argument">
+<h4>$report_error</h4>
+<code>bool</code><p>Trigger an error upon error?</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code><code>bool</code>Returns false on error, or the number of rows affected
+  on success.</div>
+</div></div>
+</div>
+<a id="method_fetchAll"></a><div class="element clickable method public method_fetchAll" data-toggle="collapse" data-target=".method_fetchAll .collapse">
+<h2>Fetches a multi demensional array (multiple rows) of data from the database.</h2>
+<pre>fetchAll(string $type, string $param) : mixed[] | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>The PDO array type to return</p></div>
+<div class="subelement argument">
+<h4>$param</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed[]</code><code>bool</code>Returns false if there are no rows to return, or
+  an array of rows on success</div>
+</div></div>
+</div>
+<a id="method_fetchColumn"></a><div class="element clickable method public method_fetchColumn" data-toggle="collapse" data-target=".method_fetchColumn .collapse">
+<h2>Fetches a column from the last query result</h2>
+<pre>fetchColumn(int $col) : mixed | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$col</h4>
+<code>int</code><p>The column index id</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code><code>bool</code>Returns false if there was no result, or
+  the value of the column</div>
+</div></div>
+</div>
+<a id="method_fetchRow"></a><div class="element clickable method public method_fetchRow" data-toggle="collapse" data-target=".method_fetchRow .collapse">
+<h2>Fetches an array of columns from the database.</h2>
+<pre>fetchRow(string $type) : mixed[] | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>The PDO array type to return</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed[]</code><code>bool</code>Returns false if there was no result, or
+  an array of columns on success</div>
+</div></div>
+</div>
+<a id="method_getAllQueries"></a><div class="element clickable method public method_getAllQueries" data-toggle="collapse" data-target=".method_getAllQueries .collapse">
+<h2>Returns an array of all queries thus far and each queries
+statistical data such as query time.</h2>
+<pre>getAllQueries() : array[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array[]</code></div>
+</div></div>
+</div>
+<a id="method_getFetchType"></a><div class="element clickable method public method_getFetchType" data-toggle="collapse" data-target=".method_getFetchType .collapse">
+<h2>Return the PDO fetch type</h2>
+<pre>getFetchType(string $type) : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>The PDO array type to return</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>The PDO fetch type ID</div>
+</div></div>
+</div>
+<a id="method_insert"></a><div class="element clickable method public method_insert" data-toggle="collapse" data-target=".method_insert .collapse">
+<h2>An easy method that will insert data into a table</h2>
+<pre>insert(string $table, mixed[] $data) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>The table name we are inserting into</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>mixed[]</code><p>An array of "column => value"'s</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns TRUE on success of FALSE on error</div>
+</div></div>
+</div>
+<a id="method_numRows"></a><div class="element clickable method public method_numRows" data-toggle="collapse" data-target=".method_numRows .collapse">
+<h2>Returns the number of rows affected, or number of rows in the result.</h2>
+<pre>numRows(bool $real) : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method returns 1 of 2 things. A) either the number of
+affected rows during the last insert/delete/update query. Or
+B) The number of rows (count) in the result array.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$real</h4>
+<code>bool</code><ul>
+<li>Setting this to TRUE will return The
+real number of rows. This is not needed unless the last
+query was a SELECT query, and you are NOT using the mysql
+driver.</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of rows in the last query</div>
+</div></div>
+</div>
+<a id="method_query"></a><div class="element clickable method public method_query" data-toggle="collapse" data-target=".method_query .collapse">
+<h2>Main method for querying the database.</h2>
+<pre>query(string $query, mixed[] $sprints, bool $report_error) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method also
+benchmarks times for each query, as well as stores the query
+in the $sql array.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$query</h4>
+<code>string</code><p>The query to run</p></div>
+<div class="subelement argument">
+<h4>$sprints</h4>
+<code>mixed[]</code><p>An array or replacemtnts of (?)'s in the $query</p>
+</div>
+<div class="subelement argument">
+<h4>$report_error</h4>
+<code>bool</code><p>Trigger an error upon error?</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Returns this object</div>
+</div></div>
+</div>
+<a id="method_reset"></a><div class="element clickable method public method_reset" data-toggle="collapse" data-target=".method_reset .collapse">
+<h2>Clears out and resets the query statistics</h2>
+<pre>reset() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_serverInfo"></a><div class="element clickable method public method_serverInfo" data-toggle="collapse" data-target=".method_serverInfo .collapse">
+<h2>Returns the DB server information</h2>
+<pre>serverInfo() : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string[]</code>Returns the driver, and database server version</div>
+</div></div>
+</div>
+<a id="method_statistics"></a><div class="element clickable method public method_statistics" data-toggle="collapse" data-target=".method_statistics .collapse">
+<h2>Returns the statistic information of this connection</h2>
+<pre>statistics() : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string[]</code>Returns the total query time for all queries, and
+  total number of queries ran on this connection</div>
+</div></div>
+</div>
+<a id="method_update"></a><div class="element clickable method public method_update" data-toggle="collapse" data-target=".method_update .collapse">
+<h2>An easy method that will update an existing row in a table</h2>
+<pre>update(string $table, mixed[] $data, string $where) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>The table name we are updating</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>mixed[]</code><p>An array of "column => value"'s</p>
+</div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code>string</code><p>The where statement Ex: "id = 5"</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns TRUE on success of FALSE on error</div>
+</div></div>
+</div>
+<a id="method_triggerError"></a><div class="element clickable method protected method_triggerError" data-toggle="collapse" data-target=".method_triggerError .collapse">
+<h2>Triggers a database error</h2>
+<pre>triggerError() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_result"> </a><div class="element clickable property public property_result" data-toggle="collapse" data-target=".property_result .collapse">
+<h2></h2>
+<pre>$result </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_driver"> </a><div class="element clickable property protected property_driver" data-toggle="collapse" data-target=".property_driver .collapse">
+<h2></h2>
+<pre>$driver : <a href="http://php.net/manual/en/class.pdo.php">\PDO</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_last_query"> </a><div class="element clickable property protected property_last_query" data-toggle="collapse" data-target=".property_last_query .collapse">
+<h2></h2>
+<pre>$last_query : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_num_rows"> </a><div class="element clickable property protected property_num_rows" data-toggle="collapse" data-target=".property_num_rows .collapse">
+<h2></h2>
+<pre>$num_rows : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_queries"> </a><div class="element clickable property protected property_queries" data-toggle="collapse" data-target=".property_queries .collapse">
+<h2></h2>
+<pre>$queries : array[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_sprints"> </a><div class="element clickable property protected property_sprints" data-toggle="collapse" data-target=".property_sprints .collapse">
+<h2></h2>
+<pre>$sprints : mixed[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_statistics"> </a><div class="element clickable property protected property_statistics" data-toggle="collapse" data-target=".property_statistics .collapse">
+<h2></h2>
+<pre>$statistics : int[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-12-09T23:53:06-06:00.<br></footer></div>
+</div>
+</body>
+</html>

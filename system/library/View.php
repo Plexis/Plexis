@@ -1,37 +1,48 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis
-| --------------------------------------------------------------
-| Author:       Steven Wilson 
-| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: View
-| ---------------------------------------------------------------
-|
-| An individual view template class
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Library/View.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    View
+ * @contains    ViewNotFoundException
+ * @contains    InvalidPageContents
+ */
 namespace Library;
 
+/**
+ * An individual view template class
+ *
+ * @author      Steven Wilson 
+ * @package     Library
+ */
 class View
 {
-    // View contents as a string
+    /**
+     * View contents as a string
+     * @var string
+     */
     protected $contents;
     
-    // Assigned template variables and values
+    /**
+     * Assigned template variables and values
+     * @var mixed[]
+     */
     protected $variables = array();
     
-/*
-| ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-|
-| @Param: (String) $path - The full path to the view file
-| @Throws Library\ViewNotFoundException when the view file cannot be located.
-|
-*/ 
+    /**
+     * Contructor
+     *
+     * @param string $string The file path to the template file, or the tempalte
+     *   as a string
+     * @param bool $isFile If set to true, $string becomes a filename, and is
+     *   loaded. If false, $string is treated as the view's contents.
+     *
+     * @throws ViewNotFoundException if the view file cannot be located
+     *
+     * @return void
+     */
     public function __construct($string, $isFile = true)
     {
         if($isFile && !file_exists($string))
@@ -40,20 +51,16 @@ class View
         $this->contents = ($isFile) ? file_get_contents($string) : $string;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Set()
-| ---------------------------------------------------------------
-|
-| This method sets variables to be replace in the view
-|
-| @Param: (String | Array) $name - Name of the variable to be set,
-|   or can be an array of key => value
-| @Param: (Mixed) $value - The value of the variable (not set if $name
-|   is an array)
-| @Return (None)
-|
-*/
+    /**
+     * Sets variables to be replaced in the view
+     *
+     * @param string|array $name Name of the variable to be set,
+     *   or can be an array of key => value
+     * @param mixed $value The value of the variable (not set if $name
+     *   is an array)
+     *
+     * @return void
+     */
     public function Set($name, $value = null)
     {
         if(is_array($name))
@@ -69,51 +76,38 @@ class View
         }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ClearVars()
-| ---------------------------------------------------------------
-|
-| These method clears all the set variables for this view
-|
-| @Return (None)
-|
-*/
+    /**
+     * These method clears all the set variables for this view
+     *
+     * @return void
+     */
     public function ClearVars()
     {
         $this->variables = array();
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: GetContents()
-| ---------------------------------------------------------------
-|
-| These method returns the view's contents, un-parsed
-|
-| @Return (String)
-|
-*/
+    /**
+     * Returns the view's contents, un-parsed
+     *
+     * @return string
+     */
     public function GetContents()
     {
         return $this->contents;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: SetContents()
-| ---------------------------------------------------------------
-|
-| These method sets the views contents
-|
-| @Param: (String | Object(View)) $contents - The new contents of
-|   this view file. Must be a string, or an object extending the 
-|   this Class.
-| @Return (None)
-| @Throws Library\InvalidViewContents if the contents are not a string
-|   of a subclass of View
-|
-*/
+    /**
+     * Sets the views contents
+     *
+     * @param string|\Library\View $contents - The new contents of
+     *   this view file. Must be a string, or an object extending
+     *   this Class.
+     *
+     * @throws InvalidViewContents if the contents are not a string
+     *   or a subclass of View
+     *
+     * @return void
+     */
     public function SetContents($contents)
     {
         // Make sure out contents are valid
@@ -123,16 +117,11 @@ class View
         $this->contents = $contents;
     }
     
-/*
-| ---------------------------------------------------------------
-| Methods: Render() & __toString()
-| ---------------------------------------------------------------
-|
-| These methods parses the view contents and returns the source
-|
-| @Return (String)
-|
-*/
+    /**
+     * These methods parses the view contents and returns the source
+     *
+     * @return string
+     */
     public function Render()
     {
         if(!empty($this->variables))
@@ -153,6 +142,11 @@ class View
         return $this->contents;
     }
     
+    /**
+     * These methods parses the view contents and returns the source
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->Render();
@@ -161,6 +155,21 @@ class View
 
 // Class Exceptions //
 
+/**
+ * View Not Found Exception. Thrown when a view file cannot be found
+ * @package     Library
+ * @subpackage  Exceptions
+ * @file        System/Library/View.php
+ * @see         View
+ */
 class ViewNotFoundException extends \ApplicationError {}
 
+/**
+ * Invalid View Contents. Thrown when the contents passed to a view, are
+ *   not a string, or an extension of the \Library\View class
+ * @package     Library
+ * @subpackage  Exceptions
+ * @file        System/Library/View.php
+ * @see         View
+ */
 class InvalidViewContents extends \ApplicationError {}

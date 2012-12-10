@@ -1,40 +1,87 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis
-| --------------------------------------------------------------
-| Author:       Steven Wilson 
-| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Response
-| ---------------------------------------------------------------
-|
-| This class is used to send a proper formated reponse to the client.
-| You can set headers, cookies, status codes, and protocol within
-| the class.
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/Response.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Response
+ * @contains    OutputSentException
+ */
 namespace Core;
 
+/**
+ * This class is used to send a proper formated reponse to the client.
+ * You can set headers, cookies, status codes, and protocol within
+ * this class.
+ *
+ * @author      Steven Wilson 
+ * @package     Core
+ */
 class Response
 {
     // Http protocol constants
     const HTTP_10 = 'HTTP/1.0';
     const HTTP_11 = 'HTTP/1.1';
     
-    // Header data
+    /**
+     * Status code to be returned in the response
+     * @var int
+     */
     protected static $status = 200;
+    
+    /**
+     * Response Protocol (HTTP/1.0 | 1.1)
+     * @var string
+     */
     protected static $protocol = self::HTTP_11;
+    
+    /**
+     * Content encoding
+     * @var string
+     */
     protected static $charset = 'UTF-8';
+    
+    /**
+     * Content Mime Type
+     * @var string
+     */
     protected static $contentType = 'text/html';
+    
+    /**
+     * Array of headers to be sent with the response
+     * @var string[]
+     */
     protected static $headers = array();
+    
+    /**
+     * Array of cookies to be sent with the response
+     * @var string[]
+     */
     protected static $cookies = array();
+    
+    /**
+     * The response body (contents)
+     * @var string
+     */
     protected static $body = null;
+    
+    /**
+     * Array of cahce directives to be sent with the response
+     * @var string[]
+     */
     protected static $cacheDirectives = array();
+    
+    /**
+     * Used to determine if output / headers have been sent already
+     * @var bool
+     */
     protected static $outputSent = false;
     
-    // Array of status codes (Borrowed from Zend Framework)
+    /**
+     * Array of $statusCode => $description
+     * @var string[]
+     */
     protected static $statusCodes = array(
         // Informational 1xx
         100 => 'Continue',
@@ -88,19 +135,14 @@ class Response
         509 => 'Bandwidth Limit Exceeded'
     );
     
-/*
-| ---------------------------------------------------------------
-| Method: Send()
-| ---------------------------------------------------------------
-|
-| This method takes all the response headers, cookies, and current
-| buffered contents, and sends them back to the client. After this
-| methid is called, any output will most likely cause a content lenght
-| error for our client.
-|
-| @Return (None)
-|
-*/
+    /**
+     * This method takes all the response headers, cookies, and current
+     * buffered contents, and sends them back to the client. After this
+     * methid is called, any output will most likely cause a content length
+     * error for our client.
+     *
+     * @return void
+     */
     public static function Send()
     {
         // Make sure that if we are redirecting, we set the corrent code!
@@ -128,19 +170,15 @@ class Response
         ob_end_flush();
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Body()
-| ---------------------------------------------------------------
-|
-| This method sets or returns the body of the response, based on
-| if a variable is passed setting the contents or not.
-|
-| @Param (String) $content - The body contents, leave null if retrieving 
-|	current set contents
-| @Return (String | None)
-|
-*/
+    /**
+     * Sets or returns the body of the response, based on
+     * if a variable is passed setting the contents or not.
+     *
+     * @param string $content The body contents. Leave null if retrieving
+     *   the current set contents.
+     * @return string|void If $content is left null, the current
+     *   contents are returned
+     */
     public static function Body($content = null)
     {
         // Are we setting or retrieving?
@@ -154,18 +192,12 @@ class Response
         self::$body = (string) $content;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: AppendBody()
-| ---------------------------------------------------------------
-|
-| This method appends data to the current body
-|
-| @Param (String) $content - The body contents, leave null if retrieving 
-|	current set contents
-| @Return (String | None)
-|
-*/
+    /**
+     * Appends data to the current body
+     *
+     * @param string $content The body contents to append.
+     * @return void
+     */
     public static function AppendBody($content)
     {
         // Make sure the data wasnt sent already
@@ -175,17 +207,13 @@ class Response
         self::$body .= (string) $content;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: StatusCode()
-| ---------------------------------------------------------------
-|
-| This method sets or returns the status code.
-|
-| @Param (Int) $code - The status code to be set
-| @Return (Int | None) returns the current code if $code is null
-|
-*/
+    /**
+     * Sets or returns the status code
+     *
+     * @param int $code The status code to be set
+     * @return int|void If $code is left null, the current status
+     *   code is returned
+     */
     public static function StatusCode($code = null)
     {
         // Are we setting or retrieving?
@@ -206,17 +234,13 @@ class Response
             return false;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ContentType()
-| ---------------------------------------------------------------
-|
-| This method sets or returns the content type.
-|
-| @Param (String) $val - The content type to be set
-| @Return (String | None) returns the current content type if $val is null
-|
-*/
+    /**
+     * Sets or returns the content type
+     *
+     * @param string $val The content type to be set
+     * @return string|void If $val is left null, the current content
+     *   type is returned
+     */
     public static function ContentType($val = null)
     {
         // Are we setting or retrieving?
@@ -230,17 +254,13 @@ class Response
         self::$contentType = $val;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Encoding()
-| ---------------------------------------------------------------
-|
-| This method sets or returns the content encoding.
-|
-| @Param (String) $code - The content encoding to be set
-| @Return (String | None) returns the current content encoding if $val is null
-|
-*/
+    /**
+     * Sets or returns the content encoding
+     *
+     * @param string $val The content encoding to be set
+     * @return string|void If $val is left null, the current content
+     *   encoding is returned
+     */
     public static function Encoding($val = null)
     {
         // Are we setting or retrieving?
@@ -254,18 +274,13 @@ class Response
         self::$charset = $val;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: SetHeader()
-| ---------------------------------------------------------------
-|
-| This method sets a header $key to the given $value
-|
-| @Param (String) $key - The header key
-| @Param (String) $value - The header key value
-| @Return (None)
-|
-*/
+    /**
+     * Sets a header $key to the given $value
+     *
+     * @param string $key The header key or name
+     * @param string $value The header key's or name's value to be set
+     * @return void
+     */
     public static function SetHeader($key, $value)
     {
         // Make sure the data wasnt sent already
@@ -287,27 +302,21 @@ class Response
             self::$headers[$key] = $value;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: SetCookie()
-| ---------------------------------------------------------------
-|
-| This method sets a cookie $name to the given $value
-|
-| @Param (String) $name - The cookie name
-| @Param (String) $value - The cookie value
-| @Param (Int) $expires - The UNIX timestamp the cookie expires
-| @Param (String) $path - The cookie path
-| @Return (None)
-|
-*/
+    /**
+     * Sets a cookies value
+     *
+     * @param string $name The cookie name
+     * @param string $value The cookies value
+     * @param int $expires The UNIX timestamp the cookie expires
+     * @param string $path The cookie path
+     * @return void
+     */
     public static function SetCookie($name, $value, $expires, $path = '/')
     {
         // Make sure the data wasnt sent already
         if(self::$outputSent)
             throw new OutputSentException('Cannot set cookie because the response headers have already been sent.');
-            
-        $_COOKIE[$name] = $value;
+        
         self::$cookies[$name] = array(
             'value' => $value,
             'expires' => $expires,
@@ -315,17 +324,13 @@ class Response
         );
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Protocol()
-| ---------------------------------------------------------------
-|
-| This method sets or returns the http protocol.
-|
-| @Param (String) $code - The protocol to be set
-| @Return (String | None) returns the current protocol if $code is null
-|
-*/
+    /**
+     * Sets or returns the http protocol
+     *
+     * @param string $code The protocol to use (HTTP_10 | HTTP_11)
+     * @return string|void If $code is null, the current protocol 
+     *   is returned
+     */
     public static function Protocol($code = null)
     {
         // Are we setting or retrieving?
@@ -344,20 +349,21 @@ class Response
         self::$protocol = $code;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Redirect()
-| ---------------------------------------------------------------
-|
-| This method sets a redirect header, and status code. When this
-| method is called, headers will be sent
-|
-| @Param (String) $location - The redirect url
-| @Param (Int) $status - The status code to be set
-| @Return (None)
-|
-*/
-    public static function Redirect($location, $status = 301)
+    /**
+     * This method sets a redirect header, and status code. When this
+     * method is called, if the $wait param is greater then 1, headers 
+     * will be sent.
+     *
+     * @param string $location The redirect URL. If a relative path
+     *   is passed here, the site's URL will be appended
+     * @param int $wait The wait time (in seconds) before the redirect 
+     *   takes affect. If set to a non 0 value, the page will still be 
+     *    rendered. Default is 0 seconds.
+     * @param int $status The redirect status. 301 is moved permanently,
+     *   and 307 is a temporary redirect. Default is 301.
+     * @return void
+     */
+    public static function Redirect($location, $wait = 0, $status = 301)
     {
         // Make sure the data wasnt sent already
         if(self::$outputSent)
@@ -371,84 +377,70 @@ class Response
         }
         
         // Reset all set data, and proccess the redirect immediately
-        self::Reset();
-        self::$status = $status;
-        self::$headers['Location'] = $location;
-        self::Send();
+        if($wait == 0)
+        {
+            self::Reset();
+            self::$status = $status;
+            self::$headers['Location'] = $location;
+            self::Send();
+        }
+        else
+        {
+            self::$status = $status;
+            self::$headers['Refresh'] = $wait .';url='. $location;
+        }
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: HasRedirects()
-| ---------------------------------------------------------------
-|
-| Returns a bool of whether a redirect has been set or not
-|
-| @Return (Bool)
-|
-*/
+    /**
+     * Returns a bool of whether a redirect has been set or not
+     *
+     * @return bool
+     */
     public static function HasRedirects()
     {
         return isset(self::$headers['Location']);
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ClearRedirects()
-| ---------------------------------------------------------------
-|
-| Removes all current redirects that are set
-|
-| @Return (None)
-|
-*/
+    /**
+     * Removes all current redirects that are set
+     *
+     * @return void
+     */
     public static function ClearRedirects()
     {
         if(isset(self::$headers['Location']))
             unset(self::$headers['Location']);
+            
+        if(isset(self::$headers['Refresh']))
+            unset(self::$headers['Refresh']);
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ClearHeaders()
-| ---------------------------------------------------------------
-|
-| Removes all current headers that are set
-|
-| @Return (None)
-|
-*/
+    /**
+     * Removes all current headers that are set
+     *
+     * @return void
+     */
     public static function ClearHeaders()
     {
         self::$headers = array();
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: ClearCookies()
-| ---------------------------------------------------------------
-|
-| Removes all current cookies that are modified
-|
-| @Return (None)
-|
-*/
+    /**
+     * Removes all current cookies that are modified
+     *
+     * @return void
+     */
     public static function ClearCookies()
     {
         self::$cookies = array();
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Reset()
-| ---------------------------------------------------------------
-|
-| Removes all current changes to the response, including the current
-| body buffer
-|
-| @Return (None)
-|
-*/
+    /**
+     * Removes all current changes to the response, including the current
+     * body buffer
+     *
+     * @return void
+     */
     public static function Reset()
     {
         self::$headers = array();
@@ -460,16 +452,11 @@ class Response
         self::$body = null;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: OutputSent()
-| ---------------------------------------------------------------
-|
-| Returns a bool based on whether the headers and output have been sent
-|
-| @Return (Bool)
-|
-*/
+    /**
+     * Returns a bool based on whether the headers and output have been sent
+     *
+     * @return bool
+     */
     public static function OutputSent()
     {
         return self::$outputSent;
@@ -482,6 +469,12 @@ class Response
 | ---------------------------------------------------------------
 |
 */
+
+    /**
+     * Sends all cookies
+     *
+     * @return void
+     */
     protected static function SendCookies()
     {
         foreach(self::$cookies as $key => $values)
@@ -490,6 +483,13 @@ class Response
         }
     }
     
+    /**
+     * Sends a header
+     *
+     * @param string $name The name of the header
+     * @param string $value The value of the header
+     * @return void
+     */
     protected static function SendHeader($name, $value = null)
     {
         // Make sure the headers havent been sent!
@@ -506,6 +506,11 @@ class Response
         return false;
     }
     
+    /**
+     * Sends the contents length
+     *
+     * @return void
+     */
     protected static function SendContentLength()
     {
         // If we already have stuff in the buffer, append that lenght
@@ -515,6 +520,11 @@ class Response
             self::$headers['Content-Length'] = strlen(self::$body);
     }
     
+    /**
+     * Sends the content type
+     *
+     * @return void
+     */
     protected static function SendContentType()
     {
         if (strpos(self::$contentType, 'text/') === 0)
@@ -527,10 +537,21 @@ class Response
             self::SetHeader('Content-Type', self::$contentType);
     }
     
+    /**
+     * Echo's out the body contents
+     *
+     * @return void
+     */
     protected static function SendBody()
     {
         echo self::$body;
     }
 }
 
+/**
+ * Output Sent Exception, Thrown when headers have already been set, and a Repsonse method is called
+ * @package     Core
+ * @subpackage  Exceptions
+ * @file        System/Core/Response.php
+ */
 class OutputSentException extends \Exception {}

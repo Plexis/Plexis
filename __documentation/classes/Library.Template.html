@@ -1,0 +1,336 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Library\Template</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">0</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_Add" title="Add :: Adds more to contents to be added into the contents section of
+the final rendered template."><span class="description">Adds more to contents to be added into the contents section of
+the final rendered template.</span><pre>Add()</pre></a></li>
+<li class="method public "><a href="#method_AddCssFile" title="AddCssFile :: AddCssFile"><span class="description">AddCssFile</span><pre>AddCssFile()</pre></a></li>
+<li class="method public "><a href="#method_AddJsFile" title="AddJsFile :: AddJsFile"><span class="description">AddJsFile</span><pre>AddJsFile()</pre></a></li>
+<li class="method public "><a href="#method_ClearBuffer" title="ClearBuffer :: Clears the current output buffer of the template"><span class="description">Clears the current output buffer of the template</span><pre>ClearBuffer()</pre></a></li>
+<li class="method public "><a href="#method_Message" title="Message :: Adds a global message to be parsed into the template"><span class="description">Adds a global message to be parsed into the template</span><pre>Message()</pre></a></li>
+<li class="method public "><a href="#method_PageTitle" title="PageTitle :: Sets the page title"><span class="description">Sets the page title</span><pre>PageTitle()</pre></a></li>
+<li class="method public "><a href="#method_Render" title="Render :: Renders the current body contents into the template layout"><span class="description">Renders the current body contents into the template layout</span><pre>Render()</pre></a></li>
+<li class="method public "><a href="#method_SetThemePath" title="SetThemePath :: Sets the path to the theme, where the layout.tpl is located"><span class="description">Sets the path to the theme, where the layout.tpl is located</span><pre>SetThemePath()</pre></a></li>
+<li class="method public "><a href="#method_SetVar" title="SetVar :: Sets variables to be parsed in the layout"><span class="description">Sets variables to be parsed in the layout</span><pre>SetVar()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="method protected "><a href="#method_LoadThemeConfig" title="LoadThemeConfig :: Internal method for loading the theme's config xml file"><span class="description">Internal method for loading the theme's config xml file</span><pre>LoadThemeConfig()</pre></a></li>
+<li class="method protected "><a href="#method_ParseGlobalMessages" title="ParseGlobalMessages :: Parse the global messages for the template renderer"><span class="description">Parse the global messages for the template renderer</span><pre>ParseGlobalMessages()</pre></a></li>
+<li class="method protected "><a href="#method__buildHeader" title="_buildHeader :: _buildHeader()"><span class="description">_buildHeader()</span><pre>_buildHeader()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_buffer" title="$buffer :: The current body view contents"><span class="description"></span><pre>$buffer</pre></a></li>
+<li class="property protected "><a href="#property_messages" title="$messages :: Array of template messages"><span class="description"></span><pre>$messages</pre></a></li>
+<li class="property protected "><a href="#property_themeConfig" title="$themeConfig :: Theme xml config object"><span class="description"></span><pre>$themeConfig</pre></a></li>
+<li class="property protected "><a href="#property_themePath" title="$themePath :: The root path to the theme"><span class="description"></span><pre>$themePath</pre></a></li>
+<li class="property protected "><a href="#property_themeUrl" title="$themeUrl :: The complete http path to the theme root"><span class="description"></span><pre>$themeUrl</pre></a></li>
+<li class="property protected "><a href="#property_variables" title="$variables :: Variables to be parsed in the layout view"><span class="description"></span><pre>$variables</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Library\Template"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Library.html">Library</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Library.Template.html">Template</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Template Engine for the CMS</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Library.html">Library</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_Add"></a><div class="element clickable method public method_Add" data-toggle="collapse" data-target=".method_Add .collapse">
+<h2>Adds more to contents to be added into the contents section of
+the final rendered template.</h2>
+<pre>Add() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Takes unlimited number of params</p></div>
+<table class="table table-bordered"><tr>
+<th>params</th>
+<td>string|\Library\View</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_AddCssFile"></a><div class="element clickable method public method_AddCssFile" data-toggle="collapse" data-target=".method_AddCssFile .collapse">
+<h2>AddCssFile</h2>
+<pre>AddCssFile(string $location) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$location</h4>
+<code>string</code><p>The http location of the file</p></div>
+</div></div>
+</div>
+<a id="method_AddJsFile"></a><div class="element clickable method public method_AddJsFile" data-toggle="collapse" data-target=".method_AddJsFile .collapse">
+<h2>AddJsFile</h2>
+<pre>AddJsFile(string $location) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$location</h4>
+<code>string</code><p>The http location of the file</p></div>
+</div></div>
+</div>
+<a id="method_ClearBuffer"></a><div class="element clickable method public method_ClearBuffer" data-toggle="collapse" data-target=".method_ClearBuffer .collapse">
+<h2>Clears the current output buffer of the template</h2>
+<pre>ClearBuffer() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_Message"></a><div class="element clickable method public method_Message" data-toggle="collapse" data-target=".method_Message .collapse">
+<h2>Adds a global message to be parsed into the template</h2>
+<pre>Message(string $lvl, string $message) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$lvl</h4>
+<code>string</code><p>The message level (error, warning, info etc)</p>
+</div>
+<div class="subelement argument">
+<h4>$message</h4>
+<code>string</code><p>The message to be displayed within the rendered template</p></div>
+</div></div>
+</div>
+<a id="method_PageTitle"></a><div class="element clickable method public method_PageTitle" data-toggle="collapse" data-target=".method_PageTitle .collapse">
+<h2>Sets the page title</h2>
+<pre>PageTitle(string $title) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$title</h4>
+<code>string</code><p>The title of the page</p></div>
+</div></div>
+</div>
+<a id="method_Render"></a><div class="element clickable method public method_Render" data-toggle="collapse" data-target=".method_Render .collapse">
+<h2>Renders the current body contents into the template layout</h2>
+<pre>Render(bool $return, bool $loadLayout) : string | void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$return</h4>
+<code>bool</code><p>When set to true, final rendered template
+  is returned instead of echo'ing it out.</p>
+</div>
+<div class="subelement argument">
+<h4>$loadLayout</h4>
+<code>bool</code><p>Load the layout?</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>void</code>Only returns the parsed page if $return is true</div>
+</div></div>
+</div>
+<a id="method_SetThemePath"></a><div class="element clickable method public method_SetThemePath" data-toggle="collapse" data-target=".method_SetThemePath .collapse">
+<h2>Sets the path to the theme, where the layout.tpl is located</h2>
+<pre>SetThemePath(string $path) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>The full path to the theme</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Library.InvalidThemePathException.html">\Library\InvalidThemePathException</a></code></th>
+<td>If the theme config cannot be found</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_SetVar"></a><div class="element clickable method public method_SetVar" data-toggle="collapse" data-target=".method_SetVar .collapse">
+<h2>Sets variables to be parsed in the layout</h2>
+<pre>SetVar(string $name, mixed $value) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>Name of the variable</p></div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>mixed</code><p>The value of the variable</p></div>
+</div></div>
+</div>
+<a id="method_LoadThemeConfig"></a><div class="element clickable method protected method_LoadThemeConfig" data-toggle="collapse" data-target=".method_LoadThemeConfig .collapse">
+<h2>Internal method for loading the theme's config xml file</h2>
+<pre>LoadThemeConfig() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/Library.ThemeNotSetException.html">\Library\ThemeNotSetException</a></code></th>
+<td>if the theme isnt set before rendering</td>
+</tr>
+<tr>
+<th><code><a href="../classes/Library.MissingThemeConfigException.html">\Library\MissingThemeConfigException</a></code></th>
+<td>if the theme is missing its theme
+config file (theme.xml)</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a id="method_ParseGlobalMessages"></a><div class="element clickable method protected method_ParseGlobalMessages" data-toggle="collapse" data-target=".method_ParseGlobalMessages .collapse">
+<h2>Parse the global messages for the template renderer</h2>
+<pre>ParseGlobalMessages() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The parsed global message contents</div>
+</div></div>
+</div>
+<a id="method__buildHeader"></a><div class="element clickable method protected method__buildHeader" data-toggle="collapse" data-target=".method__buildHeader .collapse">
+<h2>_buildHeader()</h2>
+<pre>_buildHeader() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_buffer"> </a><div class="element clickable property protected property_buffer" data-toggle="collapse" data-target=".property_buffer .collapse">
+<h2></h2>
+<pre>$buffer : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_messages"> </a><div class="element clickable property protected property_messages" data-toggle="collapse" data-target=".property_messages .collapse">
+<h2></h2>
+<pre>$messages : array[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_themeConfig"> </a><div class="element clickable property protected property_themeConfig" data-toggle="collapse" data-target=".property_themeConfig .collapse">
+<h2></h2>
+<pre>$themeConfig : \Library\SimpleXMLElement</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_themePath"> </a><div class="element clickable property protected property_themePath" data-toggle="collapse" data-target=".property_themePath .collapse">
+<h2></h2>
+<pre>$themePath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_themeUrl"> </a><div class="element clickable property protected property_themeUrl" data-toggle="collapse" data-target=".property_themeUrl .collapse">
+<h2></h2>
+<pre>$themeUrl : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_variables"> </a><div class="element clickable property protected property_variables" data-toggle="collapse" data-target=".property_variables .collapse">
+<h2></h2>
+<pre>$variables : mixed[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-12-09T23:53:06-06:00.<br></footer></div>
+</div>
+</body>
+</html>

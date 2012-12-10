@@ -1,37 +1,51 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis Core
-| --------------------------------------------------------------
-| Author:       Steven Wilson 
-| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: AutoLoader
-| ---------------------------------------------------------------
-|
-| This class is an advanced autolaoder for missing class references.
-| Able to register namespace specific paths, as well as prefix
-| specific paths.
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/Autoloader.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    Autoloader
+ */
 namespace Core;
 
+/**
+ * This class is an advanced autoloader for missing class references.
+ * Able to register namespace specific paths, as well as prefix
+ * specific paths.
+ *
+ * @author      Steven Wilson 
+ * @package     Core
+ */
 class AutoLoader
 {
+    /**
+     * A bool that states whether the Autoloader is registered with spl_autoload
+     * @var bool
+     */
     protected static $isRegistered = false;
+    
+    /**
+     * An array of registered paths
+     * @var string[]
+     */
     protected static $paths = array();
+    
+    /**
+     * An array of registered namepace => path
+     * @var string[]
+     */
     protected static $namespaces = array();
+    
+    /**
+     * An array of registered prefix => path
+     * @var string[]
+     */
     protected static $prefixes = array();
     
-/*
-| ---------------------------------------------------------------
-| Method: Init()
-| ---------------------------------------------------------------
-|
-| Registers the AutoLoader class with spl_autoload
-|
-*/
+    /**
+     * Registers the AutoLoader class with spl_autoload (Done automatically)
+     */
     public static function Init()
     {
         if(self::$isRegistered) return;
@@ -41,19 +55,14 @@ class AutoLoader
         self::$isRegistered = true;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: Register()
-| ---------------------------------------------------------------
-|
-| Registers a path for the autoload to search for classes. Namespaced
-| and prefixed registered paths will be searched first if the class
-| is namespaced, or prefixed.
-|
-| @Param: (String) $path - Full path to search for a class
-| @Return (None)
-|
-*/
+    /**
+     * Registers a path for the autoload to search for classes. Namespaced
+     * and prefixed registered paths will be searched first if the class
+     * is namespaced, or prefixed.
+     *
+     * @param string $path Full path to search for a class
+     * @return void
+     */
     public static function Register($path)
     {
         if(array_search($path, self::$paths) !== false)
@@ -61,22 +70,17 @@ class AutoLoader
         self::$paths[] = $path;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: RegisterNamespace()
-| ---------------------------------------------------------------
-|
-| Registers a path for the autoloader to search in when searching
-| for a specific namespaced class. When calling this method more
-| than once with the same namespace, the path(s) will just be added 
-| to the current ruuning list of paths for that namespace
-|
-| @Param: (String) $namespace - The namespace we are registering
-| @Param: (String | Array) $path - Full path, or an array of paths
-|   to search for the namespaced class'.
-| @Return (None)
-|
-*/
+    /**
+     * Registers a path for the autoloader to search in when searching
+     * for a specific namespaced class. When calling this method more
+     * than once with the same namespace, the path(s) will just be added 
+     * to the current ruuning list of paths for that namespace
+     *
+     * @param string $namespace The namespace we are registering
+     * @param string|array $path Full path, or an array of paths
+     *   to search for the namespaced class'.
+     * @return void
+     */
     public static function RegisterNamespace($namespace, $path)
     {
         if(isset(self::$namespaces[$namespace]))
@@ -85,22 +89,17 @@ class AutoLoader
             self::$namespaces[$namespace] = (array) $path;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: RegisterPrefix()
-| ---------------------------------------------------------------
-|
-| Registers a path for the autoload to search for when searching
-| for a prefixed class. When calling this method more than once 
-| with the same prefix, the path(s) will just be added to the current 
-| ruuning list of paths for that prefix
-|
-| @Param: (String) $prefix - The class prefix we are registering
-| @Param: (String | Array) $path - Full path, or an array of paths
-|   to search for the prefixed class'
-| @Return (None)
-|
-*/
+    /**
+     * Registers a path for the autoload to search for when searching
+     * for a prefixed class. When calling this method more than once 
+     * with the same prefix, the path(s) will just be added to the current 
+     * ruuning list of paths for that prefix
+     *
+     * @param string $prefix The class prefix we are registering
+     * @param string|array $path Full path, or an array of paths
+     *   to search for the prefixed class'
+     * @return void
+     */
     public static function RegisterPrefix($prefix, $path)
     {
         if(isset(self::$prefixes[$prefix]))
@@ -109,51 +108,36 @@ class AutoLoader
             self::$prefixes[$prefix] = (array) $path;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: GetNamespaces()
-| ---------------------------------------------------------------
-|
-| Returns an array of all registered namespaces as keys, and an array
-| of registered paths for that namespace as values
-|
-| @Return (Array)
-|
-*/
-    public function GetNamespaces()
+    /**
+     * Returns an array of all registered namespaces as keys, and an array
+     * of registered paths for that namespace as values
+     *
+     * @return string[]
+     */
+    public static function GetNamespaces()
     {
         return $this->namespaces;
     }
 
-/*
-| ---------------------------------------------------------------
-| Method: GetPrefixes()
-| ---------------------------------------------------------------
-|
-| Returns an array of all registered prefixes as keys, and an array
-| of registered paths for that prefix as values
-|
-| @Return (Array)
-|
-*/
-    public function GetPrefixes()
+    /**
+     * Returns an array of all registered prefixes as keys, and an array
+     * of registered paths for that prefix as values
+     *
+     * @return string[]
+     */
+    public static function GetPrefixes()
     {
         return $this->prefixes;
     }
     
-/*
-| ---------------------------------------------------------------
-| Method: LoadClass()
-| ---------------------------------------------------------------
-|
-| Method used to search all registered paths for a missing class
-| reference (used by the spl_autoload method)
-|
-| @Param: (String) $class - The class being loaded
-| @Return (Bool) Returns TRUE if the class is found, and file was
-|   included successfully.
-|
-*/
+    /**
+     * Method used to search all registered paths for a missing class
+     * reference (used by the spl_autoload method)
+     *
+     * @param string $class The class being loaded
+     * @return Bool Returns TRUE if the class is found, and file was
+     *   included successfully.
+     */
     public static function LoadClass($class)
     {
         // Search class name for a namespace

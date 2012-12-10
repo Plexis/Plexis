@@ -1,0 +1,330 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Library\Auth</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">0</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_HasPermission" title="HasPermission :: Used to find if user has a specified permission"><span class="description">Used to find if user has a specified permission</span><pre>HasPermission()</pre></a></li>
+<li class="method public "><a href="#method_Init" title="Init :: Contructor method (called internally)"><span class="description">Contructor method (called internally)</span><pre>Init()</pre></a></li>
+<li class="method public "><a href="#method_Login" title="Login :: Method used to proccess a user login"><span class="description">Method used to proccess a user login</span><pre>Login()</pre></a></li>
+<li class="method public "><a href="#method_Logout" title="Logout :: Logs the user out and sets all session variables to Guest."><span class="description">Logs the user out and sets all session variables to Guest.</span><pre>Logout()</pre></a></li>
+<li class="method public "><a href="#method_Register" title="Register :: Method used to create a new account"><span class="description">Method used to create a new account</span><pre>Register()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="method protected "><a href="#method_LoadPermissions" title="LoadPermissions :: Loads the permissions specific to this user"><span class="description">Loads the permissions specific to this user</span><pre>LoadPermissions()</pre></a></li>
+<li class="method protected "><a href="#method_StartSession" title="StartSession :: Internal method used to check to if the user is logged in by session."><span class="description">Internal method used to check to if the user is logged in by session.</span><pre>StartSession()</pre></a></li>
+<li class="method protected "><a href="#method__initUser" title="_initUser :: This method is used to initiate a user when an ID or username is determined"><span class="description">This method is used to initiate a user when an ID or username is determined</span><pre>_initUser()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_DB" title="$DB :: Database Driver object for the Plexis database"><span class="description"></span><pre>$DB</pre></a></li>
+<li class="property protected "><a href="#property_data" title="$data :: Users data array"><span class="description"></span><pre>$data</pre></a></li>
+<li class="property protected "><a href="#property_expireTime" title="$expireTime :: When the sessoin expires"><span class="description"></span><pre>$expireTime</pre></a></li>
+<li class="property protected "><a href="#property_permissions" title="$permissions :: Current users access permissions"><span class="description"></span><pre>$permissions</pre></a></li>
+<li class="property protected "><a href="#property_realm" title="$realm :: The Realm object from the wowlib"><span class="description"></span><pre>$realm</pre></a></li>
+<li class="property protected "><a href="#property_sessionid" title="$sessionid :: The sessions id"><span class="description"></span><pre>$sessionid</pre></a></li>
+<li class="property protected "><a href="#property_started" title="$started :: Session started? Used internally"><span class="description"></span><pre>$started</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Library\Auth"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Library.html">Library</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Library.Auth.html">Auth</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Authorization and User class.</p>
+<div class="details">
+<div class="long_description"><p>This class is used to proccess user's, and thier permissions</p></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Library.html">Library</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_HasPermission"></a><div class="element clickable method public method_HasPermission" data-toggle="collapse" data-target=".method_HasPermission .collapse">
+<h2>Used to find if user has a specified permission</h2>
+<pre>HasPermission(string $key) : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code>string</code><p>Permission name</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if the user has permissions, false otherwise</div>
+</div></div>
+</div>
+<a id="method_Init"></a><div class="element clickable method public method_Init" data-toggle="collapse" data-target=".method_Init .collapse">
+<h2>Contructor method (called internally)</h2>
+<pre>Init() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Initiates the user sessions and such</p></div></div></div>
+</div>
+<a id="method_Login"></a><div class="element clickable method public method_Login" data-toggle="collapse" data-target=".method_Login .collapse">
+<h2>Method used to proccess a user login</h2>
+<pre>Login(string $username, string $password) : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username to proccess</p></div>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>Unencrypted password to the account</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/Library.InvalidUsernameException.html">\Library\InvalidUsernameException</a></code></th>
+<td>if the account doesnt exist</td>
+</tr>
+<tr>
+<th><code><a href="../classes/Library.InvalidPasswordException.html">\Library\InvalidPasswordException</a></code></th>
+<td>if the account password is incorrect</td>
+</tr>
+<tr>
+<th><code><a href="../classes/Library.AccountBannedException.html">\Library\AccountBannedException</a></code></th>
+<td>if the account is banned</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Return true if the user is logged in, false otherwise</div>
+</div></div>
+</div>
+<a id="method_Logout"></a><div class="element clickable method public method_Logout" data-toggle="collapse" data-target=".method_Logout .collapse">
+<h2>Logs the user out and sets all session variables to Guest.</h2>
+<pre>Logout(bool $newSession) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newSession</h4>
+<code>bool</code><p>Start a new session? Should only
+be set internally in this class.</p>
+</div>
+</div></div>
+</div>
+<a id="method_Register"></a><div class="element clickable method public method_Register" data-toggle="collapse" data-target=".method_Register .collapse">
+<h2>Method used to create a new account</h2>
+<pre>Register(string $username, string $password, string $email, int $sq, string $sa) : int</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The account username to create</p></div>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>Unencrypted password to the account</p></div>
+<div class="subelement argument">
+<h4>$email</h4>
+<code>string</code><p>New accounts email address</p></div>
+<div class="subelement argument">
+<h4>$sq</h4>
+<code>int</code><p>The secret question ID. Leave null for no secrect question</p></div>
+<div class="subelement argument">
+<h4>$sa</h4>
+<code>string</code><p>The secret question answer. Leave null for no secrect question</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/Library.InvalidUsernameException.html">\Library\InvalidUsernameException</a></code></th>
+<td>if the username is invalid (too long or short)</td>
+</tr>
+<tr>
+<th><code><a href="../classes/Library.InvalidPasswordException.html">\Library\InvalidPasswordException</a></code></th>
+<td>if the password is invalid (too long or short)</td>
+</tr>
+<tr>
+<th><code><a href="../classes/Library.InvalidEmailException.html">\Library\InvalidEmailException</a></code></th>
+<td>if the email is not a real email</td>
+</tr>
+<tr>
+<th><code><a href="../classes/Library.AccountExistsException.html">\Library\AccountExistsException</a></code></th>
+<td>if the account name is already taken</td>
+</tr>
+<tr>
+<th><code><a href="../classes/Library.IpBannedException.html">\Library\IpBannedException</a></code></th>
+<td>if the ip address is banned</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>The account ID upon success, false otherwise</div>
+</div></div>
+</div>
+<a id="method_LoadPermissions"></a><div class="element clickable method protected method_LoadPermissions" data-toggle="collapse" data-target=".method_LoadPermissions .collapse">
+<h2>Loads the permissions specific to this user</h2>
+<pre>LoadPermissions(int $gid, int[] $perms) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$gid</h4>
+<code>int</code><p>The group id</p></div>
+<div class="subelement argument">
+<h4>$perms</h4>
+<code>int[]</code><p>The list of all permissions for the usergroup</p></div>
+</div></div>
+</div>
+<a id="method_StartSession"></a><div class="element clickable method protected method_StartSession" data-toggle="collapse" data-target=".method_StartSession .collapse">
+<h2>Internal method used to check to if the user is logged in by session.</h2>
+<pre>StartSession() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>If not then a username, id, and account level are set at guest.
+Also checks for login expire time.</p></div></div></div>
+</div>
+<a id="method__initUser"></a><div class="element clickable method protected method__initUser" data-toggle="collapse" data-target=".method__initUser .collapse">
+<h2>This method is used to initiate a user when an ID or username is determined</h2>
+<pre>_initUser(int $userid) : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$userid</h4>
+<code>int</code><p>The account id</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_DB"> </a><div class="element clickable property protected property_DB" data-toggle="collapse" data-target=".property_DB .collapse">
+<h2></h2>
+<pre>$DB : <a href="../classes/Database.Driver.html">\Database\Driver</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_data"> </a><div class="element clickable property protected property_data" data-toggle="collapse" data-target=".property_data .collapse">
+<h2></h2>
+<pre>$data : mixed[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_expireTime"> </a><div class="element clickable property protected property_expireTime" data-toggle="collapse" data-target=".property_expireTime .collapse">
+<h2></h2>
+<pre>$expireTime : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_permissions"> </a><div class="element clickable property protected property_permissions" data-toggle="collapse" data-target=".property_permissions .collapse">
+<h2></h2>
+<pre>$permissions : int[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_realm"> </a><div class="element clickable property protected property_realm" data-toggle="collapse" data-target=".property_realm .collapse">
+<h2></h2>
+<pre>$realm : \Wowlib\Realm</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_sessionid"> </a><div class="element clickable property protected property_sessionid" data-toggle="collapse" data-target=".property_sessionid .collapse">
+<h2></h2>
+<pre>$sessionid : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_started"> </a><div class="element clickable property protected property_started" data-toggle="collapse" data-target=".property_started .collapse">
+<h2></h2>
+<pre>$started : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-12-09T23:53:06-06:00.<br></footer></div>
+</div>
+</body>
+</html>
