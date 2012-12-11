@@ -5,6 +5,7 @@
  * @file        System/Plexis.php
  * @copyright   2011-2012, Plexis Dev Team
  * @license     GNU GPL v3
+ * @package     System
  */
 
 // First, import some classes into scope
@@ -319,9 +320,21 @@ class Plexis
         
         // Define our site url
         if( MOD_REWRITE )
+        {
+            /**
+             * The URL to get to the root of the website (HTTP_HOST + webroot)
+             *
+             * @package     System
+             */
             define('SITE_URL', Request::BaseUrl());
+        }
         else
+        {
+            /**
+             * @ignore
+             */
             define('SITE_URL', Request::BaseUrl() .'/?uri=');
+        }
     }
 }
 

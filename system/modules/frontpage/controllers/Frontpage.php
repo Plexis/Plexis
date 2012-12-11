@@ -1,17 +1,24 @@
 <?php
 
+use Core\Controller;
 use Library\Template;
 use Library\View;
 use Library\ViewNotFoundException;
 
-class Frontpage
+class Frontpage extends Controller
 {
+    public function __construct()
+    {
+        // Make sure to call the parent contructor if you have a custom constructor
+        parent::__construct();
+    }
+    
     public function Index()
     {
-        // Load our view
+        // Load our view using the Core\Controller::loadView method
         try {
-            $view = new View( path(Plexis::$modulePath, "views", "main.tpl") );
-            $view->Set('message', 'Hello World!');
+            $view = $this->loadView("main.tpl");
+            $view->Set('message', $this->modulePath);
             Template::Add($view);
         }
         catch( ViewNotFoundException $e ) {

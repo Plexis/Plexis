@@ -1,29 +1,31 @@
 <?php
-/*
-| --------------------------------------------------------------
-| Plexis Core, Multiple Application Platform
-| --------------------------------------------------------------
-|
-| Author:       Steven (Wilson212)
-| Author:       Tony (Syke)
-| Copyright:    Copyright (c) 2011-2012, Plexis Dev Team
-| License:      GNU GPL v3
-|
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @author      Steven Wilson (Wilson212)
+ * @author      Tony (Syke)
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @package     System
+ */
 
 // Make sure we are running php version 5.3.2 or newer!!!!
 if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50302)
-    die('PHP version 5.3.2 or newer required to run Plexis Core. Your version: '. PHP_VERSION);
+    die('PHP version 5.3.2 or newer required to run Plexis. Your version: '. PHP_VERSION);
     
-// Get a most accurate start time
+/** Most Accurate Start time */
 define('TIME_START', microtime(true));
     
-// Define a smaller Directory seperater and ROOT, SYSTEM paths
+/** Directory Separator */
 define('DS', DIRECTORY_SEPARATOR);
+
+/** Root Path to The cms */
 define('ROOT', dirname(__FILE__));
+
+/** Root path to the System folder */
 define('SYSTEM_PATH', ROOT . DS .'system');
 
-// Define if we are running a mod rewrite enviroment
+/** Define if we are running a mod rewrite enviroment */
 define('MOD_REWRITE', isset($_SERVER["HTTP_MOD_REWRITE"]) && $_SERVER["HTTP_MOD_REWRITE"] == "On");
 
 // Point php to our own php error log

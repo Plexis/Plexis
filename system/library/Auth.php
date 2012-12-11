@@ -18,7 +18,6 @@ namespace Library;
 use \Core\Database;
 use \Core\EventHandler;
 use \Core\Request;
-use \Exception;
 use \Plexis;
 
 /**
@@ -208,9 +207,10 @@ class Auth
      * @param string $username The username to proccess
      * @param string $password Unencrypted password to the account
      *
-     * @throws InvalidUsernameException if the account doesnt exist
-     * @throws InvalidPasswordException if the account password is incorrect
-     * @throws AccountBannedException if the account is banned
+     * @throws InvalidUsernameException Thrown if the username contains illegal characters, or is too short/long
+     * @throws InvalidPasswordException Thrown if the password contains illegal characters, or is too short
+     * @throws InvalidCredentialsException Thrown if the username or password is incorrect
+     * @throws AccountBannedException Thrown if the account is banned
      *
      * @return bool Return true if the user is logged in, false otherwise
      */
@@ -220,12 +220,17 @@ class Auth
         $username = trim($username);
         $password = trim($password);
 
-        // if the username or password is empty, return false
-        if(empty($username) || empty($password))
-        {
-            Template::Message('error', 'login_failed_field_invalid');
-            return false;
-        }
+        // if the username is too short or too long, throw exception
+        $iLength = strlen($username);
+        if($iLength < 3)
+            throw new InvalidUsernameException('', 1);
+        elseif($iLength > 12)
+            throw new InvalidUsernameException('', 2);
+        
+        // If the password is too short, throw InvalidPasswordException
+        $iLength = strlen($password);
+        if($iLength < 3)
+            throw new InvalidPasswordException('', 1);
         
         // Add trace for debugging
         ////\Debug::trace("User {$username} logging in...", __FILE__, __LINE__);
@@ -236,8 +241,7 @@ class Auth
         {
             // Add trace for debugging
             // //\Debug::trace("Failed to validate password for account '{$username}'. Login failed", __FILE__, __LINE__);
-            Template::Message('error', 'login_failed_wrong_credentials');
-            return false;
+            throw new InvalidCredentialsException('');
         }
         
         // Username exists and password is correct, Lets log in
@@ -289,11 +293,11 @@ class Auth
      * @param int $sq The secret question ID. Leave null for no secrect question
      * @param string $sa The secret question answer. Leave null for no secrect question
      *
-     * @throws InvalidUsernameException if the username is invalid (too long or short)
-     * @throws InvalidPasswordException if the password is invalid (too long or short)
-     * @throws InvalidEmailException if the email is not a real email
-     * @throws AccountExistsException if the account name is already taken
-     * @throws IpBannedException if the ip address is banned
+     * @throws InvalidUsernameException Thrown if the username is invalid.
+     * @throws InvalidPasswordException Thrown if the password is invalid
+     * @throws InvalidEmailException Thrown if the email is not a real email
+     * @throws AccountExistsException Thrown if the account name is already taken
+     * @throws IpBannedException Thrown if the ip address is banned
      *
      * @return int The account ID upon success, false otherwise
      */
@@ -303,13 +307,22 @@ class Auth
         $username = trim(ucfirst(strtolower($username)));
         $password = trim($password);
         $email = trim($email);
-
-        // If the username, password, or email is empty, return false
-        if(empty($username) || empty($password) || empty($email))
-        {
-            Template::Message('error', 'reg_failed_field_invalid');
-            return false;
-        }
+        
+        // if the username is too short or too long, throw exception
+        $iLength = strlen($username);
+        if($iLength < 3)
+            throw new InvalidUsernameException('', 1);
+        elseif($iLength > 12)
+            throw new InvalidUsernameException('', 2);
+        
+        // If the password is too short, throw InvalidPasswordException
+        $iLength = strlen($password);
+        if($iLength < 3)
+            throw new InvalidPasswordException('', 1);
+            
+        // If the email is incorrect, throw InvalidEmailException
+        if(!filter_var($email, \FILTER_VALIDATE_EMAIL))
+            throw new InvalidEmailException('');
         
         // Add trace for debugging
         ////\Debug::trace("Registering account '{$username}'...", __FILE__, __LINE__);
@@ -590,29 +603,39 @@ class Auth
 
 /**
  * Thrown by the Auth Class when the provided username is invalid in format (Too long, Too short)
+ *
  * @package     Library
  * @subpackage  Exceptions
  * @file        System/Library/Auth.php
  * @see         Auth
  */
-class InvalidUsernameException extends Exception {}
+class InvalidUsernameException extends \Exception {}
 
 /**
- * Thrown by the Auth Class when the provided password is invalid in format (Too long, Too short)
+ * Thrown by the Auth Class when the provided password is invalid in format too short
+ *
  * @package     Library
  * @subpackage  Exceptions
  * @file        System/Library/Auth.php
  * @see         Auth
  */
-class InvalidPasswordException extends Exception {}
+class InvalidPasswordException extends \Exception {}
 
 /**
  * Thrown by the Auth Class when the provided email is invalid.
- * @package Library
- * @subpackage Exceptions
- * @see Auth
+ * @package     Library
+ * @subpackage  Exceptions
+ * @see         Auth::Login()
  */
-class InvalidEmailException extends Exception {}
+class InvalidEmailException extends \Exception {}
+
+/**
+ * Thrown by the Auth Class when a login fails due to invalid username or password
+ * @package     Library
+ * @subpackage  Exceptions
+ * @see         Auth
+ */
+class InvalidCredentialsException extends \Exception {}
 
 /**
  * Thrown by the Auth Class during the Register method, if the account name provided already exists
@@ -621,7 +644,7 @@ class InvalidEmailException extends Exception {}
  * @file        System/Library/Auth.php
  * @see         Auth::Register()
  */
-class AccountExistsException extends Exception {}
+class AccountExistsException extends \Exception {}
 
 /**
  * Thrown by the Auth Class when logging in, and the account name is banned
@@ -630,7 +653,7 @@ class AccountExistsException extends Exception {}
  * @file        System/Library/Auth.php
  * @see         Auth::Login()
  */
-class AccountBannedException extends Exception {}
+class AccountBannedException extends \Exception {}
 
 /**
  * Thrown by the Auth Class when registering an account, and the Remote IP is banned.
@@ -639,5 +662,5 @@ class AccountBannedException extends Exception {}
  * @file        System/Library/Auth.php
  * @see         Auth::Register()
  */
-class IpBannedException extends Exception {}
+class IpBannedException extends \Exception {}
 // EOF

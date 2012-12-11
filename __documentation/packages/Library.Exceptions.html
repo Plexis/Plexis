@@ -22,7 +22,6 @@
 <li><a>Packages</a></li>
 <li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
 <li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
-<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
 <li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
 </ul>
@@ -67,8 +66,9 @@
 <li class="nav-header">
 <i class="icon-custom icon-class"></i> Classes</li>
 <li><a href="#InvalidUsernameException" title="Thrown by the Auth Class when the provided username is invalid in format (Too long, Too short)">InvalidUsernameException</a></li>
-<li><a href="#InvalidPasswordException" title="Thrown by the Auth Class when the provided password is invalid in format (Too long, Too short)">InvalidPasswordException</a></li>
+<li><a href="#InvalidPasswordException" title="Thrown by the Auth Class when the provided password is invalid in format too short">InvalidPasswordException</a></li>
 <li><a href="#InvalidEmailException" title="Thrown by the Auth Class when the provided email is invalid.">InvalidEmailException</a></li>
+<li><a href="#InvalidCredentialsException" title="Thrown by the Auth Class when a login fails due to invalid username or password">InvalidCredentialsException</a></li>
 <li><a href="#AccountExistsException" title="Thrown by the Auth Class during the Register method, if the account name provided already exists">AccountExistsException</a></li>
 <li><a href="#AccountBannedException" title="Thrown by the Auth Class when logging in, and the account name is banned">AccountBannedException</a></li>
 <li><a href="#IpBannedException" title="Thrown by the Auth Class when registering an account, and the Remote IP is banned.">IpBannedException</a></li>
@@ -104,6 +104,13 @@
 <div class="details collapse"></div>
 <a href="../classes/Library.AccountExistsException.html" class="more">« More »</a>
 </div>
+<div id="InvalidCredentialsException" class="element ajax clickable class">
+<h1>InvalidCredentialsException<a href="../classes/Library.InvalidCredentialsException.html">¶</a>
+</h1>
+<p class="short_description">Thrown by the Auth Class when a login fails due to invalid username or password</p>
+<div class="details collapse"></div>
+<a href="../classes/Library.InvalidCredentialsException.html" class="more">« More »</a>
+</div>
 <div id="InvalidEmailException" class="element ajax clickable class">
 <h1>InvalidEmailException<a href="../classes/Library.InvalidEmailException.html">¶</a>
 </h1>
@@ -121,7 +128,7 @@
 <div id="InvalidPasswordException" class="element ajax clickable class">
 <h1>InvalidPasswordException<a href="../classes/Library.InvalidPasswordException.html">¶</a>
 </h1>
-<p class="short_description">Thrown by the Auth Class when the provided password is invalid in format (Too long, Too short)</p>
+<p class="short_description">Thrown by the Auth Class when the provided password is invalid in format too short</p>
 <div class="details collapse"></div>
 <a href="../classes/Library.InvalidPasswordException.html" class="more">« More »</a>
 </div>
@@ -180,7 +187,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-09T23:53:06-06:00.<br></footer></div>
+            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
 </div>
 </body>
 </html>

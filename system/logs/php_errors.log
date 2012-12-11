@@ -1,0 +1,62 @@
+[10-Dec-2012 17:29:29 UTC] PHP Fatal error:  Call to undefined function Core\show_404() in C:\wamp\www\NewCms\system\core\Router.php on line 215
+[10-Dec-2012 17:29:29 UTC] PHP Stack trace:
+[10-Dec-2012 17:29:29 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[10-Dec-2012 17:29:29 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:58
+[10-Dec-2012 17:29:29 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:64
+[10-Dec-2012 17:29:29 UTC] PHP   4. Plexis::RunModule() C:\wamp\www\NewCms\system\Plexis.php:93
+[10-Dec-2012 17:29:29 UTC] PHP   5. Core\AutoLoader::LoadClass() C:\wamp\www\NewCms\system\Plexis.php:0
+[10-Dec-2012 17:29:29 UTC] PHP   6. require() C:\wamp\www\NewCms\system\core\AutoLoader.php:156
+[10-Dec-2012 17:29:29 UTC] PHP   7. Core\Router::RouteUrl() C:\wamp\www\NewCms\system\core\Router.php:229
+[10-Dec-2012 17:38:31 UTC] PHP Fatal error:  Call to undefined function Core\show_404() in C:\wamp\www\NewCms\system\core\Router.php on line 215
+[10-Dec-2012 17:38:31 UTC] PHP Stack trace:
+[10-Dec-2012 17:38:31 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[10-Dec-2012 17:38:31 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:58
+[10-Dec-2012 17:38:31 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:64
+[10-Dec-2012 17:38:31 UTC] PHP   4. Plexis::RunModule() C:\wamp\www\NewCms\system\Plexis.php:93
+[10-Dec-2012 17:38:31 UTC] PHP   5. Core\AutoLoader::LoadClass() C:\wamp\www\NewCms\system\Plexis.php:0
+[10-Dec-2012 17:38:31 UTC] PHP   6. require() C:\wamp\www\NewCms\system\core\AutoLoader.php:156
+[10-Dec-2012 17:38:31 UTC] PHP   7. Core\Router::RouteUrl() C:\wamp\www\NewCms\system\core\Router.php:229
+[10-Dec-2012 17:38:34 UTC] PHP Fatal error:  Call to undefined function Core\show_404() in C:\wamp\www\NewCms\system\core\Router.php on line 215
+[10-Dec-2012 17:38:34 UTC] PHP Stack trace:
+[10-Dec-2012 17:38:34 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[10-Dec-2012 17:38:34 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:58
+[10-Dec-2012 17:38:34 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:64
+[10-Dec-2012 17:38:34 UTC] PHP   4. Plexis::RunModule() C:\wamp\www\NewCms\system\Plexis.php:93
+[10-Dec-2012 17:38:34 UTC] PHP   5. Core\AutoLoader::LoadClass() C:\wamp\www\NewCms\system\Plexis.php:0
+[10-Dec-2012 17:38:34 UTC] PHP   6. require() C:\wamp\www\NewCms\system\core\AutoLoader.php:156
+[10-Dec-2012 17:38:34 UTC] PHP   7. Core\Router::RouteUrl() C:\wamp\www\NewCms\system\core\Router.php:229
+[11-Dec-2012 15:36:59 UTC] PHP Fatal error:  Class 'Controller' not found in C:\wamp\www\NewCms\system\modules\frontpage\controllers\Frontpage.php on line 9
+[11-Dec-2012 15:36:59 UTC] PHP Stack trace:
+[11-Dec-2012 15:36:59 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[11-Dec-2012 15:36:59 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:40
+[11-Dec-2012 15:36:59 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:64
+[11-Dec-2012 15:36:59 UTC] PHP   4. Plexis::RunModule() C:\wamp\www\NewCms\system\Plexis.php:93
+[11-Dec-2012 15:36:59 UTC] PHP   5. Core\Dispatch::Execute() C:\wamp\www\NewCms\system\Plexis.php:222
+[11-Dec-2012 15:36:59 UTC] PHP   6. require() C:\wamp\www\NewCms\system\core\Dispatch.php:70
+[11-Dec-2012 15:37:46 UTC] PHP Fatal error:  Cannot call constructor in C:\wamp\www\NewCms\system\modules\frontpage\controllers\Frontpage.php on line 12
+[11-Dec-2012 15:37:46 UTC] PHP Stack trace:
+[11-Dec-2012 15:37:46 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[11-Dec-2012 15:37:46 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:40
+[11-Dec-2012 15:37:46 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:64
+[11-Dec-2012 15:37:46 UTC] PHP   4. Plexis::RunModule() C:\wamp\www\NewCms\system\Plexis.php:93
+[11-Dec-2012 15:37:46 UTC] PHP   5. Core\Dispatch::Execute() C:\wamp\www\NewCms\system\Plexis.php:222
+[11-Dec-2012 15:37:46 UTC] PHP   6. Frontpage->__construct() C:\wamp\www\NewCms\system\core\Dispatch.php:81
+[11-Dec-2012 15:38:12 UTC] PHP Fatal error:  Cannot call constructor in C:\wamp\www\NewCms\system\modules\frontpage\controllers\Frontpage.php on line 12
+[11-Dec-2012 15:38:12 UTC] PHP Stack trace:
+[11-Dec-2012 15:38:12 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[11-Dec-2012 15:38:12 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:40
+[11-Dec-2012 15:38:12 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:64
+[11-Dec-2012 15:38:12 UTC] PHP   4. Plexis::RunModule() C:\wamp\www\NewCms\system\Plexis.php:93
+[11-Dec-2012 15:38:12 UTC] PHP   5. Core\Dispatch::Execute() C:\wamp\www\NewCms\system\Plexis.php:222
+[11-Dec-2012 15:38:12 UTC] PHP   6. Frontpage->__construct() C:\wamp\www\NewCms\system\core\Dispatch.php:81
+[11-Dec-2012 15:38:26 UTC] PHP Notice:  Undefined variable: exception in C:\wamp\www\NewCms\system\core\ErrorHandler.php on line 99
+[11-Dec-2012 15:38:26 UTC] PHP Stack trace:
+[11-Dec-2012 15:38:26 UTC] PHP   1. {main}() C:\wamp\www\NewCms\index.php:0
+[11-Dec-2012 15:38:26 UTC] PHP   2. System::Run() C:\wamp\www\NewCms\index.php:40
+[11-Dec-2012 15:38:26 UTC] PHP   3. Plexis::Run() C:\wamp\www\NewCms\system\System.php:64
+[11-Dec-2012 15:38:26 UTC] PHP   4. Plexis::RunModule() C:\wamp\www\NewCms\system\Plexis.php:93
+[11-Dec-2012 15:38:26 UTC] PHP   5. Core\Dispatch::Execute() C:\wamp\www\NewCms\system\Plexis.php:222
+[11-Dec-2012 15:38:26 UTC] PHP   6. Core\Controller->__construct() C:\wamp\www\NewCms\system\core\Dispatch.php:81
+[11-Dec-2012 15:38:26 UTC] PHP   7. Library\Template::Message() C:\wamp\www\NewCms\system\core\Controller.php:10
+[11-Dec-2012 15:38:26 UTC] PHP   8. Core\ErrorHandler::HandlePHPError() C:\wamp\www\NewCms\system\core\Controller.php:168
+[11-Dec-2012 15:38:26 UTC] PHP   9. Core\ErrorHandler::DisplayError() C:\wamp\www\NewCms\system\core\ErrorHandler.php:69

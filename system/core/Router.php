@@ -212,7 +212,7 @@ class Router
         {
             // Add this to the trace
             // \Debug::trace('Controller or action contains a private prefix "_", showing 404' , __FILE__, __LINE__);
-            show_404();
+            \Plexis::Show404();
         }
         
         // Set static Variables

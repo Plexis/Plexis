@@ -1,0 +1,123 @@
+/*
+ * Grape - Professional & Flexible Admin Template
+ * by Stammi <http://themeforest.net/user/Stammi>
+ * 
+ * -----------------
+ * TABLE OF CONTENTS
+ * -----------------
+ * 
+ * 1) Generic Buttons
+ * 2) Image Buttons
+ * 3) Username Button
+ * 4) Footer
+ */
+
+/* ==================================================
+ * 1) Generic Buttons
+ * ================================================== */
+
+.button {
+	background: url("../img/buttons/button-blue.png") repeat-x scroll 0 0 #2d5672;
+	border-radius: 5px 5px 5px 5px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #111111;
+	color: #FFFFFF !important;
+	cursor: pointer;
+	display: inline-block;
+	padding: 5px 10px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+	height: 14px;
+}
+
+input[type="submit"].button {
+	height: 26px;
+}
+
+.button:hover {
+	background: url("../img/buttons/button-blue.png") repeat-x scroll 0 -24px #4d7690;
+	color: #fff !important;
+	text-decoration: none;
+}
+
+.button:active {
+	background: url("../img/buttons/button-blue.png") repeat-x scroll 0 -48px #6290b2;
+}
+
+.button.red { background: url("../img/buttons/button-red.png") repeat-x scroll 0 0 #6b352b; }
+.button.red:hover { background: url("../img/buttons/button-red.png") repeat-x scroll 0 -24px #834a3f; }
+.button.red:active { background: url("../img/buttons/button-red.png") repeat-x scroll 0 -48px #a85f51; }
+
+
+
+
+
+
+
+/* ==================================================
+ * 2) Image Buttons
+ * ================================================== */
+
+.btn-info {
+	background: url("../img/icons/small/info.png") no-repeat scroll 0 0 transparent;
+	height: 20px;
+	width: 20px;
+	position: relative;
+	margin-right: 15px;
+	margin-top: -2px;
+	float: right;
+}
+
+.btn-info:hover {
+	background-position: 0px -20px;
+}
+
+.to-top {
+	background: url("../img/icons/misc/to-top.png") no-repeat scroll 0 0 transparent;
+	height: 30px;
+	width: 30px;
+	position: relative;
+	margin-right: 25px;
+	margin-top: -10px;
+	float: right;
+}
+
+
+
+
+
+
+/* ==================================================
+ * 3) Username Button
+ * ================================================== */
+
+.user-button {
+	background: url("../img/misc/shine-effect.png") repeat-x scroll top left #2a4757;
+	border: 1px solid #1b2f39;
+	border-radius: 4px 4px 4px 4px;
+	position: relative;
+	float: left;
+	display: inline-block;
+	padding: 8px 8px;
+}
+
+.user-button:hover {
+	background: url("../img/misc/shine-effect.png") repeat-x scroll top left #495f71;
+}
+
+.user-button:active {
+	top: 1px;
+}
+
+.user-button a {
+	display: block;
+}
+
+.arrow-link-down {
+	background: url("../img/icons/misc/arrow-down.png") no-repeat scroll center right transparent;
+	padding-right: 20px;
+}
+
+.arrow-link-down:hover {
+	background: url("../img/icons/misc/arrow-down-hover.png") no-repeat scroll center right transparent;
+}

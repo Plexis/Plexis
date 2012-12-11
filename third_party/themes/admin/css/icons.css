@@ -1,0 +1,164 @@
+/*
+ * Grape - Professional & Flexible Admin Template
+ * by Stammi <http://themeforest.net/user/Stammi>
+ * 
+ * -----------------
+ * TABLE OF CONTENTS
+ * -----------------
+ * 
+ * 1) Generic
+ * 2) Pack: Fugue
+ *   2.1) 16x16
+ *   2.2) 24x24
+ */
+
+
+/* ==================================================
+ * 1) Generic
+ * ================================================== */
+
+.icon {
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 24px;
+	
+}
+
+
+
+
+
+
+
+
+/* ==================================================
+ * 2) Pack: Fugue
+ * ================================================== */
+
+/*
+ * 2.1) 16x16
+ */
+
+.i-16-address-book { background-image: url("../img/icons/packs/fugue/16x16/address-book.png"); }
+.i-16-alarm-clock { background-image: url("../img/icons/packs/fugue/16x16/alarm-clock.png"); }
+.i-16-application { background-image: url("../img/icons/packs/fugue/16x16/application.png"); }
+.i-16-application-monitor { background-image: url("../img/icons/packs/fugue/16x16/application-monitor.png"); }
+.i-16-application-terminal { background-image: url("../img/icons/packs/fugue/16x16/application-terminal.png"); }
+.i-16-balloon { background-image: url("../img/icons/packs/fugue/16x16/balloon.png"); }
+.i-16-bank { background-image: url("../img/icons/packs/fugue/16x16/bank.png"); }
+.i-16-block { background-image: url("../img/icons/packs/fugue/16x16/block.png"); }
+.i-16-blue-document { background-image: url("../img/icons/packs/fugue/16x16/blue-document.png"); }
+.i-16-blue-document-access { background-image: url("../img/icons/packs/fugue/16x16/blue-document-access.png"); }
+.i-16-blue-document-binary { background-image: url("../img/icons/packs/fugue/16x16/blue-document-binary.png"); }
+.i-16-blue-document-bookmark { background-image: url("../img/icons/packs/fugue/16x16/blue-document-bookmark.png"); }
+.i-16-blue-document-break { background-image: url("../img/icons/packs/fugue/16x16/blue-document-break.png"); }
+.i-16-blue-document-code { background-image: url("../img/icons/packs/fugue/16x16/blue-document-code.png"); }
+.i-16-blue-document-copy { background-image: url("../img/icons/packs/fugue/16x16/blue-document-copy.png"); }
+.i-16-blue-document-excel { background-image: url("../img/icons/packs/fugue/16x16/blue-document-excel.png"); }
+.i-16-blue-document-excel-csv { background-image: url("../img/icons/packs/fugue/16x16/blue-document-excel-csv.png"); }
+.i-16-blue-document-excel-table { background-image: url("../img/icons/packs/fugue/16x16/blue-document-excel-table.png"); }
+.i-16-blue-document--exclamation { background-image: url("../img/icons/packs/fugue/16x16/blue-document--exclamation.png"); }
+.i-16-blue-document-film { background-image: url("../img/icons/packs/fugue/16x16/blue-document-film.png"); }
+.i-16-bookmark { background-image: url("../img/icons/packs/fugue/16x16/bookmark.png"); }
+.i-16-calendar { background-image: url("../img/icons/packs/fugue/16x16/calendar.png"); }
+.i-16-chart { background-image: url("../img/icons/packs/fugue/16x16/chart.png"); }
+.i-16-chart-pie { background-image: url("../img/icons/packs/fugue/16x16/chart-pie.png"); }
+.i-16-clipboard { background-image: url("../img/icons/packs/fugue/16x16/clipboard.png"); }
+.i-16-clock { background-image: url("../img/icons/packs/fugue/16x16/clock.png"); }
+.i-16-cross { background-image: url("../img/icons/packs/fugue/16x16/cross.png"); }
+.i-16-cross-small { background-image: url("../img/icons/packs/fugue/16x16/cross-small.png"); }
+.i-16-cutlery { background-image: url("../img/icons/packs/fugue/16x16/cutlery.png"); }
+.i-16-dashboard { background-image: url("../img/icons/packs/fugue/16x16/dashboard.png"); }
+.i-16-direction { background-image: url("../img/icons/packs/fugue/16x16/direction.png"); }
+.i-16-drive { background-image: url("../img/icons/packs/fugue/16x16/drive.png"); }
+.i-16-exclamation { background-image: url("../img/icons/packs/fugue/16x16/exclamation.png"); }
+.i-16-exclamation-red { background-image: url("../img/icons/packs/fugue/16x16/exclamation-red.png"); }
+.i-16-film { background-image: url("../img/icons/packs/fugue/16x16/film.png"); }
+.i-16-flag { background-image: url("../img/icons/packs/fugue/16x16/flag.png"); }
+.i-16-gear { background-image: url("../img/icons/packs/fugue/16x16/gear.png"); }
+.i-16-home { background-image: url("../img/icons/packs/fugue/16x16/home.png"); }
+.i-16-image { background-image: url("../img/icons/packs/fugue/16x16/image.png"); }
+.i-16-key { background-image: url("../img/icons/packs/fugue/16x16/key.png"); }
+.i-16-leaf { background-image: url("../img/icons/packs/fugue/16x16/leaf.png"); }
+.i-16-license-key { background-image: url("../img/icons/packs/fugue/16x16/license-key.png"); }
+.i-16-magnifier { background-image: url("../img/icons/packs/fugue/16x16/magnifier.png"); }
+.i-16-mail { background-image: url("../img/icons/packs/fugue/16x16/mail.png"); }
+.i-16-map { background-image: url("../img/icons/packs/fugue/16x16/map.png"); }
+.i-16-minus { background-image: url("../img/icons/packs/fugue/16x16/minus.png"); }
+.i-16-monitor { background-image: url("../img/icons/packs/fugue/16x16/monitor.png"); }
+.i-16-music { background-image: url("../img/icons/packs/fugue/16x16/music.png"); }
+.i-16-network-cloud { background-image: url("../img/icons/packs/fugue/16x16/network-cloud.png"); }
+.i-16-notebook { background-image: url("../img/icons/packs/fugue/16x16/notebook.png"); }
+.i-16-plus { background-image: url("../img/icons/packs/fugue/16x16/plus.png"); }
+.i-16-question { background-image: url("../img/icons/packs/fugue/16x16/question.png"); }
+.i-16-servers { background-image: url("../img/icons/packs/fugue/16x16/servers.png"); }
+.i-16-star { background-image: url("../img/icons/packs/fugue/16x16/star.png"); }
+.i-16-status { background-image: url("../img/icons/packs/fugue/16x16/status.png"); }
+.i-16-status-away { background-image: url("../img/icons/packs/fugue/16x16/status-away.png"); }
+.i-16-status-busy { background-image: url("../img/icons/packs/fugue/16x16/status-busy.png"); }
+.i-16-sticky-note { background-image: url("../img/icons/packs/fugue/16x16/sticky-note.png"); }
+.i-16-switch { background-image: url("../img/icons/packs/fugue/16x16/switch.png"); }
+.i-16-system-monitor { background-image: url("../img/icons/packs/fugue/16x16/system-monitor.png"); }
+.i-16-tag { background-image: url("../img/icons/packs/fugue/16x16/tag.png"); }
+.i-16-telephone { background-image: url("../img/icons/packs/fugue/16x16/telephone.png"); }
+.i-16-tick { background-image: url("../img/icons/packs/fugue/16x16/tick.png"); }
+
+/*
+ * 2.2) 24x24
+ */
+
+.i-24-address-book { background-image: url("../img/icons/packs/fugue/24x24/address-book.png"); }
+.i-24-address-book-blue { background-image: url("../img/icons/packs/fugue/24x24/address-book-blue.png"); }
+.i-24-alarm-clock { background-image: url("../img/icons/packs/fugue/24x24/alarm-clock.png"); }
+.i-24-alarm-clock-blue { background-image: url("../img/icons/packs/fugue/24x24/alarm-clock-blue.png"); }
+.i-24-application { background-image: url("../img/icons/packs/fugue/24x24/application.png"); }
+.i-24-application-blue { background-image: url("../img/icons/packs/fugue/24x24/application-blue.png"); }
+.i-24-balloon { background-image: url("../img/icons/packs/fugue/24x24/balloon.png"); }
+.i-24-blue-document { background-image: url("../img/icons/packs/fugue/24x24/blue-document.png"); }
+.i-24-blue-folder { background-image: url("../img/icons/packs/fugue/24x24/blue-folder.png"); }
+.i-24-blue-folder-horizontal-open { background-image: url("../img/icons/packs/fugue/24x24/blue-folder-horizontal-open.png"); }
+.i-24-book { background-image: url("../img/icons/packs/fugue/24x24/book.png"); }
+.i-24-bookmark { background-image: url("../img/icons/packs/fugue/24x24/bookmark.png"); }
+.i-24-calendar { background-image: url("../img/icons/packs/fugue/24x24/calendar.png"); }
+.i-24-card-address { background-image: url("../img/icons/packs/fugue/24x24/card-address.png"); }
+.i-24-color { background-image: url("../img/icons/packs/fugue/24x24/color.png"); }
+.i-24-cross { background-image: url("../img/icons/packs/fugue/24x24/cross.png"); }
+.i-24-database { background-image: url("../img/icons/packs/fugue/24x24/database.png"); }
+.i-24-disk-black { background-image: url("../img/icons/packs/fugue/24x24/disk-black.png"); }
+.i-24-document { background-image: url("../img/icons/packs/fugue/24x24/document.png"); }
+.i-24-drive { background-image: url("../img/icons/packs/fugue/24x24/drive.png"); }
+.i-24-edit { background-image: url("../img/icons/packs/fugue/24x24/edit.png"); }
+.i-24-equalizer { background-image: url("../img/icons/packs/fugue/24x24/equalizer.png"); }
+.i-24-folder { background-image: url("../img/icons/packs/fugue/24x24/folder.png"); }
+.i-24-folder-horizontal-open { background-image: url("../img/icons/packs/fugue/24x24/folder-horizontal-open.png"); }
+.i-24-home { background-image: url("../img/icons/packs/fugue/24x24/home.png"); }
+.i-24-inbox { background-image: url("../img/icons/packs/fugue/24x24/inbox.png"); }
+.i-24-inbox-document { background-image: url("../img/icons/packs/fugue/24x24/inbox-document.png"); }
+.i-24-information { background-image: url("../img/icons/packs/fugue/24x24/information.png"); }
+.i-24-keyboard { background-image: url("../img/icons/packs/fugue/24x24/keyboard.png"); }
+.i-24-mail { background-image: url("../img/icons/packs/fugue/24x24/mail.png"); }
+.i-24-mail-open { background-image: url("../img/icons/packs/fugue/24x24/mail-open.png"); }
+.i-24-map { background-image: url("../img/icons/packs/fugue/24x24/map.png"); }
+.i-24-marker { background-image: url("../img/icons/packs/fugue/24x24/marker.png"); }
+.i-24-minus { background-image: url("../img/icons/packs/fugue/24x24/minus.png"); }
+.i-24-monitor { background-image: url("../img/icons/packs/fugue/24x24/monitor.png"); }
+.i-24-notebook { background-image: url("../img/icons/packs/fugue/24x24/notebook.png"); }
+.i-24-pencil { background-image: url("../img/icons/packs/fugue/24x24/pencil.png"); }
+.i-24-plus { background-image: url("../img/icons/packs/fugue/24x24/plus.png"); }
+.i-24-printer { background-image: url("../img/icons/packs/fugue/24x24/printer.png"); }
+.i-24-question { background-image: url("../img/icons/packs/fugue/24x24/question.png"); }
+.i-24-receipt { background-image: url("../img/icons/packs/fugue/24x24/receipt.png"); }
+.i-24-server { background-image: url("../img/icons/packs/fugue/24x24/server.png"); }
+.i-24-sitemap { background-image: url("../img/icons/packs/fugue/24x24/sitemap.png"); }
+.i-24-smiley { background-image: url("../img/icons/packs/fugue/24x24/smiley.png"); }
+.i-24-star { background-image: url("../img/icons/packs/fugue/24x24/star.png"); }
+.i-24-star-empty { background-image: url("../img/icons/packs/fugue/24x24/star-empty.png"); }
+.i-24-star-half { background-image: url("../img/icons/packs/fugue/24x24/star-half.png"); }
+.i-24-sticky-note { background-image: url("../img/icons/packs/fugue/24x24/sticky-note.png"); }
+.i-24-switch { background-image: url("../img/icons/packs/fugue/24x24/switch.png"); }
+.i-24-tag { background-image: url("../img/icons/packs/fugue/24x24/tag.png"); }
+.i-24-terminal { background-image: url("../img/icons/packs/fugue/24x24/terminal.png"); }
+.i-24-ui-color-picker { background-image: url("../img/icons/packs/fugue/24x24/ui-color-picker.png"); }
+.i-24-user { background-image: url("../img/icons/packs/fugue/24x24/user.png"); }
+.i-24-user-business { background-image: url("../img/icons/packs/fugue/24x24/user-business.png"); }
+.i-24-wand { background-image: url("../img/icons/packs/fugue/24x24/wand.png"); }

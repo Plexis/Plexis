@@ -22,7 +22,6 @@
 <li><a>Packages</a></li>
 <li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
 <li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
-<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
 <li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
 <li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
 </ul>
@@ -157,15 +156,19 @@
 <table class="table table-bordered">
 <tr>
 <th><code><a href="../classes/Library.InvalidUsernameException.html">\Library\InvalidUsernameException</a></code></th>
-<td>if the account doesnt exist</td>
+<td>Thrown if the username contains illegal characters, or is too short/long</td>
 </tr>
 <tr>
 <th><code><a href="../classes/Library.InvalidPasswordException.html">\Library\InvalidPasswordException</a></code></th>
-<td>if the account password is incorrect</td>
+<td>Thrown if the password contains illegal characters, or is too short</td>
+</tr>
+<tr>
+<th><code><a href="../classes/Library.InvalidCredentialsException.html">\Library\InvalidCredentialsException</a></code></th>
+<td>Thrown if the username or password is incorrect</td>
 </tr>
 <tr>
 <th><code><a href="../classes/Library.AccountBannedException.html">\Library\AccountBannedException</a></code></th>
-<td>if the account is banned</td>
+<td>Thrown if the account is banned</td>
 </tr>
 </table>
 <h3>Returns</h3>
@@ -213,23 +216,23 @@ be set internally in this class.</p>
 <table class="table table-bordered">
 <tr>
 <th><code><a href="../classes/Library.InvalidUsernameException.html">\Library\InvalidUsernameException</a></code></th>
-<td>if the username is invalid (too long or short)</td>
+<td>Thrown if the username is invalid.</td>
 </tr>
 <tr>
 <th><code><a href="../classes/Library.InvalidPasswordException.html">\Library\InvalidPasswordException</a></code></th>
-<td>if the password is invalid (too long or short)</td>
+<td>Thrown if the password is invalid</td>
 </tr>
 <tr>
 <th><code><a href="../classes/Library.InvalidEmailException.html">\Library\InvalidEmailException</a></code></th>
-<td>if the email is not a real email</td>
+<td>Thrown if the email is not a real email</td>
 </tr>
 <tr>
 <th><code><a href="../classes/Library.AccountExistsException.html">\Library\AccountExistsException</a></code></th>
-<td>if the account name is already taken</td>
+<td>Thrown if the account name is already taken</td>
 </tr>
 <tr>
 <th><code><a href="../classes/Library.IpBannedException.html">\Library\IpBannedException</a></code></th>
-<td>if the ip address is banned</td>
+<td>Thrown if the ip address is banned</td>
 </tr>
 </table>
 <h3>Returns</h3>
@@ -324,7 +327,7 @@ Also checks for login expire time.</p></div></div></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-09T23:53:06-06:00.<br></footer></div>
+            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
 </div>
 </body>
 </html>

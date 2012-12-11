@@ -13,14 +13,14 @@
 /**
  * Combines several strings into a file path.
  *
- * @params string|string[] The pieces of the path, passed as 
+ * @param string|string[] $parts The pieces of the path, passed as 
  * individual arguments. Each argument can be an array of paths,
  * a string foldername, or a mixture of the two.
  *
  * @return string Full path using the correct system 
  *   directory separater
  */
-    function path()
+    function path($parts = null)
     {
         // Get our path parts
         $parts = func_get_args();
