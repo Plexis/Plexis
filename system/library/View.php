@@ -99,7 +99,7 @@ class View
     /**
      * Sets the views contents
      *
-     * @param string|\Library\View $contents - The new contents of
+     * @param string|\Library\View $contents The new contents of
      *   this view file. Must be a string, or an object extending
      *   this Class.
      *

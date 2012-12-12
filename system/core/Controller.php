@@ -55,7 +55,28 @@ class Controller
      */
     public function loadModel($name, $params = array())
     {
+        // Get our path
+        $path = path( $this->modulePath, 'models', $name .'.php');
         
+        // Check for the files existance
+        if(!file_exists($path))
+            return false;
+            
+        // Load the file
+        require $path;
+        
+        // Init a reflection clas
+        $class = false;
+        try {
+            $Reflection = new \ReflectionClass($name);
+            if($Reflection->hasMethod('__construct') && !empty($params))
+                $class = $Reflection->newInstanceArgs($params);
+            else
+                $class = new $name();
+        }
+        catch(\ReflectionException $e) {}
+        
+        return $class;
     }
     
     /**
@@ -68,7 +89,20 @@ class Controller
      *
      * @return bool Returns true if the helper file was found, false otherwise
      */
-    public function loadHelper($name, $global = false) {}
+    public function loadHelper($name, $global = false) 
+    {
+        // Get our path
+        $path = ($global) 
+            ? path( SYSTEM_PATH, 'helpers', $name .'.php' ) 
+            : path( $this->modulePath, 'helpers', $name .'.php');
+        
+        // Check for the files existance
+        if(!file_exists($path))
+            return false;
+            
+        require $path;
+        return true;
+    }
     
     /**
      * Loads a view file for the child controller, using the modules view path

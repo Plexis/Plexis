@@ -726,7 +726,7 @@ in the config folder&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Controller.php" hash="7fdfca872744400da7402d4586163ba8" package="Default">
+  <file path="system\core\Controller.php" hash="895be0a5068d520b96a11169c38cefb3" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -735,6 +735,12 @@ in the config folder&lt;/p&gt;</long-description>
       <tag line="2" name="license" description="GNU GPL v3"/>
       <tag line="2" name="contains" description="Controller"/>
     </docblock>
+    <include line="66" type="Require" package="Default">
+      <name/>
+    </include>
+    <include line="103" type="Require" package="Default">
+      <name/>
+    </include>
     <class final="false" abstract="false" namespace="Core" line="26" package="Core">
       <extends/>
       <name>Controller</name>
@@ -796,59 +802,59 @@ and useful methods for the child class.&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="71" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="92" package="Core">
         <name>loadHelper</name>
         <full_name>loadHelper</full_name>
-        <docblock line="61">
+        <docblock line="82">
           <description>Loads a helper file for the child controller</description>
           <long-description></long-description>
-          <tag line="61" name="param" description="The helper filename to load" type="string" variable="$name">
+          <tag line="82" name="param" description="The helper filename to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="61" name="param" description="When set to true, the helper will be searched for&#13;&#10;  in the &lt;ROOT&gt;/system/helpers folder instead of the modules helper&#13;&#10;  folder. Default value is false." type="bool" variable="$global">
+          <tag line="82" name="param" description="When set to true, the helper will be searched for&#13;&#10;  in the &lt;ROOT&gt;/system/helpers folder instead of the modules helper&#13;&#10;  folder. Default value is false." type="bool" variable="$global">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="61" name="return" description="Returns true if the helper file was found, false otherwise" type="bool">
+          <tag line="82" name="return" description="Returns true if the helper file was found, false otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="71">
+        <argument line="92">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="71">
+        <argument line="92">
           <name>$global</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="86" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="120" package="Core">
         <name>loadView</name>
         <full_name>loadView</full_name>
-        <docblock line="73">
+        <docblock line="107">
           <description>Loads a view file for the child controller, using the modules view path</description>
           <long-description></long-description>
-          <tag line="73" name="param" description="The view filename to load" type="string" variable="$name">
+          <tag line="107" name="param" description="The view filename to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="73" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
+          <tag line="107" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="73" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
+          <tag line="107" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
             <type by_reference="false">\Library\ViewNotFoundException</type>
           </tag>
-          <tag line="73" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  a Library\View object otherwise" type="\Library\View|bool">
+          <tag line="107" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  a Library\View object otherwise" type="\Library\View|bool">
             <type by_reference="false">\Library\View</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="86">
+        <argument line="120">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="86">
+        <argument line="120">
           <name>$silence</name>
           <default>false</default>
           <type/>
@@ -4538,7 +4544,7 @@ the final rendered template.</description>
       </docblock>
     </class>
   </file>
-  <file path="system\library\View.php" hash="22183302675c9d0f42c7c852ee1bd7d8" package="Default">
+  <file path="system\library\View.php" hash="68e218389298c5b512890d450344fd62" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -4667,7 +4673,7 @@ the final rendered template.</description>
         <docblock line="99">
           <description>Sets the views contents</description>
           <long-description></long-description>
-          <tag line="99" name="param" description="- The new contents of&#13;&#10;  this view file. Must be a string, or an object extending&#13;&#10;  this Class." type="string|\Library\View" variable="$contents">
+          <tag line="99" name="param" description="The new contents of&#13;&#10;  this view file. Must be a string, or an object extending&#13;&#10;  this Class." type="string|\Library\View" variable="$contents">
             <type by_reference="false">string</type>
             <type by_reference="false">\Library\View</type>
           </tag>
