@@ -373,9 +373,12 @@ span.empty-namespace
 
 footer
 {
-    text-align: right;
-    font-size: 0.8em;
-    opacity: 0.5;
+    margin-top: 20px;
+    text-align: center;
+    font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+    font-size: 0.7em;
+    color: #999;
+    font-weight: bold;
 }
 
 #mapHolder
