@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<title>Plexis :: 404 - Not Found</title>
-	<link rel="stylesheet" href="system/errors/css/404.css" type="text/css"/>
+	<link rel="stylesheet" href="{site_url}/system/errors/css/404.css" type="text/css"/>
 	<style type="text/css">
 		@font-face {
 			font-family: Square;
@@ -23,7 +23,7 @@
 			server administrator.<br /><br />
 		</section>
 		<section id="links">
-            <img src="system/errors/img/border.png"><br /><br />
+            <img src="{site_url}/system/errors/img/border.png"><br /><br />
 			<a href='<?php echo $site_url; ?>'>Return to Index</a> | <a href='javascript: history.go(-1)'>Previous Page</a>
 		</section>
 	</div>

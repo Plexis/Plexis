@@ -55,7 +55,7 @@
 <div class="row">
 <div class="span4">
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
-<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
@@ -136,7 +136,7 @@
 </div>
 <a id="method_Set"></a><div class="element clickable method public method_Set" data-toggle="collapse" data-target=".method_Set .collapse">
 <h2>Sets variables to be replaced in the view</h2>
-<pre>Set(string | array $name, mixed $value) : void</pre>
+<pre>Set(string | array $name, mixed $value = null) : void</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -147,7 +147,8 @@
   or can be an array of key => value</p>
 </div>
 <div class="subelement argument">
-<h4>$value</h4>
+<h4>$value<small><b>   [Default =  null]</b></small>
+</h4>
 <code>mixed</code><p>The value of the variable (not set if $name
   is an array)</p>
 </div>
@@ -178,7 +179,7 @@ this Class.</li>
 </div>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
 <h2>Contructor</h2>
-<pre>__construct(string $string, bool $isFile) : void</pre>
+<pre>__construct(string $string, bool $isFile = true) : void</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -188,7 +189,8 @@ this Class.</li>
 <code>string</code><p>The file path to the template file, or the tempalte
   as a string</p></div>
 <div class="subelement argument">
-<h4>$isFile</h4>
+<h4>$isFile<small><b>   [Default =  true]</b></small>
+</h4>
 <code>bool</code><p>If set to true, $string becomes a filename, and is
   loaded. If false, $string is treated as the view's contents.</p>
 </div>
@@ -230,7 +232,7 @@ this Class.</li>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
+            generated on 2012-12-11T19:07:42-06:00.<br></footer></div>
 </div>
 </body>
 </html>

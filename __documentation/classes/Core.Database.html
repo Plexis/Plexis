@@ -55,7 +55,7 @@
 <div class="row">
 <div class="span4">
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
-<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
@@ -102,7 +102,7 @@
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_Connect"></a><div class="element clickable method public method_Connect" data-toggle="collapse" data-target=".method_Connect .collapse">
 <h2>Initiates a new database connection.</h2>
-<pre>Connect(string $name, array $info, bool $new) : <a href="../classes/Database.Driver.html">\Database\Driver</a></pre>
+<pre>Connect(string $name, array $info, bool $new = false) : <a href="../classes/Database.Driver.html">\Database\Driver</a></pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -122,7 +122,8 @@
       'password')</p>
 </div>
 <div class="subelement argument">
-<h4>$new</h4>
+<h4>$new<small><b>   [Default =  false]</b></small>
+</h4>
 <code>bool</code><p>If connection already exists, setting to true
    will overwrite the old connection ID with the new connection</p></div>
 <h3>Exceptions</h3>
@@ -166,7 +167,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
+            generated on 2012-12-11T19:07:42-06:00.<br></footer></div>
 </div>
 </body>
 </html>

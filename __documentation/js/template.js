@@ -62,14 +62,10 @@ function initializeContents()
 
     $('.view button.details').click(function(){
         $('.side-nav li.view-simple').removeClass('view-simple');
-    }).button('toggle').click();
-
-    $('.view button.details').click(function(){
-        $('.side-nav li.view-simple').removeClass('view-simple');
-    }).button('toggle').click();
+    });
     $('.view button.simple').click(function(){
         $('.side-nav li').addClass('view-simple');
-    });
+    }).button('toggle').click();
 
 // sorting example
 //    $('ol li').sort(

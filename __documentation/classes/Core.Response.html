@@ -55,7 +55,7 @@
 <div class="row">
 <div class="span4">
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
-<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
@@ -163,13 +163,14 @@ this class.</p></div>
 <a id="method_Body"></a><div class="element clickable method public method_Body" data-toggle="collapse" data-target=".method_Body .collapse">
 <h2>Sets or returns the body of the response, based on
 if a variable is passed setting the contents or not.</h2>
-<pre>Body(string $content) : string | void</pre>
+<pre>Body(string $content = null) : string | void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$content</h4>
+<h4>$content<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The body contents. Leave null if retrieving
   the current set contents.</p></div>
 <h3>Returns</h3>
@@ -198,13 +199,14 @@ if a variable is passed setting the contents or not.</h2>
 </div>
 <a id="method_ContentType"></a><div class="element clickable method public method_ContentType" data-toggle="collapse" data-target=".method_ContentType .collapse">
 <h2>Sets or returns the content type</h2>
-<pre>ContentType(string $val) : string | void</pre>
+<pre>ContentType(string $val = null) : string | void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$val</h4>
+<h4>$val<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The content type to be set</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -214,13 +216,14 @@ if a variable is passed setting the contents or not.</h2>
 </div>
 <a id="method_Encoding"></a><div class="element clickable method public method_Encoding" data-toggle="collapse" data-target=".method_Encoding .collapse">
 <h2>Sets or returns the content encoding</h2>
-<pre>Encoding(string $val) : string | void</pre>
+<pre>Encoding(string $val = null) : string | void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$val</h4>
+<h4>$val<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The content encoding to be set</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -250,13 +253,14 @@ if a variable is passed setting the contents or not.</h2>
 </div>
 <a id="method_Protocol"></a><div class="element clickable method public method_Protocol" data-toggle="collapse" data-target=".method_Protocol .collapse">
 <h2>Sets or returns the http protocol</h2>
-<pre>Protocol(string $code) : string | void</pre>
+<pre>Protocol(string $code = null) : string | void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$code</h4>
+<h4>$code<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The protocol to use (HTTP_10 | HTTP_11)</p>
 </div>
 <h3>Returns</h3>
@@ -267,7 +271,7 @@ if a variable is passed setting the contents or not.</h2>
 </div>
 <a id="method_Redirect"></a><div class="element clickable method public method_Redirect" data-toggle="collapse" data-target=".method_Redirect .collapse">
 <h2>This method sets a redirect header, and status code.</h2>
-<pre>Redirect(string $location, int $wait, int $status) : void</pre>
+<pre>Redirect(string $location, int $wait = 0, int $status = 301) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>When this
@@ -280,13 +284,15 @@ will be sent.</p></div>
   is passed here, the site's URL will be appended</p>
 </div>
 <div class="subelement argument">
-<h4>$wait</h4>
+<h4>$wait<small><b>   [Default =  0]</b></small>
+</h4>
 <code>int</code><p>The wait time (in seconds) before the redirect
   takes affect. If set to a non 0 value, the page will still be
    rendered. Default is 0 seconds.</p>
 </div>
 <div class="subelement argument">
-<h4>$status</h4>
+<h4>$status<small><b>   [Default =  301]</b></small>
+</h4>
 <code>int</code><p>The redirect status. 301 is moved permanently,
   and 307 is a temporary redirect. Default is 301.</p></div>
 </div></div>
@@ -309,7 +315,7 @@ error for our client.</p></div></div></div>
 </div>
 <a id="method_SetCookie"></a><div class="element clickable method public method_SetCookie" data-toggle="collapse" data-target=".method_SetCookie .collapse">
 <h2>Sets a cookies value</h2>
-<pre>SetCookie(string $name, string $value, int $expires, string $path) : void</pre>
+<pre>SetCookie(string $name, string $value, int $expires, string $path = '/') : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -324,7 +330,8 @@ error for our client.</p></div></div></div>
 <h4>$expires</h4>
 <code>int</code><p>The UNIX timestamp the cookie expires</p></div>
 <div class="subelement argument">
-<h4>$path</h4>
+<h4>$path<small><b>   [Default =  '/']</b></small>
+</h4>
 <code>string</code><p>The cookie path</p></div>
 </div></div>
 </div>
@@ -346,13 +353,14 @@ error for our client.</p></div></div></div>
 </div>
 <a id="method_StatusCode"></a><div class="element clickable method public method_StatusCode" data-toggle="collapse" data-target=".method_StatusCode .collapse">
 <h2>Sets or returns the status code</h2>
-<pre>StatusCode(int $code) : int | void</pre>
+<pre>StatusCode(int $code = null) : int | void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$code</h4>
+<h4>$code<small><b>   [Default =  null]</b></small>
+</h4>
 <code>int</code><p>The status code to be set</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -386,7 +394,7 @@ error for our client.</p></div></div></div>
 </div>
 <a id="method_SendHeader"></a><div class="element clickable method protected method_SendHeader" data-toggle="collapse" data-target=".method_SendHeader .collapse">
 <h2>Sends a header</h2>
-<pre>SendHeader(string $name, string $value) : void</pre>
+<pre>SendHeader(string $name, string $value = null) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -395,7 +403,8 @@ error for our client.</p></div></div></div>
 <h4>$name</h4>
 <code>string</code><p>The name of the header</p></div>
 <div class="subelement argument">
-<h4>$value</h4>
+<h4>$value<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The value of the header</p></div>
 </div></div>
 </div>
@@ -482,7 +491,7 @@ error for our client.</p></div></div></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
+            generated on 2012-12-11T19:07:42-06:00.<br></footer></div>
 </div>
 </body>
 </html>

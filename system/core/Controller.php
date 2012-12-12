@@ -53,7 +53,10 @@ class Controller
      * @return object|bool The constructed modal object, or false if the model 
      *   could not be located.
      */
-    public function loadModel($name, $params = array()) {}
+    public function loadModel($name, $params = array())
+    {
+        
+    }
     
     /**
      * Loads a helper file for the child controller

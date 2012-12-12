@@ -55,7 +55,7 @@
 <div class="row">
 <div class="span4">
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
-<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
@@ -160,7 +160,7 @@ statistical data such as query time.</span><pre>getAllQueries()</pre></a></li>
 </div>
 <a id="method_delete"></a><div class="element clickable method public method_delete" data-toggle="collapse" data-target=".method_delete .collapse">
 <h2>An easy method that will delete data from a table</h2>
-<pre>delete(string $table, string $where) : bool</pre>
+<pre>delete(string $table, string $where = '') : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -169,7 +169,8 @@ statistical data such as query time.</span><pre>getAllQueries()</pre></a></li>
 <h4>$table</h4>
 <code>string</code><p>The table name we are updating</p></div>
 <div class="subelement argument">
-<h4>$where</h4>
+<h4>$where<small><b>   [Default =  '']</b></small>
+</h4>
 <code>string</code><p>The where statement Ex: "id = 5"</p>
 </div>
 <h3>Returns</h3>
@@ -179,7 +180,7 @@ statistical data such as query time.</span><pre>getAllQueries()</pre></a></li>
 </div>
 <a id="method_exec"></a><div class="element clickable method public method_exec" data-toggle="collapse" data-target=".method_exec .collapse">
 <h2>Wrapper for PDO's exec method.</h2>
-<pre>exec(string $query, bool $report_error) : int | bool</pre>
+<pre>exec(string $query, bool $report_error = true) : int | bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>We are intercepting
@@ -189,7 +190,8 @@ so we can add the query to our statistics, and catch errors</p></div>
 <h4>$query</h4>
 <code>string</code><p>The query to run</p></div>
 <div class="subelement argument">
-<h4>$report_error</h4>
+<h4>$report_error<small><b>   [Default =  true]</b></small>
+</h4>
 <code>bool</code><p>Trigger an error upon error?</p>
 </div>
 <h3>Returns</h3>
@@ -200,16 +202,18 @@ so we can add the query to our statistics, and catch errors</p></div>
 </div>
 <a id="method_fetchAll"></a><div class="element clickable method public method_fetchAll" data-toggle="collapse" data-target=".method_fetchAll .collapse">
 <h2>Fetches a multi demensional array (multiple rows) of data from the database.</h2>
-<pre>fetchAll(string $type, string $param) : mixed[] | bool</pre>
+<pre>fetchAll(string $type = 'ASSOC', string $param = null) : mixed[] | bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$type</h4>
+<h4>$type<small><b>   [Default =  'ASSOC']</b></small>
+</h4>
 <code>string</code><p>The PDO array type to return</p></div>
 <div class="subelement argument">
-<h4>$param</h4>
+<h4>$param<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code>
 </div>
 <h3>Returns</h3>
@@ -220,13 +224,14 @@ so we can add the query to our statistics, and catch errors</p></div>
 </div>
 <a id="method_fetchColumn"></a><div class="element clickable method public method_fetchColumn" data-toggle="collapse" data-target=".method_fetchColumn .collapse">
 <h2>Fetches a column from the last query result</h2>
-<pre>fetchColumn(int $col) : mixed | bool</pre>
+<pre>fetchColumn(int $col = 0) : mixed | bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$col</h4>
+<h4>$col<small><b>   [Default =  0]</b></small>
+</h4>
 <code>int</code><p>The column index id</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -236,13 +241,14 @@ so we can add the query to our statistics, and catch errors</p></div>
 </div>
 <a id="method_fetchRow"></a><div class="element clickable method public method_fetchRow" data-toggle="collapse" data-target=".method_fetchRow .collapse">
 <h2>Fetches an array of columns from the database.</h2>
-<pre>fetchRow(string $type) : mixed[] | bool</pre>
+<pre>fetchRow(string $type = 'ASSOC') : mixed[] | bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$type</h4>
+<h4>$type<small><b>   [Default =  'ASSOC']</b></small>
+</h4>
 <code>string</code><p>The PDO array type to return</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -297,7 +303,7 @@ statistical data such as query time.</h2>
 </div>
 <a id="method_numRows"></a><div class="element clickable method public method_numRows" data-toggle="collapse" data-target=".method_numRows .collapse">
 <h2>Returns the number of rows affected, or number of rows in the result.</h2>
-<pre>numRows(bool $real) : int</pre>
+<pre>numRows(bool $real = false) : int</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>This method returns 1 of 2 things. A) either the number of
@@ -305,7 +311,8 @@ affected rows during the last insert/delete/update query. Or
 B) The number of rows (count) in the result array.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$real</h4>
+<h4>$real<small><b>   [Default =  false]</b></small>
+</h4>
 <code>bool</code><ul>
 <li>Setting this to TRUE will return The
 real number of rows. This is not needed unless the last
@@ -320,7 +327,7 @@ driver.</li>
 </div>
 <a id="method_query"></a><div class="element clickable method public method_query" data-toggle="collapse" data-target=".method_query .collapse">
 <h2>Main method for querying the database.</h2>
-<pre>query(string $query, mixed[] $sprints, bool $report_error) : object</pre>
+<pre>query(string $query, mixed[] $sprints = null, bool $report_error = true) : object</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>This method also
@@ -331,11 +338,13 @@ in the $sql array.</p></div>
 <h4>$query</h4>
 <code>string</code><p>The query to run</p></div>
 <div class="subelement argument">
-<h4>$sprints</h4>
+<h4>$sprints<small><b>   [Default =  null]</b></small>
+</h4>
 <code>mixed[]</code><p>An array or replacemtnts of (?)'s in the $query</p>
 </div>
 <div class="subelement argument">
-<h4>$report_error</h4>
+<h4>$report_error<small><b>   [Default =  true]</b></small>
+</h4>
 <code>bool</code><p>Trigger an error upon error?</p>
 </div>
 <h3>Returns</h3>
@@ -374,7 +383,7 @@ in the $sql array.</p></div>
 </div>
 <a id="method_update"></a><div class="element clickable method public method_update" data-toggle="collapse" data-target=".method_update .collapse">
 <h2>An easy method that will update an existing row in a table</h2>
-<pre>update(string $table, mixed[] $data, string $where) : bool</pre>
+<pre>update(string $table, mixed[] $data, string $where = '') : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -387,7 +396,8 @@ in the $sql array.</p></div>
 <code>mixed[]</code><p>An array of "column => value"'s</p>
 </div>
 <div class="subelement argument">
-<h4>$where</h4>
+<h4>$where<small><b>   [Default =  '']</b></small>
+</h4>
 <code>string</code><p>The where statement Ex: "id = 5"</p>
 </div>
 <h3>Returns</h3>
@@ -452,7 +462,7 @@ in the $sql array.</p></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
+            generated on 2012-12-11T19:07:42-06:00.<br></footer></div>
 </div>
 </body>
 </html>

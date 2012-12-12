@@ -55,7 +55,7 @@
 <div class="row">
 <div class="span4">
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
-<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
@@ -133,7 +133,7 @@ readable and can be opened.</span><pre>IsReadable()</pre></a></li>
 </div>
 <a id="method_CreateDir"></a><div class="element clickable method public method_CreateDir" data-toggle="collapse" data-target=".method_CreateDir .collapse">
 <h2>Creates a new directory</h2>
-<pre>CreateDir(string $path, int $chmod) : bool</pre>
+<pre>CreateDir(string $path, int $chmod = 511) : bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -142,7 +142,8 @@ readable and can be opened.</span><pre>IsReadable()</pre></a></li>
 <h4>$path</h4>
 <code>string</code><p>The complete path to the new directory</p></div>
 <div class="subelement argument">
-<h4>$chmod</h4>
+<h4>$chmod<small><b>   [Default =  511]</b></small>
+</h4>
 <code>int</code><p>The desired chmod on the folder</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -151,7 +152,7 @@ readable and can be opened.</span><pre>IsReadable()</pre></a></li>
 </div>
 <a id="method_CreateFile"></a><div class="element clickable method public method_CreateFile" data-toggle="collapse" data-target=".method_CreateFile .collapse">
 <h2>Creates a new file.</h2>
-<pre>CreateFile(string $file, string | mixed[] $contents) : bool</pre>
+<pre>CreateFile(string $file, string | mixed[] $contents = null) : bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -160,7 +161,8 @@ readable and can be opened.</span><pre>IsReadable()</pre></a></li>
 <h4>$file</h4>
 <code>string</code><p>The complete path to the new file</p></div>
 <div class="subelement argument">
-<h4>$contents</h4>
+<h4>$contents<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><code>mixed[]</code><p>The contents to place in the file.
   If contents are an array, they will be serialized using the php
   function <i>serialize()</i>. Default value is null</p>
@@ -174,7 +176,7 @@ readable and can be opened.</span><pre>IsReadable()</pre></a></li>
 <h2>Determines if the path given is a folder OR a file,
 and removes it accordinly using this class's RemoveDir and
 DeleteFile methods</h2>
-<pre>Delete(string $path, string[] $files) : bool</pre>
+<pre>Delete(string $path, string[] $files = array()) : bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -184,7 +186,8 @@ DeleteFile methods</h2>
 <code>string</code><p>The complete path to the source file / folder</p>
 </div>
 <div class="subelement argument">
-<h4>$files</h4>
+<h4>$files<small><b>   [Default =  array()]</b></small>
+</h4>
 <code>string[]</code><p>An array of files / folders to remove</p>
 </div>
 <h3>Returns</h3>
@@ -253,7 +256,7 @@ readable and can be opened.</h2>
 </div>
 <a id="method_ListFolders"></a><div class="element clickable method public method_ListFolders" data-toggle="collapse" data-target=".method_ListFolders .collapse">
 <h2>Lists an array of folders in a directory</h2>
-<pre>ListFolders(string $path, int $recursive) : array</pre>
+<pre>ListFolders(string $path, int $recursive = false) : array</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -262,7 +265,8 @@ readable and can be opened.</h2>
 <h4>$path</h4>
 <code>string</code><p>The complete path to the directory</p></div>
 <div class="subelement argument">
-<h4>$recursive</h4>
+<h4>$recursive<small><b>   [Default =  false]</b></small>
+</h4>
 <code>int</code><p>Set the desired level or sub levels to read
    as well, -1 is unlimited.</p>
 </div>
@@ -281,7 +285,7 @@ readable and can be opened.</h2>
 </div>
 <a id="method_ReadDir"></a><div class="element clickable method public method_ReadDir" data-toggle="collapse" data-target=".method_ReadDir .collapse">
 <h2>Reads the contents a directory.</h2>
-<pre>ReadDir(string $path, bool $detailed, int $recursive) : array[]</pre>
+<pre>ReadDir(string $path, bool $detailed = false, int $recursive = false) : array[]</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -290,11 +294,13 @@ readable and can be opened.</h2>
 <h4>$path</h4>
 <code>string</code><p>The complete path to the directory</p></div>
 <div class="subelement argument">
-<h4>$detailed</h4>
+<h4>$detailed<small><b>   [Default =  false]</b></small>
+</h4>
 <code>bool</code><p>Detailed information about files and fodlers?</p>
 </div>
 <div class="subelement argument">
-<h4>$recursive</h4>
+<h4>$recursive<small><b>   [Default =  false]</b></small>
+</h4>
 <code>int</code><p>Set the desired level or sub levels to read
 as well, -1 is unlimited.</p>
 </div>
@@ -354,7 +360,7 @@ and directories</p></div>
 </div>
 <a id="method_Size"></a><div class="element clickable method public method_Size" data-toggle="collapse" data-target=".method_Size .collapse">
 <h2>Method is used to get the size of a file or folder</h2>
-<pre>Size(string $path, bool $format) : int | string</pre>
+<pre>Size(string $path, bool $format = false) : int | string</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -364,7 +370,8 @@ and directories</p></div>
 <code>string</code><p>The complete path to the file / directory</p>
 </div>
 <div class="subelement argument">
-<h4>$format</h4>
+<h4>$format<small><b>   [Default =  false]</b></small>
+</h4>
 <code>bool</code><p>Format the bytes into human readable? ( 11.7 MB )</p>
 </div>
 <h3>Returns</h3>
@@ -395,7 +402,7 @@ and directories</p></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
+            generated on 2012-12-11T19:07:42-06:00.<br></footer></div>
 </div>
 </body>
 </html>

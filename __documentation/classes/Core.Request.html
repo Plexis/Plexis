@@ -55,7 +55,7 @@
 <div class="row">
 <div class="span4">
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
-<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
@@ -136,7 +136,7 @@ the base URL, website root, and more.</p></div>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_Accepts"></a><div class="element clickable method public method_Accepts" data-toggle="collapse" data-target=".method_Accepts .collapse">
 <h2>Returns the an array of what formats the client is accepting</h2>
-<pre>Accepts(string $type) : void</pre>
+<pre>Accepts(string $type = null) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -146,19 +146,21 @@ the base URL, website root, and more.</p></div>
 </tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$type</h4>
+<h4>$type<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The type to return</p></div>
 </div></div>
 </div>
 <a id="method_AcceptsLanguage"></a><div class="element clickable method public method_AcceptsLanguage" data-toggle="collapse" data-target=".method_AcceptsLanguage .collapse">
 <h2>Returns a string or string[] of what languages the client accepts</h2>
-<pre>AcceptsLanguage(string $lang) : string | string[] | bool</pre>
+<pre>AcceptsLanguage(string $lang = null) : string | string[] | bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$lang</h4>
+<h4>$lang<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>If a language is provided here, the method will return
    true or false based on whehter the client accepts the language</p></div>
 <h3>Returns</h3>
@@ -192,16 +194,18 @@ a bool based on whehter the client accepts the language</div>
 </div>
 <a id="method_Cookie"></a><div class="element clickable method public method_Cookie" data-toggle="collapse" data-target=".method_Cookie .collapse">
 <h2>Returns the Cookie name specified, or all Cookie data</h2>
-<pre>Cookie(string $key, mixed $default) : string | string[] | mixed</pre>
+<pre>Cookie(string $key = null, mixed $default = null) : string | string[] | mixed</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$key</h4>
+<h4>$key<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The cookie name to return. Leave null to return all cookie data</p></div>
 <div class="subelement argument">
-<h4>$default</h4>
+<h4>$default<small><b>   [Default =  null]</b></small>
+</h4>
 <code>mixed</code><p>The default return value if the Cookie name doesnt
    exist. Default is null.</p></div>
 <h3>Returns</h3>
@@ -264,16 +268,18 @@ a bool based on whehter the client accepts the language</div>
 </div>
 <a id="method_Post"></a><div class="element clickable method public method_Post" data-toggle="collapse" data-target=".method_Post .collapse">
 <h2>Returns the POST var specified, or all POST data</h2>
-<pre>Post(string $key, mixed $default) : string | string[] | mixed</pre>
+<pre>Post(string $key = null, mixed $default = null) : string | string[] | mixed</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$key</h4>
+<h4>$key<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The POST array id to return. Leave null to return all POST data</p></div>
 <div class="subelement argument">
-<h4>$default</h4>
+<h4>$default<small><b>   [Default =  null]</b></small>
+</h4>
 <code>mixed</code><p>The default return value if the POST array key doesnt
    exist. Default is null.</p></div>
 <h3>Returns</h3>
@@ -294,16 +300,18 @@ a bool based on whehter the client accepts the language</div>
 </div>
 <a id="method_Query"></a><div class="element clickable method public method_Query" data-toggle="collapse" data-target=".method_Query .collapse">
 <h2>Returns the url query string</h2>
-<pre>Query(string $key, mixed $default) : string | string[] | mixed</pre>
+<pre>Query(string $key = null, mixed $default = null) : string | string[] | mixed</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$key</h4>
+<h4>$key<small><b>   [Default =  null]</b></small>
+</h4>
 <code>string</code><p>The GET array id to return. Leave null to return all GET data</p></div>
 <div class="subelement argument">
-<h4>$default</h4>
+<h4>$default<small><b>   [Default =  null]</b></small>
+</h4>
 <code>mixed</code><p>The default return value if the GET array key doesnt
    exist. Default is null.</p></div>
 <h3>Returns</h3>
@@ -417,7 +425,7 @@ a bool based on whehter the client accepts the language</div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
+            generated on 2012-12-11T19:07:42-06:00.<br></footer></div>
 </div>
 </body>
 </html>

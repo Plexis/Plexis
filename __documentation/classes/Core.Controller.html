@@ -55,7 +55,7 @@
 <div class="row">
 <div class="span4">
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
-<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
@@ -111,7 +111,7 @@ and useful methods for the child class.</p></div>
 </div>
 <a id="method_loadHelper"></a><div class="element clickable method public method_loadHelper" data-toggle="collapse" data-target=".method_loadHelper .collapse">
 <h2>Loads a helper file for the child controller</h2>
-<pre>loadHelper(string $name, bool $global) : bool</pre>
+<pre>loadHelper(string $name, bool $global = false) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -120,7 +120,8 @@ and useful methods for the child class.</p></div>
 <h4>$name</h4>
 <code>string</code><p>The helper filename to load</p></div>
 <div class="subelement argument">
-<h4>$global</h4>
+<h4>$global<small><b>   [Default =  false]</b></small>
+</h4>
 <code>bool</code><p>When set to true, the helper will be searched for
   in the <ROOT>/system/helpers folder instead of the modules helper
   folder. Default value is false.</p>
@@ -132,7 +133,7 @@ and useful methods for the child class.</p></div>
 </div>
 <a id="method_loadModel"></a><div class="element clickable method public method_loadModel" data-toggle="collapse" data-target=".method_loadModel .collapse">
 <h2>Loads a model for the child controller.</h2>
-<pre>loadModel(string $name, mixed[] $params) : object | bool</pre>
+<pre>loadModel(string $name, mixed[] $params = array()) : object | bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>The model will be searched for in the modules "model" folder.</p></div>
@@ -141,7 +142,8 @@ and useful methods for the child class.</p></div>
 <h4>$name</h4>
 <code>string</code><p>The modal name to load</p></div>
 <div class="subelement argument">
-<h4>$params</h4>
+<h4>$params<small><b>   [Default =  array()]</b></small>
+</h4>
 <code>mixed[]</code><p>An array or parameters to pass to the constructor.
   Default empty array.</p></div>
 <h3>Returns</h3>
@@ -152,7 +154,7 @@ and useful methods for the child class.</p></div>
 </div>
 <a id="method_loadView"></a><div class="element clickable method public method_loadView" data-toggle="collapse" data-target=".method_loadView .collapse">
 <h2>Loads a view file for the child controller, using the modules view path</h2>
-<pre>loadView(string $name, bool $silence) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
+<pre>loadView(string $name, bool $silence = false) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -161,7 +163,8 @@ and useful methods for the child class.</p></div>
 <h4>$name</h4>
 <code>string</code><p>The view filename to load</p></div>
 <div class="subelement argument">
-<h4>$silence</h4>
+<h4>$silence<small><b>   [Default =  false]</b></small>
+</h4>
 <code>bool</code><p>If set to true, This method will return false instead
   of throwing a \Library\ViewNotFoundException. Default value is false.</p>
 </div>
@@ -192,7 +195,7 @@ and useful methods for the child class.</p></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-11T10:13:43-06:00.<br></footer></div>
+            generated on 2012-12-11T19:07:42-06:00.<br></footer></div>
 </div>
 </body>
 </html>

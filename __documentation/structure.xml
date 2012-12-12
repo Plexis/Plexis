@@ -726,7 +726,7 @@ in the config folder&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Controller.php" hash="73e930164785f53cc612ec21a4ce145a" package="Default">
+  <file path="system\core\Controller.php" hash="7fdfca872744400da7402d4586163ba8" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -796,59 +796,59 @@ and useful methods for the child class.&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="68" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="71" package="Core">
         <name>loadHelper</name>
         <full_name>loadHelper</full_name>
-        <docblock line="58">
+        <docblock line="61">
           <description>Loads a helper file for the child controller</description>
           <long-description></long-description>
-          <tag line="58" name="param" description="The helper filename to load" type="string" variable="$name">
+          <tag line="61" name="param" description="The helper filename to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="58" name="param" description="When set to true, the helper will be searched for&#13;&#10;  in the &lt;ROOT&gt;/system/helpers folder instead of the modules helper&#13;&#10;  folder. Default value is false." type="bool" variable="$global">
+          <tag line="61" name="param" description="When set to true, the helper will be searched for&#13;&#10;  in the &lt;ROOT&gt;/system/helpers folder instead of the modules helper&#13;&#10;  folder. Default value is false." type="bool" variable="$global">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="58" name="return" description="Returns true if the helper file was found, false otherwise" type="bool">
+          <tag line="61" name="return" description="Returns true if the helper file was found, false otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="68">
+        <argument line="71">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="68">
+        <argument line="71">
           <name>$global</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="83" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="86" package="Core">
         <name>loadView</name>
         <full_name>loadView</full_name>
-        <docblock line="70">
+        <docblock line="73">
           <description>Loads a view file for the child controller, using the modules view path</description>
           <long-description></long-description>
-          <tag line="70" name="param" description="The view filename to load" type="string" variable="$name">
+          <tag line="73" name="param" description="The view filename to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="70" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
+          <tag line="73" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="70" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
+          <tag line="73" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
             <type by_reference="false">\Library\ViewNotFoundException</type>
           </tag>
-          <tag line="70" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  a Library\View object otherwise" type="\Library\View|bool">
+          <tag line="73" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  a Library\View object otherwise" type="\Library\View|bool">
             <type by_reference="false">\Library\View</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="83">
+        <argument line="86">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="83">
+        <argument line="86">
           <name>$silence</name>
           <default>false</default>
           <type/>
