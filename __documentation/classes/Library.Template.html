@@ -67,6 +67,7 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="method public "><a href="#method_AddCssFile" title="AddCssFile :: AddCssFile"><span class="description">AddCssFile</span><pre>AddCssFile()</pre></a></li>
 <li class="method public "><a href="#method_AddJsFile" title="AddJsFile :: AddJsFile"><span class="description">AddJsFile</span><pre>AddJsFile()</pre></a></li>
 <li class="method public "><a href="#method_ClearBuffer" title="ClearBuffer :: Clears the current output buffer of the template"><span class="description">Clears the current output buffer of the template</span><pre>ClearBuffer()</pre></a></li>
+<li class="method public "><a href="#method_LoadView" title="LoadView :: Loads a view file from the template's module view folder."><span class="description">Loads a view file from the template's module view folder.</span><pre>LoadView()</pre></a></li>
 <li class="method public "><a href="#method_Message" title="Message :: Adds a global message to be parsed into the template"><span class="description">Adds a global message to be parsed into the template</span><pre>Message()</pre></a></li>
 <li class="method public "><a href="#method_PageTitle" title="PageTitle :: Sets the page title"><span class="description">Sets the page title</span><pre>PageTitle()</pre></a></li>
 <li class="method public "><a href="#method_Render" title="Render :: Renders the current body contents into the template layout"><span class="description">Renders the current body contents into the template layout</span><pre>Render()</pre></a></li>
@@ -126,14 +127,24 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <a id="method_Add"></a><div class="element clickable method public method_Add" data-toggle="collapse" data-target=".method_Add .collapse">
 <h2>Adds more to contents to be added into the contents section of
 the final rendered template.</h2>
-<pre>Add() : void</pre>
+<pre>Add(string | <a href="../classes/Library.View.html">\Library\View</a> $contents, string | bool $css = false, string | bool $js = false) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Takes unlimited number of params</p></div>
-<table class="table table-bordered"><tr>
-<th>params</th>
-<td>string|\Library\View</td>
-</tr></table>
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$contents</h4>
+<code>string</code><code><a href="../classes/Library.View.html">\Library\View</a></code><p>The contents to add to the template body</p></div>
+<div class="subelement argument">
+<h4>$css<small><b>   [Default =  false]</b></small>
+</h4>
+<code>string</code><code>bool</code><p>The css file to be loaded for this view</p></div>
+<div class="subelement argument">
+<h4>$js<small><b>   [Default =  false]</b></small>
+</h4>
+<code>string</code><code>bool</code><p>The javascript file to be loaded for this view. When the
+  Template::Render() method is called, a view JS file will be located automatically.</p>
+</div>
 </div></div>
 </div>
 <a id="method_AddCssFile"></a><div class="element clickable method public method_AddCssFile" data-toggle="collapse" data-target=".method_AddCssFile .collapse">
@@ -165,6 +176,31 @@ the final rendered template.</h2>
 <pre>ClearBuffer() : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_LoadView"></a><div class="element clickable method public method_LoadView" data-toggle="collapse" data-target=".method_LoadView .collapse">
+<h2>Loads a view file from the template's module view folder.</h2>
+<pre>LoadView(string $module, string $name) : <a href="../classes/Library.View.html">\Library\View</a></pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$module</h4>
+<code>string</code><p>The name of the module (where the view is located)</p>
+</div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the view file (no extension)</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Library.ViewNotFoundException.html">\Library\ViewNotFoundException</a></code></th>
+<td>if the template does not have the view
+  file for the specified module</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/Library.View.html">\Library\View</a></code></div>
+</div></div>
 </div>
 <a id="method_Message"></a><div class="element clickable method public method_Message" data-toggle="collapse" data-target=".method_Message .collapse">
 <h2>Adds a global message to be parsed into the template</h2>

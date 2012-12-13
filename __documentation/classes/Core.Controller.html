@@ -61,7 +61,11 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method___construct" title="__construct :: Sets up the correct $modulePath variable"><span class="description">Sets up the correct $modulePath variable</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct :: Sets up the correct $modulePath and $moduleName variables"><span class="description">Sets up the correct $modulePath and $moduleName variables</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_loadConfig" title="loadConfig :: Loads a config file from the modules config folder"><span class="description">Loads a config file from the modules config folder</span><pre>loadConfig()</pre></a></li>
+<li class="method public "><a href="#method_loadController" title="loadController :: Loads a controller from the current modules folder, and returns a new
+  instance of that class"><span class="description">Loads a controller from the current modules folder, and returns a new
+  instance of that class</span><pre>loadController()</pre></a></li>
 <li class="method public "><a href="#method_loadHelper" title="loadHelper :: Loads a helper file for the child controller"><span class="description">Loads a helper file for the child controller</span><pre>loadHelper()</pre></a></li>
 <li class="method public "><a href="#method_loadModel" title="loadModel :: Loads a model for the child controller."><span class="description">Loads a model for the child controller.</span><pre>loadModel()</pre></a></li>
 <li class="method public "><a href="#method_loadView" title="loadView :: Loads a view file for the child controller, using the modules view path"><span class="description">Loads a view file for the child controller, using the modules view path</span><pre>loadView()</pre></a></li>
@@ -72,7 +76,10 @@
                     <ul></ul>
 </li>
 <li class="nav-header protected">» Protected
-                    <ul><li class="property protected "><a href="#property_modulePath" title="$modulePath :: The root path to the module extending this class"><span class="description"></span><pre>$modulePath</pre></a></li></ul>
+                    <ul>
+<li class="property protected "><a href="#property_moduleName" title="$moduleName :: The child module name"><span class="description"></span><pre>$moduleName</pre></a></li>
+<li class="property protected "><a href="#property_modulePath" title="$modulePath :: The root path to the module extending this class"><span class="description"></span><pre>$modulePath</pre></a></li>
+</ul>
 </li>
 </ul>
 </div>
@@ -104,10 +111,55 @@ and useful methods for the child class.</p></div>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
-<h2>Sets up the correct $modulePath variable</h2>
+<h2>Sets up the correct $modulePath and $moduleName variables</h2>
 <pre>__construct() : void</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_loadConfig"></a><div class="element clickable method public method_loadConfig" data-toggle="collapse" data-target=".method_loadConfig .collapse">
+<h2>Loads a config file from the modules config folder</h2>
+<pre>loadConfig(string $name, string $id, string $arrayName = false) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the config file to load (no exension)</p>
+</div>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>string</code><p>The config file id (name of the config, used for
+  fetching and setting variables)</p>
+</div>
+<div class="subelement argument">
+<h4>$arrayName<small><b>   [Default =  false]</b></small>
+</h4>
+<code>string</code><p>If all the config varaiables are in an array,
+  what is the name of the array?</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns false if the file cannot be read or located, true
+  otherwise</div>
+</div></div>
+</div>
+<a id="method_loadController"></a><div class="element clickable method public method_loadController" data-toggle="collapse" data-target=".method_loadController .collapse">
+<h2>Loads a controller from the current modules folder, and returns a new
+  instance of that class</h2>
+<pre>loadController(string $name) : object | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the controller to load</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code><code>bool</code>Returns the constructed controller or false if
+  the controller doesnt exist</div>
+</div></div>
 </div>
 <a id="method_loadHelper"></a><div class="element clickable method public method_loadHelper" data-toggle="collapse" data-target=".method_loadHelper .collapse">
 <h2>Loads a helper file for the child controller</h2>
@@ -161,7 +213,8 @@ and useful methods for the child class.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
-<code>string</code><p>The view filename to load</p></div>
+<code>string</code><p>The view filename to load (no extension)</p>
+</div>
 <div class="subelement argument">
 <h4>$silence<small><b>   [Default =  false]</b></small>
 </h4>
@@ -182,6 +235,12 @@ and useful methods for the child class.</p></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_moduleName"> </a><div class="element clickable property protected property_moduleName" data-toggle="collapse" data-target=".property_moduleName .collapse">
+<h2>The child module name</h2>
+<pre>$moduleName : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_modulePath"> </a><div class="element clickable property protected property_modulePath" data-toggle="collapse" data-target=".property_modulePath .collapse">
 <h2>The root path to the module extending this class</h2>
 <pre>$modulePath : string</pre>

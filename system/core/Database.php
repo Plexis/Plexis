@@ -81,7 +81,7 @@ class Database
  * @package Database
  * @subpackage Exceptions
  */
-class DatabaseConnectError extends \ApplicationError {}
+class DatabaseConnectError extends \Exception {}
 
 // Register the autoloader, where to find the database driver class
 AutoLoader::RegisterNamespace('Database', path(SYSTEM_PATH, "core", "database"));

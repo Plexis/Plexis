@@ -77,7 +77,7 @@ class ErrorHandler
      */
     public static function HandleException($e)
     {
-        self::DisplayError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+        self::DisplayError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), false, true);
     }
     
     /**
@@ -88,9 +88,10 @@ class ErrorHandler
      * @param string $file The filename in which the error was triggered from
      * @param int $line The line number in which the error was triggered from
      * @param bool $php Php thrown error or exception?
+     * @param bool $exception Is this an exception?
      * @return void
      */
-    protected static function DisplayError($lvl, $message, $file, $line, $php = false)
+    protected static function DisplayError($lvl, $message, $file, $line, $php = false, $exception = false)
     {
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_length() != 0) ob_clean();

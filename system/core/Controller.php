@@ -10,6 +10,7 @@
 namespace Core;
 
 // Bring some classes into scope
+use \Library\Template;
 use \Library\View;
 use \Library\ViewNotFoundException;
 
@@ -32,13 +33,21 @@ class Controller
     protected $modulePath;
     
     /**
-     * Sets up the correct $modulePath variable
+     * The child module name
+     * @var string
+     */
+    protected $moduleName;
+    
+    /**
+     * Sets up the correct $modulePath and $moduleName variables
      *
      * @return void
      */
     public function __construct() 
     {
         $this->modulePath = dirname(Dispatch::GetControllerPath());
+        $parts = explode(DS, $this->modulePath);
+        $this->moduleName = end($parts);
     }
     
     /**
@@ -107,7 +116,7 @@ class Controller
     /**
      * Loads a view file for the child controller, using the modules view path
      *
-     * @param string $name The view filename to load
+     * @param string $name The view filename to load (no extension)
      * @param bool $silence If set to true, This method will return false instead
      *   of throwing a \Library\ViewNotFoundException. Default value is false.
      *
@@ -119,18 +128,73 @@ class Controller
      */
     public function loadView($name, $silence = false)
     {
-        // Define default view value, and define full path to view
+        // See if the view file exists in the current template
         $View = false;
-        $path = path( $this->modulePath, 'views', $name );
-        
-        // Try and load the view, catch the exception
         try {
-            $View = new View($path);
+            $View = Template::LoadView($this->moduleName, $name);
         }
-        catch( ViewNotFoundException $e ) {
-            if(!$silence) throw $e;
+        catch( ViewNotFoundException $e ) {}
+        
+        if($View === false)
+        {
+            // Define full module path to view
+            $path = path( $this->modulePath, 'views', $name .'.tpl' );
+            
+            // Try and load the view, catch the exception
+            try {
+                $View = new View($path);
+            }
+            catch( ViewNotFoundException $e ) {
+                if(!$silence) throw $e;
+            }
         }
         
         return $View;
+    }
+    
+    /**
+     * Loads a controller from the current modules folder, and returns a new 
+     *   instance of that class
+     *
+     * @param string $name The name of the controller to load
+     *
+     * @return object|bool Returns the constructed controller or false if 
+     *   the controller doesnt exist
+     */
+    public function loadController($name)
+    {
+        // Get our path
+        $path = path( $this->modulePath, 'controllers', $name .'.php');
+        
+        // Check for the files existance
+        if(!file_exists($path))
+            return false;
+            
+        // Load the file
+        require $path;
+        
+        // Init a reflection class
+        return new $name();
+    }
+    
+    /**
+     * Loads a config file from the modules config folder
+     *
+     * @param string $name The name of the config file to load (no exension)
+     * @param string $id The config file id (name of the config, used for 
+     *   fetching and setting variables)
+     * @param string $arrayName If all the config varaiables are in an array,
+     *   what is the name of the array?
+     *
+     * @return bool Returns false if the file cannot be read or located, true
+     *   otherwise
+     */
+    public function loadConfig($name, $id, $arrayName = false)
+    {
+        // Get our path
+        $path = path( $this->modulePath, 'config', $name .'.php');
+        
+        // Load the file
+        return Config::Load($path, $name, $arrayName);
     }
 }

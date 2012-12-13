@@ -178,7 +178,7 @@ depends on the users error reporting level.</p></div>
 </div>
 <a id="method_DisplayError"></a><div class="element clickable method protected method_DisplayError" data-toggle="collapse" data-target=".method_DisplayError .collapse">
 <h2>Displays the error screen</h2>
-<pre>DisplayError(int $lvl, string $message, string $file, int $line, bool $php = false) : void</pre>
+<pre>DisplayError(int $lvl, string $message, string $file, int $line, bool $php = false, bool $exception = false) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -199,6 +199,11 @@ depends on the users error reporting level.</p></div>
 <h4>$php<small><b>   [Default =  false]</b></small>
 </h4>
 <code>bool</code><p>Php thrown error or exception?</p>
+</div>
+<div class="subelement argument">
+<h4>$exception<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Is this an exception?</p>
 </div>
 </div></div>
 </div>

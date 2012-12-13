@@ -162,7 +162,7 @@ class View
  * @file        System/Library/View.php
  * @see         View
  */
-class ViewNotFoundException extends \ApplicationError {}
+class ViewNotFoundException extends \Exception {}
 
 /**
  * Invalid View Contents. Thrown when the contents passed to a view, are
@@ -172,4 +172,4 @@ class ViewNotFoundException extends \ApplicationError {}
  * @file        System/Library/View.php
  * @see         View
  */
-class InvalidViewContents extends \ApplicationError {}
+class InvalidViewContents extends \Exception {}

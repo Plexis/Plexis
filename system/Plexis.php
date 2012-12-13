@@ -217,6 +217,10 @@ class Plexis
         self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($Request['controller']) );
         Dispatch::SetControllerPath( path(self::$modulePath, 'controllers') );
         
+        // If this is an ajax request, call the ajax controller rather
+        if(Request::IsAjax())
+            Dispatch::SetController("Ajax");
+        
         // Try to execute the controller, and catch any 404 error
         try {
             Dispatch::Execute();
@@ -337,14 +341,3 @@ class Plexis
         }
     }
 }
-
-// Class Exceptions
-
-/**
- * Any and all exceptions thrown from the Application should extend 
- *   the ApplicationError class
- * @package     System
- * @subpackage  Exceptions
- * @file        System/Plexis.php
- */
-class ApplicationError extends Exception {}

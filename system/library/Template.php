@@ -91,14 +91,37 @@ class Template
     }
     
     /**
-     * Adds more to contents to be added into the contents section of
-     * the final rendered template. Takes unlimited number of params
+     * Loads a view file from the template's module view folder.
      *
-     * @params string|\Library\View
+     * @param string $module The name of the module (where the view is located)
+     * @param string $name The name of the view file (no extension)
+     *
+     * @throws ViewNotFoundException if the template does not have the view
+     *   file for the specified module
+     *
+     * @return \Library\View
+     */
+    public static function LoadView($module, $name)
+    {
+        // Build path
+        $path = path(self::$themePath, 'views', strtolower($module), $name .'.tpl');
+        
+        // Try and load the view
+        return new View($path);
+    }
+    
+    /**
+     * Adds more to contents to be added into the contents section of
+     * the final rendered template.
+     *
+     * @param string|\Library\View $contents The contents to add to the template body
+     * @param string|bool $css The css file to be loaded for this view
+     * @param string|bool $js The javascript file to be loaded for this view. When the
+     *   Template::Render() method is called, a view JS file will be located automatically.
      *
      * @return void
      */
-    public static function Add()
+    public static function Add($contents, $css = false, $js = false)
     {
         $parts = func_get_args();
         foreach($parts as $contents)
@@ -106,8 +129,13 @@ class Template
             // Make sure out contents are valid
             if(!is_string($contents) && !(is_object($contents) && ($contents instanceof View)))
                 throw new InvalidPageContents('Page contents must be a string, or an object extending the "View" class');
+            
+            // Render view contents
+            if($contents instanceof View)
+                $contents = $contents->Render();
                 
-            self::$buffer .= (string) $contents;
+            // Append to buffer
+            self::$buffer .= $contents;
         }
     }
     
@@ -297,7 +325,7 @@ class Template
  * @file        System/Library/Template.php
  * @see         Template::Render()
  */
-class ThemeNotSetException extends \ApplicationError {}
+class ThemeNotSetException extends \Exception {}
 
 /**
  * Thrown by the Template Class if the theme path provided is an invalid path
@@ -306,7 +334,7 @@ class ThemeNotSetException extends \ApplicationError {}
  * @file        System/Library/Template.php
  * @see         Template::SetThemePath()
  */
-class InvalidThemePathException extends \ApplicationError {}
+class InvalidThemePathException extends \Exception {}
 
 /**
  * Thrown by the Template Class if the contents provided are not a string, or subclass of the View method
@@ -315,7 +343,7 @@ class InvalidThemePathException extends \ApplicationError {}
  * @file        System/Library/Template.php
  * @see         Template::Add()
  */
-class InvalidPageContents extends \ApplicationError {}
+class InvalidPageContents extends \Exception {}
 
 /**
  * Thrown by the Template Class if the theme is missing its config file
@@ -324,4 +352,4 @@ class InvalidPageContents extends \ApplicationError {}
  * @file        System/Library/Template.php
  * @see         Template::SetThemePath()
  */
-class MissingThemeConfigException extends \ApplicationError {}
+class MissingThemeConfigException extends \Exception {}

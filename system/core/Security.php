@@ -38,7 +38,7 @@ class Security
         // Load the config file for this
         $path = path( SYSTEM_PATH, 'config', 'security.class.php' );
         if(!Config::Load($path, 'SecurityClass', false, true, false))
-            throw new SystemError('Missing Security class configuration file.');
+            throw new \Exception('Missing Security class configuration file.');
         
         // Add trace for debugging
         // \Debug::trace('Input class initiated successfully', __FILE__, __LINE__);
