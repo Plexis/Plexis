@@ -10,6 +10,8 @@
 namespace Core;
 
 // Bring some classes into scope
+use \Plexis;
+use \Library\Auth;
 use \Library\Template;
 use \Library\View;
 use \Library\ViewNotFoundException;
@@ -53,7 +55,7 @@ class Controller
     /**
      * Loads a model for the child controller.
      *
-     * The model will be searched for in the modules "model" folder.
+     * The model will be searched for in the modules "models" folder.
      *
      * @param string $name The modal name to load
      * @param mixed[] $params An array or parameters to pass to the constructor.
@@ -114,7 +116,13 @@ class Controller
     }
     
     /**
-     * Loads a view file for the child controller, using the modules view path
+     * Loads a view file for the child controller (See detailed description)
+     *
+     * The first path searched is the current template's module/views
+     * folder. If the template does not contain a view for the current module,
+     * then the modules view folder will be checked... If a view file cannot
+     * be located on either of those paths, a ViewNotFoundException will be thrown
+     * unless the variable $silence is set to true, in which case a false will be retuned.
      *
      * @param string $name The view filename to load (no extension)
      * @param bool $silence If set to true, This method will return false instead
@@ -124,7 +132,7 @@ class Controller
      *   view file cannot be found/
      *
      * @return \Library\View|bool Returns false if the view file cannot be located,
-     *   a Library\View object otherwise
+     *   (and $silence is set to true), a Library\View object otherwise
      */
     public function loadView($name, $silence = false)
     {
@@ -196,5 +204,63 @@ class Controller
         
         // Load the file
         return Config::Load($path, $name, $arrayName);
+    }
+    
+    /**
+     * When called, if the user is not logged in, the login screen will be shown.
+     *
+     * NOTE: This method will stop execution of the current request if the user
+     * is not logged in (Guest), and the current script will stop executing.
+     *
+     * @param bool $showLogin When set to true, the login screen will be displayed.
+     *   If set to false, a 403 "Forbidden" screen is shown instead.
+     *
+     * @return void
+     *
+     * @todo Finish the requireAuth method
+     */
+    public function requireAuth($showLogin = true) 
+    {
+        if(Auth::IsGuest())
+        {
+            if($showLogin)
+            {
+                // To be Finished
+            }
+            else
+            {
+                // Tell plexis to render a 403
+                Plexis::Show403();
+            }
+        }
+    }
+    
+    /**
+     * When called, if the user does not have the specified permission, a 403 "forbidden"
+     * screen will be displayed, or a redirection will occur (depending on vars).
+     *
+     * NOTE: This method will stop execution of the current request when called if the user
+     * does not have the specified permission, and the current script will stop executing.
+     *
+     * @param string $name The name of the permission this user is required to have.
+     * @param string $uri The redirect URI (or url). If set to false, a 403 "forbidden"
+     *   screen will be displayed instead of a redirect.
+     *
+     * @return void
+     */
+    public function requirePermission($name, $uri = false)
+    {
+        if(!Auth::HasPermission($name))
+        {
+            if($uri === false)
+            {
+                // Tell plexis to render a 403
+                Plexis::Show403();
+            }
+            else
+            {
+                Response::Redirect($uri);
+            }
+        }
     }
 }

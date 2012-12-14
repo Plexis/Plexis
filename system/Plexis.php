@@ -70,7 +70,7 @@ class Plexis
         self::$isRunning = true;
         
         // Set default theme path (temporary)
-        Template::SetThemePath( path(ROOT, "third_party", "themes", "default") );
+        Template::SetThemePath( path(ROOT, "third_party", "themes"), 'default' );
         
         // Init the plexis config files
         self::LoadConfigs();
@@ -106,6 +106,10 @@ class Plexis
     /**
      * Displays the 404 page not found page
      *
+     * Calling this method will clear all current output, render the 404 page
+     * and kill all current running scripts. No code following this method
+     * will be executed
+     *
      * @return void
      */
     public static function Show404()
@@ -128,7 +132,39 @@ class Plexis
     }
     
     /**
+     * Displays the 403 "Forbidden"
+     *
+     * Calling this method will clear all current output, render the 403 page
+     * and kill all current running scripts. No code following this method
+     * will be executed
+     *
+     * @return void
+     */
+    public static function Show403()
+    {
+        // Clean all current output
+        ob_clean();
+        
+        // Reset all headers, and set our status code to 404
+        Response::Reset();
+        Response::StatusCode(403);
+        
+        // Get our 404 template contents
+        $View = new View( path(SYSTEM_PATH, "errors", "error_403.php") );
+        $View->Set('uri', ltrim(Request::Query('uri'), '/'));
+        Response::Body($View);
+        
+        // Send response, and die
+        Response::Send();
+        die;
+    }
+    
+    /**
      * Displays the site offline page
+     *
+     * Calling this method will clear all current output, render the site offline
+     * page and kill all current running scripts. No code following this method
+     * will be executed
      *
      * @param string $message The meesage to also be displayed with the
      *   Site Offline page.
@@ -319,7 +355,7 @@ class Plexis
         Config::Load($file, 'Plexis');
         
         // Load Database config file
-        $file = path(SYSTEM_PATH, "config", "database.config.php");
+        $file = path(SYSTEM_PATH, "config", "database.php");
         Config::Load($file, 'DB', 'DB_Configs');
         
         // Define our site url

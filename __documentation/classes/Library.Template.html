@@ -30,19 +30,6 @@
 <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
                                     Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
 </li>
-<li class="dropdown" id="reports-menu">
-<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
-                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
-<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">0</span></a></li>
-<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
-                <ul><li>todo 
-                <span class="label label-info">1</span>
-</li></ul></a></li>
-<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
-                <span class="label label-info">0</span></a></li>
-</ul>
-</li>
 </ul></div>
 </div></div>
 <div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
@@ -71,7 +58,8 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="method public "><a href="#method_Message" title="Message :: Adds a global message to be parsed into the template"><span class="description">Adds a global message to be parsed into the template</span><pre>Message()</pre></a></li>
 <li class="method public "><a href="#method_PageTitle" title="PageTitle :: Sets the page title"><span class="description">Sets the page title</span><pre>PageTitle()</pre></a></li>
 <li class="method public "><a href="#method_Render" title="Render :: Renders the current body contents into the template layout"><span class="description">Renders the current body contents into the template layout</span><pre>Render()</pre></a></li>
-<li class="method public "><a href="#method_SetThemePath" title="SetThemePath :: Sets the path to the theme, where the layout.tpl is located"><span class="description">Sets the path to the theme, where the layout.tpl is located</span><pre>SetThemePath()</pre></a></li>
+<li class="method public "><a href="#method_SetTheme" title="SetTheme :: Sets the name of the theme to render, where the layout.tpl is located"><span class="description">Sets the name of the theme to render, where the layout.tpl is located</span><pre>SetTheme()</pre></a></li>
+<li class="method public "><a href="#method_SetThemePath" title="SetThemePath :: Sets the path to the theme folder"><span class="description">Sets the path to the theme folder</span><pre>SetThemePath()</pre></a></li>
 <li class="method public "><a href="#method_SetVar" title="SetVar :: Sets variables to be parsed in the layout"><span class="description">Sets variables to be parsed in the layout</span><pre>SetVar()</pre></a></li>
 </ul>
 </li>
@@ -91,7 +79,8 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="property protected "><a href="#property_buffer" title="$buffer :: The current body view contents"><span class="description"></span><pre>$buffer</pre></a></li>
 <li class="property protected "><a href="#property_messages" title="$messages :: Array of template messages"><span class="description"></span><pre>$messages</pre></a></li>
 <li class="property protected "><a href="#property_themeConfig" title="$themeConfig :: Theme xml config object"><span class="description"></span><pre>$themeConfig</pre></a></li>
-<li class="property protected "><a href="#property_themePath" title="$themePath :: The root path to the theme"><span class="description"></span><pre>$themePath</pre></a></li>
+<li class="property protected "><a href="#property_themeName" title="$themeName :: The selected theme name"><span class="description"></span><pre>$themeName</pre></a></li>
+<li class="property protected "><a href="#property_themePath" title="$themePath :: The root path to the themes folder"><span class="description"></span><pre>$themePath</pre></a></li>
 <li class="property protected "><a href="#property_themeUrl" title="$themeUrl :: The complete http path to the theme root"><span class="description"></span><pre>$themeUrl</pre></a></li>
 <li class="property protected "><a href="#property_variables" title="$variables :: Variables to be parsed in the layout view"><span class="description"></span><pre>$variables</pre></a></li>
 </ul>
@@ -253,16 +242,38 @@ the final rendered template.</h2>
 <code>string</code><code>void</code>Only returns the parsed page if $return is true</div>
 </div></div>
 </div>
+<a id="method_SetTheme"></a><div class="element clickable method public method_SetTheme" data-toggle="collapse" data-target=".method_SetTheme .collapse">
+<h2>Sets the name of the theme to render, where the layout.tpl is located</h2>
+<pre>SetTheme(string $name) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The theme name</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Library.InvalidThemePathException.html">\Library\InvalidThemePathException</a></code></th>
+<td>If the theme doesnt exist in the theme path</td>
+</tr></table>
+</div></div>
+</div>
 <a id="method_SetThemePath"></a><div class="element clickable method public method_SetThemePath" data-toggle="collapse" data-target=".method_SetThemePath .collapse">
-<h2>Sets the path to the theme, where the layout.tpl is located</h2>
-<pre>SetThemePath(string $path) : void</pre>
+<h2>Sets the path to the theme folder</h2>
+<pre>SetThemePath(string $path, string $name = false) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$path</h4>
-<code>string</code><p>The full path to the theme</p></div>
+<code>string</code><p>The full path to the theme folder</p></div>
+<div class="subelement argument">
+<h4>$name<small><b>   [Default =  false]</b></small>
+</h4>
+<code>string</code><p>The theme name. Set only if you want to also define
+  the theme name as well as the path</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
 <th><code><a href="../classes/Library.InvalidThemePathException.html">\Library\InvalidThemePathException</a></code></th>
@@ -342,8 +353,14 @@ config file (theme.xml)</td>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
+<a id="property_themeName"> </a><div class="element clickable property protected property_themeName" data-toggle="collapse" data-target=".property_themeName .collapse">
+<h2>The selected theme name</h2>
+<pre>$themeName : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_themePath"> </a><div class="element clickable property protected property_themePath" data-toggle="collapse" data-target=".property_themePath .collapse">
-<h2>The root path to the theme</h2>
+<h2>The root path to the themes folder</h2>
 <pre>$themePath : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>

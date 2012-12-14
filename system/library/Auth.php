@@ -486,6 +486,17 @@ class Auth
     }
     
     /**
+     * Returns whether the current connected client is a guest.
+     *
+     * @return bool Returns true if the client is a guest, or true if
+     *   a user session is valid (logged in)
+     */
+    public static function IsGuest()
+    {
+        return (!self::$data['logged_in']);
+    }
+    
+    /**
      * This method is used to initiate a user when an ID or username is determined
      *
      * @param int $userid The account id

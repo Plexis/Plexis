@@ -27,10 +27,16 @@ class Template
     protected static $buffer = null;
     
     /**
-     * The root path to the theme
+     * The root path to the themes folder
      * @var string
      */
     protected static $themePath;
+    
+    /**
+     * The selected theme name
+     * @var string
+     */
+    protected static $themeName;
     
     /**
      * The complete http path to the theme root
@@ -74,7 +80,7 @@ class Template
         if($loadLayout)
         {
             // Load the layout, and parse it
-            $Layout = new View(self::$themePath . DS . 'layout.tpl');
+            $Layout = new View( path(self::$themePath, self::$themeName, 'layout.tpl') );
             foreach(self::$variables as $k => $v)
                 $Layout->Set($k, $v);
             $Layout->Set('CONTENTS', self::$buffer);
@@ -104,7 +110,7 @@ class Template
     public static function LoadView($module, $name)
     {
         // Build path
-        $path = path(self::$themePath, 'views', strtolower($module), $name .'.tpl');
+        $path = path(self::$themePath, self::$themeName, 'views', strtolower($module), $name .'.tpl');
         
         // Try and load the view
         return new View($path);
@@ -163,25 +169,50 @@ class Template
     }
     
     /**
-     * Sets the path to the theme, where the layout.tpl is located
+     * Sets the path to the theme folder
      *
-     * @param string $path The full path to the theme
+     * @param string $path The full path to the theme folder
+     * @param string $name The theme name. Set only if you want to also define
+     *   the theme name as well as the path
      *
      * @throws InvalidThemePathException If the theme config cannot be found
      *
      * @return void
      */
-    public static function SetThemePath($path)
+    public static function SetThemePath($path, $name = false)
     {
         // Make sure the path exists!
-        if(!file_exists($path))
+        if(!is_dir($path))
             throw new InvalidThemePathException('Invalid theme path "'. $path .'"');
         
         // Set theme path
         self::$themePath = $path;
         
+        // Set the theme name if possible
+        if($name != false)
+            self::SetTheme($name);
+    }
+    
+    /**
+     * Sets the name of the theme to render, where the layout.tpl is located
+     *
+     * @param string $name The theme name
+     *
+     * @throws InvalidThemePathException If the theme doesnt exist in the theme path
+     *
+     * @return void
+     */
+    public static function SetTheme($name)
+    {
+        // Make sure the path exists!
+        $path = path(self::$themePath, $name, 'theme.xml');
+        if(!file_exists($path))
+            throw new InvalidThemePathException('Cannot find theme config file! "'. $path .'"');
+        
+        
         // Build the HTTP url to the theme's root folder
-        $path = str_replace(ROOT . DS, '', $path);
+        self::$themeName = $name;
+        $path = str_replace(ROOT . DS, '', dirname($path));
         self::$themeUrl = Request::BaseUrl() .'/'. str_replace(DS, '/', $path);
     }
     
@@ -217,7 +248,7 @@ class Template
     {
         // Load the global_messages view
         try {
-            $View = new View( path(self::$themePath, 'views', 'message.tpl') );
+            $View = new View( path(self::$themePath, self::$themeName, 'views', 'message.tpl') );
         }
         catch( ViewNotFoundException $e ) {
             throw $e;
@@ -254,7 +285,7 @@ class Template
             throw new ThemeNotSetException('No theme selected!');
         
         // Make sure the theme config file exists
-        $file = path(self::$themePath, 'theme.xml');
+        $file = path(self::$themePath, self::$themeName, 'theme.xml');
         if(!file_exists($file))
             throw new MissingThemeConfigException('Unable to load theme config file "'. $file .'"');
         

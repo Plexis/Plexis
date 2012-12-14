@@ -30,19 +30,6 @@
 <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
                                     Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
 </li>
-<li class="dropdown" id="reports-menu">
-<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
-                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
-<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">0</span></a></li>
-<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
-                <ul><li>todo 
-                <span class="label label-info">1</span>
-</li></ul></a></li>
-<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
-                <span class="label label-info">0</span></a></li>
-</ul>
-</li>
 </ul></div>
 </div></div>
 <div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
@@ -65,6 +52,7 @@
 <li class="method public "><a href="#method_LoadDBConnection" title="LoadDBConnection :: Internal method for loading the Plexis DB connection"><span class="description">Internal method for loading the Plexis DB connection</span><pre>LoadDBConnection()</pre></a></li>
 <li class="method public "><a href="#method_RenderTemplate" title="RenderTemplate :: Sets whether plexis should render the full template or not"><span class="description">Sets whether plexis should render the full template or not</span><pre>RenderTemplate()</pre></a></li>
 <li class="method public "><a href="#method_Run" title="Run :: Main method for running the Plexis application"><span class="description">Main method for running the Plexis application</span><pre>Run()</pre></a></li>
+<li class="method public "><a href="#method_Show403" title='Show403 :: Displays the 403 "Forbidden"'><span class="description">Displays the 403 "Forbidden"</span><pre>Show403()</pre></a></li>
 <li class="method public "><a href="#method_Show404" title="Show404 :: Displays the 404 page not found page"><span class="description">Displays the 404 page not found page</span><pre>Show404()</pre></a></li>
 <li class="method public "><a href="#method_ShowSiteOffline" title="ShowSiteOffline :: Displays the site offline page"><span class="description">Displays the site offline page</span><pre>ShowSiteOffline()</pre></a></li>
 </ul>
@@ -164,18 +152,30 @@
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
+<a id="method_Show403"></a><div class="element clickable method public method_Show403" data-toggle="collapse" data-target=".method_Show403 .collapse">
+<h2>Displays the 403 "Forbidden"</h2>
+<pre>Show403() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Calling this method will clear all current output, render the 403 page
+and kill all current running scripts. No code following this method
+will be executed</p></div></div></div>
+</div>
 <a id="method_Show404"></a><div class="element clickable method public method_Show404" data-toggle="collapse" data-target=".method_Show404 .collapse">
 <h2>Displays the 404 page not found page</h2>
 <pre>Show404() : void</pre>
 <div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Calling this method will clear all current output, render the 404 page
+and kill all current running scripts. No code following this method
+will be executed</p></div></div></div>
 </div>
 <a id="method_ShowSiteOffline"></a><div class="element clickable method public method_ShowSiteOffline" data-toggle="collapse" data-target=".method_ShowSiteOffline .collapse">
 <h2>Displays the site offline page</h2>
 <pre>ShowSiteOffline(string $message = null) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>Calling this method will clear all current output, render the site offline
+page and kill all current running scripts. No code following this method
+will be executed</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$message<small><b>   [Default =  null]</b></small>

@@ -113,7 +113,7 @@ class View
         // Make sure out contents are valid
         if(!is_string($contents) && !(is_object($contents) && ($contents instanceof View)))
             throw new InvalidViewContents('Contents of the view must be a string, or an object extending the "View" class');
-                
+            
         $this->contents = $contents;
     }
     

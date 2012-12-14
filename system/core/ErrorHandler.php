@@ -97,7 +97,7 @@ class ErrorHandler
         if(ob_get_length() != 0) ob_clean();
         
         // Will make this fancy later
-        $mode = ($exception instanceof \Exception) ? "Exception" : "Error";
+        $mode = ($exception == true) ? "Exception" : "Error";
         $title = ($php == true) ? "PHP {$mode}: " : "{$mode} Thrown: ";
         
         // We wont use a view here because we might not have the Library namespace registered in the autoloader
