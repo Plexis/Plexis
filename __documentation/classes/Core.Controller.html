@@ -55,6 +55,7 @@
   instance of that class</span><pre>loadController()</pre></a></li>
 <li class="method public "><a href="#method_loadHelper" title="loadHelper :: Loads a helper file for the child controller"><span class="description">Loads a helper file for the child controller</span><pre>loadHelper()</pre></a></li>
 <li class="method public "><a href="#method_loadModel" title="loadModel :: Loads a model for the child controller."><span class="description">Loads a model for the child controller.</span><pre>loadModel()</pre></a></li>
+<li class="method public "><a href="#method_loadPartialView" title="loadPartialView :: Loads a template partial view, such as a content or news box"><span class="description">Loads a template partial view, such as a content or news box</span><pre>loadPartialView()</pre></a></li>
 <li class="method public "><a href="#method_loadView" title="loadView :: Loads a view file for the child controller (See detailed description)"><span class="description">Loads a view file for the child controller (See detailed description)</span><pre>loadView()</pre></a></li>
 <li class="method public "><a href="#method_requireAuth" title="requireAuth :: When called, if the user is not logged in, the login screen will be shown."><span class="description">When called, if the user is not logged in, the login screen will be shown.</span><pre>requireAuth()</pre></a></li>
 <li class="method public "><a href="#method_requirePermission" title='requirePermission :: When called, if the user does not have the specified permission, a 403 "forbidden"
@@ -193,6 +194,37 @@ and useful methods for the child class.</p></div>
 <div class="subelement response">
 <code>object</code><code>bool</code>The constructed modal object, or false if the model
   could not be located.</div>
+</div></div>
+</div>
+<a id="method_loadPartialView"></a><div class="element clickable method public method_loadPartialView" data-toggle="collapse" data-target=".method_loadPartialView .collapse">
+<h2>Loads a template partial view, such as a content or news box</h2>
+<pre>loadPartialView(string $name, bool $silence = false) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method loads a layout piece of the template, or rather a "partial".
+An example of this, is a news box. The news box itself requires contents
+to be set inside of it.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The partial view filename to load (no extension)</p>
+</div>
+<div class="subelement argument">
+<h4>$silence<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>If set to true, This method will return false instead
+  of throwing a \Library\ViewNotFoundException. Default value is false.</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Library.ViewNotFoundException.html">\Library\ViewNotFoundException</a></code></th>
+<td>Thrown if $silence is false, and the
+  view file cannot be found/</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/Library.View.html">\Library\View</a></code><code>bool</code>Returns false if the view file cannot be located,
+  (and $silence is set to true), a Library\View object otherwise</div>
 </div></div>
 </div>
 <a id="method_loadView"></a><div class="element clickable method public method_loadView" data-toggle="collapse" data-target=".method_loadView .collapse">

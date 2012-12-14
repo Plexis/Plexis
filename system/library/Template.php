@@ -60,7 +60,7 @@ class Template
     protected static $pageTitle;
     
     /**
-     * An array of lines to be injected into the layout <head> tags
+     * An array of lines to be injected into the layout head tags
      * @var string[]
      */
     protected static $headers = array();
@@ -76,6 +76,12 @@ class Template
      * @var mixed[]
      */
     protected static $variables = array();
+    
+    /**
+     * Javascript Variables to be added in the header
+     * @var mixed[]
+     */
+    protected static $jsVars = array();
     
     /**
      * Renders the current body contents into the template layout
@@ -123,17 +129,24 @@ class Template
      * Loads a view file from the template's module view folder.
      *
      * @param string $module The name of the module (where the view is located)
-     * @param string $name The name of the view file (no extension)
+     *   If the $name parameter is false, then this param becomes becomes the 
+     *   partial view name, and a partial view is loaded rather then a full
+     *   module view.
+     * @param string $name The name of the view file (no extension). If set
+     *   to false, then the $module param becomes the view name, and a
+     *   template partial view is loaded instead.
      *
      * @throws ViewNotFoundException if the template does not have the view
      *   file for the specified module
      *
      * @return \Library\View
      */
-    public static function LoadView($module, $name)
+    public static function LoadView($module, $name = false)
     {
-        // Build path
-        $path = path(self::$themePath, self::$themeName, 'views', strtolower($module), $name .'.tpl');
+        // Build path... Are we loading a partial or module view?
+        $path = (!$name)
+            ? path(self::$themePath, self::$themeName, 'views', $module .'.tpl')
+            : path(self::$themePath, self::$themeName, 'views', strtolower($module), $name .'.tpl');
         
         // Try and load the view
         return new View($path);
@@ -190,6 +203,29 @@ class Template
     }
     
     /**
+     * Sets javascript variables to be added in the head tags
+     *
+     * @param string $name Name of the variable
+     * @param mixed $value The value of the variable
+     *
+     * @return void
+     */
+    public static function SetJsVar($name, $value)
+    {
+        if(is_array($name))
+        {
+            foreach($name as $key => $val)
+            {
+                self::$jsVars[$key] = $val;
+            }
+        }
+        else
+        {
+            self::$jsVars[$name] = $value;
+        }
+    }
+    
+    /**
      * Sets the path to the theme folder
      *
      * @param string $path The full path to the theme folder
@@ -227,7 +263,7 @@ class Template
     {
         // Make sure the path exists!
         $path = path(self::$themePath, $name, 'theme.xml');
-        if(!file_exists($path))
+        if(empty(self::$themePath) || !file_exists($path))
             throw new InvalidThemePathException('Cannot find theme config file! "'. $path .'"');
         
         
@@ -255,7 +291,7 @@ class Template
      *
      * @return void
      */
-    public static function ClearBuffer()
+    public static function ClearContents()
     {
         self::$buffer = null;
     }
@@ -268,7 +304,7 @@ class Template
 */
 
     /**
-     * AddCssFile
+     * Appends the header adding a css tag
      *
      * @param string $location The http location of the file
      *
@@ -276,11 +312,23 @@ class Template
      */
     public static function AddCssFile($location)
     {
-    
+        $location = trim($location);
+        
+        // If we dont have a complete url, we need to determine if the css
+        // file is a plexis, or template file
+        if(!preg_match('@^((ftp|http(s)?)://|www\.)@i', $location))
+        {
+            $parts = explode('/', $location);
+            $file = path(self::$themePath, $parts);
+            
+            // Are we handling a template or plexis asset?
+            $location = (file_exists($file)) ? self::$themeUrl .'/'. ltrim($location, '/') : Request::BaseUrl() .'/'. ltrim($location, '/');
+        }
+        self::$headers[] = '<link rel="stylesheet" type="text/css" href="'. $location .'"/>';
     }
     
     /**
-     * AddJsFile
+     * Appends the header adding a script tag
      *
      * @param string $location The http location of the file
      *
@@ -288,7 +336,19 @@ class Template
      */
     public static function AddJsFile($location)
     {
-    
+        $location = trim($location);
+        
+        // If we dont have a complete url, we need to determine if the css
+        // file is a plexis, or template file
+        if(!preg_match('@^((ftp|http(s)?)://|www\.)@i', $location))
+        {
+            $parts = explode('/', $location);
+            $file = path(self::$themePath, $parts);
+            
+            // Are we handling a template or plexis asset?
+            $location = (file_exists($file)) ? self::$themeUrl .'/'. ltrim($location, '/') : Request::BaseUrl() .'/'. ltrim($location, '/');
+        }
+        self::$headers[] = '<script type="text/javascript" src="'. $location .'"></script>';
     }
     
     /**
@@ -304,7 +364,7 @@ class Template
     }
     
     /**
-     * Adds a new line of code to the <head> tags
+     * Adds a new line of code to the head tags
      *
      * @param string $line The line to add
      *
@@ -328,6 +388,21 @@ class Template
      */
     protected static function BuildHeader()
     {
+        // Convert our JS vars into a string :)
+        $string = 
+        "        var Plexis = {
+            Url : '". SITE_URL ."',
+            TemplateUrl : '". self::$themeUrl ."',
+            Debugging : false,
+            RealmId : 1,
+        }\n";
+        foreach(self::$jsVars as $key => $val)
+        {
+            // Format the var based on type
+            $val = (is_numeric($val)) ? $val : '"'. $val .'"';
+            $string .= "        var ". $key ." = ". $val .";\n";
+        }
+        
         // Build Basic Headers
         $base = Request::BaseUrl();
         $headers = array(
@@ -348,11 +423,19 @@ class Template
             '<script type="text/javascript" src="'. $base .'/assets/js/jquery.validate.js"></script>',
             '', // Add Whitespace
             '<!-- Define Global Vars and Include Plexis Static JS Scripts -->',
+            "<script type=\"text/javascript\">\n". rtrim($string) ."\n    </script>",
             '<script type="text/javascript" src="'. $base .'/assets/js/plexis.js"></script>',
             '' // Add Whitespace
         );
         
-        $headers = array_merge($headers, self::$headers);
+        // Merge user added headers
+        if(!empty(self::$headers))
+        {
+            $headers[] = '';
+            $headers[] = '<!-- Controller Added -->';
+            $headers = array_merge($headers, self::$headers);
+        }
+        
         return implode("\n    ", $headers);
     }
     
@@ -427,6 +510,9 @@ class Template
         $contents = str_ireplace('{plexis::messages}', self::ParseGlobalMessages(), $contents);
         $contents = str_ireplace('{plexis::elapsedtime}', Benchmark::ElapsedTime('total_script_exec', 5), $contents);
         
+        // Set session > user var
+        self::$variables['session']['user'] = Auth::GetUserData();
+        
         // Set variables that were set in the Template object
         $Layout = new View($contents, false);
         foreach(self::$variables as $k => $v)
@@ -435,14 +521,15 @@ class Template
         // Now, set template default variables
         $Layout->Set('BASE_URL', Request::BaseUrl());
         $Layout->Set('SITE_URL', SITE_URL);
-        $Layout->Set('TEMPLATE_PATH', self::$themeUrl);
+        $Layout->Set('TEMPLATE_URL', self::$themeUrl);
         $Layout->Set('TEMPLATE_NAME', self::$themeConfig->info->name);
         $Layout->Set('TEMPLATE_AUTHOR', self::$themeConfig->info->author);
         $Layout->Set('TEMPLATE_CODED_BY', self::$themeConfig->info->coded_by);
         $Layout->Set('TEMPLATE_COPYRIGHT', self::$themeConfig->info->copyright);
+        $Layout->Set('config', Config::FetchVars('Plexis'));
         
         // Return the rendered data
-        return $Layout->Render();
+        return preg_replace('/<!--#.*#-->/iUs', '', $Layout->Render());
     }
 
 }

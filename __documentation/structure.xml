@@ -726,7 +726,7 @@ in the config folder&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Controller.php" hash="ee91c7c4ba3e8d9a28ffd88c26c21248" package="Default">
+  <file path="system\core\Controller.php" hash="d160f5819af3ad14692a2d3b9017cb46" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -741,7 +741,7 @@ in the config folder&lt;/p&gt;</long-description>
     <include line="114" type="Require" package="Default">
       <name/>
     </include>
-    <include line="182" type="Require" package="Default">
+    <include line="213" type="Require" package="Default">
       <name/>
     </include>
     <class final="false" abstract="false" namespace="Core" line="29" package="Core">
@@ -878,107 +878,140 @@ unless the variable $silence is set to true, in which case a false will be retun
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="172" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="180" package="Core">
+        <name>loadPartialView</name>
+        <full_name>loadPartialView</full_name>
+        <docblock line="163">
+          <description>Loads a template partial view, such as a content or news box</description>
+          <long-description>&lt;p&gt;This method loads a layout piece of the template, or rather a "partial".
+An example of this, is a news box. The news box itself requires contents
+to be set inside of it.&lt;/p&gt;</long-description>
+          <tag line="163" name="param" description="The partial view filename to load (no extension)" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="163" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="163" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
+            <type by_reference="false">\Library\ViewNotFoundException</type>
+          </tag>
+          <tag line="163" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  (and $silence is set to true), a Library\View object otherwise" type="\Library\View|bool">
+            <type by_reference="false">\Library\View</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="180">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="180">
+          <name>$silence</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="203" package="Core">
         <name>loadController</name>
         <full_name>loadController</full_name>
-        <docblock line="163">
+        <docblock line="194">
           <description>Loads a controller from the current modules folder, and returns a new
   instance of that class</description>
           <long-description></long-description>
-          <tag line="163" name="param" description="The name of the controller to load" type="string" variable="$name">
+          <tag line="194" name="param" description="The name of the controller to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="163" name="return" description="Returns the constructed controller or false if&#13;&#10;  the controller doesnt exist" type="object|bool">
+          <tag line="194" name="return" description="Returns the constructed controller or false if&#13;&#10;  the controller doesnt exist" type="object|bool">
             <type by_reference="false">object</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="172">
+        <argument line="203">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="200" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="231" package="Core">
         <name>loadConfig</name>
         <full_name>loadConfig</full_name>
-        <docblock line="188">
+        <docblock line="219">
           <description>Loads a config file from the modules config folder</description>
           <long-description></long-description>
-          <tag line="188" name="param" description="The name of the config file to load (no exension)" type="string" variable="$name">
+          <tag line="219" name="param" description="The name of the config file to load (no exension)" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="188" name="param" description="The config file id (name of the config, used for&#13;&#10;  fetching and setting variables)" type="string" variable="$id">
+          <tag line="219" name="param" description="The config file id (name of the config, used for&#13;&#10;  fetching and setting variables)" type="string" variable="$id">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="188" name="param" description="If all the config varaiables are in an array,&#13;&#10;  what is the name of the array?" type="string" variable="$arrayName">
+          <tag line="219" name="param" description="If all the config varaiables are in an array,&#13;&#10;  what is the name of the array?" type="string" variable="$arrayName">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="188" name="return" description="Returns false if the file cannot be read or located, true&#13;&#10;  otherwise" type="bool">
+          <tag line="219" name="return" description="Returns false if the file cannot be read or located, true&#13;&#10;  otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="200">
+        <argument line="231">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="200">
+        <argument line="231">
           <name>$id</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="200">
+        <argument line="231">
           <name>$arrayName</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="222" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="253" package="Core">
         <name>requireAuth</name>
         <full_name>requireAuth</full_name>
-        <docblock line="209">
+        <docblock line="240">
           <description>When called, if the user is not logged in, the login screen will be shown.</description>
           <long-description>&lt;p&gt;NOTE: This method will stop execution of the current request if the user
 is not logged in (Guest), and the current script will stop executing.&lt;/p&gt;</long-description>
-          <tag line="209" name="param" description="When set to true, the login screen will be displayed.&#13;&#10;  If set to false, a 403 &quot;Forbidden&quot; screen is shown instead." type="bool" variable="$showLogin">
+          <tag line="240" name="param" description="When set to true, the login screen will be displayed.&#13;&#10;  If set to false, a 403 &quot;Forbidden&quot; screen is shown instead." type="bool" variable="$showLogin">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="209" name="return" description="" type="void">
+          <tag line="240" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
-          <tag line="209" name="todo" description="Finish the requireAuth method"/>
+          <tag line="240" name="todo" description="Finish the requireAuth method"/>
         </docblock>
-        <argument line="222">
+        <argument line="253">
           <name>$showLogin</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="251" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="282" package="Core">
         <name>requirePermission</name>
         <full_name>requirePermission</full_name>
-        <docblock line="238">
+        <docblock line="269">
           <description>When called, if the user does not have the specified permission, a 403 "forbidden"
 screen will be displayed, or a redirection will occur (depending on vars).</description>
           <long-description>&lt;p&gt;NOTE: This method will stop execution of the current request when called if the user
 does not have the specified permission, and the current script will stop executing.&lt;/p&gt;</long-description>
-          <tag line="238" name="param" description="The name of the permission this user is required to have." type="string" variable="$name">
+          <tag line="269" name="param" description="The name of the permission this user is required to have." type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="238" name="param" description="The redirect URI (or url). If set to false, a 403 &quot;forbidden&quot;&#13;&#10;  screen will be displayed instead of a redirect." type="string" variable="$uri">
+          <tag line="269" name="param" description="The redirect URI (or url). If set to false, a 403 &quot;forbidden&quot;&#13;&#10;  screen will be displayed instead of a redirect." type="string" variable="$uri">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="238" name="return" description="" type="void">
+          <tag line="269" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="251">
+        <argument line="282">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="251">
+        <argument line="282">
           <name>$uri</name>
           <default>false</default>
           <type/>
@@ -2821,7 +2854,7 @@ the base URL, website root, and more.&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Response.php" hash="aa6643d03e23f08aac0b86e9124dcc9d" package="Default">
+  <file path="system\core\Response.php" hash="ada09151f1166ec3ad11a013b89d7bbf" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -3510,7 +3543,7 @@ and query string</description>
       </method>
     </class>
   </file>
-  <file path="system\library\Auth.php" hash="ccf3f88e15e0596df2a5734ef77cb8e8" package="Default">
+  <file path="system\library\Auth.php" hash="d35f9fe3ae6ea52a785902181a9c3247" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -3815,113 +3848,135 @@ Also checks for login expire time.&lt;/p&gt;</long-description>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="506" package="Library">
-        <name>_initUser</name>
-        <full_name>_initUser</full_name>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="506" package="Library">
+        <name>IsLoggedIn</name>
+        <full_name>IsLoggedIn</full_name>
         <docblock line="499">
-          <description>This method is used to initiate a user when an ID or username is determined</description>
-          <long-description></long-description>
-          <tag line="499" name="param" description="The account id" type="int" variable="$userid">
-            <type by_reference="false">int</type>
-          </tag>
-          <tag line="499" name="return" description="" type="bool">
+          <description>Returns whether the current connected client is a guest.</description>
+          <long-description>&lt;p&gt;This method is opposite of Auth::IsGuest()&lt;/p&gt;</long-description>
+          <tag line="499" name="return" description="Returns true if the client is logged in, false otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="506">
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="516" package="Library">
+        <name>GetUserData</name>
+        <full_name>GetUserData</full_name>
+        <docblock line="511">
+          <description>Returns the clients information such as username and user id</description>
+          <long-description></long-description>
+          <tag line="511" name="return" description="" type="mixed[]">
+            <type by_reference="false">mixed[]</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="528" package="Library">
+        <name>_initUser</name>
+        <full_name>_initUser</full_name>
+        <docblock line="521">
+          <description>This method is used to initiate a user when an ID or username is determined</description>
+          <long-description></long-description>
+          <tag line="521" name="param" description="The account id" type="int" variable="$userid">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="521" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="528">
           <name>$userid</name>
           <default></default>
           <type/>
         </argument>
       </method>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="623" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="645" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidUsernameException</name>
       <full_name>\Library\InvalidUsernameException</full_name>
-      <docblock line="615">
+      <docblock line="637">
         <description>Thrown by the Auth Class when the provided username is invalid in format (Too long, Too short)</description>
         <long-description></long-description>
-        <tag line="615" name="package" description="Library"/>
-        <tag line="615" name="subpackage" description="Exceptions"/>
-        <tag line="615" name="file" description="System/Library/Auth.php"/>
-        <tag line="615" name="see" description="\Library\Auth" refers="\Library\Auth"/>
+        <tag line="637" name="package" description="Library"/>
+        <tag line="637" name="subpackage" description="Exceptions"/>
+        <tag line="637" name="file" description="System/Library/Auth.php"/>
+        <tag line="637" name="see" description="\Library\Auth" refers="\Library\Auth"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="633" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="655" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidPasswordException</name>
       <full_name>\Library\InvalidPasswordException</full_name>
-      <docblock line="625">
+      <docblock line="647">
         <description>Thrown by the Auth Class when the provided password is invalid in format too short</description>
         <long-description></long-description>
-        <tag line="625" name="package" description="Library"/>
-        <tag line="625" name="subpackage" description="Exceptions"/>
-        <tag line="625" name="file" description="System/Library/Auth.php"/>
-        <tag line="625" name="see" description="\Library\Auth" refers="\Library\Auth"/>
+        <tag line="647" name="package" description="Library"/>
+        <tag line="647" name="subpackage" description="Exceptions"/>
+        <tag line="647" name="file" description="System/Library/Auth.php"/>
+        <tag line="647" name="see" description="\Library\Auth" refers="\Library\Auth"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="641" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="663" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidEmailException</name>
       <full_name>\Library\InvalidEmailException</full_name>
-      <docblock line="635">
+      <docblock line="657">
         <description>Thrown by the Auth Class when the provided email is invalid.</description>
         <long-description></long-description>
-        <tag line="635" name="package" description="Library"/>
-        <tag line="635" name="subpackage" description="Exceptions"/>
-        <tag line="635" name="see" description="\Library\Auth::Login()" refers="\Library\Auth::Login()"/>
+        <tag line="657" name="package" description="Library"/>
+        <tag line="657" name="subpackage" description="Exceptions"/>
+        <tag line="657" name="see" description="\Library\Auth::Login()" refers="\Library\Auth::Login()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="649" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="671" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidCredentialsException</name>
       <full_name>\Library\InvalidCredentialsException</full_name>
-      <docblock line="643">
+      <docblock line="665">
         <description>Thrown by the Auth Class when a login fails due to invalid username or password</description>
         <long-description></long-description>
-        <tag line="643" name="package" description="Library"/>
-        <tag line="643" name="subpackage" description="Exceptions"/>
-        <tag line="643" name="see" description="\Library\Auth" refers="\Library\Auth"/>
+        <tag line="665" name="package" description="Library"/>
+        <tag line="665" name="subpackage" description="Exceptions"/>
+        <tag line="665" name="see" description="\Library\Auth" refers="\Library\Auth"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="658" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="680" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>AccountExistsException</name>
       <full_name>\Library\AccountExistsException</full_name>
-      <docblock line="651">
+      <docblock line="673">
         <description>Thrown by the Auth Class during the Register method, if the account name provided already exists</description>
         <long-description></long-description>
-        <tag line="651" name="package" description="Library"/>
-        <tag line="651" name="subpackage" description="Exceptions"/>
-        <tag line="651" name="file" description="System/Library/Auth.php"/>
-        <tag line="651" name="see" description="\Library\Auth::Register()" refers="\Library\Auth::Register()"/>
+        <tag line="673" name="package" description="Library"/>
+        <tag line="673" name="subpackage" description="Exceptions"/>
+        <tag line="673" name="file" description="System/Library/Auth.php"/>
+        <tag line="673" name="see" description="\Library\Auth::Register()" refers="\Library\Auth::Register()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="667" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="689" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>AccountBannedException</name>
       <full_name>\Library\AccountBannedException</full_name>
-      <docblock line="660">
+      <docblock line="682">
         <description>Thrown by the Auth Class when logging in, and the account name is banned</description>
         <long-description></long-description>
-        <tag line="660" name="package" description="Library"/>
-        <tag line="660" name="subpackage" description="Exceptions"/>
-        <tag line="660" name="file" description="System/Library/Auth.php"/>
-        <tag line="660" name="see" description="\Library\Auth::Login()" refers="\Library\Auth::Login()"/>
+        <tag line="682" name="package" description="Library"/>
+        <tag line="682" name="subpackage" description="Exceptions"/>
+        <tag line="682" name="file" description="System/Library/Auth.php"/>
+        <tag line="682" name="see" description="\Library\Auth::Login()" refers="\Library\Auth::Login()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="676" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="698" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>IpBannedException</name>
       <full_name>\Library\IpBannedException</full_name>
-      <docblock line="669">
+      <docblock line="691">
         <description>Thrown by the Auth Class when registering an account, and the Remote IP is banned.</description>
         <long-description></long-description>
-        <tag line="669" name="package" description="Library"/>
-        <tag line="669" name="subpackage" description="Exceptions"/>
-        <tag line="669" name="file" description="System/Library/Auth.php"/>
-        <tag line="669" name="see" description="\Library\Auth::Register()" refers="\Library\Auth::Register()"/>
+        <tag line="691" name="package" description="Library"/>
+        <tag line="691" name="subpackage" description="Exceptions"/>
+        <tag line="691" name="file" description="System/Library/Auth.php"/>
+        <tag line="691" name="see" description="\Library\Auth::Register()" refers="\Library\Auth::Register()"/>
       </docblock>
     </class>
   </file>
@@ -4324,7 +4379,7 @@ variable names</description>
       </method>
     </class>
   </file>
-  <file path="system\library\Template.php" hash="c047bbcf49af215077ba39a343996497" package="Default">
+  <file path="system\library\Template.php" hash="c81c49713f9ebec3b6ef84746ad8a149" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -4413,7 +4468,7 @@ variable names</description>
         <name>$headers</name>
         <default>array()</default>
         <docblock line="62">
-          <description>An array of lines to be injected into the layout &lt;head&gt; tags</description>
+          <description>An array of lines to be injected into the layout head tags</description>
           <long-description></long-description>
           <tag line="62" name="var" description="" type="string[]">
             <type by_reference="false">string[]</type>
@@ -4442,287 +4497,268 @@ variable names</description>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="93" package="Library">
+      <property final="false" static="true" visibility="protected" line="84" namespace="Library" package="Default">
+        <name>$jsVars</name>
+        <default>array()</default>
+        <docblock line="80">
+          <description>Javascript Variables to be added in the header</description>
+          <long-description></long-description>
+          <tag line="80" name="var" description="" type="mixed[]">
+            <type by_reference="false">mixed[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="99" package="Library">
         <name>Render</name>
         <full_name>Render</full_name>
-        <docblock line="80">
+        <docblock line="86">
           <description>Renders the current body contents into the template layout</description>
           <long-description>&lt;p&gt;If the $return param is false, the Response object will be called
 internally, and the Reponse headers and content will be sent to the
 browser.&lt;/p&gt;</long-description>
-          <tag line="80" name="param" description="When set to true, final rendered template&#13;&#10;  is returned instead of sending the response." type="bool" variable="$return">
+          <tag line="86" name="param" description="When set to true, final rendered template&#13;&#10;  is returned instead of sending the response." type="bool" variable="$return">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="80" name="param" description="Load the layout?" type="bool" variable="$loadLayout">
+          <tag line="86" name="param" description="Load the layout?" type="bool" variable="$loadLayout">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="80" name="return" description="Only returns the parsed page if $return is true" type="string|void">
+          <tag line="86" name="return" description="Only returns the parsed page if $return is true" type="string|void">
             <type by_reference="false">string</type>
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="93">
+        <argument line="99">
           <name>$return</name>
           <default>false</default>
           <type/>
         </argument>
-        <argument line="93">
+        <argument line="99">
           <name>$loadLayout</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="133" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="144" package="Library">
         <name>LoadView</name>
         <full_name>LoadView</full_name>
-        <docblock line="122">
+        <docblock line="128">
           <description>Loads a view file from the template's module view folder.</description>
           <long-description></long-description>
-          <tag line="122" name="param" description="The name of the module (where the view is located)" type="string" variable="$module">
+          <tag line="128" name="param" description="The name of the module (where the view is located)&#13;&#10;  If the $name parameter is false, then this param becomes becomes the&#13;&#10;  partial view name, and a partial view is loaded rather then a full&#13;&#10;  module view." type="string" variable="$module">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="122" name="param" description="The name of the view file (no extension)" type="string" variable="$name">
+          <tag line="128" name="param" description="The name of the view file (no extension). If set&#13;&#10;  to false, then the $module param becomes the view name, and a&#13;&#10;  template partial view is loaded instead." type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="122" name="throws" description="if the template does not have the view&#13;&#10;  file for the specified module" type="\Library\ViewNotFoundException">
+          <tag line="128" name="throws" description="if the template does not have the view&#13;&#10;  file for the specified module" type="\Library\ViewNotFoundException">
             <type by_reference="false">\Library\ViewNotFoundException</type>
           </tag>
-          <tag line="122" name="return" description="" type="\Library\View">
+          <tag line="128" name="return" description="" type="\Library\View">
             <type by_reference="false">\Library\View</type>
           </tag>
         </docblock>
-        <argument line="133">
+        <argument line="144">
           <name>$module</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="133">
+        <argument line="144">
           <name>$name</name>
-          <default></default>
+          <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="155" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="168" package="Library">
         <name>Add</name>
         <full_name>Add</full_name>
-        <docblock line="142">
+        <docblock line="155">
           <description>Adds more to contents to be added into the contents section of
 the final rendered template.</description>
           <long-description></long-description>
-          <tag line="142" name="param" description="The contents to add to the template body" type="string|\Library\View" variable="$contents">
+          <tag line="155" name="param" description="The contents to add to the template body" type="string|\Library\View" variable="$contents">
             <type by_reference="false">string</type>
             <type by_reference="false">\Library\View</type>
           </tag>
-          <tag line="142" name="param" description="The css file to be loaded for this view" type="string|bool" variable="$css">
+          <tag line="155" name="param" description="The css file to be loaded for this view" type="string|bool" variable="$css">
             <type by_reference="false">string</type>
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="142" name="param" description="The javascript file to be loaded for this view. When the&#13;&#10;  Template::Render() method is called, a view JS file will be located automatically." type="string|bool" variable="$js">
+          <tag line="155" name="param" description="The javascript file to be loaded for this view. When the&#13;&#10;  Template::Render() method is called, a view JS file will be located automatically." type="string|bool" variable="$js">
             <type by_reference="false">string</type>
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="142" name="return" description="" type="void">
+          <tag line="155" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
-          <tag line="142" name="todo" description="Finish the $css and $js variables"/>
+          <tag line="155" name="todo" description="Finish the $css and $js variables"/>
         </docblock>
-        <argument line="155">
+        <argument line="168">
           <name>$contents</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="155">
+        <argument line="168">
           <name>$css</name>
           <default>false</default>
           <type/>
         </argument>
-        <argument line="155">
+        <argument line="168">
           <name>$js</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="177" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="190" package="Library">
         <name>SetVar</name>
         <full_name>SetVar</full_name>
-        <docblock line="169">
+        <docblock line="182">
           <description>Sets variables to be parsed in the layout</description>
           <long-description></long-description>
-          <tag line="169" name="param" description="Name of the variable" type="string" variable="$name">
+          <tag line="182" name="param" description="Name of the variable" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="169" name="param" description="The value of the variable" type="mixed" variable="$value">
+          <tag line="182" name="param" description="The value of the variable" type="mixed" variable="$value">
             <type by_reference="false">mixed</type>
           </tag>
-          <tag line="169" name="return" description="" type="void">
+          <tag line="182" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="177">
+        <argument line="190">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="177">
+        <argument line="190">
           <name>$value</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="203" package="Library">
-        <name>SetThemePath</name>
-        <full_name>SetThemePath</full_name>
-        <docblock line="192">
-          <description>Sets the path to the theme folder</description>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="213" package="Library">
+        <name>SetJsVar</name>
+        <full_name>SetJsVar</full_name>
+        <docblock line="205">
+          <description>Sets javascript variables to be added in the head tags</description>
           <long-description></long-description>
-          <tag line="192" name="param" description="The full path to the theme folder" type="string" variable="$path">
+          <tag line="205" name="param" description="Name of the variable" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="192" name="param" description="The theme name. Set only if you want to also define&#13;&#10;  the theme name as well as the path" type="string" variable="$name">
-            <type by_reference="false">string</type>
+          <tag line="205" name="param" description="The value of the variable" type="mixed" variable="$value">
+            <type by_reference="false">mixed</type>
           </tag>
-          <tag line="192" name="throws" description="If the theme config cannot be found" type="\Library\InvalidThemePathException">
-            <type by_reference="false">\Library\InvalidThemePathException</type>
-          </tag>
-          <tag line="192" name="return" description="" type="void">
+          <tag line="205" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="203">
+        <argument line="213">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="213">
+          <name>$value</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="239" package="Library">
+        <name>SetThemePath</name>
+        <full_name>SetThemePath</full_name>
+        <docblock line="228">
+          <description>Sets the path to the theme folder</description>
+          <long-description></long-description>
+          <tag line="228" name="param" description="The full path to the theme folder" type="string" variable="$path">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="228" name="param" description="The theme name. Set only if you want to also define&#13;&#10;  the theme name as well as the path" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="228" name="throws" description="If the theme config cannot be found" type="\Library\InvalidThemePathException">
+            <type by_reference="false">\Library\InvalidThemePathException</type>
+          </tag>
+          <tag line="228" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="239">
           <name>$path</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="203">
+        <argument line="239">
           <name>$name</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="226" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="262" package="Library">
         <name>SetTheme</name>
         <full_name>SetTheme</full_name>
-        <docblock line="217">
+        <docblock line="253">
           <description>Sets the name of the theme to render, where the layout.tpl is located</description>
           <long-description></long-description>
-          <tag line="217" name="param" description="The theme name" type="string" variable="$name">
+          <tag line="253" name="param" description="The theme name" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="217" name="throws" description="If the theme doesnt exist in the theme path" type="\Library\InvalidThemePathException">
+          <tag line="253" name="throws" description="If the theme doesnt exist in the theme path" type="\Library\InvalidThemePathException">
             <type by_reference="false">\Library\InvalidThemePathException</type>
           </tag>
-          <tag line="217" name="return" description="" type="void">
+          <tag line="253" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="226">
+        <argument line="262">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="248" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="284" package="Library">
         <name>Message</name>
         <full_name>Message</full_name>
-        <docblock line="240">
+        <docblock line="276">
           <description>Adds a global message to be parsed into the template</description>
           <long-description></long-description>
-          <tag line="240" name="param" description="The message level (error, warning, info etc)" type="string" variable="$lvl">
+          <tag line="276" name="param" description="The message level (error, warning, info etc)" type="string" variable="$lvl">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="240" name="param" description="The message to be displayed within the rendered template" type="string" variable="$message">
+          <tag line="276" name="param" description="The message to be displayed within the rendered template" type="string" variable="$message">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="240" name="return" description="" type="void">
+          <tag line="276" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="248">
+        <argument line="284">
           <name>$lvl</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="248">
+        <argument line="284">
           <name>$message</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="258" package="Library">
-        <name>ClearBuffer</name>
-        <full_name>ClearBuffer</full_name>
-        <docblock line="253">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="294" package="Library">
+        <name>ClearContents</name>
+        <full_name>ClearContents</full_name>
+        <docblock line="289">
           <description>Clears the current output buffer of the template</description>
           <long-description></long-description>
-          <tag line="253" name="return" description="" type="void">
+          <tag line="289" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="277" package="Library">
-        <name>AddCssFile</name>
-        <full_name>AddCssFile</full_name>
-        <docblock line="270">
-          <description>AddCssFile</description>
-          <long-description></long-description>
-          <tag line="270" name="param" description="The http location of the file" type="string" variable="$location">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="270" name="return" description="" type="void">
-            <type by_reference="false">void</type>
-          </tag>
-        </docblock>
-        <argument line="277">
-          <name>$location</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="289" package="Library">
-        <name>AddJsFile</name>
-        <full_name>AddJsFile</full_name>
-        <docblock line="282">
-          <description>AddJsFile</description>
-          <long-description></long-description>
-          <tag line="282" name="param" description="The http location of the file" type="string" variable="$location">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="282" name="return" description="" type="void">
-            <type by_reference="false">void</type>
-          </tag>
-        </docblock>
-        <argument line="289">
-          <name>$location</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="301" package="Library">
-        <name>PageTitle</name>
-        <full_name>PageTitle</full_name>
-        <docblock line="294">
-          <description>Sets the page title (After server title)</description>
-          <long-description></long-description>
-          <tag line="294" name="param" description="The title of the page" type="string" variable="$title">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="294" name="return" description="" type="void">
-            <type by_reference="false">void</type>
-          </tag>
-        </docblock>
-        <argument line="301">
-          <name>$title</name>
-          <default></default>
-          <type/>
-        </argument>
       </method>
       <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="313" package="Library">
-        <name>AppendHeader</name>
-        <full_name>AppendHeader</full_name>
+        <name>AddCssFile</name>
+        <full_name>AddCssFile</full_name>
         <docblock line="306">
-          <description>Adds a new line of code to the &lt;head&gt; tags</description>
+          <description>Appends the header adding a css tag</description>
           <long-description></long-description>
-          <tag line="306" name="param" description="The line to add" type="string" variable="$line">
+          <tag line="306" name="param" description="The http location of the file" type="string" variable="$location">
             <type by_reference="false">string</type>
           </tag>
           <tag line="306" name="return" description="" type="void">
@@ -4730,112 +4766,169 @@ the final rendered template.</description>
           </tag>
         </docblock>
         <argument line="313">
+          <name>$location</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="337" package="Library">
+        <name>AddJsFile</name>
+        <full_name>AddJsFile</full_name>
+        <docblock line="330">
+          <description>Appends the header adding a script tag</description>
+          <long-description></long-description>
+          <tag line="330" name="param" description="The http location of the file" type="string" variable="$location">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="330" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="337">
+          <name>$location</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="361" package="Library">
+        <name>PageTitle</name>
+        <full_name>PageTitle</full_name>
+        <docblock line="354">
+          <description>Sets the page title (After server title)</description>
+          <long-description></long-description>
+          <tag line="354" name="param" description="The title of the page" type="string" variable="$title">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="354" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="361">
+          <name>$title</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="373" package="Library">
+        <name>AppendHeader</name>
+        <full_name>AppendHeader</full_name>
+        <docblock line="366">
+          <description>Adds a new line of code to the head tags</description>
+          <long-description></long-description>
+          <tag line="366" name="param" description="The line to add" type="string" variable="$line">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="366" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="373">
           <name>$line</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="329" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="389" package="Library">
         <name>BuildHeader</name>
         <full_name>BuildHeader</full_name>
-        <docblock line="324">
+        <docblock line="384">
           <description>Builds the plexis header</description>
           <long-description></long-description>
-          <tag line="324" name="return" description="The rendered header data" type="string">
+          <tag line="384" name="return" description="The rendered header data" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="364" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="447" package="Library">
         <name>ParseGlobalMessages</name>
         <full_name>ParseGlobalMessages</full_name>
-        <docblock line="359">
+        <docblock line="442">
           <description>Parse the global messages for the template renderer</description>
           <long-description></long-description>
-          <tag line="359" name="return" description="The parsed global message contents" type="string">
+          <tag line="442" name="return" description="The parsed global message contents" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="398" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="481" package="Library">
         <name>LoadThemeConfig</name>
         <full_name>LoadThemeConfig</full_name>
-        <docblock line="389">
+        <docblock line="472">
           <description>Internal method for loading the theme's config xml file</description>
           <long-description></long-description>
-          <tag line="389" name="throws" description="if the theme isnt set before rendering" type="\Library\ThemeNotSetException">
+          <tag line="472" name="throws" description="if the theme isnt set before rendering" type="\Library\ThemeNotSetException">
             <type by_reference="false">\Library\ThemeNotSetException</type>
           </tag>
-          <tag line="389" name="throws" description="if the theme is missing its theme&#13;&#10;config file (theme.xml)" type="\Library\MissingThemeConfigException">
+          <tag line="472" name="throws" description="if the theme is missing its theme&#13;&#10;config file (theme.xml)" type="\Library\MissingThemeConfigException">
             <type by_reference="false">\Library\MissingThemeConfigException</type>
           </tag>
-          <tag line="389" name="return" description="" type="void">
+          <tag line="472" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="418" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="501" package="Library">
         <name>RenderLayout</name>
         <full_name>RenderLayout</full_name>
-        <docblock line="413">
+        <docblock line="496">
           <description>Internal method for parsing template tags and rendering the layout</description>
           <long-description></long-description>
-          <tag line="413" name="return" description="The parsed contents" type="string">
+          <tag line="496" name="return" description="The parsed contents" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="459" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="546" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>ThemeNotSetException</name>
       <full_name>\Library\ThemeNotSetException</full_name>
-      <docblock line="452">
+      <docblock line="539">
         <description>Thrown by the Template Class when the render method is called, but not theme path was set</description>
         <long-description></long-description>
-        <tag line="452" name="package" description="Library"/>
-        <tag line="452" name="subpackage" description="Exceptions"/>
-        <tag line="452" name="file" description="System/Library/Template.php"/>
-        <tag line="452" name="see" description="\Library\Template::Render()" refers="\Library\Template::Render()"/>
+        <tag line="539" name="package" description="Library"/>
+        <tag line="539" name="subpackage" description="Exceptions"/>
+        <tag line="539" name="file" description="System/Library/Template.php"/>
+        <tag line="539" name="see" description="\Library\Template::Render()" refers="\Library\Template::Render()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="468" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="555" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidThemePathException</name>
       <full_name>\Library\InvalidThemePathException</full_name>
-      <docblock line="461">
+      <docblock line="548">
         <description>Thrown by the Template Class if the theme path provided is an invalid path</description>
         <long-description></long-description>
-        <tag line="461" name="package" description="Library"/>
-        <tag line="461" name="subpackage" description="Exceptions"/>
-        <tag line="461" name="file" description="System/Library/Template.php"/>
-        <tag line="461" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
+        <tag line="548" name="package" description="Library"/>
+        <tag line="548" name="subpackage" description="Exceptions"/>
+        <tag line="548" name="file" description="System/Library/Template.php"/>
+        <tag line="548" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="477" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="564" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidPageContents</name>
       <full_name>\Library\InvalidPageContents</full_name>
-      <docblock line="470">
+      <docblock line="557">
         <description>Thrown by the Template Class if the contents provided are not a string, or subclass of the View method</description>
         <long-description></long-description>
-        <tag line="470" name="package" description="Library"/>
-        <tag line="470" name="subpackage" description="Exceptions"/>
-        <tag line="470" name="file" description="System/Library/Template.php"/>
-        <tag line="470" name="see" description="\Library\Template::Add()" refers="\Library\Template::Add()"/>
+        <tag line="557" name="package" description="Library"/>
+        <tag line="557" name="subpackage" description="Exceptions"/>
+        <tag line="557" name="file" description="System/Library/Template.php"/>
+        <tag line="557" name="see" description="\Library\Template::Add()" refers="\Library\Template::Add()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="486" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="573" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>MissingThemeConfigException</name>
       <full_name>\Library\MissingThemeConfigException</full_name>
-      <docblock line="479">
+      <docblock line="566">
         <description>Thrown by the Template Class if the theme is missing its config file</description>
         <long-description></long-description>
-        <tag line="479" name="package" description="Library"/>
-        <tag line="479" name="subpackage" description="Exceptions"/>
-        <tag line="479" name="file" description="System/Library/Template.php"/>
-        <tag line="479" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
+        <tag line="566" name="package" description="Library"/>
+        <tag line="566" name="subpackage" description="Exceptions"/>
+        <tag line="566" name="file" description="System/Library/Template.php"/>
+        <tag line="566" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
       </docblock>
     </class>
   </file>

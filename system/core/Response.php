@@ -371,7 +371,7 @@ class Response
             
         // If we have a relative path, append the site url
         $location = trim($location);
-        if(!preg_match('@^((|mailto|ftp|http(s)?)://|www\.)@i', $location))
+        if(!preg_match('@^((mailto|ftp|http(s)?)://|www\.)@i', $location))
         {
             $location = Request::BaseUrl() .'/'. ltrim($location, '/');
         }

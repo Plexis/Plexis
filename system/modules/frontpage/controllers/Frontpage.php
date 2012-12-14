@@ -17,9 +17,17 @@ class Frontpage extends Controller
     {
         // Load our view using the Core\Controller::loadView method
         try {
+            // First load our page view
             $view = $this->loadView("main");
-            $view->Set('message', $this->modulePath);
-            Template::Add($view);
+            $view->Set('message', 'Module path: '. $this->modulePath);
+            
+            // Load a content box next, placing our module view as the contents of the box
+            $box = $this->loadPartialView("contentbox");
+            $box->Set('title', 'Test Title');
+            $box->Set('contents', $view->Render());
+            
+            // Add the finished content box to the template
+            Template::Add($box);
         }
         catch( ViewNotFoundException $e ) {
             echo "<br /><br />". $e->getMessage();

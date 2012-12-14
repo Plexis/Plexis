@@ -51,14 +51,15 @@
 <li class="method public "><a href="#method_Add" title="Add :: Adds more to contents to be added into the contents section of
 the final rendered template."><span class="description">Adds more to contents to be added into the contents section of
 the final rendered template.</span><pre>Add()</pre></a></li>
-<li class="method public "><a href="#method_AddCssFile" title="AddCssFile :: AddCssFile"><span class="description">AddCssFile</span><pre>AddCssFile()</pre></a></li>
-<li class="method public "><a href="#method_AddJsFile" title="AddJsFile :: AddJsFile"><span class="description">AddJsFile</span><pre>AddJsFile()</pre></a></li>
-<li class="method public "><a href="#method_AppendHeader" title="AppendHeader :: Adds a new line of code to the &lt;head&gt; tags"><span class="description">Adds a new line of code to the &lt;head&gt; tags</span><pre>AppendHeader()</pre></a></li>
-<li class="method public "><a href="#method_ClearBuffer" title="ClearBuffer :: Clears the current output buffer of the template"><span class="description">Clears the current output buffer of the template</span><pre>ClearBuffer()</pre></a></li>
+<li class="method public "><a href="#method_AddCssFile" title="AddCssFile :: Appends the header adding a css tag"><span class="description">Appends the header adding a css tag</span><pre>AddCssFile()</pre></a></li>
+<li class="method public "><a href="#method_AddJsFile" title="AddJsFile :: Appends the header adding a script tag"><span class="description">Appends the header adding a script tag</span><pre>AddJsFile()</pre></a></li>
+<li class="method public "><a href="#method_AppendHeader" title="AppendHeader :: Adds a new line of code to the head tags"><span class="description">Adds a new line of code to the head tags</span><pre>AppendHeader()</pre></a></li>
+<li class="method public "><a href="#method_ClearContents" title="ClearContents :: Clears the current output buffer of the template"><span class="description">Clears the current output buffer of the template</span><pre>ClearContents()</pre></a></li>
 <li class="method public "><a href="#method_LoadView" title="LoadView :: Loads a view file from the template's module view folder."><span class="description">Loads a view file from the template's module view folder.</span><pre>LoadView()</pre></a></li>
 <li class="method public "><a href="#method_Message" title="Message :: Adds a global message to be parsed into the template"><span class="description">Adds a global message to be parsed into the template</span><pre>Message()</pre></a></li>
 <li class="method public "><a href="#method_PageTitle" title="PageTitle :: Sets the page title (After server title)"><span class="description">Sets the page title (After server title)</span><pre>PageTitle()</pre></a></li>
 <li class="method public "><a href="#method_Render" title="Render :: Renders the current body contents into the template layout"><span class="description">Renders the current body contents into the template layout</span><pre>Render()</pre></a></li>
+<li class="method public "><a href="#method_SetJsVar" title="SetJsVar :: Sets javascript variables to be added in the head tags"><span class="description">Sets javascript variables to be added in the head tags</span><pre>SetJsVar()</pre></a></li>
 <li class="method public "><a href="#method_SetTheme" title="SetTheme :: Sets the name of the theme to render, where the layout.tpl is located"><span class="description">Sets the name of the theme to render, where the layout.tpl is located</span><pre>SetTheme()</pre></a></li>
 <li class="method public "><a href="#method_SetThemePath" title="SetThemePath :: Sets the path to the theme folder"><span class="description">Sets the path to the theme folder</span><pre>SetThemePath()</pre></a></li>
 <li class="method public "><a href="#method_SetVar" title="SetVar :: Sets variables to be parsed in the layout"><span class="description">Sets variables to be parsed in the layout</span><pre>SetVar()</pre></a></li>
@@ -79,7 +80,8 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="nav-header protected">» Protected
                     <ul>
 <li class="property protected "><a href="#property_buffer" title="$buffer :: The current body view contents"><span class="description"></span><pre>$buffer</pre></a></li>
-<li class="property protected "><a href="#property_headers" title="$headers :: An array of lines to be injected into the layout &lt;head&gt; tags"><span class="description"></span><pre>$headers</pre></a></li>
+<li class="property protected "><a href="#property_headers" title="$headers :: An array of lines to be injected into the layout head tags"><span class="description"></span><pre>$headers</pre></a></li>
+<li class="property protected "><a href="#property_jsVars" title="$jsVars :: Javascript Variables to be added in the header"><span class="description"></span><pre>$jsVars</pre></a></li>
 <li class="property protected "><a href="#property_messages" title="$messages :: Array of template messages"><span class="description"></span><pre>$messages</pre></a></li>
 <li class="property protected "><a href="#property_pageTitle" title="$pageTitle :: The page title for the title tag (appended after server name)"><span class="description"></span><pre>$pageTitle</pre></a></li>
 <li class="property protected "><a href="#property_themeConfig" title="$themeConfig :: Theme xml config object"><span class="description"></span><pre>$themeConfig</pre></a></li>
@@ -145,7 +147,7 @@ the final rendered template.</h2>
 </div></div>
 </div>
 <a id="method_AddCssFile"></a><div class="element clickable method public method_AddCssFile" data-toggle="collapse" data-target=".method_AddCssFile .collapse">
-<h2>AddCssFile</h2>
+<h2>Appends the header adding a css tag</h2>
 <pre>AddCssFile(string $location) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -157,7 +159,7 @@ the final rendered template.</h2>
 </div></div>
 </div>
 <a id="method_AddJsFile"></a><div class="element clickable method public method_AddJsFile" data-toggle="collapse" data-target=".method_AddJsFile .collapse">
-<h2>AddJsFile</h2>
+<h2>Appends the header adding a script tag</h2>
 <pre>AddJsFile(string $location) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -169,7 +171,7 @@ the final rendered template.</h2>
 </div></div>
 </div>
 <a id="method_AppendHeader"></a><div class="element clickable method public method_AppendHeader" data-toggle="collapse" data-target=".method_AppendHeader .collapse">
-<h2>Adds a new line of code to the &lt;head&gt; tags</h2>
+<h2>Adds a new line of code to the head tags</h2>
 <pre>AppendHeader(string $line) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -180,26 +182,32 @@ the final rendered template.</h2>
 <code>string</code><p>The line to add</p></div>
 </div></div>
 </div>
-<a id="method_ClearBuffer"></a><div class="element clickable method public method_ClearBuffer" data-toggle="collapse" data-target=".method_ClearBuffer .collapse">
+<a id="method_ClearContents"></a><div class="element clickable method public method_ClearContents" data-toggle="collapse" data-target=".method_ClearContents .collapse">
 <h2>Clears the current output buffer of the template</h2>
-<pre>ClearBuffer() : void</pre>
+<pre>ClearContents() : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_LoadView"></a><div class="element clickable method public method_LoadView" data-toggle="collapse" data-target=".method_LoadView .collapse">
 <h2>Loads a view file from the template's module view folder.</h2>
-<pre>LoadView(string $module, string $name) : <a href="../classes/Library.View.html">\Library\View</a></pre>
+<pre>LoadView(string $module, string $name = false) : <a href="../classes/Library.View.html">\Library\View</a></pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$module</h4>
-<code>string</code><p>The name of the module (where the view is located)</p>
+<code>string</code><p>The name of the module (where the view is located)
+  If the $name parameter is false, then this param becomes becomes the
+  partial view name, and a partial view is loaded rather then a full
+  module view.</p>
 </div>
 <div class="subelement argument">
-<h4>$name</h4>
-<code>string</code><p>The name of the view file (no extension)</p>
+<h4>$name<small><b>   [Default =  false]</b></small>
+</h4>
+<code>string</code><p>The name of the view file (no extension). If set
+  to false, then the $module param becomes the view name, and a
+  template partial view is loaded instead.</p>
 </div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
@@ -261,6 +269,21 @@ browser.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>string</code><code>void</code>Only returns the parsed page if $return is true</div>
+</div></div>
+</div>
+<a id="method_SetJsVar"></a><div class="element clickable method public method_SetJsVar" data-toggle="collapse" data-target=".method_SetJsVar .collapse">
+<h2>Sets javascript variables to be added in the head tags</h2>
+<pre>SetJsVar(string $name, mixed $value) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>Name of the variable</p></div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>mixed</code><p>The value of the variable</p></div>
 </div></div>
 </div>
 <a id="method_SetTheme"></a><div class="element clickable method public method_SetTheme" data-toggle="collapse" data-target=".method_SetTheme .collapse">
@@ -379,8 +402,14 @@ config file (theme.xml)</td>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_headers"> </a><div class="element clickable property protected property_headers" data-toggle="collapse" data-target=".property_headers .collapse">
-<h2>An array of lines to be injected into the layout <head> tags</h2>
+<h2>An array of lines to be injected into the layout head tags</h2>
 <pre>$headers : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_jsVars"> </a><div class="element clickable property protected property_jsVars" data-toggle="collapse" data-target=".property_jsVars .collapse">
+<h2>Javascript Variables to be added in the header</h2>
+<pre>$jsVars : mixed[]</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

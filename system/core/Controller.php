@@ -161,6 +161,37 @@ class Controller
     }
     
     /**
+     * Loads a template partial view, such as a content or news box
+     *
+     * This method loads a layout piece of the template, or rather a "partial". 
+     * An example of this, is a news box. The news box itself requires contents 
+     * to be set inside of it.
+     *
+     * @param string $name The partial view filename to load (no extension)
+     * @param bool $silence If set to true, This method will return false instead
+     *   of throwing a \Library\ViewNotFoundException. Default value is false.
+     *
+     * @throws \Library\ViewNotFoundException Thrown if $silence is false, and the
+     *   view file cannot be found/
+     *
+     * @return \Library\View|bool Returns false if the view file cannot be located,
+     *   (and $silence is set to true), a Library\View object otherwise
+     */
+    public function loadPartialView($name, $silence = false)
+    {
+        // See if the view file exists in the current template
+        $View = false;
+        try {
+            $View = Template::LoadView($name);
+        }
+        catch( ViewNotFoundException $e ) {
+            if(!$silence) throw $e;
+        }
+        
+        return $View;
+    }
+    
+    /**
      * Loads a controller from the current modules folder, and returns a new 
      *   instance of that class
      *

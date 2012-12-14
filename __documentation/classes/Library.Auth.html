@@ -48,9 +48,11 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
+<li class="method public "><a href="#method_GetUserData" title="GetUserData :: Returns the clients information such as username and user id"><span class="description">Returns the clients information such as username and user id</span><pre>GetUserData()</pre></a></li>
 <li class="method public "><a href="#method_HasPermission" title="HasPermission :: Used to find if user has a specified permission"><span class="description">Used to find if user has a specified permission</span><pre>HasPermission()</pre></a></li>
 <li class="method public "><a href="#method_Init" title="Init :: Contructor method (called internally)"><span class="description">Contructor method (called internally)</span><pre>Init()</pre></a></li>
 <li class="method public "><a href="#method_IsGuest" title="IsGuest :: Returns whether the current connected client is a guest."><span class="description">Returns whether the current connected client is a guest.</span><pre>IsGuest()</pre></a></li>
+<li class="method public "><a href="#method_IsLoggedIn" title="IsLoggedIn :: Returns whether the current connected client is a guest."><span class="description">Returns whether the current connected client is a guest.</span><pre>IsLoggedIn()</pre></a></li>
 <li class="method public "><a href="#method_Login" title="Login :: Method used to proccess a user login"><span class="description">Method used to proccess a user login</span><pre>Login()</pre></a></li>
 <li class="method public "><a href="#method_Logout" title="Logout :: Logs the user out and sets all session variables to Guest."><span class="description">Logs the user out and sets all session variables to Guest.</span><pre>Logout()</pre></a></li>
 <li class="method public "><a href="#method_Register" title="Register :: Method used to create a new account"><span class="description">Method used to create a new account</span><pre>Register()</pre></a></li>
@@ -106,6 +108,16 @@
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_GetUserData"></a><div class="element clickable method public method_GetUserData" data-toggle="collapse" data-target=".method_GetUserData .collapse">
+<h2>Returns the clients information such as username and user id</h2>
+<pre>GetUserData() : mixed[]</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed[]</code></div>
+</div></div>
+</div>
 <a id="method_HasPermission"></a><div class="element clickable method public method_HasPermission" data-toggle="collapse" data-target=".method_HasPermission .collapse">
 <h2>Used to find if user has a specified permission</h2>
 <pre>HasPermission(string $key) : bool</pre>
@@ -137,6 +149,17 @@
 <div class="subelement response">
 <code>bool</code>Returns true if the client is a guest, or true if
   a user session is valid (logged in)</div>
+</div></div>
+</div>
+<a id="method_IsLoggedIn"></a><div class="element clickable method public method_IsLoggedIn" data-toggle="collapse" data-target=".method_IsLoggedIn .collapse">
+<h2>Returns whether the current connected client is a guest.</h2>
+<pre>IsLoggedIn() : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method is opposite of Auth::IsGuest()</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if the client is logged in, false otherwise</div>
 </div></div>
 </div>
 <a id="method_Login"></a><div class="element clickable method public method_Login" data-toggle="collapse" data-target=".method_Login .collapse">

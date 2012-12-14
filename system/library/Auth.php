@@ -497,6 +497,28 @@ class Auth
     }
     
     /**
+     * Returns whether the current connected client is a guest.
+     *
+     * This method is opposite of Auth::IsGuest()
+     *
+     * @return bool Returns true if the client is logged in, false otherwise
+     */
+    public static function IsLoggedIn()
+    {
+        return (self::$data['logged_in']);
+    }
+    
+    /**
+     * Returns the clients information such as username and user id
+     *
+     * @return mixed[]
+     */
+    public static function GetUserData()
+    {
+        return self::$data;
+    }
+    
+    /**
      * This method is used to initiate a user when an ID or username is determined
      *
      * @param int $userid The account id
