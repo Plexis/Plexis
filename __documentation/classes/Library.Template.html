@@ -53,10 +53,11 @@ the final rendered template."><span class="description">Adds more to contents to
 the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="method public "><a href="#method_AddCssFile" title="AddCssFile :: AddCssFile"><span class="description">AddCssFile</span><pre>AddCssFile()</pre></a></li>
 <li class="method public "><a href="#method_AddJsFile" title="AddJsFile :: AddJsFile"><span class="description">AddJsFile</span><pre>AddJsFile()</pre></a></li>
+<li class="method public "><a href="#method_AppendHeader" title="AppendHeader :: Adds a new line of code to the &lt;head&gt; tags"><span class="description">Adds a new line of code to the &lt;head&gt; tags</span><pre>AppendHeader()</pre></a></li>
 <li class="method public "><a href="#method_ClearBuffer" title="ClearBuffer :: Clears the current output buffer of the template"><span class="description">Clears the current output buffer of the template</span><pre>ClearBuffer()</pre></a></li>
 <li class="method public "><a href="#method_LoadView" title="LoadView :: Loads a view file from the template's module view folder."><span class="description">Loads a view file from the template's module view folder.</span><pre>LoadView()</pre></a></li>
 <li class="method public "><a href="#method_Message" title="Message :: Adds a global message to be parsed into the template"><span class="description">Adds a global message to be parsed into the template</span><pre>Message()</pre></a></li>
-<li class="method public "><a href="#method_PageTitle" title="PageTitle :: Sets the page title"><span class="description">Sets the page title</span><pre>PageTitle()</pre></a></li>
+<li class="method public "><a href="#method_PageTitle" title="PageTitle :: Sets the page title (After server title)"><span class="description">Sets the page title (After server title)</span><pre>PageTitle()</pre></a></li>
 <li class="method public "><a href="#method_Render" title="Render :: Renders the current body contents into the template layout"><span class="description">Renders the current body contents into the template layout</span><pre>Render()</pre></a></li>
 <li class="method public "><a href="#method_SetTheme" title="SetTheme :: Sets the name of the theme to render, where the layout.tpl is located"><span class="description">Sets the name of the theme to render, where the layout.tpl is located</span><pre>SetTheme()</pre></a></li>
 <li class="method public "><a href="#method_SetThemePath" title="SetThemePath :: Sets the path to the theme folder"><span class="description">Sets the path to the theme folder</span><pre>SetThemePath()</pre></a></li>
@@ -65,9 +66,10 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
+<li class="method protected "><a href="#method_BuildHeader" title="BuildHeader :: Builds the plexis header"><span class="description">Builds the plexis header</span><pre>BuildHeader()</pre></a></li>
 <li class="method protected "><a href="#method_LoadThemeConfig" title="LoadThemeConfig :: Internal method for loading the theme's config xml file"><span class="description">Internal method for loading the theme's config xml file</span><pre>LoadThemeConfig()</pre></a></li>
 <li class="method protected "><a href="#method_ParseGlobalMessages" title="ParseGlobalMessages :: Parse the global messages for the template renderer"><span class="description">Parse the global messages for the template renderer</span><pre>ParseGlobalMessages()</pre></a></li>
-<li class="method protected "><a href="#method__buildHeader" title="_buildHeader :: _buildHeader()"><span class="description">_buildHeader()</span><pre>_buildHeader()</pre></a></li>
+<li class="method protected "><a href="#method_RenderLayout" title="RenderLayout :: Internal method for parsing template tags and rendering the layout"><span class="description">Internal method for parsing template tags and rendering the layout</span><pre>RenderLayout()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -77,7 +79,9 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="nav-header protected">» Protected
                     <ul>
 <li class="property protected "><a href="#property_buffer" title="$buffer :: The current body view contents"><span class="description"></span><pre>$buffer</pre></a></li>
+<li class="property protected "><a href="#property_headers" title="$headers :: An array of lines to be injected into the layout &lt;head&gt; tags"><span class="description"></span><pre>$headers</pre></a></li>
 <li class="property protected "><a href="#property_messages" title="$messages :: Array of template messages"><span class="description"></span><pre>$messages</pre></a></li>
+<li class="property protected "><a href="#property_pageTitle" title="$pageTitle :: The page title for the title tag (appended after server name)"><span class="description"></span><pre>$pageTitle</pre></a></li>
 <li class="property protected "><a href="#property_themeConfig" title="$themeConfig :: Theme xml config object"><span class="description"></span><pre>$themeConfig</pre></a></li>
 <li class="property protected "><a href="#property_themeName" title="$themeName :: The selected theme name"><span class="description"></span><pre>$themeName</pre></a></li>
 <li class="property protected "><a href="#property_themePath" title="$themePath :: The root path to the themes folder"><span class="description"></span><pre>$themePath</pre></a></li>
@@ -120,6 +124,10 @@ the final rendered template.</h2>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>todo</th>
+<td>Finish the $css and $js variables</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$contents</h4>
@@ -158,6 +166,18 @@ the final rendered template.</h2>
 <div class="subelement argument">
 <h4>$location</h4>
 <code>string</code><p>The http location of the file</p></div>
+</div></div>
+</div>
+<a id="method_AppendHeader"></a><div class="element clickable method public method_AppendHeader" data-toggle="collapse" data-target=".method_AppendHeader .collapse">
+<h2>Adds a new line of code to the &lt;head&gt; tags</h2>
+<pre>AppendHeader(string $line) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$line</h4>
+<code>string</code><p>The line to add</p></div>
 </div></div>
 </div>
 <a id="method_ClearBuffer"></a><div class="element clickable method public method_ClearBuffer" data-toggle="collapse" data-target=".method_ClearBuffer .collapse">
@@ -208,7 +228,7 @@ the final rendered template.</h2>
 </div></div>
 </div>
 <a id="method_PageTitle"></a><div class="element clickable method public method_PageTitle" data-toggle="collapse" data-target=".method_PageTitle .collapse">
-<h2>Sets the page title</h2>
+<h2>Sets the page title (After server title)</h2>
 <pre>PageTitle(string $title) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -224,14 +244,15 @@ the final rendered template.</h2>
 <pre>Render(bool $return = false, bool $loadLayout = true) : string | void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>If the $return param is false, the Response object will be called
+internally, and the Reponse headers and content will be sent to the
+browser.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$return<small><b>   [Default =  false]</b></small>
 </h4>
 <code>bool</code><p>When set to true, final rendered template
-  is returned instead of echo'ing it out.</p>
-</div>
+  is returned instead of sending the response.</p></div>
 <div class="subelement argument">
 <h4>$loadLayout<small><b>   [Default =  true]</b></small>
 </h4>
@@ -296,6 +317,17 @@ the final rendered template.</h2>
 <code>mixed</code><p>The value of the variable</p></div>
 </div></div>
 </div>
+<a id="method_BuildHeader"></a><div class="element clickable method protected method_BuildHeader" data-toggle="collapse" data-target=".method_BuildHeader .collapse">
+<h2>Builds the plexis header</h2>
+<pre>BuildHeader() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The rendered header data</div>
+</div></div>
+</div>
 <a id="method_LoadThemeConfig"></a><div class="element clickable method protected method_LoadThemeConfig" data-toggle="collapse" data-target=".method_LoadThemeConfig .collapse">
 <h2>Internal method for loading the theme's config xml file</h2>
 <pre>LoadThemeConfig() : void</pre>
@@ -327,11 +359,16 @@ config file (theme.xml)</td>
 <code>string</code>The parsed global message contents</div>
 </div></div>
 </div>
-<a id="method__buildHeader"></a><div class="element clickable method protected method__buildHeader" data-toggle="collapse" data-target=".method__buildHeader .collapse">
-<h2>_buildHeader()</h2>
-<pre>_buildHeader() : void</pre>
+<a id="method_RenderLayout"></a><div class="element clickable method protected method_RenderLayout" data-toggle="collapse" data-target=".method_RenderLayout .collapse">
+<h2>Internal method for parsing template tags and rendering the layout</h2>
+<pre>RenderLayout() : string</pre>
 <div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The parsed contents</div>
+</div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
@@ -341,9 +378,21 @@ config file (theme.xml)</td>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
+<a id="property_headers"> </a><div class="element clickable property protected property_headers" data-toggle="collapse" data-target=".property_headers .collapse">
+<h2>An array of lines to be injected into the layout <head> tags</h2>
+<pre>$headers : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_messages"> </a><div class="element clickable property protected property_messages" data-toggle="collapse" data-target=".property_messages .collapse">
 <h2>Array of template messages</h2>
 <pre>$messages : array[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_pageTitle"> </a><div class="element clickable property protected property_pageTitle" data-toggle="collapse" data-target=".property_pageTitle .collapse">
+<h2>The page title for the title tag (appended after server name)</h2>
+<pre>$pageTitle : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

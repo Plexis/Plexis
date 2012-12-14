@@ -10,7 +10,10 @@
 namespace Library;
 
 // Import core classes into scope
+use \Core\Benchmark;
+use \Core\Config;
 use \Core\Request;
+use \Core\Response;
 
 /**
  * Template Engine for the CMS
@@ -51,6 +54,18 @@ class Template
     protected static $themeConfig;
     
     /**
+     * The page title for the title tag (appended after server name)
+     * @var string
+     */
+    protected static $pageTitle;
+    
+    /**
+     * An array of lines to be injected into the layout <head> tags
+     * @var string[]
+     */
+    protected static $headers = array();
+    
+    /**
      * Array of template messages
      * @var array[] ('level', 'message')
      */
@@ -65,35 +80,43 @@ class Template
     /**
      * Renders the current body contents into the template layout
      *
+     * If the $return param is false, the Response object will be called
+     * internally, and the Reponse headers and content will be sent to the
+     * browser.
+     *
      * @param bool $return When set to true, final rendered template
-     *   is returned instead of echo'ing it out.
+     *   is returned instead of sending the response.
      * @param bool $loadLayout Load the layout?
      *
      * @return string|void Only returns the parsed page if $return is true
      */
     public static function Render($return = false, $loadLayout = true)
     {
-        // First, load the template xml config file
-        if(empty(self::$themeConfig)) self::LoadThemeConfig();
+        // default
+        $contents = null;
         
         // Load contents and parse the layout file
         if($loadLayout)
         {
+            // First, load the template xml config file
+            if(empty(self::$themeConfig)) 
+                self::LoadThemeConfig();
+        
             // Load the layout, and parse it
-            $Layout = new View( path(self::$themePath, self::$themeName, 'layout.tpl') );
-            foreach(self::$variables as $k => $v)
-                $Layout->Set($k, $v);
-            $Layout->Set('CONTENTS', self::$buffer);
-            $Layout->Set('GLOBAL_MESSAGES', self::ParseGlobalMessages());
-            $c = $Layout->Render();
+            $contents = self::RenderLayout();
         }
         else
-            $c = self::$buffer;
+        {
+            $contents = self::$buffer;
+        }
         
+        // Return contents if requested
         if($return)
-            return $c;
-        else
-            echo $c;
+            return $contents;
+        
+        // Send the response
+        Response::Body($contents);
+        Response::Send();
     }
     
     /**
@@ -126,23 +149,21 @@ class Template
      *   Template::Render() method is called, a view JS file will be located automatically.
      *
      * @return void
+     *
+     * @todo Finish the $css and $js variables
      */
     public static function Add($contents, $css = false, $js = false)
     {
-        $parts = func_get_args();
-        foreach($parts as $contents)
-        {
-            // Make sure out contents are valid
-            if(!is_string($contents) && !(is_object($contents) && ($contents instanceof View)))
-                throw new InvalidPageContents('Page contents must be a string, or an object extending the "View" class');
+        // Make sure out contents are valid
+        if(!is_string($contents) && !(is_object($contents) && ($contents instanceof View)))
+            throw new InvalidPageContents('Page contents must be a string, or an object extending the "View" class');
+        
+        // Render view contents
+        if($contents instanceof View)
+            $contents = $contents->Render();
             
-            // Render view contents
-            if($contents instanceof View)
-                $contents = $contents->Render();
-                
-            // Append to buffer
-            self::$buffer .= $contents;
-        }
+        // Append to buffer
+        self::$buffer .= $contents;
     }
     
     /**
@@ -239,6 +260,102 @@ class Template
         self::$buffer = null;
     }
     
+    
+/*
+| ---------------------------------------------------------------
+| Template Header Building Methods
+| ---------------------------------------------------------------
+*/
+
+    /**
+     * AddCssFile
+     *
+     * @param string $location The http location of the file
+     *
+     * @return void
+     */
+    public static function AddCssFile($location)
+    {
+    
+    }
+    
+    /**
+     * AddJsFile
+     *
+     * @param string $location The http location of the file
+     *
+     * @return void
+     */
+    public static function AddJsFile($location)
+    {
+    
+    }
+    
+    /**
+     * Sets the page title (After server title)
+     *
+     * @param string $title The title of the page
+     *
+     * @return void
+     */
+    public static function PageTitle($title)
+    {
+        self::$pageTitle = $title;
+    }
+    
+    /**
+     * Adds a new line of code to the <head> tags
+     *
+     * @param string $line The line to add
+     *
+     * @return void
+     */
+    public static function AppendHeader($line)
+    {
+        self::$header[] = $line;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Internal Methods
+| ---------------------------------------------------------------
+*/
+    
+    /**
+     * Builds the plexis header
+     *
+     * @return string The rendered header data
+     */
+    protected static function BuildHeader()
+    {
+        // Build Basic Headers
+        $base = Request::BaseUrl();
+        $headers = array(
+            '<!-- Basic Headings -->',
+            '<title>'. Config::GetVar('site_title', 'Plexis') .'</title>',
+            '<meta name="keywords" content="'. Config::GetVar('keywords', 'Plexis') .'"/>',
+            '<meta name="description" content="'. Config::GetVar('description', 'Plexis') .'"/>',
+            '<meta name="generator" content="Plexis"/>',
+            '', // Add Whitespace
+            '<!-- Content type, And cache control -->',
+            '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>',
+            '<meta http-equiv="Cache-Control" content="no-cache"/>',
+            '<meta http-equiv="Expires" content="-1"/>',
+            '', // Add Whitespace
+            '<!-- Include jQuery Scripts -->',
+            '<script type="text/javascript" src="'. $base .'/assets/js/jquery.js"></script>',
+            '<script type="text/javascript" src="'. $base .'/assets/js/jquery-ui.js"></script>',
+            '<script type="text/javascript" src="'. $base .'/assets/js/jquery.validate.js"></script>',
+            '', // Add Whitespace
+            '<!-- Define Global Vars and Include Plexis Static JS Scripts -->',
+            '<script type="text/javascript" src="'. $base .'/assets/js/plexis.js"></script>',
+            '' // Add Whitespace
+        );
+        
+        $headers = array_merge($headers, self::$headers);
+        return implode("\n    ", $headers);
+    }
+    
     /**
      * Parse the global messages for the template renderer
      *
@@ -293,56 +410,39 @@ class Template
         self::$themeConfig = simplexml_load_file($file);
     }
     
-/*
-| ---------------------------------------------------------------
-| Template Header Building Functions
-| ---------------------------------------------------------------
-*/
-
     /**
-     * AddCssFile
+     * Internal method for parsing template tags and rendering the layout
      *
-     * @param string $location The http location of the file
-     *
-     * @return void
+     * @return string The parsed contents
      */
-    public static function AddCssFile($location)
+    protected static function RenderLayout()
     {
-    
-    }
-    
-    /**
-     * AddJsFile
-     *
-     * @param string $location The http location of the file
-     *
-     * @return void
-     */
-    public static function AddJsFile($location)
-    {
-    
-    }
-    
-    /**
-     * Sets the page title
-     *
-     * @param string $title The title of the page
-     *
-     * @return void
-     */
-    public static function PageTitle($title)
-    {
-    
-    }
-    
-    /**
-     * _buildHeader()
-     *
-     * @return void
-     */
-    protected static function _buildHeader()
-    {
-    
+        // Get layout contents
+        $path = path(self::$themePath, self::$themeName, 'views', 'layout.tpl');
+        $contents = file_get_contents( $path );
+        
+        // Parse plexis tags (temporary till i input a better method)
+        $contents = str_ireplace('{plexis::head}', trim(self::BuildHeader()), $contents);
+        $contents = str_ireplace('{plexis::contents}', self::$buffer, $contents);
+        $contents = str_ireplace('{plexis::messages}', self::ParseGlobalMessages(), $contents);
+        $contents = str_ireplace('{plexis::elapsedtime}', Benchmark::ElapsedTime('total_script_exec', 5), $contents);
+        
+        // Set variables that were set in the Template object
+        $Layout = new View($contents, false);
+        foreach(self::$variables as $k => $v)
+            $Layout->Set($k, $v);
+        
+        // Now, set template default variables
+        $Layout->Set('BASE_URL', Request::BaseUrl());
+        $Layout->Set('SITE_URL', SITE_URL);
+        $Layout->Set('TEMPLATE_PATH', self::$themeUrl);
+        $Layout->Set('TEMPLATE_NAME', self::$themeConfig->info->name);
+        $Layout->Set('TEMPLATE_AUTHOR', self::$themeConfig->info->author);
+        $Layout->Set('TEMPLATE_CODED_BY', self::$themeConfig->info->coded_by);
+        $Layout->Set('TEMPLATE_COPYRIGHT', self::$themeConfig->info->copyright);
+        
+        // Return the rendered data
+        return $Layout->Render();
     }
 
 }

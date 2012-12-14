@@ -95,12 +95,6 @@ class Plexis
         // Do we render the template?
         if(self::$renderTemplate)
             Template::Render();
-        
-        // Show our elapsed time (testing purposes)
-        echo "<br /><br /><small>Page Loaded In: ". Benchmark::ElapsedTime('total_script_exec', 5);
-        
-        //Send the response to the browser
-        Response::Send();
     }
     
     /**
