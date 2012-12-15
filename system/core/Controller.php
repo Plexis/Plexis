@@ -55,7 +55,9 @@ class Controller
     /**
      * Loads a model for the child controller.
      *
-     * The model will be searched for in the modules "models" folder.
+     * The model will be searched for in the modules "models" folder. The
+     * result will also be stored in a class variable, the name of the class:
+     * "$this->{$name}".
      *
      * @param string $name The modal name to load
      * @param mixed[] $params An array or parameters to pass to the constructor.
@@ -86,6 +88,9 @@ class Controller
                 $class = new $name();
         }
         catch(\ReflectionException $e) {}
+        
+        // Set the model as a class variable
+        $this->{$name} = $class;
         
         return $class;
     }
@@ -195,7 +200,9 @@ class Controller
      * Loads a controller from the current modules folder, and returns a new 
      *   instance of that class
      *
-     * @param string $name The name of the controller to load
+     * @param string $name The name of the controller to load. The
+     * result will also be stored in a class variable, the name of the class:
+     * "$this->{$name}".
      *
      * @return object|bool Returns the constructed controller or false if 
      *   the controller doesnt exist
@@ -213,7 +220,8 @@ class Controller
         require $path;
         
         // Init a reflection class
-        return new $name();
+        $class = $this->{$name} = new $name();
+        return $class;
     }
     
     /**
@@ -247,8 +255,6 @@ class Controller
      *   If set to false, a 403 "Forbidden" screen is shown instead.
      *
      * @return void
-     *
-     * @todo Finish the requireAuth method
      */
     public function requireAuth($showLogin = true) 
     {
@@ -256,7 +262,16 @@ class Controller
         {
             if($showLogin)
             {
-                // To be Finished
+                // Clean all current output
+                ob_clean();
+                Template::ClearContents();
+                
+                // Get our login template contents
+                $View = Template::LoadView("login");
+                $View->Set('SITE_URL', Request::BaseUrl());
+                Template::Add($View);
+                Template::Render();
+                die;
             }
             else
             {

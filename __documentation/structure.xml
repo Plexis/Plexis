@@ -726,7 +726,7 @@ in the config folder&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Controller.php" hash="d160f5819af3ad14692a2d3b9017cb46" package="Default">
+  <file path="system\core\Controller.php" hash="14d6a4a5cba0cc8d0bd5dbe88cbff33d" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -735,13 +735,13 @@ in the config folder&lt;/p&gt;</long-description>
       <tag line="2" name="license" description="GNU GPL v3"/>
       <tag line="2" name="contains" description="Controller"/>
     </docblock>
-    <include line="77" type="Require" package="Default">
+    <include line="79" type="Require" package="Default">
       <name/>
     </include>
-    <include line="114" type="Require" package="Default">
+    <include line="119" type="Require" package="Default">
       <name/>
     </include>
-    <include line="213" type="Require" package="Default">
+    <include line="220" type="Require" package="Default">
       <name/>
     </include>
     <class final="false" abstract="false" namespace="Core" line="29" package="Core">
@@ -788,12 +788,14 @@ and useful methods for the child class.&lt;/p&gt;</long-description>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="67" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="69" package="Core">
         <name>loadModel</name>
         <full_name>loadModel</full_name>
         <docblock line="55">
           <description>Loads a model for the child controller.</description>
-          <long-description>&lt;p&gt;The model will be searched for in the modules "models" folder.&lt;/p&gt;</long-description>
+          <long-description>&lt;p&gt;The model will be searched for in the modules "models" folder. The
+result will also be stored in a class variable, the name of the class:
+"$this-&gt;{$name}".&lt;/p&gt;</long-description>
           <tag line="55" name="param" description="The modal name to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
@@ -805,213 +807,212 @@ and useful methods for the child class.&lt;/p&gt;</long-description>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="67">
+        <argument line="69">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="67">
+        <argument line="69">
           <name>$params</name>
           <default>array()</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="103" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="108" package="Core">
         <name>loadHelper</name>
         <full_name>loadHelper</full_name>
-        <docblock line="93">
+        <docblock line="98">
           <description>Loads a helper file for the child controller</description>
           <long-description></long-description>
-          <tag line="93" name="param" description="The helper filename to load" type="string" variable="$name">
+          <tag line="98" name="param" description="The helper filename to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="93" name="param" description="When set to true, the helper will be searched for&#13;&#10;  in the &lt;ROOT&gt;/system/helpers folder instead of the modules helper&#13;&#10;  folder. Default value is false." type="bool" variable="$global">
+          <tag line="98" name="param" description="When set to true, the helper will be searched for&#13;&#10;  in the &lt;ROOT&gt;/system/helpers folder instead of the modules helper&#13;&#10;  folder. Default value is false." type="bool" variable="$global">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="93" name="return" description="Returns true if the helper file was found, false otherwise" type="bool">
+          <tag line="98" name="return" description="Returns true if the helper file was found, false otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="103">
+        <argument line="108">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="103">
+        <argument line="108">
           <name>$global</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="137" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="142" package="Core">
         <name>loadView</name>
         <full_name>loadView</full_name>
-        <docblock line="118">
+        <docblock line="123">
           <description>Loads a view file for the child controller (See detailed description)</description>
           <long-description>&lt;p&gt;The first path searched is the current template's module/views
 folder. If the template does not contain a view for the current module,
 then the modules view folder will be checked... If a view file cannot
 be located on either of those paths, a ViewNotFoundException will be thrown
 unless the variable $silence is set to true, in which case a false will be retuned.&lt;/p&gt;</long-description>
-          <tag line="118" name="param" description="The view filename to load (no extension)" type="string" variable="$name">
+          <tag line="123" name="param" description="The view filename to load (no extension)" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="118" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
+          <tag line="123" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="118" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
+          <tag line="123" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
             <type by_reference="false">\Library\ViewNotFoundException</type>
           </tag>
-          <tag line="118" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  (and $silence is set to true), a Library\View object otherwise" type="\Library\View|bool">
+          <tag line="123" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  (and $silence is set to true), a Library\View object otherwise" type="\Library\View|bool">
             <type by_reference="false">\Library\View</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="137">
+        <argument line="142">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="137">
+        <argument line="142">
           <name>$silence</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="180" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="185" package="Core">
         <name>loadPartialView</name>
         <full_name>loadPartialView</full_name>
-        <docblock line="163">
+        <docblock line="168">
           <description>Loads a template partial view, such as a content or news box</description>
           <long-description>&lt;p&gt;This method loads a layout piece of the template, or rather a "partial".
 An example of this, is a news box. The news box itself requires contents
 to be set inside of it.&lt;/p&gt;</long-description>
-          <tag line="163" name="param" description="The partial view filename to load (no extension)" type="string" variable="$name">
+          <tag line="168" name="param" description="The partial view filename to load (no extension)" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="163" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
+          <tag line="168" name="param" description="If set to true, This method will return false instead&#13;&#10;  of throwing a \Library\ViewNotFoundException. Default value is false." type="bool" variable="$silence">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="163" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
+          <tag line="168" name="throws" description="Thrown if $silence is false, and the&#13;&#10;  view file cannot be found/" type="\Library\ViewNotFoundException">
             <type by_reference="false">\Library\ViewNotFoundException</type>
           </tag>
-          <tag line="163" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  (and $silence is set to true), a Library\View object otherwise" type="\Library\View|bool">
+          <tag line="168" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  (and $silence is set to true), a Library\View object otherwise" type="\Library\View|bool">
             <type by_reference="false">\Library\View</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="180">
+        <argument line="185">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="180">
+        <argument line="185">
           <name>$silence</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="203" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="210" package="Core">
         <name>loadController</name>
         <full_name>loadController</full_name>
-        <docblock line="194">
+        <docblock line="199">
           <description>Loads a controller from the current modules folder, and returns a new
   instance of that class</description>
           <long-description></long-description>
-          <tag line="194" name="param" description="The name of the controller to load" type="string" variable="$name">
+          <tag line="199" name="param" description="The name of the controller to load. The&#13;&#10;result will also be stored in a class variable, the name of the class:&#13;&#10;&quot;$this-&gt;{$name}&quot;." type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="194" name="return" description="Returns the constructed controller or false if&#13;&#10;  the controller doesnt exist" type="object|bool">
+          <tag line="199" name="return" description="Returns the constructed controller or false if&#13;&#10;  the controller doesnt exist" type="object|bool">
             <type by_reference="false">object</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="203">
+        <argument line="210">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="231" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="239" package="Core">
         <name>loadConfig</name>
         <full_name>loadConfig</full_name>
-        <docblock line="219">
+        <docblock line="227">
           <description>Loads a config file from the modules config folder</description>
           <long-description></long-description>
-          <tag line="219" name="param" description="The name of the config file to load (no exension)" type="string" variable="$name">
+          <tag line="227" name="param" description="The name of the config file to load (no exension)" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="219" name="param" description="The config file id (name of the config, used for&#13;&#10;  fetching and setting variables)" type="string" variable="$id">
+          <tag line="227" name="param" description="The config file id (name of the config, used for&#13;&#10;  fetching and setting variables)" type="string" variable="$id">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="219" name="param" description="If all the config varaiables are in an array,&#13;&#10;  what is the name of the array?" type="string" variable="$arrayName">
+          <tag line="227" name="param" description="If all the config varaiables are in an array,&#13;&#10;  what is the name of the array?" type="string" variable="$arrayName">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="219" name="return" description="Returns false if the file cannot be read or located, true&#13;&#10;  otherwise" type="bool">
+          <tag line="227" name="return" description="Returns false if the file cannot be read or located, true&#13;&#10;  otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="231">
+        <argument line="239">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="231">
+        <argument line="239">
           <name>$id</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="231">
+        <argument line="239">
           <name>$arrayName</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="253" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="259" package="Core">
         <name>requireAuth</name>
         <full_name>requireAuth</full_name>
-        <docblock line="240">
+        <docblock line="248">
           <description>When called, if the user is not logged in, the login screen will be shown.</description>
           <long-description>&lt;p&gt;NOTE: This method will stop execution of the current request if the user
 is not logged in (Guest), and the current script will stop executing.&lt;/p&gt;</long-description>
-          <tag line="240" name="param" description="When set to true, the login screen will be displayed.&#13;&#10;  If set to false, a 403 &quot;Forbidden&quot; screen is shown instead." type="bool" variable="$showLogin">
+          <tag line="248" name="param" description="When set to true, the login screen will be displayed.&#13;&#10;  If set to false, a 403 &quot;Forbidden&quot; screen is shown instead." type="bool" variable="$showLogin">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="240" name="return" description="" type="void">
+          <tag line="248" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
-          <tag line="240" name="todo" description="Finish the requireAuth method"/>
         </docblock>
-        <argument line="253">
+        <argument line="259">
           <name>$showLogin</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="282" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="297" package="Core">
         <name>requirePermission</name>
         <full_name>requirePermission</full_name>
-        <docblock line="269">
+        <docblock line="284">
           <description>When called, if the user does not have the specified permission, a 403 "forbidden"
 screen will be displayed, or a redirection will occur (depending on vars).</description>
           <long-description>&lt;p&gt;NOTE: This method will stop execution of the current request when called if the user
 does not have the specified permission, and the current script will stop executing.&lt;/p&gt;</long-description>
-          <tag line="269" name="param" description="The name of the permission this user is required to have." type="string" variable="$name">
+          <tag line="284" name="param" description="The name of the permission this user is required to have." type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="269" name="param" description="The redirect URI (or url). If set to false, a 403 &quot;forbidden&quot;&#13;&#10;  screen will be displayed instead of a redirect." type="string" variable="$uri">
+          <tag line="284" name="param" description="The redirect URI (or url). If set to false, a 403 &quot;forbidden&quot;&#13;&#10;  screen will be displayed instead of a redirect." type="string" variable="$uri">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="269" name="return" description="" type="void">
+          <tag line="284" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="282">
+        <argument line="297">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="282">
+        <argument line="297">
           <name>$uri</name>
           <default>false</default>
           <type/>
@@ -5451,7 +5452,7 @@ exceptions, and sets up a base for plexis to work on&lt;/p&gt;</long-description
   <namespace name="Database" full_name="Database"/>
   <namespace name="Library" full_name="Library"/>
   <namespace name="global" full_name="global"/>
-  <marker count="3">todo</marker>
+  <marker count="2">todo</marker>
   <marker count="0">fixme</marker>
   <deprecated count="0"/>
 </project>

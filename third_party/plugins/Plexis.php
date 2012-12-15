@@ -20,10 +20,6 @@ namespace Plugin;
 
 // Bring some classes into scope
 use \Plexis as App;
-use \Core\Config;
-use \Core\Database;
-use \Core\DatabaseConnectError;
-use \Core\Request;
 use \Core\Response;
 use \Library\Template;
 
@@ -44,7 +40,7 @@ class Plexis
         if($DB == false && $locked == false && $installer == true)
         {
             // Temporary redirect (307)
-            Response::Redirect('install/index.php', 307);
+            Response::Redirect('install/index.php', 0, 307);
             die;
         }
         elseif($locked == false && $installer == true)
