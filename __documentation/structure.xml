@@ -4380,7 +4380,7 @@ variable names</description>
       </method>
     </class>
   </file>
-  <file path="system\library\Template.php" hash="c81c49713f9ebec3b6ef84746ad8a149" package="Default">
+  <file path="system\library\Template.php" hash="b068f8bde1dbe8b65ae8c72d31292adc" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -4880,56 +4880,56 @@ the final rendered template.</description>
         </docblock>
       </method>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="546" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="561" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>ThemeNotSetException</name>
       <full_name>\Library\ThemeNotSetException</full_name>
-      <docblock line="539">
+      <docblock line="554">
         <description>Thrown by the Template Class when the render method is called, but not theme path was set</description>
         <long-description></long-description>
-        <tag line="539" name="package" description="Library"/>
-        <tag line="539" name="subpackage" description="Exceptions"/>
-        <tag line="539" name="file" description="System/Library/Template.php"/>
-        <tag line="539" name="see" description="\Library\Template::Render()" refers="\Library\Template::Render()"/>
+        <tag line="554" name="package" description="Library"/>
+        <tag line="554" name="subpackage" description="Exceptions"/>
+        <tag line="554" name="file" description="System/Library/Template.php"/>
+        <tag line="554" name="see" description="\Library\Template::Render()" refers="\Library\Template::Render()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="555" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="570" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidThemePathException</name>
       <full_name>\Library\InvalidThemePathException</full_name>
-      <docblock line="548">
+      <docblock line="563">
         <description>Thrown by the Template Class if the theme path provided is an invalid path</description>
         <long-description></long-description>
-        <tag line="548" name="package" description="Library"/>
-        <tag line="548" name="subpackage" description="Exceptions"/>
-        <tag line="548" name="file" description="System/Library/Template.php"/>
-        <tag line="548" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
+        <tag line="563" name="package" description="Library"/>
+        <tag line="563" name="subpackage" description="Exceptions"/>
+        <tag line="563" name="file" description="System/Library/Template.php"/>
+        <tag line="563" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="564" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="579" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidPageContents</name>
       <full_name>\Library\InvalidPageContents</full_name>
-      <docblock line="557">
+      <docblock line="572">
         <description>Thrown by the Template Class if the contents provided are not a string, or subclass of the View method</description>
         <long-description></long-description>
-        <tag line="557" name="package" description="Library"/>
-        <tag line="557" name="subpackage" description="Exceptions"/>
-        <tag line="557" name="file" description="System/Library/Template.php"/>
-        <tag line="557" name="see" description="\Library\Template::Add()" refers="\Library\Template::Add()"/>
+        <tag line="572" name="package" description="Library"/>
+        <tag line="572" name="subpackage" description="Exceptions"/>
+        <tag line="572" name="file" description="System/Library/Template.php"/>
+        <tag line="572" name="see" description="\Library\Template::Add()" refers="\Library\Template::Add()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="573" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="588" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>MissingThemeConfigException</name>
       <full_name>\Library\MissingThemeConfigException</full_name>
-      <docblock line="566">
+      <docblock line="581">
         <description>Thrown by the Template Class if the theme is missing its config file</description>
         <long-description></long-description>
-        <tag line="566" name="package" description="Library"/>
-        <tag line="566" name="subpackage" description="Exceptions"/>
-        <tag line="566" name="file" description="System/Library/Template.php"/>
-        <tag line="566" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
+        <tag line="581" name="package" description="Library"/>
+        <tag line="581" name="subpackage" description="Exceptions"/>
+        <tag line="581" name="file" description="System/Library/Template.php"/>
+        <tag line="581" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
       </docblock>
     </class>
   </file>

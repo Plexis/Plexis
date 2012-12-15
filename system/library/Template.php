@@ -505,10 +505,25 @@ class Template
         $contents = file_get_contents( $path );
         
         // Parse plexis tags (temporary till i input a better method)
-        $contents = str_ireplace('{plexis::head}', trim(self::BuildHeader()), $contents);
-        $contents = str_ireplace('{plexis::contents}', self::$buffer, $contents);
-        $contents = str_ireplace('{plexis::messages}', self::ParseGlobalMessages(), $contents);
-        $contents = str_ireplace('{plexis::elapsedtime}', Benchmark::ElapsedTime('total_script_exec', 5), $contents);
+        preg_match_all('~\{plexis::(.*)\}~iUs', $contents, $matches, PREG_SET_ORDER);
+        foreach($matches as $match)
+        {
+            switch(trim(strtolower($match[1])))
+            {
+                case "head":
+                    $contents = str_replace($match[0], trim(self::BuildHeader()), $contents);
+                    break;
+                case "contents":
+                    $contents = str_replace($match[0], self::$buffer, $contents);
+                    break;
+                case "messages":
+                    $contents = str_replace($match[0], self::ParseGlobalMessages(), $contents);
+                    break;
+                case "elapsedtime":
+                    $contents = str_replace($match[0], Benchmark::ElapsedTime('total_script_exec', 5), $contents);
+                    break;
+            }
+        }
         
         // Set session > user var
         self::$variables['session']['user'] = Auth::GetUserData();
