@@ -22,6 +22,7 @@ use Core\Router;
 use Library\Auth;
 use Library\Template;
 use Library\View;
+use Wowlib\Wowlib;
 
 /**
  * The backend controller is the main method for running the Application

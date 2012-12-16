@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Wowlib\Wowlib</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_GetDrivers" title="GetDrivers :: Returns an array of all the available drivers for the selected emulator"><span class="description">Returns an array of all the available drivers for the selected emulator</span><pre>GetDrivers()</pre></a></li>
+<li class="method public "><a href="#method_GetRealm" title="GetRealm :: Fetches or initiates a new emulator object with the provided realm id"><span class="description">Fetches or initiates a new emulator object with the provided realm id</span><pre>GetRealm()</pre></a></li>
+<li class="method public "><a href="#method_Init" title="Init :: Initializes the wowlib with the provided emulator name"><span class="description">Initializes the wowlib with the provided emulator name</span><pre>Init()</pre></a></li>
+<li class="method public "><a href="#method_Load" title="Load :: This method is used to load, and return a new instance of a Driver"><span class="description">This method is used to load, and return a new instance of a Driver</span><pre>Load()</pre></a></li>
+<li class="method public "><a href="#method_SetEmulator" title="SetEmulator :: Sets the emulator name for all future drivers"><span class="description">Sets the emulator name for all future drivers</span><pre>SetEmulator()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_emulator" title="$emulator :: Emulator string name"><span class="description"></span><pre>$emulator</pre></a></li>
+<li class="property protected "><a href="#property_initilized" title="$initilized :: Internal var for knowing if the wowli is initialized"><span class="description"></span><pre>$initilized</pre></a></li>
+<li class="property protected "><a href="#property_realm" title="$realm :: Array of loaded realm instances"><span class="description"></span><pre>$realm</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_REVISION" title="REVISION :: Contains the wowlib revision."><span class="description">Contains the wowlib revision.</span><pre>REVISION</pre></a></li>
+<li class="constant  "><a href="#constant_VERSION" title="VERSION :: Contains the wowlib version."><span class="description">Contains the wowlib version.</span><pre>VERSION</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Wowlib\Wowlib"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Wowlib.html">Wowlib</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Wowlib.Wowlib.html">Wowlib</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">WowLib Framework for WoW Private Server CMS</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Wowlib.html">Wowlib</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_GetDrivers"></a><div class="element clickable method public method_GetDrivers" data-toggle="collapse" data-target=".method_GetDrivers .collapse">
+<h2>Returns an array of all the available drivers for the selected emulator</h2>
+<pre>GetDrivers() : string[]</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string[]</code></div>
+</div></div>
+</div>
+<a id="method_GetRealm"></a><div class="element clickable method public method_GetRealm" data-toggle="collapse" data-target=".method_GetRealm .collapse">
+<h2>Fetches or initiates a new emulator object with the provided realm id</h2>
+<pre>GetRealm(string | int $id = 0, string[] $DB = array()) : \Wowlib\Emulator | bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method returns a realm instance based off of the ID paramenter
+if the realm isnt set, a new instance of the emulators realm
+class is initiated and returned</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id<small><b>   [Default =  0]</b></small>
+</h4>
+<code>string</code><code>int</code><ul>
+<li>The array key for this realm ID.
+Can be a stringname, or Integer, and is used only for when
+you need to use the getRealm() method.</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$DB<small><b>   [Default =  array()]</b></small>
+</h4>
+<code>string[]</code><p>An array of database connection
+  information as defined below. Not needed unless loading a new
+  realm that is previously unloaded.
+     array(
+         'driver'
+         'host'
+         'port'
+         'database'
+         'username'
+         'password'
+     )</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\Wowlib\Emulator</code><code>bool</code>Returns false if the emulator couldnt be loaded</div>
+</div></div>
+</div>
+<a id="method_Init"></a><div class="element clickable method public method_Init" data-toggle="collapse" data-target=".method_Init .collapse">
+<h2>Initializes the wowlib with the provided emulator name</h2>
+<pre>Init(string $emulator = '') : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$emulator<small><b>   [Default =  '']</b></small>
+</h4>
+<code>string</code><p>The name of the emulator to load</p></div>
+</div></div>
+</div>
+<a id="method_Load"></a><div class="element clickable method public method_Load" data-toggle="collapse" data-target=".method_Load .collapse">
+<h2>This method is used to load, and return a new instance of a Driver</h2>
+<pre>Load(string $driver, string[] $char, string[] $world) : \Wowlib\Driver</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$driver</h4>
+<code>string</code><p>The driver name to load</p></div>
+<div class="subelement argument">
+<h4>$char</h4>
+<code>string[]</code><p>An array of database connection for the characters database</p></div>
+<div class="subelement argument">
+<h4>$world</h4>
+<code>string[]</code><p>An array of database connection for the world database</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\Wowlib\Driver</code></div>
+</div></div>
+</div>
+<a id="method_SetEmulator"></a><div class="element clickable method public method_SetEmulator" data-toggle="collapse" data-target=".method_SetEmulator .collapse">
+<h2>Sets the emulator name for all future drivers</h2>
+<pre>SetEmulator(string $emu) : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$emu</h4>
+<code>string</code><p>The name of the emulator.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns false if the emulator doesnt exist,
+  true otherwise.</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_emulator"> </a><div class="element clickable property protected property_emulator" data-toggle="collapse" data-target=".property_emulator .collapse">
+<h2>Emulator string name</h2>
+<pre>$emulator : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_initilized"> </a><div class="element clickable property protected property_initilized" data-toggle="collapse" data-target=".property_initilized .collapse">
+<h2>Internal var for knowing if the wowli is initialized</h2>
+<pre>$initilized : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_realm"> </a><div class="element clickable property protected property_realm" data-toggle="collapse" data-target=".property_realm .collapse">
+<h2>Array of loaded realm instances</h2>
+<pre>$realm : \Wowlib\Emulator[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_REVISION"> </a><div class="element clickable constant  constant_REVISION" data-toggle="collapse" data-target=".constant_REVISION .collapse">
+<h2>Contains the wowlib revision.</h2>
+<pre>REVISION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>This number changes with each wowlib update, but only reflects
+minor changes, that will not affect the wowlib drivers in any way.</p></div></div></div>
+</div>
+<a id="constant_VERSION"> </a><div class="element clickable constant  constant_VERSION" data-toggle="collapse" data-target=".constant_VERSION .collapse">
+<h2>Contains the wowlib version.</h2>
+<pre>VERSION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>This constant only changes when the wowlib has a massive update,
+or makes a change, that could cause drivers to not be fully compatible anymore.</p></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>
