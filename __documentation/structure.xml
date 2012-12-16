@@ -5434,6 +5434,269 @@ exceptions, and sets up a base for plexis to work on&lt;/p&gt;</long-description
       </docblock>
     </class>
   </file>
+  <file path="system\wowlib\drivers\Driver.php" hash="e68b2ec0767104145b2ad01a82870091" package="Wowlib">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="file" description="System/Wowlib/Drivers/Driver.php"/>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+      <tag line="2" name="package" description="Wowlib"/>
+      <tag line="2" name="contains" description="Driver"/>
+    </docblock>
+    <include line="81" type="Require" package="Default">
+      <name/>
+    </include>
+    <include line="149" type="Require" package="Default">
+      <name/>
+    </include>
+    <include line="241" type="Require Once" package="Default">
+      <name/>
+    </include>
+    <class final="false" abstract="false" namespace="Wowlib" line="23" package="Wowlib">
+      <extends/>
+      <name>Driver</name>
+      <full_name>\Wowlib\Driver</full_name>
+      <docblock line="16">
+        <description>This class is used to handle different drivers of all different
+emulators</description>
+        <long-description></long-description>
+        <tag line="16" name="author" description="Steven Wilson"/>
+        <tag line="16" name="package" description="Wowlib"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="29" namespace="Wowlib" package="Default">
+        <name>$CDB</name>
+        <default></default>
+        <docblock line="25">
+          <description>Character database object</description>
+          <long-description></long-description>
+          <tag line="25" name="var" description="" type="\Database\Driver">
+            <type by_reference="false">\Database\Driver</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="35" namespace="Wowlib" package="Default">
+        <name>$WDB</name>
+        <default></default>
+        <docblock line="31">
+          <description>World database object</description>
+          <long-description></long-description>
+          <tag line="31" name="var" description="" type="\Database\Driver">
+            <type by_reference="false">\Database\Driver</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="41" namespace="Wowlib" package="Default">
+        <name>$config</name>
+        <default></default>
+        <docblock line="37">
+          <description>Driver configuration array</description>
+          <long-description></long-description>
+          <tag line="37" name="var" description="" type="mixed[]">
+            <type by_reference="false">mixed[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="47" namespace="Wowlib" package="Default">
+        <name>$driver</name>
+        <default></default>
+        <docblock line="43">
+          <description>Loaded driver name</description>
+          <long-description></long-description>
+          <tag line="43" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="53" namespace="Wowlib" package="Default">
+        <name>$emulator</name>
+        <default></default>
+        <docblock line="49">
+          <description>Selected emulator name</description>
+          <long-description></long-description>
+          <tag line="49" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="59" namespace="Wowlib" package="Default">
+        <name>$loaded</name>
+        <default>array()</default>
+        <docblock line="55">
+          <description>Array of loaded driver extensions</description>
+          <long-description></long-description>
+          <tag line="55" name="var" description="" type="object[]">
+            <type by_reference="false">object[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Wowlib" line="72" package="Wowlib">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="62">
+          <description>Constructor</description>
+          <long-description></long-description>
+          <tag line="62" name="param" description="The name of the selected emulator" type="string" variable="$emulator">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="62" name="param" description="The name of the driver to load" type="string" variable="$driver">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="62" name="param" description="An array of database connection for the characters database" type="string[]" variable="$char">
+            <type by_reference="false">string[]</type>
+          </tag>
+          <tag line="62" name="param" description="An array of database connection for the world database" type="string[]" variable="$world">
+            <type by_reference="false">string[]</type>
+          </tag>
+          <tag line="62" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="72">
+          <name>$emulator</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="72">
+          <name>$driver</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="72">
+          <name>$char</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="72">
+          <name>$world</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Wowlib" line="125" package="Wowlib">
+        <name>driverHasExt</name>
+        <full_name>driverHasExt</full_name>
+        <docblock line="115">
+          <description>Returns if the namespaced driver extension class exists, and has
+been loaded</description>
+          <long-description></long-description>
+          <tag line="115" name="param" description="The driver classname" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="115" name="param" description="If set to false, the class will not be loaded,&#13;&#10;  and this method will true if the class file exists only." type="bool" variable="$include">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="115" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="125">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="125">
+          <name>$include</name>
+          <default>true</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Wowlib" line="161" package="Wowlib">
+        <name>getConfig</name>
+        <full_name>getConfig</full_name>
+        <docblock line="156">
+          <description>Returns the drivers config array</description>
+          <long-description></long-description>
+          <tag line="156" name="return" description="" type="string[]">
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Wowlib" line="174" package="Wowlib">
+        <name>getColumnById</name>
+        <full_name>getColumnById</full_name>
+        <docblock line="166">
+          <description>Returns the column name for the given table id</description>
+          <long-description></long-description>
+          <tag line="166" name="param" description="The table ID" type="string" variable="$table">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="166" name="param" description="The table column ID" type="string" variable="$col">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="166" name="return" description="" type="string|bool">
+            <type by_reference="false">string</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="174">
+          <name>$table</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="174">
+          <name>$col</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Wowlib" line="187" package="Wowlib">
+        <name>getDriverNamespace</name>
+        <full_name>getDriverNamespace</full_name>
+        <docblock line="182">
+          <description>Returns the namespace to all driver classes</description>
+          <long-description></long-description>
+          <tag line="182" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Wowlib" line="198" package="Wowlib">
+        <name>getCDB</name>
+        <full_name>getCDB</full_name>
+        <docblock line="192">
+          <description>Returns the character database connection object</description>
+          <long-description></long-description>
+          <tag line="192" name="return" description="Return false only if the&#13;&#10;  character database connection fails" type="\Database\Driver|bool">
+            <type by_reference="false">\Database\Driver</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Wowlib" line="209" package="Wowlib">
+        <name>getWDB</name>
+        <full_name>getWDB</full_name>
+        <docblock line="203">
+          <description>Returns the world database connection object</description>
+          <long-description></long-description>
+          <tag line="203" name="return" description="Return false only if the&#13;&#10;  world database connection fails" type="\Database\Driver|bool">
+            <type by_reference="false">\Database\Driver</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Wowlib" line="221" package="Wowlib">
+        <name>__get</name>
+        <full_name>__get</full_name>
+        <docblock line="214">
+          <description>Magic method used to automatically load callde extensions</description>
+          <long-description></long-description>
+          <tag line="214" name="param" description="The name of the requested extension" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="214" name="return" description="" type="object|bool">
+            <type by_reference="false">object</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="221">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
   <file path="system\wowlib\Wowlib.php" hash="df8221e2e5a51ec716c1dcb62018a8c2" package="Wowlib">
     <docblock line="2">
       <description>Plexis Content Management System</description>
