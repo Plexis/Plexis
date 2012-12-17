@@ -9,8 +9,8 @@ class Frontpage extends Controller
 {
     public function __construct()
     {
-        // Make sure to call the parent contructor if you have a custom constructor
-        parent::__construct();
+        // Construct the parent controller, providing our class file path
+        parent::__construct(__FILE__);
     }
     
     public function Index()
@@ -19,7 +19,7 @@ class Frontpage extends Controller
         try {
             // First load our page view
             $view = $this->loadView("main");
-            $view->Set('message', 'Module path: '. $this->modulePath);
+            $view->Set('message', 'Module path: '. $this->modulePath .'<br />Module HTTP URI: '. $this->moduleUri);
             
             // Load a content box next, placing our module view as the contents of the box
             $box = $this->loadPartialView("contentbox");

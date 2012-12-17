@@ -135,18 +135,33 @@ class Template
      * @param string $name The name of the view file (no extension). If set
      *   to false, then the $module param becomes the view name, and a
      *   template partial view is loaded instead.
+     * @param bool $hasJs A reference variable that returns whether or not the
+     *   template's view had a javascript file for this view
      *
      * @throws ViewNotFoundException if the template does not have the view
      *   file for the specified module
      *
      * @return \Library\View
      */
-    public static function LoadView($module, $name = false)
+    public static function LoadView($module, $name = false, &$hasJs = false)
     {
         // Build path... Are we loading a partial or module view?
-        $path = (!$name)
+        $path = (empty($name))
             ? path(self::$themePath, self::$themeName, 'views', $module .'.tpl')
             : path(self::$themePath, self::$themeName, 'views', strtolower($module), $name .'.tpl');
+         
+        // Get the JS file path
+        $viewjs = (empty($name))
+            ? path(self::$themePath, self::$themeName, 'js', 'views', $module .'.js')
+            : path(self::$themePath, self::$themeName, 'js', 'views', strtolower($module), $name .'.js');
+        
+        // If the JS file exists in the template, include it!
+        if(file_exists($viewjs))
+        {
+            $url = self::$themeUrl . (!$name) ? "/js/views/{$module}.js" : "/js/views/{$module}/{$name}.js";
+            self::$headers[] = "<script type=\"text/javascript\" src=\"{$url}\"></script>";
+            $hasJs = true;
+        }
         
         // Try and load the view
         return new View($path);
@@ -433,7 +448,7 @@ class Template
         {
             $headers[] = '';
             $headers[] = '<!-- Controller Added -->';
-            $headers = array_merge($headers, self::$headers);
+            $headers = array_merge($headers, array_unique(self::$headers));
         }
         
         return implode("\n    ", $headers);

@@ -50,6 +50,8 @@
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
 <li class="method public "><a href="#method___construct" title="__construct :: Sets up the correct $modulePath and $moduleName variables"><span class="description">Sets up the correct $modulePath and $moduleName variables</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_addCssFile" title="addCssFile :: Includes a module's css file in the final layouts head tag"><span class="description">Includes a module's css file in the final layouts head tag</span><pre>addCssFile()</pre></a></li>
+<li class="method public "><a href="#method_addJsFile" title="addJsFile :: Includes a module's js file in the final layouts head tag"><span class="description">Includes a module's js file in the final layouts head tag</span><pre>addJsFile()</pre></a></li>
 <li class="method public "><a href="#method_loadConfig" title="loadConfig :: Loads a config file from the modules config folder"><span class="description">Loads a config file from the modules config folder</span><pre>loadConfig()</pre></a></li>
 <li class="method public "><a href="#method_loadController" title="loadController :: Loads a controller from the current modules folder, and returns a new
   instance of that class"><span class="description">Loads a controller from the current modules folder, and returns a new
@@ -72,6 +74,7 @@ screen will be displayed, or a redirection will occur (depending on vars).</span
                     <ul>
 <li class="property protected "><a href="#property_moduleName" title="$moduleName :: The child module name"><span class="description"></span><pre>$moduleName</pre></a></li>
 <li class="property protected "><a href="#property_modulePath" title="$modulePath :: The root path to the module extending this class"><span class="description"></span><pre>$modulePath</pre></a></li>
+<li class="property protected "><a href="#property_moduleUri" title="$moduleUri :: The http path to the module's root folder"><span class="description"></span><pre>$moduleUri</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -105,9 +108,41 @@ and useful methods for the child class.</p></div>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
 <h2>Sets up the correct $modulePath and $moduleName variables</h2>
-<pre>__construct() : void</pre>
+<pre>__construct(string $path) : void</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>The child module root path</p></div>
+</div></div>
+</div>
+<a id="method_addCssFile"></a><div class="element clickable method public method_addCssFile" data-toggle="collapse" data-target=".method_addCssFile .collapse">
+<h2>Includes a module's css file in the final layouts head tag</h2>
+<pre>addCssFile(string $name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The  name of the CSS file located in the
+  modules CSS folder</p></div>
+</div></div>
+</div>
+<a id="method_addJsFile"></a><div class="element clickable method public method_addJsFile" data-toggle="collapse" data-target=".method_addJsFile .collapse">
+<h2>Includes a module's js file in the final layouts head tag</h2>
+<pre>addJsFile(string $name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The  name of the JS file located in the
+  modules JS folder</p></div>
+</div></div>
 </div>
 <a id="method_loadConfig"></a><div class="element clickable method public method_loadConfig" data-toggle="collapse" data-target=".method_loadConfig .collapse">
 <h2>Loads a config file from the modules config folder</h2>
@@ -204,7 +239,7 @@ result will also be stored in a class variable, the name of the class:
 </div>
 <a id="method_loadPartialView"></a><div class="element clickable method public method_loadPartialView" data-toggle="collapse" data-target=".method_loadPartialView .collapse">
 <h2>Loads a template partial view, such as a content or news box</h2>
-<pre>loadPartialView(string $name, bool $silence = false) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
+<pre>loadPartialView(string $name, string $jsFile = null) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>This method loads a layout piece of the template, or rather a "partial".
@@ -216,26 +251,20 @@ to be set inside of it.</p></div>
 <code>string</code><p>The partial view filename to load (no extension)</p>
 </div>
 <div class="subelement argument">
-<h4>$silence<small><b>   [Default =  false]</b></small>
+<h4>$jsFile<small><b>   [Default =  null]</b></small>
 </h4>
-<code>bool</code><p>If set to true, This method will return false instead
-  of throwing a \Library\ViewNotFoundException. Default value is false.</p>
+<code>string</code><p>The name of the views javascript file (located in the
+  modules JS folder). Leave null for no file.</p>
 </div>
-<h3>Exceptions</h3>
-<table class="table table-bordered"><tr>
-<th><code><a href="../classes/Library.ViewNotFoundException.html">\Library\ViewNotFoundException</a></code></th>
-<td>Thrown if $silence is false, and the
-  view file cannot be found/</td>
-</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/Library.View.html">\Library\View</a></code><code>bool</code>Returns false if the view file cannot be located,
-  (and $silence is set to true), a Library\View object otherwise</div>
+  a Library\View object otherwise</div>
 </div></div>
 </div>
 <a id="method_loadView"></a><div class="element clickable method public method_loadView" data-toggle="collapse" data-target=".method_loadView .collapse">
 <h2>Loads a view file for the child controller (See detailed description)</h2>
-<pre>loadView(string $name, bool $silence = false) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
+<pre>loadView(string $name, string $jsFile = null) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>The first path searched is the current template's module/views
@@ -249,17 +278,11 @@ unless the variable $silence is set to true, in which case a false will be retun
 <code>string</code><p>The view filename to load (no extension)</p>
 </div>
 <div class="subelement argument">
-<h4>$silence<small><b>   [Default =  false]</b></small>
+<h4>$jsFile<small><b>   [Default =  null]</b></small>
 </h4>
-<code>bool</code><p>If set to true, This method will return false instead
-  of throwing a \Library\ViewNotFoundException. Default value is false.</p>
+<code>string</code><p>The name of the views javascript file (located in the
+  modules JS folder). Leave null for no file.</p>
 </div>
-<h3>Exceptions</h3>
-<table class="table table-bordered"><tr>
-<th><code><a href="../classes/Library.ViewNotFoundException.html">\Library\ViewNotFoundException</a></code></th>
-<td>Thrown if $silence is false, and the
-  view file cannot be found/</td>
-</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/Library.View.html">\Library\View</a></code><code>bool</code>Returns false if the view file cannot be located,
@@ -313,6 +336,12 @@ does not have the specified permission, and the current script will stop executi
 <a id="property_modulePath"> </a><div class="element clickable property protected property_modulePath" data-toggle="collapse" data-target=".property_modulePath .collapse">
 <h2>The root path to the module extending this class</h2>
 <pre>$modulePath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_moduleUri"> </a><div class="element clickable property protected property_moduleUri" data-toggle="collapse" data-target=".property_moduleUri .collapse">
+<h2>The http path to the module's root folder</h2>
+<pre>$moduleUri : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

@@ -9,6 +9,9 @@
  */
 namespace Core;
 
+// Bring some classes to scope
+use \Plexis;
+
 /**
  * This class is used to determine our controller / action. When called
  * this object works with the Request object to determine the current
@@ -27,7 +30,13 @@ class Router
     protected static $routed = false;
     
     /**
-     * The requested cotnroller name
+     * The requested module name
+     * @var string
+     */
+    protected static $module;
+    
+    /**
+     * The requested controller name
      * @var string
      */
     protected static $controller;
@@ -37,6 +46,12 @@ class Router
      * @var string
      */
     protected static $action;
+    
+    /**
+     * A bool representing if this module is a core module
+     * @var bool
+     */
+    protected static $isCoreModule;
     
     /**
      * The request uri
@@ -53,15 +68,28 @@ class Router
     /**
      * Returns all the url information
      *
-     * @return string[] Returns array('controller' => , 'action' => , 'params' => );
+     * @return string[] Returns array('module' => , 'controller' => , 
+     *  'action' => , 'params' => );
      */
     public static function GetRequest()
     {
         return array(
+            'isCoreModule' => self::$isCoreModule,
+            'module' => self::$module,
             'controller' => self::$controller,
             'action' => self::$action,
             'params' => self::$params
         );
+    }
+    
+    /**
+     * Returns the module name from the URI
+     *
+     * @return string
+     */
+    public static function GetModule()
+    {
+        return self::$module;
     }
     
     /**
@@ -170,7 +198,7 @@ class Router
         if(empty(self::$uri)) 
         {
             // Set our Controller / Action to the defaults
-            $controller = Config::GetVar('default_controller', 'Plexis'); // Default Controller
+            $module = Config::GetVar('default_module', 'Plexis'); // Default Module
             $action = Config::GetVar('default_action', 'Plexis'); // Default Action
             $params = array(); // Default query string
         }
@@ -184,7 +212,7 @@ class Router
             // We will start by bulding our controller, action, and querystring
             $urlArray = array();
             $urlArray = explode("/", self::$uri);
-            $controller = $urlArray[0];
+            $module = $urlArray[0];
             
             // If there is an action, then lets set that in a variable
             array_shift($urlArray);
@@ -208,16 +236,37 @@ class Router
         self::$routed = true;  
         
         // Make sure the first character of the controller is not an _ !
-        if( strncmp($controller, '_', 1) == 0 || strncmp($action, '_', 1) == 0 )
+        if( strncmp($module, '_', 1) == 0 || strncmp($action, '_', 1) == 0 )
         {
             // Add this to the trace
             // \Debug::trace('Controller or action contains a private prefix "_", showing 404' , __FILE__, __LINE__);
             \Plexis::Show404();
         }
         
-        // Set static Variables
-        self::$controller = $controller;
-        self::$action = $action;
+        // Proccess routes
+        $DB = Plexis::LoadDBConnection();
+        $query = "SELECT `module`,`controller`,`method` FROM `pcms_routes` WHERE 
+            `module_param`='{$module}' AND (`action_param`='*' OR `action_param`='{$action}')";
+        $route = $DB->query($query)->fetchRow();
+        
+        // Do we have a custom route?
+        if($route === false)
+        {
+            // Set static Variables
+            self::$module = $module;
+            self::$controller = (Request::IsAjax()) ? 'Ajax' : $module;
+            self::$action = $action;
+            self::$isCoreModule = true;
+        }
+        else
+        {
+            self::$module = $route['module'];
+            self::$controller = (Request::IsAjax()) ? 'Ajax' : $route['controller'];
+            self::$action = ($route['method'] == '*') ? $action : $route['method'];
+            self::$isCoreModule = false;
+        }
+        
+        // Params are always params :p
         self::$params = $params;
         
         // Add trace for debugging

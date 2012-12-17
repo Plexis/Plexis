@@ -245,12 +245,13 @@ class Plexis
         $Request = Router::GetRequest();
         
         // Define out module path, and our module controller path
-        self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($Request['controller']) );
+        if($Request['isCoreModule'])
+            self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($Request['module']) );
+        else
+            self::$modulePath = path( ROOT, 'third_party', 'modules', strtolower($Request['module']) );
+            
+        // Set our controller path with the dispatcher
         Dispatch::SetControllerPath( path(self::$modulePath, 'controllers') );
-        
-        // If this is an ajax request, call the ajax controller rather
-        if(Request::IsAjax())
-            Dispatch::SetController("Ajax");
         
         // Try to execute the controller, and catch any 404 error
         try {

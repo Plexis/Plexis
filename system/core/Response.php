@@ -20,8 +20,14 @@ namespace Core;
  */
 class Response
 {
-    // Http protocol constants
+    /**
+     * HTTP protocol 1.0
+     */
     const HTTP_10 = 'HTTP/1.0';
+    
+    /**
+     * HTTP protocol 1.1
+     */
     const HTTP_11 = 'HTTP/1.1';
     
     /**

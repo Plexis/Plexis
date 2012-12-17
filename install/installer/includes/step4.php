@@ -18,11 +18,11 @@ $connect = get_database_connections(true);
 $DB = $connect['plexis'];
 
 // Everthing should be fine, so first insert info into protected config file
-$conffile = "../system/config/database.config.php";
+$conffile = "../system/config/database.php";
 $build = '';
 $build .= "<?php
 \$DB_configs = array(
-    'DB' => array(
+    'PlexisDB' => array(
         'driver'	   => 'mysql',
         'host'         => '".$_POST['db_host']."',
         'port'         => '".$_POST['db_port']."',
@@ -30,7 +30,7 @@ $build .= "<?php
         'password'     => '".$_POST['db_password']."',
         'database'     => '".$_POST['db_name']."'
     ),
-    'RDB' => array(
+    'RealmDB' => array(
         'driver'	   => 'mysql',
         'host'         => '".$_POST['rdb_host']."',
         'port'         => '".$_POST['rdb_port']."',
@@ -75,7 +75,7 @@ else
 if(!isset($_POST['skip']))
 {
     // Dealing with the full install sql file
-    $install = $DB->run_sql_file("../system/sql/full_install.sql");
+    $install = $DB->run_sql_file("installer/sql/full_install.sql");
     if($install)
     {
         output_message('success', 'Plexis database installed');

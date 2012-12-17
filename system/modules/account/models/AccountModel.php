@@ -30,10 +30,10 @@ class AccountModel
             switch($e->getCode())
             {
                 case 1:
-                    $message = "Invalid username. Username must not be over 12 characters in length";
+                    $message = "Invalid username. Username must not be at least 3 characters in length";
                     break;
                 case 2:
-                    $message = "Invalid username. Username must not be at least 3 characters in length";
+                    $message = "Invalid username. Username must not be over 12 characters in length";
                     break;
             }
         }
@@ -42,10 +42,10 @@ class AccountModel
             switch($e->getCode())
             {
                 case 1:
-                    $message = "Invalid password. Password must not be over 12 characters in length";
+                    $message = "Invalid password. Password must not be at least 3 characters in length";
                     break;
                 case 2:
-                    $message = "Invalid password. Password must not be at least 3 characters in length";
+                    $message = "Invalid password. Password must not be over 12 characters in length";
                     break;
             }
         }

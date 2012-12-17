@@ -14,6 +14,12 @@ class Account extends Controller
      */
     protected $AccountModel;
     
+    public function __construct()
+    {
+        // Construct the parent controller, providing our class file path
+        parent::__construct(__FILE__);
+    }
+    
     public function index()
     {
         // Tell the parent controller we require a logged in user
@@ -29,8 +35,8 @@ class Account extends Controller
     {
         // If we have no post data, then we check for a valid session.
         // If one exists, redirect to the account screen, otherwise, login screen
-        $post = Request::Post('username');
-        if(empty($post))
+        $post = Request::Post('username', false);
+        if($post === false)
         {
             // Just have the parent controller pop open the login screen :)
             $this->requireAuth();
@@ -78,5 +84,11 @@ class Account extends Controller
         $View->Set('title', 'Logout');
         $View->Set('contents', $this->loadView('logout'));
         Template::Add($View);
+    }
+    
+    public function ajax($method, $param)
+    {
+        $this->loadController('Ajax')->{$method}($param);
+        die;
     }
 }

@@ -35,6 +35,12 @@ class Controller
     protected $modulePath;
     
     /**
+     * The http path to the module's root folder
+     * @var string
+     */
+    protected $moduleUri;
+    
+    /**
      * The child module name
      * @var string
      */
@@ -43,11 +49,14 @@ class Controller
     /**
      * Sets up the correct $modulePath and $moduleName variables
      *
+     * @param string $path The child module root path
+     *
      * @return void
      */
-    public function __construct() 
+    public function __construct($path) 
     {
-        $this->modulePath = dirname(Dispatch::GetControllerPath());
+        $this->modulePath = dirname(dirname($path));
+        $this->moduleUri = str_replace(array(ROOT, DS), array('', '/'), $this->modulePath);
         $parts = explode(DS, $this->modulePath);
         $this->moduleName = end($parts);
     }
@@ -130,21 +139,19 @@ class Controller
      * unless the variable $silence is set to true, in which case a false will be retuned.
      *
      * @param string $name The view filename to load (no extension)
-     * @param bool $silence If set to true, This method will return false instead
-     *   of throwing a \Library\ViewNotFoundException. Default value is false.
-     *
-     * @throws \Library\ViewNotFoundException Thrown if $silence is false, and the
-     *   view file cannot be found/
+     * @param string $jsFile The name of the views javascript file (located in the
+     *   modules JS folder). Leave null for no file.
      *
      * @return \Library\View|bool Returns false if the view file cannot be located,
      *   (and $silence is set to true), a Library\View object otherwise
      */
-    public function loadView($name, $silence = false)
+    public function loadView($name, $jsFile = null)
     {
         // See if the view file exists in the current template
         $View = false;
+        $viewHasJs = false;
         try {
-            $View = Template::LoadView($this->moduleName, $name);
+            $View = Template::LoadView($this->moduleName, $name, $viewHasJs);
         }
         catch( ViewNotFoundException $e ) {}
         
@@ -154,13 +161,12 @@ class Controller
             $path = path( $this->modulePath, 'views', $name .'.tpl' );
             
             // Try and load the view, catch the exception
-            try {
-                $View = new View($path);
-            }
-            catch( ViewNotFoundException $e ) {
-                if(!$silence) throw $e;
-            }
+            $View = new View($path);
         }
+        
+        // Load view JS if there is one
+        if(!empty($jsFile) && !$viewHasJs)
+            Template::AddJsFile($this->moduleUri .'/js/'. $jsFile .'.js');
         
         return $View;
     }
@@ -173,27 +179,53 @@ class Controller
      * to be set inside of it.
      *
      * @param string $name The partial view filename to load (no extension)
-     * @param bool $silence If set to true, This method will return false instead
-     *   of throwing a \Library\ViewNotFoundException. Default value is false.
-     *
-     * @throws \Library\ViewNotFoundException Thrown if $silence is false, and the
-     *   view file cannot be found/
+     * @param string $jsFile The name of the views javascript file (located in the
+     *   modules JS folder). Leave null for no file.
      *
      * @return \Library\View|bool Returns false if the view file cannot be located,
-     *   (and $silence is set to true), a Library\View object otherwise
+     *   a Library\View object otherwise
      */
-    public function loadPartialView($name, $silence = false)
+    public function loadPartialView($name, $jsFile = null)
     {
         // See if the view file exists in the current template
         $View = false;
+        $viewHasJs = false;
         try {
-            $View = Template::LoadView($name);
+            $View = Template::LoadView($name, false, $viewHasJs);
         }
-        catch( ViewNotFoundException $e ) {
-            if(!$silence) throw $e;
-        }
+        catch( ViewNotFoundException $e ) {}
+        
+        // Load view JS if there is one
+        if(!empty($jsFile) && !$viewHasJs)
+            Template::AddJsFile($this->moduleUri .'/js/'. $jsFile .'.js');
         
         return $View;
+    }
+    
+    /**
+     * Includes a module's js file in the final layouts head tag
+     *
+     * @param string $name The  name of the JS file located in the
+     *   modules JS folder
+     *
+     * @return void
+     */
+    public function addJsFile($name)
+    {
+        Template::AddJsFile($this->moduleUri .'/js/'. $name .'.js');
+    }
+    
+    /**
+     * Includes a module's css file in the final layouts head tag
+     *
+     * @param string $name The  name of the CSS file located in the
+     *   modules CSS folder
+     *
+     * @return void
+     */
+    public function addCssFile($name)
+    {
+        Template::AddCssFile($this->moduleUri .'/css/'. $name .'.css');
     }
     
     /**
@@ -267,9 +299,15 @@ class Controller
                 Template::ClearContents();
                 
                 // Get our login template contents
-                $View = Template::LoadView("login");
+                $View = Template::LoadView("login", null, $hasJsFile);
                 $View->Set('SITE_URL', Request::BaseUrl());
                 Template::Add($View);
+                
+                // Add login JS file if it doesnt exist in the template
+                if(!$hasJsFile)
+                    Template::AddJsFile("system/modules/account/js/login.js");
+                    
+                // Render the template, and die
                 Template::Render();
                 die;
             }

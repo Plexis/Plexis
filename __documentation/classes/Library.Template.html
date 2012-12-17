@@ -191,7 +191,7 @@ the final rendered template.</h2>
 </div>
 <a id="method_LoadView"></a><div class="element clickable method public method_LoadView" data-toggle="collapse" data-target=".method_LoadView .collapse">
 <h2>Loads a view file from the template's module view folder.</h2>
-<pre>LoadView(string $module, string $name = false) : <a href="../classes/Library.View.html">\Library\View</a></pre>
+<pre>LoadView(string $module, string $name = false, bool $hasJs = false) : <a href="../classes/Library.View.html">\Library\View</a></pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -209,6 +209,12 @@ the final rendered template.</h2>
 <code>string</code><p>The name of the view file (no extension). If set
   to false, then the $module param becomes the view name, and a
   template partial view is loaded instead.</p>
+</div>
+<div class="subelement argument">
+<h4>$hasJs<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>A reference variable that returns whether or not the
+  template's view had a javascript file for this view</p>
 </div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>

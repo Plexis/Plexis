@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <info>
+        <name>Plexis Core Account Module</name>
+        <author>Plexis Dev Team</author>
+        <version>1.0.0</version>
+    </info>
+    
+    <config>
+        <admin>true</admin>
+    </config>
+    
+    <!-- Array of routes to establish or override -->
+    <routes>
+        <!--
+            @attribute module = The name of the URL calling module (first part of the uri)
+            @attribute action = The name of the action (second part of uri) to override
+        -->
+        
+        <!-- 
+            Example 1: Establish this module with the "account" module request, and "login" method
+            in that controller. Defines which controller and method will handle this request
+        -->
+        <route module="account" action="login">
+            <!-- Optional: defines which controller to load for this route -->
+            <controller>Account</controller>
+            
+            <!-- Optional: defines which method to load in the controller for this route -->
+            <method>login</method>
+        </route>
+        
+        <!-- 
+            Example 2: Establishes this module with route. controller defaults to module name,
+            and method defaults to "login"
+        -->
+        <route module="account" action="login" />
+        
+        <!-- 
+            Example 3: Takes any and all actions (note the period "." )under the "account" 
+            module request 
+        -->
+        <route module="account" action="." />
+    </routes>
+</module>

@@ -23,8 +23,15 @@
     function path($parts = null)
     {
         // Get our path parts
-        $parts = func_get_args();
-        return (is_array( $parts )) ? trim( implode(DS, $parts) ) : trim($parts);
+        $args = func_get_args();
+        $parts = array();
+        
+        // Trim our paths to remvove spaces and new lines
+        foreach( $args as $part )
+            $parts[] = (is_array( $part )) ? trim( implode(DS, $part) ) : trim($part);
+
+        // Get our cleaned path into a variable with the correct directory seperator
+        return implode( DS, $parts );
     }
 	
 /**
