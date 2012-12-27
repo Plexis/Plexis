@@ -13,8 +13,8 @@
     <!-- Array of routes to establish or override -->
     <routes>
         <!--
-            @attribute module = The name of the URL calling module (first part of the uri)
-            @attribute action = The name of the action (second part of uri) to override
+            @attribute module = The requested module from the url request (first part of the uri)
+            @attribute action = The requested action from the url request (second part of uri)
         -->
         
         <!-- 

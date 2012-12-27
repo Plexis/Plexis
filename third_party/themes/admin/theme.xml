@@ -31,7 +31,7 @@
         <favicon type="image/png">img/icons/favicon.png</favicon>
         
         <comment>CSS concatenated and minified via ant build script</comment>
-        <css>jquery-ui-1.8.20.custom.css</css>
+        <css>jquery-ui.css</css>
         <css>style.css</css>
         <css>960.fluid.css</css>
         <css>main.css</css>

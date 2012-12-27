@@ -75,7 +75,7 @@ class Controller
      * @return object|bool The constructed modal object, or false if the model 
      *   could not be located.
      */
-    public function loadModel($name, $params = array())
+    protected function loadModel($name, $params = array())
     {
         // Get our path
         $path = path( $this->modulePath, 'models', $name .'.php');
@@ -114,7 +114,7 @@ class Controller
      *
      * @return bool Returns true if the helper file was found, false otherwise
      */
-    public function loadHelper($name, $global = false) 
+    protected function loadHelper($name, $global = false) 
     {
         // Get our path
         $path = ($global) 
@@ -145,7 +145,7 @@ class Controller
      * @return \Library\View|bool Returns false if the view file cannot be located,
      *   (and $silence is set to true), a Library\View object otherwise
      */
-    public function loadView($name, $jsFile = null)
+    protected function loadView($name, $jsFile = null)
     {
         // See if the view file exists in the current template
         $View = false;
@@ -185,7 +185,7 @@ class Controller
      * @return \Library\View|bool Returns false if the view file cannot be located,
      *   a Library\View object otherwise
      */
-    public function loadPartialView($name, $jsFile = null)
+    protected function loadPartialView($name, $jsFile = null)
     {
         // See if the view file exists in the current template
         $View = false;
@@ -210,7 +210,7 @@ class Controller
      *
      * @return void
      */
-    public function addJsFile($name)
+    protected function addJsFile($name)
     {
         Template::AddJsFile($this->moduleUri .'/js/'. $name .'.js');
     }
@@ -223,7 +223,7 @@ class Controller
      *
      * @return void
      */
-    public function addCssFile($name)
+    protected function addCssFile($name)
     {
         Template::AddCssFile($this->moduleUri .'/css/'. $name .'.css');
     }
@@ -239,7 +239,7 @@ class Controller
      * @return object|bool Returns the constructed controller or false if 
      *   the controller doesnt exist
      */
-    public function loadController($name)
+    protected function loadController($name)
     {
         // Get our path
         $path = path( $this->modulePath, 'controllers', $name .'.php');
@@ -268,7 +268,7 @@ class Controller
      * @return bool Returns false if the file cannot be read or located, true
      *   otherwise
      */
-    public function loadConfig($name, $id, $arrayName = false)
+    protected function loadConfig($name, $id, $arrayName = false)
     {
         // Get our path
         $path = path( $this->modulePath, 'config', $name .'.php');
@@ -288,7 +288,7 @@ class Controller
      *
      * @return void
      */
-    public function requireAuth($showLogin = true) 
+    protected function requireAuth($showLogin = true) 
     {
         if(Auth::IsGuest())
         {
@@ -332,7 +332,7 @@ class Controller
      *
      * @return void
      */
-    public function requirePermission($name, $uri = false)
+    protected function requirePermission($name, $uri = false)
     {
         if(!Auth::HasPermission($name))
         {

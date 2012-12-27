@@ -44,7 +44,36 @@
 ?>
 <!DOCTYPE html>
 <head>
-    <pcms::head />
+    {Plexis::Head}
+    
+    <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{TEMPLATE_URL}/img/icons/favicon.png" />
+    
+    <!-- CSS concatenated and minified via ant build script -->
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/960.fluid.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/buttons.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/lists.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/typography.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/forms.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/tables.css" />
+    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/charts.css" />
+    
+    <!-- Load Javascripts -->
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/plugins.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/modernizr-2.0.6.min.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.uniform.min.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.form.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.tipsy.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.pageloading.js"></script>
+    <script type="text/javascript" src="{TEMPLATE_URL}/js/template.js"></script>
 </head>
 <body id="top">
 
@@ -227,11 +256,11 @@
 
                     <!-- Global Messages -->
                     <div class="grid_12">
-                        {GLOBAL_MESSAGES}
+                        {Plexis::Messages}
                     </div>
 
                     <!-- Contents -->
-                    {PAGE_CONTENTS}
+                    {Plexis::Contents}
                 </div>
                 <div class="clear height-fix"></div>
             </div>
@@ -254,7 +283,7 @@
                 <p>
                     Plexis is a powerful content management system for WoW Servers.
                 </p>
-                <p>Page loaded in {ELAPSED_TIME} seconds, Using {MEMORY_USAGE}</p>
+                <p>Page loaded in {Plexis::ElapsedTime} seconds, Using {MEMORY_USAGE}</p>
             </div>
         </footer>
 

@@ -3,6 +3,7 @@
 use Core\Controller;
 use Core\Request;
 use Core\Response;
+use Library\Auth;
 use Library\Template;
 use Library\View;
 use Library\ViewNotFoundException;

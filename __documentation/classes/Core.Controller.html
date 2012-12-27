@@ -22,6 +22,7 @@
 <li><a>Packages</a></li>
 <li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
 <li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
 <li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
 <li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
 <li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
@@ -48,20 +49,22 @@
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
+                    <ul><li class="method public "><a href="#method___construct" title="__construct :: Sets up the correct $modulePath and $moduleName variables"><span class="description">Sets up the correct $modulePath and $moduleName variables</span><pre>__construct()</pre></a></li></ul>
+</li>
+<li class="nav-header protected">» Protected
                     <ul>
-<li class="method public "><a href="#method___construct" title="__construct :: Sets up the correct $modulePath and $moduleName variables"><span class="description">Sets up the correct $modulePath and $moduleName variables</span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_addCssFile" title="addCssFile :: Includes a module's css file in the final layouts head tag"><span class="description">Includes a module's css file in the final layouts head tag</span><pre>addCssFile()</pre></a></li>
-<li class="method public "><a href="#method_addJsFile" title="addJsFile :: Includes a module's js file in the final layouts head tag"><span class="description">Includes a module's js file in the final layouts head tag</span><pre>addJsFile()</pre></a></li>
-<li class="method public "><a href="#method_loadConfig" title="loadConfig :: Loads a config file from the modules config folder"><span class="description">Loads a config file from the modules config folder</span><pre>loadConfig()</pre></a></li>
-<li class="method public "><a href="#method_loadController" title="loadController :: Loads a controller from the current modules folder, and returns a new
+<li class="method protected "><a href="#method_addCssFile" title="addCssFile :: Includes a module's css file in the final layouts head tag"><span class="description">Includes a module's css file in the final layouts head tag</span><pre>addCssFile()</pre></a></li>
+<li class="method protected "><a href="#method_addJsFile" title="addJsFile :: Includes a module's js file in the final layouts head tag"><span class="description">Includes a module's js file in the final layouts head tag</span><pre>addJsFile()</pre></a></li>
+<li class="method protected "><a href="#method_loadConfig" title="loadConfig :: Loads a config file from the modules config folder"><span class="description">Loads a config file from the modules config folder</span><pre>loadConfig()</pre></a></li>
+<li class="method protected "><a href="#method_loadController" title="loadController :: Loads a controller from the current modules folder, and returns a new
   instance of that class"><span class="description">Loads a controller from the current modules folder, and returns a new
   instance of that class</span><pre>loadController()</pre></a></li>
-<li class="method public "><a href="#method_loadHelper" title="loadHelper :: Loads a helper file for the child controller"><span class="description">Loads a helper file for the child controller</span><pre>loadHelper()</pre></a></li>
-<li class="method public "><a href="#method_loadModel" title="loadModel :: Loads a model for the child controller."><span class="description">Loads a model for the child controller.</span><pre>loadModel()</pre></a></li>
-<li class="method public "><a href="#method_loadPartialView" title="loadPartialView :: Loads a template partial view, such as a content or news box"><span class="description">Loads a template partial view, such as a content or news box</span><pre>loadPartialView()</pre></a></li>
-<li class="method public "><a href="#method_loadView" title="loadView :: Loads a view file for the child controller (See detailed description)"><span class="description">Loads a view file for the child controller (See detailed description)</span><pre>loadView()</pre></a></li>
-<li class="method public "><a href="#method_requireAuth" title="requireAuth :: When called, if the user is not logged in, the login screen will be shown."><span class="description">When called, if the user is not logged in, the login screen will be shown.</span><pre>requireAuth()</pre></a></li>
-<li class="method public "><a href="#method_requirePermission" title='requirePermission :: When called, if the user does not have the specified permission, a 403 "forbidden"
+<li class="method protected "><a href="#method_loadHelper" title="loadHelper :: Loads a helper file for the child controller"><span class="description">Loads a helper file for the child controller</span><pre>loadHelper()</pre></a></li>
+<li class="method protected "><a href="#method_loadModel" title="loadModel :: Loads a model for the child controller."><span class="description">Loads a model for the child controller.</span><pre>loadModel()</pre></a></li>
+<li class="method protected "><a href="#method_loadPartialView" title="loadPartialView :: Loads a template partial view, such as a content or news box"><span class="description">Loads a template partial view, such as a content or news box</span><pre>loadPartialView()</pre></a></li>
+<li class="method protected "><a href="#method_loadView" title="loadView :: Loads a view file for the child controller (See detailed description)"><span class="description">Loads a view file for the child controller (See detailed description)</span><pre>loadView()</pre></a></li>
+<li class="method protected "><a href="#method_requireAuth" title="requireAuth :: When called, if the user is not logged in, the login screen will be shown."><span class="description">When called, if the user is not logged in, the login screen will be shown.</span><pre>requireAuth()</pre></a></li>
+<li class="method protected "><a href="#method_requirePermission" title='requirePermission :: When called, if the user does not have the specified permission, a 403 "forbidden"
 screen will be displayed, or a redirection will occur (depending on vars).'><span class="description">When called, if the user does not have the specified permission, a 403 "forbidden"
 screen will be displayed, or a redirection will occur (depending on vars).</span><pre>requirePermission()</pre></a></li>
 </ul>
@@ -118,7 +121,7 @@ and useful methods for the child class.</p></div>
 <code>string</code><p>The child module root path</p></div>
 </div></div>
 </div>
-<a id="method_addCssFile"></a><div class="element clickable method public method_addCssFile" data-toggle="collapse" data-target=".method_addCssFile .collapse">
+<a id="method_addCssFile"></a><div class="element clickable method protected method_addCssFile" data-toggle="collapse" data-target=".method_addCssFile .collapse">
 <h2>Includes a module's css file in the final layouts head tag</h2>
 <pre>addCssFile(string $name) : void</pre>
 <div class="labels"></div>
@@ -131,7 +134,7 @@ and useful methods for the child class.</p></div>
   modules CSS folder</p></div>
 </div></div>
 </div>
-<a id="method_addJsFile"></a><div class="element clickable method public method_addJsFile" data-toggle="collapse" data-target=".method_addJsFile .collapse">
+<a id="method_addJsFile"></a><div class="element clickable method protected method_addJsFile" data-toggle="collapse" data-target=".method_addJsFile .collapse">
 <h2>Includes a module's js file in the final layouts head tag</h2>
 <pre>addJsFile(string $name) : void</pre>
 <div class="labels"></div>
@@ -144,7 +147,7 @@ and useful methods for the child class.</p></div>
   modules JS folder</p></div>
 </div></div>
 </div>
-<a id="method_loadConfig"></a><div class="element clickable method public method_loadConfig" data-toggle="collapse" data-target=".method_loadConfig .collapse">
+<a id="method_loadConfig"></a><div class="element clickable method protected method_loadConfig" data-toggle="collapse" data-target=".method_loadConfig .collapse">
 <h2>Loads a config file from the modules config folder</h2>
 <pre>loadConfig(string $name, string $id, string $arrayName = false) : bool</pre>
 <div class="labels"></div>
@@ -172,7 +175,7 @@ and useful methods for the child class.</p></div>
   otherwise</div>
 </div></div>
 </div>
-<a id="method_loadController"></a><div class="element clickable method public method_loadController" data-toggle="collapse" data-target=".method_loadController .collapse">
+<a id="method_loadController"></a><div class="element clickable method protected method_loadController" data-toggle="collapse" data-target=".method_loadController .collapse">
 <h2>Loads a controller from the current modules folder, and returns a new
   instance of that class</h2>
 <pre>loadController(string $name) : object | bool</pre>
@@ -192,7 +195,7 @@ result will also be stored in a class variable, the name of the class:
   the controller doesnt exist</div>
 </div></div>
 </div>
-<a id="method_loadHelper"></a><div class="element clickable method public method_loadHelper" data-toggle="collapse" data-target=".method_loadHelper .collapse">
+<a id="method_loadHelper"></a><div class="element clickable method protected method_loadHelper" data-toggle="collapse" data-target=".method_loadHelper .collapse">
 <h2>Loads a helper file for the child controller</h2>
 <pre>loadHelper(string $name, bool $global = false) : bool</pre>
 <div class="labels"></div>
@@ -214,7 +217,7 @@ result will also be stored in a class variable, the name of the class:
 <code>bool</code>Returns true if the helper file was found, false otherwise</div>
 </div></div>
 </div>
-<a id="method_loadModel"></a><div class="element clickable method public method_loadModel" data-toggle="collapse" data-target=".method_loadModel .collapse">
+<a id="method_loadModel"></a><div class="element clickable method protected method_loadModel" data-toggle="collapse" data-target=".method_loadModel .collapse">
 <h2>Loads a model for the child controller.</h2>
 <pre>loadModel(string $name, mixed[] $params = array()) : object | bool</pre>
 <div class="labels"></div>
@@ -237,7 +240,7 @@ result will also be stored in a class variable, the name of the class:
   could not be located.</div>
 </div></div>
 </div>
-<a id="method_loadPartialView"></a><div class="element clickable method public method_loadPartialView" data-toggle="collapse" data-target=".method_loadPartialView .collapse">
+<a id="method_loadPartialView"></a><div class="element clickable method protected method_loadPartialView" data-toggle="collapse" data-target=".method_loadPartialView .collapse">
 <h2>Loads a template partial view, such as a content or news box</h2>
 <pre>loadPartialView(string $name, string $jsFile = null) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
 <div class="labels"></div>
@@ -262,7 +265,7 @@ to be set inside of it.</p></div>
   a Library\View object otherwise</div>
 </div></div>
 </div>
-<a id="method_loadView"></a><div class="element clickable method public method_loadView" data-toggle="collapse" data-target=".method_loadView .collapse">
+<a id="method_loadView"></a><div class="element clickable method protected method_loadView" data-toggle="collapse" data-target=".method_loadView .collapse">
 <h2>Loads a view file for the child controller (See detailed description)</h2>
 <pre>loadView(string $name, string $jsFile = null) : <a href="../classes/Library.View.html">\Library\View</a> | bool</pre>
 <div class="labels"></div>
@@ -289,7 +292,7 @@ unless the variable $silence is set to true, in which case a false will be retun
   (and $silence is set to true), a Library\View object otherwise</div>
 </div></div>
 </div>
-<a id="method_requireAuth"></a><div class="element clickable method public method_requireAuth" data-toggle="collapse" data-target=".method_requireAuth .collapse">
+<a id="method_requireAuth"></a><div class="element clickable method protected method_requireAuth" data-toggle="collapse" data-target=".method_requireAuth .collapse">
 <h2>When called, if the user is not logged in, the login screen will be shown.</h2>
 <pre>requireAuth(bool $showLogin = true) : void</pre>
 <div class="labels"></div>
@@ -305,7 +308,7 @@ is not logged in (Guest), and the current script will stop executing.</p></div>
 </div>
 </div></div>
 </div>
-<a id="method_requirePermission"></a><div class="element clickable method public method_requirePermission" data-toggle="collapse" data-target=".method_requirePermission .collapse">
+<a id="method_requirePermission"></a><div class="element clickable method protected method_requirePermission" data-toggle="collapse" data-target=".method_requirePermission .collapse">
 <h2>When called, if the user does not have the specified permission, a 403 "forbidden"
 screen will be displayed, or a redirection will occur (depending on vars).</h2>
 <pre>requirePermission(string $name, string $uri = false) : void</pre>

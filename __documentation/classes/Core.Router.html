@@ -22,6 +22,7 @@
 <li><a>Packages</a></li>
 <li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
 <li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
 <li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
 <li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
 <li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
@@ -51,6 +52,7 @@
                     <ul>
 <li class="method public "><a href="#method_GetAction" title="GetAction :: Returns the method name from the URI"><span class="description">Returns the method name from the URI</span><pre>GetAction()</pre></a></li>
 <li class="method public "><a href="#method_GetController" title="GetController :: Returns the controller name from the URI"><span class="description">Returns the controller name from the URI</span><pre>GetController()</pre></a></li>
+<li class="method public "><a href="#method_GetModule" title="GetModule :: Returns the module name from the URI"><span class="description">Returns the module name from the URI</span><pre>GetModule()</pre></a></li>
 <li class="method public "><a href="#method_GetParams" title="GetParams :: Returns the action parameters from the URI"><span class="description">Returns the action parameters from the URI</span><pre>GetParams()</pre></a></li>
 <li class="method public "><a href="#method_GetRequest" title="GetRequest :: Returns all the url information"><span class="description">Returns all the url information</span><pre>GetRequest()</pre></a></li>
 <li class="method public "><a href="#method_GetUriSegement" title="GetUriSegement :: Returns the specified URI segement"><span class="description">Returns the specified URI segement</span><pre>GetUriSegement()</pre></a></li>
@@ -66,7 +68,9 @@ and query string</span><pre>RouteUrl()</pre></a></li>
 <li class="nav-header protected">» Protected
                     <ul>
 <li class="property protected "><a href="#property_action" title="$action :: The requested method name"><span class="description"></span><pre>$action</pre></a></li>
-<li class="property protected "><a href="#property_controller" title="$controller :: The requested cotnroller name"><span class="description"></span><pre>$controller</pre></a></li>
+<li class="property protected "><a href="#property_controller" title="$controller :: The requested controller name"><span class="description"></span><pre>$controller</pre></a></li>
+<li class="property protected "><a href="#property_isCoreModule" title="$isCoreModule :: A bool representing if this module is a core module"><span class="description"></span><pre>$isCoreModule</pre></a></li>
+<li class="property protected "><a href="#property_module" title="$module :: The requested module name"><span class="description"></span><pre>$module</pre></a></li>
 <li class="property protected "><a href="#property_params" title="$params :: The querystring parameters"><span class="description"></span><pre>$params</pre></a></li>
 <li class="property protected "><a href="#property_routed" title="$routed :: Have we routed the url yet?"><span class="description"></span><pre>$routed</pre></a></li>
 <li class="property protected "><a href="#property_uri" title="$uri :: The request uri"><span class="description"></span><pre>$uri</pre></a></li>
@@ -123,6 +127,16 @@ Dispatch class will use.</p></div>
 <div class="subelement response"><code>string</code></div>
 </div></div>
 </div>
+<a id="method_GetModule"></a><div class="element clickable method public method_GetModule" data-toggle="collapse" data-target=".method_GetModule .collapse">
+<h2>Returns the module name from the URI</h2>
+<pre>GetModule() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
 <a id="method_GetParams"></a><div class="element clickable method public method_GetParams" data-toggle="collapse" data-target=".method_GetParams .collapse">
 <h2>Returns the action parameters from the URI</h2>
 <pre>GetParams() : string[]</pre>
@@ -141,7 +155,8 @@ Dispatch class will use.</p></div>
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>string[]</code>Returns array('controller' => , 'action' => , 'params' => );</div>
+<code>string[]</code>Returns array('module' => , 'controller' => ,
+ 'action' => , 'params' => );</div>
 </div></div>
 </div>
 <a id="method_GetUriSegement"></a><div class="element clickable method public method_GetUriSegement" data-toggle="collapse" data-target=".method_GetUriSegement .collapse">
@@ -175,8 +190,20 @@ and query string</h2>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_controller"> </a><div class="element clickable property protected property_controller" data-toggle="collapse" data-target=".property_controller .collapse">
-<h2>The requested cotnroller name</h2>
+<h2>The requested controller name</h2>
 <pre>$controller : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_isCoreModule"> </a><div class="element clickable property protected property_isCoreModule" data-toggle="collapse" data-target=".property_isCoreModule .collapse">
+<h2>A bool representing if this module is a core module</h2>
+<pre>$isCoreModule : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_module"> </a><div class="element clickable property protected property_module" data-toggle="collapse" data-target=".property_module .collapse">
+<h2>The requested module name</h2>
+<pre>$module : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

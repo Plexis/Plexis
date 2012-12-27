@@ -498,7 +498,7 @@ class Driver extends \PDO
         $msg .= "<b>PDO Error No:</b> ". $errInfo[0] ."<br />";
         $msg .= "<b>". ucfirst($driver) ." Error No:</b> ". $errInfo[1] ."<br />";
         $msg .= "<b>Query String: </b> ". $this->last_query ."<br />";
-        show_error($msg, false, E_ERROR);
+        \Core\ErrorHandler::TriggerError(E_ERROR, $msg, __FILE__, 0);
     }
 }
 // EOF

@@ -49,7 +49,8 @@ class Dispatch
      * This method executes the controller and action
      *
      * @throws ControllerNotFoundException when the controller file cant be found
-     * @throws MethodNotFoundException when the controller doesnt have the given action
+     * @throws MethodNotFoundException when the controller doesnt have the given action,
+     *   or the action method is not a public method
      *
      * @return mixed Returns what the action method returned
      */
@@ -77,6 +78,10 @@ class Dispatch
         catch(\ReflectionException $e) {
             throw new MethodNotFoundException("Controller \"{$controller}\" does not contain the method \"{$action}\"");
         }
+        
+        // If the method is not public, throw MethodNotFoundException
+        if(!$Dispatch->isPublic())
+            throw new MethodNotFoundException("Method \"{$action}\" is not a public method, and cannot be called via URL.");
         
         return $Dispatch->invokeArgs(new $controller(), $params);
     }

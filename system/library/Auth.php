@@ -18,7 +18,9 @@ namespace Library;
 use \Core\Database;
 use \Core\EventHandler;
 use \Core\Request;
+use \Core\Response;
 use \Plexis;
+use \System;
 
 /**
  * Authorization and User class.
@@ -74,6 +76,7 @@ class Auth
         'logged_in' => false,
         'id' => 0,
         'username' => 'Guest',
+        'ip_address' => '0.0.0.0'
     );
     
     /**
@@ -85,9 +88,6 @@ class Auth
      */
     public static function Init()
     {
-        // Add trace for debugging
-        // //\Debug::trace('Initializing User class...', __FILE__, __LINE__);
-        
         // Start the session
         if(!self::$started)
         {
@@ -106,9 +106,6 @@ class Auth
         
         // Load this users credentials
         self::StartSession();
-        
-        // Add trace for debugging
-        // //\Debug::trace('User class initialized successfully', __FILE__, __LINE__);
     }
     
     /**
@@ -147,13 +144,13 @@ class Auth
             if( $session['ip_address'] != Request::ClientIp() )
             {
                 // Session time is expired
-                // //\Debug::trace('User IP address doesnt match the IP address of the session id. Forced logout', __FILE__, __LINE__);
+                // System::Trace('User IP address doesnt match the IP address of the session id. Forced logout', __FILE__, __LINE__);
                 self::Logout(false);
             }
             elseif($session['expire_time'] < (time() - self::$expireTime))
             {
                 // Session time is expired
-                // //\Debug::trace('User session expired, Forced logout', __FILE__, __LINE__);
+                // System::Trace('User session expired, Forced logout', __FILE__, __LINE__);
                 self::Logout(false);
             }
             else
@@ -170,7 +167,7 @@ class Auth
             Guest:
             {
                 // Add trace for debugging
-                // //\Debug::trace('Loading user as guest', __FILE__, __LINE__);
+                // System::Trace('Loading user as guest', __FILE__, __LINE__);
         
                 // Get guest privilages
                 $query = "SELECT * FROM `pcms_account_groups` WHERE `group_id`=1";
@@ -233,14 +230,14 @@ class Auth
             throw new InvalidPasswordException('', 1);
         
         // Add trace for debugging
-        ////\Debug::trace("User {$username} logging in...", __FILE__, __LINE__);
+        // System::Trace("User {$username} logging in...", __FILE__, __LINE__);
         
         // If the Emulator cant match the passwords, or user doesnt exist,
         // Then we spit out an error and return false
         if(!self::$realm->validate($username, $password))
         {
             // Add trace for debugging
-            // //\Debug::trace("Failed to validate password for account '{$username}'. Login failed", __FILE__, __LINE__);
+            // System::Trace("Failed to validate password for account '{$username}'. Login failed", __FILE__, __LINE__);
             throw new InvalidCredentialsException('');
         }
         
@@ -274,7 +271,7 @@ class Auth
             Response::SetCookie('session', $token, (time() + self::$expireTime));
             
             // Add trace for debugging
-            ////\Debug::trace("Account '{$username}' logged in successfully", __FILE__, __LINE__);
+            // System::Trace("Account '{$username}' logged in successfully", __FILE__, __LINE__);
             
             // Fire the login event
             EventHandler::Trigger('user_logged_in', array(self::$data['id'], $username));
@@ -325,7 +322,7 @@ class Auth
             throw new InvalidEmailException('');
         
         // Add trace for debugging
-        ////\Debug::trace("Registering account '{$username}'...", __FILE__, __LINE__);
+        // System::Trace("Registering account '{$username}'...", __FILE__, __LINE__);
         
         // Make sure the users IP isnt blocked
         if(self::$realm->ipBanned( self::$data['ip_address'] ))
@@ -337,7 +334,7 @@ class Auth
         if(self::$realm->accountExists($username))
         {
             // Add trace for debugging
-            ////\Debug::trace("Account '{$username}' already exists. Registration failed", __FILE__, __LINE__);
+            // System::Trace("Account '{$username}' already exists. Registration failed", __FILE__, __LINE__);
             throw new AccountExistsException('');
         }
         
@@ -351,7 +348,7 @@ class Auth
             if($id !== false)
             {
                 // Add trace for debugging
-                //\Debug::trace("Account '{$username}' created successfully", __FILE__, __LINE__);
+                // System::Trace("Account '{$username}' created successfully", __FILE__, __LINE__);
                 
                 // Defaults
                 $activated = 1;
@@ -412,7 +409,7 @@ class Auth
     protected static function LoadPermissions($gid, $perms)
     {
         // Add trace for debugging
-        //\Debug::trace('Loading permissions for group id: '. $gid, __FILE__, __LINE__);
+        // System::Trace('Loading permissions for group id: '. $gid, __FILE__, __LINE__);
         
         // set to empty array if false, else we need the keys for comparison
         $perms = ($perms == false) ? array() : array_keys($perms);
@@ -473,10 +470,10 @@ class Auth
         $_COOKIE['session'] = false;
         
         // remove session from database
-        self::$DB->delete('pcms_sessions', "`token`='{$this->sessionid}'");
+        self::$DB->delete('pcms_sessions', "`token`='". self::$sessionid ."'");
         
         // Add trace for debugging
-        //\Debug::trace("Logout request recieved for account '{self::$data['username']}'", __FILE__, __LINE__);
+        // System::Trace("Logout request recieved for account '". self::$data['username'] ."'", __FILE__, __LINE__);
         
         // Fire the login event
         EventHandler::Trigger('user_logged_out', array(self::$data['id'], self::$data['username']));
@@ -532,7 +529,7 @@ class Auth
         if(!is_object($Account))
         {
             // Add trace for debugging
-            //\Debug::trace("Account id {$userid} doesnt exist in the realm database. Failed to init user account", __FILE__, __LINE__);
+            // System::Trace("Account id {$userid} doesnt exist in the realm database. Failed to init user account", __FILE__, __LINE__);
             return false;
         }
         
@@ -567,7 +564,7 @@ class Auth
         if($result === false)
         {
             // Add trace for debugging
-            //\Debug::trace("User account '{$Account->getUsername()}' doesnt exist in Plexis database, fetching account from realm", __FILE__, __LINE__);
+            // System::Trace("User account '{$Account->getUsername()}' doesnt exist in Plexis database, fetching account from realm", __FILE__, __LINE__);
             $data = array(
                 'id' => $Account->getId(), 
                 'username' => ucfirst(strtolower($Account->getUsername())), 
@@ -583,7 +580,7 @@ class Auth
             if($result === false)
             {
                 // Add trace for debugging
-                //\Debug::trace("There was a fatal error trying to insert account data into the plexis database", __FILE__, __LINE__);
+                // System::Trace("There was a fatal error trying to insert account data into the plexis database", __FILE__, __LINE__);
                 show_error('fatal_error', false, E_ERROR);
                 return false;
             }
@@ -597,7 +594,7 @@ class Auth
         if( (!isset($perms['account_access']) || $perms['account_access'] == 0) && $result['is_super_admin'] == 0)
         {
             // Add trace for debugging
-            //\Debug::trace("User has no permission to access account. Login failed.", __FILE__, __LINE__);
+            // System::Trace("User has no permission to access account. Login failed.", __FILE__, __LINE__);
             Template::Message('warning', 'account_access_denied');
             return false;
         }
@@ -609,7 +606,7 @@ class Auth
         if($result['activated'] == false && config('reg_email_verification') == TRUE)
         {
             // Add trace for debugging
-            //\Debug::trace("Account '{$username}' is unactivated. Login failed.", __FILE__, __LINE__);
+            // System::Trace("Account '{$username}' is unactivated. Login failed.", __FILE__, __LINE__);
             Template::Message('warning', 'login_failed_account_unactivated');
             return false;
         }
@@ -623,11 +620,11 @@ class Auth
             'id' => $Account->getId(), 
             'username' => ucfirst( strtolower($Account->getUsername()) ),
             'email' => $Account->getEmail(),
-            'ip_address' => self::$data['ip_address']
+            'ip_address' => Request::ClientIp()
         ), $result);
         
         // Add trace for debugging
-        //\Debug::trace('Loaded user '. $Account->getUsername(), __FILE__, __LINE__);
+        // System::Trace('Loaded user '. $Account->getUsername(), __FILE__, __LINE__);
         return true;
     }
 }

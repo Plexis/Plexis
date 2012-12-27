@@ -42,7 +42,7 @@ class Wowlib
     protected static $emulator = '';
     
     /**
-     * Internal var for knowing if the wowli is initialized
+     * Internal var for knowing if the wowlib is initialized
      * @var bool
      */
     protected static $initilized = false;

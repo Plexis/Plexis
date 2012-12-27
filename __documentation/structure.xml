@@ -396,7 +396,7 @@ benchmark name&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Common.php" hash="bf901e6df00553955c2cc86b412908e6" package="Core\Functions">
+  <file path="system\core\Common.php" hash="56a4589399edfe983f885d400cc026f7" package="Core\Functions">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -442,25 +442,6 @@ benchmark name&lt;/p&gt;</long-description>
       </docblock>
       <argument line="44">
         <name>$ip</name>
-        <default></default>
-        <type/>
-      </argument>
-    </function>
-    <function namespace="global" line="79" package="Core\Functions">
-      <name>br</name>
-      <full_name>\br</full_name>
-      <docblock line="72">
-        <description>Creates a number of html breaks to be repeated</description>
-        <long-description></long-description>
-        <tag line="72" name="param" description="The number of breaks" type="int" variable="$count">
-          <type by_reference="false">int</type>
-        </tag>
-        <tag line="72" name="return" description="A string containing the number ($count) of breaks" type="string">
-          <type by_reference="false">string</type>
-        </tag>
-      </docblock>
-      <argument line="79">
-        <name>$count</name>
         <default></default>
         <type/>
       </argument>
@@ -726,7 +707,7 @@ in the config folder&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Controller.php" hash="7a8d378fc294fd6b36ab8bab213bd4cb" package="Default">
+  <file path="system\core\Controller.php" hash="69127178e6db238251af9f240530f93c" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -807,7 +788,7 @@ and useful methods for the child class.&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="78" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="78" package="Core">
         <name>loadModel</name>
         <full_name>loadModel</full_name>
         <docblock line="64">
@@ -837,7 +818,7 @@ result will also be stored in a class variable, the name of the class:
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="117" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="117" package="Core">
         <name>loadHelper</name>
         <full_name>loadHelper</full_name>
         <docblock line="107">
@@ -864,7 +845,7 @@ result will also be stored in a class variable, the name of the class:
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="148" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="148" package="Core">
         <name>loadView</name>
         <full_name>loadView</full_name>
         <docblock line="132">
@@ -896,7 +877,7 @@ unless the variable $silence is set to true, in which case a false will be retun
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="188" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="188" package="Core">
         <name>loadPartialView</name>
         <full_name>loadPartialView</full_name>
         <docblock line="174">
@@ -926,7 +907,7 @@ to be set inside of it.&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="213" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="213" package="Core">
         <name>addJsFile</name>
         <full_name>addJsFile</full_name>
         <docblock line="205">
@@ -945,7 +926,7 @@ to be set inside of it.&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="226" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="226" package="Core">
         <name>addCssFile</name>
         <full_name>addCssFile</full_name>
         <docblock line="218">
@@ -964,7 +945,7 @@ to be set inside of it.&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="242" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="242" package="Core">
         <name>loadController</name>
         <full_name>loadController</full_name>
         <docblock line="231">
@@ -985,7 +966,7 @@ to be set inside of it.&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="271" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="271" package="Core">
         <name>loadConfig</name>
         <full_name>loadConfig</full_name>
         <docblock line="259">
@@ -1020,7 +1001,7 @@ to be set inside of it.&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="291" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="291" package="Core">
         <name>requireAuth</name>
         <full_name>requireAuth</full_name>
         <docblock line="280">
@@ -1040,7 +1021,7 @@ is not logged in (Guest), and the current script will stop executing.&lt;/p&gt;<
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="335" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="335" package="Core">
         <name>requirePermission</name>
         <full_name>requirePermission</full_name>
         <docblock line="322">
@@ -1071,7 +1052,7 @@ does not have the specified permission, and the current script will stop executi
       </method>
     </class>
   </file>
-  <file path="system\core\database\Driver.php" hash="0bd4640493c80b897098ead2c7eae4a8" package="Default">
+  <file path="system\core\database\Driver.php" hash="800055e7ba767f0286e96dbabecf58e5" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -1630,7 +1611,7 @@ statistical data such as query time.</description>
       </docblock>
     </class>
   </file>
-  <file path="system\core\Dispatch.php" hash="6e7e0c524ccb24f56c2f29fafd84d96b" package="Default">
+  <file path="system\core\Dispatch.php" hash="e48267ad118af47fd3a45b07f2dd7a46" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -1642,7 +1623,7 @@ statistical data such as query time.</description>
       <tag line="2" name="contains" description="ControllerNotFoundException"/>
       <tag line="2" name="contains" description="MethodNotFoundException"/>
     </docblock>
-    <include line="70" type="Require" package="Default">
+    <include line="71" type="Require" package="Default">
       <name/>
     </include>
     <class final="false" abstract="false" namespace="Core" line="22" package="Core">
@@ -1700,7 +1681,7 @@ calling on the action method.</description>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="56" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="57" package="Core">
         <name>Execute</name>
         <full_name>Execute</full_name>
         <docblock line="48">
@@ -1709,7 +1690,7 @@ calling on the action method.</description>
           <tag line="48" name="throws" description="when the controller file cant be found" type="\Core\ControllerNotFoundException">
             <type by_reference="false">\Core\ControllerNotFoundException</type>
           </tag>
-          <tag line="48" name="throws" description="when the controller doesnt have the given action" type="\Core\MethodNotFoundException">
+          <tag line="48" name="throws" description="when the controller doesnt have the given action,&#13;&#10;  or the action method is not a public method" type="\Core\MethodNotFoundException">
             <type by_reference="false">\Core\MethodNotFoundException</type>
           </tag>
           <tag line="48" name="return" description="Returns what the action method returned" type="mixed">
@@ -1717,132 +1698,132 @@ calling on the action method.</description>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="91" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="96" package="Core">
         <name>SetControllerPath</name>
         <full_name>SetControllerPath</full_name>
-        <docblock line="84">
+        <docblock line="89">
           <description>Sets the path to the controller class files.</description>
           <long-description></long-description>
-          <tag line="84" name="param" description="The path to the controller files" type="string" variable="$path">
+          <tag line="89" name="param" description="The path to the controller files" type="string" variable="$path">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="84" name="return" description="" type="void">
+          <tag line="89" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="91">
+        <argument line="96">
           <name>$path</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="102" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="107" package="Core">
         <name>GetControllerPath</name>
         <full_name>GetControllerPath</full_name>
-        <docblock line="96">
+        <docblock line="101">
           <description>Returns the path to the controller class files.</description>
           <long-description></long-description>
-          <tag line="96" name="return" description="Returns the set controller path, or false&#13;&#10;  if the path isnt set" type="string">
+          <tag line="101" name="return" description="Returns the set controller path, or false&#13;&#10;  if the path isnt set" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="114" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="119" package="Core">
         <name>SetController</name>
         <full_name>SetController</full_name>
-        <docblock line="107">
+        <docblock line="112">
           <description>Sets the controller name, overriding the controller the router finds</description>
           <long-description></long-description>
-          <tag line="107" name="param" description="The name of the controller to load" type="string" variable="$name">
+          <tag line="112" name="param" description="The name of the controller to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="107" name="return" description="" type="void">
+          <tag line="112" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="114">
+        <argument line="119">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="126" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="131" package="Core">
         <name>SetAction</name>
         <full_name>SetAction</full_name>
-        <docblock line="119">
+        <docblock line="124">
           <description>Sets the action name, overriding the action the router finds</description>
           <long-description></long-description>
-          <tag line="119" name="param" description="The name of the action to load" type="string" variable="$name">
+          <tag line="124" name="param" description="The name of the action to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="119" name="return" description="" type="void">
+          <tag line="124" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="126">
+        <argument line="131">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="138" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="143" package="Core">
         <name>SetParams</name>
         <full_name>SetParams</full_name>
-        <docblock line="131">
+        <docblock line="136">
           <description>Sets the actions' parameters, overriding the params the router finds</description>
           <long-description></long-description>
-          <tag line="131" name="param" description="- An array of params to pass to the action" type="mixed[]" variable="$params">
+          <tag line="136" name="param" description="- An array of params to pass to the action" type="mixed[]" variable="$params">
             <type by_reference="false">mixed[]</type>
           </tag>
-          <tag line="131" name="return" description="" type="void">
+          <tag line="136" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="138">
+        <argument line="143">
           <name>$params</name>
           <default></default>
           <type>array</type>
         </argument>
       </method>
     </class>
-    <class final="false" abstract="false" namespace="Core" line="154" package="Core\Exceptions">
+    <class final="false" abstract="false" namespace="Core" line="159" package="Core\Exceptions">
       <extends>\Exception</extends>
       <name>NotFoundException</name>
       <full_name>\Core\NotFoundException</full_name>
-      <docblock line="146">
+      <docblock line="151">
         <description>Thrown when the action does not exist in the controller, or the controller
 class does not exists.</description>
         <long-description>&lt;p&gt;This exeption is mainly thrown for a 404&lt;/p&gt;</long-description>
-        <tag line="146" name="package" description="Core"/>
-        <tag line="146" name="subpackage" description="Exceptions"/>
-        <tag line="146" name="file" description="System/Core/Dispatch.php"/>
-        <tag line="146" name="see" description="\Core\Dispatch::Execute()" refers="\Core\Dispatch::Execute()"/>
+        <tag line="151" name="package" description="Core"/>
+        <tag line="151" name="subpackage" description="Exceptions"/>
+        <tag line="151" name="file" description="System/Core/Dispatch.php"/>
+        <tag line="151" name="see" description="\Core\Dispatch::Execute()" refers="\Core\Dispatch::Execute()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Core" line="163" package="Core\Exceptions">
+    <class final="false" abstract="false" namespace="Core" line="168" package="Core\Exceptions">
       <extends>\Core\NotFoundException</extends>
       <name>ControllerNotFoundException</name>
       <full_name>\Core\ControllerNotFoundException</full_name>
-      <docblock line="156">
+      <docblock line="161">
         <description>Thrown when the controller class does not exist in the controllers path</description>
         <long-description></long-description>
-        <tag line="156" name="package" description="Core"/>
-        <tag line="156" name="subpackage" description="Exceptions"/>
-        <tag line="156" name="file" description="System/Core/Dispatch.php"/>
-        <tag line="156" name="see" description="\Core\Dispatch::Execute()" refers="\Core\Dispatch::Execute()"/>
+        <tag line="161" name="package" description="Core"/>
+        <tag line="161" name="subpackage" description="Exceptions"/>
+        <tag line="161" name="file" description="System/Core/Dispatch.php"/>
+        <tag line="161" name="see" description="\Core\Dispatch::Execute()" refers="\Core\Dispatch::Execute()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Core" line="172" package="Core\Exceptions">
+    <class final="false" abstract="false" namespace="Core" line="177" package="Core\Exceptions">
       <extends>\Core\NotFoundException</extends>
       <name>MethodNotFoundException</name>
       <full_name>\Core\MethodNotFoundException</full_name>
-      <docblock line="165">
+      <docblock line="170">
         <description>Thrown when the action method does not exist in the controller</description>
         <long-description></long-description>
-        <tag line="165" name="package" description="Core"/>
-        <tag line="165" name="subpackage" description="Exceptions"/>
-        <tag line="165" name="file" description="System/Core/Dispatch.php"/>
-        <tag line="165" name="see" description="\Core\Dispatch::Execute()" refers="\Core\Dispatch::Execute()"/>
+        <tag line="170" name="package" description="Core"/>
+        <tag line="170" name="subpackage" description="Exceptions"/>
+        <tag line="170" name="file" description="System/Core/Dispatch.php"/>
+        <tag line="170" name="see" description="\Core\Dispatch::Execute()" refers="\Core\Dispatch::Execute()"/>
       </docblock>
     </class>
   </file>
@@ -2906,7 +2887,7 @@ the base URL, website root, and more.&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Response.php" hash="6fc9588152a2cb2f2b0f5960de50a985" package="Default">
+  <file path="system\core\Response.php" hash="48d6e1b87feb4183d22f911e74c912f5" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -3448,7 +3429,7 @@ body buffer</description>
       </docblock>
     </class>
   </file>
-  <file path="system\core\Router.php" hash="c47d919f025c3bd633fff55fde0f160b" package="Default">
+  <file path="system\core\Router.php" hash="1844f9ba1c824537b97657c15a96500d" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -3457,153 +3438,236 @@ body buffer</description>
       <tag line="2" name="license" description="GNU GPL v3"/>
       <tag line="2" name="contains" description="Router"/>
     </docblock>
-    <class final="false" abstract="false" namespace="Core" line="21" package="Core">
+    <class final="false" abstract="false" namespace="Core" line="24" package="Core">
       <extends/>
       <name>Router</name>
       <full_name>\Core\Router</full_name>
-      <docblock line="12">
+      <docblock line="15">
         <description>This class is used to determine our controller / action.</description>
         <long-description>&lt;p&gt;When called
 this object works with the Request object to determine the current
 url, and analyze it to determine which controller, and method the
 Dispatch class will use.&lt;/p&gt;</long-description>
-        <tag line="12" name="author" description="Steven Wilson"/>
-        <tag line="12" name="package" description="Core"/>
+        <tag line="15" name="author" description="Steven Wilson"/>
+        <tag line="15" name="package" description="Core"/>
       </docblock>
-      <property final="false" static="true" visibility="protected" line="27" namespace="Core" package="Default">
+      <property final="false" static="true" visibility="protected" line="30" namespace="Core" package="Default">
         <name>$routed</name>
         <default>false</default>
-        <docblock line="23">
+        <docblock line="26">
           <description>Have we routed the url yet?</description>
           <long-description></long-description>
-          <tag line="23" name="var" description="" type="bool">
+          <tag line="26" name="var" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="33" namespace="Core" package="Default">
+      <property final="false" static="true" visibility="protected" line="36" namespace="Core" package="Default">
+        <name>$module</name>
+        <default></default>
+        <docblock line="32">
+          <description>The requested module name</description>
+          <long-description></long-description>
+          <tag line="32" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="true" visibility="protected" line="42" namespace="Core" package="Default">
         <name>$controller</name>
         <default></default>
-        <docblock line="29">
-          <description>The requested cotnroller name</description>
+        <docblock line="38">
+          <description>The requested controller name</description>
           <long-description></long-description>
-          <tag line="29" name="var" description="" type="string">
+          <tag line="38" name="var" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="39" namespace="Core" package="Default">
+      <property final="false" static="true" visibility="protected" line="48" namespace="Core" package="Default">
         <name>$action</name>
         <default></default>
-        <docblock line="35">
+        <docblock line="44">
           <description>The requested method name</description>
           <long-description></long-description>
-          <tag line="35" name="var" description="" type="string">
+          <tag line="44" name="var" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="45" namespace="Core" package="Default">
+      <property final="false" static="true" visibility="protected" line="54" namespace="Core" package="Default">
+        <name>$isCoreModule</name>
+        <default></default>
+        <docblock line="50">
+          <description>A bool representing if this module is a core module</description>
+          <long-description></long-description>
+          <tag line="50" name="var" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="true" visibility="protected" line="60" namespace="Core" package="Default">
         <name>$uri</name>
         <default></default>
-        <docblock line="41">
+        <docblock line="56">
           <description>The request uri</description>
           <long-description></long-description>
-          <tag line="41" name="var" description="" type="string">
+          <tag line="56" name="var" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="51" namespace="Core" package="Default">
+      <property final="false" static="true" visibility="protected" line="66" namespace="Core" package="Default">
         <name>$params</name>
         <default></default>
-        <docblock line="47">
+        <docblock line="62">
           <description>The querystring parameters</description>
           <long-description></long-description>
-          <tag line="47" name="var" description="" type="string[]">
+          <tag line="62" name="var" description="" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="58" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="74" package="Core">
         <name>GetRequest</name>
         <full_name>GetRequest</full_name>
-        <docblock line="53">
+        <docblock line="68">
           <description>Returns all the url information</description>
           <long-description></long-description>
-          <tag line="53" name="return" description="Returns array('controller' =&gt; , 'action' =&gt; , 'params' =&gt; );" type="string[]">
+          <tag line="68" name="return" description="Returns array('module' =&gt; , 'controller' =&gt; ,&#13;&#10; 'action' =&gt; , 'params' =&gt; );" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="72" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="90" package="Core">
+        <name>GetModule</name>
+        <full_name>GetModule</full_name>
+        <docblock line="85">
+          <description>Returns the module name from the URI</description>
+          <long-description></long-description>
+          <tag line="85" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="100" package="Core">
         <name>GetController</name>
         <full_name>GetController</full_name>
-        <docblock line="67">
+        <docblock line="95">
           <description>Returns the controller name from the URI</description>
           <long-description></long-description>
-          <tag line="67" name="return" description="" type="string">
+          <tag line="95" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="82" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="110" package="Core">
         <name>GetAction</name>
         <full_name>GetAction</full_name>
-        <docblock line="77">
+        <docblock line="105">
           <description>Returns the method name from the URI</description>
           <long-description></long-description>
-          <tag line="77" name="return" description="" type="string">
+          <tag line="105" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="92" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="120" package="Core">
         <name>GetParams</name>
         <full_name>GetParams</full_name>
-        <docblock line="87">
+        <docblock line="115">
           <description>Returns the action parameters from the URI</description>
           <long-description></long-description>
-          <tag line="87" name="return" description="" type="string[]">
+          <tag line="115" name="return" description="" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="103" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="131" package="Core">
         <name>GetUriSegement</name>
         <full_name>GetUriSegement</full_name>
-        <docblock line="97">
+        <docblock line="125">
           <description>Returns the specified URI segement</description>
           <long-description></long-description>
-          <tag line="97" name="param" description="The uri segement index" type="int" variable="$index">
+          <tag line="125" name="param" description="The uri segement index" type="int" variable="$index">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="97" name="return" description="Returns false if the URI index is out of range" type="string|bool">
+          <tag line="125" name="return" description="Returns false if the URI index is out of range" type="string|bool">
             <type by_reference="false">string</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="103">
+        <argument line="131">
           <name>$index</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="117" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="145" package="Core">
         <name>RouteUrl</name>
         <full_name>RouteUrl</full_name>
-        <docblock line="111">
+        <docblock line="139">
           <description>This method analyzes the url to determine the controller / action
 and query string</description>
           <long-description></long-description>
-          <tag line="111" name="return" description="" type="void">
+          <tag line="139" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
     </class>
   </file>
-  <file path="system\library\Auth.php" hash="d35f9fe3ae6ea52a785902181a9c3247" package="Default">
+  <file path="system\helpers\html.php" hash="d381eef6ae5063202baea3ef03be5cac" package="Helpers\Html">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="file" description="System/Helpers/Html.php"/>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+      <tag line="2" name="author" description="Plexis Dev Team"/>
+      <tag line="2" name="package" description="Helpers"/>
+      <tag line="2" name="subpackage" description="Html"/>
+    </docblock>
+    <function namespace="global" line="20" package="Helpers\Html">
+      <name>br</name>
+      <full_name>\br</full_name>
+      <docblock line="13">
+        <description>Creates a number of html breaks to be repeated</description>
+        <long-description></long-description>
+        <tag line="13" name="param" description="The number of breaks" type="int" variable="$count">
+          <type by_reference="false">int</type>
+        </tag>
+        <tag line="13" name="return" description="A string containing the number ($count) of breaks" type="string">
+          <type by_reference="false">string</type>
+        </tag>
+      </docblock>
+      <argument line="20">
+        <name>$count</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="global" line="36" package="Helpers\Html">
+      <name>nbs</name>
+      <full_name>\nbs</full_name>
+      <docblock line="29">
+        <description>Creates a number of non-breaking spaces to be repeated</description>
+        <long-description></long-description>
+        <tag line="29" name="param" description="The number of spaces" type="int" variable="$count">
+          <type by_reference="false">int</type>
+        </tag>
+        <tag line="29" name="return" description="A string containing the number ($count) of non-breaking spaces" type="string">
+          <type by_reference="false">string</type>
+        </tag>
+      </docblock>
+      <argument line="36">
+        <name>$count</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+  </file>
+  <file path="system\library\Auth.php" hash="5bc76e392a086b7098bcfc6d3dbdf765" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -3617,426 +3681,426 @@ and query string</description>
       <tag line="2" name="contains" description="AccountBannedException"/>
       <tag line="2" name="contains" description="IpBannedException"/>
     </docblock>
-    <class final="false" abstract="false" namespace="Library" line="31" package="Library">
+    <class final="false" abstract="false" namespace="Library" line="33" package="Library">
       <extends/>
       <name>Auth</name>
       <full_name>\Library\Auth</full_name>
-      <docblock line="23">
+      <docblock line="25">
         <description>Authorization and User class.</description>
         <long-description>&lt;p&gt;This class is used to proccess user's, and thier permissions&lt;/p&gt;</long-description>
-        <tag line="23" name="author" description="Steven Wilson"/>
-        <tag line="23" name="package" description="Library"/>
+        <tag line="25" name="author" description="Steven Wilson"/>
+        <tag line="25" name="package" description="Library"/>
       </docblock>
-      <property final="false" static="true" visibility="protected" line="37" namespace="Library" package="Default">
+      <property final="false" static="true" visibility="protected" line="39" namespace="Library" package="Default">
         <name>$started</name>
         <default>false</default>
-        <docblock line="33">
+        <docblock line="35">
           <description>Session started? Used internally</description>
           <long-description></long-description>
-          <tag line="33" name="var" description="" type="bool">
+          <tag line="35" name="var" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="43" namespace="Library" package="Default">
+      <property final="false" static="true" visibility="protected" line="45" namespace="Library" package="Default">
         <name>$expireTime</name>
         <default></default>
-        <docblock line="39">
+        <docblock line="41">
           <description>When the sessoin expires</description>
           <long-description></long-description>
-          <tag line="39" name="var" description="" type="int">
+          <tag line="41" name="var" description="" type="int">
             <type by_reference="false">int</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="49" namespace="Library" package="Default">
+      <property final="false" static="true" visibility="protected" line="51" namespace="Library" package="Default">
         <name>$DB</name>
         <default></default>
-        <docblock line="45">
+        <docblock line="47">
           <description>Database Driver object for the Plexis database</description>
           <long-description></long-description>
-          <tag line="45" name="var" description="" type="\Database\Driver">
+          <tag line="47" name="var" description="" type="\Database\Driver">
             <type by_reference="false">\Database\Driver</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="55" namespace="Library" package="Default">
+      <property final="false" static="true" visibility="protected" line="57" namespace="Library" package="Default">
         <name>$realm</name>
         <default></default>
-        <docblock line="51">
+        <docblock line="53">
           <description>The Realm object from the wowlib</description>
           <long-description></long-description>
-          <tag line="51" name="var" description="" type="\Wowlib\Realm">
+          <tag line="53" name="var" description="" type="\Wowlib\Realm">
             <type by_reference="false">\Wowlib\Realm</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="61" namespace="Library" package="Default">
+      <property final="false" static="true" visibility="protected" line="63" namespace="Library" package="Default">
         <name>$sessionid</name>
         <default>0</default>
-        <docblock line="57">
+        <docblock line="59">
           <description>The sessions id</description>
           <long-description></long-description>
-          <tag line="57" name="var" description="" type="string">
+          <tag line="59" name="var" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="67" namespace="Library" package="Default">
+      <property final="false" static="true" visibility="protected" line="69" namespace="Library" package="Default">
         <name>$permissions</name>
         <default></default>
-        <docblock line="63">
+        <docblock line="65">
           <description>Current users access permissions</description>
           <long-description></long-description>
-          <tag line="63" name="var" description="" type="int[]">
+          <tag line="65" name="var" description="" type="int[]">
             <type by_reference="false">int[]</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="protected" line="73" namespace="Library" package="Default">
+      <property final="false" static="true" visibility="protected" line="75" namespace="Library" package="Default">
         <name>$data</name>
-        <default>array('logged_in' =&gt; false, 'id' =&gt; 0, 'username' =&gt; 'Guest')</default>
-        <docblock line="69">
+        <default>array('logged_in' =&gt; false, 'id' =&gt; 0, 'username' =&gt; 'Guest', 'ip_address' =&gt; '0.0.0.0')</default>
+        <docblock line="71">
           <description>Users data array</description>
           <long-description></long-description>
-          <tag line="69" name="var" description="" type="mixed[]">
+          <tag line="71" name="var" description="" type="mixed[]">
             <type by_reference="false">mixed[]</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="86" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="89" package="Library">
         <name>Init</name>
         <full_name>Init</full_name>
-        <docblock line="79">
+        <docblock line="82">
           <description>Contructor method (called internally)</description>
           <long-description>&lt;p&gt;Initiates the user sessions and such&lt;/p&gt;</long-description>
-          <tag line="79" name="return" description="" type="void">
+          <tag line="82" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="121" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="118" package="Library">
         <name>StartSession</name>
         <full_name>StartSession</full_name>
-        <docblock line="114">
+        <docblock line="111">
           <description>Internal method used to check to if the user is logged in by session.</description>
           <long-description>&lt;p&gt;If not then a username, id, and account level are set at guest.
 Also checks for login expire time.&lt;/p&gt;</long-description>
-          <tag line="114" name="return" description="" type="void">
+          <tag line="111" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="217" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="214" package="Library">
         <name>Login</name>
         <full_name>Login</full_name>
-        <docblock line="204">
+        <docblock line="201">
           <description>Method used to proccess a user login</description>
           <long-description></long-description>
-          <tag line="204" name="param" description="The username to proccess" type="string" variable="$username">
+          <tag line="201" name="param" description="The username to proccess" type="string" variable="$username">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="204" name="param" description="Unencrypted password to the account" type="string" variable="$password">
+          <tag line="201" name="param" description="Unencrypted password to the account" type="string" variable="$password">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="204" name="throws" description="Thrown if the username contains illegal characters, or is too short/long" type="\Library\InvalidUsernameException">
+          <tag line="201" name="throws" description="Thrown if the username contains illegal characters, or is too short/long" type="\Library\InvalidUsernameException">
             <type by_reference="false">\Library\InvalidUsernameException</type>
           </tag>
-          <tag line="204" name="throws" description="Thrown if the password contains illegal characters, or is too short" type="\Library\InvalidPasswordException">
+          <tag line="201" name="throws" description="Thrown if the password contains illegal characters, or is too short" type="\Library\InvalidPasswordException">
             <type by_reference="false">\Library\InvalidPasswordException</type>
           </tag>
-          <tag line="204" name="throws" description="Thrown if the username or password is incorrect" type="\Library\InvalidCredentialsException">
+          <tag line="201" name="throws" description="Thrown if the username or password is incorrect" type="\Library\InvalidCredentialsException">
             <type by_reference="false">\Library\InvalidCredentialsException</type>
           </tag>
-          <tag line="204" name="throws" description="Thrown if the account is banned" type="\Library\AccountBannedException">
+          <tag line="201" name="throws" description="Thrown if the account is banned" type="\Library\AccountBannedException">
             <type by_reference="false">\Library\AccountBannedException</type>
           </tag>
-          <tag line="204" name="return" description="Return true if the user is logged in, false otherwise" type="bool">
+          <tag line="201" name="return" description="Return true if the user is logged in, false otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="217">
+        <argument line="214">
           <name>$username</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="217">
+        <argument line="214">
           <name>$password</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="304" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="301" package="Library">
         <name>Register</name>
         <full_name>Register</full_name>
-        <docblock line="287">
+        <docblock line="284">
           <description>Method used to create a new account</description>
           <long-description></long-description>
-          <tag line="287" name="param" description="The account username to create" type="string" variable="$username">
+          <tag line="284" name="param" description="The account username to create" type="string" variable="$username">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="287" name="param" description="Unencrypted password to the account" type="string" variable="$password">
+          <tag line="284" name="param" description="Unencrypted password to the account" type="string" variable="$password">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="287" name="param" description="New accounts email address" type="string" variable="$email">
+          <tag line="284" name="param" description="New accounts email address" type="string" variable="$email">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="287" name="param" description="The secret question ID. Leave null for no secrect question" type="int" variable="$sq">
+          <tag line="284" name="param" description="The secret question ID. Leave null for no secrect question" type="int" variable="$sq">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="287" name="param" description="The secret question answer. Leave null for no secrect question" type="string" variable="$sa">
+          <tag line="284" name="param" description="The secret question answer. Leave null for no secrect question" type="string" variable="$sa">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="287" name="throws" description="Thrown if the username is invalid." type="\Library\InvalidUsernameException">
+          <tag line="284" name="throws" description="Thrown if the username is invalid." type="\Library\InvalidUsernameException">
             <type by_reference="false">\Library\InvalidUsernameException</type>
           </tag>
-          <tag line="287" name="throws" description="Thrown if the password is invalid" type="\Library\InvalidPasswordException">
+          <tag line="284" name="throws" description="Thrown if the password is invalid" type="\Library\InvalidPasswordException">
             <type by_reference="false">\Library\InvalidPasswordException</type>
           </tag>
-          <tag line="287" name="throws" description="Thrown if the email is not a real email" type="\Library\InvalidEmailException">
+          <tag line="284" name="throws" description="Thrown if the email is not a real email" type="\Library\InvalidEmailException">
             <type by_reference="false">\Library\InvalidEmailException</type>
           </tag>
-          <tag line="287" name="throws" description="Thrown if the account name is already taken" type="\Library\AccountExistsException">
+          <tag line="284" name="throws" description="Thrown if the account name is already taken" type="\Library\AccountExistsException">
             <type by_reference="false">\Library\AccountExistsException</type>
           </tag>
-          <tag line="287" name="throws" description="Thrown if the ip address is banned" type="\Library\IpBannedException">
+          <tag line="284" name="throws" description="Thrown if the ip address is banned" type="\Library\IpBannedException">
             <type by_reference="false">\Library\IpBannedException</type>
           </tag>
-          <tag line="287" name="return" description="The account ID upon success, false otherwise" type="int">
+          <tag line="284" name="return" description="The account ID upon success, false otherwise" type="int">
             <type by_reference="false">int</type>
           </tag>
         </docblock>
-        <argument line="304">
+        <argument line="301">
           <name>$username</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="304">
+        <argument line="301">
           <name>$password</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="304">
+        <argument line="301">
           <name>$email</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="304">
+        <argument line="301">
           <name>$sq</name>
           <default>NULL</default>
           <type/>
         </argument>
-        <argument line="304">
+        <argument line="301">
           <name>$sa</name>
           <default>NULL</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="412" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="409" package="Library">
         <name>LoadPermissions</name>
         <full_name>LoadPermissions</full_name>
-        <docblock line="404">
+        <docblock line="401">
           <description>Loads the permissions specific to this user</description>
           <long-description></long-description>
-          <tag line="404" name="param" description="The group id" type="int" variable="$gid">
+          <tag line="401" name="param" description="The group id" type="int" variable="$gid">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="404" name="param" description="The list of all permissions for the usergroup" type="int[]" variable="$perms">
+          <tag line="401" name="param" description="The list of all permissions for the usergroup" type="int[]" variable="$perms">
             <type by_reference="false">int[]</type>
           </tag>
-          <tag line="404" name="return" description="" type="void">
+          <tag line="401" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="412">
+        <argument line="409">
           <name>$gid</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="412">
+        <argument line="409">
           <name>$perms</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="449" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="446" package="Library">
         <name>HasPermission</name>
         <full_name>HasPermission</full_name>
-        <docblock line="442">
+        <docblock line="439">
           <description>Used to find if user has a specified permission</description>
           <long-description></long-description>
-          <tag line="442" name="param" description="Permission name" type="string" variable="$key">
+          <tag line="439" name="param" description="Permission name" type="string" variable="$key">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="442" name="return" description="Returns true if the user has permissions, false otherwise" type="bool">
+          <tag line="439" name="return" description="Returns true if the user has permissions, false otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="449">
+        <argument line="446">
           <name>$key</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="466" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="463" package="Library">
         <name>Logout</name>
         <full_name>Logout</full_name>
-        <docblock line="458">
+        <docblock line="455">
           <description>Logs the user out and sets all session variables to Guest.</description>
           <long-description></long-description>
-          <tag line="458" name="param" description="Start a new session? Should only&#13;&#10;be set internally in this class." type="bool" variable="$newSession">
+          <tag line="455" name="param" description="Start a new session? Should only&#13;&#10;be set internally in this class." type="bool" variable="$newSession">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="458" name="return" description="" type="void">
+          <tag line="455" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="466">
+        <argument line="463">
           <name>$newSession</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="494" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="491" package="Library">
         <name>IsGuest</name>
         <full_name>IsGuest</full_name>
-        <docblock line="488">
+        <docblock line="485">
           <description>Returns whether the current connected client is a guest.</description>
           <long-description></long-description>
-          <tag line="488" name="return" description="Returns true if the client is a guest, or true if&#13;&#10;  a user session is valid (logged in)" type="bool">
+          <tag line="485" name="return" description="Returns true if the client is a guest, or true if&#13;&#10;  a user session is valid (logged in)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="506" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="503" package="Library">
         <name>IsLoggedIn</name>
         <full_name>IsLoggedIn</full_name>
-        <docblock line="499">
+        <docblock line="496">
           <description>Returns whether the current connected client is a guest.</description>
           <long-description>&lt;p&gt;This method is opposite of Auth::IsGuest()&lt;/p&gt;</long-description>
-          <tag line="499" name="return" description="Returns true if the client is logged in, false otherwise" type="bool">
+          <tag line="496" name="return" description="Returns true if the client is logged in, false otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="516" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="513" package="Library">
         <name>GetUserData</name>
         <full_name>GetUserData</full_name>
-        <docblock line="511">
+        <docblock line="508">
           <description>Returns the clients information such as username and user id</description>
           <long-description></long-description>
-          <tag line="511" name="return" description="" type="mixed[]">
+          <tag line="508" name="return" description="" type="mixed[]">
             <type by_reference="false">mixed[]</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="528" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="525" package="Library">
         <name>_initUser</name>
         <full_name>_initUser</full_name>
-        <docblock line="521">
+        <docblock line="518">
           <description>This method is used to initiate a user when an ID or username is determined</description>
           <long-description></long-description>
-          <tag line="521" name="param" description="The account id" type="int" variable="$userid">
+          <tag line="518" name="param" description="The account id" type="int" variable="$userid">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="521" name="return" description="" type="bool">
+          <tag line="518" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="528">
+        <argument line="525">
           <name>$userid</name>
           <default></default>
           <type/>
         </argument>
       </method>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="645" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="642" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidUsernameException</name>
       <full_name>\Library\InvalidUsernameException</full_name>
-      <docblock line="637">
+      <docblock line="634">
         <description>Thrown by the Auth Class when the provided username is invalid in format (Too long, Too short)</description>
         <long-description></long-description>
-        <tag line="637" name="package" description="Library"/>
-        <tag line="637" name="subpackage" description="Exceptions"/>
-        <tag line="637" name="file" description="System/Library/Auth.php"/>
-        <tag line="637" name="see" description="\Library\Auth" refers="\Library\Auth"/>
+        <tag line="634" name="package" description="Library"/>
+        <tag line="634" name="subpackage" description="Exceptions"/>
+        <tag line="634" name="file" description="System/Library/Auth.php"/>
+        <tag line="634" name="see" description="\Library\Auth" refers="\Library\Auth"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="655" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="652" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidPasswordException</name>
       <full_name>\Library\InvalidPasswordException</full_name>
-      <docblock line="647">
+      <docblock line="644">
         <description>Thrown by the Auth Class when the provided password is invalid in format too short</description>
         <long-description></long-description>
-        <tag line="647" name="package" description="Library"/>
-        <tag line="647" name="subpackage" description="Exceptions"/>
-        <tag line="647" name="file" description="System/Library/Auth.php"/>
-        <tag line="647" name="see" description="\Library\Auth" refers="\Library\Auth"/>
+        <tag line="644" name="package" description="Library"/>
+        <tag line="644" name="subpackage" description="Exceptions"/>
+        <tag line="644" name="file" description="System/Library/Auth.php"/>
+        <tag line="644" name="see" description="\Library\Auth" refers="\Library\Auth"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="663" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="660" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidEmailException</name>
       <full_name>\Library\InvalidEmailException</full_name>
-      <docblock line="657">
+      <docblock line="654">
         <description>Thrown by the Auth Class when the provided email is invalid.</description>
         <long-description></long-description>
-        <tag line="657" name="package" description="Library"/>
-        <tag line="657" name="subpackage" description="Exceptions"/>
-        <tag line="657" name="see" description="\Library\Auth::Login()" refers="\Library\Auth::Login()"/>
+        <tag line="654" name="package" description="Library"/>
+        <tag line="654" name="subpackage" description="Exceptions"/>
+        <tag line="654" name="see" description="\Library\Auth::Login()" refers="\Library\Auth::Login()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="671" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="668" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidCredentialsException</name>
       <full_name>\Library\InvalidCredentialsException</full_name>
-      <docblock line="665">
+      <docblock line="662">
         <description>Thrown by the Auth Class when a login fails due to invalid username or password</description>
         <long-description></long-description>
-        <tag line="665" name="package" description="Library"/>
-        <tag line="665" name="subpackage" description="Exceptions"/>
-        <tag line="665" name="see" description="\Library\Auth" refers="\Library\Auth"/>
+        <tag line="662" name="package" description="Library"/>
+        <tag line="662" name="subpackage" description="Exceptions"/>
+        <tag line="662" name="see" description="\Library\Auth" refers="\Library\Auth"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="680" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="677" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>AccountExistsException</name>
       <full_name>\Library\AccountExistsException</full_name>
-      <docblock line="673">
+      <docblock line="670">
         <description>Thrown by the Auth Class during the Register method, if the account name provided already exists</description>
         <long-description></long-description>
-        <tag line="673" name="package" description="Library"/>
-        <tag line="673" name="subpackage" description="Exceptions"/>
-        <tag line="673" name="file" description="System/Library/Auth.php"/>
-        <tag line="673" name="see" description="\Library\Auth::Register()" refers="\Library\Auth::Register()"/>
+        <tag line="670" name="package" description="Library"/>
+        <tag line="670" name="subpackage" description="Exceptions"/>
+        <tag line="670" name="file" description="System/Library/Auth.php"/>
+        <tag line="670" name="see" description="\Library\Auth::Register()" refers="\Library\Auth::Register()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="689" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="686" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>AccountBannedException</name>
       <full_name>\Library\AccountBannedException</full_name>
-      <docblock line="682">
+      <docblock line="679">
         <description>Thrown by the Auth Class when logging in, and the account name is banned</description>
         <long-description></long-description>
-        <tag line="682" name="package" description="Library"/>
-        <tag line="682" name="subpackage" description="Exceptions"/>
-        <tag line="682" name="file" description="System/Library/Auth.php"/>
-        <tag line="682" name="see" description="\Library\Auth::Login()" refers="\Library\Auth::Login()"/>
+        <tag line="679" name="package" description="Library"/>
+        <tag line="679" name="subpackage" description="Exceptions"/>
+        <tag line="679" name="file" description="System/Library/Auth.php"/>
+        <tag line="679" name="see" description="\Library\Auth::Login()" refers="\Library\Auth::Login()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="698" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="695" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>IpBannedException</name>
       <full_name>\Library\IpBannedException</full_name>
-      <docblock line="691">
+      <docblock line="688">
         <description>Thrown by the Auth Class when registering an account, and the Remote IP is banned.</description>
         <long-description></long-description>
-        <tag line="691" name="package" description="Library"/>
-        <tag line="691" name="subpackage" description="Exceptions"/>
-        <tag line="691" name="file" description="System/Library/Auth.php"/>
-        <tag line="691" name="see" description="\Library\Auth::Register()" refers="\Library\Auth::Register()"/>
+        <tag line="688" name="package" description="Library"/>
+        <tag line="688" name="subpackage" description="Exceptions"/>
+        <tag line="688" name="file" description="System/Library/Auth.php"/>
+        <tag line="688" name="see" description="\Library\Auth::Register()" refers="\Library\Auth::Register()"/>
       </docblock>
     </class>
   </file>
@@ -5197,7 +5261,7 @@ the final rendered template.</description>
       </docblock>
     </class>
   </file>
-  <file path="system\Plexis.php" hash="6cccb95241365f1a8b16ca4d2ca0061d" package="System">
+  <file path="system\Plexis.php" hash="1943818d18f285c3f61799cb246feee0" package="System">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -5206,24 +5270,24 @@ the final rendered template.</description>
       <tag line="2" name="license" description="GNU GPL v3"/>
       <tag line="2" name="package" description="System"/>
     </docblock>
-    <include line="272" type="Include" package="Default">
+    <include line="306" type="Include" package="Default">
       <name/>
     </include>
-    <include line="287" type="Include" package="Default">
+    <include line="322" type="Include" package="Default">
       <name/>
     </include>
-    <include line="313" type="Require" package="Default">
+    <include line="351" type="Require" package="Default">
       <name/>
     </include>
-    <include line="346" type="Require" package="Default">
+    <include line="384" type="Require" package="Default">
       <name/>
     </include>
-    <constant namespace="global" line="364" package="System">
+    <constant namespace="global" line="402" package="System">
       <name>SITE_URL</name>
       <full_name>\SITE_URL</full_name>
       <value>\Core\Request::BaseUrl()</value>
     </constant>
-    <constant namespace="global" line="371" package="System">
+    <constant namespace="global" line="409" package="System">
       <name>SITE_URL</name>
       <full_name>\SITE_URL</full_name>
       <value>\Core\Request::BaseUrl() . '/?uri='</value>
@@ -5262,7 +5326,7 @@ the final rendered template.</description>
       </property>
       <property final="false" static="true" visibility="protected" line="51" namespace="global" package="Default">
         <name>$realm</name>
-        <default></default>
+        <default>null</default>
         <docblock line="47">
           <description>The Wowlib object</description>
           <long-description></long-description>
@@ -5272,178 +5336,219 @@ the final rendered template.</description>
         </docblock>
       </property>
       <property final="false" static="true" visibility="protected" line="57" namespace="global" package="Default">
+        <name>$plugins</name>
+        <default>array()</default>
+        <docblock line="53">
+          <description>An array of installed plugins</description>
+          <long-description></long-description>
+          <tag line="53" name="var" description="" type="string[]">
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="true" visibility="protected" line="63" namespace="global" package="Default">
         <name>$renderTemplate</name>
         <default>true</default>
-        <docblock line="53">
+        <docblock line="59">
           <description>Certain modules may not want the template to render.</description>
           <long-description></long-description>
-          <tag line="53" name="var" description="" type="bool">
+          <tag line="59" name="var" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="65" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="71" package="System">
         <name>Run</name>
         <full_name>Run</full_name>
-        <docblock line="60">
+        <docblock line="66">
           <description>Main method for running the Plexis application</description>
           <long-description></long-description>
-          <tag line="60" name="return" description="" type="void">
+          <tag line="66" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="110" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="117" package="System">
         <name>Show404</name>
         <full_name>Show404</full_name>
-        <docblock line="101">
+        <docblock line="108">
           <description>Displays the 404 page not found page</description>
           <long-description>&lt;p&gt;Calling this method will clear all current output, render the 404 page
 and kill all current running scripts. No code following this method
 will be executed&lt;/p&gt;</long-description>
-          <tag line="101" name="return" description="" type="void">
+          <tag line="108" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="138" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="145" package="System">
         <name>Show403</name>
         <full_name>Show403</full_name>
-        <docblock line="129">
+        <docblock line="136">
           <description>Displays the 403 "Forbidden"</description>
           <long-description>&lt;p&gt;Calling this method will clear all current output, render the 403 page
 and kill all current running scripts. No code following this method
 will be executed&lt;/p&gt;</long-description>
-          <tag line="129" name="return" description="" type="void">
+          <tag line="136" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="168" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="175" package="System">
         <name>ShowSiteOffline</name>
         <full_name>ShowSiteOffline</full_name>
-        <docblock line="157">
+        <docblock line="164">
           <description>Displays the site offline page</description>
           <long-description>&lt;p&gt;Calling this method will clear all current output, render the site offline
 page and kill all current running scripts. No code following this method
 will be executed&lt;/p&gt;</long-description>
-          <tag line="157" name="param" description="The meesage to also be displayed with the&#13;&#10;  Site Offline page." type="string" variable="$message">
+          <tag line="164" name="param" description="The meesage to also be displayed with the&#13;&#10;  Site Offline page." type="string" variable="$message">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="157" name="return" description="" type="void">
+          <tag line="164" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="168">
+        <argument line="175">
           <name>$message</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="193" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="200" package="System">
         <name>GetRealm</name>
         <full_name>GetRealm</full_name>
-        <docblock line="188">
+        <docblock line="195">
           <description>Returns the Realm Object</description>
           <long-description></long-description>
-          <tag line="188" name="return" description="" type="\Wowlib\Realm">
+          <tag line="195" name="return" description="" type="\Wowlib\Realm">
             <type by_reference="false">\Wowlib\Realm</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="205" package="System">
-        <name>RenderTemplate</name>
-        <full_name>RenderTemplate</full_name>
-        <docblock line="198">
-          <description>Sets whether plexis should render the full template or not</description>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="210" package="System">
+        <name>ListPlugins</name>
+        <full_name>ListPlugins</full_name>
+        <docblock line="205">
+          <description>Returns an array of installed plugins</description>
           <long-description></long-description>
-          <tag line="198" name="param" description="Render the template?" type="bool" variable="$bool">
+          <tag line="205" name="return" description="" type="string[]">
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="222" package="System">
+        <name>PluginInstalled</name>
+        <full_name>PluginInstalled</full_name>
+        <docblock line="215">
+          <description>Returns whether or not a plugin is installed and running</description>
+          <long-description></long-description>
+          <tag line="215" name="param" description="The name of the plugin" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="215" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="198" name="return" description="" type="void">
+        </docblock>
+        <argument line="222">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="234" package="System">
+        <name>RenderTemplate</name>
+        <full_name>RenderTemplate</full_name>
+        <docblock line="227">
+          <description>Sets whether plexis should render the full template or not</description>
+          <long-description></long-description>
+          <tag line="227" name="param" description="Render the template?" type="bool" variable="$bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="227" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="205">
+        <argument line="234">
           <name>$bool</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="220" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="249" package="System">
         <name>LoadDBConnection</name>
         <full_name>LoadDBConnection</full_name>
-        <docblock line="212">
+        <docblock line="241">
           <description>Internal method for loading the Plexis DB connection</description>
           <long-description></long-description>
-          <tag line="212" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the plexis database connection is offline" type="bool" variable="$showOffline">
+          <tag line="241" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the plexis database connection is offline" type="bool" variable="$showOffline">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="212" name="return" description="" type="\Database\Driver">
+          <tag line="241" name="return" description="" type="\Database\Driver">
             <type by_reference="false">\Database\Driver</type>
           </tag>
         </docblock>
-        <argument line="220">
+        <argument line="249">
           <name>$showOffline</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="242" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="271" package="System">
         <name>RunModule</name>
         <full_name>RunModule</full_name>
-        <docblock line="237">
+        <docblock line="266">
           <description>Internal method for running the controller and action</description>
           <long-description></long-description>
-          <tag line="237" name="return" description="" type="void">
+          <tag line="266" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="269" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="303" package="System">
         <name>LoadPlugins</name>
         <full_name>LoadPlugins</full_name>
-        <docblock line="264">
+        <docblock line="298">
           <description>Internal method for loading, and running all plugins</description>
           <long-description></long-description>
-          <tag line="264" name="return" description="" type="void">
+          <tag line="298" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="310" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="348" package="System">
         <name>LoadWowlib</name>
         <full_name>LoadWowlib</full_name>
-        <docblock line="302">
+        <docblock line="340">
           <description>Internal method for loading the wowlib</description>
           <long-description></long-description>
-          <tag line="302" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the realm database connection is offline" type="bool" variable="$showOffline">
+          <tag line="340" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the realm database connection is offline" type="bool" variable="$showOffline">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="302" name="return" description="" type="void">
+          <tag line="340" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="310">
+        <argument line="348">
           <name>$showOffline</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="343" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="381" package="System">
         <name>LoadConfigs</name>
         <full_name>LoadConfigs</full_name>
-        <docblock line="338">
+        <docblock line="376">
           <description>Internal method for loading the plexis config files</description>
           <long-description></long-description>
-          <tag line="338" name="return" description="" type="void">
+          <tag line="376" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
     </class>
   </file>
-  <file path="system\System.php" hash="db89fbd73693b5fec4eca2c489e15a73" package="Default">
+  <file path="system\System.php" hash="cbd30d711e6c9d0bb9ca5a7d4bcf0e90" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -5451,7 +5556,7 @@ will be executed&lt;/p&gt;</long-description>
       <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
       <tag line="2" name="license" description="GNU GPL v3"/>
     </docblock>
-    <include line="61" type="Require" package="Default">
+    <include line="67" type="Require" package="Default">
       <name/>
     </include>
     <class final="false" abstract="false" namespace="global" line="24" package="System">
@@ -5476,30 +5581,51 @@ exceptions, and sets up a base for plexis to work on&lt;/p&gt;</long-description
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="37" package="System">
+      <property final="false" static="true" visibility="protected" line="36" namespace="global" package="Default">
+        <name>$traceLogs</name>
+        <default>array()</default>
+        <docblock line="32">
+          <description>List of trace logs</description>
+          <long-description></long-description>
+          <tag line="32" name="var" description="" type="array[]">
+            <type by_reference="false">array[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="43" package="System">
         <name>Run</name>
         <full_name>Run</full_name>
-        <docblock line="32">
+        <docblock line="38">
           <description>Initiates the System wrapper for plexis</description>
           <long-description></long-description>
-          <tag line="32" name="return" description="" type="void">
+          <tag line="38" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="80" package="System">
+        <name>Trace</name>
+        <full_name>Trace</full_name>
+        <argument line="80">
+          <name>$message</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="80">
+          <name>$file</name>
+          <default>'Not Specified'</default>
+          <type/>
+        </argument>
+        <argument line="80">
+          <name>$line</name>
+          <default>0</default>
+          <type/>
+        </argument>
+      </method>
     </class>
-    <class final="false" abstract="false" namespace="global" line="78" package="System\Exceptions">
-      <extends>\Exception</extends>
-      <name>SystemError</name>
-      <full_name>\SystemError</full_name>
-      <docblock line="72">
-        <description>System Error exception</description>
-        <long-description></long-description>
-        <tag line="72" name="package" description="System"/>
-        <tag line="72" name="subpackage" description="Exceptions"/>
-        <tag line="72" name="file" description="System/System.php"/>
-      </docblock>
-    </class>
+    <parse_markers>
+      <error line="80" code="50010">No DocBlock was found for method Trace()</error>
+    </parse_markers>
   </file>
   <file path="system\wowlib\drivers\Driver.php" hash="f31a619b3ce71449d1964331018377c5" package="Wowlib">
     <docblock line="2">
@@ -5764,7 +5890,7 @@ been loaded</description>
       </method>
     </class>
   </file>
-  <file path="system\wowlib\Wowlib.php" hash="df8221e2e5a51ec716c1dcb62018a8c2" package="Wowlib">
+  <file path="system\wowlib\Wowlib.php" hash="5884a50062df7407d1e6bab13f719763" package="Wowlib">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -5833,7 +5959,7 @@ minor changes, that will not affect the wowlib drivers in any way.&lt;/p&gt;</lo
         <name>$initilized</name>
         <default>false</default>
         <docblock line="44">
-          <description>Internal var for knowing if the wowli is initialized</description>
+          <description>Internal var for knowing if the wowlib is initialized</description>
           <long-description></long-description>
           <tag line="44" name="var" description="" type="bool">
             <type by_reference="false">bool</type>
@@ -5976,12 +6102,13 @@ class is initiated and returned&lt;/p&gt;</long-description>
     <package name="Exceptions" full_name="Database\Exceptions"/>
   </package>
   <package name="Default" full_name="Default"/>
+  <package name="Helpers" full_name="Helpers">
+    <package name="Html" full_name="Helpers\Html"/>
+  </package>
   <package name="Library" full_name="Library">
     <package name="Exceptions" full_name="Library\Exceptions"/>
   </package>
-  <package name="System" full_name="System">
-    <package name="Exceptions" full_name="System\Exceptions"/>
-  </package>
+  <package name="System" full_name="System"/>
   <package name="Wowlib" full_name="Wowlib"/>
   <namespace name="Core" full_name="Core"/>
   <namespace name="Database" full_name="Database"/>

@@ -385,9 +385,9 @@ class Response
         // Reset all set data, and proccess the redirect immediately
         if($wait == 0)
         {
-            self::Reset();
             self::$status = $status;
             self::$headers['Location'] = $location;
+            self::$body = null;
             self::Send();
         }
         else
@@ -404,7 +404,7 @@ class Response
      */
     public static function HasRedirects()
     {
-        return isset(self::$headers['Location']);
+        return (isset(self::$headers['Location']) || isset(self::$headers['Refresh']));
     }
     
     /**
@@ -485,7 +485,7 @@ class Response
     {
         foreach(self::$cookies as $key => $values)
         {
-            setcookie($key, $values['value'], $values['expires'], $values['path']);
+            setcookie($key, $values['value'], $values['expires'], $values['path'], $_SERVER['HTTP_HOST']);
         }
     }
     

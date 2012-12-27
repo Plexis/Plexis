@@ -68,20 +68,4 @@
         }
         return false;
     }
-    
-/**
- * Creates a number of html breaks to be repeated
- *
- * @param int $count The number of breaks
- *
- * @return string A string containing the number ($count) of breaks
- */
-    function br($count)
-    {
-        $buffer = '';
-        for($i = 0; $i < $count; $i++)
-            $buffer .= "<br />";
-            
-        return $buffer;
-    }
 // EOF

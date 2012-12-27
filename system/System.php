@@ -30,6 +30,12 @@ class System
     private static $isInitiated = false;
     
     /**
+     * List of trace logs
+     * @var array[]
+     */
+    protected static $traceLogs = array();
+    
+    /**
      * Initiates the System wrapper for plexis
      *
      * @return void
@@ -66,13 +72,14 @@ class System
         catch(Exception $e) {
             ErrorHandler::HandleException($e);
         }
+        
+        //if(!empty(self::$traceLogs))
+           // file_put_contents(ROOT . DS .'log.php', json_encode(self::$traceLogs, true) . PHP_EOL, FILE_APPEND);
+    }
+    
+    public static function Trace($message, $file = 'Not Specified', $line = 0)
+    {
+        self::$traceLogs[] = array('message' => $message, 'file' => $file, 'line' => $line);
     }
 }
-
-/**
- * System Error exception
- * @package     System
- * @subpackage  Exceptions
- * @file        System/System.php
- */
-class SystemError extends Exception {}
+// EOF

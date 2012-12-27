@@ -22,6 +22,7 @@
 <li><a>Packages</a></li>
 <li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
 <li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
 <li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
 <li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
 <li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
@@ -50,7 +51,9 @@
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
 <li class="method public "><a href="#method_GetRealm" title="GetRealm :: Returns the Realm Object"><span class="description">Returns the Realm Object</span><pre>GetRealm()</pre></a></li>
+<li class="method public "><a href="#method_ListPlugins" title="ListPlugins :: Returns an array of installed plugins"><span class="description">Returns an array of installed plugins</span><pre>ListPlugins()</pre></a></li>
 <li class="method public "><a href="#method_LoadDBConnection" title="LoadDBConnection :: Internal method for loading the Plexis DB connection"><span class="description">Internal method for loading the Plexis DB connection</span><pre>LoadDBConnection()</pre></a></li>
+<li class="method public "><a href="#method_PluginInstalled" title="PluginInstalled :: Returns whether or not a plugin is installed and running"><span class="description">Returns whether or not a plugin is installed and running</span><pre>PluginInstalled()</pre></a></li>
 <li class="method public "><a href="#method_RenderTemplate" title="RenderTemplate :: Sets whether plexis should render the full template or not"><span class="description">Sets whether plexis should render the full template or not</span><pre>RenderTemplate()</pre></a></li>
 <li class="method public "><a href="#method_Run" title="Run :: Main method for running the Plexis application"><span class="description">Main method for running the Plexis application</span><pre>Run()</pre></a></li>
 <li class="method public "><a href="#method_Show403" title='Show403 :: Displays the 403 "Forbidden"'><span class="description">Displays the 403 "Forbidden"</span><pre>Show403()</pre></a></li>
@@ -72,6 +75,7 @@
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
+<li class="property protected "><a href="#property_plugins" title="$plugins :: An array of installed plugins"><span class="description"></span><pre>$plugins</pre></a></li>
 <li class="property protected "><a href="#property_realm" title="$realm :: The Wowlib object"><span class="description"></span><pre>$realm</pre></a></li>
 <li class="property protected "><a href="#property_renderTemplate" title="$renderTemplate :: Certain modules may not want the template to render."><span class="description"></span><pre>$renderTemplate</pre></a></li>
 </ul>
@@ -117,6 +121,16 @@
 <div class="subelement response"><code>\Wowlib\Realm</code></div>
 </div></div>
 </div>
+<a id="method_ListPlugins"></a><div class="element clickable method public method_ListPlugins" data-toggle="collapse" data-target=".method_ListPlugins .collapse">
+<h2>Returns an array of installed plugins</h2>
+<pre>ListPlugins() : string[]</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string[]</code></div>
+</div></div>
+</div>
 <a id="method_LoadDBConnection"></a><div class="element clickable method public method_LoadDBConnection" data-toggle="collapse" data-target=".method_LoadDBConnection .collapse">
 <h2>Internal method for loading the Plexis DB connection</h2>
 <pre>LoadDBConnection(bool $showOffline = true) : <a href="../classes/Database.Driver.html">\Database\Driver</a></pre>
@@ -131,6 +145,20 @@
   not be rendered if the plexis database connection is offline</p></div>
 <h3>Returns</h3>
 <div class="subelement response"><code><a href="../classes/Database.Driver.html">\Database\Driver</a></code></div>
+</div></div>
+</div>
+<a id="method_PluginInstalled"></a><div class="element clickable method public method_PluginInstalled" data-toggle="collapse" data-target=".method_PluginInstalled .collapse">
+<h2>Returns whether or not a plugin is installed and running</h2>
+<pre>PluginInstalled(string $name) : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the plugin</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
 </div></div>
 </div>
 <a id="method_RenderTemplate"></a><div class="element clickable method public method_RenderTemplate" data-toggle="collapse" data-target=".method_RenderTemplate .collapse">
@@ -222,6 +250,12 @@ will be executed</p></div>
 <a id="property_modulePath"> </a><div class="element clickable property public property_modulePath" data-toggle="collapse" data-target=".property_modulePath .collapse">
 <h2>Declares the root controller path for the current module</h2>
 <pre>$modulePath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_plugins"> </a><div class="element clickable property protected property_plugins" data-toggle="collapse" data-target=".property_plugins .collapse">
+<h2>An array of installed plugins</h2>
+<pre>$plugins : string[]</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

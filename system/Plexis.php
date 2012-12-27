@@ -48,7 +48,13 @@ class Plexis
      * The Wowlib object
      * @var \Wowlib\Realm
      */
-    protected static $realm;
+    protected static $realm = null;
+    
+    /**
+     * An array of installed plugins
+     * @var string[]
+     */
+    protected static $plugins = array();
     
     /**
      * Certain modules may not want the template to render.
@@ -80,7 +86,8 @@ class Plexis
         self::LoadPlugins();
         
         // Load the Wowlib
-        self::LoadWowlib(false);
+        if(self::$realm === null)
+            self::LoadWowlib(false);
         
         // Init the database connection, we check to see if it exists first, because
         // a plugin might have already loaded it
@@ -196,6 +203,28 @@ class Plexis
     }
     
     /**
+     * Returns an array of installed plugins
+     *
+     * @return string[]
+     */
+    public static function ListPlugins()
+    {
+        return self::$plugins;
+    }
+    
+    /**
+     * Returns whether or not a plugin is installed and running
+     *
+     * @param string $name The name of the plugin
+     *
+     * @return bool
+     */
+    public static function PluginInstalled($name)
+    {
+        return in_array($name, self::$plugins);
+    }
+    
+    /**
      * Sets whether plexis should render the full template or not
      *
      * @param bool $bool Render the template?
@@ -244,6 +273,10 @@ class Plexis
         // Get URL info
         $Request = Router::GetRequest();
         
+        $GLOBALS['controller'] = $Request['module'];
+        $GLOBALS['action'] = $Request['action'];
+        $GLOBALS['querystring'] = $Request['params'];
+        
         // Define out module path, and our module controller path
         if($Request['isCoreModule'])
             self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($Request['module']) );
@@ -285,9 +318,13 @@ class Plexis
                 continue;
             }
             
+            // Construct the plugin class
             include $file;
             $className = "Plugin\\". $name;
             new $className();
+            
+            // Add the plugin to the list of installed plugins
+            self::$plugins[] = $name;
             $i++;
         }
         
