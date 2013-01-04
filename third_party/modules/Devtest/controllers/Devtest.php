@@ -27,9 +27,11 @@ class Devtest extends \Core\Controller
     
     public function index() 
     {
-        global $NAME;
-        $NAME = 'CAN YOU SEE ME?';
-        var_dump($GLOBALS); die();
+        $string = "<frame>test</frame> <div>Hi!</div>";
+        $Filter = new Core\XssFilter();
+        $Filter->useBlacklist(true);
+        $Filter->setTagsMethod( Core\XssFilter::BLACKLIST );
+        Library\Template::Add($Filter->clean($string));
     }
 }
 ?>

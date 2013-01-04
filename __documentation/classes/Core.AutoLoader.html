@@ -60,10 +60,10 @@ of registered paths for that prefix as values</span><pre>GetPrefixes()</pre></a>
 <li class="method public "><a href="#method_LoadClass" title="LoadClass :: Method used to search all registered paths for a missing class
 reference (used by the spl_autoload method)"><span class="description">Method used to search all registered paths for a missing class
 reference (used by the spl_autoload method)</span><pre>LoadClass()</pre></a></li>
-<li class="method public "><a href="#method_Register" title="Register :: Registers a path for the autoload to search for classes."><span class="description">Registers a path for the autoload to search for classes.</span><pre>Register()</pre></a></li>
 <li class="method public "><a href="#method_RegisterNamespace" title="RegisterNamespace :: Registers a path for the autoloader to search in when searching
 for a specific namespaced class."><span class="description">Registers a path for the autoloader to search in when searching
 for a specific namespaced class.</span><pre>RegisterNamespace()</pre></a></li>
+<li class="method public "><a href="#method_RegisterPath" title="RegisterPath :: Registers a path for the autoload to search for classes."><span class="description">Registers a path for the autoload to search for classes.</span><pre>RegisterPath()</pre></a></li>
 <li class="method public "><a href="#method_RegisterPrefix" title="RegisterPrefix :: Registers a path for the autoload to search for when searching
 for a prefixed class."><span class="description">Registers a path for the autoload to search for when searching
 for a prefixed class.</span><pre>RegisterPrefix()</pre></a></li>
@@ -155,20 +155,6 @@ reference (used by the spl_autoload method)</h2>
   included successfully.</div>
 </div></div>
 </div>
-<a id="method_Register"></a><div class="element clickable method public method_Register" data-toggle="collapse" data-target=".method_Register .collapse">
-<h2>Registers a path for the autoload to search for classes.</h2>
-<pre>Register(string $path) : void</pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Namespaced
-and prefixed registered paths will be searched first if the class
-is namespaced, or prefixed.</p></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$path</h4>
-<code>string</code><p>Full path to search for a class</p></div>
-</div></div>
-</div>
 <a id="method_RegisterNamespace"></a><div class="element clickable method public method_RegisterNamespace" data-toggle="collapse" data-target=".method_RegisterNamespace .collapse">
 <h2>Registers a path for the autoloader to search in when searching
 for a specific namespaced class.</h2>
@@ -187,6 +173,20 @@ to the current ruuning list of paths for that namespace</p></div>
 <code>string</code><code>array</code><p>Full path, or an array of paths
   to search for the namespaced class'.</p>
 </div>
+</div></div>
+</div>
+<a id="method_RegisterPath"></a><div class="element clickable method public method_RegisterPath" data-toggle="collapse" data-target=".method_RegisterPath .collapse">
+<h2>Registers a path for the autoload to search for classes.</h2>
+<pre>RegisterPath(string $path) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Namespaced
+and prefixed registered paths will be searched first if the class
+is namespaced, or prefixed.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>Full path to search for a class</p></div>
 </div></div>
 </div>
 <a id="method_RegisterPrefix"></a><div class="element clickable method public method_RegisterPrefix" data-toggle="collapse" data-target=".method_RegisterPrefix .collapse">

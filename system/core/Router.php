@@ -147,6 +147,9 @@ class Router
         // Make sure we only route once
         if(self::$routed) return;
         
+        // Create an instance of the XssFilter
+        $Filter = new XssFilter();
+        
         // Add trace for debugging
         // \Debug::trace('Routing url...', __FILE__, __LINE__);
 
@@ -154,7 +157,7 @@ class Router
         if( !Config::GetVar('enable_query_strings', 'Plexis'))
         {
             // Get our current url, which is passed on by the 'url' param
-            self::$uri = (isset($_GET['uri'])) ? Security::Clean(Request::Query('uri')) : '';   
+            self::$uri = (isset($_GET['uri'])) ? $Filter->clean(Request::Query('uri')) : '';   
         }
         else
         {
@@ -163,7 +166,7 @@ class Router
             $a_param = Config::GetVar('action_param', 'Plexis');
             
             // Make sure we have a controller at least
-            $c = Security::Clean(Request::Query($c_param));
+            $c = $Filter->clean(Request::Query($c_param));
             if( !$c )
             {
                 self::$uri = '';
@@ -171,14 +174,14 @@ class Router
             else
             {
                 // Get our action
-                $a = Security::Clean(Request::Query($a_param));
+                $a = $Filter->clean(Request::Query($a_param));
                 if( !$a ) $a = Config::GetVar('default_action', 'Plexis'); // Default Action
                 
                 // Init the uri
                 self::$uri = $c .'/'. $a;
                 
                 // Clean the query string
-                $qs = Security::Clean( $_SERVER['QUERY_STRING'] );
+                $qs = $Filter->clean( $_SERVER['QUERY_STRING'] );
                 $qs = explode('&', $qs);
                 foreach($qs as $string)
                 {

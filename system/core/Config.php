@@ -77,10 +77,6 @@ class Config
         // Lowercase the $name
         $name = strtolower($name);
         
-        // Make sure this config has set permissions
-        if(!self::$files[$name]['allow_set'])
-            return false;
-        
         // If we have array, loop through and set each
         if(is_array($key))
         {
@@ -104,14 +100,12 @@ class Config
      * @param string $_Cname The container name we are storing this configs
      * @param string $_Carray If all of the config vars are stored in an array, 
      *    whats the array variable name?
-     * @param bool $_CallowSet If set to false, config values are readonly, and cannot
-     *    be set via the 'SetVar' method. 
-     * @param bool $_CallowSave If set to true, the config file cannot be written
-     *    to by the 'Save' method. Also, if $_CallowSet is false, this value is
-     *    false as well, no matter the actual set value. 
+     *
+     * @throws \FileNotFoundException if the config file does not exist
+     *
      * @return bool Returns false if the config file cannot be found or read
      */
-    public static function Load($_Cfile, $_Cname, $_Carray = false, $_CallowSet = true, $_CallowSave = true) 
+    public static function Load($_Cfile, $_Cname, $_Carray = false) 
     {
         // Lowercase the $name
         $_Cname = strtolower($_Cname);
@@ -125,14 +119,12 @@ class Config
         
         // Include file and add it to the $files array
         if(!file_exists($_Cfile)) 
-            return false;
+            throw new \FileNotFoundException("Config file '{$_Cfile}' does not exist!");
         include( $_Cfile );
         
         // Set config file flags
         self::$files[$_Cname]['file_path'] = $_Cfile;
         self::$files[$_Cname]['config_key'] = $_Carray;
-        self::$files[$_Cname]['allow_set'] = $_CallowSet;
-        self::$files[$_Cname]['allow_save'] = $_CallowSave;
         
         // Get defined variables
         $vars = get_defined_vars();
@@ -140,7 +132,7 @@ class Config
             $vars = $vars[$_Carray];
         else
             // Unset the passes vars
-            unset($vars['_Cfile'], $vars['_Cname'], $vars['_Carray'], $vars['_CallowSet'], $vars['_CallowSave']);
+            unset($vars['_Cfile'], $vars['_Cname'], $vars['_Carray']);
         
         // Add the variables to the $data[$name] array
         if(count($vars) > 0)

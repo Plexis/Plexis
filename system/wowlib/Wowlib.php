@@ -14,6 +14,7 @@ namespace Wowlib;
 use \Core\Autoloader;
 use \Database\Driver as DBDriver;
 use \Core\Filesystem;
+use \Exception;
 
 /**
  * WowLib Framework for WoW Private Server CMS

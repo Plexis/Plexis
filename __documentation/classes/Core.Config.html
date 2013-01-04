@@ -151,7 +151,7 @@ May return NULL if the var is not set</div>
 </div>
 <a id="method_Load"></a><div class="element clickable method public method_Load" data-toggle="collapse" data-target=".method_Load .collapse">
 <h2>Loads a config file, and adds its defined variables to the $data array</h2>
-<pre>Load(string $_Cfile, string $_Cname, string $_Carray = false, bool $_CallowSet = true, bool $_CallowSave = true) : bool</pre>
+<pre>Load(string $_Cfile, string $_Cname, string $_Carray = false) : bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -168,19 +168,11 @@ May return NULL if the var is not set</div>
 <code>string</code><p>If all of the config vars are stored in an array,
    whats the array variable name?</p>
 </div>
-<div class="subelement argument">
-<h4>$_CallowSet<small><b>   [Default =  true]</b></small>
-</h4>
-<code>bool</code><p>If set to false, config values are readonly, and cannot
-   be set via the 'SetVar' method.</p>
-</div>
-<div class="subelement argument">
-<h4>$_CallowSave<small><b>   [Default =  true]</b></small>
-</h4>
-<code>bool</code><p>If set to true, the config file cannot be written
-   to by the 'Save' method. Also, if $_CallowSet is false, this value is
-   false as well, no matter the actual set value.</p>
-</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/FileNotFoundException.html">\FileNotFoundException</a></code></th>
+<td>if the config file does not exist</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>bool</code>Returns false if the config file cannot be found or read</div>

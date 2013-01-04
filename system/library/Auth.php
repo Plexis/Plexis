@@ -125,13 +125,16 @@ class Auth
         
         // Read cookie data to get our token
         $cookie = base64_decode( $cookie );
-        if(strpos($cookie, '::') != false):
+        if(strpos($cookie, '::') != false)
+        {
             list($userid, $token) = explode('::', $cookie);
             $userid = (int) $userid;
-        else:
+        }
+        else
+        {
             self::Logout(false);
             goto Guest;
-        endif;
+        }
 
         // Get the database result
         $query = "SELECT * FROM `pcms_sessions` WHERE `token` = ?";
@@ -335,7 +338,7 @@ class Auth
         {
             // Add trace for debugging
             // System::Trace("Account '{$username}' already exists. Registration failed", __FILE__, __LINE__);
-            throw new AccountExistsException('');
+            throw new AccountExistsException("Account '{$username}' already exists.");
         }
         
         // We are good to go, register the user
@@ -424,7 +427,10 @@ class Auth
         
         // Build a list of current permissions
         $p = array();
-        foreach($perms as $perm) $p[$perm] = 1;
+        foreach($perms as $perm)
+        {
+            $p[$perm] = 1;
+        }
         
         // Update the DB if there are any changes
         if(!empty($dif))

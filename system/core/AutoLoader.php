@@ -63,7 +63,7 @@ class AutoLoader
      * @param string $path Full path to search for a class
      * @return void
      */
-    public static function Register($path)
+    public static function RegisterPath($path)
     {
         if(array_search($path, self::$paths) !== false)
             return;

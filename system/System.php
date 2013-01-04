@@ -47,7 +47,8 @@ class System
         
         // Register the Core and Library namespaces with the autoloader
         AutoLoader::RegisterNamespace('Core', path(SYSTEM_PATH, 'core'));
-        AutoLoader::RegisterNamespace('Library', path( SYSTEM_PATH, "library" ));
+        AutoLoader::RegisterNamespace('Library', path(SYSTEM_PATH, 'library'));
+        AutoLoader::RegisterPath( path(SYSTEM_PATH, 'core', 'exceptions') );
         
         // Init System Benchmark
         Benchmark::Start('system');

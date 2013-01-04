@@ -109,7 +109,7 @@ class Controller
      *
      * @param string $name The helper filename to load
      * @param bool $global When set to true, the helper will be searched for
-     *   in the <ROOT>/system/helpers folder instead of the modules helper
+     *   in the {ROOT}/system/helpers folder instead of the modules helper
      *   folder. Default value is false.
      *
      * @return bool Returns true if the helper file was found, false otherwise
@@ -140,7 +140,8 @@ class Controller
      *
      * @param string $name The view filename to load (no extension)
      * @param string $jsFile The name of the views javascript file (located in the
-     *   modules JS folder). Leave null for no file.
+     *   modules JS folder). Leave null for no file, or to use the default template's view
+     *   js file.
      *
      * @return \Library\View|bool Returns false if the view file cannot be located,
      *   (and $silence is set to true), a Library\View object otherwise
@@ -180,7 +181,8 @@ class Controller
      *
      * @param string $name The partial view filename to load (no extension)
      * @param string $jsFile The name of the views javascript file (located in the
-     *   modules JS folder). Leave null for no file.
+     *   modules JS folder). Leave null for no file, or to use the default template's view
+     *  js file.
      *
      * @return \Library\View|bool Returns false if the view file cannot be located,
      *   a Library\View object otherwise
@@ -272,9 +274,14 @@ class Controller
     {
         // Get our path
         $path = path( $this->modulePath, 'config', $name .'.php');
+        $result = false;
+        try {
+            Config::Load($path, $id, $arrayName);
+            $result = true;
+        }
+        catch(\FileNotFoundException $e) {}
         
-        // Load the file
-        return Config::Load($path, $name, $arrayName);
+        return $result;
     }
     
     /**

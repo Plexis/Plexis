@@ -1,124 +1,208 @@
 <?php
-/* 
-| --------------------------------------------------------------
-| Plexis Core
-| --------------------------------------------------------------
-| Author:       Steven Wilson
-| Copyright:    Copyright (c) 2012, Plexis Dev Team
-| License:      GNU GPL v3
-| ---------------------------------------------------------------
-| Class: Security
-| ---------------------------------------------------------------
-|
-| This class is used for security cleaning of variables
-| 
-*/
+/**
+ * Plexis Content Management System
+ *
+ * @file        System/Core/XssFilter.php
+ * @copyright   2011-2012, Plexis Dev Team
+ * @license     GNU GPL v3
+ * @contains    XssFilter
+ */
 namespace Core;
 
-class Security
+/**
+ * A Cross Site Scripting security filter class
+ *
+ * @author      Steven Wilson
+ * @author      Daniel Morris
+ * @contributors Gianpaolo Racca, Ghislain Picard, Marco Wandschneider, Chris Tobin and Andrew Eddie.
+ * @copyright   Daniel Morris, Plexis Dev team
+ * @package     Core
+ */
+class XssFilter
 {
-    // Array of tags and attributes
-    protected static $tagsArray = array();
-    protected static $attrArray = array();
+    /**
+     * Constant containing the cleaning method of whitelist
+     * @var int
+     */
+    const WHITELIST = 0;
     
-    // Our tag and attribute cleaning methods
-    protected static $tagsMethod = 0;
-    protected static $attrMethod = 0;
+    /**
+     * Constant containing the cleaning method of blacklist
+     * @var int
+     */
+    const BLACKLIST = 1;
     
-    // Out xss cleaning method
-    protected static $xssAuto = 1;
+    /**
+     * Array of tags to be filtered
+     * @var string[]
+     */
+    protected $tagsArray = array();
+    
+    /**
+     * Array of attributes to be filtered
+     * @var string[]
+     */
+    protected $attrArray = array();
+    
+    /**
+     * Tags list cleaning method (whitelist or blacklist)
+     * @var int
+     */
+    protected $tagsMethod = self::WHITELIST;
+    
+    /**
+     * Attributes list cleaning method (whitelist or blacklist)
+     * @var int
+     */
+    protected $attrMethod = self::WHITELIST;
+    
+    /**
+     * Automatically remove blacklisted tags and attrubutes
+     * @var bool
+     */
+    protected $useBlacklist = true;
 
-/*
-| ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-*/
-    public static function Init()
+    /**
+     * Constructor.
+     *
+     * @return void
+     */
+    public function __construct()
     {
         // Load the config file for this
-        $path = path( SYSTEM_PATH, 'config', 'security.class.php' );
-        if(!Config::Load($path, 'SecurityClass', false, true, false))
-            throw new \Exception('Missing Security class configuration file.');
-        
-        // Add trace for debugging
-        // \Debug::trace('Input class initiated successfully', __FILE__, __LINE__);
+        if(!Config::IsLoaded('XssFilter'))
+        {
+            $path = path( SYSTEM_PATH, 'config', 'xssfilter.class.php' );
+            try {
+                Config::Load($path, 'XssFilter');
+            }
+            catch( \FileNotFoundException $e ) {
+                throw new \Exception('Missing XssFilter class configuration file: '. $path);
+            }
+        }
+    }
+    
+    /**
+     * Adds a tag to the array of tags to be filtered. Adding tags does not clear
+     * the current array of tags
+     *
+     * @param string $tag The html tag name to be filtered
+     *
+     * @return void
+     */
+    public function addTag($tag) 
+    {
+        if(!in_array($tag, $this->tagsArray))
+            $this->tagsArray[] = $tag;
+    }
+    
+    /**
+     * Adds an array of tags to be filtered. Adding tags does not clear
+     * the current array of tags
+     *
+     * @param string[] $tags An array of html tag names to be filtered
+     *
+     * @return void
+     */
+    public function addTagsArray($tags) 
+    {
+        foreach($tags as $tag)
+        {
+            $this->addTag($tag);
+        }
+    }
+    
+    /**
+     * Adds an attribute to the array of attributes to be filtered.
+     * Adding attributes does not clear the current array of attributes
+     *
+     * @param string $attr The html attribute name to be filtered
+     *
+     * @return void
+     */
+    public function addAttr($attr) 
+    {
+        if(!in_array($attr, $this->attrArray))
+            $this->attrArray[] = $attr;
+    }
+    
+    /**
+     * Adds an array of attributes to be filtered. Adding attributes does not clear
+     * the current array of attributes
+     *
+     * @param string[] $attrs An array of html attribute names to be filtered
+     *
+     * @return void
+     */
+    public function addAttrArray($attrs) 
+    {
+        foreach($attrs as $attr)
+        {
+            $this->addAttr($attr);
+        }
+    }
+    
+    /**
+     * Sets the tag method for filtering.
+     *
+     * @param int $mode The filter method. This value will either be
+     *   the constant value of XssFilter::WHITELIST or XssFilter::BLACKLIST.
+     *   If set to whitelist, all tags that are NOT defined will be removed.
+     *   If set to blacklist, all tags defined <b>will</b> be removed from the source,
+     *   and all non-defined tags will <b>not</b> be filtered out
+     *
+     * @return void
+     */
+    public function setTagsMethod($mode) 
+    {
+        if($mode != 0 && $mode != 1)
+            throw new \Exception('Invalid argument type for $mode');
+            
+        $this->tagsMethod = $mode;
+    }
+    
+    /**
+     * Sets the attribute method for filtering.
+     *
+     * @param int $mode The filter method. This value will either be
+     *   the constant value of XssFilter::WHITELIST or XssFilter::BLACKLIST.
+     *   If set to whitelist, all attributes that are NOT defined will be removed.
+     *   If set to blacklist, all attributes defined <b>will</b> be removed from the source,
+     *   and all non-defined attributes will <b>not</b> be filtered out
+     *
+     * @return void
+     */
+    public function setAttrMethod($mode) 
+    {
+        if($mode != 0 && $mode != 1)
+            throw new \Exception('Invalid argument type for $mode');
+            
+        $this->attrMethod = $mode;
+    }
+    
+    /**
+     * Defines whether the filter should use the blacklist of tags and attributes, 
+     * and automatically remove them. Blacklist is enabled by default.
+     *
+     * @param bool $bool Auto remove blacklisted tags and attributes? Blacklisted tags and
+     *   attributes are defined in the "system/config/xssfilter.class.php" config file.
+     *
+     * @return void
+     */
+    public function useBlacklist($bool = true) 
+    {  
+        $this->useBlacklist = $bool;
     }
 
-/*
-| ---------------------------------------------------------------
-| PHP InputFilter
-| ---------------------------------------------------------------
-|
-| NOTE: The below funtions where not created by myself, All i did
-| was update the code and clean it up a bit. Here is the original 
-| credits
-|
-| @project: PHP Input Filter
-| @date: 10-05-2005
-| @version: 1.2.2_php5
-| @author: Daniel Morris
-| @updated By: Steven Wilson
-| @contributors: Gianpaolo Racca, Ghislain Picard, Marco Wandschneider, Chris Tobin and Andrew Eddie.
-| @copyright: Daniel Morris
-| @email: dan@rootcube.com
-| @license: GNU General Public License (GPL)
-|
-*/
-
-
-/*
-| ---------------------------------------------------------------
-| Method: SetRules
-| ---------------------------------------------------------------
-|
-| Sets the cleaning rules such as allowed tags etc.
-|
-| @param: (Array) $tagsArray - list of user-defined tags
-| @param: (Array) $attrArray - list of user-defined attributes
-| @param: (Int) $tagsMethod - 0 = allow just user-defined, 1= allow all but user-defined
-| @param: (Int) $attrMethod - 0 = allow just user-defined, 1= allow all but user-defined
-| @param: (Int) $xssAuto - 0 = only auto clean essentials, 1= allow clean blacklisted tags/attr
-| @Return (None)
-|
-*/
-    public static function SetRules($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1) 
-    {	
-        // Count how many are in each for out loops
-        $countTags = count($tagsArray);
-        $countAttr = count($attrArray);
-        
-        // Loop through and lowercase all Tags
-        for($i = 0; $i < $countTags; $i++)
-        {
-            $tagsArray[$i] = strtolower($tagsArray[$i]);
-        }
-        
-        // Loop through and lowercase all attributes
-        for($i = 0; $i < $countAttr; $i++)
-        {
-            $attrArray[$i] = strtolower($attrArray[$i]);
-        }
-        
-        // Set our class variables
-        self::$tagsArray = $tagsArray;
-        self::$attrArray = $attrArray;
-        self::$tagsMethod = $tagsMethod;
-        self::$attrMethod = $attrMethod;
-        self::$xssAuto = $xssAuto;
-    }
-
-/*
-| ---------------------------------------------------------------
-| Method: Clean()
-| ---------------------------------------------------------------
-|
-| Main call function. Used to clean user input
-|
-| @Param: (Mixed) $source - String or array to be cleaned
-| @Return (Mixed) Returns the cleaned source of $source
-|
-*/
-    public static function Clean($source) 
+    /**
+     * Cleans a source string, using the Xss Filter tags and methods defined.
+     *
+     * @param string|string[] $source The source to be cleaned. May also be an array 
+     *   of strings to be cleaned
+     *
+     * @return string|string[] The cleaned source
+     */
+    public function clean($source) 
     {
         // If in array, clean each value
         if(is_array($source)) 
@@ -128,7 +212,7 @@ class Security
                 if(is_string($value)) 
                 {
                     // filter element for XSS and other 'bad' code etc.
-                    $source[$key] = self::Remove(self::Decode($value));
+                    $source[$key] = $this->remove($this->decode($value));
                 }
             }
             return $source;
@@ -136,45 +220,37 @@ class Security
         elseif(is_string($source)) 
         {
             // filter element for XSS and other 'bad' code etc.
-            return self::Remove(self::Decode($source));
+            return $this->remove($this->decode($source));
         } 
         return $source;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: Remove()
-| ---------------------------------------------------------------
-|
-| Removes all unwanted tags and attributes
-|
-| @Param: (String) $source - String or array to be cleaned
-| @Return (Mixed) Returns the cleaned source of $source
-|
-*/
-    protected static function Remove($source) 
+    
+    /**
+     * Removes all unwanted tags and attributes
+     *
+     * @param string $source The source to be cleaned.
+     *
+     * @return string Returns the cleaned source
+     */
+    protected function remove($source) 
     {
         $loopCounter = 0;
-        while($source != self::FilterTags($source)) 
+        while($source != $this->filterTags($source)) 
         {
-            $source = self::FilterTags($source);
+            $source = $this->filterTags($source);
             $loopCounter++;
         }
         return $source;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: FilterTags()
-| ---------------------------------------------------------------
-|
-| Internal method to strip a string of certain tags
-|
-| @Param: (String) $source - String or array to be cleaned
-| @Return (Mixed) Returns the cleaned source of $source
-|
-*/
-    protected static function FilterTags($source) 
+    
+    /**
+     * Internal method for removing all unwanted tags
+     *
+     * @param string $source The source to be cleaned.
+     *
+     * @return string Returns the cleaned source
+     */
+    protected function filterTags($source) 
     {
         $preTag = NULL;
         $postTag = $source;
@@ -234,7 +310,7 @@ class Security
             }	
 
             // excludes all "non-regular" tagnames OR no tagname OR remove if xssauto is on and tag is blacklisted
-            if(!preg_match("/^[a-z][a-z0-9]*$/i", $tagName) || !$tagName || ((in_array(strtolower($tagName), Config::GetVar('tagBlacklist', 'SecurityClass'))) && self::$xssAuto)) 
+            if(!preg_match("/^[a-z][a-z0-9]*$/i", $tagName) || !$tagName || ((in_array(strtolower($tagName), Config::GetVar('tagBlacklist', 'XssFilter'))) && $this->useBlacklist)) 
             { 				
                 $postTag = substr($postTag, ($tagLength + 2));
                 $tagOpen_start = strpos($postTag, '<');
@@ -286,15 +362,15 @@ class Security
             }
             
             // appears in array specified by user
-            $tagFound = in_array(strtolower($tagName), self::$tagsArray);
+            $tagFound = in_array(strtolower($tagName), $this->tagsArray);
 
             // remove this tag on condition			
-            if((!$tagFound && self::$tagsMethod || ($tagFound && !self::$tagsMethod)))
+            if((!$tagFound && $this->tagsMethod || ($tagFound && !$this->tagsMethod)))
             {
                 // reconstruct tag with allowed attributes
                 if(!$isCloseTag) 
                 {
-                    $attrSet = self::FilterAttr($attrSet);
+                    $attrSet = $this->filterAttr($attrSet);
                     $preTag .= '<' . $tagName;
                     for($i = 0; $i < count($attrSet); $i++)
                     {
@@ -328,19 +404,15 @@ class Security
         $preTag .= $postTag;
         return $preTag;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: FilterAttr()
-| ---------------------------------------------------------------
-|
-| Internal method to strip a tag of certain attributes
-|
-| @Param: (String) $source - String or array to be cleaned
-| @Return (Mixed) Returns the cleaned source of $source
-|
-*/
-    protected static function FilterAttr($attrSet) 
+    
+    /**
+     * Internal method for removing all unwanted attributes
+     *
+     * @param string[] $attrSet An array of attribute sets in a tag
+     *
+     * @return string[] Returns an array of filtered atrribute sets
+     */
+    protected function filterAttr($attrSet) 
     {	
         $newSet = array();
         
@@ -358,7 +430,7 @@ class Security
             list($attrSubSet[0]) = explode(' ', $attrSubSet[0]);
             
             // removes all "non-regular" attr names AND also attr blacklisted
-            if ((!preg_match("/^[a-z]*$/i", $attrSubSet[0])) || (self::$xssAuto && ((in_array(strtolower($attrSubSet[0]), Config::GetVar('attrBlacklist', 'SecurityClass'))) || (substr($attrSubSet[0], 0, 2) == 'on'))))
+            if ((!preg_match("/^[a-z]*$/i", $attrSubSet[0])) || ($this->useBlacklist && ((in_array(strtolower($attrSubSet[0]), Config::GetVar('attrBlacklist', 'XssFilter'))) || (substr($attrSubSet[0], 0, 2) == 'on'))))
             {
                 continue;
             }
@@ -396,10 +468,10 @@ class Security
             ) continue;
             
             // if matches user defined array
-            $attrFound = in_array(strtolower($attrSubSet[0]), self::$attrArray);
+            $attrFound = in_array(strtolower($attrSubSet[0]), $this->attrArray);
             
             // keep this attr on condition
-            if((!$attrFound && self::$attrMethod) || ($attrFound && !self::$attrMethod)) 
+            if((!$attrFound && $this->attrMethod) || ($attrFound && !$this->attrMethod)) 
             {
                 // attr has value
                 if($attrSubSet[1])
@@ -422,19 +494,15 @@ class Security
         }
         return $newSet;
     }
-
-/*
-| ---------------------------------------------------------------
-| Method: Decode()
-| ---------------------------------------------------------------
-|
-| Converts to plain text
-|
-| @Param: (String) $source - String to be converted
-| @Return (Mixed) Returns the cleaned source of $source
-|
-*/
-    protected static function Decode($source) 
+    
+    /**
+     * Decodes all html entities from the source
+     *
+     * @param string $source The source to be converted.
+     *
+     * @return string Returns the converted source
+     */
+    protected function decode($source) 
     {
         $source = html_entity_decode($source, ENT_QUOTES, "ISO-8859-1");
         $source = preg_replace('/&#(\d+);/me',"chr(\\1)", $source);
@@ -442,8 +510,4 @@ class Security
         return $source;
     }
 }
-
-// Init the class
-Security::Init();
-
 // EOF 

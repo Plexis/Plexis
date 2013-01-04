@@ -1,0 +1,373 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\XssFilter</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: Constructor."><span class="description">Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_addAttr" title="addAttr :: Adds an attribute to the array of attributes to be filtered."><span class="description">Adds an attribute to the array of attributes to be filtered.</span><pre>addAttr()</pre></a></li>
+<li class="method public "><a href="#method_addAttrArray" title="addAttrArray :: Adds an array of attributes to be filtered."><span class="description">Adds an array of attributes to be filtered.</span><pre>addAttrArray()</pre></a></li>
+<li class="method public "><a href="#method_addTag" title="addTag :: Adds a tag to the array of tags to be filtered."><span class="description">Adds a tag to the array of tags to be filtered.</span><pre>addTag()</pre></a></li>
+<li class="method public "><a href="#method_addTagsArray" title="addTagsArray :: Adds an array of tags to be filtered."><span class="description">Adds an array of tags to be filtered.</span><pre>addTagsArray()</pre></a></li>
+<li class="method public "><a href="#method_clean" title="clean :: Cleans a source string, using the Xss Filter tags and methods defined."><span class="description">Cleans a source string, using the Xss Filter tags and methods defined.</span><pre>clean()</pre></a></li>
+<li class="method public "><a href="#method_setAttrMethod" title="setAttrMethod :: Sets the attribute method for filtering."><span class="description">Sets the attribute method for filtering.</span><pre>setAttrMethod()</pre></a></li>
+<li class="method public "><a href="#method_setTagsMethod" title="setTagsMethod :: Sets the tag method for filtering."><span class="description">Sets the tag method for filtering.</span><pre>setTagsMethod()</pre></a></li>
+<li class="method public "><a href="#method_useBlacklist" title="useBlacklist :: Defines whether the filter should use the blacklist of tags and attributes,
+and automatically remove them."><span class="description">Defines whether the filter should use the blacklist of tags and attributes,
+and automatically remove them.</span><pre>useBlacklist()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="method protected "><a href="#method_decode" title="decode :: Decodes all html entities from the source"><span class="description">Decodes all html entities from the source</span><pre>decode()</pre></a></li>
+<li class="method protected "><a href="#method_filterAttr" title="filterAttr :: Internal method for removing all unwanted attributes"><span class="description">Internal method for removing all unwanted attributes</span><pre>filterAttr()</pre></a></li>
+<li class="method protected "><a href="#method_filterTags" title="filterTags :: Internal method for removing all unwanted tags"><span class="description">Internal method for removing all unwanted tags</span><pre>filterTags()</pre></a></li>
+<li class="method protected "><a href="#method_remove" title="remove :: Removes all unwanted tags and attributes"><span class="description">Removes all unwanted tags and attributes</span><pre>remove()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_attrArray" title="$attrArray :: Array of attributes to be filtered"><span class="description"></span><pre>$attrArray</pre></a></li>
+<li class="property protected "><a href="#property_attrMethod" title="$attrMethod :: Attributes list cleaning method (whitelist or blacklist)"><span class="description"></span><pre>$attrMethod</pre></a></li>
+<li class="property protected "><a href="#property_tagsArray" title="$tagsArray :: Array of tags to be filtered"><span class="description"></span><pre>$tagsArray</pre></a></li>
+<li class="property protected "><a href="#property_tagsMethod" title="$tagsMethod :: Tags list cleaning method (whitelist or blacklist)"><span class="description"></span><pre>$tagsMethod</pre></a></li>
+<li class="property protected "><a href="#property_useBlacklist" title="$useBlacklist :: Automatically remove blacklisted tags and attrubutes"><span class="description"></span><pre>$useBlacklist</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_BLACKLIST" title="BLACKLIST :: Constant containing the cleaning method of blacklist"><span class="description">Constant containing the cleaning method of blacklist</span><pre>BLACKLIST</pre></a></li>
+<li class="constant  "><a href="#constant_WHITELIST" title="WHITELIST :: Constant containing the cleaning method of whitelist"><span class="description">Constant containing the cleaning method of whitelist</span><pre>WHITELIST</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\XssFilter"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.XssFilter.html">XssFilter</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">A Cross Site Scripting security filter class</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">Daniel Morris</a></td>
+</tr>
+<tr>
+<th>contributors</th>
+<td>Gianpaolo Racca, Ghislain Picard, Marco Wandschneider, Chris Tobin and Andrew Eddie.</td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>Daniel Morris, Plexis Dev team</td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Core.html">Core</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Constructor.</h2>
+<pre>__construct() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_addAttr"></a><div class="element clickable method public method_addAttr" data-toggle="collapse" data-target=".method_addAttr .collapse">
+<h2>Adds an attribute to the array of attributes to be filtered.</h2>
+<pre>addAttr(string $attr) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Adding attributes does not clear the current array of attributes</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$attr</h4>
+<code>string</code><p>The html attribute name to be filtered</p></div>
+</div></div>
+</div>
+<a id="method_addAttrArray"></a><div class="element clickable method public method_addAttrArray" data-toggle="collapse" data-target=".method_addAttrArray .collapse">
+<h2>Adds an array of attributes to be filtered.</h2>
+<pre>addAttrArray(string[] $attrs) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Adding attributes does not clear
+the current array of attributes</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$attrs</h4>
+<code>string[]</code><p>An array of html attribute names to be filtered</p></div>
+</div></div>
+</div>
+<a id="method_addTag"></a><div class="element clickable method public method_addTag" data-toggle="collapse" data-target=".method_addTag .collapse">
+<h2>Adds a tag to the array of tags to be filtered.</h2>
+<pre>addTag(string $tag) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Adding tags does not clear
+the current array of tags</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$tag</h4>
+<code>string</code><p>The html tag name to be filtered</p></div>
+</div></div>
+</div>
+<a id="method_addTagsArray"></a><div class="element clickable method public method_addTagsArray" data-toggle="collapse" data-target=".method_addTagsArray .collapse">
+<h2>Adds an array of tags to be filtered.</h2>
+<pre>addTagsArray(string[] $tags) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Adding tags does not clear
+the current array of tags</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$tags</h4>
+<code>string[]</code><p>An array of html tag names to be filtered</p></div>
+</div></div>
+</div>
+<a id="method_clean"></a><div class="element clickable method public method_clean" data-toggle="collapse" data-target=".method_clean .collapse">
+<h2>Cleans a source string, using the Xss Filter tags and methods defined.</h2>
+<pre>clean(string | string[] $source) : string | string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source</h4>
+<code>string</code><code>string[]</code><p>The source to be cleaned. May also be an array
+  of strings to be cleaned</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>string[]</code>The cleaned source</div>
+</div></div>
+</div>
+<a id="method_setAttrMethod"></a><div class="element clickable method public method_setAttrMethod" data-toggle="collapse" data-target=".method_setAttrMethod .collapse">
+<h2>Sets the attribute method for filtering.</h2>
+<pre>setAttrMethod(int $mode) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code>int</code><p>The filter method. This value will either be
+  the constant value of XssFilter::WHITELIST or XssFilter::BLACKLIST.
+  If set to whitelist, all attributes that are NOT defined will be removed.
+  If set to blacklist, all attributes defined <b>will</b> be removed from the source,
+  and all non-defined attributes will <b>not</b> be filtered out</p>
+</div>
+</div></div>
+</div>
+<a id="method_setTagsMethod"></a><div class="element clickable method public method_setTagsMethod" data-toggle="collapse" data-target=".method_setTagsMethod .collapse">
+<h2>Sets the tag method for filtering.</h2>
+<pre>setTagsMethod(int $mode) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code>int</code><p>The filter method. This value will either be
+  the constant value of XssFilter::WHITELIST or XssFilter::BLACKLIST.
+  If set to whitelist, all tags that are NOT defined will be removed.
+  If set to blacklist, all tags defined <b>will</b> be removed from the source,
+  and all non-defined tags will <b>not</b> be filtered out</p>
+</div>
+</div></div>
+</div>
+<a id="method_useBlacklist"></a><div class="element clickable method public method_useBlacklist" data-toggle="collapse" data-target=".method_useBlacklist .collapse">
+<h2>Defines whether the filter should use the blacklist of tags and attributes,
+and automatically remove them.</h2>
+<pre>useBlacklist(bool $bool = true) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Blacklist is enabled by default.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$bool<small><b>   [Default =  true]</b></small>
+</h4>
+<code>bool</code><p>Auto remove blacklisted tags and attributes? Blacklisted tags and
+  attributes are defined in the "system/config/xssfilter.class.php" config file.</p>
+</div>
+</div></div>
+</div>
+<a id="method_decode"></a><div class="element clickable method protected method_decode" data-toggle="collapse" data-target=".method_decode .collapse">
+<h2>Decodes all html entities from the source</h2>
+<pre>decode(string $source) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source</h4>
+<code>string</code><p>The source to be converted.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the converted source</div>
+</div></div>
+</div>
+<a id="method_filterAttr"></a><div class="element clickable method protected method_filterAttr" data-toggle="collapse" data-target=".method_filterAttr .collapse">
+<h2>Internal method for removing all unwanted attributes</h2>
+<pre>filterAttr(string[] $attrSet) : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$attrSet</h4>
+<code>string[]</code><p>An array of attribute sets in a tag</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string[]</code>Returns an array of filtered atrribute sets</div>
+</div></div>
+</div>
+<a id="method_filterTags"></a><div class="element clickable method protected method_filterTags" data-toggle="collapse" data-target=".method_filterTags .collapse">
+<h2>Internal method for removing all unwanted tags</h2>
+<pre>filterTags(string $source) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source</h4>
+<code>string</code><p>The source to be cleaned.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the cleaned source</div>
+</div></div>
+</div>
+<a id="method_remove"></a><div class="element clickable method protected method_remove" data-toggle="collapse" data-target=".method_remove .collapse">
+<h2>Removes all unwanted tags and attributes</h2>
+<pre>remove(string $source) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source</h4>
+<code>string</code><p>The source to be cleaned.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the cleaned source</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_attrArray"> </a><div class="element clickable property protected property_attrArray" data-toggle="collapse" data-target=".property_attrArray .collapse">
+<h2>Array of attributes to be filtered</h2>
+<pre>$attrArray : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_attrMethod"> </a><div class="element clickable property protected property_attrMethod" data-toggle="collapse" data-target=".property_attrMethod .collapse">
+<h2>Attributes list cleaning method (whitelist or blacklist)</h2>
+<pre>$attrMethod : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_tagsArray"> </a><div class="element clickable property protected property_tagsArray" data-toggle="collapse" data-target=".property_tagsArray .collapse">
+<h2>Array of tags to be filtered</h2>
+<pre>$tagsArray : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_tagsMethod"> </a><div class="element clickable property protected property_tagsMethod" data-toggle="collapse" data-target=".property_tagsMethod .collapse">
+<h2>Tags list cleaning method (whitelist or blacklist)</h2>
+<pre>$tagsMethod : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_useBlacklist"> </a><div class="element clickable property protected property_useBlacklist" data-toggle="collapse" data-target=".property_useBlacklist .collapse">
+<h2>Automatically remove blacklisted tags and attrubutes</h2>
+<pre>$useBlacklist : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_BLACKLIST"> </a><div class="element clickable constant  constant_BLACKLIST" data-toggle="collapse" data-target=".constant_BLACKLIST .collapse">
+<h2>Constant containing the cleaning method of blacklist</h2>
+<pre>BLACKLIST : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_WHITELIST"> </a><div class="element clickable constant  constant_WHITELIST" data-toggle="collapse" data-target=".constant_WHITELIST .collapse">
+<h2>Constant containing the cleaning method of whitelist</h2>
+<pre>WHITELIST : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>
