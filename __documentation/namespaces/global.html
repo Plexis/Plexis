@@ -79,6 +79,21 @@
 <code>string</code>A string containing the number ($count) of breaks</div>
 </div></div>
 </div>
+<a id="function_formatSize"></a><div class="element clickable function  function_formatSize" data-toggle="collapse" data-target=".function_formatSize .collapse">
+<h2>Formats a file size to human readable format</h2>
+<pre>formatSize(string | float | int $size) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$size</h4>
+<code>string</code><code>float</code><code>int</code><p>The size in bytes</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns a formatted size ( Ex: 32.6 MB )</div>
+</div></div>
+</div>
 <a id="function_isValidIp"></a><div class="element clickable function  function_isValidIp" data-toggle="collapse" data-target=".function_isValidIp .collapse">
 <h2>Checks an IP address, returning whether its a valid, Non-Private IP.</h2>
 <pre>isValidIp(string $ip) : bool</pre>
@@ -120,16 +135,45 @@
 <h4>$parts<small><b>   [Default =  null]</b></small>
 </h4>
 <code>string</code><code>string[]</code><p>The pieces of the path, passed as
-individual arguments. Each argument can be an array of paths,
-a string foldername, or a mixture of the two.</p></div>
+  individual arguments. Each argument can be a single dimmensional
+  array of paths, a string foldername, or a mixture of the two.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>string</code>Full path using the correct system
   directory separater</div>
 </div></div>
 </div>
+<a id="function_truePath"></a><div class="element clickable function  function_truePath" data-toggle="collapse" data-target=".function_truePath .collapse">
+<h2>This function is to return a complete path from a relative path.</h2>
+<pre>truePath(string $path) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This function is meant to replace PHP's extremely buggy realpath().</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>The original path, can be relative.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The resolved path without a trailing slash, it might not exist.</div>
+</div></div>
+</div>
 <h3>
 <i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="ArgumentException" class="element ajax clickable class">
+<h1>ArgumentException<a href="../classes/ArgumentException.html">¶</a>
+</h1>
+<p class="short_description">A common exception thrown by many classes for passing invalid arguments</p>
+<div class="details collapse"></div>
+<a href="../classes/ArgumentException.html" class="more">« More »</a>
+</div>
+<div id="DirectoryNotFoundException" class="element ajax clickable class">
+<h1>DirectoryNotFoundException<a href="../classes/DirectoryNotFoundException.html">¶</a>
+</h1>
+<p class="short_description">An exception thrown by the DirectoryInfo class when a directory could not be found.</p>
+<div class="details collapse"></div>
+<a href="../classes/DirectoryNotFoundException.html" class="more">« More »</a>
+</div>
 <div id="FileNotFoundException" class="element ajax clickable class">
 <h1>FileNotFoundException<a href="../classes/FileNotFoundException.html">¶</a>
 </h1>
@@ -137,12 +181,26 @@ a string foldername, or a mixture of the two.</p></div>
 <div class="details collapse"></div>
 <a href="../classes/FileNotFoundException.html" class="more">« More »</a>
 </div>
+<div id="IOException" class="element ajax clickable class">
+<h1>IOException<a href="../classes/IOException.html">¶</a>
+</h1>
+<p class="short_description">An exception thrown when filesystem releated errors occur</p>
+<div class="details collapse"></div>
+<a href="../classes/IOException.html" class="more">« More »</a>
+</div>
 <div id="Plexis" class="element ajax clickable class">
 <h1>Plexis<a href="../classes/Plexis.html">¶</a>
 </h1>
 <p class="short_description">The backend controller is the main method for running the Application</p>
 <div class="details collapse"></div>
 <a href="../classes/Plexis.html" class="more">« More »</a>
+</div>
+<div id="SecurityException" class="element ajax clickable class">
+<h1>SecurityException<a href="../classes/SecurityException.html">¶</a>
+</h1>
+<p class="short_description">A common exception thrown by many classes for security purposes.</p>
+<div class="details collapse"></div>
+<a href="../classes/SecurityException.html" class="more">« More »</a>
 </div>
 <div id="System" class="element ajax clickable class">
 <h1>System<a href="../classes/System.html">¶</a>

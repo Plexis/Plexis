@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>Plexis CMS » Helpers</title>
+<title>Plexis CMS » Helpers\Validation</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../template/css/template.css" rel="stylesheet" media="all">
@@ -50,124 +50,14 @@
 <li class="nav-header">
 <i class="icon-map-marker"></i> Packages</li>
 <li>
-<span class="empty-package"><i class="icon-folder-close"></i>Helpers</span><ul class="nav nav-list nav-packages">
-<li>
-<a href="../packages/Helpers.Html.html" title="Html"><i class="icon-folder-open"></i>Html</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Helpers.IO.html" title="IO"><i class="icon-folder-open"></i>IO</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
 <a href="../packages/Helpers.Validation.html" title="Validation"><i class="icon-folder-open"></i>Validation</a><ul class="nav nav-list nav-packages"></ul>
 </li>
-</ul>
-</li>
+<li class="nav-header">
+<i class="icon-custom icon-function"></i> Functions</li>
+<li class="function  "><a href="#function_isValidIp" title="isValidIp :: Checks an IP address, returning whether its a valid, Non-Private IP."><span class="description">Checks an IP address, returning whether its a valid, Non-Private IP.</span><pre>isValidIp</pre></a></li>
 </ul>
 </div>
 <div class="span8 package-contents">
-<ul class="breadcrumb"><li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/Helpers.html">Helpers</a></li>
-</li></ul>
-<div class="package-indent">
-<ul class="breadcrumb"><li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Helpers.html">Helpers</a></li>
-<li class="active">
-<span class="divider">\</span><a href="../packages/Helpers.Html.html">Html</a>
-</li>
-</li></ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-function"></i> Functions</h3>
-<a id="function_br"></a><div class="element clickable function  function_br" data-toggle="collapse" data-target=".function_br .collapse">
-<h2>Creates a number of html breaks to be repeated</h2>
-<pre>br(int $count) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$count</h4>
-<code>int</code><p>The number of breaks</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>A string containing the number ($count) of breaks</div>
-</div></div>
-</div>
-<a id="function_nbs"></a><div class="element clickable function  function_nbs" data-toggle="collapse" data-target=".function_nbs .collapse">
-<h2>Creates a number of non-breaking spaces to be repeated</h2>
-<pre>nbs(int $count) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$count</h4>
-<code>int</code><p>The number of spaces</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>A string containing the number ($count) of non-breaking spaces</div>
-</div></div>
-</div>
-</div>
-<ul class="breadcrumb"><li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Helpers.html">Helpers</a></li>
-<li class="active">
-<span class="divider">\</span><a href="../packages/Helpers.IO.html">IO</a>
-</li>
-</li></ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-function"></i> Functions</h3>
-<a id="function_formatSize"></a><div class="element clickable function  function_formatSize" data-toggle="collapse" data-target=".function_formatSize .collapse">
-<h2>Formats a file size to human readable format</h2>
-<pre>formatSize(string | float | int $size) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$size</h4>
-<code>string</code><code>float</code><code>int</code><p>The size in bytes</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>Returns a formatted size ( Ex: 32.6 MB )</div>
-</div></div>
-</div>
-<a id="function_path"></a><div class="element clickable function  function_path" data-toggle="collapse" data-target=".function_path .collapse">
-<h2>Combines several strings into a file path.</h2>
-<pre>path(string | string[] $parts = null) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$parts<small><b>   [Default =  null]</b></small>
-</h4>
-<code>string</code><code>string[]</code><p>The pieces of the path, passed as
-  individual arguments. Each argument can be a single dimmensional
-  array of paths, a string foldername, or a mixture of the two.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>Full path using the correct system
-  directory separater</div>
-</div></div>
-</div>
-<a id="function_truePath"></a><div class="element clickable function  function_truePath" data-toggle="collapse" data-target=".function_truePath .collapse">
-<h2>This function is to return a complete path from a relative path.</h2>
-<pre>truePath(string $path) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>This function is meant to replace PHP's extremely buggy realpath().</p></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$path</h4>
-<code>string</code><p>The original path, can be relative.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>The resolved path without a trailing slash, it might not exist.</div>
-</div></div>
-</div>
-</div>
 <ul class="breadcrumb"><li>
 <a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Helpers.html">Helpers</a></li>
 <li class="active">
@@ -191,7 +81,6 @@
 <div class="subelement response">
 <code>bool</code>Returns true if the given IP address is a valid, Non-Private IP, false otherwise</div>
 </div></div>
-</div>
 </div>
 </div>
 </div>

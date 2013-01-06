@@ -1,0 +1,481 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\IO\FileInfo</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: Class Constructor"><span class="description">Class Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method___toString" title="__toString :: When used as a string, this object returns the fullpath to the file."><span class="description">When used as a string, this object returns the fullpath to the file.</span><pre>__toString()</pre></a></li>
+<li class="method public "><a href="#method_accessed" title="accessed :: Gets last access time of file"><span class="description">Gets last access time of file</span><pre>accessed()</pre></a></li>
+<li class="method public "><a href="#method_chmod" title="chmod :: Fetches or sets the permissions of the file"><span class="description">Fetches or sets the permissions of the file</span><pre>chmod()</pre></a></li>
+<li class="method public "><a href="#method_copyTo" title="copyTo :: Creates a copy of the file to the specified file location"><span class="description">Creates a copy of the file to the specified file location</span><pre>copyTo()</pre></a></li>
+<li class="method public "><a href="#method_ext" title="ext :: Gets the file's extension"><span class="description">Gets the file's extension</span><pre>ext()</pre></a></li>
+<li class="method public "><a href="#method_filepath" title="filepath :: Returns the full path to the file, including the file name"><span class="description">Returns the full path to the file, including the file name</span><pre>filepath()</pre></a></li>
+<li class="method public "><a href="#method_getContents" title="getContents :: Returns the contents of the file"><span class="description">Returns the contents of the file</span><pre>getContents()</pre></a></li>
+<li class="method public "><a href="#method_getParentDir" title="getParentDir :: Returns the directory that the file is located in"><span class="description">Returns the directory that the file is located in</span><pre>getParentDir()</pre></a></li>
+<li class="method public "><a href="#method_isReadable" title="isReadable :: Returns whether this file is readable or not."><span class="description">Returns whether this file is readable or not.</span><pre>isReadable()</pre></a></li>
+<li class="method public "><a href="#method_isWritable" title="isWritable :: Returns whether this file is writable or not."><span class="description">Returns whether this file is writable or not.</span><pre>isWritable()</pre></a></li>
+<li class="method public "><a href="#method_mimeType" title="mimeType :: Fetches the mime type of this file."><span class="description">Fetches the mime type of this file.</span><pre>mimeType()</pre></a></li>
+<li class="method public "><a href="#method_modified" title="modified :: Gets last amodification time of file"><span class="description">Gets last amodification time of file</span><pre>modified()</pre></a></li>
+<li class="method public "><a href="#method_moveTo" title="moveTo :: Moves the file to a new location."><span class="description">Moves the file to a new location.</span><pre>moveTo()</pre></a></li>
+<li class="method public "><a href="#method_name" title="name :: Returns the base file name"><span class="description">Returns the base file name</span><pre>name()</pre></a></li>
+<li class="method public "><a href="#method_putContents" title="putContents :: Sets or adds contents of the file"><span class="description">Sets or adds contents of the file</span><pre>putContents()</pre></a></li>
+<li class="method public "><a href="#method_rename" title="rename :: Renames the file."><span class="description">Renames the file.</span><pre>rename()</pre></a></li>
+<li class="method public "><a href="#method_size" title="size :: Gets the size for the file"><span class="description">Gets the size for the file</span><pre>size()</pre></a></li>
+<li class="method public "><a href="#method_truncate" title="truncate :: Completly removes all contents of the file"><span class="description">Completly removes all contents of the file</span><pre>truncate()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_filepath" title="$filepath :: The full path to the file's current location, including the filename"><span class="description"></span><pre>$filepath</pre></a></li>
+<li class="property protected "><a href="#property_parentDir" title="$parentDir :: The full path to the file's parent directory"><span class="description"></span><pre>$parentDir</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_APPEND" title="APPEND :: File mode APPEND"><span class="description">File mode APPEND</span><pre>APPEND</pre></a></li>
+<li class="constant  "><a href="#constant_OVERWRITE" title="OVERWRITE :: File mode OVERWRITE"><span class="description">File mode OVERWRITE</span><pre>OVERWRITE</pre></a></li>
+<li class="constant  "><a href="#constant_PREPEND" title="PREPEND :: File mode PREPEND"><span class="description">File mode PREPEND</span><pre>PREPEND</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\IO\FileInfo"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/Core.IO.html">IO</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.IO.FileInfo.html">FileInfo</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">A File class used to preform advanced operations and provide information
+about the file.</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Core.IO.html">Core</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>IO</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Class Constructor</h2>
+<pre>__construct(string $path, bool $create = false) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>The full path the the file</p></div>
+<div class="subelement argument">
+<h4>$create<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Create the file if it doesnt exist?</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/IOException.html">\IOException</a></code></th>
+<td>Thrown if the $path directory doesnt exist,
+  $create is set to true, and there was an error creating the file.</td>
+</tr>
+<tr>
+<th><code><a href="../classes/FileNotFoundException.html">\FileNotFoundException</a></code></th>
+<td>If the $path file does not exist, and $create is set to false.</td>
+</tr>
+<tr>
+<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
+<td>Thrown if the $path is not a file at all, but rather a directory</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a id="method___toString"></a><div class="element clickable method public method___toString" data-toggle="collapse" data-target=".method___toString .collapse">
+<h2>When used as a string, this object returns the fullpath to the file.</h2>
+<pre>__toString() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_accessed"></a><div class="element clickable method public method_accessed" data-toggle="collapse" data-target=".method_accessed .collapse">
+<h2>Gets last access time of file</h2>
+<pre>accessed() : int | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code><code>bool</code>Returns the time the file was last accessed,
+or FALSE on failure. The time is returned as a Unix timestamp.</div>
+</div></div>
+</div>
+<a id="method_chmod"></a><div class="element clickable method public method_chmod" data-toggle="collapse" data-target=".method_chmod .collapse">
+<h2>Fetches or sets the permissions of the file</h2>
+<pre>chmod(int $ch = null) : int | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch<small><b>   [Default =  null]</b></small>
+</h4>
+<code>int</code><p>The permission level to set on the file (chmod).
+  If left unset, the current chmod will be returned.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code><code>bool</code>Returns the current file chmod if $ch is left null,
+  otherwise, returns the success value of setting the permissions.</div>
+</div></div>
+</div>
+<a id="method_copyTo"></a><div class="element clickable method public method_copyTo" data-toggle="collapse" data-target=".method_copyTo .collapse">
+<h2>Creates a copy of the file to the specified file location</h2>
+<pre>copyTo(string $fileName, string $newPath = false) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$fileName</h4>
+<code>string</code><p>The name of the file to copy to</p></div>
+<div class="subelement argument">
+<h4>$newPath<small><b>   [Default =  false]</b></small>
+</h4>
+<code>string</code><p>The path to the new file if not in the current
+  file directory.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true on success, false otherwise</div>
+</div></div>
+</div>
+<a id="method_ext"></a><div class="element clickable method public method_ext" data-toggle="collapse" data-target=".method_ext .collapse">
+<h2>Gets the file's extension</h2>
+<pre>ext() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_filepath"></a><div class="element clickable method public method_filepath" data-toggle="collapse" data-target=".method_filepath .collapse">
+<h2>Returns the full path to the file, including the file name</h2>
+<pre>filepath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_getContents"></a><div class="element clickable method public method_getContents" data-toggle="collapse" data-target=".method_getContents .collapse">
+<h2>Returns the contents of the file</h2>
+<pre>getContents(bool $asArray = false) : string | string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$asArray<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>If set to true, the contents will be returned as an array.
+  Each array index will be a new line within the file.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>string[]</code>
+</div>
+</div></div>
+</div>
+<a id="method_getParentDir"></a><div class="element clickable method public method_getParentDir" data-toggle="collapse" data-target=".method_getParentDir .collapse">
+<h2>Returns the directory that the file is located in</h2>
+<pre>getParentDir(bool $asString = false) : string | <a href="../classes/Core.IO.DirectoryInfo.html">\Core\IO\DirectoryInfo</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$asString<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>If set to true, The string path will be
+  returned, otherwise the DirectoryInfo object of the dir will be returned</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code><a href="../classes/Core.IO.DirectoryInfo.html">\Core\IO\DirectoryInfo</a></code>
+</div>
+</div></div>
+</div>
+<a id="method_isReadable"></a><div class="element clickable method public method_isReadable" data-toggle="collapse" data-target=".method_isReadable .collapse">
+<h2>Returns whether this file is readable or not.</h2>
+<pre>isReadable() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_isWritable"></a><div class="element clickable method public method_isWritable" data-toggle="collapse" data-target=".method_isWritable .collapse">
+<h2>Returns whether this file is writable or not.</h2>
+<pre>isWritable() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_mimeType"></a><div class="element clickable method public method_mimeType" data-toggle="collapse" data-target=".method_mimeType .collapse">
+<h2>Fetches the mime type of this file.</h2>
+<pre>mimeType() : string | string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>string[]</code>Returns an array if there is more then
+  1 mime type (Ordered by most common to least), or a string if
+  there is only 1 mime type. Returns false if there is no entry
+  for the given file extenstion</div>
+</div></div>
+</div>
+<a id="method_modified"></a><div class="element clickable method public method_modified" data-toggle="collapse" data-target=".method_modified .collapse">
+<h2>Gets last amodification time of file</h2>
+<pre>modified() : int | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code><code>bool</code>Returns the time the file was last modified,
+or FALSE on failure. The time is returned as a Unix timestamp.</div>
+</div></div>
+</div>
+<a id="method_moveTo"></a><div class="element clickable method public method_moveTo" data-toggle="collapse" data-target=".method_moveTo .collapse">
+<h2>Moves the file to a new location.</h2>
+<pre>moveTo(string $newPath, string $newName = false) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>The old file will not be removed until the new file is created successfully.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newPath</h4>
+<code>string</code><p>The full path to move the file to</p></div>
+<div class="subelement argument">
+<h4>$newName<small><b>   [Default =  false]</b></small>
+</h4>
+<code>string</code><p>If set, the file will also be renamed in its new location</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/IOException.html">\IOException</a></code></th>
+<td>Thrown if there was an error creating the new directory path</td>
+</tr>
+<tr>
+<th><code><a href="../classes/SecurityException.html">\SecurityException</a></code></th>
+<td>Thrown if the $newPath directory could not be opened
+  for various security reasons such as permissions.</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true on success, false otherwise</div>
+</div></div>
+</div>
+<a id="method_name"></a><div class="element clickable method public method_name" data-toggle="collapse" data-target=".method_name .collapse">
+<h2>Returns the base file name</h2>
+<pre>name() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_putContents"></a><div class="element clickable method public method_putContents" data-toggle="collapse" data-target=".method_putContents .collapse">
+<h2>Sets or adds contents of the file</h2>
+<pre>putContents(string | string[] $contents, int $mode = self::OVERWRITE) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$contents</h4>
+<code>string</code><code>string[]</code><p>The contents to be stored in the file.
+  If an array is passed, each array index will be treated as a new line within
+  the file.</p></div>
+<div class="subelement argument">
+<h4>$mode<small><b>   [Default =  self::OVERWRITE]</b></small>
+</h4>
+<code>int</code><p>The write mode for the contents (See class constants).</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns TRUE on success, or FALSE on failure.</div>
+</div></div>
+</div>
+<a id="method_rename"></a><div class="element clickable method public method_rename" data-toggle="collapse" data-target=".method_rename .collapse">
+<h2>Renames the file.</h2>
+<pre>rename(string $newName) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newName</h4>
+<code>string</code><p>The new name of the file</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true on success, false otherwise</div>
+</div></div>
+</div>
+<a id="method_size"></a><div class="element clickable method public method_size" data-toggle="collapse" data-target=".method_size .collapse">
+<h2>Gets the size for the file</h2>
+<pre>size(bool $format = false, bool $gt2gb = false) : float | string | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$format<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Format the file size to human readable format?</p>
+</div>
+<div class="subelement argument">
+<h4>$gt2gb<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Do we think this file to be over 2 GB? This is used to get
+  an accurate filesize via the command line on 32 bit systems.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>float</code><code>string</code><code>bool</code>Returns false on failure, a float if $format is false, or
+  a string if $format is true</div>
+</div></div>
+</div>
+<a id="method_truncate"></a><div class="element clickable method public method_truncate" data-toggle="collapse" data-target=".method_truncate .collapse">
+<h2>Completly removes all contents of the file</h2>
+<pre>truncate() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true on success, false otherwise</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_filepath"> </a><div class="element clickable property protected property_filepath" data-toggle="collapse" data-target=".property_filepath .collapse">
+<h2>The full path to the file's current location, including the filename</h2>
+<pre>$filepath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_parentDir"> </a><div class="element clickable property protected property_parentDir" data-toggle="collapse" data-target=".property_parentDir .collapse">
+<h2>The full path to the file's parent directory</h2>
+<pre>$parentDir : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_APPEND"> </a><div class="element clickable constant  constant_APPEND" data-toggle="collapse" data-target=".constant_APPEND .collapse">
+<h2>File mode APPEND</h2>
+<pre>APPEND : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_OVERWRITE"> </a><div class="element clickable constant  constant_OVERWRITE" data-toggle="collapse" data-target=".constant_OVERWRITE .collapse">
+<h2>File mode OVERWRITE</h2>
+<pre>OVERWRITE : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_PREPEND"> </a><div class="element clickable constant  constant_PREPEND" data-toggle="collapse" data-target=".constant_PREPEND .collapse">
+<h2>File mode PREPEND</h2>
+<pre>PREPEND : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>

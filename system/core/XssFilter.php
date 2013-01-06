@@ -92,6 +92,7 @@ class XssFilter
      */
     public function addTag($tag) 
     {
+        $tag = strtolower($tag);
         if(!in_array($tag, $this->tagsArray))
             $this->tagsArray[] = $tag;
     }
@@ -122,6 +123,7 @@ class XssFilter
      */
     public function addAttr($attr) 
     {
+        $attr = strtolower($attr);
         if(!in_array($attr, $this->attrArray))
             $this->attrArray[] = $attr;
     }

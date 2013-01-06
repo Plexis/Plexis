@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>Plexis CMS » Helpers</title>
+<title>Plexis CMS » Helpers\IO</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../template/css/template.css" rel="stylesheet" media="all">
@@ -50,65 +50,16 @@
 <li class="nav-header">
 <i class="icon-map-marker"></i> Packages</li>
 <li>
-<span class="empty-package"><i class="icon-folder-close"></i>Helpers</span><ul class="nav nav-list nav-packages">
-<li>
-<a href="../packages/Helpers.Html.html" title="Html"><i class="icon-folder-open"></i>Html</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
 <a href="../packages/Helpers.IO.html" title="IO"><i class="icon-folder-open"></i>IO</a><ul class="nav nav-list nav-packages"></ul>
 </li>
-<li>
-<a href="../packages/Helpers.Validation.html" title="Validation"><i class="icon-folder-open"></i>Validation</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-</ul>
-</li>
+<li class="nav-header">
+<i class="icon-custom icon-function"></i> Functions</li>
+<li class="function  "><a href="#function_formatSize" title="formatSize :: Formats a file size to human readable format"><span class="description">Formats a file size to human readable format</span><pre>formatSize</pre></a></li>
+<li class="function  "><a href="#function_path" title="path :: Combines several strings into a file path."><span class="description">Combines several strings into a file path.</span><pre>path</pre></a></li>
+<li class="function  "><a href="#function_truePath" title="truePath :: This function is to return a complete path from a relative path."><span class="description">This function is to return a complete path from a relative path.</span><pre>truePath</pre></a></li>
 </ul>
 </div>
 <div class="span8 package-contents">
-<ul class="breadcrumb"><li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/Helpers.html">Helpers</a></li>
-</li></ul>
-<div class="package-indent">
-<ul class="breadcrumb"><li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Helpers.html">Helpers</a></li>
-<li class="active">
-<span class="divider">\</span><a href="../packages/Helpers.Html.html">Html</a>
-</li>
-</li></ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-function"></i> Functions</h3>
-<a id="function_br"></a><div class="element clickable function  function_br" data-toggle="collapse" data-target=".function_br .collapse">
-<h2>Creates a number of html breaks to be repeated</h2>
-<pre>br(int $count) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$count</h4>
-<code>int</code><p>The number of breaks</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>A string containing the number ($count) of breaks</div>
-</div></div>
-</div>
-<a id="function_nbs"></a><div class="element clickable function  function_nbs" data-toggle="collapse" data-target=".function_nbs .collapse">
-<h2>Creates a number of non-breaking spaces to be repeated</h2>
-<pre>nbs(int $count) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$count</h4>
-<code>int</code><p>The number of spaces</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>A string containing the number ($count) of non-breaking spaces</div>
-</div></div>
-</div>
-</div>
 <ul class="breadcrumb"><li>
 <a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Helpers.html">Helpers</a></li>
 <li class="active">
@@ -166,32 +117,6 @@
 <div class="subelement response">
 <code>string</code>The resolved path without a trailing slash, it might not exist.</div>
 </div></div>
-</div>
-</div>
-<ul class="breadcrumb"><li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Helpers.html">Helpers</a></li>
-<li class="active">
-<span class="divider">\</span><a href="../packages/Helpers.Validation.html">Validation</a>
-</li>
-</li></ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-function"></i> Functions</h3>
-<a id="function_isValidIp"></a><div class="element clickable function  function_isValidIp" data-toggle="collapse" data-target=".function_isValidIp .collapse">
-<h2>Checks an IP address, returning whether its a valid, Non-Private IP.</h2>
-<pre>isValidIp(string $ip) : bool</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$ip</h4>
-<code>string</code><p>The ip address to check.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>bool</code>Returns true if the given IP address is a valid, Non-Private IP, false otherwise</div>
-</div></div>
-</div>
 </div>
 </div>
 </div>

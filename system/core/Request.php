@@ -99,6 +99,9 @@ class Request
             while(strpos($site_url, '//') !== false) $site_url = str_replace('//', '/', $site_url);
             self::$baseurl = str_replace( '\\', '', self::$protocol .'://' . rtrim($site_url, '/') );
         }
+        
+        // Load the Validation helper
+        \Plexis::LoadHelper('validation');
     }
     
     /**

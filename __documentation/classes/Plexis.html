@@ -53,6 +53,7 @@
 <li class="method public "><a href="#method_GetRealm" title="GetRealm :: Returns the Realm Object"><span class="description">Returns the Realm Object</span><pre>GetRealm()</pre></a></li>
 <li class="method public "><a href="#method_ListPlugins" title="ListPlugins :: Returns an array of installed plugins"><span class="description">Returns an array of installed plugins</span><pre>ListPlugins()</pre></a></li>
 <li class="method public "><a href="#method_LoadDBConnection" title="LoadDBConnection :: Internal method for loading the Plexis DB connection"><span class="description">Internal method for loading the Plexis DB connection</span><pre>LoadDBConnection()</pre></a></li>
+<li class="method public "><a href="#method_LoadHelper" title="LoadHelper :: Loads the requested helper name"><span class="description">Loads the requested helper name</span><pre>LoadHelper()</pre></a></li>
 <li class="method public "><a href="#method_PluginInstalled" title="PluginInstalled :: Returns whether or not a plugin is installed and running"><span class="description">Returns whether or not a plugin is installed and running</span><pre>PluginInstalled()</pre></a></li>
 <li class="method public "><a href="#method_RenderTemplate" title="RenderTemplate :: Sets whether plexis should render the full template or not"><span class="description">Sets whether plexis should render the full template or not</span><pre>RenderTemplate()</pre></a></li>
 <li class="method public "><a href="#method_Run" title="Run :: Main method for running the Plexis application"><span class="description">Main method for running the Plexis application</span><pre>Run()</pre></a></li>
@@ -75,6 +76,7 @@
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
+<li class="property protected "><a href="#property_helpers" title="$helpers :: An array of helpers that have been loaded"><span class="description"></span><pre>$helpers</pre></a></li>
 <li class="property protected "><a href="#property_plugins" title="$plugins :: An array of installed plugins"><span class="description"></span><pre>$plugins</pre></a></li>
 <li class="property protected "><a href="#property_realm" title="$realm :: The Wowlib object"><span class="description"></span><pre>$realm</pre></a></li>
 <li class="property protected "><a href="#property_renderTemplate" title="$renderTemplate :: Certain modules may not want the template to render."><span class="description"></span><pre>$renderTemplate</pre></a></li>
@@ -145,6 +147,22 @@
   not be rendered if the plexis database connection is offline</p></div>
 <h3>Returns</h3>
 <div class="subelement response"><code><a href="../classes/Database.Driver.html">\Database\Driver</a></code></div>
+</div></div>
+</div>
+<a id="method_LoadHelper"></a><div class="element clickable method public method_LoadHelper" data-toggle="collapse" data-target=".method_LoadHelper .collapse">
+<h2>Loads the requested helper name</h2>
+<pre>LoadHelper(string $name) : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The helper name to load (no file extension)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns false if the helper doesnt exist, true otherwise</div>
 </div></div>
 </div>
 <a id="method_PluginInstalled"></a><div class="element clickable method public method_PluginInstalled" data-toggle="collapse" data-target=".method_PluginInstalled .collapse">
@@ -250,6 +268,12 @@ will be executed</p></div>
 <a id="property_modulePath"> </a><div class="element clickable property public property_modulePath" data-toggle="collapse" data-target=".property_modulePath .collapse">
 <h2>Declares the root controller path for the current module</h2>
 <pre>$modulePath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_helpers"> </a><div class="element clickable property protected property_helpers" data-toggle="collapse" data-target=".property_helpers .collapse">
+<h2>An array of helpers that have been loaded</h2>
+<pre>$helpers : string[]</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

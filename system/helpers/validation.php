@@ -2,38 +2,14 @@
 /**
  * Plexis Content Management System
  *
- * @file        System/Core/Common.php
+ * @file        System/Helpers/Validation.php
  * @copyright   2011-2012, Plexis Dev Team
  * @license     GNU GPL v3
  * @author      Plexis Dev Team
- * @package     Core
- * @subpackage  Functions
+ * @package     Helpers
+ * @subpackage  Validation
  */
-
-/**
- * Combines several strings into a file path.
- *
- * @param string|string[] $parts The pieces of the path, passed as 
- * individual arguments. Each argument can be an array of paths,
- * a string foldername, or a mixture of the two.
- *
- * @return string Full path using the correct system 
- *   directory separater
- */
-    function path($parts = null)
-    {
-        // Get our path parts
-        $args = func_get_args();
-        $parts = array();
-        
-        // Trim our paths to remvove spaces and new lines
-        foreach( $args as $part )
-            $parts[] = (is_array( $part )) ? trim( implode(DS, $part) ) : trim($part);
-
-        // Get our cleaned path into a variable with the correct directory seperator
-        return implode( DS, $parts );
-    }
-	
+    
 /**
  * Checks an IP address, returning whether its a valid, Non-Private IP.
  *
@@ -45,7 +21,7 @@
     {
         // Trim the ip address
         $ip = trim($ip);
-        if(!empty($ip) && ip2long($ip) != -1) 
+        if(!empty($ip) && ip2long($ip) != -1)
         {
             $reserved_ips = array(
                 array('0.0.0.0','2.255.255.255'),
@@ -58,7 +34,7 @@
                 array('255.255.255.0','255.255.255.255')
             );
 
-            foreach($reserved_ips as $r) 
+            foreach($reserved_ips as $r)
             {
                 $min = ip2long($r[0]);
                 $max = ip2long($r[1]);
@@ -68,4 +44,3 @@
         }
         return false;
     }
-// EOF

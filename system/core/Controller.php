@@ -105,21 +105,16 @@ class Controller
     }
     
     /**
-     * Loads a helper file for the child controller
+     * Loads a helper file from the modules helper folder
      *
-     * @param string $name The helper filename to load
-     * @param bool $global When set to true, the helper will be searched for
-     *   in the {ROOT}/system/helpers folder instead of the modules helper
-     *   folder. Default value is false.
+     * @param string $name The helper name to load (no file extension)
      *
      * @return bool Returns true if the helper file was found, false otherwise
      */
-    protected function loadHelper($name, $global = false) 
+    protected function loadHelper($name) 
     {
         // Get our path
-        $path = ($global) 
-            ? path( SYSTEM_PATH, 'helpers', $name .'.php' ) 
-            : path( $this->modulePath, 'helpers', $name .'.php');
+        $path = path( $this->modulePath, 'helpers', $name .'.php');
         
         // Check for the files existance
         if(!file_exists($path))

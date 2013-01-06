@@ -51,6 +51,12 @@ class Plexis
     protected static $realm = null;
     
     /**
+     * An array of helpers that have been loaded
+     * @var string[]
+     */
+    protected static $helpers = array();
+    
+    /**
      * An array of installed plugins
      * @var string[]
      */
@@ -236,6 +242,33 @@ class Plexis
         if(!is_bool($bool)) return;
         
         self::$renderTemplate = $bool;
+    }
+    
+    /**
+     * Loads the requested helper name
+     *
+     * @param string $name The helper name to load (no file extension)
+     *
+     * @return bool Returns false if the helper doesnt exist, true otherwise
+     */
+    public static function LoadHelper($name)
+    {
+        // If we already loaded this helper, return true
+        $name = strtolower($name);
+        if(in_array($name, self::$helpers))
+            return true;
+            
+        // Build path
+        $path = path( SYSTEM_PATH, 'helpers', $name .'.php' );
+        if(file_exists($path))
+        {
+            require_once $path;
+            
+            // Add the helper to the list
+            self::$helpers[] = $name;
+            return true;
+        }
+        return false;
     }
     
     /**

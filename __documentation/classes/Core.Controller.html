@@ -59,7 +59,7 @@
 <li class="method protected "><a href="#method_loadController" title="loadController :: Loads a controller from the current modules folder, and returns a new
   instance of that class"><span class="description">Loads a controller from the current modules folder, and returns a new
   instance of that class</span><pre>loadController()</pre></a></li>
-<li class="method protected "><a href="#method_loadHelper" title="loadHelper :: Loads a helper file for the child controller"><span class="description">Loads a helper file for the child controller</span><pre>loadHelper()</pre></a></li>
+<li class="method protected "><a href="#method_loadHelper" title="loadHelper :: Loads a helper file from the modules helper folder"><span class="description">Loads a helper file from the modules helper folder</span><pre>loadHelper()</pre></a></li>
 <li class="method protected "><a href="#method_loadModel" title="loadModel :: Loads a model for the child controller."><span class="description">Loads a model for the child controller.</span><pre>loadModel()</pre></a></li>
 <li class="method protected "><a href="#method_loadPartialView" title="loadPartialView :: Loads a template partial view, such as a content or news box"><span class="description">Loads a template partial view, such as a content or news box</span><pre>loadPartialView()</pre></a></li>
 <li class="method protected "><a href="#method_loadView" title="loadView :: Loads a view file for the child controller (See detailed description)"><span class="description">Loads a view file for the child controller (See detailed description)</span><pre>loadView()</pre></a></li>
@@ -196,21 +196,15 @@ result will also be stored in a class variable, the name of the class:
 </div></div>
 </div>
 <a id="method_loadHelper"></a><div class="element clickable method protected method_loadHelper" data-toggle="collapse" data-target=".method_loadHelper .collapse">
-<h2>Loads a helper file for the child controller</h2>
-<pre>loadHelper(string $name, bool $global = false) : bool</pre>
+<h2>Loads a helper file from the modules helper folder</h2>
+<pre>loadHelper(string $name) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
-<code>string</code><p>The helper filename to load</p></div>
-<div class="subelement argument">
-<h4>$global<small><b>   [Default =  false]</b></small>
-</h4>
-<code>bool</code><p>When set to true, the helper will be searched for
-  in the {ROOT}/system/helpers folder instead of the modules helper
-  folder. Default value is false.</p>
+<code>string</code><p>The helper name to load (no file extension)</p>
 </div>
 <h3>Returns</h3>
 <div class="subelement response">

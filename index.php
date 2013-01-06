@@ -32,8 +32,8 @@ define('MOD_REWRITE', isset($_SERVER["HTTP_MOD_REWRITE"]) && $_SERVER["HTTP_MOD_
 ini_set('error_log', SYSTEM_PATH . DS .'logs'. DS .'php_errors.log');
     
 // Include the required script to run the system
-require SYSTEM_PATH . DS .'core'. DS .'Common.php';
 require SYSTEM_PATH . DS .'core'. DS .'AutoLoader.php';
+require SYSTEM_PATH . DS .'helpers'. DS .'Io.php';
 require SYSTEM_PATH . DS .'System.php';
 
 // Run the system. Application will be run on success

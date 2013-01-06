@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project version="2.0.0a12" title="Plexis CMS">
-  <file path="index.php" hash="6b0bfca418823ff3a566d1ce53c9ac26" package="System">
+  <file path="index.php" hash="74e41ba80d80646b7ce2549878b9668e" package="System">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -396,57 +396,6 @@ benchmark name&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Common.php" hash="56a4589399edfe983f885d400cc026f7" package="Core\Functions">
-    <docblock line="2">
-      <description>Plexis Content Management System</description>
-      <long-description></long-description>
-      <tag line="2" name="file" description="System/Core/Common.php"/>
-      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
-      <tag line="2" name="license" description="GNU GPL v3"/>
-      <tag line="2" name="author" description="Plexis Dev Team"/>
-      <tag line="2" name="package" description="Core"/>
-      <tag line="2" name="subpackage" description="Functions"/>
-    </docblock>
-    <function namespace="global" line="23" package="Core\Functions">
-      <name>path</name>
-      <full_name>\path</full_name>
-      <docblock line="13">
-        <description>Combines several strings into a file path.</description>
-        <long-description></long-description>
-        <tag line="13" name="param" description="The pieces of the path, passed as&#13;&#10;individual arguments. Each argument can be an array of paths,&#13;&#10;a string foldername, or a mixture of the two." type="string|string[]" variable="$parts">
-          <type by_reference="false">string</type>
-          <type by_reference="false">string[]</type>
-        </tag>
-        <tag line="13" name="return" description="Full path using the correct system&#13;&#10;  directory separater" type="string">
-          <type by_reference="false">string</type>
-        </tag>
-      </docblock>
-      <argument line="23">
-        <name>$parts</name>
-        <default>null</default>
-        <type/>
-      </argument>
-    </function>
-    <function namespace="global" line="44" package="Core\Functions">
-      <name>isValidIp</name>
-      <full_name>\isValidIp</full_name>
-      <docblock line="37">
-        <description>Checks an IP address, returning whether its a valid, Non-Private IP.</description>
-        <long-description></long-description>
-        <tag line="37" name="param" description="The ip address to check." type="string" variable="$ip">
-          <type by_reference="false">string</type>
-        </tag>
-        <tag line="37" name="return" description="Returns true if the given IP address is a valid, Non-Private IP, false otherwise" type="bool">
-          <type by_reference="false">bool</type>
-        </tag>
-      </docblock>
-      <argument line="44">
-        <name>$ip</name>
-        <default></default>
-        <type/>
-      </argument>
-    </function>
-  </file>
   <file path="system\core\Config.php" hash="830be07811ed9c65b1dfeece66d709ee" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
@@ -694,7 +643,7 @@ in the config folder&lt;/p&gt;</long-description>
       </method>
     </class>
   </file>
-  <file path="system\core\Controller.php" hash="c1711fecfba057fdfc6b63e93e860288" package="Default">
+  <file path="system\core\Controller.php" hash="253bf9fb0ab21fdb07bf49e076091b14" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -706,10 +655,10 @@ in the config folder&lt;/p&gt;</long-description>
     <include line="88" type="Require" package="Default">
       <name/>
     </include>
-    <include line="128" type="Require" package="Default">
+    <include line="123" type="Require" package="Default">
       <name/>
     </include>
-    <include line="254" type="Require" package="Default">
+    <include line="249" type="Require" package="Default">
       <name/>
     </include>
     <class final="false" abstract="false" namespace="Core" line="29" package="Core">
@@ -805,233 +754,225 @@ result will also be stored in a class variable, the name of the class:
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="117" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="114" package="Core">
         <name>loadHelper</name>
         <full_name>loadHelper</full_name>
         <docblock line="107">
-          <description>Loads a helper file for the child controller</description>
+          <description>Loads a helper file from the modules helper folder</description>
           <long-description></long-description>
-          <tag line="107" name="param" description="The helper filename to load" type="string" variable="$name">
+          <tag line="107" name="param" description="The helper name to load (no file extension)" type="string" variable="$name">
             <type by_reference="false">string</type>
-          </tag>
-          <tag line="107" name="param" description="When set to true, the helper will be searched for&#13;&#10;  in the {ROOT}/system/helpers folder instead of the modules helper&#13;&#10;  folder. Default value is false." type="bool" variable="$global">
-            <type by_reference="false">bool</type>
           </tag>
           <tag line="107" name="return" description="Returns true if the helper file was found, false otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="117">
+        <argument line="114">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="117">
-          <name>$global</name>
-          <default>false</default>
-          <type/>
-        </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="149" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="144" package="Core">
         <name>loadView</name>
         <full_name>loadView</full_name>
-        <docblock line="132">
+        <docblock line="127">
           <description>Loads a view file for the child controller (See detailed description)</description>
           <long-description>&lt;p&gt;The first path searched is the current template's module/views
 folder. If the template does not contain a view for the current module,
 then the modules view folder will be checked... If a view file cannot
 be located on either of those paths, a ViewNotFoundException will be thrown
 unless the variable $silence is set to true, in which case a false will be retuned.&lt;/p&gt;</long-description>
-          <tag line="132" name="param" description="The view filename to load (no extension)" type="string" variable="$name">
+          <tag line="127" name="param" description="The view filename to load (no extension)" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="132" name="param" description="The name of the views javascript file (located in the&#13;&#10;  modules JS folder). Leave null for no file, or to use the default template's view&#13;&#10;  js file." type="string" variable="$jsFile">
+          <tag line="127" name="param" description="The name of the views javascript file (located in the&#13;&#10;  modules JS folder). Leave null for no file, or to use the default template's view&#13;&#10;  js file." type="string" variable="$jsFile">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="132" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  (and $silence is set to true), a Library\View object otherwise" type="\Library\View|bool">
+          <tag line="127" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  (and $silence is set to true), a Library\View object otherwise" type="\Library\View|bool">
             <type by_reference="false">\Library\View</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="149">
+        <argument line="144">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="149">
+        <argument line="144">
           <name>$jsFile</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="190" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="185" package="Core">
         <name>loadPartialView</name>
         <full_name>loadPartialView</full_name>
-        <docblock line="175">
+        <docblock line="170">
           <description>Loads a template partial view, such as a content or news box</description>
           <long-description>&lt;p&gt;This method loads a layout piece of the template, or rather a "partial".
 An example of this, is a news box. The news box itself requires contents
 to be set inside of it.&lt;/p&gt;</long-description>
-          <tag line="175" name="param" description="The partial view filename to load (no extension)" type="string" variable="$name">
+          <tag line="170" name="param" description="The partial view filename to load (no extension)" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="175" name="param" description="The name of the views javascript file (located in the&#13;&#10;  modules JS folder). Leave null for no file, or to use the default template's view&#13;&#10; js file." type="string" variable="$jsFile">
+          <tag line="170" name="param" description="The name of the views javascript file (located in the&#13;&#10;  modules JS folder). Leave null for no file, or to use the default template's view&#13;&#10; js file." type="string" variable="$jsFile">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="175" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  a Library\View object otherwise" type="\Library\View|bool">
+          <tag line="170" name="return" description="Returns false if the view file cannot be located,&#13;&#10;  a Library\View object otherwise" type="\Library\View|bool">
             <type by_reference="false">\Library\View</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="190">
+        <argument line="185">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="190">
+        <argument line="185">
           <name>$jsFile</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="215" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="210" package="Core">
         <name>addJsFile</name>
         <full_name>addJsFile</full_name>
-        <docblock line="207">
+        <docblock line="202">
           <description>Includes a module's js file in the final layouts head tag</description>
           <long-description></long-description>
-          <tag line="207" name="param" description="The  name of the JS file located in the&#13;&#10;  modules JS folder" type="string" variable="$name">
+          <tag line="202" name="param" description="The  name of the JS file located in the&#13;&#10;  modules JS folder" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="207" name="return" description="" type="void">
+          <tag line="202" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="215">
+        <argument line="210">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="228" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="223" package="Core">
         <name>addCssFile</name>
         <full_name>addCssFile</full_name>
-        <docblock line="220">
+        <docblock line="215">
           <description>Includes a module's css file in the final layouts head tag</description>
           <long-description></long-description>
-          <tag line="220" name="param" description="The  name of the CSS file located in the&#13;&#10;  modules CSS folder" type="string" variable="$name">
+          <tag line="215" name="param" description="The  name of the CSS file located in the&#13;&#10;  modules CSS folder" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="220" name="return" description="" type="void">
+          <tag line="215" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="228">
+        <argument line="223">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="244" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="239" package="Core">
         <name>loadController</name>
         <full_name>loadController</full_name>
-        <docblock line="233">
+        <docblock line="228">
           <description>Loads a controller from the current modules folder, and returns a new
   instance of that class</description>
           <long-description></long-description>
-          <tag line="233" name="param" description="The name of the controller to load. The&#13;&#10;result will also be stored in a class variable, the name of the class:&#13;&#10;&quot;$this-&gt;{$name}&quot;." type="string" variable="$name">
+          <tag line="228" name="param" description="The name of the controller to load. The&#13;&#10;result will also be stored in a class variable, the name of the class:&#13;&#10;&quot;$this-&gt;{$name}&quot;." type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="233" name="return" description="Returns the constructed controller or false if&#13;&#10;  the controller doesnt exist" type="object|bool">
+          <tag line="228" name="return" description="Returns the constructed controller or false if&#13;&#10;  the controller doesnt exist" type="object|bool">
             <type by_reference="false">object</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="244">
+        <argument line="239">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="273" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="268" package="Core">
         <name>loadConfig</name>
         <full_name>loadConfig</full_name>
-        <docblock line="261">
+        <docblock line="256">
           <description>Loads a config file from the modules config folder</description>
           <long-description></long-description>
-          <tag line="261" name="param" description="The name of the config file to load (no exension)" type="string" variable="$name">
+          <tag line="256" name="param" description="The name of the config file to load (no exension)" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="261" name="param" description="The config file id (name of the config, used for&#13;&#10;  fetching and setting variables)" type="string" variable="$id">
+          <tag line="256" name="param" description="The config file id (name of the config, used for&#13;&#10;  fetching and setting variables)" type="string" variable="$id">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="261" name="param" description="If all the config varaiables are in an array,&#13;&#10;  what is the name of the array?" type="string" variable="$arrayName">
+          <tag line="256" name="param" description="If all the config varaiables are in an array,&#13;&#10;  what is the name of the array?" type="string" variable="$arrayName">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="261" name="return" description="Returns false if the file cannot be read or located, true&#13;&#10;  otherwise" type="bool">
+          <tag line="256" name="return" description="Returns false if the file cannot be read or located, true&#13;&#10;  otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="273">
+        <argument line="268">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="273">
+        <argument line="268">
           <name>$id</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="273">
+        <argument line="268">
           <name>$arrayName</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="298" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="293" package="Core">
         <name>requireAuth</name>
         <full_name>requireAuth</full_name>
-        <docblock line="287">
+        <docblock line="282">
           <description>When called, if the user is not logged in, the login screen will be shown.</description>
           <long-description>&lt;p&gt;NOTE: This method will stop execution of the current request if the user
 is not logged in (Guest), and the current script will stop executing.&lt;/p&gt;</long-description>
-          <tag line="287" name="param" description="When set to true, the login screen will be displayed.&#13;&#10;  If set to false, a 403 &quot;Forbidden&quot; screen is shown instead." type="bool" variable="$showLogin">
+          <tag line="282" name="param" description="When set to true, the login screen will be displayed.&#13;&#10;  If set to false, a 403 &quot;Forbidden&quot; screen is shown instead." type="bool" variable="$showLogin">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="287" name="return" description="" type="void">
+          <tag line="282" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="298">
+        <argument line="293">
           <name>$showLogin</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="342" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="337" package="Core">
         <name>requirePermission</name>
         <full_name>requirePermission</full_name>
-        <docblock line="329">
+        <docblock line="324">
           <description>When called, if the user does not have the specified permission, a 403 "forbidden"
 screen will be displayed, or a redirection will occur (depending on vars).</description>
           <long-description>&lt;p&gt;NOTE: This method will stop execution of the current request when called if the user
 does not have the specified permission, and the current script will stop executing.&lt;/p&gt;</long-description>
-          <tag line="329" name="param" description="The name of the permission this user is required to have." type="string" variable="$name">
+          <tag line="324" name="param" description="The name of the permission this user is required to have." type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="329" name="param" description="The redirect URI (or url). If set to false, a 403 &quot;forbidden&quot;&#13;&#10;  screen will be displayed instead of a redirect." type="string" variable="$uri">
+          <tag line="324" name="param" description="The redirect URI (or url). If set to false, a 403 &quot;forbidden&quot;&#13;&#10;  screen will be displayed instead of a redirect." type="string" variable="$uri">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="329" name="return" description="" type="void">
+          <tag line="324" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="342">
+        <argument line="337">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="342">
+        <argument line="337">
           <name>$uri</name>
           <default>false</default>
           <type/>
@@ -2142,6 +2083,46 @@ event is fired.</description>
       </docblock>
     </class>
   </file>
+  <file path="system\core\exceptions\ArgumentException.php" hash="1e20a12a538af6cbe18ceb0cadad78c4" package="Default">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="global" line="16" package="Core\Exceptions">
+      <extends>\Exception</extends>
+      <name>ArgumentException</name>
+      <full_name>\ArgumentException</full_name>
+      <docblock line="9">
+        <description>A common exception thrown by many classes for passing invalid arguments</description>
+        <long-description></long-description>
+        <tag line="9" name="package" description="Core"/>
+        <tag line="9" name="subpackage" description="Exceptions"/>
+        <tag line="9" name="file" description="System/Core/Exceptions/ArgumentException.php"/>
+      </docblock>
+    </class>
+  </file>
+  <file path="system\core\exceptions\DirectoryNotFoundException.php" hash="f68b92486501f9fc6a8b86a84d716114" package="Default">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="global" line="16" package="Core\Exceptions">
+      <extends>\Exception</extends>
+      <name>DirectoryNotFoundException</name>
+      <full_name>\DirectoryNotFoundException</full_name>
+      <docblock line="9">
+        <description>An exception thrown by the DirectoryInfo class when a directory could not be found.</description>
+        <long-description></long-description>
+        <tag line="9" name="package" description="Core"/>
+        <tag line="9" name="subpackage" description="Exceptions"/>
+        <tag line="9" name="file" description="System/Core/Exceptions/DirectoryNotFoundException.php"/>
+      </docblock>
+    </class>
+  </file>
   <file path="system\core\exceptions\FileNotFoundException.php" hash="e7b763ecf1c0854f5b61a87616c15d13" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
@@ -2159,6 +2140,46 @@ event is fired.</description>
         <tag line="9" name="package" description="Core"/>
         <tag line="9" name="subpackage" description="Exceptions"/>
         <tag line="9" name="file" description="System/Core/Exceptions/FileNotFoundException.php"/>
+      </docblock>
+    </class>
+  </file>
+  <file path="system\core\exceptions\IOException.php" hash="e48504e30476e97d3eb82ab28f81f416" package="Default">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="global" line="16" package="Core\Exceptions">
+      <extends>\Exception</extends>
+      <name>IOException</name>
+      <full_name>\IOException</full_name>
+      <docblock line="9">
+        <description>An exception thrown when filesystem releated errors occur</description>
+        <long-description></long-description>
+        <tag line="9" name="package" description="Core"/>
+        <tag line="9" name="subpackage" description="Exceptions"/>
+        <tag line="9" name="file" description="System/Core/Exceptions/IOException.php"/>
+      </docblock>
+    </class>
+  </file>
+  <file path="system\core\exceptions\SecurityException.php" hash="a4073936999b195d9e7a8a157713f9ba" package="Default">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="global" line="16" package="Core\Exceptions">
+      <extends>\Exception</extends>
+      <name>SecurityException</name>
+      <full_name>\SecurityException</full_name>
+      <docblock line="9">
+        <description>A common exception thrown by many classes for security purposes.</description>
+        <long-description></long-description>
+        <tag line="9" name="package" description="Core"/>
+        <tag line="9" name="subpackage" description="Exceptions"/>
+        <tag line="9" name="file" description="System/Core/Exceptions/SecurityException.php"/>
       </docblock>
     </class>
   </file>
@@ -2529,7 +2550,1035 @@ DeleteFile methods</description>
       </method>
     </class>
   </file>
-  <file path="system\core\Request.php" hash="572f118739909aa4013070445b320058" package="Default">
+  <file path="system\core\io\DirectoryInfo.php" hash="c466df140d8709503acd07457adfbe9b" package="Default">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="file" description="System/Core/IO/DirectoryInfo.php"/>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+      <tag line="2" name="contains" description="DirectoryInfo"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="Core\IO" line="20" package="Core\IO">
+      <extends/>
+      <name>DirectoryInfo</name>
+      <full_name>\Core\IO\DirectoryInfo</full_name>
+      <docblock line="12">
+        <description>A Directory class used to preform advanced operations and provide information
+about the directory.</description>
+        <long-description></long-description>
+        <tag line="12" name="author" description="Steven Wilson"/>
+        <tag line="12" name="package" description="Core"/>
+        <tag line="12" name="subpackage" description="IO"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="26" namespace="Core\IO" package="Default">
+        <name>$filelist</name>
+        <default>array()</default>
+        <docblock line="22">
+          <description>An array of files in this directory</description>
+          <long-description></long-description>
+          <tag line="22" name="var" description="" type="string[]">
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="32" namespace="Core\IO" package="Default">
+        <name>$subdirs</name>
+        <default>array()</default>
+        <docblock line="28">
+          <description>An array of sub directories in this directory</description>
+          <long-description></long-description>
+          <tag line="28" name="var" description="" type="string[]">
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="38" namespace="Core\IO" package="Default">
+        <name>$parentDir</name>
+        <default></default>
+        <docblock line="34">
+          <description>Full path to the parent directory</description>
+          <long-description></long-description>
+          <tag line="34" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="44" namespace="Core\IO" package="Default">
+        <name>$rootPath</name>
+        <default></default>
+        <docblock line="40">
+          <description>Full path to the current directory</description>
+          <long-description></long-description>
+          <tag line="40" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="61" package="Core\IO">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="46">
+          <description>Class Constructor</description>
+          <long-description></long-description>
+          <tag line="46" name="param" description="The full path the the directory" type="string" variable="$path">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="46" name="param" description="Create the directory if it doesnt exist?" type="bool" variable="$create">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="46" name="throws" description="Thrown if the $path directory doesnt exist,&#13;&#10;  $create is set to true, and there was an error creating the directory" type="\IOException">
+            <type by_reference="false">\IOException</type>
+          </tag>
+          <tag line="46" name="throws" description="If the $path directory does not exist,&#13;&#10;  and $create is set to false." type="\DirectoryNotFoundException">
+            <type by_reference="false">\DirectoryNotFoundException</type>
+          </tag>
+          <tag line="46" name="throws" description="Thrown if the $path directory could not be opened&#13;&#10;  for various security reasons such as permissions." type="\SecurityException">
+            <type by_reference="false">\SecurityException</type>
+          </tag>
+          <tag line="46" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="61">
+          <name>$path</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="61">
+          <name>$create</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="94" package="Core\IO">
+        <name>name</name>
+        <full_name>name</full_name>
+        <docblock line="89">
+          <description>Returns the base folder name</description>
+          <long-description></long-description>
+          <tag line="89" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="104" package="Core\IO">
+        <name>fullpath</name>
+        <full_name>fullpath</full_name>
+        <docblock line="99">
+          <description>Returns the full path to the folder, including the folder name</description>
+          <long-description></long-description>
+          <tag line="99" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="114" package="Core\IO">
+        <name>fileCount</name>
+        <full_name>fileCount</full_name>
+        <docblock line="109">
+          <description>Returns the amount of files in the directory</description>
+          <long-description></long-description>
+          <tag line="109" name="return" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="124" package="Core\IO">
+        <name>dirCount</name>
+        <full_name>dirCount</full_name>
+        <docblock line="119">
+          <description>Returns the amount of subdirectories in the directory</description>
+          <long-description></long-description>
+          <tag line="119" name="return" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="136" package="Core\IO">
+        <name>hasFile</name>
+        <full_name>hasFile</full_name>
+        <docblock line="129">
+          <description>Returns if a file exists within the directory</description>
+          <long-description></long-description>
+          <tag line="129" name="param" description="The name of the file" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="129" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="136">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="148" package="Core\IO">
+        <name>hasDir</name>
+        <full_name>hasDir</full_name>
+        <docblock line="141">
+          <description>Returns if a subdirectory exists within the directory</description>
+          <long-description></long-description>
+          <tag line="141" name="param" description="The name of the subdirectory" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="141" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="148">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="161" package="Core\IO">
+        <name>getFile</name>
+        <full_name>getFile</full_name>
+        <docblock line="153">
+          <description>Fetches a file within the directory</description>
+          <long-description></long-description>
+          <tag line="153" name="param" description="The name of the file to fetch" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="153" name="return" description="The fileinfo object of $name file, or&#13;&#10;  false if the file does not exist." type="\Core\IO\FileInfo|bool">
+            <type by_reference="false">\Core\IO\FileInfo</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="161">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="180" package="Core\IO">
+        <name>getFileList</name>
+        <full_name>getFileList</full_name>
+        <docblock line="172">
+          <description>Fetches an array of files withing the directory</description>
+          <long-description></long-description>
+          <tag line="172" name="param" description="Sort by asscending? If set to false,&#13;&#10;  files will be set descending." type="bool" variable="$sortAsc">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="172" name="return" description="The fileinfo object of each file in the directory" type="\Core\IO\FileInfo[]">
+            <type by_reference="false">\Core\IO\FileInfo[]</type>
+          </tag>
+        </docblock>
+        <argument line="180">
+          <name>$sortAsc</name>
+          <default>true</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="203" package="Core\IO">
+        <name>getDir</name>
+        <full_name>getDir</full_name>
+        <docblock line="191">
+          <description>Fetches a subdirectory within the directory</description>
+          <long-description></long-description>
+          <tag line="191" name="param" description="The name of the directory to fetch" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="191" name="throws" description="If the $path directory does not exist,&#13;&#10;  and $create is set to false." type="\DirectoryNotFoundException">
+            <type by_reference="false">\DirectoryNotFoundException</type>
+          </tag>
+          <tag line="191" name="throws" description="Thrown if the $path directory could not be opened&#13;&#10;  for various security reasons such as permissions." type="\SecurityException">
+            <type by_reference="false">\SecurityException</type>
+          </tag>
+          <tag line="191" name="return" description="The fileinfo object of $name file." type="\Core\IO\DirectoryInfo">
+            <type by_reference="false">\Core\IO\DirectoryInfo</type>
+          </tag>
+        </docblock>
+        <argument line="203">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="218" package="Core\IO">
+        <name>getDirList</name>
+        <full_name>getDirList</full_name>
+        <docblock line="208">
+          <description>Fetches an array of subdirectory's within the directory</description>
+          <long-description></long-description>
+          <tag line="208" name="param" description="Sort by asscending? If set to false,&#13;&#10;  files will be set descending." type="bool" variable="$sortAsc">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="208" name="return" description="Returns an array of DirectoryInfo for each&#13;&#10;  sub directory. If there was an exception thrown while opening a sub directory, a&#13;&#10;  string filepath will be in place of the DirectoryInfo class." type="\Core\IO\DirectoryInfo[]|string[]">
+            <type by_reference="false">\Core\IO\DirectoryInfo[]</type>
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+        <argument line="218">
+          <name>$sortAsc</name>
+          <default>true</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="242" package="Core\IO">
+        <name>getFilesWithExt</name>
+        <full_name>getFilesWithExt</full_name>
+        <docblock line="234">
+          <description>Fetches an array of files with a specified file extension</description>
+          <long-description></long-description>
+          <tag line="234" name="param" description="The file extension, without the dot." type="string" variable="$ext">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="234" name="return" description="The fileinfo object of each file in the directory&#13;&#10;  with the specified extension" type="\Core\IO\FileInfo[]">
+            <type by_reference="false">\Core\IO\FileInfo[]</type>
+          </tag>
+        </docblock>
+        <argument line="242">
+          <name>$ext</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="266" package="Core\IO">
+        <name>getFilesModifiedSince</name>
+        <full_name>getFilesModifiedSince</full_name>
+        <docblock line="258">
+          <description>Fetches an array of files that have been modified since the timestamp provided</description>
+          <long-description></long-description>
+          <tag line="258" name="param" description="The timestamp" type="int" variable="$timestamp">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="258" name="return" description="The fileinfo object of each file in the directory&#13;&#10;  that have been modified since the provided timestamp" type="\Core\IO\FileInfo[]">
+            <type by_reference="false">\Core\IO\FileInfo[]</type>
+          </tag>
+        </docblock>
+        <argument line="266">
+          <name>$timestamp</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="291" package="Core\IO">
+        <name>getFilesModifiedBefore</name>
+        <full_name>getFilesModifiedBefore</full_name>
+        <docblock line="283">
+          <description>Fetches an array of files that have been modified before the timestamp provided</description>
+          <long-description></long-description>
+          <tag line="283" name="param" description="The timestamp" type="int" variable="$timestamp">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="283" name="return" description="The fileinfo object of each file in the directory&#13;&#10;  that have been modified before the provided timestamp" type="\Core\IO\FileInfo[]">
+            <type by_reference="false">\Core\IO\FileInfo[]</type>
+          </tag>
+        </docblock>
+        <argument line="291">
+          <name>$timestamp</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="316" package="Core\IO">
+        <name>getFilesAccessedSince</name>
+        <full_name>getFilesAccessedSince</full_name>
+        <docblock line="308">
+          <description>Fetches an array of files that have been accessed since the timestamp provided</description>
+          <long-description></long-description>
+          <tag line="308" name="param" description="The timestamp" type="int" variable="$timestamp">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="308" name="return" description="The fileinfo object of each file in the directory&#13;&#10;  that have been accessed since the provided timestamp" type="\Core\IO\FileInfo[]">
+            <type by_reference="false">\Core\IO\FileInfo[]</type>
+          </tag>
+        </docblock>
+        <argument line="316">
+          <name>$timestamp</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="341" package="Core\IO">
+        <name>getFilesAccessedBefore</name>
+        <full_name>getFilesAccessedBefore</full_name>
+        <docblock line="333">
+          <description>Fetches an array of files that have been accessed before the timestamp provided</description>
+          <long-description></long-description>
+          <tag line="333" name="param" description="The timestamp" type="int" variable="$timestamp">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="333" name="return" description="The fileinfo object of each file in the directory&#13;&#10;  that have been accessed before the provided timestamp" type="\Core\IO\FileInfo[]">
+            <type by_reference="false">\Core\IO\FileInfo[]</type>
+          </tag>
+        </docblock>
+        <argument line="341">
+          <name>$timestamp</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="368" package="Core\IO">
+        <name>chmod</name>
+        <full_name>chmod</full_name>
+        <docblock line="359">
+          <description>Fetches or sets the permissions of the directory</description>
+          <long-description></long-description>
+          <tag line="359" name="param" description="The permission level to set on the directory (chmod).&#13;&#10;  If left unset, the current chmod will be returned." type="int" variable="$ch">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="359" name="return" description="Returns the current folder chmod if $ch is left null,&#13;&#10;  otherwise, returns the success value of setting the permissions." type="int|bool">
+            <type by_reference="false">int</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="368">
+          <name>$ch</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="390" package="Core\IO">
+        <name>moveTo</name>
+        <full_name>moveTo</full_name>
+        <docblock line="376">
+          <description>Moves the directory and all of its contents to a new path.</description>
+          <long-description>&lt;p&gt;The old directory will not be removed until the new directory is created successfully.&lt;/p&gt;</long-description>
+          <tag line="376" name="param" description="The full path to move the contents of this&#13;&#10;  folder to." type="string" variable="$newPath">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="376" name="throws" description="Thrown if there was an error creating the new directory path" type="\IOException">
+            <type by_reference="false">\IOException</type>
+          </tag>
+          <tag line="376" name="throws" description="Thrown if the $newPath directory could not be opened&#13;&#10;  for various security reasons such as permissions." type="\SecurityException">
+            <type by_reference="false">\SecurityException</type>
+          </tag>
+          <tag line="376" name="return" description="Returns the success value of the folder being moved." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="390">
+          <name>$newPath</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="418" package="Core\IO">
+        <name>rename</name>
+        <full_name>rename</full_name>
+        <docblock line="407">
+          <description>Renames the directory.</description>
+          <long-description></long-description>
+          <tag line="407" name="param" description="The new name of the directory" type="string" variable="$newName">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="407" name="throws" description="Thrown if there was an error creating the new directory path" type="\IOException">
+            <type by_reference="false">\IOException</type>
+          </tag>
+          <tag line="407" name="throws" description="Thrown if the directory could not be opened&#13;&#10;  for various security reasons such as permissions." type="\SecurityException">
+            <type by_reference="false">\SecurityException</type>
+          </tag>
+          <tag line="407" name="return" description="Returns the success value of the folder being renamed." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="418">
+          <name>$newName</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="439" package="Core\IO">
+        <name>truncate</name>
+        <full_name>truncate</full_name>
+        <docblock line="432">
+          <description>Completly empties a directory of all files and subfolders</description>
+          <long-description></long-description>
+          <tag line="432" name="throws" description="Thrown if there was an error removing a file or directory" type="\IOException">
+            <type by_reference="false">\IOException</type>
+          </tag>
+          <tag line="432" name="return" description="Returns the success value of the folder being truncated." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="488" package="Core\IO">
+        <name>createDir</name>
+        <full_name>createDir</full_name>
+        <docblock line="480">
+          <description>Creates a new sub directory</description>
+          <long-description></long-description>
+          <tag line="480" name="param" description="The basename of the subdirectory" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="480" name="param" description="The folder permissions (chmod)" type="int" variable="$chmod">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="480" name="return" description="Returns the success value of the folder being created." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="488">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="488">
+          <name>$chmod</name>
+          <default>511</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="519" package="Core\IO">
+        <name>removeDir</name>
+        <full_name>removeDir</full_name>
+        <docblock line="508">
+          <description>Removes a sub directory.</description>
+          <long-description>&lt;p&gt;This method should be used with caution as
+it is recursive, and will delete all sub files and directories in the
+specified folder.&lt;/p&gt;</long-description>
+          <tag line="508" name="param" description="The basename of the subdirectory" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="508" name="throws" description="Thrown if there was an error removing a file or directory" type="\IOException">
+            <type by_reference="false">\IOException</type>
+          </tag>
+          <tag line="508" name="return" description="Returns the success value of the folder being removed." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="519">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="545" package="Core\IO">
+        <name>createFile</name>
+        <full_name>createFile</full_name>
+        <docblock line="535">
+          <description>Creates a new file withing the directory.</description>
+          <long-description></long-description>
+          <tag line="535" name="param" description="The basename of the new file." type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="535" name="param" description="The contents to be put into the file.&#13;&#10;  If an array is passed, each array index will be treated as a new line&#13;&#10;  (implode(&quot;\n&quot;, $contents))" type="string|string[]" variable="$contents">
+            <type by_reference="false">string</type>
+            <type by_reference="false">string[]</type>
+          </tag>
+          <tag line="535" name="return" description="Returns the success value of the file being created." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="545">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="545">
+          <name>$contents</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="580" package="Core\IO">
+        <name>removeFile</name>
+        <full_name>removeFile</full_name>
+        <docblock line="573">
+          <description>Removes a file from the directory.</description>
+          <long-description></long-description>
+          <tag line="573" name="param" description="The basename of the new file." type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="573" name="return" description="Returns the success value of the file being deleted." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="580">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="602" package="Core\IO">
+        <name>size</name>
+        <full_name>size</full_name>
+        <docblock line="591">
+          <description>Fetches the size of all files within the directory, including
+those in all subdirectories (full recursive).</description>
+          <long-description>&lt;p&gt;This method will not factor in the size of files within directories
+that cannot be opened due to permissions.&lt;/p&gt;</long-description>
+          <tag line="591" name="param" description="Format the size into a human readable format?" type="bool" variable="$format">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="591" name="return" description="Returns the size of all sub files recursivly" type="float|string">
+            <type by_reference="false">float</type>
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="602">
+          <name>$format</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="634" package="Core\IO">
+        <name>isWritable</name>
+        <full_name>isWritable</full_name>
+        <docblock line="629">
+          <description>Returns whether this directory is writable or not.</description>
+          <long-description></long-description>
+          <tag line="629" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core\IO" line="656" package="Core\IO">
+        <name>_scanDir</name>
+        <full_name>_scanDir</full_name>
+        <docblock line="650">
+          <description>Scans the current directory, and setting the filelist and subdir list
+variables.</description>
+          <long-description></long-description>
+          <tag line="650" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="688" package="Core\IO">
+        <name>__toString</name>
+        <full_name>__toString</full_name>
+        <docblock line="683">
+          <description>When used as a string, this object returns the fullpath to the folder.</description>
+          <long-description></long-description>
+          <tag line="683" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+  </file>
+  <file path="system\core\io\FileInfo.php" hash="8958e36f73db196b0967fffff3f3dba2" package="Default">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="file" description="System/Core/IO/FileInfo.php"/>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+      <tag line="2" name="contains" description="DirectoryInfo"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="Core\IO" line="20" package="Core\IO">
+      <extends/>
+      <name>FileInfo</name>
+      <full_name>\Core\IO\FileInfo</full_name>
+      <docblock line="12">
+        <description>A File class used to preform advanced operations and provide information
+about the file.</description>
+        <long-description></long-description>
+        <tag line="12" name="author" description="Steven Wilson"/>
+        <tag line="12" name="package" description="Core"/>
+        <tag line="12" name="subpackage" description="IO"/>
+      </docblock>
+      <constant namespace="Core\IO" line="26" package="Core\IO">
+        <name>OVERWRITE</name>
+        <full_name>OVERWRITE</full_name>
+        <value>0</value>
+        <docblock line="22">
+          <description>File mode OVERWRITE</description>
+          <long-description></long-description>
+          <tag line="22" name="var" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </constant>
+      <constant namespace="Core\IO" line="32" package="Core\IO">
+        <name>PREPEND</name>
+        <full_name>PREPEND</full_name>
+        <value>1</value>
+        <docblock line="28">
+          <description>File mode PREPEND</description>
+          <long-description></long-description>
+          <tag line="28" name="var" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </constant>
+      <constant namespace="Core\IO" line="38" package="Core\IO">
+        <name>APPEND</name>
+        <full_name>APPEND</full_name>
+        <value>2</value>
+        <docblock line="34">
+          <description>File mode APPEND</description>
+          <long-description></long-description>
+          <tag line="34" name="var" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </constant>
+      <property final="false" static="false" visibility="protected" line="44" namespace="Core\IO" package="Default">
+        <name>$parentDir</name>
+        <default></default>
+        <docblock line="40">
+          <description>The full path to the file's parent directory</description>
+          <long-description></long-description>
+          <tag line="40" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="50" namespace="Core\IO" package="Default">
+        <name>$filepath</name>
+        <default></default>
+        <docblock line="46">
+          <description>The full path to the file's current location, including the filename</description>
+          <long-description></long-description>
+          <tag line="46" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="65" package="Core\IO">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="52">
+          <description>Class Constructor</description>
+          <long-description></long-description>
+          <tag line="52" name="param" description="The full path the the file" type="string" variable="$path">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="52" name="param" description="Create the file if it doesnt exist?" type="bool" variable="$create">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="52" name="throws" description="Thrown if the $path directory doesnt exist,&#13;&#10;  $create is set to true, and there was an error creating the file." type="\IOException">
+            <type by_reference="false">\IOException</type>
+          </tag>
+          <tag line="52" name="throws" description="If the $path file does not exist, and $create is set to false." type="\FileNotFoundException">
+            <type by_reference="false">\FileNotFoundException</type>
+          </tag>
+          <tag line="52" name="throws" description="Thrown if the $path is not a file at all, but rather a directory" type="\Exception">
+            <type by_reference="false">\Exception</type>
+          </tag>
+          <tag line="52" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="65">
+          <name>$path</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="65">
+          <name>$create</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="102" package="Core\IO">
+        <name>getContents</name>
+        <full_name>getContents</full_name>
+        <docblock line="94">
+          <description>Returns the contents of the file</description>
+          <long-description></long-description>
+          <tag line="94" name="param" description="If set to true, the contents will be returned as an array.&#13;&#10;  Each array index will be a new line within the file." type="bool" variable="$asArray">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="94" name="return" description="" type="string|string[]">
+            <type by_reference="false">string</type>
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+        <argument line="102">
+          <name>$asArray</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="117" package="Core\IO">
+        <name>putContents</name>
+        <full_name>putContents</full_name>
+        <docblock line="107">
+          <description>Sets or adds contents of the file</description>
+          <long-description></long-description>
+          <tag line="107" name="param" description="The contents to be stored in the file.&#13;&#10;  If an array is passed, each array index will be treated as a new line within&#13;&#10;  the file." type="string|string[]" variable="$contents">
+            <type by_reference="false">string</type>
+            <type by_reference="false">string[]</type>
+          </tag>
+          <tag line="107" name="param" description="The write mode for the contents (See class constants)." type="int" variable="$mode">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="107" name="return" description="Returns TRUE on success, or FALSE on failure." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="117">
+          <name>$contents</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="117">
+          <name>$mode</name>
+          <default>self::OVERWRITE</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="138" package="Core\IO">
+        <name>name</name>
+        <full_name>name</full_name>
+        <docblock line="133">
+          <description>Returns the base file name</description>
+          <long-description></long-description>
+          <tag line="133" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="148" package="Core\IO">
+        <name>filepath</name>
+        <full_name>filepath</full_name>
+        <docblock line="143">
+          <description>Returns the full path to the file, including the file name</description>
+          <long-description></long-description>
+          <tag line="143" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="161" package="Core\IO">
+        <name>getParentDir</name>
+        <full_name>getParentDir</full_name>
+        <docblock line="153">
+          <description>Returns the directory that the file is located in</description>
+          <long-description></long-description>
+          <tag line="153" name="param" description="If set to true, The string path will be&#13;&#10;  returned, otherwise the DirectoryInfo object of the dir will be returned" type="bool" variable="$asString">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="153" name="return" description="" type="string|\Core\IO\DirectoryInfo">
+            <type by_reference="false">string</type>
+            <type by_reference="false">\Core\IO\DirectoryInfo</type>
+          </tag>
+        </docblock>
+        <argument line="161">
+          <name>$asString</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="180" package="Core\IO">
+        <name>moveTo</name>
+        <full_name>moveTo</full_name>
+        <docblock line="166">
+          <description>Moves the file to a new location.</description>
+          <long-description>&lt;p&gt;The old file will not be removed until the new file is created successfully.&lt;/p&gt;</long-description>
+          <tag line="166" name="param" description="The full path to move the file to" type="string" variable="$newPath">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="166" name="param" description="If set, the file will also be renamed in its new location" type="string" variable="$newName">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="166" name="throws" description="Thrown if there was an error creating the new directory path" type="\IOException">
+            <type by_reference="false">\IOException</type>
+          </tag>
+          <tag line="166" name="throws" description="Thrown if the $newPath directory could not be opened&#13;&#10;  for various security reasons such as permissions." type="\SecurityException">
+            <type by_reference="false">\SecurityException</type>
+          </tag>
+          <tag line="166" name="return" description="Returns true on success, false otherwise" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="180">
+          <name>$newPath</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="180">
+          <name>$newName</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="209" package="Core\IO">
+        <name>copyTo</name>
+        <full_name>copyTo</full_name>
+        <docblock line="200">
+          <description>Creates a copy of the file to the specified file location</description>
+          <long-description></long-description>
+          <tag line="200" name="param" description="The name of the file to copy to" type="string" variable="$fileName">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="200" name="param" description="The path to the new file if not in the current&#13;&#10;  file directory." type="string" variable="$newPath">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="200" name="return" description="Returns true on success, false otherwise" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="209">
+          <name>$fileName</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="209">
+          <name>$newPath</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="225" package="Core\IO">
+        <name>rename</name>
+        <full_name>rename</full_name>
+        <docblock line="218">
+          <description>Renames the file.</description>
+          <long-description></long-description>
+          <tag line="218" name="param" description="The new name of the file" type="string" variable="$newName">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="218" name="return" description="Returns true on success, false otherwise" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="225">
+          <name>$newName</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="241" package="Core\IO">
+        <name>truncate</name>
+        <full_name>truncate</full_name>
+        <docblock line="236">
+          <description>Completly removes all contents of the file</description>
+          <long-description></long-description>
+          <tag line="236" name="return" description="Returns true on success, false otherwise" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="259" package="Core\IO">
+        <name>modified</name>
+        <full_name>modified</full_name>
+        <docblock line="253">
+          <description>Gets last amodification time of file</description>
+          <long-description></long-description>
+          <tag line="253" name="return" description="Returns the time the file was last modified,&#13;&#10;or FALSE on failure. The time is returned as a Unix timestamp." type="int|bool">
+            <type by_reference="false">int</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="270" package="Core\IO">
+        <name>accessed</name>
+        <full_name>accessed</full_name>
+        <docblock line="264">
+          <description>Gets last access time of file</description>
+          <long-description></long-description>
+          <tag line="264" name="return" description="Returns the time the file was last accessed,&#13;&#10;or FALSE on failure. The time is returned as a Unix timestamp." type="int|bool">
+            <type by_reference="false">int</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="285" package="Core\IO">
+        <name>size</name>
+        <full_name>size</full_name>
+        <docblock line="275">
+          <description>Gets the size for the file</description>
+          <long-description></long-description>
+          <tag line="275" name="param" description="Format the file size to human readable format?" type="bool" variable="$format">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="275" name="param" description="Do we think this file to be over 2 GB? This is used to get&#13;&#10;  an accurate filesize via the command line on 32 bit systems." type="bool" variable="$gt2gb">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="275" name="return" description="Returns false on failure, a float if $format is false, or&#13;&#10;  a string if $format is true" type="float|string|bool">
+            <type by_reference="false">float</type>
+            <type by_reference="false">string</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="285">
+          <name>$format</name>
+          <default>false</default>
+          <type/>
+        </argument>
+        <argument line="285">
+          <name>$gt2gb</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="341" package="Core\IO">
+        <name>chmod</name>
+        <full_name>chmod</full_name>
+        <docblock line="332">
+          <description>Fetches or sets the permissions of the file</description>
+          <long-description></long-description>
+          <tag line="332" name="param" description="The permission level to set on the file (chmod).&#13;&#10;  If left unset, the current chmod will be returned." type="int" variable="$ch">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="332" name="return" description="Returns the current file chmod if $ch is left null,&#13;&#10;  otherwise, returns the success value of setting the permissions." type="int|bool">
+            <type by_reference="false">int</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="341">
+          <name>$ch</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="357" package="Core\IO">
+        <name>mimeType</name>
+        <full_name>mimeType</full_name>
+        <docblock line="349">
+          <description>Fetches the mime type of this file.</description>
+          <long-description></long-description>
+          <tag line="349" name="return" description="Returns an array if there is more then&#13;&#10;  1 mime type (Ordered by most common to least), or a string if&#13;&#10;  there is only 1 mime type. Returns false if there is no entry&#13;&#10;  for the given file extenstion" type="string|string[]">
+            <type by_reference="false">string</type>
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="367" package="Core\IO">
+        <name>ext</name>
+        <full_name>ext</full_name>
+        <docblock line="362">
+          <description>Gets the file's extension</description>
+          <long-description></long-description>
+          <tag line="362" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="377" package="Core\IO">
+        <name>isWritable</name>
+        <full_name>isWritable</full_name>
+        <docblock line="372">
+          <description>Returns whether this file is writable or not.</description>
+          <long-description></long-description>
+          <tag line="372" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="394" package="Core\IO">
+        <name>isReadable</name>
+        <full_name>isReadable</full_name>
+        <docblock line="389">
+          <description>Returns whether this file is readable or not.</description>
+          <long-description></long-description>
+          <tag line="389" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\IO" line="411" package="Core\IO">
+        <name>__toString</name>
+        <full_name>__toString</full_name>
+        <docblock line="406">
+          <description>When used as a string, this object returns the fullpath to the file.</description>
+          <long-description></long-description>
+          <tag line="406" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+  </file>
+  <file path="system\core\Request.php" hash="a72ba00612f05af1057aabfe3adc3b36" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -2667,227 +3716,227 @@ the base URL, website root, and more.&lt;/p&gt;</long-description>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="109" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="112" package="Core">
         <name>Input</name>
         <full_name>Input</full_name>
-        <docblock line="104">
+        <docblock line="107">
           <description>Returns data from the 'php://input'</description>
           <long-description></long-description>
-          <tag line="104" name="return" description="" type="string">
+          <tag line="107" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="119" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="122" package="Core">
         <name>Method</name>
         <full_name>Method</full_name>
-        <docblock line="114">
+        <docblock line="117">
           <description>Returns the request http method (GET, POST, PUT etc)</description>
           <long-description></long-description>
-          <tag line="114" name="return" description="" type="string">
+          <tag line="117" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="135" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="138" package="Core">
         <name>Referer</name>
         <full_name>Referer</full_name>
-        <docblock line="130">
+        <docblock line="133">
           <description>Returns the reffering website url</description>
           <long-description></long-description>
-          <tag line="130" name="return" description="" type="string">
+          <tag line="133" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="155" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="158" package="Core">
         <name>Query</name>
         <full_name>Query</full_name>
-        <docblock line="146">
+        <docblock line="149">
           <description>Returns the url query string</description>
           <long-description></long-description>
-          <tag line="146" name="param" description="The GET array id to return. Leave null to return all GET data" type="string" variable="$key">
+          <tag line="149" name="param" description="The GET array id to return. Leave null to return all GET data" type="string" variable="$key">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="146" name="param" description="The default return value if the GET array key doesnt&#13;&#10;   exist. Default is null." type="mixed" variable="$default">
+          <tag line="149" name="param" description="The default return value if the GET array key doesnt&#13;&#10;   exist. Default is null." type="mixed" variable="$default">
             <type by_reference="false">mixed</type>
           </tag>
-          <tag line="146" name="return" description="Returns $default if the GET key doesnt exist. Returns a&#13;&#10;  string[] if no $key is provided, or the value of $key if the array key exists" type="string|string[]|mixed">
+          <tag line="149" name="return" description="Returns $default if the GET key doesnt exist. Returns a&#13;&#10;  string[] if no $key is provided, or the value of $key if the array key exists" type="string|string[]|mixed">
             <type by_reference="false">string</type>
             <type by_reference="false">string[]</type>
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
-        <argument line="155">
+        <argument line="158">
           <name>$key</name>
           <default>null</default>
           <type/>
         </argument>
-        <argument line="155">
+        <argument line="158">
           <name>$default</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="172" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="175" package="Core">
         <name>Post</name>
         <full_name>Post</full_name>
-        <docblock line="163">
+        <docblock line="166">
           <description>Returns the POST var specified, or all POST data</description>
           <long-description></long-description>
-          <tag line="163" name="param" description="The POST array id to return. Leave null to return all POST data" type="string" variable="$key">
+          <tag line="166" name="param" description="The POST array id to return. Leave null to return all POST data" type="string" variable="$key">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="163" name="param" description="The default return value if the POST array key doesnt&#13;&#10;   exist. Default is null." type="mixed" variable="$default">
+          <tag line="166" name="param" description="The default return value if the POST array key doesnt&#13;&#10;   exist. Default is null." type="mixed" variable="$default">
             <type by_reference="false">mixed</type>
           </tag>
-          <tag line="163" name="return" description="Returns $default if the POST key doesnt exist. Returns a&#13;&#10;  string[] if no $key is provided, or the value of $key if the array key exists." type="string|string[]|mixed">
+          <tag line="166" name="return" description="Returns $default if the POST key doesnt exist. Returns a&#13;&#10;  string[] if no $key is provided, or the value of $key if the array key exists." type="string|string[]|mixed">
             <type by_reference="false">string</type>
             <type by_reference="false">string[]</type>
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
-        <argument line="172">
+        <argument line="175">
           <name>$key</name>
           <default>null</default>
           <type/>
         </argument>
-        <argument line="172">
+        <argument line="175">
           <name>$default</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="189" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="192" package="Core">
         <name>Cookie</name>
         <full_name>Cookie</full_name>
-        <docblock line="180">
+        <docblock line="183">
           <description>Returns the Cookie name specified, or all Cookie data</description>
           <long-description></long-description>
-          <tag line="180" name="param" description="The cookie name to return. Leave null to return all cookie data" type="string" variable="$key">
+          <tag line="183" name="param" description="The cookie name to return. Leave null to return all cookie data" type="string" variable="$key">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="180" name="param" description="The default return value if the Cookie name doesnt&#13;&#10;   exist. Default is null." type="mixed" variable="$default">
+          <tag line="183" name="param" description="The default return value if the Cookie name doesnt&#13;&#10;   exist. Default is null." type="mixed" variable="$default">
             <type by_reference="false">mixed</type>
           </tag>
-          <tag line="180" name="return" description="Returns $default if the Cookie name doesnt exist. Returns a&#13;&#10;  string[] if no $key is provided, or the value of $key if the cookie exists." type="string|string[]|mixed">
+          <tag line="183" name="return" description="Returns $default if the Cookie name doesnt exist. Returns a&#13;&#10;  string[] if no $key is provided, or the value of $key if the cookie exists." type="string|string[]|mixed">
             <type by_reference="false">string</type>
             <type by_reference="false">string[]</type>
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
-        <argument line="189">
+        <argument line="192">
           <name>$key</name>
           <default>null</default>
           <type/>
         </argument>
-        <argument line="189">
+        <argument line="192">
           <name>$default</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="204" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="207" package="Core">
         <name>Accepts</name>
         <full_name>Accepts</full_name>
-        <docblock line="197">
+        <docblock line="200">
           <description>Returns the an array of what formats the client is accepting</description>
           <long-description></long-description>
-          <tag line="197" name="param" description="The type to return" type="string" variable="$type">
+          <tag line="200" name="param" description="The type to return" type="string" variable="$type">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="197" name="todo" description="Finish the method, and provide better description"/>
-          <tag line="197" name="return" description="" type="void">
+          <tag line="200" name="todo" description="Finish the method, and provide better description"/>
+          <tag line="200" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="204">
+        <argument line="207">
           <name>$type</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="215" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="218" package="Core">
         <name>AcceptsLanguage</name>
         <full_name>AcceptsLanguage</full_name>
-        <docblock line="206">
+        <docblock line="209">
           <description>Returns a string or string[] of what languages the client accepts</description>
           <long-description></long-description>
-          <tag line="206" name="param" description="If a language is provided here, the method will return&#13;&#10;   true or false based on whehter the client accepts the language" type="string" variable="$lang">
+          <tag line="209" name="param" description="If a language is provided here, the method will return&#13;&#10;   true or false based on whehter the client accepts the language" type="string" variable="$lang">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="206" name="return" description="Returns the language, or an array of&#13;&#10;languages the client accpets. If $lang is set, then this method returns&#13;&#10;a bool based on whehter the client accepts the language" type="string|string[]|bool">
+          <tag line="209" name="return" description="Returns the language, or an array of&#13;&#10;languages the client accpets. If $lang is set, then this method returns&#13;&#10;a bool based on whehter the client accepts the language" type="string|string[]|bool">
             <type by_reference="false">string</type>
             <type by_reference="false">string[]</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="215">
+        <argument line="218">
           <name>$lang</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="233" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="236" package="Core">
         <name>ClientIp</name>
         <full_name>ClientIp</full_name>
-        <docblock line="227">
+        <docblock line="230">
           <description>Returns the Remote connected IP address</description>
           <long-description></long-description>
-          <tag line="227" name="return" description="The validated remote IP address. Returns 0.0.0.0 if&#13;&#10;  the IP address could not be determined" type="string">
+          <tag line="230" name="return" description="The validated remote IP address. Returns 0.0.0.0 if&#13;&#10;  the IP address could not be determined" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="292" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="295" package="Core">
         <name>IsAjax</name>
         <full_name>IsAjax</full_name>
-        <docblock line="287">
+        <docblock line="290">
           <description>Returns the whether the request is an ajax request</description>
           <long-description></long-description>
-          <tag line="287" name="return" description="If the requeset is an ajax request (HTTP_X_REQUESTED_WITH =&gt; xmlhttprequest)" type="bool">
+          <tag line="290" name="return" description="If the requeset is an ajax request (HTTP_X_REQUESTED_WITH =&gt; xmlhttprequest)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="303" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="306" package="Core">
         <name>Header</name>
         <full_name>Header</full_name>
-        <docblock line="297">
+        <docblock line="300">
           <description>Returns the value of the specified header passed</description>
           <long-description></long-description>
-          <tag line="297" name="param" description="The header name to be returned" type="string" variable="$name">
+          <tag line="300" name="param" description="The header name to be returned" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="297" name="return" description="Returns false if the header isnt set" type="string|bool">
+          <tag line="300" name="return" description="Returns false if the header isnt set" type="string|bool">
             <type by_reference="false">string</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="303">
+        <argument line="306">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="314" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="317" package="Core">
         <name>BaseUrl</name>
         <full_name>BaseUrl</full_name>
-        <docblock line="309">
+        <docblock line="312">
           <description>Returns the site's base URL</description>
           <long-description></long-description>
-          <tag line="309" name="return" description="" type="string">
+          <tag line="312" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="324" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="327" package="Core">
         <name>Protocol</name>
         <full_name>Protocol</full_name>
-        <docblock line="319">
+        <docblock line="322">
           <description>Returns the current requests protocol</description>
           <long-description></long-description>
-          <tag line="319" name="return" description="" type="string">
+          <tag line="322" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
@@ -3624,7 +4673,7 @@ and query string</description>
       </method>
     </class>
   </file>
-  <file path="system\core\XssFilter.php" hash="a400a0fb16a36ae711542d3b93a7ad97" package="Default">
+  <file path="system\core\XssFilter.php" hash="59fb140fb93aed0788cc8f10b33a2ae6" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -3756,215 +4805,215 @@ the current array of tags&lt;/p&gt;</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="107" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="108" package="Core">
         <name>addTagsArray</name>
         <full_name>addTagsArray</full_name>
-        <docblock line="99">
+        <docblock line="100">
           <description>Adds an array of tags to be filtered.</description>
           <long-description>&lt;p&gt;Adding tags does not clear
 the current array of tags&lt;/p&gt;</long-description>
-          <tag line="99" name="param" description="An array of html tag names to be filtered" type="string[]" variable="$tags">
+          <tag line="100" name="param" description="An array of html tag names to be filtered" type="string[]" variable="$tags">
             <type by_reference="false">string[]</type>
           </tag>
-          <tag line="99" name="return" description="" type="void">
+          <tag line="100" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="107">
+        <argument line="108">
           <name>$tags</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="123" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="124" package="Core">
         <name>addAttr</name>
         <full_name>addAttr</full_name>
-        <docblock line="115">
+        <docblock line="116">
           <description>Adds an attribute to the array of attributes to be filtered.</description>
           <long-description>&lt;p&gt;Adding attributes does not clear the current array of attributes&lt;/p&gt;</long-description>
-          <tag line="115" name="param" description="The html attribute name to be filtered" type="string" variable="$attr">
+          <tag line="116" name="param" description="The html attribute name to be filtered" type="string" variable="$attr">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="115" name="return" description="" type="void">
+          <tag line="116" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="123">
+        <argument line="124">
           <name>$attr</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="137" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="139" package="Core">
         <name>addAttrArray</name>
         <full_name>addAttrArray</full_name>
-        <docblock line="129">
+        <docblock line="131">
           <description>Adds an array of attributes to be filtered.</description>
           <long-description>&lt;p&gt;Adding attributes does not clear
 the current array of attributes&lt;/p&gt;</long-description>
-          <tag line="129" name="param" description="An array of html attribute names to be filtered" type="string[]" variable="$attrs">
+          <tag line="131" name="param" description="An array of html attribute names to be filtered" type="string[]" variable="$attrs">
             <type by_reference="false">string[]</type>
           </tag>
-          <tag line="129" name="return" description="" type="void">
+          <tag line="131" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="137">
+        <argument line="139">
           <name>$attrs</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="156" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="158" package="Core">
         <name>setTagsMethod</name>
         <full_name>setTagsMethod</full_name>
-        <docblock line="145">
+        <docblock line="147">
           <description>Sets the tag method for filtering.</description>
           <long-description></long-description>
-          <tag line="145" name="param" description="The filter method. This value will either be&#13;&#10;  the constant value of XssFilter::WHITELIST or XssFilter::BLACKLIST.&#13;&#10;  If set to whitelist, all tags that are NOT defined will be removed.&#13;&#10;  If set to blacklist, all tags defined &lt;b&gt;will&lt;/b&gt; be removed from the source,&#13;&#10;  and all non-defined tags will &lt;b&gt;not&lt;/b&gt; be filtered out" type="int" variable="$mode">
+          <tag line="147" name="param" description="The filter method. This value will either be&#13;&#10;  the constant value of XssFilter::WHITELIST or XssFilter::BLACKLIST.&#13;&#10;  If set to whitelist, all tags that are NOT defined will be removed.&#13;&#10;  If set to blacklist, all tags defined &lt;b&gt;will&lt;/b&gt; be removed from the source,&#13;&#10;  and all non-defined tags will &lt;b&gt;not&lt;/b&gt; be filtered out" type="int" variable="$mode">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="145" name="return" description="" type="void">
+          <tag line="147" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="156">
+        <argument line="158">
           <name>$mode</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="175" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="177" package="Core">
         <name>setAttrMethod</name>
         <full_name>setAttrMethod</full_name>
-        <docblock line="164">
+        <docblock line="166">
           <description>Sets the attribute method for filtering.</description>
           <long-description></long-description>
-          <tag line="164" name="param" description="The filter method. This value will either be&#13;&#10;  the constant value of XssFilter::WHITELIST or XssFilter::BLACKLIST.&#13;&#10;  If set to whitelist, all attributes that are NOT defined will be removed.&#13;&#10;  If set to blacklist, all attributes defined &lt;b&gt;will&lt;/b&gt; be removed from the source,&#13;&#10;  and all non-defined attributes will &lt;b&gt;not&lt;/b&gt; be filtered out" type="int" variable="$mode">
+          <tag line="166" name="param" description="The filter method. This value will either be&#13;&#10;  the constant value of XssFilter::WHITELIST or XssFilter::BLACKLIST.&#13;&#10;  If set to whitelist, all attributes that are NOT defined will be removed.&#13;&#10;  If set to blacklist, all attributes defined &lt;b&gt;will&lt;/b&gt; be removed from the source,&#13;&#10;  and all non-defined attributes will &lt;b&gt;not&lt;/b&gt; be filtered out" type="int" variable="$mode">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="164" name="return" description="" type="void">
+          <tag line="166" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="175">
+        <argument line="177">
           <name>$mode</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="192" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="194" package="Core">
         <name>useBlacklist</name>
         <full_name>useBlacklist</full_name>
-        <docblock line="183">
+        <docblock line="185">
           <description>Defines whether the filter should use the blacklist of tags and attributes,
 and automatically remove them.</description>
           <long-description>&lt;p&gt;Blacklist is enabled by default.&lt;/p&gt;</long-description>
-          <tag line="183" name="param" description="Auto remove blacklisted tags and attributes? Blacklisted tags and&#13;&#10;  attributes are defined in the &quot;system/config/xssfilter.class.php&quot; config file." type="bool" variable="$bool">
+          <tag line="185" name="param" description="Auto remove blacklisted tags and attributes? Blacklisted tags and&#13;&#10;  attributes are defined in the &quot;system/config/xssfilter.class.php&quot; config file." type="bool" variable="$bool">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="183" name="return" description="" type="void">
+          <tag line="185" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="192">
+        <argument line="194">
           <name>$bool</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="205" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="207" package="Core">
         <name>clean</name>
         <full_name>clean</full_name>
-        <docblock line="197">
+        <docblock line="199">
           <description>Cleans a source string, using the Xss Filter tags and methods defined.</description>
           <long-description></long-description>
-          <tag line="197" name="param" description="The source to be cleaned. May also be an array&#13;&#10;  of strings to be cleaned" type="string|string[]" variable="$source">
+          <tag line="199" name="param" description="The source to be cleaned. May also be an array&#13;&#10;  of strings to be cleaned" type="string|string[]" variable="$source">
             <type by_reference="false">string</type>
             <type by_reference="false">string[]</type>
           </tag>
-          <tag line="197" name="return" description="The cleaned source" type="string|string[]">
+          <tag line="199" name="return" description="The cleaned source" type="string|string[]">
             <type by_reference="false">string</type>
             <type by_reference="false">string[]</type>
           </tag>
         </docblock>
-        <argument line="205">
+        <argument line="207">
           <name>$source</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="235" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="237" package="Core">
         <name>remove</name>
         <full_name>remove</full_name>
-        <docblock line="228">
+        <docblock line="230">
           <description>Removes all unwanted tags and attributes</description>
           <long-description></long-description>
-          <tag line="228" name="param" description="The source to be cleaned." type="string" variable="$source">
+          <tag line="230" name="param" description="The source to be cleaned." type="string" variable="$source">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="228" name="return" description="Returns the cleaned source" type="string">
+          <tag line="230" name="return" description="Returns the cleaned source" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="235">
+        <argument line="237">
           <name>$source</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="253" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="255" package="Core">
         <name>filterTags</name>
         <full_name>filterTags</full_name>
-        <docblock line="246">
+        <docblock line="248">
           <description>Internal method for removing all unwanted tags</description>
           <long-description></long-description>
-          <tag line="246" name="param" description="The source to be cleaned." type="string" variable="$source">
+          <tag line="248" name="param" description="The source to be cleaned." type="string" variable="$source">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="246" name="return" description="Returns the cleaned source" type="string">
+          <tag line="248" name="return" description="Returns the cleaned source" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="253">
+        <argument line="255">
           <name>$source</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="415" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="417" package="Core">
         <name>filterAttr</name>
         <full_name>filterAttr</full_name>
-        <docblock line="408">
+        <docblock line="410">
           <description>Internal method for removing all unwanted attributes</description>
           <long-description></long-description>
-          <tag line="408" name="param" description="An array of attribute sets in a tag" type="string[]" variable="$attrSet">
+          <tag line="410" name="param" description="An array of attribute sets in a tag" type="string[]" variable="$attrSet">
             <type by_reference="false">string[]</type>
           </tag>
-          <tag line="408" name="return" description="Returns an array of filtered atrribute sets" type="string[]">
+          <tag line="410" name="return" description="Returns an array of filtered atrribute sets" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
         </docblock>
-        <argument line="415">
+        <argument line="417">
           <name>$attrSet</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="505" package="Core">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Core" line="507" package="Core">
         <name>decode</name>
         <full_name>decode</full_name>
-        <docblock line="498">
+        <docblock line="500">
           <description>Decodes all html entities from the source</description>
           <long-description></long-description>
-          <tag line="498" name="param" description="The source to be converted." type="string" variable="$source">
+          <tag line="500" name="param" description="The source to be converted." type="string" variable="$source">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="498" name="return" description="Returns the converted source" type="string">
+          <tag line="500" name="return" description="Returns the converted source" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="505">
+        <argument line="507">
           <name>$source</name>
           <default></default>
           <type/>
@@ -4017,6 +5066,109 @@ and automatically remove them.</description>
       </docblock>
       <argument line="36">
         <name>$count</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+  </file>
+  <file path="system\helpers\io.php" hash="e5dc328e583ec20579069b7f3698c06d" package="Helpers\IO">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="file" description="System/Helpers/Io.php"/>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+      <tag line="2" name="author" description="Plexis Dev Team"/>
+      <tag line="2" name="package" description="Helpers"/>
+      <tag line="2" name="subpackage" description="IO"/>
+    </docblock>
+    <function namespace="global" line="23" package="Helpers\IO">
+      <name>path</name>
+      <full_name>\path</full_name>
+      <docblock line="13">
+        <description>Combines several strings into a file path.</description>
+        <long-description></long-description>
+        <tag line="13" name="param" description="The pieces of the path, passed as&#13;&#10;  individual arguments. Each argument can be a single dimmensional&#13;&#10;  array of paths, a string foldername, or a mixture of the two." type="string|string[]" variable="$parts">
+          <type by_reference="false">string</type>
+          <type by_reference="false">string[]</type>
+        </tag>
+        <tag line="13" name="return" description="Full path using the correct system&#13;&#10;  directory separater" type="string">
+          <type by_reference="false">string</type>
+        </tag>
+      </docblock>
+      <argument line="23">
+        <name>$parts</name>
+        <default>null</default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="global" line="64" package="Helpers\IO">
+      <name>truePath</name>
+      <full_name>\truePath</full_name>
+      <docblock line="55">
+        <description>This function is to return a complete path from a relative path.</description>
+        <long-description>&lt;p&gt;This function is meant to replace PHP's extremely buggy realpath().&lt;/p&gt;</long-description>
+        <tag line="55" name="param" description="The original path, can be relative." type="string" variable="$path">
+          <type by_reference="false">string</type>
+        </tag>
+        <tag line="55" name="return" description="The resolved path without a trailing slash, it might not exist." type="string">
+          <type by_reference="false">string</type>
+        </tag>
+      </docblock>
+      <argument line="64">
+        <name>$path</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="global" line="108" package="Helpers\IO">
+      <name>formatSize</name>
+      <full_name>\formatSize</full_name>
+      <docblock line="101">
+        <description>Formats a file size to human readable format</description>
+        <long-description></long-description>
+        <tag line="101" name="param" description="The size in bytes" type="string|float|int" variable="$size">
+          <type by_reference="false">string</type>
+          <type by_reference="false">float</type>
+          <type by_reference="false">int</type>
+        </tag>
+        <tag line="101" name="return" description="Returns a formatted size ( Ex: 32.6 MB )" type="string">
+          <type by_reference="false">string</type>
+        </tag>
+      </docblock>
+      <argument line="108">
+        <name>$size</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+  </file>
+  <file path="system\helpers\validation.php" hash="fc15bfa12d81ff64674e2376523a26fe" package="Helpers\Validation">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description></long-description>
+      <tag line="2" name="file" description="System/Helpers/Validation.php"/>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+      <tag line="2" name="author" description="Plexis Dev Team"/>
+      <tag line="2" name="package" description="Helpers"/>
+      <tag line="2" name="subpackage" description="Validation"/>
+    </docblock>
+    <function namespace="global" line="20" package="Helpers\Validation">
+      <name>isValidIp</name>
+      <full_name>\isValidIp</full_name>
+      <docblock line="13">
+        <description>Checks an IP address, returning whether its a valid, Non-Private IP.</description>
+        <long-description></long-description>
+        <tag line="13" name="param" description="The ip address to check." type="string" variable="$ip">
+          <type by_reference="false">string</type>
+        </tag>
+        <tag line="13" name="return" description="Returns true if the given IP address is a valid, Non-Private IP, false otherwise" type="bool">
+          <type by_reference="false">bool</type>
+        </tag>
+      </docblock>
+      <argument line="20">
+        <name>$ip</name>
         <default></default>
         <type/>
       </argument>
@@ -5616,7 +6768,7 @@ the final rendered template.</description>
       </docblock>
     </class>
   </file>
-  <file path="system\Plexis.php" hash="1943818d18f285c3f61799cb246feee0" package="System">
+  <file path="system\Plexis.php" hash="c54b5be2a214c91b3a9f3de73e177186" package="System">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -5625,24 +6777,27 @@ the final rendered template.</description>
       <tag line="2" name="license" description="GNU GPL v3"/>
       <tag line="2" name="package" description="System"/>
     </docblock>
-    <include line="306" type="Include" package="Default">
+    <include line="265" type="Require Once" package="Default">
       <name/>
     </include>
-    <include line="322" type="Include" package="Default">
+    <include line="339" type="Include" package="Default">
       <name/>
     </include>
-    <include line="351" type="Require" package="Default">
+    <include line="355" type="Include" package="Default">
       <name/>
     </include>
     <include line="384" type="Require" package="Default">
       <name/>
     </include>
-    <constant namespace="global" line="402" package="System">
+    <include line="417" type="Require" package="Default">
+      <name/>
+    </include>
+    <constant namespace="global" line="435" package="System">
       <name>SITE_URL</name>
       <full_name>\SITE_URL</full_name>
       <value>\Core\Request::BaseUrl()</value>
     </constant>
-    <constant namespace="global" line="409" package="System">
+    <constant namespace="global" line="442" package="System">
       <name>SITE_URL</name>
       <full_name>\SITE_URL</full_name>
       <value>\Core\Request::BaseUrl() . '/?uri='</value>
@@ -5691,10 +6846,10 @@ the final rendered template.</description>
         </docblock>
       </property>
       <property final="false" static="true" visibility="protected" line="57" namespace="global" package="Default">
-        <name>$plugins</name>
+        <name>$helpers</name>
         <default>array()</default>
         <docblock line="53">
-          <description>An array of installed plugins</description>
+          <description>An array of helpers that have been loaded</description>
           <long-description></long-description>
           <tag line="53" name="var" description="" type="string[]">
             <type by_reference="false">string[]</type>
@@ -5702,201 +6857,231 @@ the final rendered template.</description>
         </docblock>
       </property>
       <property final="false" static="true" visibility="protected" line="63" namespace="global" package="Default">
+        <name>$plugins</name>
+        <default>array()</default>
+        <docblock line="59">
+          <description>An array of installed plugins</description>
+          <long-description></long-description>
+          <tag line="59" name="var" description="" type="string[]">
+            <type by_reference="false">string[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="true" visibility="protected" line="69" namespace="global" package="Default">
         <name>$renderTemplate</name>
         <default>true</default>
-        <docblock line="59">
+        <docblock line="65">
           <description>Certain modules may not want the template to render.</description>
           <long-description></long-description>
-          <tag line="59" name="var" description="" type="bool">
+          <tag line="65" name="var" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="71" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="77" package="System">
         <name>Run</name>
         <full_name>Run</full_name>
-        <docblock line="66">
+        <docblock line="72">
           <description>Main method for running the Plexis application</description>
           <long-description></long-description>
-          <tag line="66" name="return" description="" type="void">
+          <tag line="72" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="117" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="123" package="System">
         <name>Show404</name>
         <full_name>Show404</full_name>
-        <docblock line="108">
+        <docblock line="114">
           <description>Displays the 404 page not found page</description>
           <long-description>&lt;p&gt;Calling this method will clear all current output, render the 404 page
 and kill all current running scripts. No code following this method
 will be executed&lt;/p&gt;</long-description>
-          <tag line="108" name="return" description="" type="void">
+          <tag line="114" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="145" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="151" package="System">
         <name>Show403</name>
         <full_name>Show403</full_name>
-        <docblock line="136">
+        <docblock line="142">
           <description>Displays the 403 "Forbidden"</description>
           <long-description>&lt;p&gt;Calling this method will clear all current output, render the 403 page
 and kill all current running scripts. No code following this method
 will be executed&lt;/p&gt;</long-description>
-          <tag line="136" name="return" description="" type="void">
+          <tag line="142" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="175" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="181" package="System">
         <name>ShowSiteOffline</name>
         <full_name>ShowSiteOffline</full_name>
-        <docblock line="164">
+        <docblock line="170">
           <description>Displays the site offline page</description>
           <long-description>&lt;p&gt;Calling this method will clear all current output, render the site offline
 page and kill all current running scripts. No code following this method
 will be executed&lt;/p&gt;</long-description>
-          <tag line="164" name="param" description="The meesage to also be displayed with the&#13;&#10;  Site Offline page." type="string" variable="$message">
+          <tag line="170" name="param" description="The meesage to also be displayed with the&#13;&#10;  Site Offline page." type="string" variable="$message">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="164" name="return" description="" type="void">
+          <tag line="170" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="175">
+        <argument line="181">
           <name>$message</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="200" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="206" package="System">
         <name>GetRealm</name>
         <full_name>GetRealm</full_name>
-        <docblock line="195">
+        <docblock line="201">
           <description>Returns the Realm Object</description>
           <long-description></long-description>
-          <tag line="195" name="return" description="" type="\Wowlib\Realm">
+          <tag line="201" name="return" description="" type="\Wowlib\Realm">
             <type by_reference="false">\Wowlib\Realm</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="210" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="216" package="System">
         <name>ListPlugins</name>
         <full_name>ListPlugins</full_name>
-        <docblock line="205">
+        <docblock line="211">
           <description>Returns an array of installed plugins</description>
           <long-description></long-description>
-          <tag line="205" name="return" description="" type="string[]">
+          <tag line="211" name="return" description="" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="222" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="228" package="System">
         <name>PluginInstalled</name>
         <full_name>PluginInstalled</full_name>
-        <docblock line="215">
+        <docblock line="221">
           <description>Returns whether or not a plugin is installed and running</description>
           <long-description></long-description>
-          <tag line="215" name="param" description="The name of the plugin" type="string" variable="$name">
+          <tag line="221" name="param" description="The name of the plugin" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="215" name="return" description="" type="bool">
+          <tag line="221" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="222">
+        <argument line="228">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="234" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="240" package="System">
         <name>RenderTemplate</name>
         <full_name>RenderTemplate</full_name>
-        <docblock line="227">
+        <docblock line="233">
           <description>Sets whether plexis should render the full template or not</description>
           <long-description></long-description>
-          <tag line="227" name="param" description="Render the template?" type="bool" variable="$bool">
+          <tag line="233" name="param" description="Render the template?" type="bool" variable="$bool">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="227" name="return" description="" type="void">
+          <tag line="233" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="234">
+        <argument line="240">
           <name>$bool</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="249" package="System">
-        <name>LoadDBConnection</name>
-        <full_name>LoadDBConnection</full_name>
-        <docblock line="241">
-          <description>Internal method for loading the Plexis DB connection</description>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="254" package="System">
+        <name>LoadHelper</name>
+        <full_name>LoadHelper</full_name>
+        <docblock line="247">
+          <description>Loads the requested helper name</description>
           <long-description></long-description>
-          <tag line="241" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the plexis database connection is offline" type="bool" variable="$showOffline">
+          <tag line="247" name="param" description="The helper name to load (no file extension)" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="247" name="return" description="Returns false if the helper doesnt exist, true otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="241" name="return" description="" type="\Database\Driver">
+        </docblock>
+        <argument line="254">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="282" package="System">
+        <name>LoadDBConnection</name>
+        <full_name>LoadDBConnection</full_name>
+        <docblock line="274">
+          <description>Internal method for loading the Plexis DB connection</description>
+          <long-description></long-description>
+          <tag line="274" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the plexis database connection is offline" type="bool" variable="$showOffline">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="274" name="return" description="" type="\Database\Driver">
             <type by_reference="false">\Database\Driver</type>
           </tag>
         </docblock>
-        <argument line="249">
+        <argument line="282">
           <name>$showOffline</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="271" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="304" package="System">
         <name>RunModule</name>
         <full_name>RunModule</full_name>
-        <docblock line="266">
+        <docblock line="299">
           <description>Internal method for running the controller and action</description>
           <long-description></long-description>
-          <tag line="266" name="return" description="" type="void">
+          <tag line="299" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="303" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="336" package="System">
         <name>LoadPlugins</name>
         <full_name>LoadPlugins</full_name>
-        <docblock line="298">
+        <docblock line="331">
           <description>Internal method for loading, and running all plugins</description>
           <long-description></long-description>
-          <tag line="298" name="return" description="" type="void">
+          <tag line="331" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="348" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="381" package="System">
         <name>LoadWowlib</name>
         <full_name>LoadWowlib</full_name>
-        <docblock line="340">
+        <docblock line="373">
           <description>Internal method for loading the wowlib</description>
           <long-description></long-description>
-          <tag line="340" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the realm database connection is offline" type="bool" variable="$showOffline">
+          <tag line="373" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the realm database connection is offline" type="bool" variable="$showOffline">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="340" name="return" description="" type="void">
+          <tag line="373" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="348">
+        <argument line="381">
           <name>$showOffline</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="381" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="414" package="System">
         <name>LoadConfigs</name>
         <full_name>LoadConfigs</full_name>
-        <docblock line="376">
+        <docblock line="409">
           <description>Internal method for loading the plexis config files</description>
           <long-description></long-description>
-          <tag line="376" name="return" description="" type="void">
+          <tag line="409" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
@@ -6451,7 +7636,7 @@ class is initiated and returned&lt;/p&gt;</long-description>
   </file>
   <package name="Core" full_name="Core">
     <package name="Exceptions" full_name="Core\Exceptions"/>
-    <package name="Functions" full_name="Core\Functions"/>
+    <package name="IO" full_name="Core\IO"/>
   </package>
   <package name="Database" full_name="Database">
     <package name="Exceptions" full_name="Database\Exceptions"/>
@@ -6459,13 +7644,17 @@ class is initiated and returned&lt;/p&gt;</long-description>
   <package name="Default" full_name="Default"/>
   <package name="Helpers" full_name="Helpers">
     <package name="Html" full_name="Helpers\Html"/>
+    <package name="IO" full_name="Helpers\IO"/>
+    <package name="Validation" full_name="Helpers\Validation"/>
   </package>
   <package name="Library" full_name="Library">
     <package name="Exceptions" full_name="Library\Exceptions"/>
   </package>
   <package name="System" full_name="System"/>
   <package name="Wowlib" full_name="Wowlib"/>
-  <namespace name="Core" full_name="Core"/>
+  <namespace name="Core" full_name="Core">
+    <namespace name="IO" full_name="Core\IO"/>
+  </namespace>
   <namespace name="Database" full_name="Database"/>
   <namespace name="Library" full_name="Library"/>
   <namespace name="Wowlib" full_name="Wowlib"/>

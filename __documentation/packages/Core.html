@@ -55,7 +55,7 @@
 <a href="../packages/Core.Exceptions.html" title="Exceptions"><i class="icon-folder-open"></i>Exceptions</a><ul class="nav nav-list nav-packages"></ul>
 </li>
 <li>
-<a href="../packages/Core.Functions.html" title="Functions"><i class="icon-folder-open"></i>Functions</a><ul class="nav nav-list nav-packages"></ul>
+<a href="../packages/Core.IO.html" title="IO"><i class="icon-folder-open"></i>IO</a><ul class="nav nav-list nav-packages"></ul>
 </li>
 </ul>
 </li>
@@ -181,6 +181,13 @@ calling on the action method.</p>
 <div class="package-indent">
 <h3>
 <i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="ArgumentException" class="element ajax clickable class">
+<h1>ArgumentException<a href="../classes/ArgumentException.html">¶</a>
+</h1>
+<p class="short_description">A common exception thrown by many classes for passing invalid arguments</p>
+<div class="details collapse"></div>
+<a href="../classes/ArgumentException.html" class="more">« More »</a>
+</div>
 <div id="ControllerNotFoundException" class="element ajax clickable class">
 <h1>ControllerNotFoundException<a href="../classes/Core.ControllerNotFoundException.html">¶</a>
 </h1>
@@ -217,6 +224,13 @@ class does not exists.</p>
 <div class="details collapse"></div>
 <a href="../classes/Core.OutputSentException.html" class="more">« More »</a>
 </div>
+<div id="DirectoryNotFoundException" class="element ajax clickable class">
+<h1>DirectoryNotFoundException<a href="../classes/DirectoryNotFoundException.html">¶</a>
+</h1>
+<p class="short_description">An exception thrown by the DirectoryInfo class when a directory could not be found.</p>
+<div class="details collapse"></div>
+<a href="../classes/DirectoryNotFoundException.html" class="more">« More »</a>
+</div>
 <div id="FileNotFoundException" class="element ajax clickable class">
 <h1>FileNotFoundException<a href="../classes/FileNotFoundException.html">¶</a>
 </h1>
@@ -224,49 +238,45 @@ class does not exists.</p>
 <div class="details collapse"></div>
 <a href="../classes/FileNotFoundException.html" class="more">« More »</a>
 </div>
+<div id="IOException" class="element ajax clickable class">
+<h1>IOException<a href="../classes/IOException.html">¶</a>
+</h1>
+<p class="short_description">An exception thrown when filesystem releated errors occur</p>
+<div class="details collapse"></div>
+<a href="../classes/IOException.html" class="more">« More »</a>
+</div>
+<div id="SecurityException" class="element ajax clickable class">
+<h1>SecurityException<a href="../classes/SecurityException.html">¶</a>
+</h1>
+<p class="short_description">A common exception thrown by many classes for security purposes.</p>
+<div class="details collapse"></div>
+<a href="../classes/SecurityException.html" class="more">« More »</a>
+</div>
 </div>
 <ul class="breadcrumb"><li>
 <a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Core.html">Core</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../packages/Core.Functions.html">Functions</a>
+<span class="divider">\</span><a href="../packages/Core.IO.html">IO</a>
 </li>
 </li></ul>
 <div class="package-indent">
 <h3>
-<i class="icon-custom icon-function"></i> Functions</h3>
-<a id="function_isValidIp"></a><div class="element clickable function  function_isValidIp" data-toggle="collapse" data-target=".function_isValidIp .collapse">
-<h2>Checks an IP address, returning whether its a valid, Non-Private IP.</h2>
-<pre>isValidIp(string $ip) : bool</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$ip</h4>
-<code>string</code><p>The ip address to check.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>bool</code>Returns true if the given IP address is a valid, Non-Private IP, false otherwise</div>
-</div></div>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<div id="DirectoryInfo" class="element ajax clickable class">
+<h1>DirectoryInfo<a href="../classes/Core.IO.DirectoryInfo.html">¶</a>
+</h1>
+<p class="short_description">A Directory class used to preform advanced operations and provide information
+about the directory.</p>
+<div class="details collapse"></div>
+<a href="../classes/Core.IO.DirectoryInfo.html" class="more">« More »</a>
 </div>
-<a id="function_path"></a><div class="element clickable function  function_path" data-toggle="collapse" data-target=".function_path .collapse">
-<h2>Combines several strings into a file path.</h2>
-<pre>path(string | string[] $parts = null) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$parts<small><b>   [Default =  null]</b></small>
-</h4>
-<code>string</code><code>string[]</code><p>The pieces of the path, passed as
-individual arguments. Each argument can be an array of paths,
-a string foldername, or a mixture of the two.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>Full path using the correct system
-  directory separater</div>
-</div></div>
+<div id="FileInfo" class="element ajax clickable class">
+<h1>FileInfo<a href="../classes/Core.IO.FileInfo.html">¶</a>
+</h1>
+<p class="short_description">A File class used to preform advanced operations and provide information
+about the file.</p>
+<div class="details collapse"></div>
+<a href="../classes/Core.IO.FileInfo.html" class="more">« More »</a>
 </div>
 </div>
 </div>
