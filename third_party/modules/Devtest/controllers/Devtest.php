@@ -42,14 +42,18 @@ class Devtest extends Core\Controller
     
     public function dirtest()
     {
-        require path( SYSTEM_PATH, 'core', 'io', 'DirectoryInfo.php');
-        require path( SYSTEM_PATH, 'core', 'io', 'FileInfo.php');
-        
         $path1 = truePath('C:/users/steve/desktop/test/');
         $path2 = truePath('C:/users/steve/desktop/test2/');
+        $d = false;
         
-        $d = new Core\IO\DirectoryInfo($path1);
-        $d->moveTo($path2);
+        try {
+            $d = new Core\IO\DirectoryInfo($path1);
+            $d->moveTo($path2);
+        }
+        catch( \Exception $e ) {
+            $d = new Core\IO\DirectoryInfo($path2);
+            $d->moveTo($path1);
+        }
         var_dump($d);
         
         echo microtime(1) - TIME_START;

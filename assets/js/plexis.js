@@ -1,147 +1,165 @@
-/**
- * Plexis Core JS
- * Author: Steven Wilson
- */
-
-    // Realm status default function
-    function ajax_realm_status(div_id, loading_id)
-    { 
-        var post_url = Plexis.url + "/ajax/realms/";
-        $( div_id ).hide();
+(function() {
+    Plexis = {
+        /**
+         * Cookie Setting Method
+         * Function from QuirksMode
+         */
+        SetCookie: function(name, value, days) {
+            if( days ) {
+                var date = new Date();
+                date.setTime( date.getTime() + (days * 24 * 60 * 60 * 1000) );
+                var expires = "; expires=" + date.toGMTString();
+            }
+            else {
+                var expires = "";
+            }
+            document.cookie = name + "=" + value + expires + "; path=/";
+        },
         
-        // Send our Init. command
-        $.ajax({
-            type: "POST",
-            url: post_url,
-            data: {action: 'status'},
-            dataType: "json",
-            timeout: 5000, // in milliseconds
-            success: function(result) 
-            {
-                if(result.success == false)
+        /**
+         * Cookie Fetching Method
+         * Function from QuirksMode
+         */
+        GetCookie: function(c_name) {
+            var name = c_name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') 
+                    c = c.substring(1,c.length);
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return null;
+        },
+        
+        /**
+         * Cookie Deleting Method
+         * Function from QuirksMode
+         */
+        DeleteCookie: function(name) {
+            Plexis.SetCookie(name, "", -1);
+        },
+        
+        /**
+         * Displays a message box to the user
+         * This method uses jQuery MsgBox, created by Eduardo Daniel Sada
+         */
+        MessageBox: function(message, options, callback) {
+            return $.MsgBoxObject.show(message, options, callback);
+        },
+        
+        /**
+         * This method is used to fetch all the currently installed realms via ajax,
+         * returning all information about each realm including population, online status ect.
+         */
+        GetRealms: function() {
+            var post_url = Globals.Url + "/realms/status";
+            var postResult;
+            
+            // Send our Init. command
+            $.ajax({
+                type: "POST",
+                url: post_url,
+                dataType: "json",
+                timeout: 5000, // in milliseconds
+                success: function(result) 
                 {
-                    if(typeof result.php_error != "undefined" && result.php_error == true && Plexis.debugging == false)
+                    if(result.success == false)
                     {
-                        show_php_error(result.php_error_data);
+                        if(typeof result.php_error != "undefined" && result.php_error == true && Plexis.debugging == false)
+                        {
+                            Plexis.ShowPHPError(result.php_error_data);
+                        }
                     }
-                }
-                else
+                    else
+                    {
+                        postResult = result;
+                    }
+                },
+                error: function(request, status, err) 
                 {
-                    var finished = parse_realm_status(result, div_id );
-                    if( finished == '' ) finished = '<center>No Realms Installed</center>';
-                    $( div_id ).html(finished).show();
-                    $( loading_id ).hide();
+                    Plexis.ShowAjaxError(status);
                 }
-            },
-            error: function(request, status, err) 
-            {
-                show_ajax_error(status);
+            });
+            
+            return postResult;
+        },
+        
+        ParseRealmStatus: function(div_id, result) {
+            var count = result.length;
+            var finished = '';
+            for (i = 0; count > i; i++) {
+                block = $( div_id ).html();
+                block = block.replace(/\@id/i, result[i].id);
+                block = block.replace(/\@name/i, result[i].name);
+                block = block.replace(/\@type/i, result[i].type);
+                block = block.replace(/\@status/i, result[i].status);
+                block = block.replace(/\@online/i, result[i].online);
+                block = block.replace(/\@alliance/i, result[i].alliance);
+                block = block.replace(/\@horde/i, result[i].horde);
+                block = block.replace(/\@uptime/i, result[i].uptime);
+                finished += block;
             }
-        });
-    }
-    
-    // Parses the div html and replacing the template vars
-    function parse_realm_status(result, div_id )
-    {
-        var count = result.length;
-        var finished = '';
-        for (i = 0; count > i; i++)
-        {
-            block = $( div_id ).html();
-            block = block.replace(/\@id/i, result[i].id);
-            block = block.replace(/\@name/i, result[i].name);
-            block = block.replace(/\@type/i, result[i].type);
-            block = block.replace(/\@status/i, result[i].status);
-            block = block.replace(/\@online/i, result[i].online);
-            block = block.replace(/\@alliance/i, result[i].alliance);
-            block = block.replace(/\@horde/i, result[i].horde);
-            block = block.replace(/\@uptime/i, result[i].uptime);
-            finished += block;
-        }
-        return finished;
-    }
-    
-    function show_ajax_error(status)
-    {
-        switch(status)
-        {
-            case "error":
-                $.msgbox('An error ocurred while sending the ajax request. Unable to establish connection.', {type : 'error'});
-                break;
-            default:
-                $.msgbox('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
-                break;
-        }
-    }
-    
-    function show_php_error(data)
-    {
-        $.msgbox('An error was encountered during this ajax request!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
-            type : 'error'
-        });
-    }
-    
-/**
- * Cookie reading / writing / deleting functions
- * Functions from QuirksMode
- */
-    function setCookie(name, value, days) 
-    {
-        if( days )
-        {
-            var date = new Date();
-            date.setTime( date.getTime() + (days * 24 * 60 * 60 * 1000) );
-            var expires = "; expires=" + date.toGMTString();
-        }
-        else
-        {
-            var expires = "";
-        }
-        document.cookie = name + "=" + value + expires + "; path=/";
-    }
-
-    function getCookie(c_name) 
-    {
-        var name = c_name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) 
-        {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if (c.indexOf(name) == 0)
-            {
-                return c.substring(name.length, c.length);
+            return finished;
+        },
+        
+        /**
+         * Displays a message box to the user explaining an ajax error occured
+         * This method uses jQuery MsgBox, created by Eduardo Daniel Sada
+         */
+        ShowAjaxError: function(status) {
+            switch(status) {
+                case "error":
+                    $.MsgBoxObject.show('An error ocurred while sending the ajax request. Unable to establish connection.', {type : 'error'});
+                    break;
+                default:
+                    $.MsgBoxObject.show('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
+                    break;
+            }
+        },
+        
+        /**
+         * Displays a PHP error message box to the user explaining the error occured
+         * This method uses jQuery MsgBox, created by Eduardo Daniel Sada
+         */
+        ShowPHPError: function(status) {
+            $.MsgBoxObject.show('An error was encountered during this ajax request!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
+                type : 'error'
+            });
+        },
+        
+        /**
+         * This method is used to load a template JS file, and append it to the <head> tag
+         */
+        LoadTemplateJS: function(name) {
+            var url = Globals.TemplateUrl + '/js/' + name + '.js';
+            $('head').append('<script type="text/javascript" src="' + url + '"></script>');
+        },
+        
+        /**
+         * This method is used to load a JS file from a URL, and append it to the <head> tag
+         */
+        LoadScript: function(url) {
+            $.getScript(url);
+        },
+        
+        /**
+         * This method is used to load a CSS file from a URL, and append it to the <head> tag
+         */
+        LoadCss: function(url) {
+            // EI compatability
+            if (document.createStyleSheet) {
+                document.createStyleSheet(url);
+            } 
+            else {
+                $('head').append('<link rel="stylesheet" href="' + name + '" type="text/css" />');
             }
         }
-        return null;
     }
+})();
 
-    function deleteCookie(name) 
-    {
-        setCookie(name, "", -1);
-    }
-    
-/**
- * Dynamic stylesheet and Js file loading
- */
-    function load_css(name)
-    {
-        // EI compatability
-        if (document.createStyleSheet) 
-        {
-            document.createStyleSheet(url);
-        } 
-        else 
-        {
-            $('head').append('<link rel="stylesheet" href="' + name + '" type="text/css" />');
-        }
-    }
-    
-    function load_script(name)
-    {
-        $.getScript(name);
-    }
-    
 /**
  * jQuery MsgBox
  * Copyright 2010, Eduardo Daniel Sada
@@ -720,7 +738,7 @@
         msgbox: function(txt, options, callback) {
             if (typeof txt == "object")
             {
-                    $.MsgBoxObject.config(txt);
+                $.MsgBoxObject.config(txt);
             }
             else
             {

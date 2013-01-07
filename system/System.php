@@ -47,6 +47,7 @@ class System
         
         // Register the Core and Library namespaces with the autoloader
         AutoLoader::RegisterNamespace('Core', path(SYSTEM_PATH, 'core'));
+        AutoLoader::RegisterNamespace('Core\IO', path(SYSTEM_PATH, 'core', 'io'));
         AutoLoader::RegisterNamespace('Library', path(SYSTEM_PATH, 'library'));
         AutoLoader::RegisterPath( path(SYSTEM_PATH, 'core', 'exceptions') );
         

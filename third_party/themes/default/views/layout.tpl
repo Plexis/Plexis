@@ -1,7 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <!--# This is a template comment that will be removed when the page is rendered... Build the basic heading automatcially #-->
+    <!--# 
+        This is a template comment that will be removed when the page is rendered... 
+        Build the basic heading automatcially 
+    #-->
     {Plexis::Head} 
     
     <!-- Include template CSS stylesheets -->
@@ -17,7 +20,7 @@
     <script type="text/javascript">
     <!--
         // Slide Show
-        jQuery(function( $ ){
+        $(function( $ ){
             $('#slide')
             .after('<div id="slide-tabs">')
             .cycle({
@@ -29,7 +32,7 @@
         });
 
         // Setup our form validator error style class
-        jQuery.validator.setDefaults({
+        $.validator.setDefaults({
             errorClass: "input-error",
             errorElement: "div"
         });
@@ -37,7 +40,15 @@
         $().ready(function() {
             // Load the realm status Ajax reuqests
             // @Param1: id of the "loop block", @Param2: the loading gif div id.
-            //ajax_realm_status('#ajax_realm,', '#ajax_loading');
+            // var status = Plexis.GetRealms();
+            // $('#ajax_realm').hide();
+            // Plexis.ParseRealmStatus('#ajax_realm', result);
+            
+            // Test plexis message
+            if(typeof Plexis == "undefined")
+                alert('Failed to load Plexis Javascript Library!');
+            else
+                Plexis.MessageBox("The Plexis Javascript Library Loaded Successfully!", {type: 'info'});
         });
     -->
     </script>

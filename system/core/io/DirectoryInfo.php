@@ -83,7 +83,7 @@ class DirectoryInfo
         $this->parentDir = dirname($path) . DS;
         
         // Scan the fodler to get a list of files and subdirs
-        $this->_scanDir();
+        $this->refresh();
     }
     
     /**
@@ -398,8 +398,8 @@ class DirectoryInfo
         
         // Reset the root path, and rescan
         $this->rootPath = truePath($newPath) . DS;
-        $this->parentDir = dirname($newPath) . DS;
-        $this->_scanDir();
+        $this->parentDir = dirname($this->rootPath) . DS;
+        $this->refresh();
         
         return true;
     }
@@ -424,7 +424,7 @@ class DirectoryInfo
         
         // update the the path and such
         $this->rootPath = $newDir;
-        $this->_scanDir();
+        $this->refresh();
         
         return true;
     }
@@ -473,7 +473,7 @@ class DirectoryInfo
         
         // Clearstats cache
         clearstatcache();
-        $this->_scanDir();
+        $this->refresh();
         return true;
     }
     
@@ -490,7 +490,7 @@ class DirectoryInfo
         // Get current directory mask
         $oldumask = umask(0);
         $newPath = $this->parentDir . $name;
-        if( !mkdir($newPath, 0777, true) )
+        if( !mkdir($newPath, $chmod, true) )
         {
             // Add trace for debugging
             // \Debug::trace("Failed to create directory '{$path}' (chmod: $chmod)", __FILE__, __LINE__);
@@ -512,6 +512,7 @@ class DirectoryInfo
      *
      * @param string $name The basename of the subdirectory
      *
+     * @throws \DirectoryNotFoundException Thrown if the subdir does not exist
      * @throws \IOException Thrown if there was an error removing a file or directory
      *
      * @return bool Returns the success value of the folder being removed.
@@ -524,12 +525,13 @@ class DirectoryInfo
             return false;
             
         // Remove the directory now that its empty
-        $result = rmdir($Dir->fullpath());
+        if(!rmdir($Dir->fullpath()))
+            return false;
+            
+        // Clear stats cache and rescan dir
         clearstatcache();
-        
-        // Rescan directory
-        $this->_scanDir();
-        return $result;
+        $this->refresh();
+        return true;
     }
     
     /**
@@ -561,7 +563,7 @@ class DirectoryInfo
             fclose($handle);
             
             // Rescan the directory
-            $this->_scanDir();
+            $this->refresh();
             
             // Return true if we are here
             return true;
@@ -584,7 +586,7 @@ class DirectoryInfo
             return false;
         
         // Rescan directory
-        $this->_scanDir();
+        $this->refresh();
         return true;
     }
     
@@ -653,7 +655,7 @@ class DirectoryInfo
      *
      * @return void
      */
-    protected function _scanDir()
+    protected function refresh()
     {
         // Open the directory
         $handle = @opendir($this->rootPath);

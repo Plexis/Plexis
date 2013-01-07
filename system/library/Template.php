@@ -403,10 +403,13 @@ class Template
      */
     protected static function BuildHeader()
     {
+        $base = Request::BaseUrl();
+        
         // Convert our JS vars into a string :)
         $string = 
-        "        var Plexis = {
+        "        var Globals = {
             Url : '". SITE_URL ."',
+            BaseUrl : '". $base ."',
             TemplateUrl : '". self::$themeUrl ."',
             Debugging : false,
             RealmId : 1,
@@ -419,7 +422,6 @@ class Template
         }
         
         // Build Basic Headers
-        $base = Request::BaseUrl();
         $headers = array(
             '<!-- Basic Headings -->',
             '<title>'. Config::GetVar('site_title', 'Plexis') .'</title>',
