@@ -10,8 +10,6 @@
 // First, Import some classes into scope
 use Core\AutoLoader;
 use Core\Benchmark;
-use Core\Config;
-use Core\Router;
 use Core\ErrorHandler;
 
 /**
@@ -45,28 +43,29 @@ class System
         // Dont allow the system to run twice
         if(self::$isInitiated) return;
         
-        // Register the Core and Library namespaces with the autoloader
+        // Register the Default Core and Library namespaces with the autoloader
         AutoLoader::RegisterNamespace('Core', path(SYSTEM_PATH, 'core'));
         AutoLoader::RegisterNamespace('Core\IO', path(SYSTEM_PATH, 'core', 'io'));
         AutoLoader::RegisterNamespace('Library', path(SYSTEM_PATH, 'library'));
         AutoLoader::RegisterPath( path(SYSTEM_PATH, 'core', 'exceptions') );
         
         // Init System Benchmark
-        Benchmark::Start('system');
+        Benchmark::Start('System');
         
-        // Make sure output buffering is enabled. This is pretty important
+        // Make sure output buffering is enabled, and started This is pretty important
         ini_set('output_buffering', 'On');
         ob_start();
         
-        // Set our exception and error handler
+        // Set our exception and error handler, and Accept all errors
         set_exception_handler('Core\ErrorHandler::HandleException');
         set_error_handler('Core\ErrorHandler::HandlePHPError');
+        error_reporting(E_ALL);
+        
+        // Include the Plexis Application
+        require path(SYSTEM_PATH, "Plexis.php");
         
         // We are initiated successfully
         self::$isInitiated = true;
-        
-        // Run the application
-        require path(SYSTEM_PATH, "Plexis.php");
         
         try {
             Plexis::Run();
@@ -77,11 +76,6 @@ class System
         
         //if(!empty(self::$traceLogs))
            // file_put_contents(ROOT . DS .'log.php', json_encode(self::$traceLogs, true) . PHP_EOL, FILE_APPEND);
-    }
-    
-    public static function Trace($message, $file = 'Not Specified', $line = 0)
-    {
-        self::$traceLogs[] = array('message' => $message, 'file' => $file, 'line' => $line);
     }
 }
 // EOF

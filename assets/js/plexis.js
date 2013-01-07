@@ -104,7 +104,8 @@
             if(jqHXR.status == 500) {
                 var errorData;
                 try {
-                    errorData = $.parseJSON(jqHXR.responseText);
+                    var errorData = $.parseJSON(jqHXR.responseText);
+                    var data = errorData.errorData;
                     $.MsgBoxObject.show('An error was encountered during this ajax request!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
                         type : 'error'
                     });

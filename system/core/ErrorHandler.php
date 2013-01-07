@@ -66,6 +66,8 @@ class ErrorHandler
      */
     public static function HandlePHPError($lvl, $message, $file, $line)
     {
+        // If the error_reporting level is 0, then this is a supressed error ("@" prepeding)
+        if(error_reporting() == 0) return;
         self::DisplayError($lvl, $message, $file, $line, true);
     }
     
@@ -100,10 +102,13 @@ class ErrorHandler
         if(Request::IsAjax())
         {
             $data = array(
-                'level' => $lvl,
-                'message' => $message,
-                'file' => $file,
-                'line' => $line
+                'message' => 'A php error was thrown during this request.',
+                'errorData' => array(
+                    'level' => self::ErrorLevelToText($lvl),
+                    'message' => $message,
+                    'file' => $file,
+                    'line' => $line
+                )
             );
             $page = json_encode($data);
         }
@@ -126,6 +131,36 @@ class ErrorHandler
         Response::Body($page);
         Response::Send();
         die;
+    }
+    
+    /**
+     * Converts a php error constant level to a string
+     *
+     * @return string
+     */
+    protected static function ErrorLevelToText($lvl)
+    {
+        switch($lvl)
+        {
+            case E_ERROR:
+                return 'Error';
+            case E_WARNING:
+                return 'Warning';
+            case E_NOTICE:
+                return 'Notice';
+            case E_USER_ERROR:
+                return 'User Error';
+            case E_USER_WARNING:
+                return 'User Warning';
+            case E_USER_NOTICE:
+                return 'User Notice';
+            case E_PARSE:
+                return 'Parse Error';
+            case E_STRICT:
+                return 'Strict';
+            case E_CORE_ERROR:
+                return 'PHP Core Error';
+        }
     }
 }
 

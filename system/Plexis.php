@@ -15,6 +15,7 @@ use Core\Config;
 use Core\Database;
 use Core\DatabaseConnectError;
 use Core\Dispatch;
+use Core\Logger;
 use Core\NotFoundException;
 use Core\Request;
 use Core\Response;
@@ -43,6 +44,12 @@ class Plexis
      * @var string
      */
     public static $modulePath;
+    
+    /**
+     * Holds the plexis Logger object
+     * @var \Core\Logger
+     */
+    protected static $log;
     
     /**
      * The Wowlib object
@@ -81,6 +88,9 @@ class Plexis
         
         // We are now running
         self::$isRunning = true;
+        
+        /** The URL to get to the root of the website (HTTP_HOST + webroot) */
+        define('SITE_URL', ( MOD_REWRITE ) ? Request::BaseUrl() : Request::BaseUrl() .'/?uri=');
         
         // Set default theme path (temporary)
         Template::SetThemePath( path(ROOT, "third_party", "themes"), 'default' );
@@ -424,22 +434,27 @@ class Plexis
         $file = path(SYSTEM_PATH, "config", "database.php");
         Config::Load($file, 'DB', 'DB_Configs');
         
-        // Define our site url
-        if( MOD_REWRITE )
+        /** Define whether we are debugging or not */
+        define('DEBUGGING', (Config::GetVar('debugging', 'Plexis') && Request::Query('debug', false) !== false));
+        
+        // Build path to our log
+        if( DEBUGGING )
         {
-            /**
-             * The URL to get to the root of the website (HTTP_HOST + webroot)
-             *
-             * @package     System
-             */
-            define('SITE_URL', Request::BaseUrl());
+            $uri = str_replace('/', '_',  Request::Query('uri'));
+            if(empty($uri) || $uri == '_')
+                $uri = 'index';
+            $logPath = path( SYSTEM_PATH, 'logs', 'debug', 'debug_'. $uri .'_'. time() .'.log' );
         }
         else
-        {
-            /**
-             * @ignore
-             */
-            define('SITE_URL', Request::BaseUrl() .'/?uri=');
-        }
+            $logPath = path( SYSTEM_PATH, 'logs', 'plexis.log' );
+        
+        // Init the new logger
+        self::$log = new Logger($logPath, 'Debug');
+        
+        // If debugging, we set the log level
+        if( DEBUGGING )
+            self::$log->setLogLevel( Logger::DEBUG );
+        else
+            self::$log->setLogLevel( Config::GetVar('log_level', 'Plexis') );
     }
 }
