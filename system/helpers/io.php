@@ -11,13 +11,14 @@
  */
 
 /**
- * Combines several strings into a file path.
+ * Combines several string arguments into a file path.
  *
  * @param string|string[] $parts The pieces of the path, passed as 
  *   individual arguments. Each argument can be a single dimmensional 
- *   array of paths, a string foldername, or a mixture of the two.
+ *   array of paths, a string folder / filename, or a mixture of the two.
+ *   Dots may also be passed ( . & .. ) to change directory levels
  *
- * @return string Full path using the correct system 
+ * @return string Returns the full path using the correct system 
  *   directory separater
  */
     function path($parts = null)
@@ -53,11 +54,14 @@
     }
     
 /**
- * This function is to return a complete path from a relative path.
+ * This function is to return a complete root path from a relative path.
  *
  * This function is meant to replace PHP's extremely buggy realpath().
  *
- * @param string $path The original path, can be relative.
+ * @param string $path The original path, can be relative. Dots may also be 
+ *   passed ( . & .. ) to change directory levels. If the $path starts with a
+ *   forward slash, the $path will be interpreted as "from the root folder" on
+ *   Unix machines.
  *
  * @return string The resolved path without a trailing slash, it might not exist.
  */

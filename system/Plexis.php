@@ -8,7 +8,11 @@
  * @package     System
  */
 
-// First, import some classes into scope
+/**
+ * First, import some classes into scope, so we can 
+ * directly call the class name without having to 
+ * specify the namespace everytime ( think C# :D )
+ */
 use Core\AutoLoader;
 use Core\Benchmark;
 use Core\Config;

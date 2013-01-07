@@ -16,16 +16,16 @@ if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50302)
 /** Most Accurate Start time */
 define('TIME_START', microtime(true));
     
-/** Directory Separator */
+/** Smaller Directory Separator */
 define('DS', DIRECTORY_SEPARATOR);
 
-/** Root Path to The cms */
+/** Full Root Path to The Cms, No trailing slash */
 define('ROOT', dirname(__FILE__));
 
-/** Root path to the System folder */
+/** Full Root path to the System folder, No trailing slash */
 define('SYSTEM_PATH', ROOT . DS .'system');
 
-/** Define if we are running a mod rewrite enviroment */
+/** Define if we are running in a mod rewrite enviroment */
 define('MOD_REWRITE', isset($_SERVER["HTTP_MOD_REWRITE"]) && $_SERVER["HTTP_MOD_REWRITE"] == "On");
 
 // Point php to our own php error log

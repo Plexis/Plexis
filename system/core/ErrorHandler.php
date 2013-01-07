@@ -136,6 +136,7 @@ class ErrorHandler
     /**
      * Converts a php error constant level to a string
      *
+     * @param int $lvl The error constant
      * @return string
      */
     protected static function ErrorLevelToText($lvl)

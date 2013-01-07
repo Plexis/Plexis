@@ -82,9 +82,9 @@ those in all subdirectories (full recursive).</span><pre>size()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header protected">» Protected
-                    <ul><li class="method protected "><a href="#method__scanDir" title="_scanDir :: Scans the current directory, and setting the filelist and subdir list
+                    <ul><li class="method protected "><a href="#method_refresh" title="refresh :: Scans the current directory, and setting the filelist and subdir list
 variables."><span class="description">Scans the current directory, and setting the filelist and subdir list
-variables.</span><pre>_scanDir()</pre></a></li></ul>
+variables.</span><pre>refresh()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties
@@ -521,10 +521,16 @@ specified folder.</p></div>
 <h4>$name</h4>
 <code>string</code><p>The basename of the subdirectory</p></div>
 <h3>Exceptions</h3>
-<table class="table table-bordered"><tr>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/DirectoryNotFoundException.html">\DirectoryNotFoundException</a></code></th>
+<td>Thrown if the subdir does not exist</td>
+</tr>
+<tr>
 <th><code><a href="../classes/IOException.html">\IOException</a></code></th>
 <td>Thrown if there was an error removing a file or directory</td>
-</tr></table>
+</tr>
+</table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>bool</code>Returns the success value of the folder being removed.</div>
@@ -607,10 +613,10 @@ that cannot be opened due to permissions.</p></div>
 <code>bool</code>Returns the success value of the folder being truncated.</div>
 </div></div>
 </div>
-<a id="method__scanDir"></a><div class="element clickable method protected method__scanDir" data-toggle="collapse" data-target=".method__scanDir .collapse">
+<a id="method_refresh"></a><div class="element clickable method protected method_refresh" data-toggle="collapse" data-target=".method_refresh .collapse">
 <h2>Scans the current directory, and setting the filelist and subdir list
 variables.</h2>
-<pre>_scanDir() : void</pre>
+<pre>refresh() : void</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
