@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\Database</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_Connect" title="Connect :: Initiates a new database connection."><span class="description">Initiates a new database connection.</span><pre>Connect()</pre></a></li>
+<li class="method public "><a href="#method_GetConnection" title="GetConnection :: Returns the connection object for the given Name or ID"><span class="description">Returns the connection object for the given Name or ID</span><pre>GetConnection()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="property protected "><a href="#property_connections" title="$connections :: An array of all stored connections"><span class="description"></span><pre>$connections</pre></a></li></ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\Database"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.Database.html">Database</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Database Factory Class</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Database.html">Database</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_Connect"></a><div class="element clickable method public method_Connect" data-toggle="collapse" data-target=".method_Connect .collapse">
+<h2>Initiates a new database connection.</h2>
+<pre>Connect(string $name, array $info, bool $new = false) : <a href="../classes/Database.Driver.html">\Database\Driver</a></pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>Name or ID of the connection</p></div>
+<div class="subelement argument">
+<h4>$info</h4>
+<code>array</code><p>The database connection information
+    array(
+      'driver'
+      'host'
+      'port'
+      'database'
+      'username'
+      'password')</p>
+</div>
+<div class="subelement argument">
+<h4>$new<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>If connection already exists, setting to true
+   will overwrite the old connection ID with the new connection</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Core.DatabaseConnectError.html">\Core\DatabaseConnectError</a></code></th>
+<td>if there is a database connection error</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/Database.Driver.html">\Database\Driver</a></code>Returns a Database Driver Object</div>
+</div></div>
+</div>
+<a id="method_GetConnection"></a><div class="element clickable method public method_GetConnection" data-toggle="collapse" data-target=".method_GetConnection .collapse">
+<h2>Returns the connection object for the given Name or ID</h2>
+<pre>GetConnection(string $name) : bool | <a href="../classes/Database.Driver.html">\Database\Driver</a></pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>Name or ID of the connection</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code><code><a href="../classes/Database.Driver.html">\Database\Driver</a></code>Returns a Database Driver Object,
+   or false of the connection $name doesnt exist</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_connections"> </a><div class="element clickable property protected property_connections" data-toggle="collapse" data-target=".property_connections .collapse">
+<h2>An array of all stored connections</h2>
+<pre>$connections : <a href="Core.Database.Driver.html">\Database\Driver[]</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>

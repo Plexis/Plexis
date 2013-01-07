@@ -1,0 +1,659 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\IO\DirectoryInfo</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: Class Constructor"><span class="description">Class Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method___toString" title="__toString :: When used as a string, this object returns the fullpath to the folder."><span class="description">When used as a string, this object returns the fullpath to the folder.</span><pre>__toString()</pre></a></li>
+<li class="method public "><a href="#method_chmod" title="chmod :: Fetches or sets the permissions of the directory"><span class="description">Fetches or sets the permissions of the directory</span><pre>chmod()</pre></a></li>
+<li class="method public "><a href="#method_createDir" title="createDir :: Creates a new sub directory"><span class="description">Creates a new sub directory</span><pre>createDir()</pre></a></li>
+<li class="method public "><a href="#method_createFile" title="createFile :: Creates a new file withing the directory."><span class="description">Creates a new file withing the directory.</span><pre>createFile()</pre></a></li>
+<li class="method public "><a href="#method_dirCount" title="dirCount :: Returns the amount of subdirectories in the directory"><span class="description">Returns the amount of subdirectories in the directory</span><pre>dirCount()</pre></a></li>
+<li class="method public "><a href="#method_fileCount" title="fileCount :: Returns the amount of files in the directory"><span class="description">Returns the amount of files in the directory</span><pre>fileCount()</pre></a></li>
+<li class="method public "><a href="#method_fullpath" title="fullpath :: Returns the full path to the folder, including the folder name"><span class="description">Returns the full path to the folder, including the folder name</span><pre>fullpath()</pre></a></li>
+<li class="method public "><a href="#method_getDir" title="getDir :: Fetches a subdirectory within the directory"><span class="description">Fetches a subdirectory within the directory</span><pre>getDir()</pre></a></li>
+<li class="method public "><a href="#method_getDirList" title="getDirList :: Fetches an array of subdirectory's within the directory"><span class="description">Fetches an array of subdirectory's within the directory</span><pre>getDirList()</pre></a></li>
+<li class="method public "><a href="#method_getFile" title="getFile :: Fetches a file within the directory"><span class="description">Fetches a file within the directory</span><pre>getFile()</pre></a></li>
+<li class="method public "><a href="#method_getFileList" title="getFileList :: Fetches an array of files withing the directory"><span class="description">Fetches an array of files withing the directory</span><pre>getFileList()</pre></a></li>
+<li class="method public "><a href="#method_getFilesAccessedBefore" title="getFilesAccessedBefore :: Fetches an array of files that have been accessed before the timestamp provided"><span class="description">Fetches an array of files that have been accessed before the timestamp provided</span><pre>getFilesAccessedBefore()</pre></a></li>
+<li class="method public "><a href="#method_getFilesAccessedSince" title="getFilesAccessedSince :: Fetches an array of files that have been accessed since the timestamp provided"><span class="description">Fetches an array of files that have been accessed since the timestamp provided</span><pre>getFilesAccessedSince()</pre></a></li>
+<li class="method public "><a href="#method_getFilesModifiedBefore" title="getFilesModifiedBefore :: Fetches an array of files that have been modified before the timestamp provided"><span class="description">Fetches an array of files that have been modified before the timestamp provided</span><pre>getFilesModifiedBefore()</pre></a></li>
+<li class="method public "><a href="#method_getFilesModifiedSince" title="getFilesModifiedSince :: Fetches an array of files that have been modified since the timestamp provided"><span class="description">Fetches an array of files that have been modified since the timestamp provided</span><pre>getFilesModifiedSince()</pre></a></li>
+<li class="method public "><a href="#method_getFilesWithExt" title="getFilesWithExt :: Fetches an array of files with a specified file extension"><span class="description">Fetches an array of files with a specified file extension</span><pre>getFilesWithExt()</pre></a></li>
+<li class="method public "><a href="#method_hasDir" title="hasDir :: Returns if a subdirectory exists within the directory"><span class="description">Returns if a subdirectory exists within the directory</span><pre>hasDir()</pre></a></li>
+<li class="method public "><a href="#method_hasFile" title="hasFile :: Returns if a file exists within the directory"><span class="description">Returns if a file exists within the directory</span><pre>hasFile()</pre></a></li>
+<li class="method public "><a href="#method_isWritable" title="isWritable :: Returns whether this directory is writable or not."><span class="description">Returns whether this directory is writable or not.</span><pre>isWritable()</pre></a></li>
+<li class="method public "><a href="#method_moveTo" title="moveTo :: Moves the directory and all of its contents to a new path."><span class="description">Moves the directory and all of its contents to a new path.</span><pre>moveTo()</pre></a></li>
+<li class="method public "><a href="#method_name" title="name :: Returns the base folder name"><span class="description">Returns the base folder name</span><pre>name()</pre></a></li>
+<li class="method public "><a href="#method_removeDir" title="removeDir :: Removes a sub directory."><span class="description">Removes a sub directory.</span><pre>removeDir()</pre></a></li>
+<li class="method public "><a href="#method_removeFile" title="removeFile :: Removes a file from the directory."><span class="description">Removes a file from the directory.</span><pre>removeFile()</pre></a></li>
+<li class="method public "><a href="#method_rename" title="rename :: Renames the directory."><span class="description">Renames the directory.</span><pre>rename()</pre></a></li>
+<li class="method public "><a href="#method_size" title="size :: Fetches the size of all files within the directory, including
+those in all subdirectories (full recursive)."><span class="description">Fetches the size of all files within the directory, including
+those in all subdirectories (full recursive).</span><pre>size()</pre></a></li>
+<li class="method public "><a href="#method_truncate" title="truncate :: Completly empties a directory of all files and subfolders"><span class="description">Completly empties a directory of all files and subfolders</span><pre>truncate()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="method protected "><a href="#method_refresh" title="refresh :: Scans the current directory, and setting the filelist and subdir list
+variables."><span class="description">Scans the current directory, and setting the filelist and subdir list
+variables.</span><pre>refresh()</pre></a></li></ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_filelist" title="$filelist :: An array of files in this directory"><span class="description"></span><pre>$filelist</pre></a></li>
+<li class="property protected "><a href="#property_parentDir" title="$parentDir :: Full path to the parent directory"><span class="description"></span><pre>$parentDir</pre></a></li>
+<li class="property protected "><a href="#property_rootPath" title="$rootPath :: Full path to the current directory"><span class="description"></span><pre>$rootPath</pre></a></li>
+<li class="property protected "><a href="#property_subdirs" title="$subdirs :: An array of sub directories in this directory"><span class="description"></span><pre>$subdirs</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\IO\DirectoryInfo"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/Core.IO.html">IO</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.IO.DirectoryInfo.html">DirectoryInfo</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">A Directory class used to preform advanced operations and provide information
+about the directory.</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Core.IO.html">Core</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>IO</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Class Constructor</h2>
+<pre>__construct(string $path, bool $create = false) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>The full path the the directory</p></div>
+<div class="subelement argument">
+<h4>$create<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Create the directory if it doesnt exist?</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/IOException.html">\IOException</a></code></th>
+<td>Thrown if the $path directory doesnt exist,
+  $create is set to true, and there was an error creating the directory</td>
+</tr>
+<tr>
+<th><code><a href="../classes/DirectoryNotFoundException.html">\DirectoryNotFoundException</a></code></th>
+<td>If the $path directory does not exist,
+  and $create is set to false.</td>
+</tr>
+<tr>
+<th><code><a href="../classes/SecurityException.html">\SecurityException</a></code></th>
+<td>Thrown if the $path directory could not be opened
+  for various security reasons such as permissions.</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a id="method___toString"></a><div class="element clickable method public method___toString" data-toggle="collapse" data-target=".method___toString .collapse">
+<h2>When used as a string, this object returns the fullpath to the folder.</h2>
+<pre>__toString() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_chmod"></a><div class="element clickable method public method_chmod" data-toggle="collapse" data-target=".method_chmod .collapse">
+<h2>Fetches or sets the permissions of the directory</h2>
+<pre>chmod(int $ch = null) : int | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch<small><b>   [Default =  null]</b></small>
+</h4>
+<code>int</code><p>The permission level to set on the directory (chmod).
+  If left unset, the current chmod will be returned.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code><code>bool</code>Returns the current folder chmod if $ch is left null,
+  otherwise, returns the success value of setting the permissions.</div>
+</div></div>
+</div>
+<a id="method_createDir"></a><div class="element clickable method public method_createDir" data-toggle="collapse" data-target=".method_createDir .collapse">
+<h2>Creates a new sub directory</h2>
+<pre>createDir(string $name, int $chmod = 511) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The basename of the subdirectory</p></div>
+<div class="subelement argument">
+<h4>$chmod<small><b>   [Default =  511]</b></small>
+</h4>
+<code>int</code><p>The folder permissions (chmod)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns the success value of the folder being created.</div>
+</div></div>
+</div>
+<a id="method_createFile"></a><div class="element clickable method public method_createFile" data-toggle="collapse" data-target=".method_createFile .collapse">
+<h2>Creates a new file withing the directory.</h2>
+<pre>createFile(string $name, string | string[] $contents = null) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The basename of the new file.</p></div>
+<div class="subelement argument">
+<h4>$contents<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><code>string[]</code><p>The contents to be put into the file.
+  If an array is passed, each array index will be treated as a new line
+  (implode("\n", $contents))</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns the success value of the file being created.</div>
+</div></div>
+</div>
+<a id="method_dirCount"></a><div class="element clickable method public method_dirCount" data-toggle="collapse" data-target=".method_dirCount .collapse">
+<h2>Returns the amount of subdirectories in the directory</h2>
+<pre>dirCount() : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>int</code></div>
+</div></div>
+</div>
+<a id="method_fileCount"></a><div class="element clickable method public method_fileCount" data-toggle="collapse" data-target=".method_fileCount .collapse">
+<h2>Returns the amount of files in the directory</h2>
+<pre>fileCount() : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>int</code></div>
+</div></div>
+</div>
+<a id="method_fullpath"></a><div class="element clickable method public method_fullpath" data-toggle="collapse" data-target=".method_fullpath .collapse">
+<h2>Returns the full path to the folder, including the folder name</h2>
+<pre>fullpath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_getDir"></a><div class="element clickable method public method_getDir" data-toggle="collapse" data-target=".method_getDir .collapse">
+<h2>Fetches a subdirectory within the directory</h2>
+<pre>getDir(string $name) : <a href="../classes/Core.IO.DirectoryInfo.html">\Core\IO\DirectoryInfo</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the directory to fetch</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/DirectoryNotFoundException.html">\DirectoryNotFoundException</a></code></th>
+<td>If the $path directory does not exist,
+  and $create is set to false.</td>
+</tr>
+<tr>
+<th><code><a href="../classes/SecurityException.html">\SecurityException</a></code></th>
+<td>Thrown if the $path directory could not be opened
+  for various security reasons such as permissions.</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/Core.IO.DirectoryInfo.html">\Core\IO\DirectoryInfo</a></code>The fileinfo object of $name file.</div>
+</div></div>
+</div>
+<a id="method_getDirList"></a><div class="element clickable method public method_getDirList" data-toggle="collapse" data-target=".method_getDirList .collapse">
+<h2>Fetches an array of subdirectory's within the directory</h2>
+<pre>getDirList(bool $sortAsc = true) : <a href="Core.Io.DirectoryInfo.html">\Core\IO\DirectoryInfo[]</a> | string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sortAsc<small><b>   [Default =  true]</b></small>
+</h4>
+<code>bool</code><p>Sort by asscending? If set to false,
+  files will be set descending.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="Core.Io.DirectoryInfo.html">\Core\IO\DirectoryInfo[]</a></code><code>string[]</code>Returns an array of DirectoryInfo for each
+  sub directory. If there was an exception thrown while opening a sub directory, a
+  string filepath will be in place of the DirectoryInfo class.</div>
+</div></div>
+</div>
+<a id="method_getFile"></a><div class="element clickable method public method_getFile" data-toggle="collapse" data-target=".method_getFile .collapse">
+<h2>Fetches a file within the directory</h2>
+<pre>getFile(string $name) : <a href="../classes/Core.IO.FileInfo.html">\Core\IO\FileInfo</a> | bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the file to fetch</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/Core.IO.FileInfo.html">\Core\IO\FileInfo</a></code><code>bool</code>The fileinfo object of $name file, or
+  false if the file does not exist.</div>
+</div></div>
+</div>
+<a id="method_getFileList"></a><div class="element clickable method public method_getFileList" data-toggle="collapse" data-target=".method_getFileList .collapse">
+<h2>Fetches an array of files withing the directory</h2>
+<pre>getFileList(bool $sortAsc = true) : <a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sortAsc<small><b>   [Default =  true]</b></small>
+</h4>
+<code>bool</code><p>Sort by asscending? If set to false,
+  files will be set descending.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></code>The fileinfo object of each file in the directory</div>
+</div></div>
+</div>
+<a id="method_getFilesAccessedBefore"></a><div class="element clickable method public method_getFilesAccessedBefore" data-toggle="collapse" data-target=".method_getFilesAccessedBefore .collapse">
+<h2>Fetches an array of files that have been accessed before the timestamp provided</h2>
+<pre>getFilesAccessedBefore(int $timestamp) : <a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$timestamp</h4>
+<code>int</code><p>The timestamp</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></code>The fileinfo object of each file in the directory
+  that have been accessed before the provided timestamp</div>
+</div></div>
+</div>
+<a id="method_getFilesAccessedSince"></a><div class="element clickable method public method_getFilesAccessedSince" data-toggle="collapse" data-target=".method_getFilesAccessedSince .collapse">
+<h2>Fetches an array of files that have been accessed since the timestamp provided</h2>
+<pre>getFilesAccessedSince(int $timestamp) : <a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$timestamp</h4>
+<code>int</code><p>The timestamp</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></code>The fileinfo object of each file in the directory
+  that have been accessed since the provided timestamp</div>
+</div></div>
+</div>
+<a id="method_getFilesModifiedBefore"></a><div class="element clickable method public method_getFilesModifiedBefore" data-toggle="collapse" data-target=".method_getFilesModifiedBefore .collapse">
+<h2>Fetches an array of files that have been modified before the timestamp provided</h2>
+<pre>getFilesModifiedBefore(int $timestamp) : <a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$timestamp</h4>
+<code>int</code><p>The timestamp</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></code>The fileinfo object of each file in the directory
+  that have been modified before the provided timestamp</div>
+</div></div>
+</div>
+<a id="method_getFilesModifiedSince"></a><div class="element clickable method public method_getFilesModifiedSince" data-toggle="collapse" data-target=".method_getFilesModifiedSince .collapse">
+<h2>Fetches an array of files that have been modified since the timestamp provided</h2>
+<pre>getFilesModifiedSince(int $timestamp) : <a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$timestamp</h4>
+<code>int</code><p>The timestamp</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></code>The fileinfo object of each file in the directory
+  that have been modified since the provided timestamp</div>
+</div></div>
+</div>
+<a id="method_getFilesWithExt"></a><div class="element clickable method public method_getFilesWithExt" data-toggle="collapse" data-target=".method_getFilesWithExt .collapse">
+<h2>Fetches an array of files with a specified file extension</h2>
+<pre>getFilesWithExt(string $ext) : <a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ext</h4>
+<code>string</code><p>The file extension, without the dot.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="Core.Io.FileInfo.html">\Core\IO\FileInfo[]</a></code>The fileinfo object of each file in the directory
+  with the specified extension</div>
+</div></div>
+</div>
+<a id="method_hasDir"></a><div class="element clickable method public method_hasDir" data-toggle="collapse" data-target=".method_hasDir .collapse">
+<h2>Returns if a subdirectory exists within the directory</h2>
+<pre>hasDir(string $name) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the subdirectory</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_hasFile"></a><div class="element clickable method public method_hasFile" data-toggle="collapse" data-target=".method_hasFile .collapse">
+<h2>Returns if a file exists within the directory</h2>
+<pre>hasFile(string $name) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the file</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_isWritable"></a><div class="element clickable method public method_isWritable" data-toggle="collapse" data-target=".method_isWritable .collapse">
+<h2>Returns whether this directory is writable or not.</h2>
+<pre>isWritable() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_moveTo"></a><div class="element clickable method public method_moveTo" data-toggle="collapse" data-target=".method_moveTo .collapse">
+<h2>Moves the directory and all of its contents to a new path.</h2>
+<pre>moveTo(string $newPath) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>The old directory will not be removed until the new directory is created successfully.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newPath</h4>
+<code>string</code><p>The full path to move the contents of this
+  folder to.</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/IOException.html">\IOException</a></code></th>
+<td>Thrown if there was an error creating the new directory path</td>
+</tr>
+<tr>
+<th><code><a href="../classes/SecurityException.html">\SecurityException</a></code></th>
+<td>Thrown if the $newPath directory could not be opened
+  for various security reasons such as permissions.</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns the success value of the folder being moved.</div>
+</div></div>
+</div>
+<a id="method_name"></a><div class="element clickable method public method_name" data-toggle="collapse" data-target=".method_name .collapse">
+<h2>Returns the base folder name</h2>
+<pre>name() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_removeDir"></a><div class="element clickable method public method_removeDir" data-toggle="collapse" data-target=".method_removeDir .collapse">
+<h2>Removes a sub directory.</h2>
+<pre>removeDir(string $name) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method should be used with caution as
+it is recursive, and will delete all sub files and directories in the
+specified folder.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The basename of the subdirectory</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/DirectoryNotFoundException.html">\DirectoryNotFoundException</a></code></th>
+<td>Thrown if the subdir does not exist</td>
+</tr>
+<tr>
+<th><code><a href="../classes/IOException.html">\IOException</a></code></th>
+<td>Thrown if there was an error removing a file or directory</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns the success value of the folder being removed.</div>
+</div></div>
+</div>
+<a id="method_removeFile"></a><div class="element clickable method public method_removeFile" data-toggle="collapse" data-target=".method_removeFile .collapse">
+<h2>Removes a file from the directory.</h2>
+<pre>removeFile(string $name) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The basename of the new file.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns the success value of the file being deleted.</div>
+</div></div>
+</div>
+<a id="method_rename"></a><div class="element clickable method public method_rename" data-toggle="collapse" data-target=".method_rename .collapse">
+<h2>Renames the directory.</h2>
+<pre>rename(string $newName) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newName</h4>
+<code>string</code><p>The new name of the directory</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="../classes/IOException.html">\IOException</a></code></th>
+<td>Thrown if there was an error creating the new directory path</td>
+</tr>
+<tr>
+<th><code><a href="../classes/SecurityException.html">\SecurityException</a></code></th>
+<td>Thrown if the directory could not be opened
+  for various security reasons such as permissions.</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns the success value of the folder being renamed.</div>
+</div></div>
+</div>
+<a id="method_size"></a><div class="element clickable method public method_size" data-toggle="collapse" data-target=".method_size .collapse">
+<h2>Fetches the size of all files within the directory, including
+those in all subdirectories (full recursive).</h2>
+<pre>size(bool $format = false) : float | string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method will not factor in the size of files within directories
+that cannot be opened due to permissions.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$format<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Format the size into a human readable format?</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>float</code><code>string</code>Returns the size of all sub files recursivly</div>
+</div></div>
+</div>
+<a id="method_truncate"></a><div class="element clickable method public method_truncate" data-toggle="collapse" data-target=".method_truncate .collapse">
+<h2>Completly empties a directory of all files and subfolders</h2>
+<pre>truncate() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/IOException.html">\IOException</a></code></th>
+<td>Thrown if there was an error removing a file or directory</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns the success value of the folder being truncated.</div>
+</div></div>
+</div>
+<a id="method_refresh"></a><div class="element clickable method protected method_refresh" data-toggle="collapse" data-target=".method_refresh .collapse">
+<h2>Scans the current directory, and setting the filelist and subdir list
+variables.</h2>
+<pre>refresh() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_filelist"> </a><div class="element clickable property protected property_filelist" data-toggle="collapse" data-target=".property_filelist .collapse">
+<h2>An array of files in this directory</h2>
+<pre>$filelist : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_parentDir"> </a><div class="element clickable property protected property_parentDir" data-toggle="collapse" data-target=".property_parentDir .collapse">
+<h2>Full path to the parent directory</h2>
+<pre>$parentDir : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_rootPath"> </a><div class="element clickable property protected property_rootPath" data-toggle="collapse" data-target=".property_rootPath .collapse">
+<h2>Full path to the current directory</h2>
+<pre>$rootPath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_subdirs"> </a><div class="element clickable property protected property_subdirs" data-toggle="collapse" data-target=".property_subdirs .collapse">
+<h2>An array of sub directories in this directory</h2>
+<pre>$subdirs : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>

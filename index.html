@@ -1,107 +1,115 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Plexis CMS Documentation</title>
-	<link rel='stylesheet' type='text/css' media='all' href='doc_style/userguide.css' />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="template/css/template.css" rel="stylesheet" media="all">
+<script src="template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="template/js/bootstrap.js" type="text/javascript"></script><script src="template/js/template.js" type="text/javascript"></script><script src="template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="template/img/favicon.ico">
+<link rel="apple-touch-icon" href="template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="template/img/apple-touch-icon-114x114.png">
 </head>
 <body>
-
-<!-- START NAVIGATION -->
-<div id="nav"><div id="nav_inner"></div></div>
-<div id="nav2"><a name="top">&nbsp;</a></div>
-<div id="masthead">
-	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
-		<tr>
-			<td><h1><center>Plexis CMS Documentation</center></h1></td>
-		</tr>
-	</table>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
 </div>
-<!-- END NAVIGATION -->
-
-<br clear="all" />
-
-<!-- START CONTENT -->
-<div id="content">
-	<table cellpadding="0" cellspacing="0" border="0" style="width:800px; margin: 0 auto;">
-		<thead>
-			<tr><td colspan="3"><center><u>Table Of Contents</u></center></td></tr>
-		</thead>
-		<tr>
-			<td class="td" valign="top">
-				<ul>
-					<li>Introduction</li>
-					<ul>
-						<li><a href='intro/mvc.html'>The Model - View - Controller Method</a></li>
-						<li><a href='intro/guide.html'>How to Use This Guide</a></li>
-						<li><a href='intro/flow_chart.html'>Flow Chart</a></li>
-						<!-- <li><a href='intro/namespacing.html'>Namespacing</a></li> -->
-					</ul>
-					
-					<li>General Topics</li>
-					<ul>
-						<li><a href='intro/controllers.html'>Controllers</a></li>
-						<li><a href='intro/models.html'>Models</a></li>
-						<li><a href='intro/views.html'>Views</a></li>
-						<!-- 
-						<li><a href='intro/helpers.html'>Helpers</a></li>
-						<li><a href='intro/libraries.html'>Using and Creating Libraries</a></li>
-						-->
-					</ul>
-				</ul>
-			</td>
-			
-			<td class="td" valign="top">
-				<ul>
-					<li>Core Classes</li>
-					<ul>
-						<li><a href='core_classes/benchmark.html'>Benchmark Class</a></li>
-						<li><a href='core_classes/config.html'>Config Class</a></li>
-						<li><a href='core_classes/database.html'>Database Class</a></li>
-						<li><a href='core_classes/events.html'>Events Class</a></li>
-						<li><a href='core_classes/input.html'>Input Class</a></li>
-						<li><a href='core_classes/loader.html'>Loader Class</a></li>
-					</ul>
-					
-					<li>Library Classes</li>
-					<ul>
-						<li><a href='libraries/remote_access.html'>Soap / Telnet Classes</a></li>
-						<li><a href='libraries/template.html'>Template Class</a></li>
-						<li><a href='libraries/user.html'>User Class</a></li>
-					</ul>
-				</ul>
-			</td>
-			<td class="td" valign="top">
-				<ul>
-					<li>Development</li>
-					<ul>
-						<li><a href='development/events.html'>List of Events</a></li>
-						<li><a href='development/constants.html'>Defined Constants & Global Variables</a></li>
-						<li><a href='development/functions.html'>Functions</a></li>
-						<li><a href='development/modules.html'>Creating Modules</a></li>
-						<li><a href='development/plugins.html'>Creating Plugins</a></li>
-					</ul>
-				</ul>
-                <ul>
-					<li>WowLib</li>
-					<ul>
-						<li><a href='wowlib/intro.html'>Introduction</a></li>
-					</ul>
-				</ul>
-			</td>
-		</tr>
-	</table>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="hero-unit">
+<h1>Plexis CMS</h1>
+<h2>Class Reference and Development Guide</h2>
 </div>
-<!-- END CONTENT -->
-
-<!-- START FOOTER -->
-<div id="footer">
-	<p>
-		Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
-		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
-	</p>
+<div class="row">
+<div class="span6">
+<div class="well"><ul class="nav nav-list">
+<li class="nav-header">Introduction</li>
+<li><a href="intro/requirements.html"><i class="icon-stop"></i> Server Requirements</a></li>
+<li><a href="intro/installation.html"><i class="icon-stop"></i> Installation</a></li>
+<li><a href="intro/mvc.html"><i class="icon-stop"></i> The Model-View-Controller</a></li>
+<li><a href="intro/controllers.html"><i class="icon-stop"></i> Controllers</a></li>
+<li><a href="intro/models.html"><i class="icon-stop"></i> Models</a></li>
+<li><a href="intro/views.html"><i class="icon-stop"></i> Views</a></li>
+<li><a href="intro/helpers.html"><i class="icon-stop"></i> Helpers</a></li>
+</ul></div>
+<div class="well"><ul class="nav nav-list">
+<li class="nav-header">Packages</li>
+<li><a href="packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul></div>
+<div class="well"><ul class="nav nav-list">
+<li class="nav-header">Namespaces</li>
+<li><a href="namespaces/Core.html"><i class="icon-th"></i> Core</a></li>
+<li><a href="namespaces/Database.html"><i class="icon-th"></i> Database</a></li>
+<li><a href="namespaces/Library.html"><i class="icon-th"></i> Library</a></li>
+<li><a href="namespaces/Wowlib.html"><i class="icon-th"></i> Wowlib</a></li>
+<li><a href="namespaces/global.html"><i class="icon-th"></i> global</a></li>
+</ul></div>
 </div>
-<!-- END FOOTER -->
-
+<div class="span6">
+<div class="well"><ul class="nav nav-list">
+<li class="nav-header">Development</li>
+<li><a href="development/constants.html"><i class="icon-stop"></i> Defined Constants</a></li>
+<li><a href="development/classes.html"><i class="icon-stop"></i> Using Core and Library Classes</a></li>
+<li><a href="development/autoloading.html"><i class="icon-stop"></i> Autoloading</a></li>
+<li><a href="development/error_handling.html"><i class="icon-stop"></i> Error Handling</a></li>
+<li><a href="development/events.html"><i class="icon-stop"></i> List of Events</a></li>
+<li><a href="development/modules.html"><i class="icon-stop"></i> Creating Modules</a></li>
+<li><a href="development/plugins.html"><i class="icon-stop"></i> Creating Plugins</a></li>
+<li><a href="development/wowlib.html"><i class="icon-stop"></i> Working with the Wowlib</a></li>
+<li><a href="development/libraries.html"><i class="icon-stop"></i> Creating your own Libraries</a></li>
+</ul></div>
+<div class="well"><ul class="nav nav-list">
+<li class="nav-header">Charts</li>
+<li><a href="graph_class.html"><i class="icon-list-alt"></i> Class inheritance diagram
+                            </a></li>
+</ul></div>
+<div class="well"><ul class="nav nav-list">
+<li class="nav-header">Reports</li>
+<li><a href="errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">0</span></a></li>
+<li><a href="markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul></div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
 </body>
 </html>

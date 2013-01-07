@@ -1,84 +1,59 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Plugins :: Plexis CMS Documentation</title>
-	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
 </head>
 <body>
-
-<!-- START NAVIGATION -->
-<div id="nav"><div id="nav_inner"></div></div>
-<div id="nav2"><a name="top">&nbsp;</a></div>
-<div id="masthead">
-	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
-		<tr>
-			<td><h1>Plexis</h1></td>
-			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
-		</tr>
-	</table>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
 </div>
-<!-- END NAVIGATION -->
-
-<br clear="all" />
-
-<!-- START CONTENT -->
-<div id="content">
-	<h1>Creating Plugins</h1>
-	<p>
-		Plexis comes equiped with a plugin system, that acts just like hooks in any other framework or Cms. Plugins are mainly just normal classes, that are used
-		for registering <a href="events.html">Events</a> and callbacks. This allows plugins to hook in at different stages through the page load, or when specific
-		actions are preformed, without having to modify the cms code.
-	</p>
-
-
-	<!--Start -->
-	<h2>Plugin Layout</h2>
-	<p>Below is the base of any plugin. The methods listed here are <font color="red">Required</font> in order for your plugin to work correctly when loaded.</p>
-	<pre>
-namespace Plugins;
-
-class Plugin_name
-{
-	public function __construct()
-	{
-		/*
-			This code is executed very early in the cms, before any database connections are made,
-			right after the URL is routed. This is the only method called, so in order to "hook" into
-			The cms at later parts, or when certain actions are preformed, you must use events
-		*/
-		
-		// Example event registration
-		$this->Events = load_class('Events');
-		$this->Events->register('user_logged_in', array($this, 'MyLoginHookFunction'));
-	}
-	
-	public function MyLoginHookFunction($accountID, $username)
-	{
-		/*
-			Code exectued when the 'user_logged_in' event is triggered
-			The parameters passed are based on the event we are registered to recieve.
-			Please read the 'List of Events' section to see a list of events
-		*/
-	}
-}
-	</pre>
-    <p class="important">All plugin file names must have the first letter capitalized! The Classname and Namespace are also Capitalized.</p>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row"><div class="span12">
+<ul class="breadcrumb">
+<li>
+<a href="../"><i class="icon-stop"></i> Index</a><span class="divider">\</span>
+</li>
+<li>Creating Plugins</li>
+</ul>
+<div class="alert alert-info">Under Construction</div>
+</div></div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
 </div>
-<!-- END CONTENT -->
-
-
-<div id="footer">
-	<p>
-		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-		<!-- Next Topic:&nbsp;&nbsp;<a href="config.html">Config Class</a> -->
-	</p>
-	<p>
-		Frostbite Framework &copy; 2011 - 2012, Steven Wilson | Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
-		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
-	</p>
-</div>
-
 </body>
 </html>

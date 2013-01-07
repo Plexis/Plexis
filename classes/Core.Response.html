@@ -1,0 +1,486 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\Response</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_AppendBody" title="AppendBody :: Appends data to the current body"><span class="description">Appends data to the current body</span><pre>AppendBody()</pre></a></li>
+<li class="method public "><a href="#method_Body" title="Body :: Sets or returns the body of the response, based on
+if a variable is passed setting the contents or not."><span class="description">Sets or returns the body of the response, based on
+if a variable is passed setting the contents or not.</span><pre>Body()</pre></a></li>
+<li class="method public "><a href="#method_ClearCookies" title="ClearCookies :: Removes all current cookies that are modified"><span class="description">Removes all current cookies that are modified</span><pre>ClearCookies()</pre></a></li>
+<li class="method public "><a href="#method_ClearHeaders" title="ClearHeaders :: Removes all current headers that are set"><span class="description">Removes all current headers that are set</span><pre>ClearHeaders()</pre></a></li>
+<li class="method public "><a href="#method_ClearRedirects" title="ClearRedirects :: Removes all current redirects that are set"><span class="description">Removes all current redirects that are set</span><pre>ClearRedirects()</pre></a></li>
+<li class="method public "><a href="#method_ContentType" title="ContentType :: Sets or returns the content type"><span class="description">Sets or returns the content type</span><pre>ContentType()</pre></a></li>
+<li class="method public "><a href="#method_Encoding" title="Encoding :: Sets or returns the content encoding"><span class="description">Sets or returns the content encoding</span><pre>Encoding()</pre></a></li>
+<li class="method public "><a href="#method_HasRedirects" title="HasRedirects :: Returns a bool of whether a redirect has been set or not"><span class="description">Returns a bool of whether a redirect has been set or not</span><pre>HasRedirects()</pre></a></li>
+<li class="method public "><a href="#method_OutputSent" title="OutputSent :: Returns a bool based on whether the headers and output have been sent"><span class="description">Returns a bool based on whether the headers and output have been sent</span><pre>OutputSent()</pre></a></li>
+<li class="method public "><a href="#method_Protocol" title="Protocol :: Sets or returns the http protocol"><span class="description">Sets or returns the http protocol</span><pre>Protocol()</pre></a></li>
+<li class="method public "><a href="#method_Redirect" title="Redirect :: This method sets a redirect header, and status code."><span class="description">This method sets a redirect header, and status code.</span><pre>Redirect()</pre></a></li>
+<li class="method public "><a href="#method_Reset" title="Reset :: Removes all current changes to the response, including the current
+body buffer"><span class="description">Removes all current changes to the response, including the current
+body buffer</span><pre>Reset()</pre></a></li>
+<li class="method public "><a href="#method_Send" title="Send :: This method takes all the response headers, cookies, and current
+buffered contents, and sends them back to the client."><span class="description">This method takes all the response headers, cookies, and current
+buffered contents, and sends them back to the client.</span><pre>Send()</pre></a></li>
+<li class="method public "><a href="#method_SetCookie" title="SetCookie :: Sets a cookies value"><span class="description">Sets a cookies value</span><pre>SetCookie()</pre></a></li>
+<li class="method public "><a href="#method_SetHeader" title="SetHeader :: Sets a header $key to the given $value"><span class="description">Sets a header $key to the given $value</span><pre>SetHeader()</pre></a></li>
+<li class="method public "><a href="#method_StatusCode" title="StatusCode :: Sets or returns the status code"><span class="description">Sets or returns the status code</span><pre>StatusCode()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="method protected "><a href="#method_SendBody" title="SendBody :: Echo's out the body contents"><span class="description">Echo's out the body contents</span><pre>SendBody()</pre></a></li>
+<li class="method protected "><a href="#method_SendContentLength" title="SendContentLength :: Sends the contents length"><span class="description">Sends the contents length</span><pre>SendContentLength()</pre></a></li>
+<li class="method protected "><a href="#method_SendContentType" title="SendContentType :: Sends the content type"><span class="description">Sends the content type</span><pre>SendContentType()</pre></a></li>
+<li class="method protected "><a href="#method_SendCookies" title="SendCookies :: Sends all cookies"><span class="description">Sends all cookies</span><pre>SendCookies()</pre></a></li>
+<li class="method protected "><a href="#method_SendHeader" title="SendHeader :: Sends a header"><span class="description">Sends a header</span><pre>SendHeader()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_body" title="$body :: The response body (contents)"><span class="description"></span><pre>$body</pre></a></li>
+<li class="property protected "><a href="#property_cacheDirectives" title="$cacheDirectives :: Array of cahce directives to be sent with the response"><span class="description"></span><pre>$cacheDirectives</pre></a></li>
+<li class="property protected "><a href="#property_charset" title="$charset :: Content encoding"><span class="description"></span><pre>$charset</pre></a></li>
+<li class="property protected "><a href="#property_contentType" title="$contentType :: Content Mime Type"><span class="description"></span><pre>$contentType</pre></a></li>
+<li class="property protected "><a href="#property_cookies" title="$cookies :: Array of cookies to be sent with the response"><span class="description"></span><pre>$cookies</pre></a></li>
+<li class="property protected "><a href="#property_headers" title="$headers :: Array of headers to be sent with the response"><span class="description"></span><pre>$headers</pre></a></li>
+<li class="property protected "><a href="#property_outputSent" title="$outputSent :: Used to determine if output / headers have been sent already"><span class="description"></span><pre>$outputSent</pre></a></li>
+<li class="property protected "><a href="#property_protocol" title="$protocol :: Response Protocol (HTTP/1.0 | 1.1)"><span class="description"></span><pre>$protocol</pre></a></li>
+<li class="property protected "><a href="#property_status" title="$status :: Status code to be returned in the response"><span class="description"></span><pre>$status</pre></a></li>
+<li class="property protected "><a href="#property_statusCodes" title="$statusCodes :: Array of $statusCode =&gt; $description"><span class="description"></span><pre>$statusCodes</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_HTTP_10" title="HTTP_10 :: HTTP protocol 1.0"><span class="description">HTTP protocol 1.0</span><pre>HTTP_10</pre></a></li>
+<li class="constant  "><a href="#constant_HTTP_11" title="HTTP_11 :: HTTP protocol 1.1"><span class="description">HTTP protocol 1.1</span><pre>HTTP_11</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\Response"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.Response.html">Response</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">This class is used to send a proper formated reponse to the client.</p>
+<div class="details">
+<div class="long_description"><p>You can set headers, cookies, status codes, and protocol within
+this class.</p></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Core.html">Core</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_AppendBody"></a><div class="element clickable method public method_AppendBody" data-toggle="collapse" data-target=".method_AppendBody .collapse">
+<h2>Appends data to the current body</h2>
+<pre>AppendBody(string $content) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$content</h4>
+<code>string</code><p>The body contents to append.</p></div>
+</div></div>
+</div>
+<a id="method_Body"></a><div class="element clickable method public method_Body" data-toggle="collapse" data-target=".method_Body .collapse">
+<h2>Sets or returns the body of the response, based on
+if a variable is passed setting the contents or not.</h2>
+<pre>Body(string $content = null) : string | void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$content<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The body contents. Leave null if retrieving
+  the current set contents.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>void</code>If $content is left null, the current
+  contents are returned</div>
+</div></div>
+</div>
+<a id="method_ClearCookies"></a><div class="element clickable method public method_ClearCookies" data-toggle="collapse" data-target=".method_ClearCookies .collapse">
+<h2>Removes all current cookies that are modified</h2>
+<pre>ClearCookies() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_ClearHeaders"></a><div class="element clickable method public method_ClearHeaders" data-toggle="collapse" data-target=".method_ClearHeaders .collapse">
+<h2>Removes all current headers that are set</h2>
+<pre>ClearHeaders() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_ClearRedirects"></a><div class="element clickable method public method_ClearRedirects" data-toggle="collapse" data-target=".method_ClearRedirects .collapse">
+<h2>Removes all current redirects that are set</h2>
+<pre>ClearRedirects() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_ContentType"></a><div class="element clickable method public method_ContentType" data-toggle="collapse" data-target=".method_ContentType .collapse">
+<h2>Sets or returns the content type</h2>
+<pre>ContentType(string $val = null) : string | void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The content type to be set</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>void</code>If $val is left null, the current content
+  type is returned</div>
+</div></div>
+</div>
+<a id="method_Encoding"></a><div class="element clickable method public method_Encoding" data-toggle="collapse" data-target=".method_Encoding .collapse">
+<h2>Sets or returns the content encoding</h2>
+<pre>Encoding(string $val = null) : string | void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The content encoding to be set</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>void</code>If $val is left null, the current content
+  encoding is returned</div>
+</div></div>
+</div>
+<a id="method_HasRedirects"></a><div class="element clickable method public method_HasRedirects" data-toggle="collapse" data-target=".method_HasRedirects .collapse">
+<h2>Returns a bool of whether a redirect has been set or not</h2>
+<pre>HasRedirects() : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_OutputSent"></a><div class="element clickable method public method_OutputSent" data-toggle="collapse" data-target=".method_OutputSent .collapse">
+<h2>Returns a bool based on whether the headers and output have been sent</h2>
+<pre>OutputSent() : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_Protocol"></a><div class="element clickable method public method_Protocol" data-toggle="collapse" data-target=".method_Protocol .collapse">
+<h2>Sets or returns the http protocol</h2>
+<pre>Protocol(string $code = null) : string | void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$code<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The protocol to use (HTTP_10 | HTTP_11)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>void</code>If $code is null, the current protocol
+  is returned</div>
+</div></div>
+</div>
+<a id="method_Redirect"></a><div class="element clickable method public method_Redirect" data-toggle="collapse" data-target=".method_Redirect .collapse">
+<h2>This method sets a redirect header, and status code.</h2>
+<pre>Redirect(string $location, int $wait = 0, int $status = 301) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>When this
+method is called, if the $wait param is greater then 1, headers
+will be sent.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$location</h4>
+<code>string</code><p>The redirect URL. If a relative path
+  is passed here, the site's URL will be appended</p>
+</div>
+<div class="subelement argument">
+<h4>$wait<small><b>   [Default =  0]</b></small>
+</h4>
+<code>int</code><p>The wait time (in seconds) before the redirect
+  takes affect. If set to a non 0 value, the page will still be
+   rendered. Default is 0 seconds.</p>
+</div>
+<div class="subelement argument">
+<h4>$status<small><b>   [Default =  301]</b></small>
+</h4>
+<code>int</code><p>The redirect status. 301 is moved permanently,
+  and 307 is a temporary redirect. Default is 301.</p></div>
+</div></div>
+</div>
+<a id="method_Reset"></a><div class="element clickable method public method_Reset" data-toggle="collapse" data-target=".method_Reset .collapse">
+<h2>Removes all current changes to the response, including the current
+body buffer</h2>
+<pre>Reset() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_Send"></a><div class="element clickable method public method_Send" data-toggle="collapse" data-target=".method_Send .collapse">
+<h2>This method takes all the response headers, cookies, and current
+buffered contents, and sends them back to the client.</h2>
+<pre>Send() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>After this
+methid is called, any output will most likely cause a content length
+error for our client.</p></div></div></div>
+</div>
+<a id="method_SetCookie"></a><div class="element clickable method public method_SetCookie" data-toggle="collapse" data-target=".method_SetCookie .collapse">
+<h2>Sets a cookies value</h2>
+<pre>SetCookie(string $name, string $value, int $expires, string $path = '/') : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The cookie name</p></div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>string</code><p>The cookies value</p></div>
+<div class="subelement argument">
+<h4>$expires</h4>
+<code>int</code><p>The UNIX timestamp the cookie expires</p></div>
+<div class="subelement argument">
+<h4>$path<small><b>   [Default =  '/']</b></small>
+</h4>
+<code>string</code><p>The cookie path</p></div>
+</div></div>
+</div>
+<a id="method_SetHeader"></a><div class="element clickable method public method_SetHeader" data-toggle="collapse" data-target=".method_SetHeader .collapse">
+<h2>Sets a header $key to the given $value</h2>
+<pre>SetHeader(string $key, string $value) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code>string</code><p>The header key or name</p></div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>string</code><p>The header key's or name's value to be set</p>
+</div>
+</div></div>
+</div>
+<a id="method_StatusCode"></a><div class="element clickable method public method_StatusCode" data-toggle="collapse" data-target=".method_StatusCode .collapse">
+<h2>Sets or returns the status code</h2>
+<pre>StatusCode(int $code = null) : int | void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$code<small><b>   [Default =  null]</b></small>
+</h4>
+<code>int</code><p>The status code to be set</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code><code>void</code>If $code is left null, the current status
+  code is returned</div>
+</div></div>
+</div>
+<a id="method_SendBody"></a><div class="element clickable method protected method_SendBody" data-toggle="collapse" data-target=".method_SendBody .collapse">
+<h2>Echo's out the body contents</h2>
+<pre>SendBody() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_SendContentLength"></a><div class="element clickable method protected method_SendContentLength" data-toggle="collapse" data-target=".method_SendContentLength .collapse">
+<h2>Sends the contents length</h2>
+<pre>SendContentLength() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_SendContentType"></a><div class="element clickable method protected method_SendContentType" data-toggle="collapse" data-target=".method_SendContentType .collapse">
+<h2>Sends the content type</h2>
+<pre>SendContentType() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_SendCookies"></a><div class="element clickable method protected method_SendCookies" data-toggle="collapse" data-target=".method_SendCookies .collapse">
+<h2>Sends all cookies</h2>
+<pre>SendCookies() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_SendHeader"></a><div class="element clickable method protected method_SendHeader" data-toggle="collapse" data-target=".method_SendHeader .collapse">
+<h2>Sends a header</h2>
+<pre>SendHeader(string $name, string $value = null) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the header</p></div>
+<div class="subelement argument">
+<h4>$value<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The value of the header</p></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_body"> </a><div class="element clickable property protected property_body" data-toggle="collapse" data-target=".property_body .collapse">
+<h2>The response body (contents)</h2>
+<pre>$body : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_cacheDirectives"> </a><div class="element clickable property protected property_cacheDirectives" data-toggle="collapse" data-target=".property_cacheDirectives .collapse">
+<h2>Array of cahce directives to be sent with the response</h2>
+<pre>$cacheDirectives : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_charset"> </a><div class="element clickable property protected property_charset" data-toggle="collapse" data-target=".property_charset .collapse">
+<h2>Content encoding</h2>
+<pre>$charset : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_contentType"> </a><div class="element clickable property protected property_contentType" data-toggle="collapse" data-target=".property_contentType .collapse">
+<h2>Content Mime Type</h2>
+<pre>$contentType : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_cookies"> </a><div class="element clickable property protected property_cookies" data-toggle="collapse" data-target=".property_cookies .collapse">
+<h2>Array of cookies to be sent with the response</h2>
+<pre>$cookies : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_headers"> </a><div class="element clickable property protected property_headers" data-toggle="collapse" data-target=".property_headers .collapse">
+<h2>Array of headers to be sent with the response</h2>
+<pre>$headers : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_outputSent"> </a><div class="element clickable property protected property_outputSent" data-toggle="collapse" data-target=".property_outputSent .collapse">
+<h2>Used to determine if output / headers have been sent already</h2>
+<pre>$outputSent : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_protocol"> </a><div class="element clickable property protected property_protocol" data-toggle="collapse" data-target=".property_protocol .collapse">
+<h2>Response Protocol (HTTP/1.0 | 1.1)</h2>
+<pre>$protocol : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_status"> </a><div class="element clickable property protected property_status" data-toggle="collapse" data-target=".property_status .collapse">
+<h2>Status code to be returned in the response</h2>
+<pre>$status : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_statusCodes"> </a><div class="element clickable property protected property_statusCodes" data-toggle="collapse" data-target=".property_statusCodes .collapse">
+<h2>Array of $statusCode => $description</h2>
+<pre>$statusCodes : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_HTTP_10"> </a><div class="element clickable constant  constant_HTTP_10" data-toggle="collapse" data-target=".constant_HTTP_10 .collapse">
+<h2>HTTP protocol 1.0</h2>
+<pre>HTTP_10 </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_HTTP_11"> </a><div class="element clickable constant  constant_HTTP_11" data-toggle="collapse" data-target=".constant_HTTP_11 .collapse">
+<h2>HTTP protocol 1.1</h2>
+<pre>HTTP_11 </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>

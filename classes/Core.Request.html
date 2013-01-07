@@ -1,0 +1,420 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\Request</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_Accepts" title="Accepts :: Returns the an array of what formats the client is accepting"><span class="description">Returns the an array of what formats the client is accepting</span><pre>Accepts()</pre></a></li>
+<li class="method public "><a href="#method_AcceptsLanguage" title="AcceptsLanguage :: Returns a string or string[] of what languages the client accepts"><span class="description">Returns a string or string[] of what languages the client accepts</span><pre>AcceptsLanguage()</pre></a></li>
+<li class="method public "><a href="#method_BaseUrl" title="BaseUrl :: Returns the site's base URL"><span class="description">Returns the site's base URL</span><pre>BaseUrl()</pre></a></li>
+<li class="method public "><a href="#method_ClientIp" title="ClientIp :: Returns the Remote connected IP address"><span class="description">Returns the Remote connected IP address</span><pre>ClientIp()</pre></a></li>
+<li class="method public "><a href="#method_Cookie" title="Cookie :: Returns the Cookie name specified, or all Cookie data"><span class="description">Returns the Cookie name specified, or all Cookie data</span><pre>Cookie()</pre></a></li>
+<li class="method public "><a href="#method_Header" title="Header :: Returns the value of the specified header passed"><span class="description">Returns the value of the specified header passed</span><pre>Header()</pre></a></li>
+<li class="method public "><a href="#method_Init" title="Init :: Class Constructor (called automatically)"><span class="description">Class Constructor (called automatically)</span><pre>Init()</pre></a></li>
+<li class="method public "><a href="#method_Input" title="Input :: Returns data from the 'php://input'"><span class="description">Returns data from the 'php://input'</span><pre>Input()</pre></a></li>
+<li class="method public "><a href="#method_IsAjax" title="IsAjax :: Returns the whether the request is an ajax request"><span class="description">Returns the whether the request is an ajax request</span><pre>IsAjax()</pre></a></li>
+<li class="method public "><a href="#method_Method" title="Method :: Returns the request http method (GET, POST, PUT etc)"><span class="description">Returns the request http method (GET, POST, PUT etc)</span><pre>Method()</pre></a></li>
+<li class="method public "><a href="#method_Post" title="Post :: Returns the POST var specified, or all POST data"><span class="description">Returns the POST var specified, or all POST data</span><pre>Post()</pre></a></li>
+<li class="method public "><a href="#method_Protocol" title="Protocol :: Returns the current requests protocol"><span class="description">Returns the current requests protocol</span><pre>Protocol()</pre></a></li>
+<li class="method public "><a href="#method_Query" title="Query :: Returns the url query string"><span class="description">Returns the url query string</span><pre>Query()</pre></a></li>
+<li class="method public "><a href="#method_Referer" title="Referer :: Returns the reffering website url"><span class="description">Returns the reffering website url</span><pre>Referer()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_baseurl" title="$baseurl :: the site's base url (the root of the website)"><span class="description"></span><pre>$baseurl</pre></a></li>
+<li class="property protected "><a href="#property_clientIp" title="$clientIp :: The remote IP address connected to this request"><span class="description"></span><pre>$clientIp</pre></a></li>
+<li class="property protected "><a href="#property_domain" title="$domain :: Http domain name (no trailing paths after the .com)"><span class="description"></span><pre>$domain</pre></a></li>
+<li class="property protected "><a href="#property_protocol" title="$protocol :: Current protocol"><span class="description"></span><pre>$protocol</pre></a></li>
+<li class="property protected "><a href="#property_queryString" title="$queryString :: The query string passed with the request"><span class="description"></span><pre>$queryString</pre></a></li>
+<li class="property protected "><a href="#property_webroot" title="$webroot :: The web root is the trailing path after the domain name."><span class="description"></span><pre>$webroot</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_METHOD_DELETE" title="METHOD_DELETE :: "><span class="description">METHOD_DELETE</span><pre>METHOD_DELETE</pre></a></li>
+<li class="constant  "><a href="#constant_METHOD_GET" title="METHOD_GET :: "><span class="description">METHOD_GET</span><pre>METHOD_GET</pre></a></li>
+<li class="constant  "><a href="#constant_METHOD_POST" title="METHOD_POST :: "><span class="description">METHOD_POST</span><pre>METHOD_POST</pre></a></li>
+<li class="constant  "><a href="#constant_METHOD_PUT" title="METHOD_PUT :: "><span class="description">METHOD_PUT</span><pre>METHOD_PUT</pre></a></li>
+<li class="constant  "><a href="#constant_PROTOCOL_FTP" title="PROTOCOL_FTP :: "><span class="description">PROTOCOL_FTP</span><pre>PROTOCOL_FTP</pre></a></li>
+<li class="constant  "><a href="#constant_PROTOCOL_HTTP" title="PROTOCOL_HTTP :: "><span class="description">PROTOCOL_HTTP</span><pre>PROTOCOL_HTTP</pre></a></li>
+<li class="constant  "><a href="#constant_PROTOCOL_HTTPS" title="PROTOCOL_HTTPS :: "><span class="description">PROTOCOL_HTTPS</span><pre>PROTOCOL_HTTPS</pre></a></li>
+<li class="constant  "><a href="#constant_PROTOCOL_SSL" title="PROTOCOL_SSL :: "><span class="description">PROTOCOL_SSL</span><pre>PROTOCOL_SSL</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\Request"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.Request.html">Request</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">This class provides information for the current Request.</p>
+<div class="details">
+<div class="long_description"><p>Such information
+like all the Post and GET data, the URI string, the Remote IP, Referer,
+the base URL, website root, and more.</p></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Core.html">Core</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_Accepts"></a><div class="element clickable method public method_Accepts" data-toggle="collapse" data-target=".method_Accepts .collapse">
+<h2>Returns the an array of what formats the client is accepting</h2>
+<pre>Accepts(string $type = null) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>todo</th>
+<td>Finish the method, and provide better description</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The type to return</p></div>
+</div></div>
+</div>
+<a id="method_AcceptsLanguage"></a><div class="element clickable method public method_AcceptsLanguage" data-toggle="collapse" data-target=".method_AcceptsLanguage .collapse">
+<h2>Returns a string or string[] of what languages the client accepts</h2>
+<pre>AcceptsLanguage(string $lang = null) : string | string[] | bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$lang<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>If a language is provided here, the method will return
+   true or false based on whehter the client accepts the language</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>string[]</code><code>bool</code>Returns the language, or an array of
+languages the client accpets. If $lang is set, then this method returns
+a bool based on whehter the client accepts the language</div>
+</div></div>
+</div>
+<a id="method_BaseUrl"></a><div class="element clickable method public method_BaseUrl" data-toggle="collapse" data-target=".method_BaseUrl .collapse">
+<h2>Returns the site's base URL</h2>
+<pre>BaseUrl() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_ClientIp"></a><div class="element clickable method public method_ClientIp" data-toggle="collapse" data-target=".method_ClientIp .collapse">
+<h2>Returns the Remote connected IP address</h2>
+<pre>ClientIp() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The validated remote IP address. Returns 0.0.0.0 if
+  the IP address could not be determined</div>
+</div></div>
+</div>
+<a id="method_Cookie"></a><div class="element clickable method public method_Cookie" data-toggle="collapse" data-target=".method_Cookie .collapse">
+<h2>Returns the Cookie name specified, or all Cookie data</h2>
+<pre>Cookie(string $key = null, mixed $default = null) : string | string[] | mixed</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The cookie name to return. Leave null to return all cookie data</p></div>
+<div class="subelement argument">
+<h4>$default<small><b>   [Default =  null]</b></small>
+</h4>
+<code>mixed</code><p>The default return value if the Cookie name doesnt
+   exist. Default is null.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>string[]</code><code>mixed</code>Returns $default if the Cookie name doesnt exist. Returns a
+  string[] if no $key is provided, or the value of $key if the cookie exists.</div>
+</div></div>
+</div>
+<a id="method_Header"></a><div class="element clickable method public method_Header" data-toggle="collapse" data-target=".method_Header .collapse">
+<h2>Returns the value of the specified header passed</h2>
+<pre>Header(string $name) : string | bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The header name to be returned</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>bool</code>Returns false if the header isnt set</div>
+</div></div>
+</div>
+<a id="method_Init"></a><div class="element clickable method public method_Init" data-toggle="collapse" data-target=".method_Init .collapse">
+<h2>Class Constructor (called automatically)</h2>
+<pre>Init() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Initializes the class properties</p></div></div></div>
+</div>
+<a id="method_Input"></a><div class="element clickable method public method_Input" data-toggle="collapse" data-target=".method_Input .collapse">
+<h2>Returns data from the 'php://input'</h2>
+<pre>Input() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_IsAjax"></a><div class="element clickable method public method_IsAjax" data-toggle="collapse" data-target=".method_IsAjax .collapse">
+<h2>Returns the whether the request is an ajax request</h2>
+<pre>IsAjax() : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>If the requeset is an ajax request (HTTP_X_REQUESTED_WITH => xmlhttprequest)</div>
+</div></div>
+</div>
+<a id="method_Method"></a><div class="element clickable method public method_Method" data-toggle="collapse" data-target=".method_Method .collapse">
+<h2>Returns the request http method (GET, POST, PUT etc)</h2>
+<pre>Method() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_Post"></a><div class="element clickable method public method_Post" data-toggle="collapse" data-target=".method_Post .collapse">
+<h2>Returns the POST var specified, or all POST data</h2>
+<pre>Post(string $key = null, mixed $default = null) : string | string[] | mixed</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The POST array id to return. Leave null to return all POST data</p></div>
+<div class="subelement argument">
+<h4>$default<small><b>   [Default =  null]</b></small>
+</h4>
+<code>mixed</code><p>The default return value if the POST array key doesnt
+   exist. Default is null.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>string[]</code><code>mixed</code>Returns $default if the POST key doesnt exist. Returns a
+  string[] if no $key is provided, or the value of $key if the array key exists.</div>
+</div></div>
+</div>
+<a id="method_Protocol"></a><div class="element clickable method public method_Protocol" data-toggle="collapse" data-target=".method_Protocol .collapse">
+<h2>Returns the current requests protocol</h2>
+<pre>Protocol() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_Query"></a><div class="element clickable method public method_Query" data-toggle="collapse" data-target=".method_Query .collapse">
+<h2>Returns the url query string</h2>
+<pre>Query(string $key = null, mixed $default = null) : string | string[] | mixed</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The GET array id to return. Leave null to return all GET data</p></div>
+<div class="subelement argument">
+<h4>$default<small><b>   [Default =  null]</b></small>
+</h4>
+<code>mixed</code><p>The default return value if the GET array key doesnt
+   exist. Default is null.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>string[]</code><code>mixed</code>Returns $default if the GET key doesnt exist. Returns a
+  string[] if no $key is provided, or the value of $key if the array key exists</div>
+</div></div>
+</div>
+<a id="method_Referer"></a><div class="element clickable method public method_Referer" data-toggle="collapse" data-target=".method_Referer .collapse">
+<h2>Returns the reffering website url</h2>
+<pre>Referer() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_baseurl"> </a><div class="element clickable property protected property_baseurl" data-toggle="collapse" data-target=".property_baseurl .collapse">
+<h2>the site's base url (the root of the website)</h2>
+<pre>$baseurl : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_clientIp"> </a><div class="element clickable property protected property_clientIp" data-toggle="collapse" data-target=".property_clientIp .collapse">
+<h2>The remote IP address connected to this request</h2>
+<pre>$clientIp : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_domain"> </a><div class="element clickable property protected property_domain" data-toggle="collapse" data-target=".property_domain .collapse">
+<h2>Http domain name (no trailing paths after the .com)</h2>
+<pre>$domain : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_protocol"> </a><div class="element clickable property protected property_protocol" data-toggle="collapse" data-target=".property_protocol .collapse">
+<h2>Current protocol</h2>
+<pre>$protocol : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_queryString"> </a><div class="element clickable property protected property_queryString" data-toggle="collapse" data-target=".property_queryString .collapse">
+<h2>The query string passed with the request</h2>
+<pre>$queryString : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_webroot"> </a><div class="element clickable property protected property_webroot" data-toggle="collapse" data-target=".property_webroot .collapse">
+<h2>The web root is the trailing path after the domain name.</h2>
+<pre>$webroot : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>The base url is the Domain name, plus the webroot</p></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_METHOD_DELETE"> </a><div class="element clickable constant  constant_METHOD_DELETE" data-toggle="collapse" data-target=".constant_METHOD_DELETE .collapse">
+<h2></h2>
+<pre>METHOD_DELETE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_METHOD_GET"> </a><div class="element clickable constant  constant_METHOD_GET" data-toggle="collapse" data-target=".constant_METHOD_GET .collapse">
+<h2></h2>
+<pre>METHOD_GET </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_METHOD_POST"> </a><div class="element clickable constant  constant_METHOD_POST" data-toggle="collapse" data-target=".constant_METHOD_POST .collapse">
+<h2></h2>
+<pre>METHOD_POST </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_METHOD_PUT"> </a><div class="element clickable constant  constant_METHOD_PUT" data-toggle="collapse" data-target=".constant_METHOD_PUT .collapse">
+<h2></h2>
+<pre>METHOD_PUT </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_PROTOCOL_FTP"> </a><div class="element clickable constant  constant_PROTOCOL_FTP" data-toggle="collapse" data-target=".constant_PROTOCOL_FTP .collapse">
+<h2></h2>
+<pre>PROTOCOL_FTP </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_PROTOCOL_HTTP"> </a><div class="element clickable constant  constant_PROTOCOL_HTTP" data-toggle="collapse" data-target=".constant_PROTOCOL_HTTP .collapse">
+<h2></h2>
+<pre>PROTOCOL_HTTP </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_PROTOCOL_HTTPS"> </a><div class="element clickable constant  constant_PROTOCOL_HTTPS" data-toggle="collapse" data-target=".constant_PROTOCOL_HTTPS .collapse">
+<h2></h2>
+<pre>PROTOCOL_HTTPS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_PROTOCOL_SSL"> </a><div class="element clickable constant  constant_PROTOCOL_SSL" data-toggle="collapse" data-target=".constant_PROTOCOL_SSL .collapse">
+<h2></h2>
+<pre>PROTOCOL_SSL </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>

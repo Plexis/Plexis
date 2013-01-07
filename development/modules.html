@@ -1,173 +1,59 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Modules :: Plexis CMS Documentation</title>
-	<link rel='stylesheet' type='text/css' media='all' href='../doc_style/userguide.css' />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
 </head>
 <body>
-
-<!-- START NAVIGATION -->
-<div id="nav"><div id="nav_inner"></div></div>
-<div id="nav2"><a name="top">&nbsp;</a></div>
-<div id="masthead">
-	<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
-		<tr>
-			<td><h1>Plexis</h1></td>
-			<td id="breadcrumb_right"><a href="../index.html">Return To Index</a></td>
-		</tr>
-	</table>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
 </div>
-<!-- END NAVIGATION -->
-
-<br clear="all" />
-
-<!-- START CONTENT -->
-<div id="content">
-	<h1>Creating Module</h1>
-	<p>
-		Modules are pretty unique when it comes to Plexis. The act just like any normal controller, except they can "Override" the cms controllers, or can be
-		used to just extend a controller, or the core adding new pages. You'll notice when you install a module, you can enter a URI. This is the method overriding
-        mentioned earlier. If you enter a URI to a current page, the module will replace that page when accessed. You can even configure a module to take all requests
-        from 1 controller, and direct them to the corresponding methods in your module. Modules also can be fully integrated into the admin panel, allowing users to
-        configure settings and save config options right in the admin panel.
-	</p>
-    
-    <!--Layout -->
-	<h2>Module Layout</h2>
-	<p>
-		The code below shows you how your module must be structured to work correctly in the cms:
-	</p>
-	<pre>
-third_party/
-	modules/
-		Modulename/
-			models/
-			views/
-			admin.php
-			controller.php
-    </pre>
-    <p class="important"> The folder that contains your module files is the name of your module.. It must be capitalized! All sub files / folders are all lowercase. </p>
-
-
-	<!--Controller -->
-	<h2>Module Admin Controller Layout</h2>
-	<p>
-		Below is the base admin controller of any module. This controller is only ran by the admin panel. The methods listed here are <font color="red">Required</font> 
-        in order for your module to work correctly when loaded, unless otherwise noted.
-	</p>
-	<pre>
-class Module_name 
-{
-
-/*
-| ---------------------------------------------------------------
-| Required Constructor. 
-| ---------------------------------------------------------------
-*/
-	 public function __construct()
-	{
-		/* 
-			We cannot construct the core controller because the
-			Admin panel is loading these functions... so we create
-			our own module Constructor. You just need to load what 
-			is required to run the install() and uninstall() methods
-		*/
-		
-		// In this example, we manually load the loader and database classes
-		$this->load = load_class('Loader');
-		$this->DB = $this->load->database( 'DB' );
-	}
-
-/*
-| ---------------------------------------------------------------
-| Required Install and Uninstall Methods
-| ---------------------------------------------------------------
-*/
-	
-	public function install()
-	{
-		// This function is ran when the user installs the module via the admin panel
-		// Return TRUE if the module installs correctly, or false
-	}
-	
-	
-	public function uninstall()
-	{
-		// This function is ran when the user Un-installs the module via the admin panel
-		// Return TRUE if the module un-installs correctly, or false
-	}
-	
-	/* 
-		For admin panel integration, this method is REQUIRED. It IS your admin method
-		It is not required IF you dont have admin panel integration. When this method
-		is called, it essentially takes over the system, and is used to load views etc. 
-	*/
-	public function admin()
-	{
-		// Your Module Admin Panel PHP //
-		
-		// The return value here should be true or false
-		return true;  // Tells the admin controller things are OK, and to shutdown
-		return false; // Tells the admin controller things went bad, and displays an error to the user
-	}
-}
-	</pre>
-    <p class="important">All module classnames must have the first letter Capitalized!</p>
-    
-    <!--Controller -->
-	<h2>Module Frontend / Main Controller Layout</h2>
-	<p>
-		Below is the base frontend controller of any module. This controller holdes all of your page actions, and is what the user will
-        interact with on the site. The methods listed here are <font color="red">Required</font> in order for your module to work correctly when loaded, unless
-		otherwise noted.
-	</p>
-	<pre>
-class Module_name extends \Core\Controller
-{
-
-/*
-| ---------------------------------------------------------------
-| Constructor
-| ---------------------------------------------------------------
-*/
-
-	public function __construct()
-	{
-		// Normally construct the application controller
-		parent::__construct();
-		
-		// Your constructor code //
-	}
-
-/*
-| ---------------------------------------------------------------
-| Page Functions - These are viewed by users in the frontend
-| ---------------------------------------------------------------
-*/
-	
-	public function index() 
-	{
-		// blah blah blah
-		$this->load->view('index');
-	}
-}
-	</pre>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row"><div class="span12">
+<ul class="breadcrumb">
+<li>
+<a href="../"><i class="icon-stop"></i> Index</a><span class="divider">\</span>
+</li>
+<li>Creating Modules</li>
+</ul>
+<div class="alert alert-info">Under Construction</div>
+</div></div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
 </div>
-<!-- END CONTENT -->
-
-
-<div id="footer">
-	<p>
-		<a href="#top">Top of Page</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-		<a href="../index.html">Return to Index</a> &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-		<!-- Next Topic:&nbsp;&nbsp;<a href="config.html">Config Class</a> -->
-	</p>
-	<p>
-		Frostbite Framework &copy; 2011 - 2012, Steven Wilson | Plexis CMS &copy; 2011 - 2012, Plexis Dev Team<br />
-		Documentation Template Copyright &#169; 2006 - 2012 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a>
-	</p>
-</div>
-
 </body>
 </html>
