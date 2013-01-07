@@ -55,7 +55,7 @@
          * returning all information about each realm including population, online status ect.
          */
         GetRealms: function() {
-            var post_url = Globals.Url + "/realms/status";
+            var post_url = Globals.Url + "/realm/status";
             var postResult;
             
             // Send our Init. command
@@ -64,29 +64,20 @@
                 url: post_url,
                 dataType: "json",
                 timeout: 5000, // in milliseconds
-                success: function(result) 
-                {
-                    if(result.success == false)
-                    {
-                        if(typeof result.php_error != "undefined" && result.php_error == true && Plexis.debugging == false)
-                        {
-                            Plexis.ShowPHPError(result.php_error_data);
-                        }
-                    }
-                    else
-                    {
-                        postResult = result;
-                    }
+                success: function(output, textStatus, jh) {
+                    postResult = output;
                 },
-                error: function(request, status, err) 
-                {
-                    Plexis.ShowAjaxError(status);
+                error: function(jqHXR, textStatus, errorString) {
+                    Plexis.HandleAjaxError(jqHXR, textStatus, errorString);
                 }
             });
             
             return postResult;
         },
         
+        /**
+         * Parses the GetRealms result, and placing each result into an html div.
+         */
         ParseRealmStatus: function(div_id, result) {
             var count = result.length;
             var finished = '';
@@ -109,31 +100,41 @@
          * Displays a message box to the user explaining an ajax error occured
          * This method uses jQuery MsgBox, created by Eduardo Daniel Sada
          */
-        ShowAjaxError: function(status) {
-            switch(status) {
-                case "error":
-                    $.MsgBoxObject.show('An error ocurred while sending the ajax request. Unable to establish connection.', {type : 'error'});
-                    break;
-                default:
-                    $.MsgBoxObject.show('An error ('+ status +') ocurred while sending the ajax request', {type : 'error'});
-                    break;
+        HandleAjaxError: function(jqHXR, textStatus, errorString) {
+            if(jqHXR.status == 500) {
+                var errorData;
+                try {
+                    errorData = $.parseJSON(jqHXR.responseText);
+                    $.MsgBoxObject.show('An error was encountered during this ajax request!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
+                        type : 'error'
+                    });
+                }
+                catch(e) {
+                    $.MsgBoxObject.show(jqHXR.responseText, {type: "error"});
+                }
             }
-        },
-        
-        /**
-         * Displays a PHP error message box to the user explaining the error occured
-         * This method uses jQuery MsgBox, created by Eduardo Daniel Sada
-         */
-        ShowPHPError: function(status) {
-            $.MsgBoxObject.show('An error was encountered during this ajax request!<br /><br >  Message: '+ data.message +'<br /> File: '+ data.file +'<br /> Line: '+ data.line, {
-                type : 'error'
-            });
+            else if(jqHXR.status == 404) {
+                postResult = false;
+            }
+            else {
+                switch(textStatus) {
+                    case "timeout":
+                        $.MsgBoxObject.show('A timeout ocurred while sending the ajax request. Unable to establish connection.', {type : 'error'});
+                        break;
+                    case "error":
+                        $.MsgBoxObject.show('An error ocurred while sending the ajax request. Unable to establish connection.', {type : 'error'});
+                        break;
+                    default:
+                        $.MsgBoxObject.show('An error ('+ textStatus +') ocurred while sending the ajax request', {type : 'error'});
+                        break;
+                }
+            }
         },
         
         /**
          * This method is used to load a template JS file, and append it to the <head> tag
          */
-        LoadTemplateJS: function(name) {
+        LoadTemplateScript: function(name) {
             var url = Globals.TemplateUrl + '/js/' + name + '.js';
             $('head').append('<script type="text/javascript" src="' + url + '"></script>');
         },
@@ -141,21 +142,133 @@
         /**
          * This method is used to load a JS file from a URL, and append it to the <head> tag
          */
-        LoadScript: function(url) {
+        LoadExternalScript: function(url) {
+            $.getScript(url);
+        },
+        
+        /**
+         * This method is used to load a JS asset file from the plexis Assets folder, and append it to the <head> tag
+         */
+        LoadScript: function(name) {
+            var url = Globals.Url + '/assets/js/' + name + '.js';
             $.getScript(url);
         },
         
         /**
          * This method is used to load a CSS file from a URL, and append it to the <head> tag
          */
-        LoadCss: function(url) {
+        LoadExternalStylesheet: function(url) {
             // EI compatability
             if (document.createStyleSheet) {
                 document.createStyleSheet(url);
             } 
             else {
-                $('head').append('<link rel="stylesheet" href="' + name + '" type="text/css" />');
+                $('head').append('<link rel="stylesheet" href="' + url + '" type="text/css" />');
             }
+        },
+        
+        /**
+         * This method is used to load a template stylesheet file, and append it to the <head> tag
+         */
+        LoadTemplateStylesheet: function(name) {
+            var url = Globals.TemplateUrl + '/css/' + name + '.css';
+            
+            // IE Compatability
+            if (document.createStyleSheet) {
+                document.createStyleSheet(url);
+            } 
+            else {
+                $('head').append('<link rel="stylesheet" href="' + url + '" type="text/css" />');
+            }
+        },
+        
+        /**
+         * This method displays an overlay over the screen, with a centered ajax loading image
+         */
+        PageLoading: function(Options) {
+            // Default Settings
+            var Settings = { 
+                'BgIMG' : '',
+                'BgColor' : '#000000',
+                'BgInnerColor' : '#FFFFFF',
+                'BorderColor' : '#000000',
+                'ShadowColor' : '',
+                'LoaderImage' : Globals.Url + "/assets/images/ajax.gif",
+                'zIndex' : 999
+            };
+            
+            // Function to remove the # infront of hex colors
+            var CutDiese = function(Value) { 
+                return (Value.charAt(0)=="#") ? Value.substring(1,7) : Value;
+            }
+            
+            // If options exist, replace the default Settings by the options set.
+            if (Options) { 
+                $.extend(Settings, Options);
+            }
+            
+            // Append the loading screen to the body
+            $("body").append("<div id=\"OverMask\"></div><div id=\"LoaderDiv\"><img src=\"" + Settings.LoaderImage + "\"></div>");
+            
+            // Create the overmask css, and display
+            $("#OverMask").css({
+                'width' : '100%',
+                'height' : '100%',
+                'background-color': Settings.BgColor,
+                'position': 'absolute',
+                'left' : 0, 
+                'top' : 0, 
+                'position' : 'fixed',
+                'opacity': 0.5,
+                "z-index" : Settings.zIndex
+            }).show();
+            
+            var Red, Green, Blue;
+            if(Settings.BorderColor != "") {
+                Red = parseInt((CutDiese(Settings.BorderColor)).substring(0,2),16);
+                Green = parseInt((CutDiese(Settings.BorderColor)).substring(2,4),16);
+                Blue = parseInt((CutDiese(Settings.BorderColor)).substring(4,6),16);
+            }
+            else {
+                Red = 0;
+                Green = 0;
+                Blue = 0;
+            }
+
+            $("#LoaderDiv").hide().css({
+                'position': 'fixed',
+                'left' : '50%', 
+                'top' : '50%', 
+                'margin-top' : -47 , 
+                'margin-left' : -47, 
+                'z-index' : Settings.zIndex + 1,
+                'background-color': Settings.BgInnerColor,
+                '-moz-background-clip' : 'padding',
+                '-webkit-background-clip' : 'padding',
+                'background-clip' : 'padding-box',
+                'border' : '10px solid rgba(' + Red + ', ' + Green + ', ' + Blue + ', 0.3)',
+                '-webkit-border-radius' : '13px',
+                '-moz-border-radius' : '13px',
+                'border-radius' : '13px',
+                '-webkit-box-shadow' : '0px 0px 5px' + Settings.ShadowColor,
+                '-moz-box-shadow' : '0px 0px 5px' + Settings.ShadowColor,
+                'box-shadow' : '0px 0px 5px' + Settings.ShadowColor, 
+                'padding' : '5px'
+                
+            }).fadeIn(400);
+
+        },
+        
+        /**
+         * This method removes the PageLoading overlay
+         */
+        PageLoaded: function() {
+            $("#LoaderDiv").fadeOut(100, function()
+            {
+                $("#LoaderDiv").remove();
+                $("#OverMask").fadeOut(100);
+                $("#OverMask").remove();
+            });
         }
     }
 })();

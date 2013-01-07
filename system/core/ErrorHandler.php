@@ -96,16 +96,30 @@ class ErrorHandler
         // Clear out all the old junk so we don't get 2 pages all fused together
         if(ob_get_length() != 0) ob_clean();
         
-        // Will make this fancy later
-        $mode = ($exception == true) ? "Exception" : "Error";
-        $title = ($php == true) ? "PHP {$mode}: " : "{$mode} Thrown: ";
-        
-        // We wont use a view here because we might not have the Library namespace registered in the autoloader
-        $page = file_get_contents( path(SYSTEM_PATH, "errors", "general_error.php") );
-        $page = str_replace('{TITLE}', $title, $page);
-        $page = str_replace('{MESSAGE}', $message, $page);
-        $page = str_replace('{FILE}', $file, $page);
-        $page = str_replace('{LINE}', $line, $page);
+        // If this is an ajax request, then json_encode
+        if(Request::IsAjax())
+        {
+            $data = array(
+                'level' => $lvl,
+                'message' => $message,
+                'file' => $file,
+                'line' => $line
+            );
+            $page = json_encode($data);
+        }
+        else
+        {
+            // Will make this fancy later
+            $mode = ($exception == true) ? "Exception" : "Error";
+            $title = ($php == true) ? "PHP {$mode}: " : "{$mode} Thrown: ";
+            
+            // We wont use a view here because we might not have the Library namespace registered in the autoloader
+            $page = file_get_contents( path(SYSTEM_PATH, "errors", "general_error.php") );
+            $page = str_replace('{TITLE}', $title, $page);
+            $page = str_replace('{MESSAGE}', $message, $page);
+            $page = str_replace('{FILE}', $file, $page);
+            $page = str_replace('{LINE}', $line, $page);
+        }
         
         // Prepare response
         Response::StatusCode(500);
