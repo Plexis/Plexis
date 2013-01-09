@@ -53,8 +53,8 @@
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
-<li class="method protected "><a href="#method_addCssFile" title="addCssFile :: Includes a module's css file in the final layouts head tag"><span class="description">Includes a module's css file in the final layouts head tag</span><pre>addCssFile()</pre></a></li>
 <li class="method protected "><a href="#method_addJsFile" title="addJsFile :: Includes a module's js file in the final layouts head tag"><span class="description">Includes a module's js file in the final layouts head tag</span><pre>addJsFile()</pre></a></li>
+<li class="method protected "><a href="#method_addStylesheet" title="addStylesheet :: Includes a module's css file in the final layouts head tag"><span class="description">Includes a module's css file in the final layouts head tag</span><pre>addStylesheet()</pre></a></li>
 <li class="method protected "><a href="#method_loadConfig" title="loadConfig :: Loads a config file from the modules config folder"><span class="description">Loads a config file from the modules config folder</span><pre>loadConfig()</pre></a></li>
 <li class="method protected "><a href="#method_loadController" title="loadController :: Loads a controller from the current modules folder, and returns a new
   instance of that class"><span class="description">Loads a controller from the current modules folder, and returns a new
@@ -67,6 +67,7 @@
 <li class="method protected "><a href="#method_requirePermission" title='requirePermission :: When called, if the user does not have the specified permission, a 403 "forbidden"
 screen will be displayed, or a redirection will occur (depending on vars).'><span class="description">When called, if the user does not have the specified permission, a 403 "forbidden"
 screen will be displayed, or a redirection will occur (depending on vars).</span><pre>requirePermission()</pre></a></li>
+<li class="method protected "><a href="#method_throwExceptions" title="throwExceptions :: Tells the Core Controller whether or not to throw exceptions."><span class="description">Tells the Core Controller whether or not to throw exceptions.</span><pre>throwExceptions()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -111,27 +112,16 @@ and useful methods for the child class.</p></div>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
 <h2>Sets up the correct $modulePath and $moduleName variables</h2>
-<pre>__construct(string $path) : void</pre>
+<pre>__construct(string $Module) : void</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$path</h4>
-<code>string</code><p>The child module root path</p></div>
-</div></div>
-</div>
-<a id="method_addCssFile"></a><div class="element clickable method protected method_addCssFile" data-toggle="collapse" data-target=".method_addCssFile .collapse">
-<h2>Includes a module's css file in the final layouts head tag</h2>
-<pre>addCssFile(string $name) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$name</h4>
-<code>string</code><p>The  name of the CSS file located in the
-  modules CSS folder</p></div>
+<h4>$Module</h4>
+<code>string</code><p>The Module object of the child Module. Not to be
+  confused with the child controller, but the argument passed to the chile
+  controller.</p></div>
 </div></div>
 </div>
 <a id="method_addJsFile"></a><div class="element clickable method protected method_addJsFile" data-toggle="collapse" data-target=".method_addJsFile .collapse">
@@ -145,6 +135,19 @@ and useful methods for the child class.</p></div>
 <h4>$name</h4>
 <code>string</code><p>The  name of the JS file located in the
   modules JS folder</p></div>
+</div></div>
+</div>
+<a id="method_addStylesheet"></a><div class="element clickable method protected method_addStylesheet" data-toggle="collapse" data-target=".method_addStylesheet .collapse">
+<h2>Includes a module's css file in the final layouts head tag</h2>
+<pre>addStylesheet(string $name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The  name of the CSS file located in the
+  modules CSS folder</p></div>
 </div></div>
 </div>
 <a id="method_loadConfig"></a><div class="element clickable method protected method_loadConfig" data-toggle="collapse" data-target=".method_loadConfig .collapse">
@@ -321,6 +324,23 @@ does not have the specified permission, and the current script will stop executi
 </h4>
 <code>string</code><p>The redirect URI (or url). If set to false, a 403 "forbidden"
   screen will be displayed instead of a redirect.</p>
+</div>
+</div></div>
+</div>
+<a id="method_throwExceptions"></a><div class="element clickable method protected method_throwExceptions" data-toggle="collapse" data-target=".method_throwExceptions .collapse">
+<h2>Tells the Core Controller whether or not to throw exceptions.</h2>
+<pre>throwExceptions(bool $bool) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>todo</th>
+<td>Finish this option to throw exceptions in the main controller</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$bool</h4>
+<code>bool</code><p>Do we throw exceptions?</p>
 </div>
 </div></div>
 </div>

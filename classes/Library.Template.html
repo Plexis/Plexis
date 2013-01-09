@@ -53,8 +53,8 @@
 <li class="method public "><a href="#method_Add" title="Add :: Adds more to contents to be added into the contents section of
 the final rendered template."><span class="description">Adds more to contents to be added into the contents section of
 the final rendered template.</span><pre>Add()</pre></a></li>
-<li class="method public "><a href="#method_AddCssFile" title="AddCssFile :: Appends the header adding a css tag"><span class="description">Appends the header adding a css tag</span><pre>AddCssFile()</pre></a></li>
-<li class="method public "><a href="#method_AddJsFile" title="AddJsFile :: Appends the header adding a script tag"><span class="description">Appends the header adding a script tag</span><pre>AddJsFile()</pre></a></li>
+<li class="method public "><a href="#method_AddScriptSrc" title="AddScriptSrc :: Appends the header adding a script tag"><span class="description">Appends the header adding a script tag</span><pre>AddScriptSrc()</pre></a></li>
+<li class="method public "><a href="#method_AddStylesheet" title="AddStylesheet :: Appends the header adding a css tag"><span class="description">Appends the header adding a css tag</span><pre>AddStylesheet()</pre></a></li>
 <li class="method public "><a href="#method_AppendHeader" title="AppendHeader :: Adds a new line of code to the head tags"><span class="description">Adds a new line of code to the head tags</span><pre>AppendHeader()</pre></a></li>
 <li class="method public "><a href="#method_ClearContents" title="ClearContents :: Clears the current output buffer of the template"><span class="description">Clears the current output buffer of the template</span><pre>ClearContents()</pre></a></li>
 <li class="method public "><a href="#method_LoadView" title="LoadView :: Loads a view file from the template's module view folder."><span class="description">Loads a view file from the template's module view folder.</span><pre>LoadView()</pre></a></li>
@@ -148,21 +148,25 @@ the final rendered template.</h2>
 </div>
 </div></div>
 </div>
-<a id="method_AddCssFile"></a><div class="element clickable method public method_AddCssFile" data-toggle="collapse" data-target=".method_AddCssFile .collapse">
-<h2>Appends the header adding a css tag</h2>
-<pre>AddCssFile(string $location) : void</pre>
-<div class="labels"><span class="label">Static</span></div>
+<a id="method_AddScriptSrc"></a><div class="element clickable method public method_AddScriptSrc" data-toggle="collapse" data-target=".method_AddScriptSrc .collapse">
+<h2>Appends the header adding a script tag</h2>
+<pre>AddScriptSrc(string $location, string $type = 'text/javascript') : void</pre>
+<div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$location</h4>
 <code>string</code><p>The http location of the file</p></div>
+<div class="subelement argument">
+<h4>$type<small><b>   [Default =  'text/javascript']</b></small>
+</h4>
+<code>string</code><p>The script mime type, as it would be in the html script tag.</p></div>
 </div></div>
 </div>
-<a id="method_AddJsFile"></a><div class="element clickable method public method_AddJsFile" data-toggle="collapse" data-target=".method_AddJsFile .collapse">
-<h2>Appends the header adding a script tag</h2>
-<pre>AddJsFile(string $location) : void</pre>
+<a id="method_AddStylesheet"></a><div class="element clickable method public method_AddStylesheet" data-toggle="collapse" data-target=".method_AddStylesheet .collapse">
+<h2>Appends the header adding a css tag</h2>
+<pre>AddStylesheet(string $location) : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>

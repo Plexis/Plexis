@@ -1,0 +1,336 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\Module</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: Module Constructor."><span class="description">Module Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_dispatch" title="dispatch :: This method executes the controller and action"><span class="description">This method executes the controller and action</span><pre>dispatch()</pre></a></li>
+<li class="method public "><a href="#method_getActionName" title="getActionName :: Returns the current set action (method) to be called when the
+controller is to be dispatched"><span class="description">Returns the current set action (method) to be called when the
+controller is to be dispatched</span><pre>getActionName()</pre></a></li>
+<li class="method public "><a href="#method_getActionParams" title="getActionParams :: Returns an array of params to be passed to the controller's action
+method when dispatched."><span class="description">Returns an array of params to be passed to the controller's action
+method when dispatched.</span><pre>getActionParams()</pre></a></li>
+<li class="method public "><a href="#method_getControllerName" title="getControllerName :: Returns the current set module controller name"><span class="description">Returns the current set module controller name</span><pre>getControllerName()</pre></a></li>
+<li class="method public "><a href="#method_getModuleXml" title="getModuleXml :: Returns the data stored in the Modules XML file."><span class="description">Returns the data stored in the Modules XML file.</span><pre>getModuleXml()</pre></a></li>
+<li class="method public "><a href="#method_getName" title="getName :: Returns the modules name"><span class="description">Returns the modules name</span><pre>getName()</pre></a></li>
+<li class="method public "><a href="#method_getRootPath" title="getRootPath :: Returns the path to the modules root folder"><span class="description">Returns the path to the modules root folder</span><pre>getRootPath()</pre></a></li>
+<li class="method public "><a href="#method_isCoreModule" title="isCoreModule :: Returns whehter the module is a Plexis Core Module"><span class="description">Returns whehter the module is a Plexis Core Module</span><pre>isCoreModule()</pre></a></li>
+<li class="method public "><a href="#method_setActionName" title="setActionName :: Sets the action name, overriding the action the router finds"><span class="description">Sets the action name, overriding the action the router finds</span><pre>setActionName()</pre></a></li>
+<li class="method public "><a href="#method_setActionParams" title="setActionParams :: Sets the actions' parameters, overriding the params the router finds"><span class="description">Sets the actions' parameters, overriding the params the router finds</span><pre>setActionParams()</pre></a></li>
+<li class="method public "><a href="#method_setControllerName" title="setControllerName :: Sets the controller name, overriding the controller the router finds"><span class="description">Sets the controller name, overriding the controller the router finds</span><pre>setControllerName()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_action" title="$action :: The method to be called in the controller class"><span class="description"></span><pre>$action</pre></a></li>
+<li class="property protected "><a href="#property_controller" title="$controller :: The controller class name"><span class="description"></span><pre>$controller</pre></a></li>
+<li class="property protected "><a href="#property_isCoreModule" title="$isCoreModule :: Used to determine if the module is a Plexis core module"><span class="description"></span><pre>$isCoreModule</pre></a></li>
+<li class="property protected "><a href="#property_name" title="$name :: The module name"><span class="description"></span><pre>$name</pre></a></li>
+<li class="property protected "><a href="#property_params" title="$params :: Arrat of parameters to be passed to the action method"><span class="description"></span><pre>$params</pre></a></li>
+<li class="property protected "><a href="#property_rootPath" title="$rootPath :: The root path to the module"><span class="description"></span><pre>$rootPath</pre></a></li>
+<li class="property protected "><a href="#property_xml" title="$xml :: If the module.xml has been requested, its XMLObject is stored here."><span class="description"></span><pre>$xml</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\Module"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.Module.html">Module</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">The module class is used to hold information about, as well as execute its action
+methods upon request.</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Core.html">Core</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Module Constructor.</h2>
+<pre>__construct(string $path, string $controller = null, string $method = null, string[] $params = array()) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>The root path to the module directory (can be a relative path from cms root)</p>
+</div>
+<div class="subelement argument">
+<h4>$controller<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The controller name to dispatch</p></div>
+<div class="subelement argument">
+<h4>$method<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The method name to dispatch in the controller.</p></div>
+<div class="subelement argument">
+<h4>$params<small><b>   [Default =  array()]</b></small>
+</h4>
+<code>string[]</code><p>The arguments to be passed to the method when dispatched.</p></div>
+</div></div>
+</div>
+<a id="method_dispatch"></a><div class="element clickable method public method_dispatch" data-toggle="collapse" data-target=".method_dispatch .collapse">
+<h2>This method executes the controller and action</h2>
+<pre>dispatch() : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
+<td>Thrown ifthe controller or action variables were never set, or empty.</td>
+</tr>
+<tr>
+<th><code><a href="../classes/ControllerNotFoundException.html">\ControllerNotFoundException</a></code></th>
+<td>when the controller file cant be found</td>
+</tr>
+<tr>
+<th><code><a href="../classes/MethodNotFoundException.html">\MethodNotFoundException</a></code></th>
+<td>when the controller doesnt have the given action,
+  or the action method is not a public method</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Returns the module controller object</div>
+</div></div>
+</div>
+<a id="method_getActionName"></a><div class="element clickable method public method_getActionName" data-toggle="collapse" data-target=".method_getActionName .collapse">
+<h2>Returns the current set action (method) to be called when the
+controller is to be dispatched</h2>
+<pre>getActionName() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_getActionParams"></a><div class="element clickable method public method_getActionParams" data-toggle="collapse" data-target=".method_getActionParams .collapse">
+<h2>Returns an array of params to be passed to the controller's action
+method when dispatched.</h2>
+<pre>getActionParams() : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string[]</code></div>
+</div></div>
+</div>
+<a id="method_getControllerName"></a><div class="element clickable method public method_getControllerName" data-toggle="collapse" data-target=".method_getControllerName .collapse">
+<h2>Returns the current set module controller name</h2>
+<pre>getControllerName() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_getModuleXml"></a><div class="element clickable method public method_getModuleXml" data-toggle="collapse" data-target=".method_getModuleXml .collapse">
+<h2>Returns the data stored in the Modules XML file.</h2>
+<pre>getModuleXml() : \Core\SimpleXMLElement</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\Core\SimpleXMLElement</code>Returns an object of class SimpleXMLElement with properties
+  containing the data held within the XML document</div>
+</div></div>
+</div>
+<a id="method_getName"></a><div class="element clickable method public method_getName" data-toggle="collapse" data-target=".method_getName .collapse">
+<h2>Returns the modules name</h2>
+<pre>getName() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_getRootPath"></a><div class="element clickable method public method_getRootPath" data-toggle="collapse" data-target=".method_getRootPath .collapse">
+<h2>Returns the path to the modules root folder</h2>
+<pre>getRootPath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the set controller path, or false
+  if the path isnt set</div>
+</div></div>
+</div>
+<a id="method_isCoreModule"></a><div class="element clickable method public method_isCoreModule" data-toggle="collapse" data-target=".method_isCoreModule .collapse">
+<h2>Returns whehter the module is a Plexis Core Module</h2>
+<pre>isCoreModule() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_setActionName"></a><div class="element clickable method public method_setActionName" data-toggle="collapse" data-target=".method_setActionName .collapse">
+<h2>Sets the action name, overriding the action the router finds</h2>
+<pre>setActionName(string $name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the action to load</p></div>
+</div></div>
+</div>
+<a id="method_setActionParams"></a><div class="element clickable method public method_setActionParams" data-toggle="collapse" data-target=".method_setActionParams .collapse">
+<h2>Sets the actions' parameters, overriding the params the router finds</h2>
+<pre>setActionParams(string[] $params) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>string[]</code><ul>
+<li>An array of params to pass to the action</li>
+</ul>
+</div>
+</div></div>
+</div>
+<a id="method_setControllerName"></a><div class="element clickable method public method_setControllerName" data-toggle="collapse" data-target=".method_setControllerName .collapse">
+<h2>Sets the controller name, overriding the controller the router finds</h2>
+<pre>setControllerName(string $name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the controller to load</p></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_action"> </a><div class="element clickable property protected property_action" data-toggle="collapse" data-target=".property_action .collapse">
+<h2>The method to be called in the controller class</h2>
+<pre>$action : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_controller"> </a><div class="element clickable property protected property_controller" data-toggle="collapse" data-target=".property_controller .collapse">
+<h2>The controller class name</h2>
+<pre>$controller : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_isCoreModule"> </a><div class="element clickable property protected property_isCoreModule" data-toggle="collapse" data-target=".property_isCoreModule .collapse">
+<h2>Used to determine if the module is a Plexis core module</h2>
+<pre>$isCoreModule : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_name"> </a><div class="element clickable property protected property_name" data-toggle="collapse" data-target=".property_name .collapse">
+<h2>The module name</h2>
+<pre>$name : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_params"> </a><div class="element clickable property protected property_params" data-toggle="collapse" data-target=".property_params .collapse">
+<h2>Arrat of parameters to be passed to the action method</h2>
+<pre>$params : string[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_rootPath"> </a><div class="element clickable property protected property_rootPath" data-toggle="collapse" data-target=".property_rootPath .collapse">
+<h2>The root path to the module</h2>
+<pre>$rootPath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_xml"> </a><div class="element clickable property protected property_xml" data-toggle="collapse" data-target=".property_xml .collapse">
+<h2>If the module.xml has been requested, its XMLObject is stored here.</h2>
+<pre>$xml : Object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>

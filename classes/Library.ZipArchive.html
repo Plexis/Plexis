@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>Plexis CMS » \Core\ControllerNotFoundException</title>
+<title>Plexis CMS » \Library\ZipArchive</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../template/css/template.css" rel="stylesheet" media="all">
@@ -46,40 +46,57 @@
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
 <button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
 </div>
-<ul class="side-nav nav nav-list"></ul>
+<ul class="side-nav nav nav-list"><li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul><li class="method public "><a href="#method_ZipDirectory" title="ZipDirectory :: Main method used to Zip a directory recursively"><span class="description">Main method used to Zip a directory recursively</span><pre>ZipDirectory()</pre></a></li></ul>
+</li></ul>
 </div>
 <div class="span8">
-<a id="\Core\ControllerNotFoundException"></a><ul class="breadcrumb">
+<a id="\Library\ZipArchive"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
-<li><a href="../namespaces/Core.html">Core</a></li>
+<li><a href="../namespaces/Library.html">Library</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/Core.ControllerNotFoundException.html">ControllerNotFoundException</a>
+<span class="divider">\</span><a href="../classes/Library.ZipArchive.html">ZipArchive</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Thrown when the controller class does not exist in the controllers path</p>
+<p class="short_description">A Recursive directory zipping class</p>
 <div class="details">
-<div class="long_description"><p>This exeption is mainly thrown for a 404</p></div>
+<div class="long_description"></div>
 <table class="table table-bordered">
 <tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
 <th>package</th>
-<td><a href="../packages/Core.Exceptions.html">Core</a></td>
-</tr>
-<tr>
-<th>subpackage</th>
-<td>Exceptions</td>
-</tr>
-<tr>
-<th>file</th>
-<td>System/Core/Dispatch.php</td>
-</tr>
-<tr>
-<th>see</th>
-<td><a href="Core.Dispatch.html#method_Execute">\Core\Dispatch::Execute()</a></td>
+<td><a href="../packages/Library.html">Library</a></td>
 </tr>
 </table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_ZipDirectory"></a><div class="element clickable method public method_ZipDirectory" data-toggle="collapse" data-target=".method_ZipDirectory .collapse">
+<h2>Main method used to Zip a directory recursively</h2>
+<pre>ZipDirectory(string $source, string $destination) : <a href="http://php.net/manual/en/class.ziparchive.php">\ZipArchive</a></pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source</h4>
+<code>string</code><p>The source directory path we are zipping</p></div>
+<div class="subelement argument">
+<h4>$destination</h4>
+<code>string</code><p>The full path to the Ziparchive, including filename
+  and extension.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="http://php.net/manual/en/class.ziparchive.php">\ZipArchive</a></code>Returns the opened ZipArchive object of the newely
+  created Zip file</div>
+</div></div>
+</div>
 </div>
 </div>
 </div>

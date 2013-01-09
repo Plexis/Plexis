@@ -65,13 +65,13 @@
 <li><a href="#Benchmark" title="This class is used to benchmark certain parts of the system.">Benchmark</a></li>
 <li><a href="#Config" title="Main Config class.">Config</a></li>
 <li><a href="#Controller" title="Class used to assist modules, by providing useful methods.">Controller</a></li>
-<li><a href="#Dispatch" title="Responsible for initializing the controller, and
-calling on the action method.">Dispatch</a></li>
 <li><a href="#ErrorHandler" title="Responsible for handling all errors, and execptions, and displaying
 an error page">ErrorHandler</a></li>
 <li><a href="#EventHandler" title="Responsible for initializing the controller, and
 calling on the action method.">EventHandler</a></li>
 <li><a href="#Filesystem" title="A class built to easily manage files and directories">Filesystem</a></li>
+<li><a href="#Module" title="The module class is used to hold information about, as well as execute its action
+methods upon request.">Module</a></li>
 <li><a href="#Request" title="This class provides information for the current Request.">Request</a></li>
 <li><a href="#Response" title="This class is used to send a proper formated reponse to the client.">Response</a></li>
 <li><a href="#Router" title="This class is used to determine our controller / action.">Router</a></li>
@@ -113,14 +113,6 @@ calling on the action method.">EventHandler</a></li>
 <div class="details collapse"></div>
 <a href="../classes/Core.Controller.html" class="more">« More »</a>
 </div>
-<div id="Dispatch" class="element ajax clickable class">
-<h1>Dispatch<a href="../classes/Core.Dispatch.html">¶</a>
-</h1>
-<p class="short_description">Responsible for initializing the controller, and
-calling on the action method.</p>
-<div class="details collapse"></div>
-<a href="../classes/Core.Dispatch.html" class="more">« More »</a>
-</div>
 <div id="ErrorHandler" class="element ajax clickable class">
 <h1>ErrorHandler<a href="../classes/Core.ErrorHandler.html">¶</a>
 </h1>
@@ -143,6 +135,14 @@ calling on the action method.</p>
 <p class="short_description">A class built to easily manage files and directories</p>
 <div class="details collapse"></div>
 <a href="../classes/Core.Filesystem.html" class="more">« More »</a>
+</div>
+<div id="Module" class="element ajax clickable class">
+<h1>Module<a href="../classes/Core.Module.html">¶</a>
+</h1>
+<p class="short_description">The module class is used to hold information about, as well as execute its action
+methods upon request.</p>
+<div class="details collapse"></div>
+<a href="../classes/Core.Module.html" class="more">« More »</a>
 </div>
 <div id="Request" class="element ajax clickable class">
 <h1>Request<a href="../classes/Core.Request.html">¶</a>
@@ -189,11 +189,11 @@ calling on the action method.</p>
 <a href="../classes/ArgumentException.html" class="more">« More »</a>
 </div>
 <div id="ControllerNotFoundException" class="element ajax clickable class">
-<h1>ControllerNotFoundException<a href="../classes/Core.ControllerNotFoundException.html">¶</a>
+<h1>ControllerNotFoundException<a href="../classes/ControllerNotFoundException.html">¶</a>
 </h1>
 <p class="short_description">Thrown when the controller class does not exist in the controllers path</p>
 <div class="details collapse"></div>
-<a href="../classes/Core.ControllerNotFoundException.html" class="more">« More »</a>
+<a href="../classes/ControllerNotFoundException.html" class="more">« More »</a>
 </div>
 <div id="InvalidCallableException" class="element ajax clickable class">
 <h1>InvalidCallableException<a href="../classes/Core.InvalidCallableException.html">¶</a>
@@ -201,21 +201,6 @@ calling on the action method.</p>
 <p class="short_description">Invalid Callable Exception, Thrown when a callback is invalid</p>
 <div class="details collapse"></div>
 <a href="../classes/Core.InvalidCallableException.html" class="more">« More »</a>
-</div>
-<div id="MethodNotFoundException" class="element ajax clickable class">
-<h1>MethodNotFoundException<a href="../classes/Core.MethodNotFoundException.html">¶</a>
-</h1>
-<p class="short_description">Thrown when the action method does not exist in the controller</p>
-<div class="details collapse"></div>
-<a href="../classes/Core.MethodNotFoundException.html" class="more">« More »</a>
-</div>
-<div id="NotFoundException" class="element ajax clickable class">
-<h1>NotFoundException<a href="../classes/Core.NotFoundException.html">¶</a>
-</h1>
-<p class="short_description">Thrown when the action does not exist in the controller, or the controller
-class does not exists.</p>
-<div class="details collapse"></div>
-<a href="../classes/Core.NotFoundException.html" class="more">« More »</a>
 </div>
 <div id="OutputSentException" class="element ajax clickable class">
 <h1>OutputSentException<a href="../classes/Core.OutputSentException.html">¶</a>
@@ -244,6 +229,28 @@ class does not exists.</p>
 <p class="short_description">An exception thrown when filesystem releated errors occur</p>
 <div class="details collapse"></div>
 <a href="../classes/IOException.html" class="more">« More »</a>
+</div>
+<div id="MethodNotFoundException" class="element ajax clickable class">
+<h1>MethodNotFoundException<a href="../classes/MethodNotFoundException.html">¶</a>
+</h1>
+<p class="short_description">Thrown when the action method does not exist in the controller</p>
+<div class="details collapse"></div>
+<a href="../classes/MethodNotFoundException.html" class="more">« More »</a>
+</div>
+<div id="ModuleNotFoundException" class="element ajax clickable class">
+<h1>ModuleNotFoundException<a href="../classes/ModuleNotFoundException.html">¶</a>
+</h1>
+<p class="short_description">Thrown when a provided module path is not a valid directory.</p>
+<div class="details collapse"></div>
+<a href="../classes/ModuleNotFoundException.html" class="more">« More »</a>
+</div>
+<div id="NotFoundException" class="element ajax clickable class">
+<h1>NotFoundException<a href="../classes/NotFoundException.html">¶</a>
+</h1>
+<p class="short_description">Thrown when the action does not exist in the controller, or the controller
+class does not exists.</p>
+<div class="details collapse"></div>
+<a href="../classes/NotFoundException.html" class="more">« More »</a>
 </div>
 <div id="SecurityException" class="element ajax clickable class">
 <h1>SecurityException<a href="../classes/SecurityException.html">¶</a>
