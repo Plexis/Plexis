@@ -50,11 +50,9 @@
 </ul>
 <h3>Controllers</h3>
 <p>
-                    Controllers are the heart of all your pages. A Controller is basically a class file that is named in a way that can be associated with a URI.
-                    Lets look at an example:
+                    Controllers are the heart of all your pages. A Controller is basically a class file that with methods that are named in a way that 
+                    can be associated with a URI.
                 </p>
-<code>
-                    www.yoursite.com/<var>page</var></code><p>In this example, Plexis would search for a controller file named "Page.php". in the "Page" module</p>
 <h4>An Example Controller</h4>
 <p>
                     Lets take a look at an example controller.
@@ -114,9 +112,10 @@
                 </p>
 <h3>Protecting Functions</h3>
 <p>
-                    There maybe times where you wish to use functions in the controller, that you dont want accessed via the browser. To protect these functions, simply add an underscore as the first letter like below:
+                    There maybe times where you wish to use functions in the controller, that you dont want accessed via the browser. To protect these functions, simply decalre them as 
+                    <var>private</var> or <var>protected</var>:
                     <pre class="prettyprint">
-    public function _noaccess() 
+    protected function noaccess() 
     {
         // stuffs
     }</pre>
@@ -135,9 +134,9 @@ $default_action = "index";</pre></p>
                     <pre class="prettyprint">&lt;?php
     class Page extends Core\Controller 
     {
-        public function __construct()
+        public function __construct( Core\Module $Module )
         {
-            <var>parent::__construct();</var>
+            <var>parent::__construct( $Module );</var>
             // Your own constructor code
         }
     }

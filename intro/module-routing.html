@@ -1,0 +1,152 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row"><div class="span12">
+<ul class="breadcrumb">
+<li>
+<a href="../"><i class="icon-stop"></i> Index</a><span class="divider">\</span>
+</li>
+<li>Modules and Url Mapping</li>
+</ul>
+<h3>Modules</h3>
+<p>
+                    Modules are the pages to your CMS. Every page that your cms contains, comes from a module.
+                </p>
+<h3>Directory Strucutre</h3>
+<p>
+                    Modules in plexis must follow a pretty strict directory structure in order to operate correctly.
+                    Below is an example module with a full directory structure
+                    <pre class="prettyprint">/ModuleName
+    /controllers/
+        AdminExtension.php
+        Ajax.php
+        ModuleName.php
+    /models
+    /helpers
+    /views
+    module.xml</pre></p>
+<p><div class="alert alert-info">
+<strong>Note:</strong>
+                        Only the "controllers" folder and module.xml file are required for your module to work correctly, but models, helpers, and views
+                        all must go in the correctly names directories.
+                    </div></p>
+<h4>The Ajax Controller</h4>
+<p>
+                    The Ajax controller is a special controller that handle all ajax requests, regardless of the defined controller for the route.
+                </p>
+<h4>The AdminExtension Controller</h4>
+<p>
+                    The AdminExtension controller is only called by the admin control panel during installation, un-installation, and when the module 
+                    is loaded in the admin panel. More information about this is documented in the "Creating your own Modules" section of this reference
+                    guide.
+                </p>
+<h3>The module XML file</h3>
+<p>
+                    Modules in plexis are required to contain a file names "<var>module.xml</var>". This xml provides some information about the module
+                    author, version and copyright information. The xml file also is used to define which routes your module will claim or override (See
+                    "Defining Routes For Your Module" below).
+                </p>
+<h3>Module Url Mapping</h3>
+<p>
+                    Every request made to your cms will search for a module by mapping the request
+                    URI, and checking for matches against the defined module routes in the plexis database. Lets take a look at an example
+                    request: 
+                </p>
+<p><code>
+                        www.yoursite.com/<var>module</var>/<var>action</var>/<var>param1</var>/<var>param2</var></code></p>
+<p>
+                    With this Url, Plexis will initially attempt to find a route match in the plexis database. Routes are broken down into 3 parts, 
+                    The Module, the Action, and the Params. The module param is always the first part of the uri (from the root of your plexis installation folder), 
+                    which is "<var>module</var>" in this case. The action parameter is "<var>action</var>". Anything after <var>action</var> would be considered a parameter.
+                    In the example url, both <var>param1</var> and <var>param2</var> are both parameters that will get passed to your modules controller method.
+                    If no module name, or an action is not specified, plexis will load the default route for the index page, and/or method, stored in the plexis config file.
+                    <div class="alert alert-info">
+<strong>Note:</strong>
+                        By default, if no controller is specified in the route, Plexis will load the default controller. The default controller for every module is named after
+                        the module itself (Ex: If your module name is "test", then the default controller name is "Test").
+                    </div></p>
+<h3>Defining Routes For Your Module</h3>
+<p>
+                    Routes are defined in the module.xml file that is required with each module. The routes will be defined into the plexis database
+                    once the module is installed from the admin panel. In this example below, you will see how routes are defined
+                </p>
+<pre class="prettyprint">&lt;module&gt;
+    &lt;routes&gt;
+        &lt;!--
+            @attribute module = The requested module from the url request (first part of the uri)
+            @attribute action = The requested action from the url request (second part of uri)
+        --&gt;
+        
+        &lt;!-- 
+            Example 1: Establish this module with the "account" module request, and "login" action
+            request. Defines which controller and method will handle this request
+        --&gt;
+        &lt;route module="account" action="login"&gt;
+            &lt;!-- Optional: defines which Controller in this module to load for this route --&gt;
+            &lt;controller&gt;Account&lt;/controller&gt;
+            
+            &lt;!-- Optional: defines which method to load in the Controller for this route --&gt;
+            &lt;method&gt;login&lt;/method&gt;
+        &lt;/route&gt;
+        
+        &lt;!-- 
+            Example 2: Establishes this module with route. Controller defaults to the module name,
+            and method defaults to the action name ("login" in this case)
+        --&gt;
+        &lt;route module="account" action="login" /&gt;
+        
+        &lt;!-- 
+            Example 3: Takes any and all actions (note the period "." in the action attribute) under the "account" 
+            module request 
+        --&gt;
+        &lt;route module="account" action="." /&gt;
+    &lt;/routes&gt;
+&lt;/module&gt;</pre>
+</div></div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>
