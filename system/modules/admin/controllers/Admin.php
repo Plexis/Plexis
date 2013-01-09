@@ -6,9 +6,11 @@ use Library\Template;
 
 class Admin extends Controller
 {
-    public function __construct()
+    
+    public function __construct($Module)
     {
-        parent::__construct(__FILE__);
+        // Construct the parent controller, providing our module object
+        parent::__construct($Module);
         Template::SetTheme('admin');
     }
     

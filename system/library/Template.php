@@ -325,7 +325,7 @@ class Template
      *
      * @return void
      */
-    public static function AddCssFile($location)
+    public static function AddStylesheet($location)
     {
         $location = trim($location);
         
@@ -346,10 +346,11 @@ class Template
      * Appends the header adding a script tag
      *
      * @param string $location The http location of the file
+     * @param string $type The script mime type, as it would be in the html script tag.
      *
      * @return void
      */
-    public static function AddJsFile($location)
+    public function AddScriptSrc($location, $type = 'text/javascript')
     {
         $location = trim($location);
         
@@ -363,7 +364,7 @@ class Template
             // Are we handling a template or plexis asset?
             $location = (file_exists($file)) ? self::$themeUrl .'/'. ltrim($location, '/') : Request::BaseUrl() .'/'. ltrim($location, '/');
         }
-        self::$headers[] = '<script type="text/javascript" src="'. $location .'"></script>';
+        self::$headers[] = '<script type="'. $type .'" src="'. $location .'"></script>';
     }
     
     /**
@@ -476,9 +477,9 @@ class Template
         $size = sizeof(self::$messages);
         foreach(self::$messages as $k => $m)
         {
-            $View->Set('level', $m[0]);
-            $View->Set('message', $m[1]);
-            $buffer .= $View->Render();
+            $View->set('level', $m[0]);
+            $View->set('message', $m[1]);
+            $buffer .= $View->render();
             if($k+1 != $size) 
                 $buffer .= PHP_EOL;
         }
@@ -548,20 +549,20 @@ class Template
         // Set variables that were set in the Template object
         $Layout = new View($contents, false);
         foreach(self::$variables as $k => $v)
-            $Layout->Set($k, $v);
+            $Layout->set($k, $v);
         
         // Now, set template default variables
-        $Layout->Set('BASE_URL', Request::BaseUrl());
-        $Layout->Set('SITE_URL', SITE_URL);
-        $Layout->Set('TEMPLATE_URL', self::$themeUrl);
-        $Layout->Set('TEMPLATE_NAME', self::$themeConfig->info->name);
-        $Layout->Set('TEMPLATE_AUTHOR', self::$themeConfig->info->author);
-        $Layout->Set('TEMPLATE_CODED_BY', self::$themeConfig->info->coded_by);
-        $Layout->Set('TEMPLATE_COPYRIGHT', self::$themeConfig->info->copyright);
-        $Layout->Set('config', Config::FetchVars('Plexis'));
+        $Layout->set('BASE_URL', Request::BaseUrl());
+        $Layout->set('SITE_URL', SITE_URL);
+        $Layout->set('TEMPLATE_URL', self::$themeUrl);
+        $Layout->set('TEMPLATE_NAME', self::$themeConfig->info->name);
+        $Layout->set('TEMPLATE_AUTHOR', self::$themeConfig->info->author);
+        $Layout->set('TEMPLATE_CODED_BY', self::$themeConfig->info->coded_by);
+        $Layout->set('TEMPLATE_COPYRIGHT', self::$themeConfig->info->copyright);
+        $Layout->set('config', Config::FetchVars('Plexis'));
         
         // Return the rendered data
-        return preg_replace('/<!--#.*#-->/iUs', '', $Layout->Render());
+        return preg_replace('/<!--#.*#-->/iUs', '', $Layout->render());
     }
 
 }

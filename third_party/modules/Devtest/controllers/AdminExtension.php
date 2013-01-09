@@ -5,7 +5,7 @@
 | ---------------------------------------------------------------
 */
 
-class Devtest 
+class AdminExtension
 {
 
 /*
@@ -13,18 +13,10 @@ class Devtest
 | Constructor
 | ---------------------------------------------------------------
 */
-    public function __construct()
+    public function __construct($Module)
     {
-        /* 
-            We cannot construct the core controller because the
-            Admin panel is loading these functions... so we create
-            our own module Constructor. You just need to load what 
-            is required to run the install() and uninstall() methods
-        */
-        
-        // In this example, we manually load the loader and database classes
-        $this->load = load_class('Loader');
-        $this->DB = $this->load->database( 'DB' );
+        // Construct the parent controller, providing our module object
+        parent::__construct($Module);
     }
 
 /*

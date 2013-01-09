@@ -303,10 +303,10 @@ class FileInfo
                 if($isWindows)
                 {
                     // Check for windows COM
-                    if(class_exists("COM")) 
+                    if(class_exists("COM", false)) 
                     {
                         $fsobj = new COM('Scripting.FileSystemObject');
-                        $f = $fsobj->GetFile(realpath($this->filepath));
+                        $f = $fsobj->GetFile(truePath($this->filepath));
                         $total_size = (float) $f->Size;
                     } 
                     else 

@@ -49,16 +49,22 @@ class Controller
     /**
      * Sets up the correct $modulePath and $moduleName variables
      *
-     * @param string $path The child module root path
+     * @param string $Module The Module object of the child Module. Not to be
+     *   confused with the child controller, but the argument passed to the chile
+     *   controller.
      *
      * @return void
      */
-    public function __construct($path) 
+    public function __construct($Module) 
     {
-        $this->modulePath = dirname(dirname($path));
+        // Define all our paths for this module
+        $this->moduleName = $Module->getName();
+        $this->modulePath = $Module->getRootPath();
         $this->moduleUri = str_replace(array(ROOT, DS), array('', '/'), $this->modulePath);
-        $parts = explode(DS, $this->modulePath);
-        $this->moduleName = end($parts);
+        
+        // Disable template rendering in Ajax mode
+        if(Request::IsAjax())
+            Plexis::RenderTemplate(false);
     }
     
     /**
@@ -90,9 +96,14 @@ class Controller
         // Init a reflection clas
         $class = false;
         try {
-            $Reflection = new \ReflectionClass($name);
-            if($Reflection->hasMethod('__construct') && !empty($params))
-                $class = $Reflection->newInstanceArgs($params);
+            if(!empty($params))
+            {
+                $Reflection = new \ReflectionClass($name);
+                if($Reflection->hasMethod('__construct'))
+                    $class = $Reflection->newInstanceArgs($params);
+                else
+                    $class = new $name();
+            }
             else
                 $class = new $name();
         }
@@ -220,9 +231,9 @@ class Controller
      *
      * @return void
      */
-    protected function addCssFile($name)
+    protected function addStylesheet($name)
     {
-        Template::AddCssFile($this->moduleUri .'/css/'. $name .'.css');
+        Template::AddStylesheet($this->moduleUri .'/css/'. $name .'.css');
     }
     
     /**
@@ -349,4 +360,15 @@ class Controller
             }
         }
     }
+    
+    /**
+     * Tells the Core Controller whether or not to throw exceptions.
+     *
+     * @param bool $bool Do we throw exceptions?
+     *
+     * @return void
+     *
+     * @todo Finish this option to throw exceptions in the main controller
+     */
+    protected function throwExceptions($bool) {}
 }

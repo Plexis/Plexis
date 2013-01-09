@@ -19,16 +19,52 @@ namespace Core;
  */
 class Request
 {
-    // Protocols
+    /**
+     * HTTP protocol method
+     * @var string
+     */
     const PROTOCOL_HTTP = 'http';
+    
+    /**
+     * HTTPS protocol method
+     * @var string
+     */
     const PROTOCOL_HTTPS = 'https';
+    
+    /**
+     * FTP protocol method
+     * @var string
+     */
     const PROTOCOL_FTP = 'ftp';
+    
+    /**
+     * SSL protocol method
+     * @var string
+     */
     const PROTOCOL_SSL = 'ssl';
     
-    // Request methods
+    /**
+     * POST method
+     * @var string
+     */
     const METHOD_POST = 'POST';
+    
+    /**
+     * GET method
+     * @var string
+     */
     const METHOD_GET = 'GET';
+    
+    /**
+     * PUT method
+     * @var string
+     */
     const METHOD_PUT = 'PUT';
+    
+    /**
+     * DELETE method
+     * @var string
+     */
     const METHOD_DELETE = 'DELETE';    
     
     /**
@@ -204,7 +240,10 @@ class Request
      * @todo Finish the method, and provide better description
      * @return void
      */
-    public static function Accepts($type = null){}
+    public static function Accepts($type = null)
+    {
+        
+    }
     
     /**
      * Returns a string or string[] of what languages the client accepts

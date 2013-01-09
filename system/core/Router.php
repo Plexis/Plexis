@@ -30,28 +30,10 @@ class Router
     protected static $routed = false;
     
     /**
-     * The requested module name
-     * @var string
+     * The module request object
+     * @var Module
      */
-    protected static $module;
-    
-    /**
-     * The requested controller name
-     * @var string
-     */
-    protected static $controller;
-
-    /**
-     * The requested method name
-     * @var string
-     */
-    protected static $action;
-    
-    /**
-     * A bool representing if this module is a core module
-     * @var bool
-     */
-    protected static $isCoreModule;
+    protected static $RequestModule;
     
     /**
      * The request uri
@@ -60,81 +42,24 @@ class Router
     protected static $uri;
     
     /**
-     * The querystring parameters
-     * @var string[]
-     */
-    protected static $params;
-    
-    /**
      * Returns all the url information
      *
-     * @return string[] Returns array('module' => , 'controller' => , 
-     *  'action' => , 'params' => );
+     * @return Module Returns a Core\Module object of the current request
      */
     public static function GetRequest()
     {
-        return array(
-            'isCoreModule' => self::$isCoreModule,
-            'module' => self::$module,
-            'controller' => self::$controller,
-            'action' => self::$action,
-            'params' => self::$params
-        );
+        return self::$RequestModule;
     }
     
     /**
-     * Returns the module name from the URI
+     * This method analyzes a uri string, and returns a Module object
+     * of the routed request.
      *
-     * @return string
-     */
-    public static function GetModule()
-    {
-        return self::$module;
-    }
-    
-    /**
-     * Returns the controller name from the URI
+     * @param string $uri The uri string to be routed.
      *
-     * @return string
+     * @return Module|bool Returns false if the request leads to a 404.
      */
-    public static function GetController()
-    {
-        return self::$controller;
-    }
-    
-    /**
-     * Returns the method name from the URI
-     *
-     * @return string
-     */
-    public static function GetAction()
-    {
-        return self::$action;
-    }
-    
-    /**
-     * Returns the action parameters from the URI
-     *
-     * @return string[]
-     */
-    public static function GetParams()
-    {
-        return self::$params;
-    }
-    
-    /**
-     * Returns the specified URI segement
-     *
-     * @param int $index The uri segement index
-     * @return string|bool Returns false if the URI index is out of range
-     */
-    public static function GetUriSegement($index)
-    {
-        // Make sure we've at least routed the url here;
-        if(!self::$routed) self::RouteUrl();
-        
-        return (isset(self::$uri[$index])) ? self::$uri[$index] : false;
-    }
+    public static function RouteString($uri) {}
     
     /**
      * This method analyzes the url to determine the controller / action
@@ -238,14 +163,6 @@ class Router
         // Tell the system we've routed
         self::$routed = true;  
         
-        // Make sure the first character of the controller is not an _ !
-        if( strncmp($module, '_', 1) == 0 || strncmp($action, '_', 1) == 0 )
-        {
-            // Add this to the trace
-            // \Debug::trace('Controller or action contains a private prefix "_", showing 404' , __FILE__, __LINE__);
-            \Plexis::Show404();
-        }
-        
         // Proccess routes
         $DB = Plexis::LoadDBConnection();
         $query = "SELECT `module`,`controller`,`method` FROM `pcms_routes` WHERE 
@@ -256,21 +173,18 @@ class Router
         if($route === false)
         {
             // Set static Variables
-            self::$module = $module;
-            self::$controller = (Request::IsAjax()) ? 'Ajax' : $module;
-            self::$action = $action;
-            self::$isCoreModule = true;
+            $controller = (Request::IsAjax()) ? 'Ajax' : $module;
+            $path = path( SYSTEM_PATH, 'modules', $module );
         }
         else
         {
-            self::$module = $route['module'];
-            self::$controller = (Request::IsAjax()) ? 'Ajax' : $route['controller'];
-            self::$action = ($route['method'] == '*') ? $action : $route['method'];
-            self::$isCoreModule = false;
+            $controller = (Request::IsAjax()) ? 'Ajax' : ucfirst(strtolower($route['controller']));
+            $action = ($route['method'] == '*') ? $action : $route['method'];
+            $path = path( ROOT, 'third_party', 'modules', $route['module'] );
         }
         
-        // Params are always params :p
-        self::$params = $params;
+        // Load the module request :p
+        self::$RequestModule = new Module($path, $controller, $action, $params);
         
         // Add trace for debugging
         // \Debug::trace("Url routed successfully. Found controller: ". self::$controller ."; Action: ". self::$action ."; Querystring: ". implode('/', self::$params), __FILE__, __LINE__);

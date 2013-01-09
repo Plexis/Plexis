@@ -15,10 +15,10 @@ class Account extends Controller
      */
     protected $AccountModel;
     
-    public function __construct()
+    public function __construct($Module)
     {
-        // Construct the parent controller, providing our class file path
-        parent::__construct(__FILE__);
+        // Construct the parent controller, providing our module object
+        parent::__construct($Module);
     }
     
     public function index()

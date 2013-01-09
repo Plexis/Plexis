@@ -222,7 +222,7 @@
 
                 <!-- MAIN CONTENT -->
                 <div id="left">
-                    <?php if(\Core\Router::GetController() == 'frontpage'): ?>
+                    <?php if($GLOBALS['controller'] == 'Frontpage'): ?>
                         <!-- Slide Show -->
                         <div id="slide">
                             <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/slide-1.jpg" alt="" /></a><p>Plexis, A Professional WoW CMS!</p></div>

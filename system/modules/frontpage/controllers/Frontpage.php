@@ -1,16 +1,17 @@
 <?php
 // Bring some classes into scope So we dont have to specify namespaces with each class
 use Core\Controller;
+use Core\Module;
 use Library\Template;
 use Library\View;
 use Library\ViewNotFoundException;
 
 class Frontpage extends Controller
 {
-    public function __construct()
+    public function __construct($Module)
     {
-        // Construct the parent controller, providing our class file path
-        parent::__construct(__FILE__);
+        // Construct the parent controller, providing our module object
+        parent::__construct($Module);
     }
     
     public function Index()
@@ -19,12 +20,12 @@ class Frontpage extends Controller
         try {
             // First load our page view
             $view = $this->loadView("main");
-            $view->Set('message', 'Module path: '. $this->modulePath .'<br />Module HTTP URI: '. $this->moduleUri);
+            $view->set('message', 'Module path: '. $this->modulePath .'<br />Module HTTP URI: '. $this->moduleUri);
             
             // Load a content box next, placing our module view as the contents of the box
             $box = $this->loadPartialView("contentbox");
-            $box->Set('title', 'Test Title');
-            $box->Set('contents', $view->Render());
+            $box->set('title', 'Test Title');
+            $box->set('contents', $view->render());
             
             // Add the finished content box to the template
             Template::Add($box);

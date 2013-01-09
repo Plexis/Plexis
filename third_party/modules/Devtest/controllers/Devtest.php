@@ -13,10 +13,11 @@ class Devtest extends Core\Controller
 | Constructor
 | ---------------------------------------------------------------
 */
-    public function __construct()
+    public function __construct($Module)
     {
-        // Normally construct the application controller
-        parent::__construct(__FILE__); 
+        // Construct the parent controller, providing our module object
+        parent::__construct($Module);
+        $this->module = $Module;
     }
     
 /*
@@ -58,6 +59,20 @@ class Devtest extends Core\Controller
         
         echo microtime(1) - TIME_START;
         Plexis::RenderTemplate(false);
+    }
+    
+    public function zip()
+    {
+        $path = path( SYSTEM_PATH );
+        $file = path( SYSTEM_PATH, 'system.zip' );
+        var_dump(Library\ZipArchive::ZipDirectory($path, $file));
+        Plexis::RenderTemplate(false);
+    }
+    
+    public function xml()
+    {
+        var_dump($this->module->getModuleXml());
+        die;
     }
 }
 ?>

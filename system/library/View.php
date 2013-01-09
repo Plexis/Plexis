@@ -61,7 +61,7 @@ class View
      *
      * @return void
      */
-    public function Set($name, $value = null)
+    public function set($name, $value = null)
     {
         if(is_array($name))
         {
@@ -81,17 +81,46 @@ class View
      *
      * @return void
      */
-    public function ClearVars()
+    public function clearVars()
     {
         $this->variables = array();
     }
+    
+    /**
+     * Fetches all currently set variables
+     *
+     * @return mixed[]
+     */
+    public function getVars()
+    {
+        return $this->variables;
+    }
+    
+    /**
+     * Appends the header adding a css tag
+     *
+     * @param string $location The http location of the file
+     *
+     * @return void
+     */
+    public function attachStylesheet($location) {}
+    
+    /**
+     * Appends the header adding a script tag for this view file
+     *
+     * @param string $location The http location of the file
+     * @param string $type The script mime type, as it would be in the html script tag.
+     *
+     * @return void
+     */
+    public function attachScriptScr($location, $type = 'text/javascript') {}
     
     /**
      * Returns the view's contents, un-parsed
      *
      * @return string
      */
-    public function GetContents()
+    public function getContents()
     {
         return $this->contents;
     }
@@ -108,7 +137,7 @@ class View
      *
      * @return void
      */
-    public function SetContents($contents)
+    public function setContents($contents)
     {
         // Make sure out contents are valid
         if(!is_string($contents) && !(is_object($contents) && ($contents instanceof View)))
@@ -122,7 +151,7 @@ class View
      *
      * @return string
      */
-    public function Render()
+    public function render()
     {
         if(!empty($this->variables))
         {

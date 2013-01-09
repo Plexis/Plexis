@@ -64,33 +64,55 @@ class Benchmark
      */
     public static function Stop($name)
     {
-        self::$stop[$name] = microtime(true);
+        if(!isset(self::$stop[$name]))
+            self::$stop[$name] = microtime(true);
     }
 
     /**
      * Returns the final time from start to finish for a benchmark
      *
      * @param string $name The name given for this benchmark timer
-     * @param int $round How many numbers after the "." do we show?
+     * @param int $decimals How many numbers after the "." do we show?
      * @param bool $stop Stop the timer as well?
      * @return float|bool The time it took from start to finish. FALSE
      * if no timer was set in the first place.
      */
-    public static function ElapsedTime($name, $round = 3, $stop = FALSE)
+    public static function ElapsedTime($name, $decimals = 3, $stop = false)
     {
         if(!isset(self::$start[$name]))
         {
             // show_error('benchmark_key_not_found', array($name), E_WARNING);
-            return FALSE;
+            return true;
         }
         else
         {
-            if(!isset(self::$stop[$name]) && $stop == TRUE)
+            if(!isset(self::$stop[$name]) && $stop == true)
             {
                 self::$stop[$name] = microtime(true);
             }
-            return round( (microtime(true) - self::$start[$name]), $round );
+            return round( (microtime(true) - self::$start[$name]), $decimals );
         }
+    }
+    
+    /**
+     * Returns the an array of all registered benchmarks, and thier times.
+     *
+     * @param int $decimals How many numbers after the "." do we show?
+     * @param bool $stopAll Stop the timer for all benchmarks as well?
+     * @return float|bool The time it took from start to finish. 
+     */
+    public static function FetchAll($decimals, $stopAll = false)
+    {
+        $profiles = array();
+        $time = microtime(true);
+        foreach(self::$start as $bench)
+        {
+            if(!isset(self::$stop[$name]) && $stopAll == true)
+                self::$stop[$bench] = $time;
+                
+            $profiles[$bench] = round( ($time - self::$start[$bench]), $decimals );
+        }
+        return $profiles;
     }
     
     /**

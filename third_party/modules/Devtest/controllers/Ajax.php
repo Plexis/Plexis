@@ -13,11 +13,10 @@ class Ajax extends Core\Controller
 | Constructor
 | ---------------------------------------------------------------
 */
-    public function __construct()
+    public function __construct($Module)
     {
-        // Normally construct the application controller
-        parent::__construct(__FILE__); 
-        Plexis::RenderTemplate(false);
+        // Construct the parent controller, providing our module object
+        parent::__construct($Module);
     }
     
 /*

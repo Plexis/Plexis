@@ -44,10 +44,10 @@ class Plexis
     private static $isRunning = false;
     
     /**
-     * Declares the root controller path for the current module
-     * @var string
+     * Holds the current module object, false if the module isn't yet dispatched
+     * @var Core\Module|bool
      */
-    public static $modulePath;
+    public static $module = false;
     
     /**
      * Holds the plexis Logger object
@@ -318,24 +318,15 @@ class Plexis
     protected static function RunModule()
     {
         // Get URL info
-        $Request = Router::GetRequest();
+        $Module = self::$module = Router::GetRequest();
         
-        $GLOBALS['controller'] = $Request['module'];
-        $GLOBALS['action'] = $Request['action'];
-        $GLOBALS['querystring'] = $Request['params'];
-        
-        // Define out module path, and our module controller path
-        if($Request['isCoreModule'])
-            self::$modulePath = path( SYSTEM_PATH, 'modules', strtolower($Request['module']) );
-        else
-            self::$modulePath = path( ROOT, 'third_party', 'modules', strtolower($Request['module']) );
-            
-        // Set our controller path with the dispatcher
-        Dispatch::SetControllerPath( path(self::$modulePath, 'controllers') );
+        $GLOBALS['controller'] = $Module->getControllerName();
+        $GLOBALS['action'] = $Module->getActionName();
+        $GLOBALS['querystring'] = $Module->getActionParams();
         
         // Try to execute the controller, and catch any 404 error
         try {
-            Dispatch::Execute();
+            $Module->dispatch();
         }
         catch( NotFoundException $e ) {
             self::Show404();

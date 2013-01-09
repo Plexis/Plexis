@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <info>
+        <name>Plexis Dev Test Module</name>
+        <author>Plexis Dev Team</author>
+        <authorEmail />
+        <authorUrl />
+        <copyright />
+        <version>1.0.0</version>
+    </info>
+    
+    <!-- Array of routes to establish or override -->
+    <routes>
+        <!--
+            @attribute module = The requested module from the url request (first part of the uri)
+            @attribute action = The requested action from the url request (second part of uri)
+            
+            Take any and all actions to the Devtest module request
+        -->
+        <route module="devtest" action="." />
+    </routes>
+</module>
