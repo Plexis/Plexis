@@ -3513,11 +3513,11 @@ about the file.</description>
       </method>
     </class>
   </file>
-  <file path="system\core\Module.php" hash="d497afc76af4441ca99f23fe790ee45a" package="Default">
+  <file path="system\core\Module.php" hash="813b9cacd44ce019f8cfab7e9980f65b" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
-      <long-description></long-description>
-      <tag line="2" name="file" description="System/Core/Dispatch.php"/>
+      <long-description/>
+      <tag line="2" name="file" description="System/Core/Module.php"/>
       <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
       <tag line="2" name="license" description="GNU GPL v3"/>
       <tag line="2" name="contains" description="Module"/>
@@ -3532,16 +3532,16 @@ about the file.</description>
       <docblock line="12">
         <description>The module class is used to hold information about, as well as execute its action
 methods upon request.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="12" name="author" description="Steven Wilson"/>
         <tag line="12" name="package" description="Core"/>
       </docblock>
       <property final="false" static="false" visibility="protected" line="25" namespace="Core" package="Default">
         <name>$name</name>
-        <default></default>
+        <default/>
         <docblock line="21">
           <description>The module name</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="21" name="var" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3549,10 +3549,10 @@ methods upon request.</description>
       </property>
       <property final="false" static="false" visibility="protected" line="31" namespace="Core" package="Default">
         <name>$rootPath</name>
-        <default></default>
+        <default/>
         <docblock line="27">
           <description>The root path to the module</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="27" name="var" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3560,10 +3560,10 @@ methods upon request.</description>
       </property>
       <property final="false" static="false" visibility="protected" line="37" namespace="Core" package="Default">
         <name>$controller</name>
-        <default></default>
+        <default/>
         <docblock line="33">
           <description>The controller class name</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="33" name="var" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3571,10 +3571,10 @@ methods upon request.</description>
       </property>
       <property final="false" static="false" visibility="protected" line="43" namespace="Core" package="Default">
         <name>$action</name>
-        <default></default>
+        <default/>
         <docblock line="39">
           <description>The method to be called in the controller class</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="39" name="var" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3582,10 +3582,10 @@ methods upon request.</description>
       </property>
       <property final="false" static="false" visibility="protected" line="49" namespace="Core" package="Default">
         <name>$params</name>
-        <default></default>
+        <default/>
         <docblock line="45">
           <description>Arrat of parameters to be passed to the action method</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="45" name="var" description="" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
@@ -3593,10 +3593,10 @@ methods upon request.</description>
       </property>
       <property final="false" static="false" visibility="protected" line="55" namespace="Core" package="Default">
         <name>$isCoreModule</name>
-        <default></default>
+        <default/>
         <docblock line="51">
           <description>Used to determine if the module is a Plexis core module</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="51" name="var" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -3604,10 +3604,10 @@ methods upon request.</description>
       </property>
       <property final="false" static="false" visibility="protected" line="61" namespace="Core" package="Default">
         <name>$xml</name>
-        <default></default>
+        <default/>
         <docblock line="57">
           <description>If the module.xml has been requested, its XMLObject is stored here.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="57" name="var" description="" type="Object">
             <type by_reference="false">Object</type>
           </tag>
@@ -3618,7 +3618,7 @@ methods upon request.</description>
         <full_name>__construct</full_name>
         <docblock line="63">
           <description>Module Constructor.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="63" name="param" description="The root path to the module directory (can be a relative path from cms root)" type="string" variable="$path">
             <type by_reference="false">string</type>
           </tag>
@@ -3634,7 +3634,7 @@ methods upon request.</description>
         </docblock>
         <argument line="71">
           <name>$path</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="71">
@@ -3654,11 +3654,11 @@ methods upon request.</description>
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="96" package="Core">
-        <name>dispatch</name>
-        <full_name>dispatch</full_name>
+        <name>invoke</name>
+        <full_name>invoke</full_name>
         <docblock line="86">
           <description>This method executes the controller and action</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="86" name="throws" description="Thrown ifthe controller or action variables were never set, or empty." type="\Exception">
             <type by_reference="false">\Exception</type>
           </tag>
@@ -3678,7 +3678,7 @@ methods upon request.</description>
         <full_name>isCoreModule</full_name>
         <docblock line="132">
           <description>Returns whehter the module is a Plexis Core Module</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="132" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -3689,7 +3689,7 @@ methods upon request.</description>
         <full_name>getName</full_name>
         <docblock line="142">
           <description>Returns the modules name</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="142" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3700,7 +3700,7 @@ methods upon request.</description>
         <full_name>getRootPath</full_name>
         <docblock line="152">
           <description>Returns the path to the modules root folder</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="152" name="return" description="Returns the set controller path, or false&#13;&#10;  if the path isnt set" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3711,7 +3711,7 @@ methods upon request.</description>
         <full_name>getControllerName</full_name>
         <docblock line="163">
           <description>Returns the current set module controller name</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="163" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3723,7 +3723,7 @@ methods upon request.</description>
         <docblock line="173">
           <description>Returns the current set action (method) to be called when the
 controller is to be dispatched</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="173" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3735,7 +3735,7 @@ controller is to be dispatched</description>
         <docblock line="184">
           <description>Returns an array of params to be passed to the controller's action
 method when dispatched.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="184" name="return" description="" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
@@ -3746,9 +3746,9 @@ method when dispatched.</description>
         <full_name>getModuleXml</full_name>
         <docblock line="195">
           <description>Returns the data stored in the Modules XML file.</description>
-          <long-description></long-description>
-          <tag line="195" name="return" description="Returns an object of class SimpleXMLElement with properties&#13;&#10;  containing the data held within the XML document" type="\Core\SimpleXMLElement">
-            <type by_reference="false">\Core\SimpleXMLElement</type>
+          <long-description/>
+          <tag line="195" name="return" description="Returns an object of class SimpleXMLElement with properties&#13;&#10;  containing the data held within the XML document" type="\SimpleXMLElement">
+            <type by_reference="false">\SimpleXMLElement</type>
           </tag>
         </docblock>
       </method>
@@ -3757,7 +3757,7 @@ method when dispatched.</description>
         <full_name>setControllerName</full_name>
         <docblock line="209">
           <description>Sets the controller name, overriding the controller the router finds</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="209" name="param" description="The name of the controller to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
@@ -3767,7 +3767,7 @@ method when dispatched.</description>
         </docblock>
         <argument line="216">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3776,7 +3776,7 @@ method when dispatched.</description>
         <full_name>setActionName</full_name>
         <docblock line="221">
           <description>Sets the action name, overriding the action the router finds</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="221" name="param" description="The name of the action to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
@@ -3786,7 +3786,7 @@ method when dispatched.</description>
         </docblock>
         <argument line="228">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3795,7 +3795,7 @@ method when dispatched.</description>
         <full_name>setActionParams</full_name>
         <docblock line="233">
           <description>Sets the actions' parameters, overriding the params the router finds</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="233" name="param" description="- An array of params to pass to the action" type="string[]" variable="$params">
             <type by_reference="false">string[]</type>
           </tag>
@@ -3805,7 +3805,7 @@ method when dispatched.</description>
         </docblock>
         <argument line="240">
           <name>$params</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4774,10 +4774,10 @@ body buffer</description>
       </docblock>
     </class>
   </file>
-  <file path="system\core\Router.php" hash="55bb0d955aacb8190c8bfe3b1c4680d7" package="Default">
+  <file path="system\core\Router.php" hash="0c3def8ca7b8ec8e47a673bc0b273276" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
-      <long-description/>
+      <long-description></long-description>
       <tag line="2" name="file" description="System/Core/Router.php"/>
       <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
       <tag line="2" name="license" description="GNU GPL v3"/>
@@ -4801,7 +4801,7 @@ Dispatch class will use.&lt;/p&gt;</long-description>
         <default>false</default>
         <docblock line="26">
           <description>Have we routed the url yet?</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="26" name="var" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -4809,23 +4809,23 @@ Dispatch class will use.&lt;/p&gt;</long-description>
       </property>
       <property final="false" static="true" visibility="protected" line="36" namespace="Core" package="Default">
         <name>$RequestModule</name>
-        <default/>
+        <default></default>
         <docblock line="32">
           <description>The module request object</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="32" name="var" description="" type="\Core\Module">
             <type by_reference="false">\Core\Module</type>
           </tag>
         </docblock>
       </property>
       <property final="false" static="true" visibility="protected" line="42" namespace="Core" package="Default">
-        <name>$uri</name>
-        <default/>
+        <name>$DB</name>
+        <default></default>
         <docblock line="38">
-          <description>The request uri</description>
-          <long-description/>
-          <tag line="38" name="var" description="" type="string">
-            <type by_reference="false">string</type>
+          <description>The Plexis Database Object</description>
+          <long-description></long-description>
+          <tag line="38" name="var" description="" type="\Database\Driver">
+            <type by_reference="false">\Database\Driver</type>
           </tag>
         </docblock>
       </property>
@@ -4833,8 +4833,8 @@ Dispatch class will use.&lt;/p&gt;</long-description>
         <name>GetRequest</name>
         <full_name>GetRequest</full_name>
         <docblock line="44">
-          <description>Returns all the url information</description>
-          <long-description/>
+          <description>Fetches the current request in a \Core\Module object</description>
+          <long-description></long-description>
           <tag line="44" name="return" description="Returns a Core\Module object of the current request" type="\Core\Module">
             <type by_reference="false">\Core\Module</type>
           </tag>
@@ -4846,7 +4846,7 @@ Dispatch class will use.&lt;/p&gt;</long-description>
         <docblock line="54">
           <description>This method analyzes a uri string, and returns a Module object
 of the routed request.</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="54" name="param" description="The uri string to be routed." type="string" variable="$uri">
             <type by_reference="false">string</type>
           </tag>
@@ -4857,18 +4857,102 @@ of the routed request.</description>
         </docblock>
         <argument line="62">
           <name>$uri</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="70" package="Core">
-        <name>RouteUrl</name>
-        <full_name>RouteUrl</full_name>
-        <docblock line="64">
-          <description>This method analyzes the url to determine the controller / action
-and query string</description>
-          <long-description/>
-          <tag line="64" name="return" description="" type="void">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="126" package="Core">
+        <name>AddRoute</name>
+        <full_name>AddRoute</full_name>
+        <docblock line="117">
+          <description>Adds a new route rule in the database for future route matching</description>
+          <long-description></long-description>
+          <tag line="117" name="param" description="The Module object for the module we are appending routes for" type="\Core\Module" variable="$module">
+            <type by_reference="false">\Core\Module</type>
+          </tag>
+          <tag line="117" name="param" description="The request module (first part of the URI)" type="string" variable="$reqModule">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="117" name="param" description="The request action, or an array or request actions." type="string|string[]" variable="$reqAction">
+            <type by_reference="false">string</type>
+            <type by_reference="false">string[]</type>
+          </tag>
+          <tag line="117" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="126">
+          <name>$module</name>
+          <default></default>
+          <type>\Core\Module</type>
+        </argument>
+        <argument line="126">
+          <name>$reqModule</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="126">
+          <name>$reqAction</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="141" package="Core">
+        <name>MatchRoute</name>
+        <full_name>MatchRoute</full_name>
+        <docblock line="132">
+          <description>Checks a module and action for a matching route.</description>
+          <long-description></long-description>
+          <tag line="132" name="param" description="The requested module" type="string" variable="$module">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="132" name="param" description="The requested action" type="string" variable="$action">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="132" name="return" description="Returns false if there is no database route,&#13;&#10;  or if the module matched does not exist." type="\Core\Module|bool">
+            <type by_reference="false">\Core\Module</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="141">
+          <name>$module</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="141">
+          <name>$action</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="177" package="Core">
+        <name>FetchRoutes</name>
+        <full_name>FetchRoutes</full_name>
+        <docblock line="167">
+          <description>Returns an array of routes for a defined module</description>
+          <long-description></long-description>
+          <tag line="167" name="param" description="The requested module" type="string" variable="$module">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="167" name="return" description="Returns a two dimensional array. foreach array&#13;&#10;  key, the index key is the first 2 parts of the URI routed, and the&#13;&#10;  the value is an array of ('controller' =&gt; controller, 'method' =&gt; method).&#13;&#10;  Returns an empty array if there are not routes for the defined module." type="array[]">
+            <type by_reference="false">array[]</type>
+          </tag>
+        </docblock>
+        <argument line="177">
+          <name>$module</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="204" package="Core">
+        <name>Init</name>
+        <full_name>Init</full_name>
+        <docblock line="197">
+          <description>This method analyzes the current URL request, and loads the
+module in which claims the URL route.</description>
+          <long-description>&lt;p&gt;This method is called
+automatically, and will not do anything if called again.&lt;/p&gt;</long-description>
+          <tag line="197" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
@@ -7083,7 +7167,7 @@ the final rendered template.</description>
       </method>
     </class>
   </file>
-  <file path="system\Plexis.php" hash="d0a6080099829f6aaaf88d579a7c1675" package="System">
+  <file path="system\Plexis.php" hash="1c46fc58d7a14dfa4b530ad582dff7f5" package="System">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description/>

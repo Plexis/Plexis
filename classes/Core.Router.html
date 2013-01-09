@@ -50,13 +50,16 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_GetRequest" title="GetRequest :: Returns all the url information"><span class="description">Returns all the url information</span><pre>GetRequest()</pre></a></li>
+<li class="method public "><a href="#method_AddRoute" title="AddRoute :: Adds a new route rule in the database for future route matching"><span class="description">Adds a new route rule in the database for future route matching</span><pre>AddRoute()</pre></a></li>
+<li class="method public "><a href="#method_FetchRoutes" title="FetchRoutes :: Returns an array of routes for a defined module"><span class="description">Returns an array of routes for a defined module</span><pre>FetchRoutes()</pre></a></li>
+<li class="method public "><a href="#method_GetRequest" title="GetRequest :: Fetches the current request in a \Core\Module object"><span class="description">Fetches the current request in a \Core\Module object</span><pre>GetRequest()</pre></a></li>
+<li class="method public "><a href="#method_Init" title="Init :: This method analyzes the current URL request, and loads the
+module in which claims the URL route."><span class="description">This method analyzes the current URL request, and loads the
+module in which claims the URL route.</span><pre>Init()</pre></a></li>
+<li class="method public "><a href="#method_MatchRoute" title="MatchRoute :: Checks a module and action for a matching route."><span class="description">Checks a module and action for a matching route.</span><pre>MatchRoute()</pre></a></li>
 <li class="method public "><a href="#method_RouteString" title="RouteString :: This method analyzes a uri string, and returns a Module object
 of the routed request."><span class="description">This method analyzes a uri string, and returns a Module object
 of the routed request.</span><pre>RouteString()</pre></a></li>
-<li class="method public "><a href="#method_RouteUrl" title="RouteUrl :: This method analyzes the url to determine the controller / action
-and query string"><span class="description">This method analyzes the url to determine the controller / action
-and query string</span><pre>RouteUrl()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -65,9 +68,9 @@ and query string</span><pre>RouteUrl()</pre></a></li>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
+<li class="property protected "><a href="#property_DB" title="$DB :: The Plexis Database Object"><span class="description"></span><pre>$DB</pre></a></li>
 <li class="property protected "><a href="#property_RequestModule" title="$RequestModule :: The module request object"><span class="description"></span><pre>$RequestModule</pre></a></li>
 <li class="property protected "><a href="#property_routed" title="$routed :: Have we routed the url yet?"><span class="description"></span><pre>$routed</pre></a></li>
-<li class="property protected "><a href="#property_uri" title="$uri :: The request uri"><span class="description"></span><pre>$uri</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -101,8 +104,45 @@ Dispatch class will use.</p></div>
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_AddRoute"></a><div class="element clickable method public method_AddRoute" data-toggle="collapse" data-target=".method_AddRoute .collapse">
+<h2>Adds a new route rule in the database for future route matching</h2>
+<pre>AddRoute(\Core\Module $module, string $reqModule, string | string[] $reqAction) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$module</h4>
+<code><a href="../classes/Core.Module.html">\Core\Module</a></code><p>The Module object for the module we are appending routes for</p></div>
+<div class="subelement argument">
+<h4>$reqModule</h4>
+<code>string</code><p>The request module (first part of the URI)</p>
+</div>
+<div class="subelement argument">
+<h4>$reqAction</h4>
+<code>string</code><code>string[]</code><p>The request action, or an array or request actions.</p></div>
+</div></div>
+</div>
+<a id="method_FetchRoutes"></a><div class="element clickable method public method_FetchRoutes" data-toggle="collapse" data-target=".method_FetchRoutes .collapse">
+<h2>Returns an array of routes for a defined module</h2>
+<pre>FetchRoutes(string $module) : array[]</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$module</h4>
+<code>string</code><p>The requested module</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array[]</code>Returns a two dimensional array. foreach array
+  key, the index key is the first 2 parts of the URI routed, and the
+  the value is an array of ('controller' => controller, 'method' => method).
+  Returns an empty array if there are not routes for the defined module.</div>
+</div></div>
+</div>
 <a id="method_GetRequest"></a><div class="element clickable method public method_GetRequest" data-toggle="collapse" data-target=".method_GetRequest .collapse">
-<h2>Returns all the url information</h2>
+<h2>Fetches the current request in a \Core\Module object</h2>
 <pre>GetRequest() : <a href="../classes/Core.Module.html">\Core\Module</a></pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -110,6 +150,33 @@ Dispatch class will use.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/Core.Module.html">\Core\Module</a></code>Returns a Core\Module object of the current request</div>
+</div></div>
+</div>
+<a id="method_Init"></a><div class="element clickable method public method_Init" data-toggle="collapse" data-target=".method_Init .collapse">
+<h2>This method analyzes the current URL request, and loads the
+module in which claims the URL route.</h2>
+<pre>Init() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>This method is called
+automatically, and will not do anything if called again.</p></div></div></div>
+</div>
+<a id="method_MatchRoute"></a><div class="element clickable method public method_MatchRoute" data-toggle="collapse" data-target=".method_MatchRoute .collapse">
+<h2>Checks a module and action for a matching route.</h2>
+<pre>MatchRoute(string $module, string $action) : <a href="../classes/Core.Module.html">\Core\Module</a> | bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$module</h4>
+<code>string</code><p>The requested module</p></div>
+<div class="subelement argument">
+<h4>$action</h4>
+<code>string</code><p>The requested action</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/Core.Module.html">\Core\Module</a></code><code>bool</code>Returns false if there is no database route,
+  or if the module matched does not exist.</div>
 </div></div>
 </div>
 <a id="method_RouteString"></a><div class="element clickable method public method_RouteString" data-toggle="collapse" data-target=".method_RouteString .collapse">
@@ -128,15 +195,14 @@ of the routed request.</h2>
 <code><a href="../classes/Core.Module.html">\Core\Module</a></code><code>bool</code>Returns false if the request leads to a 404.</div>
 </div></div>
 </div>
-<a id="method_RouteUrl"></a><div class="element clickable method public method_RouteUrl" data-toggle="collapse" data-target=".method_RouteUrl .collapse">
-<h2>This method analyzes the url to determine the controller / action
-and query string</h2>
-<pre>RouteUrl() : void</pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_DB"> </a><div class="element clickable property protected property_DB" data-toggle="collapse" data-target=".property_DB .collapse">
+<h2>The Plexis Database Object</h2>
+<pre>$DB : <a href="../classes/Database.Driver.html">\Database\Driver</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_RequestModule"> </a><div class="element clickable property protected property_RequestModule" data-toggle="collapse" data-target=".property_RequestModule .collapse">
 <h2>The module request object</h2>
 <pre>$RequestModule : <a href="../classes/Core.Module.html">\Core\Module</a></pre>
@@ -146,12 +212,6 @@ and query string</h2>
 <a id="property_routed"> </a><div class="element clickable property protected property_routed" data-toggle="collapse" data-target=".property_routed .collapse">
 <h2>Have we routed the url yet?</h2>
 <pre>$routed : bool</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="property_uri"> </a><div class="element clickable property protected property_uri" data-toggle="collapse" data-target=".property_uri .collapse">
-<h2>The request uri</h2>
-<pre>$uri : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

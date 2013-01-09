@@ -51,7 +51,6 @@
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
 <li class="method public "><a href="#method___construct" title="__construct :: Module Constructor."><span class="description">Module Constructor.</span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_dispatch" title="dispatch :: This method executes the controller and action"><span class="description">This method executes the controller and action</span><pre>dispatch()</pre></a></li>
 <li class="method public "><a href="#method_getActionName" title="getActionName :: Returns the current set action (method) to be called when the
 controller is to be dispatched"><span class="description">Returns the current set action (method) to be called when the
 controller is to be dispatched</span><pre>getActionName()</pre></a></li>
@@ -62,6 +61,7 @@ method when dispatched.</span><pre>getActionParams()</pre></a></li>
 <li class="method public "><a href="#method_getModuleXml" title="getModuleXml :: Returns the data stored in the Modules XML file."><span class="description">Returns the data stored in the Modules XML file.</span><pre>getModuleXml()</pre></a></li>
 <li class="method public "><a href="#method_getName" title="getName :: Returns the modules name"><span class="description">Returns the modules name</span><pre>getName()</pre></a></li>
 <li class="method public "><a href="#method_getRootPath" title="getRootPath :: Returns the path to the modules root folder"><span class="description">Returns the path to the modules root folder</span><pre>getRootPath()</pre></a></li>
+<li class="method public "><a href="#method_invoke" title="invoke :: This method executes the controller and action"><span class="description">This method executes the controller and action</span><pre>invoke()</pre></a></li>
 <li class="method public "><a href="#method_isCoreModule" title="isCoreModule :: Returns whehter the module is a Plexis Core Module"><span class="description">Returns whehter the module is a Plexis Core Module</span><pre>isCoreModule()</pre></a></li>
 <li class="method public "><a href="#method_setActionName" title="setActionName :: Sets the action name, overriding the action the router finds"><span class="description">Sets the action name, overriding the action the router finds</span><pre>setActionName()</pre></a></li>
 <li class="method public "><a href="#method_setActionParams" title="setActionParams :: Sets the actions' parameters, overriding the params the router finds"><span class="description">Sets the actions' parameters, overriding the params the router finds</span><pre>setActionParams()</pre></a></li>
@@ -137,33 +137,6 @@ methods upon request.</p>
 <code>string[]</code><p>The arguments to be passed to the method when dispatched.</p></div>
 </div></div>
 </div>
-<a id="method_dispatch"></a><div class="element clickable method public method_dispatch" data-toggle="collapse" data-target=".method_dispatch .collapse">
-<h2>This method executes the controller and action</h2>
-<pre>dispatch() : object</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Exceptions</h3>
-<table class="table table-bordered">
-<tr>
-<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
-<td>Thrown ifthe controller or action variables were never set, or empty.</td>
-</tr>
-<tr>
-<th><code><a href="../classes/ControllerNotFoundException.html">\ControllerNotFoundException</a></code></th>
-<td>when the controller file cant be found</td>
-</tr>
-<tr>
-<th><code><a href="../classes/MethodNotFoundException.html">\MethodNotFoundException</a></code></th>
-<td>when the controller doesnt have the given action,
-  or the action method is not a public method</td>
-</tr>
-</table>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>object</code>Returns the module controller object</div>
-</div></div>
-</div>
 <a id="method_getActionName"></a><div class="element clickable method public method_getActionName" data-toggle="collapse" data-target=".method_getActionName .collapse">
 <h2>Returns the current set action (method) to be called when the
 controller is to be dispatched</h2>
@@ -198,13 +171,13 @@ method when dispatched.</h2>
 </div>
 <a id="method_getModuleXml"></a><div class="element clickable method public method_getModuleXml" data-toggle="collapse" data-target=".method_getModuleXml .collapse">
 <h2>Returns the data stored in the Modules XML file.</h2>
-<pre>getModuleXml() : \Core\SimpleXMLElement</pre>
+<pre>getModuleXml() : <a href="http://php.net/manual/en/class.simplexmlelement.php">\SimpleXMLElement</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>\Core\SimpleXMLElement</code>Returns an object of class SimpleXMLElement with properties
+<code><a href="http://php.net/manual/en/class.simplexmlelement.php">\SimpleXMLElement</a></code>Returns an object of class SimpleXMLElement with properties
   containing the data held within the XML document</div>
 </div></div>
 </div>
@@ -228,6 +201,33 @@ method when dispatched.</h2>
 <div class="subelement response">
 <code>string</code>Returns the set controller path, or false
   if the path isnt set</div>
+</div></div>
+</div>
+<a id="method_invoke"></a><div class="element clickable method public method_invoke" data-toggle="collapse" data-target=".method_invoke .collapse">
+<h2>This method executes the controller and action</h2>
+<pre>invoke() : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered">
+<tr>
+<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
+<td>Thrown ifthe controller or action variables were never set, or empty.</td>
+</tr>
+<tr>
+<th><code><a href="../classes/ControllerNotFoundException.html">\ControllerNotFoundException</a></code></th>
+<td>when the controller file cant be found</td>
+</tr>
+<tr>
+<th><code><a href="../classes/MethodNotFoundException.html">\MethodNotFoundException</a></code></th>
+<td>when the controller doesnt have the given action,
+  or the action method is not a public method</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Returns the module controller object</div>
 </div></div>
 </div>
 <a id="method_isCoreModule"></a><div class="element clickable method public method_isCoreModule" data-toggle="collapse" data-target=".method_isCoreModule .collapse">
