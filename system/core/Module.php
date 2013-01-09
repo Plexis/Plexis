@@ -2,7 +2,7 @@
 /**
  * Plexis Content Management System
  *
- * @file        System/Core/Dispatch.php
+ * @file        System/Core/Module.php
  * @copyright   2011-2012, Plexis Dev Team
  * @license     GNU GPL v3
  * @contains    Module
@@ -93,7 +93,7 @@ class Module
      *
      * @return object Returns the module controller object
      */
-    public function dispatch()
+    public function invoke()
     {
         // Make sure the controller is not empty
         if(empty($this->controller))
@@ -195,7 +195,7 @@ class Module
     /**
      * Returns the data stored in the Modules XML file.
      *
-     * @return SimpleXMLElement Returns an object of class SimpleXMLElement with properties 
+     * @return \SimpleXMLElement Returns an object of class SimpleXMLElement with properties 
      *   containing the data held within the XML document
      */
     public function getModuleXml()

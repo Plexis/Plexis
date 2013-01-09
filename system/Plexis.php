@@ -326,7 +326,7 @@ class Plexis
         
         // Try to execute the controller, and catch any 404 error
         try {
-            $Module->dispatch();
+            $Module->invoke();
         }
         catch( NotFoundException $e ) {
             self::Show404();

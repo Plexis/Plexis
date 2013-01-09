@@ -9,10 +9,6 @@
         <version>1.0.0</version>
     </info>
     
-    <config>
-        <admin>true</admin>
-    </config>
-    
     <!-- Array of routes to establish or override -->
     <routes>
         <!--
