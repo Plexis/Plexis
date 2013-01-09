@@ -231,11 +231,18 @@ CREATE TABLE `pcms_routes` (
   `action_param` varchar(20) NOT NULL,
   `module` varchar(20) NOT NULL,
   `controller` varchar(20) NOT NULL,
-  `method` varchar(20) NOT NULL
+  `method` varchar(20) NOT NULL,
+  `core` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Is this a core module?'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Table structure for `pcms_routes`
 -- ----------------------------
+
+INSERT INTO `pcms_routes` (`module_param`, `action_param`, `module`, `controller`, `method`, `core`) VALUES 
+('devtest', '*', 'Devtest', 'Devtest', '*', '0'), 
+('error', '403', 'error', 'Show403', 'index', '1'), 
+('error', '404', 'error', 'Show404', 'index', '1'), 
+('error', 'offline', 'error', 'SiteOffline', 'index', '1');
 
 -- ----------------------------
 -- Table structure for `pcms_sessions`

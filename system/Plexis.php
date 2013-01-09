@@ -136,20 +136,11 @@ class Plexis
      */
     public static function Show404()
     {
-        // Clean all current output
-        ob_clean();
-        
-        // Reset all headers, and set our status code to 404
-        Response::Reset();
-        Response::StatusCode(404);
-        
-        // Get our 404 template contents
-        $View = new View( path(SYSTEM_PATH, "errors", "error_404.php") );
-        $View->Set('site_url', Request::BaseUrl());
-        Response::Body($View);
-        
-        // Send response, and die
-        Response::Send();
+        // Load the 404 Error module
+        $Module = Router::RouteString('error/404');
+        if($Module == false)
+            die('404');
+        $Module->invoke();
         die;
     }
     
@@ -164,20 +155,11 @@ class Plexis
      */
     public static function Show403()
     {
-        // Clean all current output
-        ob_clean();
-        
-        // Reset all headers, and set our status code to 404
-        Response::Reset();
-        Response::StatusCode(403);
-        
-        // Get our 404 template contents
-        $View = new View( path(SYSTEM_PATH, "errors", "error_403.php") );
-        $View->Set('uri', ltrim(Request::Query('uri'), '/'));
-        Response::Body($View);
-        
-        // Send response, and die
-        Response::Send();
+        // Load the 403 Error module
+        $Module = Router::RouteString('error/403');
+        if($Module == false)
+            die('403');
+        $Module->invoke();
         die;
     }
     
@@ -194,21 +176,11 @@ class Plexis
      */
     public static function ShowSiteOffline($message = null)
     {
-        // Clean all current output
-        ob_clean();
-        
-        // Reset all headers, and set our status code to 503 "Service Unavailable"
-        Response::Reset();
-        Response::StatusCode(503);
-        
-        // Get our site offline template contents
-        $View = new View( path(SYSTEM_PATH, "errors", "error_site_offline.php") );
-        $View->Set('site_url', Request::BaseUrl());
-        $View->Set('message', $message);
-        Response::Body($View);
-        
-        // Send response, and die
-        Response::Send();
+        // Load the 403 Error module
+        $Module = Router::RouteString('error/offline');
+        if($Module == false)
+            die('Site is currently unavailable.');
+        $Module->invoke();
         die;
     }
     

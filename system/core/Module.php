@@ -80,7 +80,6 @@ class Module
         $this->controller = ucfirst($controller);
         $this->action = $method;
         $this->params = $params;
-        $this->isCoreModule = (path( SYSTEM_PATH, 'modules' ) == dirname($this->rootPath));
     }
     
     /**
@@ -136,6 +135,8 @@ class Module
      */
     public function isCoreModule()
     {
+        if(!is_bool($this->isCoreModule))
+            $this->isCoreModule = (path( SYSTEM_PATH, 'modules' ) == dirname($this->rootPath));
         return $this->isCoreModule;
     }
     

@@ -141,7 +141,7 @@ class Router
     public static function MatchRoute($module, $action)
     {
         // Search the database for defined routes
-        $query = "SELECT `module`,`controller`,`method` FROM `pcms_routes` WHERE 
+        $query = "SELECT `module`,`controller`,`method`, `core` FROM `pcms_routes` WHERE 
             `module_param`='{$module}' AND (`action_param`='*' OR `action_param`='{$action}')";
         $route = self::$DB->query($query)->fetchRow();
         
@@ -150,9 +150,12 @@ class Router
             return false;
             
         // Define our Module object constructor args
-        $controller = (Request::IsAjax()) ? 'Ajax' : ucfirst(strtolower($route['controller']));
+        $controller = (Request::IsAjax()) ? 'Ajax' : $route['controller'];
         $action = ($route['method'] == '*') ? $action : $route['method'];
-        $path = path( ROOT, 'third_party', 'modules', $route['module'] );
+        if($route['core'] == 1)
+            $path = path( SYSTEM_PATH, 'modules', $route['module'] );
+        else
+            $path = path( ROOT, 'third_party', 'modules', $route['module'] );
         
         // Load the module request :p
         $return = false;

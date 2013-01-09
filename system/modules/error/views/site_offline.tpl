@@ -4,7 +4,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 	<title>Site Offline</title>
-	<link rel="stylesheet" href="{site_url}/system/errors/css/site_offline.css" type="text/css"/>
+	<style type="text/css"/>
+        body {
+            background: url("{site_url}/{root_dir}/img/site_offline.jpg") no-repeat top center #0f0f0f;
+            color: #999999;
+            padding-top: 460px;
+        }
+    </style>
 </head>
 <body>
     <div id="message"><center>{message}</center></div>

@@ -266,6 +266,28 @@ class Template
     }
     
     /**
+     * Returns the current theme path
+     *
+     * @param bool $themeName Include the current set theme name?
+     *
+     * @return string The path from the root to the theme folder.
+     */
+    public static function GetThemePath($themeName = false)
+    {
+        return ($themeName) ? self::$themePath . DS . self::$themeName : self::$themePath;
+    }
+    
+    /**
+     * Returns the theme HTTP url to the root dir.
+     *
+     * @return string The path from the root to the theme folder.
+     */
+    public static function GetThemeUrl()
+    {
+        return self::$themeUrl;
+    }
+    
+    /**
      * Sets the name of the theme to render, where the layout.tpl is located
      *
      * @param string $name The theme name
@@ -436,13 +458,13 @@ class Template
             '<meta http-equiv="Expires" content="-1"/>',
             '', // Add Whitespace
             '<!-- Include jQuery Scripts -->',
-            '<script type="text/javascript" src="'. $base .'/assets/js/jquery.js"></script>',
-            '<script type="text/javascript" src="'. $base .'/assets/js/jquery-ui.js"></script>',
-            '<script type="text/javascript" src="'. $base .'/assets/js/jquery.validate.js"></script>',
+            '<script type="text/javascript" src="'. $base .'/assets/jquery.js"></script>',
+            '<script type="text/javascript" src="'. $base .'/assets/jquery-ui.js"></script>',
+            '<script type="text/javascript" src="'. $base .'/assets/jquery.validate.js"></script>',
             '', // Add Whitespace
             '<!-- Define Global Vars and Include Plexis Static JS Scripts -->',
             "<script type=\"text/javascript\">\n". rtrim($string) ."\n    </script>",
-            '<script type="text/javascript" src="'. $base .'/assets/js/plexis.js"></script>',
+            '<script type="text/javascript" src="'. $base .'/assets/plexis.js"></script>',
             '' // Add Whitespace
         );
         

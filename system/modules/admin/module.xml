@@ -5,7 +5,7 @@
 -->
 <module>
     <info>
-        <name>Plexis Core Frontpage Module</name>
+        <name>Plexis Core Admin Module</name>
         <author>Plexis Dev Team</author>
         <authorEmail />
         <authorUrl />
@@ -13,6 +13,6 @@
         <version>1.0.0</version>
     </info>
     <routes>
-        <route module="frontpage" action="index" />
+        <route module="admin" action="." />
     </routes>
 </module>
