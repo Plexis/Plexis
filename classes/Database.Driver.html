@@ -149,7 +149,7 @@ statistical data such as query time.</span><pre>getAllQueries()</pre></a></li>
 </div>
 <a id="method_delete"></a><div class="element clickable method public method_delete" data-toggle="collapse" data-target=".method_delete .collapse">
 <h2>An easy method that will delete data from a table</h2>
-<pre>delete(string $table, string $where = '') : bool</pre>
+<pre>delete(string $table, string | string[] $where = '') : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -160,7 +160,8 @@ statistical data such as query time.</span><pre>getAllQueries()</pre></a></li>
 <div class="subelement argument">
 <h4>$where<small><b>   [Default =  '']</b></small>
 </h4>
-<code>string</code><p>The where statement Ex: "id = 5"</p>
+<code>string</code><code>string[]</code><p>The where statement Ex: "id = 5"
+  Also accepts an array of $column => $value</p>
 </div>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -372,7 +373,7 @@ in the $sql array.</p></div>
 </div>
 <a id="method_update"></a><div class="element clickable method public method_update" data-toggle="collapse" data-target=".method_update .collapse">
 <h2>An easy method that will update an existing row in a table</h2>
-<pre>update(string $table, mixed[] $data, string $where = '') : bool</pre>
+<pre>update(string $table, mixed[] $data, string | string[] $where = '') : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -387,7 +388,8 @@ in the $sql array.</p></div>
 <div class="subelement argument">
 <h4>$where<small><b>   [Default =  '']</b></small>
 </h4>
-<code>string</code><p>The where statement Ex: "id = 5"</p>
+<code>string</code><code>string[]</code><p>The where statement Ex: "id = 5"
+  Also accepts an array of $column => $value</p>
 </div>
 <h3>Returns</h3>
 <div class="subelement response">

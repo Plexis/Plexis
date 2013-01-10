@@ -56,10 +56,10 @@ of registered paths for that namespace as values</span><pre>GetNamespaces()</pre
 <li class="method public "><a href="#method_GetPrefixes" title="GetPrefixes :: Returns an array of all registered prefixes as keys, and an array
 of registered paths for that prefix as values"><span class="description">Returns an array of all registered prefixes as keys, and an array
 of registered paths for that prefix as values</span><pre>GetPrefixes()</pre></a></li>
-<li class="method public "><a href="#method_Init" title="Init :: Registers the AutoLoader class with spl_autoload (Done automatically)"><span class="description">Registers the AutoLoader class with spl_autoload (Done automatically)</span><pre>Init()</pre></a></li>
 <li class="method public "><a href="#method_LoadClass" title="LoadClass :: Method used to search all registered paths for a missing class
 reference (used by the spl_autoload method)"><span class="description">Method used to search all registered paths for a missing class
 reference (used by the spl_autoload method)</span><pre>LoadClass()</pre></a></li>
+<li class="method public "><a href="#method_Register" title="Register :: Registers the AutoLoader class with spl_autoload."><span class="description">Registers the AutoLoader class with spl_autoload.</span><pre>Register()</pre></a></li>
 <li class="method public "><a href="#method_RegisterNamespace" title="RegisterNamespace :: Registers a path for the autoloader to search in when searching
 for a specific namespaced class."><span class="description">Registers a path for the autoloader to search in when searching
 for a specific namespaced class.</span><pre>RegisterNamespace()</pre></a></li>
@@ -67,6 +67,7 @@ for a specific namespaced class.</span><pre>RegisterNamespace()</pre></a></li>
 <li class="method public "><a href="#method_RegisterPrefix" title="RegisterPrefix :: Registers a path for the autoload to search for when searching
 for a prefixed class."><span class="description">Registers a path for the autoload to search for when searching
 for a prefixed class.</span><pre>RegisterPrefix()</pre></a></li>
+<li class="method public "><a href="#method_UnRegister" title="UnRegister :: Un-Registers the AutoLoader class with spl_autoload"><span class="description">Un-Registers the AutoLoader class with spl_autoload</span><pre>UnRegister()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -97,8 +98,15 @@ for a prefixed class.</span><pre>RegisterPrefix()</pre></a></li>
 <p class="short_description">This class is an advanced autoloader for missing class references.</p>
 <div class="details">
 <div class="long_description"><p>Able to register namespace specific paths, as well as prefix
-specific paths.</p></div>
+specific paths.</p>
+
+<p>This class was taken from the Symfony2 package, and re-written for
+the use of Plexis CMS.</p></div>
 <table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="mailto:fabien.potencier@symfony-project.org">Fabien Potencier</a></td>
+</tr>
 <tr>
 <th>author</th>
 <td><a href="">Steven Wilson</a></td>
@@ -132,12 +140,6 @@ of registered paths for that prefix as values</h2>
 <div class="subelement response"><code>string[]</code></div>
 </div></div>
 </div>
-<a id="method_Init"></a><div class="element clickable method public method_Init" data-toggle="collapse" data-target=".method_Init .collapse">
-<h2>Registers the AutoLoader class with spl_autoload (Done automatically)</h2>
-<pre>Init() </pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
 <a id="method_LoadClass"></a><div class="element clickable method public method_LoadClass" data-toggle="collapse" data-target=".method_LoadClass .collapse">
 <h2>Method used to search all registered paths for a missing class
 reference (used by the spl_autoload method)</h2>
@@ -154,6 +156,13 @@ reference (used by the spl_autoload method)</h2>
 <code>Bool</code>Returns TRUE if the class is found, and file was
   included successfully.</div>
 </div></div>
+</div>
+<a id="method_Register"></a><div class="element clickable method public method_Register" data-toggle="collapse" data-target=".method_Register .collapse">
+<h2>Registers the AutoLoader class with spl_autoload.</h2>
+<pre>Register() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Multiple
+calls to this method will not yeild any additional results.</p></div></div></div>
 </div>
 <a id="method_RegisterNamespace"></a><div class="element clickable method public method_RegisterNamespace" data-toggle="collapse" data-target=".method_RegisterNamespace .collapse">
 <h2>Registers a path for the autoloader to search in when searching
@@ -208,6 +217,12 @@ ruuning list of paths for that prefix</p></div>
   to search for the prefixed class'</p>
 </div>
 </div></div>
+</div>
+<a id="method_UnRegister"></a><div class="element clickable method public method_UnRegister" data-toggle="collapse" data-target=".method_UnRegister .collapse">
+<h2>Un-Registers the AutoLoader class with spl_autoload</h2>
+<pre>UnRegister() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>

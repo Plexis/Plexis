@@ -61,11 +61,14 @@ method when dispatched.</span><pre>getActionParams()</pre></a></li>
 <li class="method public "><a href="#method_getModuleXml" title="getModuleXml :: Returns the data stored in the Modules XML file."><span class="description">Returns the data stored in the Modules XML file.</span><pre>getModuleXml()</pre></a></li>
 <li class="method public "><a href="#method_getName" title="getName :: Returns the modules name"><span class="description">Returns the modules name</span><pre>getName()</pre></a></li>
 <li class="method public "><a href="#method_getRootPath" title="getRootPath :: Returns the path to the modules root folder"><span class="description">Returns the path to the modules root folder</span><pre>getRootPath()</pre></a></li>
+<li class="method public "><a href="#method_install" title="install :: Installs the module and defines its routes with the router"><span class="description">Installs the module and defines its routes with the router</span><pre>install()</pre></a></li>
 <li class="method public "><a href="#method_invoke" title="invoke :: This method executes the controller and action"><span class="description">This method executes the controller and action</span><pre>invoke()</pre></a></li>
 <li class="method public "><a href="#method_isCoreModule" title="isCoreModule :: Returns whehter the module is a Plexis Core Module"><span class="description">Returns whehter the module is a Plexis Core Module</span><pre>isCoreModule()</pre></a></li>
+<li class="method public "><a href="#method_isInstalled" title="isInstalled :: Returns whether or not the module is installed in the plexis database."><span class="description">Returns whether or not the module is installed in the plexis database.</span><pre>isInstalled()</pre></a></li>
 <li class="method public "><a href="#method_setActionName" title="setActionName :: Sets the action name, overriding the action the router finds"><span class="description">Sets the action name, overriding the action the router finds</span><pre>setActionName()</pre></a></li>
 <li class="method public "><a href="#method_setActionParams" title="setActionParams :: Sets the actions' parameters, overriding the params the router finds"><span class="description">Sets the actions' parameters, overriding the params the router finds</span><pre>setActionParams()</pre></a></li>
 <li class="method public "><a href="#method_setControllerName" title="setControllerName :: Sets the controller name, overriding the controller the router finds"><span class="description">Sets the controller name, overriding the controller the router finds</span><pre>setControllerName()</pre></a></li>
+<li class="method public "><a href="#method_uninstall" title="uninstall :: Removes the modules routes, and declares the module as Uninstalled"><span class="description">Removes the modules routes, and declares the module as Uninstalled</span><pre>uninstall()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -203,6 +206,31 @@ method when dispatched.</h2>
   if the path isnt set</div>
 </div></div>
 </div>
+<a id="method_install"></a><div class="element clickable method public method_install" data-toggle="collapse" data-target=".method_install .collapse">
+<h2>Installs the module and defines its routes with the router</h2>
+<pre>install(bool $override = false) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$override<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Remove conflicting routes from other modules?
+If false, and there is a routing conflict, an \Exception will be thrown.
+Otherwise, the old route will be removed, and the new inserted.</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
+<td>Thrown if there is a routing conflict with another
+  module, and $override is set to false.</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true on success, false otherwise</div>
+</div></div>
+</div>
 <a id="method_invoke"></a><div class="element clickable method public method_invoke" data-toggle="collapse" data-target=".method_invoke .collapse">
 <h2>This method executes the controller and action</h2>
 <pre>invoke() : object</pre>
@@ -238,6 +266,17 @@ method when dispatched.</h2>
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_isInstalled"></a><div class="element clickable method public method_isInstalled" data-toggle="collapse" data-target=".method_isInstalled .collapse">
+<h2>Returns whether or not the module is installed in the plexis database.</h2>
+<pre>isInstalled() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if the module is installed, false otherwise.</div>
 </div></div>
 </div>
 <a id="method_setActionName"></a><div class="element clickable method public method_setActionName" data-toggle="collapse" data-target=".method_setActionName .collapse">
@@ -277,6 +316,18 @@ method when dispatched.</h2>
 <div class="subelement argument">
 <h4>$name</h4>
 <code>string</code><p>The name of the controller to load</p></div>
+</div></div>
+</div>
+<a id="method_uninstall"></a><div class="element clickable method public method_uninstall" data-toggle="collapse" data-target=".method_uninstall .collapse">
+<h2>Removes the modules routes, and declares the module as Uninstalled</h2>
+<pre>uninstall() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if the module was uninstalled. May return
+  false if the module was never installed in the first place.</div>
 </div></div>
 </div>
 <h3>

@@ -92,12 +92,13 @@ of the routed request.</span><pre>RouteString()</pre></a></li>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">This class is used to determine our controller / action.</p>
+<p class="short_description">The Router is used to determine which module and action to load for
+the current request.</p>
 <div class="details">
-<div class="long_description"><p>When called
-this object works with the Request object to determine the current
-url, and analyze it to determine which controller, and method the
-Dispatch class will use.</p></div>
+<div class="long_description"><p>When called, this object works with the Request object to determine
+the current uri, and analyze it to determine which module, controller,
+and method to load. This object also handles the adding and removing of
+routes that are stored in the plexis database.</p></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -188,7 +189,7 @@ automatically, and will not do anything if called again.</p></div></div></div>
 </div>
 <a id="method_MatchRoute"></a><div class="element clickable method public method_MatchRoute" data-toggle="collapse" data-target=".method_MatchRoute .collapse">
 <h2>Checks a module and action for a matching route.</h2>
-<pre>MatchRoute(string $module, string $action) : <a href="../classes/Core.Module.html">\Core\Module</a> | bool</pre>
+<pre>MatchRoute(string $module, string $action, string[] $params = array()) : <a href="../classes/Core.Module.html">\Core\Module</a> | bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -199,6 +200,10 @@ automatically, and will not do anything if called again.</p></div></div></div>
 <div class="subelement argument">
 <h4>$action</h4>
 <code>string</code><p>The action URI segement</p></div>
+<div class="subelement argument">
+<h4>$params<small><b>   [Default =  array()]</b></small>
+</h4>
+<code>string[]</code><p>An array of the remaing URI parameters</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/Core.Module.html">\Core\Module</a></code><code>bool</code>Returns false if there is no database route,

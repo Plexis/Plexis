@@ -140,6 +140,19 @@
             module request 
         --&gt;
         &lt;route module="account" action="*" /&gt;
+        
+        &lt;!-- 
+            Example 4: The final example is a more complicated one. By specifying wildcard controller and method
+            names for a route, you can use a 3 part route instead of a 2 part route. The following will proccess
+            the URI for 3 parts -&gt; module/controller/action instead of the default 2 -&gt; module/action.
+        --&gt;
+        &lt;route module="account" action="update"&gt;
+            &lt;!-- Call the controller name that is in the action URI segement (second URI). Defaults to Modulename. --&gt;
+            &lt;controller&gt;@action&lt;/controller&gt; &lt;!-- In this route, will be "Update" --&gt;
+            
+            &lt;!-- Call the method name that is in the first parameter URI (third URI). Defaults to "index"  --&gt;
+            &lt;method&gt;@param&lt;/method&gt;
+        &lt;/route&gt;
     &lt;/routes&gt;
 &lt;/module&gt;</pre>
 </div></div>
