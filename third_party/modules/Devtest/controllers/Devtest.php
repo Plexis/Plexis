@@ -69,9 +69,11 @@ class Devtest extends Core\Controller
         Plexis::RenderTemplate(false);
     }
     
-    public function xml()
+    public function route()
     {
-        var_dump($this->module->getModuleXml());
+        $Stack = new Core\Router\RouteCollection();
+        $Stack->addModuleRoutes( $this->module );
+        var_dump(Core\Router::AddRoutes($Stack, true));
         die;
     }
 }

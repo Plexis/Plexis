@@ -17,6 +17,6 @@
             
             Take any and all actions to the Devtest module request
         -->
-        <route module="devtest" action="." />
+        <route module="devtest" action="*" />
     </routes>
 </module>

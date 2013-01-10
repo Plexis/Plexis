@@ -42,6 +42,12 @@ class Router
     protected static $DB;
     
     /**
+     * The route stack of all defined routes
+     * @var Router\RouteCollection
+     */
+    protected static $RouteCollection;
+    
+    /**
      * Fetches the current request in a \Core\Module object
      *
      * @return Module Returns a Core\Module object of the current request
@@ -72,7 +78,7 @@ class Router
             $action = Config::GetVar('default_action', 'Plexis'); // Default Action
             $params = array(); // Default query string
         }
-        else 
+        else
         {
             // We will start by bulding our controller, action, and querystring
             $urlArray = explode("/", $uri);
@@ -115,25 +121,120 @@ class Router
     }
     
     /**
-     * Adds a new route rule in the database for future route matching
+     * Adds a list new route rules in the database for future route matching
      *
-     * @param Module $module The Module object for the module we are appending routes for
-     * @param string $reqModule The request module (first part of the URI)
-     * @param string|string[] $reqAction The request action, or an array or request actions.
-     *
-     * @return void
+     * @param Router\RouteCollection $routes The route stack container
+     * @param bool $remove Remove conflicting results? If false, and there is a
+     *   routing conflict, an \Exception will be thrown. Otherwise, 
+     *   the old route will be removed, and the new inserted.
+     *   
+     * @return bool Returns true if successfull, false otherwise.
      */
-    public static function AddRoute(Module $module, $reqModule, $reqAction) 
+    public static function AddRoutes( Router\RouteCollection $routes, $remove = false ) 
     {
-        // format controller name
-        $reqModule = ucfirst( strtolower($reqModule) );
+        // Check for conflicts
+        $conflicts = self::GetConflictingRoutes( $routes );
+        if(!empty($conflicts))
+        {
+            // Throw exception if remove is false
+            if(!$remove)
+            {
+                $convert = array();
+                foreach($conflicts as $c)
+                    $convert[] = "{$c['module_uri']}/{$c['action_uri']}";
+                
+                $m = "Could not add route because a routing conflict was detected for uri: ('". implode(', ', $convert) ."')";
+                throw new \Exception($m);
+            }
+            
+            // remove conflicting routes
+            foreach($conflicts as $c)
+            {
+                $where = "`module_param`='". $c['module_uri'] ."' AND `action_param`='". $c['action_uri'] ."'";
+                self::$DB->delete('pcms_routes', $where);
+            }
+        }
+        
+        return self::$DB->exec($routes->toSql());
+    }
+    
+    /**
+     * Removes a defined route from the database
+     *
+     * @param string $reqModule The module URI segement
+     * @param string $reqAction The action URI segement
+     *
+     * @return bool Returns true if any results were removed, or false
+     *   if there was no rows removed
+     */
+    public static function RemoveRoute($reqModule, $reqAction) 
+    {
+        $where = "`module_param`='". $reqModule ."' AND `action_param`='". $reqAction ."'";
+        return self::$DB->delete('pcms_routes', $where);
+    }
+    
+    /**
+     * Removes all routes associated with a specified module.
+     *
+     * @param string $module The module name
+     *
+     * @return bool Returns true if any results were removed, or false
+     *   if there was no rows removed
+     */
+    public static function RemoveModuleRoutes($module) 
+    {
+        return self::$DB->delete('pcms_routes', "`module`='". $module ."'");
+    }
+    
+    /**
+     * Returns an array of conflicting routes with a Route stack, and the
+     * current defined routes
+     *
+     * @param Router\RouteCollection $routes A routes stack to check for.
+     *
+     * @return array[] Returns a 2 dimensional array. Each index is an array of
+     *      array('module_uri' -> module uri, 'action_uri' -> action uri).
+     */
+    public static function GetConflictingRoutes( Router\RouteCollection $routes )
+    {
+        // This may get large, best to only have to do it once!
+        if(empty(self::$RouteCollection))
+        {
+            self::$RouteCollection = new Router\RouteCollection();
+            $query = "SELECT `module_param`, `action_param`, `module`, `controller`, `method`, `core` FROM `pcms_routes`";
+            $DBroutes = self::$DB->query($query)->fetchAll();
+            foreach($DBroutes as $r)
+            {
+                self::$RouteCollection->addRouteParams(
+                    $r['module'], 
+                    $r['module_param'] .'/'. $r['action_param'], 
+                    $r['controller'], 
+                    $r['method'], 
+                    $r['core']
+                );
+            }
+        }
+        
+        // Define our return stack, and get our array of routes
+        $RouteCollection = array();
+        $routes = $routes->getRoutes();
+        
+        // Check each defined route against the current defined routes
+        foreach($routes as $k => $r)
+        {
+            $key = explode('_', $k);
+            if(self::$RouteCollection->hasRoute($key[0], $key[1]));
+                $RouteCollection[] = array('module_uri' => $key[0], 'action_uri' => $key[1]);
+        }
+        
+        return $RouteCollection;
     }
     
     /**
      * Checks a module and action for a matching route.
      *
-     * @param string $module The requested module
-     * @param string $action The requested action
+     * @param string $module The module URI segement
+     * @param string $action The action URI segement
      *
      * @return \Core\Module|bool Returns false if there is no database route,
      *   or if the module matched does not exist.
@@ -142,7 +243,7 @@ class Router
     {
         // Search the database for defined routes
         $query = "SELECT `module`,`controller`,`method`, `core` FROM `pcms_routes` WHERE 
-            `module_param`='{$module}' AND (`action_param`='*' OR `action_param`='{$action}')";
+            `module_param`='{$module}' AND (`action_param`='*' OR `action_param`='{$action}') LIMIT 1";
         $route = self::$DB->query($query)->fetchRow();
         
         // Do we have a custom route?
@@ -208,6 +309,9 @@ class Router
     {
         // Make sure we only route once
         if(self::$routed) return;
+        
+        // Register the router sub namespace
+        AutoLoader::RegisterNamespace('Core\Router', path( SYSTEM_PATH, 'core', 'router' ));
         
         // Create an instance of the XssFilter
         $Filter = new XssFilter();
