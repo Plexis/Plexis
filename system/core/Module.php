@@ -77,8 +77,8 @@ class Module
         
         // Set internal variables
         $this->name = basename($this->rootPath);
-        $this->controller = ucfirst($controller);
-        $this->action = $method;
+        $this->controller = ($controller == null) ? ucfirst($this->name) : ucfirst($controller);
+        $this->action = ($method == null) ? 'index' : $method;
         $this->params = $params;
     }
     
@@ -96,11 +96,11 @@ class Module
     {
         // Make sure the controller is not empty
         if(empty($this->controller))
-            throw new Exception("No controller defined");
+            throw new \Exception("No controller defined");
          
         // Also make sure the action method is not empty
         if(empty($this->action))
-            throw new Exception("No action defined");
+            throw new \Exception("No action defined");
             
         // Build path to the controller
         $file = path($this->rootPath, 'controllers', $this->controller .'.php');
@@ -228,7 +228,7 @@ class Module
      */
     public function setActionName($name)
     {
-        $this->action = $name;
+        $this->action = strtolower($name);
     }
     
     /**
@@ -244,5 +244,61 @@ class Module
             return false;
             
         $this->params = $params;
+    }
+    
+    /**
+     * Installs the module and defines its routes with the router
+     *
+     * @param bool $override Remove conflicting routes from other modules? 
+     * If false, and there is a routing conflict, an \Exception will be thrown. 
+     * Otherwise, the old route will be removed, and the new inserted.
+     *
+     * @throws \Exception Thrown if there is a routing conflict with another
+     *   module, and $override is set to false.
+     *
+     * @return bool Returns true on success, false otherwise
+     */
+    public function install($override = false) 
+    {
+        // Check to see if we are installed already
+        if($this->isInstalled())
+            return true;
+            
+        // Add Module Routes
+        $Routes = new Router\RouteCollection();
+        $Routes->addModuleRoutes($this);
+        Router::AddRoutes($Routes, $override);
+        
+        // Register module as installed
+        $DB = Database::GetConnection('DB');
+        $data = array(
+            'name' => $this->name,
+            'core_module' => $this->isCoreModule()
+        );
+        return $DB->insert('pcms_modules', $data);
+    }
+    
+    /**
+     * Removes the modules routes, and declares the module as Uninstalled
+     *
+     * @return bool Returns true if the module was uninstalled. May return
+     *   false if the module was never installed in the first place.
+     */
+    public function uninstall() 
+    {
+        $DB = Database::GetConnection('DB');
+        Router::RemoveModuleRoutes($this->name);
+        return $DB->delete('pcms_modules', array('name' => $this->name));
+    }
+    
+    /**
+     * Returns whether or not the module is installed in the plexis database.
+     *
+     * @return bool Returns true if the module is installed, false otherwise.
+     */
+    public function isInstalled()
+    {
+        $DB = Database::GetConnection('DB');
+        return (bool) $DB->query("SELECT COUNT(`id`) FROM `pcms_modules` WHERE `name`='{$this->name}';")->fetchColumn();
     }
 }

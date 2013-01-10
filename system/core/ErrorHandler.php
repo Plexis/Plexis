@@ -120,6 +120,7 @@ class ErrorHandler
             
             // We wont use a view here because we might not have the Library namespace registered in the autoloader
             $page = file_get_contents( path(SYSTEM_PATH, "errors", "general_error.php") );
+            $page = str_replace('{ERROR_LEVEL}', self::ErrorLevelToText($lvl), $page);
             $page = str_replace('{TITLE}', $title, $page);
             $page = str_replace('{MESSAGE}', $message, $page);
             $page = str_replace('{FILE}', $file, $page);
@@ -143,6 +144,7 @@ class ErrorHandler
     {
         switch($lvl)
         {
+            default:
             case E_ERROR:
                 return 'Error';
             case E_WARNING:

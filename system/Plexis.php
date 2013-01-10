@@ -300,7 +300,10 @@ class Plexis
         try {
             $Module->invoke();
         }
-        catch( NotFoundException $e ) {
+        catch( MethodNotFoundException $e ) {
+            self::Show404();
+        }
+        catch( ControllerNotFoundException $e ) {
             self::Show404();
         }
     }

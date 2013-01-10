@@ -9,14 +9,14 @@
  */
 namespace Core;
 
-// Bring some classes to scope
-use \Plexis;
-
 /**
- * This class is used to determine our controller / action. When called
- * this object works with the Request object to determine the current
- * url, and analyze it to determine which controller, and method the 
- * Dispatch class will use.
+ * The Router is used to determine which module and action to load for 
+ * the current request. 
+ *
+ * When called, this object works with the Request object to determine 
+ * the current uri, and analyze it to determine which module, controller, 
+ * and method to load. This object also handles the adding and removing of
+ * routes that are stored in the plexis database.
  *
  * @author      Steven Wilson 
  * @package     Core
@@ -75,7 +75,7 @@ class Router
         {
             // Set our Controller / Action to the defaults
             $module = Config::GetVar('default_module', 'Plexis'); // Default Module
-            $action = Config::GetVar('default_action', 'Plexis'); // Default Action
+            $action = 'index'; // Default Action
             $params = array(); // Default query string
         }
         else
@@ -94,7 +94,7 @@ class Router
             else 
             {
                 // If there is no action, load the default 'index'.
-                $action = Config::GetVar('default_action', 'Plexis');
+                $action = 'index'; // Default Action
             }
             
             // $params is what remains in the url array
@@ -102,18 +102,14 @@ class Router
         }
         
         // Try to find a module route for the request
-        if(($Mod = self::MatchRoute($module, $action)) !== false)
-        {
-            $Mod->setActionParams($params);
+        if(($Mod = self::MatchRoute($module, $action, $params)) !== false)
             return $Mod;
-        }
         
-        // If there was no route found, then we assume that its a Plexis core module
+        // If there was no route found, then we assume that its a Plexis core module (Might get removed?)
         $controller = (Request::IsAjax()) ? 'Ajax' : $module;
         $path = path( SYSTEM_PATH, 'modules', $module );
         try {
-            $Mod = new Module($path, $controller, $action);
-            $Mod->setActionParams($params);
+            $Mod = new Module($path, $controller, $action, $params);
         }
         catch( \ModuleNotFoundException $e ) { }
         
@@ -155,7 +151,7 @@ class Router
             }
         }
         
-        return self::$DB->exec($routes->toSql());
+        return (bool) self::$DB->exec($routes->toSql());
     }
     
     /**
@@ -170,7 +166,7 @@ class Router
     public static function RemoveRoute($reqModule, $reqAction) 
     {
         $where = "`module_param`='". $reqModule ."' AND `action_param`='". $reqAction ."'";
-        return self::$DB->delete('pcms_routes', $where);
+        return (bool) self::$DB->delete('pcms_routes', $where);
     }
     
     /**
@@ -183,7 +179,7 @@ class Router
      */
     public static function RemoveModuleRoutes($module) 
     {
-        return self::$DB->delete('pcms_routes', "`module`='". $module ."'");
+        return (bool) self::$DB->delete('pcms_routes', "`module`='". $module ."'");
     }
     
     /**
@@ -235,14 +231,15 @@ class Router
      *
      * @param string $module The module URI segement
      * @param string $action The action URI segement
+     * @param string[] $params An array of the remaing URI parameters
      *
      * @return \Core\Module|bool Returns false if there is no database route,
      *   or if the module matched does not exist.
      */
-    public static function MatchRoute($module, $action)
+    public static function MatchRoute($module, $action, $params = array())
     {
         // Search the database for defined routes
-        $query = "SELECT `module`,`controller`,`method`, `core` FROM `pcms_routes` WHERE 
+        $query = "SELECT `module`,`controller`,`method`,`core` FROM `pcms_routes` WHERE 
             `module_param`='{$module}' AND (`action_param`='*' OR `action_param`='{$action}') LIMIT 1";
         $route = self::$DB->query($query)->fetchRow();
         
@@ -252,7 +249,29 @@ class Router
             
         // Define our Module object constructor args
         $controller = (Request::IsAjax()) ? 'Ajax' : $route['controller'];
-        $action = ($route['method'] == '*') ? $action : $route['method'];
+        
+        // Proccess wildcard controller names
+        if($controller == "@action")
+        {
+            $controller = ($action == 'index') ? ucfirst($route['module']) : ucfirst( strtolower($action) );
+            $action = ($route['method'] == '*') ? 'index' : $route['method'];
+        }
+        else
+            $action = ($route['method'] == '*') ? $action : $route['method'];
+        
+        // Proccess Wildcard methods
+        if($route['method'] == "@param")
+        {
+            if(!empty($params))
+            {
+                $action = $params[0];
+                array_shift($params);
+            }
+            else
+                $action = 'index';
+        }
+        
+        // Define path to our module root
         if($route['core'] == 1)
             $path = path( SYSTEM_PATH, 'modules', $route['module'] );
         else
@@ -261,7 +280,7 @@ class Router
         // Load the module request :p
         $return = false;
         try {
-            $return = new Module($path, $controller, $action);
+            $return = new Module($path, $controller, $action, $params);
         }
         catch( \ModuleNotFoundException $e ) {}
         
@@ -317,7 +336,7 @@ class Router
         $Filter = new XssFilter();
         
         // Load up our DB connection
-        self::$DB = Plexis::LoadDBConnection();
+        self::$DB = \Plexis::LoadDBConnection();
         
         // Add trace for debugging
         // \Debug::trace('Routing url...', __FILE__, __LINE__);
@@ -368,7 +387,7 @@ class Router
         self::$routed = true;  
         
         if((self::$RequestModule = self::RouteString($uri)) == false)
-            Plexis::Show404();
+            \Plexis::Show404();
             
         // Add trace for debugging
         // \Debug::trace("Url routed successfully. Found controller: ". self::$controller ."; Action: ". self::$action ."; Querystring: ". implode('/', self::$params), __FILE__, __LINE__);

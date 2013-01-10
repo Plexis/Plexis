@@ -13,4 +13,4 @@
  * @subpackage  Exceptions
  * @see         Core\Module::dispatch()
  */
-class MethodNotFoundException extends NotFoundException {}
+class MethodNotFoundException extends Exception {}

@@ -38,6 +38,7 @@ class System
         if(self::$isInitiated) return;
         
         // Register the Default Core and Library namespaces with the autoloader
+        AutoLoader::Register(); // Register the Autoloader with spl_autoload;
         AutoLoader::RegisterNamespace('Core', path(SYSTEM_PATH, 'core'));
         AutoLoader::RegisterNamespace('Core\IO', path(SYSTEM_PATH, 'core', 'io'));
         AutoLoader::RegisterNamespace('Library', path(SYSTEM_PATH, 'library'));

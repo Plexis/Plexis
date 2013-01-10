@@ -28,11 +28,9 @@ class Devtest extends Core\Controller
     
     public function index() 
     {
-        $string = "<frame>test</frame> <div>Hi!</div>";
-        $Filter = new Core\XssFilter();
-        $Filter->useBlacklist(true);
-        $Filter->setTagsMethod( Core\XssFilter::BLACKLIST );
-        Library\Template::Add($Filter->clean($string));
+        $this->module->uninstall();
+        $this->module->install(true);
+        var_dump( $this->module->isInstalled() ); die;
     }
     
     public function intsize()
@@ -69,11 +67,29 @@ class Devtest extends Core\Controller
         Plexis::RenderTemplate(false);
     }
     
-    public function route()
+    public function AddDefaultRoutes()
     {
         $Stack = new Core\Router\RouteCollection();
+        $path = path( SYSTEM_PATH, 'modules' );
+        
+        $d = new Core\IO\DirectoryInfo($path);
+        $modules = $d->getDirList();
+        
+        foreach($modules as $m)
+        {
+            $Mod = new Core\Module($m->fullpath());
+            $Stack->addModuleRoutes( $Mod );
+        }
+        
+        
         $Stack->addModuleRoutes( $this->module );
         var_dump(Core\Router::AddRoutes($Stack, true));
+        die;
+    }
+    
+    public function debug()
+    {
+        var_dump( debug_backtrace() );
         die;
     }
 }

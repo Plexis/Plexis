@@ -105,12 +105,12 @@ class Benchmark
     {
         $profiles = array();
         $time = microtime(true);
-        foreach(self::$start as $bench)
+        foreach(self::$start as $bench => $starttime)
         {
-            if(!isset(self::$stop[$name]) && $stopAll == true)
+            if(!isset(self::$stop[$bench]) && $stopAll == true)
                 self::$stop[$bench] = $time;
                 
-            $profiles[$bench] = round( ($time - self::$start[$bench]), $decimals );
+            $profiles[$bench] = round( ($time - $starttime), $decimals );
         }
         return $profiles;
     }

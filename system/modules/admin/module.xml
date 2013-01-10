@@ -13,6 +13,10 @@
         <version>1.0.0</version>
     </info>
     <routes>
-        <route module="admin" action="." />
+        <!-- Allows for 3 part uri's -> module/controller/action -->
+        <route module="admin" action="*">
+            <controller>@action</controller>
+            <method>@param</method>
+        </route>
     </routes>
 </module>

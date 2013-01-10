@@ -8,12 +8,16 @@
  * @contains    Autoloader
  */
 namespace Core;
-
+ 
 /**
  * This class is an advanced autoloader for missing class references.
  * Able to register namespace specific paths, as well as prefix
  * specific paths.
  *
+ * This class was taken from the Symfony2 package, and re-written for
+ * the use of Plexis CMS.
+ *
+ * @author      Fabien Potencier <fabien.potencier@symfony-project.org>
  * @author      Steven Wilson 
  * @package     Core
  */
@@ -44,15 +48,32 @@ class AutoLoader
     protected static $prefixes = array();
     
     /**
-     * Registers the AutoLoader class with spl_autoload (Done automatically)
+     * Registers the AutoLoader class with spl_autoload. Multiple
+     * calls to this method will not yeild any additional results.
+     *
+     * @return void
      */
-    public static function Init()
+    public static function Register()
     {
         if(self::$isRegistered) return;
         
         spl_autoload_register('Core\AutoLoader::LoadClass');
         
         self::$isRegistered = true;
+    }
+    
+    /**
+     * Un-Registers the AutoLoader class with spl_autoload
+     *
+     * @return void
+     */
+    public static function UnRegister()
+    {
+        if(!self::$isRegistered) return;
+        
+        spl_autoload_unregister('Core\AutoLoader::LoadClass');
+        
+        self::$isRegistered = false;
     }
     
     /**
@@ -65,9 +86,8 @@ class AutoLoader
      */
     public static function RegisterPath($path)
     {
-        if(array_search($path, self::$paths) !== false)
-            return;
-        self::$paths[] = $path;
+        if(array_search($path, self::$paths) === false)
+            self::$paths[] = $path;
     }
     
     /**
@@ -194,5 +214,4 @@ class AutoLoader
         return false;
     }
 }
-
-AutoLoader::Init();
+// EOF

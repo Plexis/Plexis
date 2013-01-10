@@ -13,4 +13,4 @@
  * @subpackage  Exceptions
  * @see         Core\Module
  */
-class ModuleNotFoundException extends NotFoundException {}
+class ModuleNotFoundException extends Exception {}

@@ -111,16 +111,14 @@ CREATE TABLE `pcms_hits` (
 DROP TABLE IF EXISTS `pcms_modules`;
 CREATE TABLE `pcms_modules` (
   `id` tinyint(3) NOT NULL AUTO_INCREMENT,
-  `name` varchar(24) NOT NULL,
-  `author` varchar(24) NOT NULL,
-  `version` varchar(24) NOT NULL DEFAULT '1.0.0',
-  `has_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Has admin controller for this module',
+  `name` varchar(24) NOT NULL COMMENT 'Folder name of the module',
+  `core_module` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is this a core module?',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 -- ----------------------------
 -- Records of pcms_modules
 -- ----------------------------
-INSERT INTO `pcms_modules` VALUES (1, 'Devtest', 'Plexis Dev Team', '1.0.0', 1);
+INSERT INTO `pcms_modules` VALUES (1, 'Devtest', 0);
 
 -- ----------------------------
 -- Table structure for `pcms_news`

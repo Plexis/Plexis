@@ -11,21 +11,24 @@ class Admin extends Controller
     {
         // Construct the parent controller, providing our module object
         parent::__construct($Module);
-        Template::SetTheme('admin');
+        Template::SetThemePath($this->modulePath, 'public');
+        $this->loadHelper('admin');
     }
     
     public function index()
     {
+        // Set page title and description
+        setPageTitle('Dashboard');
+        setPageDesc('Here you have a quick overview of some features');
+        
         // Get our PHP and DB versions
         $info = Database::GetConnection('DB')->serverInfo();
 
         // Add our build var
         Template::SetJsVar('Build', CMS_REVISION);
-        Template::SetVar('page_title', 'Dashboard');
-        Template::SetVar('page_desc', 'Here you have a quick overview of some features');
 
         // Proccess DB red font if out of date
-        //$db = (REQ_DB_VERSION != CMS_DB_VERSION) ? '<font color="red">'. REQ_DB_VERSION .'</font> (Manual update Required)' : REQ_DB_VERSION;
+        //$db = (REQ_DB_VER != CMS_DB_VER) ? '<font color="red">'. REQ_DB_VER .'</font> (Manual update Required)' : REQ_DB_VER;
 
         // Set our page data
         $data = array(

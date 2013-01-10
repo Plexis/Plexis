@@ -301,13 +301,23 @@ class Driver extends \PDO
      *
      * @param string $table The table name we are updating
      * @param mixed[] $data An array of "column => value"'s
-     * @param string $where The where statement Ex: "id = 5"
+     * @param string|string[] $where The where statement Ex: "id = 5"
+     *   Also accepts an array of $column => $value
      * @return bool Returns TRUE on success of FALSE on error
      */
     public function update($table, $data, $where = '')
     {
         // Our string of columns
         $cols = '';
+        // Parse where clause
+        if(is_array($where))
+        {
+            $sql = null;
+            foreach($where as $col => $value)
+                $sql .= "`{$col}`='{$value}' AND ";
+                
+            $where = substr($sql, 0, -5);
+        }
         
         // Do we have a where tp process?
         ($where != '') ? $where = ' WHERE ' . $where : '';
@@ -334,11 +344,22 @@ class Driver extends \PDO
      * An easy method that will delete data from a table
      *
      * @param string $table The table name we are updating
-     * @param string $where The where statement Ex: "id = 5"
+     * @param string|string[] $where The where statement Ex: "id = 5"
+     *   Also accepts an array of $column => $value
      * @return bool Returns TRUE on success of FALSE on error
      */
     public function delete($table, $where = '')
     {
+        // Parse where clause
+        if(is_array($where))
+        {
+            $sql = null;
+            foreach($where as $col => $value)
+                $sql .= "`{$col}`='{$value}' AND ";
+                
+            $where = substr($sql, 0, -5);
+        }
+        
         // run the query
         $this->num_rows = $this->exec('DELETE FROM ' . $table . ($where != '' ? ' WHERE ' . $where : ''));
 

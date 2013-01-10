@@ -12,4 +12,4 @@
  * @subpackage  Exceptions
  * @see         Core\Module::dispatch()
  */
-class ControllerNotFoundException extends NotFoundException {}
+class ControllerNotFoundException extends Exception {}
