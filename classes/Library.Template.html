@@ -57,6 +57,8 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="method public "><a href="#method_AddStylesheet" title="AddStylesheet :: Appends the header adding a css tag"><span class="description">Appends the header adding a css tag</span><pre>AddStylesheet()</pre></a></li>
 <li class="method public "><a href="#method_AppendHeader" title="AppendHeader :: Adds a new line of code to the head tags"><span class="description">Adds a new line of code to the head tags</span><pre>AppendHeader()</pre></a></li>
 <li class="method public "><a href="#method_ClearContents" title="ClearContents :: Clears the current output buffer of the template"><span class="description">Clears the current output buffer of the template</span><pre>ClearContents()</pre></a></li>
+<li class="method public "><a href="#method_GetThemePath" title="GetThemePath :: Returns the current theme path"><span class="description">Returns the current theme path</span><pre>GetThemePath()</pre></a></li>
+<li class="method public "><a href="#method_GetThemeUrl" title="GetThemeUrl :: Returns the theme HTTP url to the root dir."><span class="description">Returns the theme HTTP url to the root dir.</span><pre>GetThemeUrl()</pre></a></li>
 <li class="method public "><a href="#method_LoadView" title="LoadView :: Loads a view file from the template's module view folder."><span class="description">Loads a view file from the template's module view folder.</span><pre>LoadView()</pre></a></li>
 <li class="method public "><a href="#method_Message" title="Message :: Adds a global message to be parsed into the template"><span class="description">Adds a global message to be parsed into the template</span><pre>Message()</pre></a></li>
 <li class="method public "><a href="#method_PageTitle" title="PageTitle :: Sets the page title (After server title)"><span class="description">Sets the page title (After server title)</span><pre>PageTitle()</pre></a></li>
@@ -193,6 +195,34 @@ the final rendered template.</h2>
 <pre>ClearContents() : void</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_GetThemePath"></a><div class="element clickable method public method_GetThemePath" data-toggle="collapse" data-target=".method_GetThemePath .collapse">
+<h2>Returns the current theme path</h2>
+<pre>GetThemePath(bool $themeName = false) : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$themeName<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Include the current set theme name?</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The path from the root to the theme folder.</div>
+</div></div>
+</div>
+<a id="method_GetThemeUrl"></a><div class="element clickable method public method_GetThemeUrl" data-toggle="collapse" data-target=".method_GetThemeUrl .collapse">
+<h2>Returns the theme HTTP url to the root dir.</h2>
+<pre>GetThemeUrl() : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The path from the root to the theme folder.</div>
+</div></div>
 </div>
 <a id="method_LoadView"></a><div class="element clickable method public method_LoadView" data-toggle="collapse" data-target=".method_LoadView .collapse">
 <h2>Loads a view file from the template's module view folder.</h2>

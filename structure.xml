@@ -2014,6 +2014,26 @@ event is fired.</description>
       </docblock>
     </class>
   </file>
+  <file path="system\core\exceptions\InvalidArgumentException.php" hash="18d1903f81ac814fa6a5a2d228d478d3" package="Default">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description/>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="global" line="16" package="Core\Exceptions">
+      <extends>\Exception</extends>
+      <name>InvalidArgumentException</name>
+      <full_name>\InvalidArgumentException</full_name>
+      <docblock line="9">
+        <description>A common exception thrown by many classes for passing invalid arguments</description>
+        <long-description/>
+        <tag line="9" name="package" description="Core"/>
+        <tag line="9" name="subpackage" description="Exceptions"/>
+        <tag line="9" name="file" description="System/Core/Exceptions/ArgumentException.php"/>
+      </docblock>
+    </class>
+  </file>
   <file path="system\core\exceptions\IOException.php" hash="e48504e30476e97d3eb82ab28f81f416" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
@@ -3513,7 +3533,7 @@ about the file.</description>
       </method>
     </class>
   </file>
-  <file path="system\core\Module.php" hash="813b9cacd44ce019f8cfab7e9980f65b" package="Default">
+  <file path="system\core\Module.php" hash="6a858d2e65dc374fb7a723b060d10c85" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description/>
@@ -3522,7 +3542,7 @@ about the file.</description>
       <tag line="2" name="license" description="GNU GPL v3"/>
       <tag line="2" name="contains" description="Module"/>
     </docblock>
-    <include line="112" type="Require Once" package="Default">
+    <include line="111" type="Require Once" package="Default">
       <name/>
     </include>
     <class final="false" abstract="false" namespace="Core" line="19" package="Core">
@@ -3653,157 +3673,157 @@ methods upon request.</description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="96" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="95" package="Core">
         <name>invoke</name>
         <full_name>invoke</full_name>
-        <docblock line="86">
+        <docblock line="85">
           <description>This method executes the controller and action</description>
           <long-description/>
-          <tag line="86" name="throws" description="Thrown ifthe controller or action variables were never set, or empty." type="\Exception">
+          <tag line="85" name="throws" description="Thrown ifthe controller or action variables were never set, or empty." type="\Exception">
             <type by_reference="false">\Exception</type>
           </tag>
-          <tag line="86" name="throws" description="when the controller file cant be found" type="\ControllerNotFoundException">
+          <tag line="85" name="throws" description="when the controller file cant be found" type="\ControllerNotFoundException">
             <type by_reference="false">\ControllerNotFoundException</type>
           </tag>
-          <tag line="86" name="throws" description="when the controller doesnt have the given action,&#13;&#10;  or the action method is not a public method" type="\MethodNotFoundException">
+          <tag line="85" name="throws" description="when the controller doesnt have the given action,&#13;&#10;  or the action method is not a public method" type="\MethodNotFoundException">
             <type by_reference="false">\MethodNotFoundException</type>
           </tag>
-          <tag line="86" name="return" description="Returns the module controller object" type="object">
+          <tag line="85" name="return" description="Returns the module controller object" type="object">
             <type by_reference="false">object</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="137" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="136" package="Core">
         <name>isCoreModule</name>
         <full_name>isCoreModule</full_name>
-        <docblock line="132">
+        <docblock line="131">
           <description>Returns whehter the module is a Plexis Core Module</description>
           <long-description/>
-          <tag line="132" name="return" description="" type="bool">
+          <tag line="131" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="147" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="148" package="Core">
         <name>getName</name>
         <full_name>getName</full_name>
-        <docblock line="142">
+        <docblock line="143">
           <description>Returns the modules name</description>
           <long-description/>
-          <tag line="142" name="return" description="" type="string">
+          <tag line="143" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="158" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="159" package="Core">
         <name>getRootPath</name>
         <full_name>getRootPath</full_name>
-        <docblock line="152">
+        <docblock line="153">
           <description>Returns the path to the modules root folder</description>
           <long-description/>
-          <tag line="152" name="return" description="Returns the set controller path, or false&#13;&#10;  if the path isnt set" type="string">
+          <tag line="153" name="return" description="Returns the set controller path, or false&#13;&#10;  if the path isnt set" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="168" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="169" package="Core">
         <name>getControllerName</name>
         <full_name>getControllerName</full_name>
-        <docblock line="163">
+        <docblock line="164">
           <description>Returns the current set module controller name</description>
           <long-description/>
-          <tag line="163" name="return" description="" type="string">
+          <tag line="164" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="179" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="180" package="Core">
         <name>getActionName</name>
         <full_name>getActionName</full_name>
-        <docblock line="173">
+        <docblock line="174">
           <description>Returns the current set action (method) to be called when the
 controller is to be dispatched</description>
           <long-description/>
-          <tag line="173" name="return" description="" type="string">
+          <tag line="174" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="190" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="191" package="Core">
         <name>getActionParams</name>
         <full_name>getActionParams</full_name>
-        <docblock line="184">
+        <docblock line="185">
           <description>Returns an array of params to be passed to the controller's action
 method when dispatched.</description>
           <long-description/>
-          <tag line="184" name="return" description="" type="string[]">
+          <tag line="185" name="return" description="" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="201" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="202" package="Core">
         <name>getModuleXml</name>
         <full_name>getModuleXml</full_name>
-        <docblock line="195">
+        <docblock line="196">
           <description>Returns the data stored in the Modules XML file.</description>
           <long-description/>
-          <tag line="195" name="return" description="Returns an object of class SimpleXMLElement with properties&#13;&#10;  containing the data held within the XML document" type="\SimpleXMLElement">
+          <tag line="196" name="return" description="Returns an object of class SimpleXMLElement with properties&#13;&#10;  containing the data held within the XML document" type="\SimpleXMLElement">
             <type by_reference="false">\SimpleXMLElement</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="216" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="217" package="Core">
         <name>setControllerName</name>
         <full_name>setControllerName</full_name>
-        <docblock line="209">
+        <docblock line="210">
           <description>Sets the controller name, overriding the controller the router finds</description>
           <long-description/>
-          <tag line="209" name="param" description="The name of the controller to load" type="string" variable="$name">
+          <tag line="210" name="param" description="The name of the controller to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="209" name="return" description="" type="void">
+          <tag line="210" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="216">
+        <argument line="217">
           <name>$name</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="228" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="229" package="Core">
         <name>setActionName</name>
         <full_name>setActionName</full_name>
-        <docblock line="221">
+        <docblock line="222">
           <description>Sets the action name, overriding the action the router finds</description>
           <long-description/>
-          <tag line="221" name="param" description="The name of the action to load" type="string" variable="$name">
+          <tag line="222" name="param" description="The name of the action to load" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="221" name="return" description="" type="void">
+          <tag line="222" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="228">
+        <argument line="229">
           <name>$name</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="240" package="Core">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core" line="241" package="Core">
         <name>setActionParams</name>
         <full_name>setActionParams</full_name>
-        <docblock line="233">
+        <docblock line="234">
           <description>Sets the actions' parameters, overriding the params the router finds</description>
           <long-description/>
-          <tag line="233" name="param" description="- An array of params to pass to the action" type="string[]" variable="$params">
+          <tag line="234" name="param" description="- An array of params to pass to the action" type="string[]" variable="$params">
             <type by_reference="false">string[]</type>
           </tag>
-          <tag line="233" name="return" description="" type="void">
+          <tag line="234" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="240">
+        <argument line="241">
           <name>$params</name>
           <default/>
           <type/>
@@ -4774,7 +4794,270 @@ body buffer</description>
       </docblock>
     </class>
   </file>
-  <file path="system\core\Router.php" hash="0c3def8ca7b8ec8e47a673bc0b273276" package="Default">
+  <file path="system\core\router\RouteCollection.php" hash="cea654f6e93e0e4f833a984b472daf31" package="Default">
+    <docblock line="2">
+      <description>Plexis Content Management System</description>
+      <long-description/>
+      <tag line="2" name="file" description="System/Core/Router/RouteCollection.php"/>
+      <tag line="2" name="copyright" description="2011-2012, Plexis Dev Team"/>
+      <tag line="2" name="license" description="GNU GPL v3"/>
+      <tag line="2" name="contains" description="RouteCollection"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="Core\Router" line="19" package="Core\Router">
+      <extends/>
+      <name>RouteCollection</name>
+      <full_name>\Core\Router\RouteCollection</full_name>
+      <docblock line="12">
+        <description>A container class to hold route information for the router.</description>
+        <long-description/>
+        <tag line="12" name="author" description="Steven Wilson"/>
+        <tag line="12" name="package" description="Core"/>
+        <tag line="12" name="subpackage" description="Router"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="25" namespace="Core\Router" package="Default">
+        <name>$routes</name>
+        <default>array()</default>
+        <docblock line="21">
+          <description>A Multi-Demensional array of route information</description>
+          <long-description/>
+          <tag line="21" name="var" description="" type="array[]">
+            <type by_reference="false">array[]</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="36" package="Core\Router">
+        <name>addRoute</name>
+        <full_name>addRoute</full_name>
+        <docblock line="27">
+          <description>Adds a route for a module, and URI segements</description>
+          <long-description/>
+          <tag line="27" name="param" description="The module we are adding a route for" type="\Core\Module" variable="$M">
+            <type by_reference="false">\Core\Module</type>
+          </tag>
+          <tag line="27" name="param" description="The module uri segement" type="string" variable="$moduleUri">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="27" name="param" description="The action uri segement" type="string" variable="$actionUri">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="27" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="36">
+          <name>$M</name>
+          <default/>
+          <type>\Core\Module</type>
+        </argument>
+        <argument line="36">
+          <name>$moduleUri</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="36">
+          <name>$actionUri</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="66" package="Core\Router">
+        <name>addRouteParams</name>
+        <full_name>addRouteParams</full_name>
+        <docblock line="51">
+          <description>Adds a route for a module, based off a list of parameters</description>
+          <long-description/>
+          <tag line="51" name="param" description="The name of the module we are adding a route for" type="string" variable="$moduleName">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="51" name="param" description="The 2 part URI string we are routing for. Must be formatted&#13;&#10;  correctly (module/action)." type="string" variable="$uriString">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="51" name="param" description="The module controller that will handle the route request." type="string" variable="$controller">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="51" name="param" description="The module controller method that will handle the route request." type="string" variable="$action">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="51" name="param" description="Is this a core module? This bool affects the path to the module's root&#13;&#10;  folder." type="bool" variable="$coreModule">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="51" name="throws" description="Thrown if the $uriString is invalid." type="\InvalidArgumentException">
+            <type by_reference="false">\InvalidArgumentException</type>
+          </tag>
+          <tag line="51" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="66">
+          <name>$moduleName</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="66">
+          <name>$uriString</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="66">
+          <name>$controller</name>
+          <default>null</default>
+          <type/>
+        </argument>
+        <argument line="66">
+          <name>$action</name>
+          <default>null</default>
+          <type/>
+        </argument>
+        <argument line="66">
+          <name>$coreModule</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="99" package="Core\Router">
+        <name>addRoutesArray</name>
+        <full_name>addRoutesArray</full_name>
+        <docblock line="89">
+          <description>Takes an array of routes to add to the database.</description>
+          <long-description/>
+          <tag line="89" name="param" description="The module we are adding a routes for" type="\Core\Module" variable="$M">
+            <type by_reference="false">\Core\Module</type>
+          </tag>
+          <tag line="89" name="param" description="A Two Dimensional Array containing information&#13;&#10;  about the route. Array keys are ('module_uri', 'action_uri', 'controller',&#13;&#10;  'method', 'core');" type="array[]" variable="$routes">
+            <type by_reference="false">array[]</type>
+          </tag>
+          <tag line="89" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="99">
+          <name>$M</name>
+          <default/>
+          <type>\Core\Module</type>
+        </argument>
+        <argument line="99">
+          <name>$routes</name>
+          <default/>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="128" package="Core\Router">
+        <name>addModuleRoutes</name>
+        <full_name>addModuleRoutes</full_name>
+        <docblock line="121">
+          <description>Takes a module object, and Adds its routes to the list.</description>
+          <long-description/>
+          <tag line="121" name="param" description="The module we are adding routes for" type="\Core\Module" variable="$M">
+            <type by_reference="false">\Core\Module</type>
+          </tag>
+          <tag line="121" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="128">
+          <name>$M</name>
+          <default/>
+          <type>\Core\Module</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="166" package="Core\Router">
+        <name>removeRoute</name>
+        <full_name>removeRoute</full_name>
+        <docblock line="158">
+          <description>Removes the specified route from the list of routes.</description>
+          <long-description/>
+          <tag line="158" name="param" description="The module uri segement" type="string" variable="$moduleUri">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="158" name="param" description="The action uri segement" type="string" variable="$actionUri">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="158" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="166">
+          <name>$moduleUri</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="166">
+          <name>$actionUri</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="178" package="Core\Router">
+        <name>removeRoutesByModule</name>
+        <full_name>removeRoutesByModule</full_name>
+        <docblock line="171">
+          <description>Removes all routes from the list from the specified module name.</description>
+          <long-description/>
+          <tag line="171" name="param" description="" type="string" variable="$moduleName">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="171" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="178">
+          <name>$moduleName</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="196" package="Core\Router">
+        <name>hasRoute</name>
+        <full_name>hasRoute</full_name>
+        <docblock line="188">
+          <description>Specified whether or not a route has been defined.</description>
+          <long-description/>
+          <tag line="188" name="param" description="The module uri segement" type="string" variable="$moduleUri">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="188" name="param" description="The action uri segement" type="string" variable="$actionUri">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="188" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="196">
+          <name>$moduleUri</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="196">
+          <name>$actionUri</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="207" package="Core\Router">
+        <name>getRoutes</name>
+        <full_name>getRoutes</full_name>
+        <docblock line="201">
+          <description>Returns a list of all defined routes in this stack.</description>
+          <long-description/>
+          <tag line="201" name="return" description="" type="array[]">
+            <type by_reference="false">array[]</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Core\Router" line="217" package="Core\Router">
+        <name>toSql</name>
+        <full_name>toSql</full_name>
+        <docblock line="212">
+          <description>Formats the current stack list into an insert sql statement</description>
+          <long-description/>
+          <tag line="212" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+  </file>
+  <file path="system\core\Router.php" hash="3b6d297ed5beeea63efad77c76d0a5f9" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description></long-description>
@@ -4829,130 +5112,198 @@ Dispatch class will use.&lt;/p&gt;</long-description>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="49" package="Core">
+      <property final="false" static="true" visibility="protected" line="48" namespace="Core" package="Default">
+        <name>$RouteCollection</name>
+        <default></default>
+        <docblock line="44">
+          <description>The route stack of all defined routes</description>
+          <long-description></long-description>
+          <tag line="44" name="var" description="" type="\Core\Router\RouteCollection">
+            <type by_reference="false">\Core\Router\RouteCollection</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="55" package="Core">
         <name>GetRequest</name>
         <full_name>GetRequest</full_name>
-        <docblock line="44">
+        <docblock line="50">
           <description>Fetches the current request in a \Core\Module object</description>
           <long-description></long-description>
-          <tag line="44" name="return" description="Returns a Core\Module object of the current request" type="\Core\Module">
+          <tag line="50" name="return" description="Returns a Core\Module object of the current request" type="\Core\Module">
             <type by_reference="false">\Core\Module</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="62" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="68" package="Core">
         <name>RouteString</name>
         <full_name>RouteString</full_name>
-        <docblock line="54">
+        <docblock line="60">
           <description>This method analyzes a uri string, and returns a Module object
 of the routed request.</description>
           <long-description></long-description>
-          <tag line="54" name="param" description="The uri string to be routed." type="string" variable="$uri">
+          <tag line="60" name="param" description="The uri string to be routed." type="string" variable="$uri">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="54" name="return" description="Returns false if the request leads to a 404." type="\Core\Module|bool">
+          <tag line="60" name="return" description="Returns false if the request leads to a 404." type="\Core\Module|bool">
             <type by_reference="false">\Core\Module</type>
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="62">
+        <argument line="68">
           <name>$uri</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="126" package="Core">
-        <name>AddRoute</name>
-        <full_name>AddRoute</full_name>
-        <docblock line="117">
-          <description>Adds a new route rule in the database for future route matching</description>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="133" package="Core">
+        <name>AddRoutes</name>
+        <full_name>AddRoutes</full_name>
+        <docblock line="123">
+          <description>Adds a list new route rules in the database for future route matching</description>
           <long-description></long-description>
-          <tag line="117" name="param" description="The Module object for the module we are appending routes for" type="\Core\Module" variable="$module">
-            <type by_reference="false">\Core\Module</type>
+          <tag line="123" name="param" description="The route stack container" type="\Core\Router\RouteCollection" variable="$routes">
+            <type by_reference="false">\Core\Router\RouteCollection</type>
           </tag>
-          <tag line="117" name="param" description="The request module (first part of the URI)" type="string" variable="$reqModule">
-            <type by_reference="false">string</type>
+          <tag line="123" name="param" description="Remove conflicting results? If false, and there is a&#13;&#10;  routing conflict, an \Exception will be thrown. Otherwise,&#13;&#10;  the old route will be removed, and the new inserted." type="bool" variable="$remove">
+            <type by_reference="false">bool</type>
           </tag>
-          <tag line="117" name="param" description="The request action, or an array or request actions." type="string|string[]" variable="$reqAction">
-            <type by_reference="false">string</type>
-            <type by_reference="false">string[]</type>
-          </tag>
-          <tag line="117" name="return" description="" type="void">
-            <type by_reference="false">void</type>
+          <tag line="123" name="return" description="Returns true if successfull, false otherwise." type="bool">
+            <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="126">
-          <name>$module</name>
+        <argument line="133">
+          <name>$routes</name>
           <default></default>
-          <type>\Core\Module</type>
+          <type>\Core\Router\RouteCollection</type>
         </argument>
-        <argument line="126">
+        <argument line="133">
+          <name>$remove</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="170" package="Core">
+        <name>RemoveRoute</name>
+        <full_name>RemoveRoute</full_name>
+        <docblock line="161">
+          <description>Removes a defined route from the database</description>
+          <long-description></long-description>
+          <tag line="161" name="param" description="The module URI segement" type="string" variable="$reqModule">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="161" name="param" description="The action URI segement" type="string" variable="$reqAction">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="161" name="return" description="Returns true if any results were removed, or false&#13;&#10;  if there was no rows removed" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="170">
           <name>$reqModule</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="126">
+        <argument line="170">
           <name>$reqAction</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="141" package="Core">
-        <name>MatchRoute</name>
-        <full_name>MatchRoute</full_name>
-        <docblock line="132">
-          <description>Checks a module and action for a matching route.</description>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="184" package="Core">
+        <name>RemoveModuleRoutes</name>
+        <full_name>RemoveModuleRoutes</full_name>
+        <docblock line="176">
+          <description>Removes all routes associated with a specified module.</description>
           <long-description></long-description>
-          <tag line="132" name="param" description="The requested module" type="string" variable="$module">
+          <tag line="176" name="param" description="The module name" type="string" variable="$module">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="132" name="param" description="The requested action" type="string" variable="$action">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="132" name="return" description="Returns false if there is no database route,&#13;&#10;  or if the module matched does not exist." type="\Core\Module|bool">
-            <type by_reference="false">\Core\Module</type>
+          <tag line="176" name="return" description="Returns true if any results were removed, or false&#13;&#10;  if there was no rows removed" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="141">
+        <argument line="184">
           <name>$module</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="141">
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="198" package="Core">
+        <name>GetConflictingRoutes</name>
+        <full_name>GetConflictingRoutes</full_name>
+        <docblock line="189">
+          <description>Returns an array of conflicting routes with a Route stack, and the
+current defined routes</description>
+          <long-description></long-description>
+          <tag line="189" name="param" description="A routes stack to check for." type="\Core\Router\RouteCollection" variable="$routes">
+            <type by_reference="false">\Core\Router\RouteCollection</type>
+          </tag>
+          <tag line="189" name="return" description="Returns a 2 dimensional array. Each index is an array of&#13;&#10;     array('module_uri' -&gt; module uri, 'action_uri' -&gt; action uri)." type="array[]">
+            <type by_reference="false">array[]</type>
+          </tag>
+        </docblock>
+        <argument line="198">
+          <name>$routes</name>
+          <default></default>
+          <type>\Core\Router\RouteCollection</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="242" package="Core">
+        <name>MatchRoute</name>
+        <full_name>MatchRoute</full_name>
+        <docblock line="233">
+          <description>Checks a module and action for a matching route.</description>
+          <long-description></long-description>
+          <tag line="233" name="param" description="The module URI segement" type="string" variable="$module">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="233" name="param" description="The action URI segement" type="string" variable="$action">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="233" name="return" description="Returns false if there is no database route,&#13;&#10;  or if the module matched does not exist." type="\Core\Module|bool">
+            <type by_reference="false">\Core\Module</type>
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="242">
+          <name>$module</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="242">
           <name>$action</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="177" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="281" package="Core">
         <name>FetchRoutes</name>
         <full_name>FetchRoutes</full_name>
-        <docblock line="167">
+        <docblock line="271">
           <description>Returns an array of routes for a defined module</description>
           <long-description></long-description>
-          <tag line="167" name="param" description="The requested module" type="string" variable="$module">
+          <tag line="271" name="param" description="The requested module" type="string" variable="$module">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="167" name="return" description="Returns a two dimensional array. foreach array&#13;&#10;  key, the index key is the first 2 parts of the URI routed, and the&#13;&#10;  the value is an array of ('controller' =&gt; controller, 'method' =&gt; method).&#13;&#10;  Returns an empty array if there are not routes for the defined module." type="array[]">
+          <tag line="271" name="return" description="Returns a two dimensional array. foreach array&#13;&#10;  key, the index key is the first 2 parts of the URI routed, and the&#13;&#10;  the value is an array of ('controller' =&gt; controller, 'method' =&gt; method).&#13;&#10;  Returns an empty array if there are not routes for the defined module." type="array[]">
             <type by_reference="false">array[]</type>
           </tag>
         </docblock>
-        <argument line="177">
+        <argument line="281">
           <name>$module</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="204" package="Core">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Core" line="308" package="Core">
         <name>Init</name>
         <full_name>Init</full_name>
-        <docblock line="197">
+        <docblock line="301">
           <description>This method analyzes the current URL request, and loads the
 module in which claims the URL route.</description>
           <long-description>&lt;p&gt;This method is called
 automatically, and will not do anything if called again.&lt;/p&gt;</long-description>
-          <tag line="197" name="return" description="" type="void">
+          <tag line="301" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
@@ -6296,7 +6647,7 @@ variable names</description>
       </method>
     </class>
   </file>
-  <file path="system\library\Template.php" hash="6a92d7756ec72ce2bedfd50cf1802d55" package="Default">
+  <file path="system\library\Template.php" hash="a6e76c9b67242c9dad28436a409f4fa6" package="Default">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description/>
@@ -6617,251 +6968,281 @@ the final rendered template.</description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="277" package="Library">
-        <name>SetTheme</name>
-        <full_name>SetTheme</full_name>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="275" package="Library">
+        <name>GetThemePath</name>
+        <full_name>GetThemePath</full_name>
         <docblock line="268">
-          <description>Sets the name of the theme to render, where the layout.tpl is located</description>
+          <description>Returns the current theme path</description>
           <long-description/>
-          <tag line="268" name="param" description="The theme name" type="string" variable="$name">
+          <tag line="268" name="param" description="Include the current set theme name?" type="bool" variable="$themeName">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="268" name="return" description="The path from the root to the theme folder." type="string">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="268" name="throws" description="If the theme doesnt exist in the theme path" type="\Library\InvalidThemePathException">
+        </docblock>
+        <argument line="275">
+          <name>$themeName</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="285" package="Library">
+        <name>GetThemeUrl</name>
+        <full_name>GetThemeUrl</full_name>
+        <docblock line="280">
+          <description>Returns the theme HTTP url to the root dir.</description>
+          <long-description/>
+          <tag line="280" name="return" description="The path from the root to the theme folder." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="299" package="Library">
+        <name>SetTheme</name>
+        <full_name>SetTheme</full_name>
+        <docblock line="290">
+          <description>Sets the name of the theme to render, where the layout.tpl is located</description>
+          <long-description/>
+          <tag line="290" name="param" description="The theme name" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="290" name="throws" description="If the theme doesnt exist in the theme path" type="\Library\InvalidThemePathException">
             <type by_reference="false">\Library\InvalidThemePathException</type>
           </tag>
-          <tag line="268" name="return" description="" type="void">
+          <tag line="290" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="277">
+        <argument line="299">
           <name>$name</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="299" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="321" package="Library">
         <name>Message</name>
         <full_name>Message</full_name>
-        <docblock line="291">
+        <docblock line="313">
           <description>Adds a global message to be parsed into the template</description>
           <long-description/>
-          <tag line="291" name="param" description="The message level (error, warning, info etc)" type="string" variable="$lvl">
+          <tag line="313" name="param" description="The message level (error, warning, info etc)" type="string" variable="$lvl">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="291" name="param" description="The message to be displayed within the rendered template" type="string" variable="$message">
+          <tag line="313" name="param" description="The message to be displayed within the rendered template" type="string" variable="$message">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="291" name="return" description="" type="void">
+          <tag line="313" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="299">
+        <argument line="321">
           <name>$lvl</name>
           <default/>
           <type/>
         </argument>
-        <argument line="299">
+        <argument line="321">
           <name>$message</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="309" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="331" package="Library">
         <name>ClearContents</name>
         <full_name>ClearContents</full_name>
-        <docblock line="304">
+        <docblock line="326">
           <description>Clears the current output buffer of the template</description>
           <long-description/>
-          <tag line="304" name="return" description="" type="void">
+          <tag line="326" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="328" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="350" package="Library">
         <name>AddStylesheet</name>
         <full_name>AddStylesheet</full_name>
-        <docblock line="321">
+        <docblock line="343">
           <description>Appends the header adding a css tag</description>
           <long-description/>
-          <tag line="321" name="param" description="The http location of the file" type="string" variable="$location">
+          <tag line="343" name="param" description="The http location of the file" type="string" variable="$location">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="321" name="return" description="" type="void">
+          <tag line="343" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="328">
+        <argument line="350">
           <name>$location</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Library" line="353" package="Library">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Library" line="375" package="Library">
         <name>AddScriptSrc</name>
         <full_name>AddScriptSrc</full_name>
-        <docblock line="345">
+        <docblock line="367">
           <description>Appends the header adding a script tag</description>
           <long-description/>
-          <tag line="345" name="param" description="The http location of the file" type="string" variable="$location">
+          <tag line="367" name="param" description="The http location of the file" type="string" variable="$location">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="345" name="param" description="The script mime type, as it would be in the html script tag." type="string" variable="$type">
+          <tag line="367" name="param" description="The script mime type, as it would be in the html script tag." type="string" variable="$type">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="345" name="return" description="" type="void">
+          <tag line="367" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="353">
+        <argument line="375">
           <name>$location</name>
           <default/>
           <type/>
         </argument>
-        <argument line="353">
+        <argument line="375">
           <name>$type</name>
           <default>'text/javascript'</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="377" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="399" package="Library">
         <name>PageTitle</name>
         <full_name>PageTitle</full_name>
-        <docblock line="370">
+        <docblock line="392">
           <description>Sets the page title (After server title)</description>
           <long-description/>
-          <tag line="370" name="param" description="The title of the page" type="string" variable="$title">
+          <tag line="392" name="param" description="The title of the page" type="string" variable="$title">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="370" name="return" description="" type="void">
+          <tag line="392" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="377">
+        <argument line="399">
           <name>$title</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="389" package="Library">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Library" line="411" package="Library">
         <name>AppendHeader</name>
         <full_name>AppendHeader</full_name>
-        <docblock line="382">
+        <docblock line="404">
           <description>Adds a new line of code to the head tags</description>
           <long-description/>
-          <tag line="382" name="param" description="The line to add" type="string" variable="$line">
+          <tag line="404" name="param" description="The line to add" type="string" variable="$line">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="382" name="return" description="" type="void">
+          <tag line="404" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="389">
+        <argument line="411">
           <name>$line</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="405" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="427" package="Library">
         <name>BuildHeader</name>
         <full_name>BuildHeader</full_name>
-        <docblock line="400">
+        <docblock line="422">
           <description>Builds the plexis header</description>
           <long-description/>
-          <tag line="400" name="return" description="The rendered header data" type="string">
+          <tag line="422" name="return" description="The rendered header data" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="465" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="487" package="Library">
         <name>ParseGlobalMessages</name>
         <full_name>ParseGlobalMessages</full_name>
-        <docblock line="460">
+        <docblock line="482">
           <description>Parse the global messages for the template renderer</description>
           <long-description/>
-          <tag line="460" name="return" description="The parsed global message contents" type="string">
+          <tag line="482" name="return" description="The parsed global message contents" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="499" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="521" package="Library">
         <name>LoadThemeConfig</name>
         <full_name>LoadThemeConfig</full_name>
-        <docblock line="490">
+        <docblock line="512">
           <description>Internal method for loading the theme's config xml file</description>
           <long-description/>
-          <tag line="490" name="throws" description="if the theme isnt set before rendering" type="\Library\ThemeNotSetException">
+          <tag line="512" name="throws" description="if the theme isnt set before rendering" type="\Library\ThemeNotSetException">
             <type by_reference="false">\Library\ThemeNotSetException</type>
           </tag>
-          <tag line="490" name="throws" description="if the theme is missing its theme&#13;&#10;config file (theme.xml)" type="\Library\MissingThemeConfigException">
+          <tag line="512" name="throws" description="if the theme is missing its theme&#13;&#10;config file (theme.xml)" type="\Library\MissingThemeConfigException">
             <type by_reference="false">\Library\MissingThemeConfigException</type>
           </tag>
-          <tag line="490" name="return" description="" type="void">
+          <tag line="512" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="519" package="Library">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Library" line="541" package="Library">
         <name>RenderLayout</name>
         <full_name>RenderLayout</full_name>
-        <docblock line="514">
+        <docblock line="536">
           <description>Internal method for parsing template tags and rendering the layout</description>
           <long-description/>
-          <tag line="514" name="return" description="The parsed contents" type="string">
+          <tag line="536" name="return" description="The parsed contents" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="579" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="601" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>ThemeNotSetException</name>
       <full_name>\Library\ThemeNotSetException</full_name>
-      <docblock line="572">
+      <docblock line="594">
         <description>Thrown by the Template Class when the render method is called, but not theme path was set</description>
         <long-description/>
-        <tag line="572" name="package" description="Library"/>
-        <tag line="572" name="subpackage" description="Exceptions"/>
-        <tag line="572" name="file" description="System/Library/Template.php"/>
-        <tag line="572" name="see" description="\Library\Template::Render()" refers="\Library\Template::Render()"/>
+        <tag line="594" name="package" description="Library"/>
+        <tag line="594" name="subpackage" description="Exceptions"/>
+        <tag line="594" name="file" description="System/Library/Template.php"/>
+        <tag line="594" name="see" description="\Library\Template::Render()" refers="\Library\Template::Render()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="588" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="610" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidThemePathException</name>
       <full_name>\Library\InvalidThemePathException</full_name>
-      <docblock line="581">
+      <docblock line="603">
         <description>Thrown by the Template Class if the theme path provided is an invalid path</description>
         <long-description/>
-        <tag line="581" name="package" description="Library"/>
-        <tag line="581" name="subpackage" description="Exceptions"/>
-        <tag line="581" name="file" description="System/Library/Template.php"/>
-        <tag line="581" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
+        <tag line="603" name="package" description="Library"/>
+        <tag line="603" name="subpackage" description="Exceptions"/>
+        <tag line="603" name="file" description="System/Library/Template.php"/>
+        <tag line="603" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="597" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="619" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>InvalidPageContents</name>
       <full_name>\Library\InvalidPageContents</full_name>
-      <docblock line="590">
+      <docblock line="612">
         <description>Thrown by the Template Class if the contents provided are not a string, or subclass of the View method</description>
         <long-description/>
-        <tag line="590" name="package" description="Library"/>
-        <tag line="590" name="subpackage" description="Exceptions"/>
-        <tag line="590" name="file" description="System/Library/Template.php"/>
-        <tag line="590" name="see" description="\Library\Template::Add()" refers="\Library\Template::Add()"/>
+        <tag line="612" name="package" description="Library"/>
+        <tag line="612" name="subpackage" description="Exceptions"/>
+        <tag line="612" name="file" description="System/Library/Template.php"/>
+        <tag line="612" name="see" description="\Library\Template::Add()" refers="\Library\Template::Add()"/>
       </docblock>
     </class>
-    <class final="false" abstract="false" namespace="Library" line="606" package="Library\Exceptions">
+    <class final="false" abstract="false" namespace="Library" line="628" package="Library\Exceptions">
       <extends>\Exception</extends>
       <name>MissingThemeConfigException</name>
       <full_name>\Library\MissingThemeConfigException</full_name>
-      <docblock line="599">
+      <docblock line="621">
         <description>Thrown by the Template Class if the theme is missing its config file</description>
         <long-description/>
-        <tag line="599" name="package" description="Library"/>
-        <tag line="599" name="subpackage" description="Exceptions"/>
-        <tag line="599" name="file" description="System/Library/Template.php"/>
-        <tag line="599" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
+        <tag line="621" name="package" description="Library"/>
+        <tag line="621" name="subpackage" description="Exceptions"/>
+        <tag line="621" name="file" description="System/Library/Template.php"/>
+        <tag line="621" name="see" description="\Library\Template::SetThemePath()" refers="\Library\Template::SetThemePath()"/>
       </docblock>
     </class>
   </file>
@@ -7167,7 +7548,7 @@ the final rendered template.</description>
       </method>
     </class>
   </file>
-  <file path="system\Plexis.php" hash="1c46fc58d7a14dfa4b530ad582dff7f5" package="System">
+  <file path="system\Plexis.php" hash="ad0a245ce425b49732d7c66331c0d4c4" package="System">
     <docblock line="2">
       <description>Plexis Content Management System</description>
       <long-description/>
@@ -7176,19 +7557,19 @@ the final rendered template.</description>
       <tag line="2" name="license" description="GNU GPL v3"/>
       <tag line="2" name="package" description="System"/>
     </docblock>
-    <include line="279" type="Require Once" package="Default">
+    <include line="251" type="Require Once" package="Default">
       <name/>
     </include>
-    <include line="344" type="Include" package="Default">
+    <include line="316" type="Include" package="Default">
       <name/>
     </include>
-    <include line="360" type="Include" package="Default">
+    <include line="332" type="Include" package="Default">
       <name/>
     </include>
-    <include line="389" type="Require" package="Default">
+    <include line="361" type="Require" package="Default">
       <name/>
     </include>
-    <include line="422" type="Require" package="Default">
+    <include line="394" type="Require" package="Default">
       <name/>
     </include>
     <constant namespace="global" line="97" package="System">
@@ -7196,7 +7577,7 @@ the final rendered template.</description>
       <full_name>\SITE_URL</full_name>
       <value>MOD_REWRITE ? \Core\Request::BaseUrl() : \Core\Request::BaseUrl() . '/?uri='</value>
     </constant>
-    <constant namespace="global" line="433" package="System">
+    <constant namespace="global" line="405" package="System">
       <name>DEBUGGING</name>
       <full_name>\DEBUGGING</full_name>
       <value>\Core\Config::GetVar('debugging', 'Plexis') &amp;&amp; \Core\Request::Query('debug', false) !== false</value>
@@ -7313,186 +7694,186 @@ will be executed&lt;/p&gt;</long-description>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="165" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="156" package="System">
         <name>Show403</name>
         <full_name>Show403</full_name>
-        <docblock line="156">
+        <docblock line="147">
           <description>Displays the 403 "Forbidden"</description>
           <long-description>&lt;p&gt;Calling this method will clear all current output, render the 403 page
 and kill all current running scripts. No code following this method
 will be executed&lt;/p&gt;</long-description>
-          <tag line="156" name="return" description="" type="void">
+          <tag line="147" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="195" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="177" package="System">
         <name>ShowSiteOffline</name>
         <full_name>ShowSiteOffline</full_name>
-        <docblock line="184">
+        <docblock line="166">
           <description>Displays the site offline page</description>
           <long-description>&lt;p&gt;Calling this method will clear all current output, render the site offline
 page and kill all current running scripts. No code following this method
 will be executed&lt;/p&gt;</long-description>
-          <tag line="184" name="param" description="The meesage to also be displayed with the&#13;&#10;  Site Offline page." type="string" variable="$message">
+          <tag line="166" name="param" description="The meesage to also be displayed with the&#13;&#10;  Site Offline page." type="string" variable="$message">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="184" name="return" description="" type="void">
+          <tag line="166" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="195">
+        <argument line="177">
           <name>$message</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="220" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="192" package="System">
         <name>GetRealm</name>
         <full_name>GetRealm</full_name>
-        <docblock line="215">
+        <docblock line="187">
           <description>Returns the Realm Object</description>
           <long-description/>
-          <tag line="215" name="return" description="" type="\Wowlib\Realm">
+          <tag line="187" name="return" description="" type="\Wowlib\Realm">
             <type by_reference="false">\Wowlib\Realm</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="230" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="202" package="System">
         <name>ListPlugins</name>
         <full_name>ListPlugins</full_name>
-        <docblock line="225">
+        <docblock line="197">
           <description>Returns an array of installed plugins</description>
           <long-description/>
-          <tag line="225" name="return" description="" type="string[]">
+          <tag line="197" name="return" description="" type="string[]">
             <type by_reference="false">string[]</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="242" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="214" package="System">
         <name>PluginInstalled</name>
         <full_name>PluginInstalled</full_name>
-        <docblock line="235">
+        <docblock line="207">
           <description>Returns whether or not a plugin is installed and running</description>
           <long-description/>
-          <tag line="235" name="param" description="The name of the plugin" type="string" variable="$name">
+          <tag line="207" name="param" description="The name of the plugin" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="235" name="return" description="" type="bool">
+          <tag line="207" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="242">
+        <argument line="214">
           <name>$name</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="254" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="226" package="System">
         <name>RenderTemplate</name>
         <full_name>RenderTemplate</full_name>
-        <docblock line="247">
+        <docblock line="219">
           <description>Sets whether plexis should render the full template or not</description>
           <long-description/>
-          <tag line="247" name="param" description="Render the template?" type="bool" variable="$bool">
+          <tag line="219" name="param" description="Render the template?" type="bool" variable="$bool">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="247" name="return" description="" type="void">
+          <tag line="219" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="254">
+        <argument line="226">
           <name>$bool</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="268" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="240" package="System">
         <name>LoadHelper</name>
         <full_name>LoadHelper</full_name>
-        <docblock line="261">
+        <docblock line="233">
           <description>Loads the requested helper name</description>
           <long-description/>
-          <tag line="261" name="param" description="The helper name to load (no file extension)" type="string" variable="$name">
+          <tag line="233" name="param" description="The helper name to load (no file extension)" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="261" name="return" description="Returns false if the helper doesnt exist, true otherwise" type="bool">
+          <tag line="233" name="return" description="Returns false if the helper doesnt exist, true otherwise" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="268">
+        <argument line="240">
           <name>$name</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="296" package="System">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="268" package="System">
         <name>LoadDBConnection</name>
         <full_name>LoadDBConnection</full_name>
-        <docblock line="288">
+        <docblock line="260">
           <description>Internal method for loading the Plexis DB connection</description>
           <long-description/>
-          <tag line="288" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the plexis database connection is offline" type="bool" variable="$showOffline">
+          <tag line="260" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the plexis database connection is offline" type="bool" variable="$showOffline">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="288" name="return" description="" type="\Database\Driver">
+          <tag line="260" name="return" description="" type="\Database\Driver">
             <type by_reference="false">\Database\Driver</type>
           </tag>
         </docblock>
-        <argument line="296">
+        <argument line="268">
           <name>$showOffline</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="318" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="290" package="System">
         <name>RunModule</name>
         <full_name>RunModule</full_name>
-        <docblock line="313">
+        <docblock line="285">
           <description>Internal method for running the controller and action</description>
           <long-description/>
-          <tag line="313" name="return" description="" type="void">
+          <tag line="285" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="341" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="313" package="System">
         <name>LoadPlugins</name>
         <full_name>LoadPlugins</full_name>
-        <docblock line="336">
+        <docblock line="308">
           <description>Internal method for loading, and running all plugins</description>
           <long-description/>
-          <tag line="336" name="return" description="" type="void">
+          <tag line="308" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="386" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="358" package="System">
         <name>LoadWowlib</name>
         <full_name>LoadWowlib</full_name>
-        <docblock line="378">
+        <docblock line="350">
           <description>Internal method for loading the wowlib</description>
           <long-description/>
-          <tag line="378" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the realm database connection is offline" type="bool" variable="$showOffline">
+          <tag line="350" name="param" description="If set to false, the Site Offline page will&#13;&#10;  not be rendered if the realm database connection is offline" type="bool" variable="$showOffline">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="378" name="return" description="" type="void">
+          <tag line="350" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
-        <argument line="386">
+        <argument line="358">
           <name>$showOffline</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="419" package="System">
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="391" package="System">
         <name>LoadConfigs</name>
         <full_name>LoadConfigs</full_name>
-        <docblock line="414">
+        <docblock line="386">
           <description>Internal method for loading the plexis config files</description>
           <long-description/>
-          <tag line="414" name="return" description="" type="void">
+          <tag line="386" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
@@ -8015,6 +8396,7 @@ class is initiated and returned&lt;/p&gt;</long-description>
   <package name="Core" full_name="Core">
     <package name="Exceptions" full_name="Core\Exceptions"/>
     <package name="IO" full_name="Core\IO"/>
+    <package name="Router" full_name="Core\Router"/>
   </package>
   <package name="Database" full_name="Database">
     <package name="Exceptions" full_name="Database\Exceptions"/>
@@ -8032,6 +8414,7 @@ class is initiated and returned&lt;/p&gt;</long-description>
   <package name="Wowlib" full_name="Wowlib"/>
   <namespace name="Core" full_name="Core">
     <namespace name="IO" full_name="Core\IO"/>
+    <namespace name="Router" full_name="Core\Router"/>
   </namespace>
   <namespace name="Database" full_name="Database"/>
   <namespace name="Library" full_name="Library"/>

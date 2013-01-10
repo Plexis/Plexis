@@ -72,7 +72,7 @@
                     </div></p>
 <h4>The Ajax Controller</h4>
 <p>
-                    The Ajax controller is a special controller that handle all ajax requests, regardless of the defined controller for the route.
+                    The Ajax controller is a special controller that handles all ajax requests for the module, regardless of the defined controller for the route.
                 </p>
 <h4>The AdminExtension Controller</h4>
 <p>
@@ -136,10 +136,10 @@
         &lt;route module="account" action="login" /&gt;
         
         &lt;!-- 
-            Example 3: Takes any and all actions (note the period "." in the action attribute) under the "account" 
+            Example 3: Takes any and all actions (note the period "*" in the action attribute) under the "account" 
             module request 
         --&gt;
-        &lt;route module="account" action="." /&gt;
+        &lt;route module="account" action="*" /&gt;
     &lt;/routes&gt;
 &lt;/module&gt;</pre>
 </div></div>

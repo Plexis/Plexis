@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Plexis CMS » \Core\Router\RouteCollection</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../template/css/template.css" rel="stylesheet" media="all">
+<script src="../template/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../template/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../template/js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../template/js/bootstrap.js" type="text/javascript"></script><script src="../template/js/template.js" type="text/javascript"></script><script src="../template/js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../template/img/favicon.ico">
+<link rel="apple-touch-icon" href="../template/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../template/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../template/img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Plexis CMS</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Core.html"><i class="icon-folder-open"></i> Core</a></li>
+<li><a href="../packages/Database.html"><i class="icon-folder-open"></i> Database</a></li>
+<li><a href="../packages/Helpers.html"><i class="icon-folder-open"></i> Helpers</a></li>
+<li><a href="../packages/Library.html"><i class="icon-folder-open"></i> Library</a></li>
+<li><a href="../packages/System.html"><i class="icon-folder-open"></i> System</a></li>
+<li><a href="../packages/Wowlib.html"><i class="icon-folder-open"></i> Wowlib</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button><button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_addModuleRoutes" title="addModuleRoutes :: Takes a module object, and Adds its routes to the list."><span class="description">Takes a module object, and Adds its routes to the list.</span><pre>addModuleRoutes()</pre></a></li>
+<li class="method public "><a href="#method_addRoute" title="addRoute :: Adds a route for a module, and URI segements"><span class="description">Adds a route for a module, and URI segements</span><pre>addRoute()</pre></a></li>
+<li class="method public "><a href="#method_addRouteParams" title="addRouteParams :: Adds a route for a module, based off a list of parameters"><span class="description">Adds a route for a module, based off a list of parameters</span><pre>addRouteParams()</pre></a></li>
+<li class="method public "><a href="#method_addRoutesArray" title="addRoutesArray :: Takes an array of routes to add to the database."><span class="description">Takes an array of routes to add to the database.</span><pre>addRoutesArray()</pre></a></li>
+<li class="method public "><a href="#method_getRoutes" title="getRoutes :: Returns a list of all defined routes in this stack."><span class="description">Returns a list of all defined routes in this stack.</span><pre>getRoutes()</pre></a></li>
+<li class="method public "><a href="#method_hasRoute" title="hasRoute :: Specified whether or not a route has been defined."><span class="description">Specified whether or not a route has been defined.</span><pre>hasRoute()</pre></a></li>
+<li class="method public "><a href="#method_removeRoute" title="removeRoute :: Removes the specified route from the list of routes."><span class="description">Removes the specified route from the list of routes.</span><pre>removeRoute()</pre></a></li>
+<li class="method public "><a href="#method_removeRoutesByModule" title="removeRoutesByModule :: Removes all routes from the list from the specified module name."><span class="description">Removes all routes from the list from the specified module name.</span><pre>removeRoutesByModule()</pre></a></li>
+<li class="method public "><a href="#method_toSql" title="toSql :: Formats the current stack list into an insert sql statement"><span class="description">Formats the current stack list into an insert sql statement</span><pre>toSql()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="property protected "><a href="#property_routes" title="$routes :: A Multi-Demensional array of route information"><span class="description"></span><pre>$routes</pre></a></li></ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Core\Router\RouteCollection"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Core.html">Core</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/Core.Router.html">Router</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Core.Router.RouteCollection.html">RouteCollection</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">A container class to hold route information for the router.</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Steven Wilson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Core.Router.html">Core</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Router</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_addModuleRoutes"></a><div class="element clickable method public method_addModuleRoutes" data-toggle="collapse" data-target=".method_addModuleRoutes .collapse">
+<h2>Takes a module object, and Adds its routes to the list.</h2>
+<pre>addModuleRoutes(\Core\Module $M) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$M</h4>
+<code><a href="../classes/Core.Module.html">\Core\Module</a></code><p>The module we are adding routes for</p></div>
+</div></div>
+</div>
+<a id="method_addRoute"></a><div class="element clickable method public method_addRoute" data-toggle="collapse" data-target=".method_addRoute .collapse">
+<h2>Adds a route for a module, and URI segements</h2>
+<pre>addRoute(\Core\Module $M, string $moduleUri, string $actionUri) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$M</h4>
+<code><a href="../classes/Core.Module.html">\Core\Module</a></code><p>The module we are adding a route for</p></div>
+<div class="subelement argument">
+<h4>$moduleUri</h4>
+<code>string</code><p>The module uri segement</p></div>
+<div class="subelement argument">
+<h4>$actionUri</h4>
+<code>string</code><p>The action uri segement</p></div>
+</div></div>
+</div>
+<a id="method_addRouteParams"></a><div class="element clickable method public method_addRouteParams" data-toggle="collapse" data-target=".method_addRouteParams .collapse">
+<h2>Adds a route for a module, based off a list of parameters</h2>
+<pre>addRouteParams(string $moduleName, string $uriString, string $controller = null, string $action = null, bool $coreModule = false) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$moduleName</h4>
+<code>string</code><p>The name of the module we are adding a route for</p></div>
+<div class="subelement argument">
+<h4>$uriString</h4>
+<code>string</code><p>The 2 part URI string we are routing for. Must be formatted
+  correctly (module/action).</p>
+</div>
+<div class="subelement argument">
+<h4>$controller<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The module controller that will handle the route request.</p></div>
+<div class="subelement argument">
+<h4>$action<small><b>   [Default =  null]</b></small>
+</h4>
+<code>string</code><p>The module controller method that will handle the route request.</p></div>
+<div class="subelement argument">
+<h4>$coreModule<small><b>   [Default =  false]</b></small>
+</h4>
+<code>bool</code><p>Is this a core module? This bool affects the path to the module's root
+  folder.</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/InvalidArgumentException.html">\InvalidArgumentException</a></code></th>
+<td>Thrown if the $uriString is invalid.</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_addRoutesArray"></a><div class="element clickable method public method_addRoutesArray" data-toggle="collapse" data-target=".method_addRoutesArray .collapse">
+<h2>Takes an array of routes to add to the database.</h2>
+<pre>addRoutesArray(\Core\Module $M, array $routes) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$M</h4>
+<code><a href="../classes/Core.Module.html">\Core\Module</a></code><p>The module we are adding a routes for</p></div>
+<div class="subelement argument">
+<h4>$routes</h4>
+<code>array[]</code><p>A Two Dimensional Array containing information
+  about the route. Array keys are ('module_uri', 'action_uri', 'controller',
+  'method', 'core');</p>
+</div>
+</div></div>
+</div>
+<a id="method_getRoutes"></a><div class="element clickable method public method_getRoutes" data-toggle="collapse" data-target=".method_getRoutes .collapse">
+<h2>Returns a list of all defined routes in this stack.</h2>
+<pre>getRoutes() : array[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array[]</code></div>
+</div></div>
+</div>
+<a id="method_hasRoute"></a><div class="element clickable method public method_hasRoute" data-toggle="collapse" data-target=".method_hasRoute .collapse">
+<h2>Specified whether or not a route has been defined.</h2>
+<pre>hasRoute(string $moduleUri, string $actionUri) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$moduleUri</h4>
+<code>string</code><p>The module uri segement</p></div>
+<div class="subelement argument">
+<h4>$actionUri</h4>
+<code>string</code><p>The action uri segement</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_removeRoute"></a><div class="element clickable method public method_removeRoute" data-toggle="collapse" data-target=".method_removeRoute .collapse">
+<h2>Removes the specified route from the list of routes.</h2>
+<pre>removeRoute(string $moduleUri, string $actionUri) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$moduleUri</h4>
+<code>string</code><p>The module uri segement</p></div>
+<div class="subelement argument">
+<h4>$actionUri</h4>
+<code>string</code><p>The action uri segement</p></div>
+</div></div>
+</div>
+<a id="method_removeRoutesByModule"></a><div class="element clickable method public method_removeRoutesByModule" data-toggle="collapse" data-target=".method_removeRoutesByModule .collapse">
+<h2>Removes all routes from the list from the specified module name.</h2>
+<pre>removeRoutesByModule(string $moduleName) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$moduleName</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a id="method_toSql"></a><div class="element clickable method public method_toSql" data-toggle="collapse" data-target=".method_toSql .collapse">
+<h2>Formats the current stack list into an insert sql statement</h2>
+<pre>toSql() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_routes"> </a><div class="element clickable property protected property_routes" data-toggle="collapse" data-target=".property_routes .collapse">
+<h2>A Multi-Demensional array of route information</h2>
+<pre>$routes : array[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br></footer></div>
+</div>
+</body>
+</html>
