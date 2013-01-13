@@ -372,7 +372,7 @@ class Template
      *
      * @return void
      */
-    public function AddScriptSrc($location, $type = 'text/javascript')
+    public static function AddScriptSrc($location, $type = 'text/javascript')
     {
         $location = trim($location);
         

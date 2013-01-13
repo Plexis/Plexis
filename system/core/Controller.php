@@ -193,7 +193,7 @@ class Controller
      * @return \Library\View|bool Returns false if the view file cannot be located,
      *   a Library\View object otherwise
      */
-    protected function loadPartialView($name, $jsFile = null)
+    protected function loadTemplateView($name, $jsFile = null)
     {
         // See if the view file exists in the current template
         $View = false;
@@ -218,9 +218,9 @@ class Controller
      *
      * @return void
      */
-    protected function addJsFile($name)
+    protected function addScript($name)
     {
-        Template::AddJsFile($this->moduleUri .'/js/'. $name .'.js');
+        Template::AddScriptSrc($this->moduleUri .'/js/'. $name .'.js');
     }
     
     /**

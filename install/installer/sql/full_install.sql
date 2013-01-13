@@ -110,15 +110,18 @@ CREATE TABLE `pcms_hits` (
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_modules`;
 CREATE TABLE `pcms_modules` (
-  `id` tinyint(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(24) NOT NULL COMMENT 'Folder name of the module',
-  `core_module` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is this a core module?',
-  PRIMARY KEY (`id`)
+  `version` varchar(10) NOT NULL DEFAULT '1.0.0',
+  PRIMARY KEY (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 -- ----------------------------
 -- Records of pcms_modules
 -- ----------------------------
-INSERT INTO `pcms_modules` VALUES (1, 'Devtest', 0);
+INSERT INTO `pcms_modules` VALUES ('admin', '1.0.0');
+INSERT INTO `pcms_modules` VALUES ('account', '1.0.0');
+INSERT INTO `pcms_modules` VALUES ('error', '1.0.0');
+INSERT INTO `pcms_modules` VALUES ('frontpage', '1.0.0');
+INSERT INTO `pcms_modules` VALUES ('Devtest', '1.0.0');
 
 -- ----------------------------
 -- Table structure for `pcms_news`
@@ -216,31 +219,10 @@ CREATE TABLE `pcms_reg_keys` (
   `usedby` int(11) NOT NULL DEFAULT '0' COMMENT 'The account ID of the user who registered with this code (for stat tracking purposes).',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- ----------------------------
--- Table structure for `pcms_reg_keys`
--- ----------------------------
 
 -- ----------------------------
--- Table structure for `pcms_routes`
+-- Records of `pcms_reg_keys`
 -- ----------------------------
-DROP TABLE IF EXISTS `pcms_routes`;
-CREATE TABLE `pcms_routes` (
-  `module_param` varchar(20) NOT NULL,
-  `action_param` varchar(20) NOT NULL,
-  `module` varchar(20) NOT NULL,
-  `controller` varchar(20) NOT NULL,
-  `method` varchar(20) NOT NULL,
-  `core` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Is this a core module?'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- ----------------------------
--- Table structure for `pcms_routes`
--- ----------------------------
-
-INSERT INTO `pcms_routes` (`module_param`, `action_param`, `module`, `controller`, `method`, `core`) VALUES 
-('devtest', '*', 'Devtest', 'Devtest', '*', '0'), 
-('error', '403', 'error', 'Show403', 'index', '1'), 
-('error', '404', 'error', 'Show404', 'index', '1'), 
-('error', 'offline', 'error', 'SiteOffline', 'index', '1');
 
 -- ----------------------------
 -- Table structure for `pcms_sessions`

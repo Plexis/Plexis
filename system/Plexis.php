@@ -97,7 +97,7 @@ class Plexis
         define('SITE_URL', ( MOD_REWRITE ) ? Request::BaseUrl() : Request::BaseUrl() .'/?uri=');
         
         // Set default theme path (temporary)
-        Template::SetThemePath( path(ROOT, "third_party", "themes"), 'default' );
+        Template::SetThemePath( path(ROOT, "themes"), 'default' );
         
         // Init the plexis config files
         self::LoadConfigs();
@@ -118,7 +118,8 @@ class Plexis
         Auth::Init();
         
         // Load our controller etc etc
-        self::RunModule();
+        Router::HandleRequest();
+        $GLOBALS['controller'] = 'Frontpage';
         
         // Do we render the template?
         if(self::$renderTemplate)
@@ -137,7 +138,7 @@ class Plexis
     public static function Show404()
     {
         // Load the 404 Error module
-        $Module = Router::RouteString('error/404');
+        $Module = Router::Route('error/404');
         if($Module == false)
             die('404');
         $Module->invoke();
@@ -156,7 +157,7 @@ class Plexis
     public static function Show403()
     {
         // Load the 403 Error module
-        $Module = Router::RouteString('error/403');
+        $Module = Router::Route('error/403');
         if($Module == false)
             die('403');
         $Module->invoke();
@@ -177,7 +178,7 @@ class Plexis
     public static function ShowSiteOffline($message = null)
     {
         // Load the 403 Error module
-        $Module = Router::RouteString('error/offline');
+        $Module = Router::Route('error/offline');
         if($Module == false)
             die('Site is currently unavailable.');
         $Module->invoke();
@@ -283,32 +284,6 @@ class Plexis
     }
     
     /**
-     * Internal method for running the controller and action
-     *
-     * @return void
-     */
-    protected static function RunModule()
-    {
-        // Get URL info
-        $Module = self::$module = Router::GetRequest();
-        
-        $GLOBALS['controller'] = $Module->getControllerName();
-        $GLOBALS['action'] = $Module->getActionName();
-        $GLOBALS['querystring'] = $Module->getActionParams();
-        
-        // Try to execute the controller, and catch any 404 error
-        try {
-            $Module->invoke();
-        }
-        catch( MethodNotFoundException $e ) {
-            self::Show404();
-        }
-        catch( ControllerNotFoundException $e ) {
-            self::Show404();
-        }
-    }
-    
-    /**
      * Internal method for loading, and running all plugins
      *
      * @return void
@@ -323,7 +298,7 @@ class Plexis
         $i = 0;
         foreach($Plugins as $name)
         {
-            $file = path( ROOT, 'third_party', 'plugins', $name .'.php');
+            $file = path( SYSTEM_PATH, 'plugins', $name .'.php');
             if(!file_exists($file))
             {
                 // Remove the plugin from the list

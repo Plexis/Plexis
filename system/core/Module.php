@@ -10,14 +10,20 @@
 namespace Core;
 
 /**
- * The module class is used to hold information about, as well as execute its action
- * methods upon request.
+ * The module class is used to hold information about requested modules, 
+ *  as well as execute its controller action methods upon request.
  *
  * @author      Steven Wilson 
  * @package     Core
  */
 class Module
 {
+    /**
+     * An array of loaded modules
+     * @var Module[]
+     */
+    protected static $modules = array();
+    
     /**
      * The module name
      * @var string
@@ -31,113 +37,90 @@ class Module
     protected $rootPath;
     
     /**
-     * The controller class name
-     * @var string
-     */
-    protected $controller;
-    
-    /**
-     * The method to be called in the controller class
-     * @var string
-     */
-    protected $action;
-    
-    /**
-     * Arrat of parameters to be passed to the action method
-     * @var string[]
-     */
-    protected $params;
-    
-    /**
-     * Used to determine if the module is a Plexis core module
-     * @var bool
-     */
-    protected $isCoreModule;
-    
-    /**
      * If the module.xml has been requested, its XMLObject is stored here.
      * @var Object
      */
     protected $xml;
     
     /**
-     * Module Constructor.
+     * Main method used to fetch and load modules. This method acts
+     * like a factory, and stores all loaded modules statically.
      *
-     * @param string $path The root path to the module directory (can be a relative path from cms root)
-     * @param string $controller The controller name to dispatch
-     * @param string $method The method name to dispatch in the controller.
-     * @param string[] $params The arguments to be passed to the method when dispatched.
+     * @param string $name The name of the module folder
+     * @return Module Returns a module object
      */
-    public function __construct($path, $controller = null, $method = null, $params = array())
+    public static function Get($name)
     {
-        // Make sure the module path is valid
-        $this->rootPath = truePath($path);
-        if(!is_dir($this->rootPath))
-            throw new \ModuleNotFoundException("Module path '". $this->rootPath ."' does not exist");
-        
-        // Set internal variables
-        $this->name = basename($this->rootPath);
-        $this->controller = ($controller == null) ? ucfirst($this->name) : ucfirst($controller);
-        $this->action = ($method == null) ? 'index' : $method;
-        $this->params = $params;
+        if(!isset(self::$modules[$name]))
+            self::$modules[$name] = new Module($name);
+            
+        return self::$modules[$name];
     }
     
     /**
-     * This method executes the controller and action
+     * Module Constructor. This method should never be called
+     * by another library or module, but rather called by the
+     * internal Module::Get method
      *
-     * @throws \Exception Thrown ifthe controller or action variables were never set, or empty.
+     * @param string $name The name of the module folder
+     */
+    public function __construct($name)
+    {
+        // Make sure the module path is valid
+        $this->rootPath = truePath("modules/". $name);
+        if(!is_dir($this->rootPath))
+            throw new \ModuleNotFoundException("Module path '". $this->rootPath ."' does not exist");
+            
+        // Make sure the xml file exists!
+        $xml = $this->rootPath . DS . 'module.xml';
+        if(!file_exists($xml))
+            throw new \ModuleNotFoundException("Module missing its xml file: '{$xml}'.");
+            
+        // Load up the xml file
+        $this->xml = simplexml_load_file($xml);
+        
+        // Set internal variables
+        $this->name = $name;
+    }
+    
+    /**
+     * Invokes a controller and action within the module.
+     *
+     * @param string $controller The controller name to call. Case Sensative!
+     * @param string $action The controller method name to execute. Case IN-sensative.
+     * @param string[] $params The parameters to pass to the controller method.
+     *
      * @throws \ControllerNotFoundException when the controller file cant be found
      * @throws \MethodNotFoundException when the controller doesnt have the given action,
      *   or the action method is not a public method
      *
-     * @return object Returns the module controller object
+     * @return mixed Returns whatever the method returns, Most likely null.
      */
-    public function invoke()
+    public function invoke($controller, $action, $params = array())
     {
-        // Make sure the controller is not empty
-        if(empty($this->controller))
-            throw new \Exception("No controller defined");
-         
-        // Also make sure the action method is not empty
-        if(empty($this->action))
-            throw new \Exception("No action defined");
-            
         // Build path to the controller
-        $file = path($this->rootPath, 'controllers', $this->controller .'.php');
+        $file = path($this->rootPath, 'controllers', $controller .'.php');
         if(!file_exists($file))
             throw new \ControllerNotFoundException('Could not find the controller file "'. $file .'"');
         
         // Load our controller file, and construct the module.
         require_once $file;
-        $Dispatch = new $this->controller($this);
+        $Dispatch = new $controller($this);
         
         // Create a reflection of the controller method
         try {
-            $Method = new \ReflectionMethod($Dispatch, $this->action);
+            $Method = new \ReflectionMethod($Dispatch, $action);
         }
         catch(\ReflectionException $e) {
-            throw new \MethodNotFoundException("Controller \"{$this->controller}\" does not contain the method \"{$this->action}\"");
+            throw new \MethodNotFoundException("Controller \"{$controller}\" does not contain the method \"{$action}\"");
         }
         
         // If the method is not public, throw MethodNotFoundException
         if(!$Method->isPublic())
-            throw new \MethodNotFoundException("Method \"{$this->action}\" is not a public method, and cannot be called via URL.");
+            throw new \MethodNotFoundException("Method \"{$action}\" is not a public method, and cannot be called via URL.");
          
         // Invoke the module controller and action
-        $Method->invokeArgs($Dispatch, $this->params);
-        return $Dispatch;
-    }
-    
-    /**
-     * Returns whehter the module is a Plexis Core Module
-     *
-     * @return bool
-     */
-    public function isCoreModule()
-    {
-        if(!is_bool($this->isCoreModule))
-            $this->isCoreModule = (path( SYSTEM_PATH, 'modules' ) == dirname($this->rootPath));
-        return $this->isCoreModule;
+        return $Method->invokeArgs($Dispatch, $params);
     }
     
     /**
@@ -162,38 +145,6 @@ class Module
     }
     
     /**
-     * Returns the current set module controller name
-     *
-     * @return string
-     */
-    public function getControllerName()
-    {
-        return $this->controller;
-    }
-    
-    /**
-     * Returns the current set action (method) to be called when the
-     * controller is to be dispatched
-     *
-     * @return string
-     */
-    public function getActionName()
-    {
-        return $this->action;
-    }
-    
-    /**
-     * Returns an array of params to be passed to the controller's action 
-     * method when dispatched.
-     *
-     * @return string[]
-     */
-    public function getActionParams()
-    {
-        return $this->params;
-    }
-    
-    /**
      * Returns the data stored in the Modules XML file.
      *
      * @return \SimpleXMLElement Returns an object of class SimpleXMLElement with properties 
@@ -208,78 +159,33 @@ class Module
     }
     
     /**
-     * Sets the controller name, overriding the controller the router finds
-     *
-     * @param string $name The name of the controller to load
-     *
-     * @return void
-     */
-    public function setControllerName($name)
-    {
-        $this->controller = ucfirst( $name );
-    }
-    
-    /**
-     * Sets the action name, overriding the action the router finds
-     *
-     * @param string $name The name of the action to load
-     *
-     * @return void
-     */
-    public function setActionName($name)
-    {
-        $this->action = strtolower($name);
-    }
-    
-    /**
-     * Sets the actions' parameters, overriding the params the router finds
-     *
-     * @param string[] $params - An array of params to pass to the action
-     *
-     * @return void
-     */
-    public function setActionParams($params)
-    {
-        if(!is_array($params))
-            return false;
-            
-        $this->params = $params;
-    }
-    
-    /**
      * Installs the module and defines its routes with the router
-     *
-     * @param bool $override Remove conflicting routes from other modules? 
-     * If false, and there is a routing conflict, an \Exception will be thrown. 
-     * Otherwise, the old route will be removed, and the new inserted.
      *
      * @throws \Exception Thrown if there is a routing conflict with another
      *   module, and $override is set to false.
      *
      * @return bool Returns true on success, false otherwise
      */
-    public function install($override = false) 
+    public function install() 
     {
         // Check to see if we are installed already
         if($this->isInstalled())
             return true;
             
-        // Add Module Routes
-        $Routes = new Router\RouteCollection();
-        $Routes->addModuleRoutes($this);
-        Router::AddRoutes($Routes, $override);
+        // DB connections and xml files
+        $Xml = $this->getModuleXml();
+        $DB = Database::GetConnection('DB');
         
         // Register module as installed
-        $DB = Database::GetConnection('DB');
         $data = array(
             'name' => $this->name,
-            'core_module' => $this->isCoreModule()
+            'version' => $Xml->info->version
         );
         return $DB->insert('pcms_modules', $data);
     }
     
     /**
-     * Removes the modules routes, and declares the module as Uninstalled
+     * Removes the module from the database, declaring the module as Uninstalled
      *
      * @return bool Returns true if the module was uninstalled. May return
      *   false if the module was never installed in the first place.
@@ -287,7 +193,6 @@ class Module
     public function uninstall() 
     {
         $DB = Database::GetConnection('DB');
-        Router::RemoveModuleRoutes($this->name);
         return $DB->delete('pcms_modules', array('name' => $this->name));
     }
     
@@ -299,6 +204,6 @@ class Module
     public function isInstalled()
     {
         $DB = Database::GetConnection('DB');
-        return (bool) $DB->query("SELECT COUNT(`id`) FROM `pcms_modules` WHERE `name`='{$this->name}';")->fetchColumn();
+        return (bool) $DB->query("SELECT COUNT(`name`) FROM `pcms_modules` WHERE `name`='{$this->name}';")->fetchColumn();
     }
 }

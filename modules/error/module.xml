@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Comments removed. For instructions, please refer to the
+    Plexis documentation website http://plexis.github.com/Plexis
+-->
+<module>
+    <info>
+        <name>Plexis Error Module</name>
+        <author>Plexis Dev Team</author>
+        <authorEmail />
+        <authorUrl />
+        <copyright />
+        <version>1.0.0</version>
+    </info>
+</module>

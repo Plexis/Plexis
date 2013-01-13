@@ -9,6 +9,9 @@
  */
 namespace Core;
 
+use Core\Router\RouteCollection;
+use Core\Router\Route;
+
 /**
  * The Router is used to determine which module and action to load for 
  * the current request. 
@@ -22,7 +25,7 @@ namespace Core;
  * @package     Core
  */
 class Router
-{
+{   
     /**
      * Have we routed the url yet?
      * @var bool
@@ -30,10 +33,10 @@ class Router
     protected static $routed = false;
     
     /**
-     * The module request object
+     * Specified whether the main request was handled
      * @var Module
      */
-    protected static $RequestModule;
+    protected static $RequestHandled = false;
     
     /**
      * The Plexis Database Object
@@ -45,277 +48,7 @@ class Router
      * The route stack of all defined routes
      * @var Router\RouteCollection
      */
-    protected static $RouteCollection;
-    
-    /**
-     * Fetches the current request in a \Core\Module object
-     *
-     * @return Module Returns a Core\Module object of the current request
-     */
-    public static function GetRequest()
-    {
-        return self::$RequestModule;
-    }
-    
-    /**
-     * This method analyzes a uri string, and returns a Module object
-     * of the routed request.
-     *
-     * @param string $uri The uri string to be routed.
-     *
-     * @return Module|bool Returns false if the request leads to a 404.
-     */
-    public static function RouteString($uri) 
-    {
-        // Remove any left slashes or double slashes
-        $uri = trim( preg_replace('~(/+)~', '/', $uri), '/');
-        
-        // There is no URI, Lets load our controller and action defaults
-        if(empty($uri)) 
-        {
-            // Set our Controller / Action to the defaults
-            $module = Config::GetVar('default_module', 'Plexis'); // Default Module
-            $action = 'index'; // Default Action
-            $params = array(); // Default query string
-        }
-        else
-        {
-            // We will start by bulding our controller, action, and querystring
-            $urlArray = explode("/", $uri);
-            $module = $urlArray[0];
-            
-            // If there is an action, then lets set that in a variable
-            array_shift($urlArray);
-            if(!empty($urlArray) && !empty($urlArray[0])) 
-            {
-                $action = $urlArray[0];
-                array_shift($urlArray);
-            }
-            else 
-            {
-                // If there is no action, load the default 'index'.
-                $action = 'index'; // Default Action
-            }
-            
-            // $params is what remains in the url array
-            $params = $urlArray;
-        }
-        
-        // Try to find a module route for the request
-        if(($Mod = self::MatchRoute($module, $action, $params)) !== false)
-            return $Mod;
-        
-        // If there was no route found, then we assume that its a Plexis core module (Might get removed?)
-        $controller = (Request::IsAjax()) ? 'Ajax' : $module;
-        $path = path( SYSTEM_PATH, 'modules', $module );
-        try {
-            $Mod = new Module($path, $controller, $action, $params);
-        }
-        catch( \ModuleNotFoundException $e ) { }
-        
-        return $Mod;
-    }
-    
-    /**
-     * Adds a list new route rules in the database for future route matching
-     *
-     * @param Router\RouteCollection $routes The route stack container
-     * @param bool $remove Remove conflicting results? If false, and there is a
-     *   routing conflict, an \Exception will be thrown. Otherwise, 
-     *   the old route will be removed, and the new inserted.
-     *   
-     * @return bool Returns true if successfull, false otherwise.
-     */
-    public static function AddRoutes( Router\RouteCollection $routes, $remove = false ) 
-    {
-        // Check for conflicts
-        $conflicts = self::GetConflictingRoutes( $routes );
-        if(!empty($conflicts))
-        {
-            // Throw exception if remove is false
-            if(!$remove)
-            {
-                $convert = array();
-                foreach($conflicts as $c)
-                    $convert[] = "{$c['module_uri']}/{$c['action_uri']}";
-                
-                $m = "Could not add route because a routing conflict was detected for uri: ('". implode(', ', $convert) ."')";
-                throw new \Exception($m);
-            }
-            
-            // remove conflicting routes
-            foreach($conflicts as $c)
-            {
-                $where = "`module_param`='". $c['module_uri'] ."' AND `action_param`='". $c['action_uri'] ."'";
-                self::$DB->delete('pcms_routes', $where);
-            }
-        }
-        
-        return (bool) self::$DB->exec($routes->toSql());
-    }
-    
-    /**
-     * Removes a defined route from the database
-     *
-     * @param string $reqModule The module URI segement
-     * @param string $reqAction The action URI segement
-     *
-     * @return bool Returns true if any results were removed, or false
-     *   if there was no rows removed
-     */
-    public static function RemoveRoute($reqModule, $reqAction) 
-    {
-        $where = "`module_param`='". $reqModule ."' AND `action_param`='". $reqAction ."'";
-        return (bool) self::$DB->delete('pcms_routes', $where);
-    }
-    
-    /**
-     * Removes all routes associated with a specified module.
-     *
-     * @param string $module The module name
-     *
-     * @return bool Returns true if any results were removed, or false
-     *   if there was no rows removed
-     */
-    public static function RemoveModuleRoutes($module) 
-    {
-        return (bool) self::$DB->delete('pcms_routes', "`module`='". $module ."'");
-    }
-    
-    /**
-     * Returns an array of conflicting routes with a Route stack, and the
-     * current defined routes
-     *
-     * @param Router\RouteCollection $routes A routes stack to check for.
-     *
-     * @return array[] Returns a 2 dimensional array. Each index is an array of
-     *      array('module_uri' -> module uri, 'action_uri' -> action uri).
-     */
-    public static function GetConflictingRoutes( Router\RouteCollection $routes )
-    {
-        // This may get large, best to only have to do it once!
-        if(empty(self::$RouteCollection))
-        {
-            self::$RouteCollection = new Router\RouteCollection();
-            $query = "SELECT `module_param`, `action_param`, `module`, `controller`, `method`, `core` FROM `pcms_routes`";
-            $DBroutes = self::$DB->query($query)->fetchAll();
-            foreach($DBroutes as $r)
-            {
-                self::$RouteCollection->addRouteParams(
-                    $r['module'], 
-                    $r['module_param'] .'/'. $r['action_param'], 
-                    $r['controller'], 
-                    $r['method'], 
-                    $r['core']
-                );
-            }
-        }
-        
-        // Define our return stack, and get our array of routes
-        $RouteCollection = array();
-        $routes = $routes->getRoutes();
-        
-        // Check each defined route against the current defined routes
-        foreach($routes as $k => $r)
-        {
-            $key = explode('_', $k);
-            if(self::$RouteCollection->hasRoute($key[0], $key[1]));
-                $RouteCollection[] = array('module_uri' => $key[0], 'action_uri' => $key[1]);
-        }
-        
-        return $RouteCollection;
-    }
-    
-    /**
-     * Checks a module and action for a matching route.
-     *
-     * @param string $module The module URI segement
-     * @param string $action The action URI segement
-     * @param string[] $params An array of the remaing URI parameters
-     *
-     * @return \Core\Module|bool Returns false if there is no database route,
-     *   or if the module matched does not exist.
-     */
-    public static function MatchRoute($module, $action, $params = array())
-    {
-        // Search the database for defined routes
-        $query = "SELECT `module`,`controller`,`method`,`core` FROM `pcms_routes` WHERE 
-            `module_param`='{$module}' AND (`action_param`='*' OR `action_param`='{$action}') LIMIT 1";
-        $route = self::$DB->query($query)->fetchRow();
-        
-        // Do we have a custom route?
-        if(!is_array($route))
-            return false;
-            
-        // Define our Module object constructor args
-        $controller = (Request::IsAjax()) ? 'Ajax' : $route['controller'];
-        
-        // Proccess wildcard controller names
-        if($controller == "@action")
-        {
-            $controller = ($action == 'index') ? ucfirst($route['module']) : ucfirst( strtolower($action) );
-            $action = ($route['method'] == '*') ? 'index' : $route['method'];
-        }
-        else
-            $action = ($route['method'] == '*') ? $action : $route['method'];
-        
-        // Proccess Wildcard methods
-        if($route['method'] == "@param")
-        {
-            if(!empty($params))
-            {
-                $action = $params[0];
-                array_shift($params);
-            }
-            else
-                $action = 'index';
-        }
-        
-        // Define path to our module root
-        if($route['core'] == 1)
-            $path = path( SYSTEM_PATH, 'modules', $route['module'] );
-        else
-            $path = path( ROOT, 'third_party', 'modules', $route['module'] );
-        
-        // Load the module request :p
-        $return = false;
-        try {
-            $return = new Module($path, $controller, $action, $params);
-        }
-        catch( \ModuleNotFoundException $e ) {}
-        
-        return $return;
-    }
-    
-    /**
-     * Returns an array of routes for a defined module
-     *
-     * @param string $module The requested module
-     *
-     * @return array[] Returns a two dimensional array. foreach array
-     *   key, the index key is the first 2 parts of the URI routed, and the
-     *   the value is an array of ('controller' => controller, 'method' => method).
-     *   Returns an empty array if there are not routes for the defined module.
-     */
-    public static function FetchRoutes($module)
-    {
-        // Search the database for defined routes
-        $return = array();
-        $query = "SELECT `module_param`, `action_param`, `controller`, `method` FROM `pcms_routes` WHERE 
-            `module`='{$module}'";
-        $routes = self::$DB->query($query)->fetchAll();
-        
-        foreach($routes as $route)
-        {
-            $key = $route['module_param'] .'/'. $route['action_param'];
-            $return[ $key ] = array(
-                'controller' => $route['controller'], 
-                'method' => $route['method']
-            );
-        }
-        
-        return $return;
-    }
+    protected static $Routes;
     
     /**
      * This method analyzes the current URL request, and loads the
@@ -332,15 +65,42 @@ class Router
         // Register the router sub namespace
         AutoLoader::RegisterNamespace('Core\Router', path( SYSTEM_PATH, 'core', 'router' ));
         
-        // Create an instance of the XssFilter
-        $Filter = new XssFilter();
-        
         // Load up our DB connection
         self::$DB = \Plexis::LoadDBConnection();
         
-        // Add trace for debugging
-        // \Debug::trace('Routing url...', __FILE__, __LINE__);
-
+        // Load our route collection
+        self::$Routes = new RouteCollection();
+        $routes = array();
+        
+        // Search the database for defined routes
+        include SYSTEM_PATH . DS .'config'. DS .'routes.php';
+        
+        // Do we have a custom route?
+        if(is_array($routes))
+        {
+            // Add routes to the collection
+            foreach($routes as $match => $routes)
+                self::$Routes->addRoute( new Route($match, $routes) );
+        }
+        
+        // Tell the system we've routed
+        self::$routed = true;  
+    }
+    
+    /**
+     * Executes the main request.
+     *
+     * @return void
+     */
+    public static function HandleRequest()
+    {
+        // Dont handle the request twice
+        if(self::$RequestHandled)
+            return;
+            
+        // Create an instance of the XssFilter
+        $Filter = new XssFilter();
+        
         // Process the site URI
         if( !Config::GetVar('enable_query_strings', 'Plexis'))
         {
@@ -350,21 +110,24 @@ class Router
         else
         {
             // Define our needed vars
+            $m_param = Config::GetVar('module_param', 'Plexis');
             $c_param = Config::GetVar('controller_param', 'Plexis');
             $a_param = Config::GetVar('action_param', 'Plexis');
             $uri = '';
             
-            // Make sure we have a controller at least
-            $c = $Filter->clean(Request::Query($c_param));
-            if(!empty($c))
+            // Make sure we have a module at least
+            $m = $Filter->clean(Request::Query($m_param));
+            if(!empty($m))
             {
+                // Get our controller
+                $c = $Filter->clean(Request::Query($c_param));
+                if(!empty($c)) 
+                    $uri .= '/'. $c;
+                    
                 // Get our action
                 $a = $Filter->clean(Request::Query($a_param));
-                if(empty($a)) 
-                    $a = Config::GetVar('default_action', 'Plexis'); // Default Action
-                
-                // Init the uri
-                $uri = $c .'/'. $a;
+                if(!empty($a))
+                    $uri .= '/'. $a;
                 
                 // Clean the query string
                 $qs = $Filter->clean( $_SERVER['QUERY_STRING'] );
@@ -375,7 +138,8 @@ class Router
                     $string = explode('=', $string);
                     
                     // Dont add the controller / action twice ;)
-                    if($string[0] == $c_param || $string[0] == $a_param) continue;
+                    if($string[0] == $m_param || $string[0] == $c_param || $string[0] == $a_param)
+                        continue;
                     
                     // Append the uri vraiable
                     $uri .= '/'. $string[1];
@@ -383,14 +147,275 @@ class Router
             }
         }
         
-        // Tell the system we've routed
-        self::$routed = true;  
+        // Prevent future requests
+        self::$RequestHandled = true;
+        return self::Execute($uri);
+    }
+    
+    /**
+     * This method analyzes a uri string, and executes the module
+     * tied to the route. If the route cannot be parsed, a 404 error
+     * will be thrown
+     *
+     * @param string $route The uri string to be routed.
+     * @param bool $isAjax Proccess the route in ajax mode?
+     *   If the main request is ajax, then setting this to
+     *   true will execute the route as a normal HTTP request.
+     *
+     * @return void
+     */
+    public static function Execute($route, $isAjax = null)
+    {
+        // Route request
+        $Mod = self::LoadModule($route, $data);
+        if($Mod == false)
+        {
+            self::Execute('error/404');
+            die();
+        }
         
-        if((self::$RequestModule = self::RouteString($uri)) == false)
-            \Plexis::Show404();
+        // Define which controller and such we load
+        $isAjax = ($isAjax === null) ? Request::IsAjax() : $isAjax;
+        $controller = ($isAjax && isset($data['ajax']['controller'])) 
+            ? $data['ajax']['controller'] 
+            : $data['controller'];
+        $action = ($isAjax && isset($data['ajax']['action']))
+            ? $data['ajax']['action'] 
+            : $data['action'];
+        
+        // Might move these later
+        $GLOBALS['controller'] = ucfirst($Mod->getName());
+        $GLOBALS['action'] = $action;
+        $GLOBALS['querystring'] = $data['params'];
+        
+        // Fire the module off
+        try {
+            $Mod->invoke($controller, $action, $data['params']);
+        }
+        catch( \MethodNotFoundException $e ) {
+            self::Execute('error/404');
+        }
+        catch( \ControllerNotFoundException $e ) {
+            self::Execute('error/404');
+        }
+    }
+    
+    /**
+     * This method is similar to execute, but does not call on
+     * the module to preform any actions. Instead, the data require
+     * to correcltly invoke the module, as well as the Core\Module
+     * itself is returned.
+     *
+     * @param string $route The uri string to be routed.
+     * @param string[] $data [Reference Variable] This variable will
+     *   pass back the request data, such as the controller, action, 
+     *   and parameters to be used to invoke the module.
+     * @param bool $isAjax Proccess the route in ajax mode?
+     *   If the main request is ajax, then setting this to
+     *   true will execute the route as a normal HTTP request.
+     *
+     * @return Module|bool Returns false if the request leads to a 404,
+     *   otherwise the module object will be returned.
+     */
+    public static function Forge($route, &$data = array(), $isAjax = null)
+    {
+        if(($Mod = self::LoadModule($route, $d)) === false)
+            return false;
+        
+        // Define which controller and such we load
+        $isAjax = ($isAjax === null) ? Request::IsAjax() : $isAjax;
+        $data['controller'] = ($isAjax && isset($d['ajax']['controller'])) 
+            ? $d['ajax']['controller'] 
+            : $d['controller'];
+        $data['action'] = ($isAjax && isset($d['ajax']['action']))
+            ? $d['ajax']['action'] 
+            : $d['action'];
+        $data['params'] = $d['params'];
+        return $Mod;
+    }
+    
+    /**
+     * Adds a list new route rules in the database for future route matching
+     *
+     * @param Router\RouteCollection $routes The route stack container
+     *   
+     * @return bool Returns true if successfull, false otherwise.
+     */
+    public static function AddRoutes( RouteCollection $routes ) 
+    {
+        // Add routes to the collection
+        self::$Routes->merge( $routes );
+        
+        // Write routes file
+        $routes = self::$Routes->getRoutes();
+        
+        // Save the rotues file
+        $file = path( SYSTEM_PATH, 'config', 'routes.php' );
+        $string = "<?php\n\$routes = ". var_export($routes, true) .";\n?>";
+        $string = preg_replace('/[ ]{2}/', "\t", $string);
+        $string = preg_replace("/\=\>[ \n\t]+array[ ]+\(/", '=> array(', $string);
+        return file_put_contents($file, $string);
+    }
+    
+    /**
+     * Removes a defined route from the database
+     *
+     * @param string $key The routes array key in routes.php
+     *
+     * @return bool Returns true on success
+     */
+    public static function RemoveRoute($key) 
+    {
+        self::$Routes->removeRoute($key);
+        
+        // Get our new list of routes
+        $routes = self::$Routes->getRoutes();
+        
+        // Save the routes file
+        $file = path( SYSTEM_PATH, 'config', 'routes.php' );
+        $string = "<?php\n\$routes = ". var_export($routes, true) .";\n?>";
+        $string = preg_replace('/[ ]{2}/', "\t", $string);
+        $string = preg_replace("/\=\>[ \n\t]+array[ ]+\(/", '=> array(', $string);
+        return file_put_contents($file, $string);
+    }
+    
+    /**
+     * Returns the route collection containing all defined routes.
+     *
+     * @return Router\RouteCollection
+     */
+    public static function FetchRoutes()
+    {
+        return self::$Routes;
+    }
+    
+    /**
+     * Checks a module and action for a matching route.
+     *
+     * @param string $route The route to map for a module
+     * @param string[] $data [Reference Variable] This variable will
+     *   pass back the request data, such as the controller, action, 
+     *   and parameters to be used to invoke the module.
+     *
+     * @return \Core\Module|bool Returns false if there is no database route,
+     *   or if the module matched does not exist.
+     */
+    protected static function LoadModule($route, &$data)
+    {
+        // There is no URI, Lets load our controller and action defaults
+        $route = trim($route);
+        if(empty($route))
+        {
+            $route = Config::GetVar('default_module', 'Plexis'); // Default Module
+        }
+        else
+        {
+            // We are note allowed to call certain methods
+            $parts = explode('/', $route);
+            if(isset($parts[2]) && strncmp($parts[2], '_', 1) == 0)
+                return false;
+        }
+        
+        // Format URI
+        $route = trim( strtolower($route) );
+        $Mod = false;
+        
+        // Try to find a module route for the request
+        if(self::$Routes->hasRoute($route, $data))
+        {
+            // Check for a routes
+            try {
+                $Mod = Module::Get( $data['module'] );
+            }
+            catch( \ModuleNotFoundException $e ) {}
             
-        // Add trace for debugging
-        // \Debug::trace("Url routed successfully. Found controller: ". self::$controller ."; Action: ". self::$action ."; Querystring: ". implode('/', self::$params), __FILE__, __LINE__);
+            // Does module exist?
+            if($Mod == false)
+                return false;
+                
+            // Is the module installed?
+            if(!$Mod->isInstalled())
+                return false;
+                
+            // Is the module installed?
+            if(!$Mod->isInstalled())
+                return false;
+        }
+        else
+        {
+            // Get our module name
+            $parts = explode('/', $route);
+            $module = $parts[0];
+            
+            // Check for a routes
+            try {
+                $Mod = Module::Get( $module );
+            }
+            catch( \ModuleNotFoundException $e ) {}
+            
+            // Does module exist?
+            if($Mod == false)
+                return false;
+                
+            // Is the module installed?
+            if(!$Mod->isInstalled())
+                return false;
+                
+            // Load the routes file if it exist
+            $path = path( $Mod->getRootPath(), 'config', 'routes.php' );
+            if(file_exists($path))
+            {
+                $routes = array();
+                include $path;
+                if(is_array($routes))
+                {
+                    $Rc = new RouteCollection();
+                    foreach($routes as $match => $r)
+                        $Rc->addRoute( new Route($match, $r) );
+                        
+                    if(!$Rc->hasRoute($route, $data))
+                        goto NoModuleRoute;
+                }
+                else
+                {
+                    goto NoModuleRoute;
+                }
+            }
+            else
+            {
+                // Go to for not having a module route defined
+                NoModuleRoute:
+                {
+                    // Is this an error?
+                    if(strpos('error/', $route) !== false)
+                    {
+                        switch($route)
+                        {
+                            case "error/404":
+                                die('404 Not Found');
+                            case "error/403":
+                                die('Forbidden');
+                            case "error/offline":
+                                die('Site Down For Maintenance');
+                        }
+                    }
+                    
+                    // Make sure we have a module, controller, and action
+                    if(!isset($parts[1]))
+                        $parts[1] = ucfirst($Mod->getName());
+                    if(!isset($parts[2]))
+                        $parts[2] = 'index';
+                    
+                    $data = array(
+                        'controller' => $parts[1],
+                        'action' => $parts[2],
+                        'params' => array_slice($parts, 3)
+                    );
+                }
+            }
+        }
+        
+        return $Mod;
     }
 }
 
