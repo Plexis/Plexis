@@ -43,6 +43,12 @@ class Module
     protected $xml;
     
     /**
+     * Holds the plexis Logger object
+     * @var \Core\Logger
+     */
+    protected static $log;
+    
+    /**
      * Main method used to fetch and load modules. This method acts
      * like a factory, and stores all loaded modules statically.
      *
@@ -66,6 +72,10 @@ class Module
      */
     public function __construct($name)
     {
+        // Make sure we have a log
+        if(empty(self::$log))
+            self::$log = Logger::Get('Debug');
+        
         // Make sure the module path is valid
         $this->rootPath = truePath("modules/". $name);
         if(!is_dir($this->rootPath))
@@ -105,7 +115,8 @@ class Module
         
         // Load our controller file, and construct the module.
         require_once $file;
-        $Dispatch = new $controller($this);
+        $nsController = ucfirst($this->name) .'\\'. $controller;
+        $Dispatch = new $nsController($this);
         
         // Create a reflection of the controller method
         try {
@@ -161,8 +172,9 @@ class Module
     /**
      * Installs the module and defines its routes with the router
      *
-     * @throws \Exception Thrown if there is a routing conflict with another
-     *   module, and $override is set to false.
+     * @throws \Exception Thrown if there is the install method in
+     *   the admin extension controller returns false. Also thrown if
+     *   if the install method itself throws an exception.
      *
      * @return bool Returns true on success, false otherwise
      */
@@ -172,6 +184,34 @@ class Module
         if($this->isInstalled())
             return true;
             
+        // Run the admin extensions controller
+        $result = false;
+        try {
+            $result = $this->invoke('AdminExtension', 'install');
+            if(!$result)
+                throw new \Exception('Installation of module "'. $this->name .'" failed because the install method returned false');
+        }
+        catch( \ControllerNotFoundException $e ) {
+            self::$log->logDebug('Module "'. $this->name .'" does not have an admin extension controller.');
+            $result = true;
+        }
+        catch( \MethodNotFoundException $e ) {
+            if(strpos('not a public method') === false)
+            {
+                self::$log->logDebug('No Install method found for module "'. $this->name .'"');
+                $result = true;
+            }
+            else
+                self::$log->logWarning('Install method for module "'. $this->name .'" is not a public method. Unable to Install via method.');
+        }
+        catch( \Exception $e ) {
+            throw new \Exception('Exception thrown during installation of module "'. $this->name .'". Message: '. $e->getMessage());
+        }
+        
+        // Did we succeed?
+        if(!$result)
+            return false;
+        
         // DB connections and xml files
         $Xml = $this->getModuleXml();
         $DB = Database::GetConnection('DB');
@@ -187,11 +227,40 @@ class Module
     /**
      * Removes the module from the database, declaring the module as Uninstalled
      *
+     * @throws \Exception Thrown if there is the uninstall method in
+     *   the admin extension controller returns false. Also thrown if
+     *   if the uninstall method itself throws an exception.
+     *
      * @return bool Returns true if the module was uninstalled. May return
      *   false if the module was never installed in the first place.
      */
     public function uninstall() 
     {
+        // Run the admin extensions controller
+        $result = false;
+        try {
+            $result = $this->invoke('AdminExtension', 'uninstall');
+            if(!$result)
+                throw new \Exception('Un-installation of module "'. $this->name .'" failed because the uninstall method returned false');
+        }
+        catch( \ControllerNotFoundException $e ) {
+            self::$log->logDebug('Module "'. $this->name .'" does not have an admin extension controller.');
+            $result = true;
+        }
+        catch( \MethodNotFoundException $e ) {
+            if(strpos('not a public method') === false)
+            {
+                self::$log->logDebug('No Uninstall method found for module "'. $this->name .'"');
+                $result = true;
+            }
+            else
+                self::$log->logWarning('Uninstall method for module "'. $this->name .'" is not a public method. Unable to uninstall via method.');
+        }
+        catch( \Exception $e ) {
+            throw new \Exception('Exception thrown during un-installation of module "'. $this->name .'". Message: '. $e->getMessage());
+        }
+        
+        // Remove from DB
         $DB = Database::GetConnection('DB');
         return $DB->delete('pcms_modules', array('name' => $this->name));
     }

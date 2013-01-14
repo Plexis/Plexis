@@ -1,10 +1,11 @@
 <?php
+namespace Admin;
 
 use Core\Controller;
 use Core\Database;
 use Library\Template;
 
-class Admin extends Controller
+final class Admin extends Controller
 {
     
     public function __construct($Module)

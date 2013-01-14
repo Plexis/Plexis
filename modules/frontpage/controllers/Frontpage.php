@@ -1,4 +1,6 @@
 <?php
+namespace Frontpage;
+
 // Bring some classes into scope So we dont have to specify namespaces with each class
 use Core\Controller;
 use Core\Module;
@@ -6,7 +8,7 @@ use Library\Template;
 use Library\View;
 use Library\ViewNotFoundException;
 
-class Frontpage extends Controller
+final class Frontpage extends Controller
 {
     public function __construct($Module)
     {

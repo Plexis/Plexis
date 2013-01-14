@@ -1,4 +1,6 @@
 <?php
+namespace Account;
+
 // Bring some classes into scope So we dont have to specify namespaces with each class
 use Core\Controller;
 use Core\Request;
@@ -8,7 +10,7 @@ use Library\Template;
 use Library\View;
 use Library\ViewNotFoundException;
 
-class Account extends Controller
+final class Account extends Controller
 {
     /**
      * The account model ... model

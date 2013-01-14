@@ -4,8 +4,11 @@
 | Example Module
 | ---------------------------------------------------------------
 */
+namespace Devtest;
 
-class Devtest extends Core\Controller 
+use Core\Controller;
+
+final class Devtest extends Controller 
 {
 
 /*
@@ -32,7 +35,7 @@ class Devtest extends Core\Controller
         //$this->module->install(true);
         // var_dump( $this->module->isInstalled() ); die;
         
-        var_dump( Core\Router::Forge('error/403', $data) );
+        var_dump( \Core\Router::Forge('error/403', $data) );
         var_dump( $data ); die;
     }
     
@@ -49,7 +52,7 @@ class Devtest extends Core\Controller
         $d = false;
         
         try {
-            $d = new Core\IO\DirectoryInfo($path1);
+            $d = new \Core\IO\DirectoryInfo($path1);
             $d->moveTo($path2);
         }
         catch( \Exception $e ) {
@@ -66,7 +69,7 @@ class Devtest extends Core\Controller
     {
         $path = path( SYSTEM_PATH );
         $file = path( SYSTEM_PATH, 'system.zip' );
-        var_dump(Library\ZipArchive::ZipDirectory($path, $file));
+        var_dump(\Library\ZipArchive::ZipDirectory($path, $file));
         Plexis::RenderTemplate(false);
     }
     
@@ -75,18 +78,18 @@ class Devtest extends Core\Controller
         $Stack = new Core\Router\RouteCollection();
         $path = path( SYSTEM_PATH, 'modules' );
         
-        $d = new Core\IO\DirectoryInfo($path);
+        $d = new \Core\IO\DirectoryInfo($path);
         $modules = $d->getDirList();
         
         foreach($modules as $m)
         {
-            $Mod = new Core\Module($m->fullpath());
+            $Mod = new \Core\Module($m->fullpath());
             $Stack->addModuleRoutes( $Mod );
         }
         
         
         $Stack->addModuleRoutes( $this->module );
-        var_dump(Core\Router::AddRoutes($Stack, true));
+        var_dump(\Core\Router::AddRoutes($Stack, true));
         die;
     }
     

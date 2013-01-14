@@ -2,12 +2,15 @@
 /**
  * Core 403 handling Class
  */
+namespace Error;
+
+use Core\Controller;
 use Core\Config;
 use Core\Response;
 use Core\Request;
 use Library\Template;
  
-class Show403 extends Core\Controller
+final class Show403 extends Controller
 {
     /**
      * For 404's and 403's, plexis will always call upon the

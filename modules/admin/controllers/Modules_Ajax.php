@@ -1,16 +1,19 @@
 <?php
+namespace Admin;
+
+use Core\Controller;
+use Core\Database;
 use Core\Module;
 use Core\Request;
 use Core\Router;
 use Core\IO\DirectoryInfo;
 use Core\Router\RouteCollection;
 
-class Modules_Ajax extends Core\Controller
+final class Modules_Ajax extends Controller
 {
     protected $success = false;
     protected $type = "error";
     protected $message = null;
-    protected $conflicts = array();
     
     public function __construct($Module)
     {
@@ -27,8 +30,8 @@ class Modules_Ajax extends Core\Controller
     public function getlist()
     {
         // Get alist of installed modules...
-        $this->DB = Core\Database::GetConnection('DB');
-        $installed = $this->DB->query("SELECT `name` FROM `pcms_modules`")->fetchAll( PDO::FETCH_COLUMN );
+        $this->DB = Database::GetConnection('DB');
+        $installed = $this->DB->query("SELECT `name` FROM `pcms_modules`")->fetchAll( \PDO::FETCH_COLUMN );
         
         // Grab list of all present module for comparison
         $path = path( ROOT, 'modules' );
@@ -123,22 +126,18 @@ class Modules_Ajax extends Core\Controller
         if($quit)
             $this->output();
         
-        // Get conflicting routes!
-        $Stack = new RouteCollection();
-        $Stack->addModuleRoutes( $Module );
-        $this->conflicts = Router::GetConflictingRoutes($Stack);
-        
-        // If we have conflicts, then show that!
-        if(is_array($this->conflicts) && !empty($this->conflicts))
-        {
+        // Install the module
+        try {
+            $Module->install();
+        }
+        catch( \Exception $e ) {
             $this->success = false;
-            $this->type = "warning";
-            $this->message = "Routing conflicts detected.";
+            $this->type = 'error';
+            $this->message = $e->getMessage();
             $this->output();
         }
         
-        // Install the module
-        $Module->install();
+        // If we are here, we were successful
         $this->success = true;
         $this->type = 'success';
         $this->message = 'Module installed successfully!';
@@ -189,7 +188,17 @@ class Modules_Ajax extends Core\Controller
         }
         
         // Run uninstaller
-        $Module->uninstall();
+        try {
+            $Module->uninstall();
+        }
+        catch( \Exception $e ) {
+            $this->success = false;
+            $this->type = 'error';
+            $this->message = $e->getMessage();
+            $this->output();
+        }
+        
+        // If we are here, we were successful
         $this->success = true;
         $this->type = 'success';
         $this->message = 'Module Uninstalled';
