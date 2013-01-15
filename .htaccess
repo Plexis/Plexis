@@ -11,8 +11,9 @@
     # Deny access to the system and third_party and System folders. All defined
     # file extensions from the previos rewrite rule wont make it here, which allows
     # direct access to images and such in these folders still.
-    RewriteRule ^third_party/ - [R=403,L,NC]
+    RewriteRule ^modules/ - [R=403,L,NC]
     RewriteRule ^system/ - [R=403,L,NC]
+    RewriteRule ^themes/ - [R=403,L,NC]
 
     # Dont redirect direct links to non-existant files or directories to the index.php
     RewriteCond %{REQUEST_FILENAME} !-f

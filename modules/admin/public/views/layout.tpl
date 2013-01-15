@@ -3,7 +3,7 @@
     $a = $b = $c = $d = $e = $f = $g = FALSE;
 
     // Determine our action to highlight our navigation pane
-    switch($GLOBALS['action'])
+    switch(strtolower($GLOBALS['controller']))
     {
         case "index":
             $a = TRUE;
@@ -213,35 +213,7 @@
                 <ul id="breadcrumbs">
                     <li><a href="{SITE_URL}/admin" title="Home"><span id="bc-home"></span></a></li>
                     <?php
-                        // Instead of making a custom one in every page, we make an automatic one here
-                        if($GLOBALS['action'] == 'index')
-                        {
-                            echo '<li class="no-hover">Dashboard</li>';
-                        }
-                        elseif($GLOBALS['action'] !== 'index' && isset($GLOBALS['querystring'][0]))
-                        {
-                            echo '<li class="no-hover"><a href="{SITE_URL}/'.$GLOBALS['controller'].'/'.$GLOBALS['action'].'">'.ucfirst($GLOBALS['action']).'</a></li>';
-                            $__count = count($GLOBALS['querystring']) - 1;
-                            foreach($GLOBALS['querystring'] as $k => $qs)
-                            {
-                                if($__count == $k) {
-                                    echo '<li class="no-hover">'.ucfirst($qs).'</li>';
-                                }
-                                else
-                                {
-                                    $__string = '<li><a href="{SITE_URL}/'.$GLOBALS['controller'].'/'.$GLOBALS['action'];
-                                    for($i = 0; $i <= $k; $i++)
-                                    {
-                                        $__string .= '/'. $GLOBALS['querystring'][$i];
-                                    }
-                                    echo $__string .'">'.ucfirst($qs).'</a></li>';
-                                }
-                            }
-                        }
-                        else
-                        {
-                            echo '<li class="no-hover">'.ucfirst($GLOBALS['action']).'</li>';
-                        }
+                        echo \Library\Breadcrumb::GenerateListsOnly("no-hover");
                     ?>
                 </ul>
             </div>

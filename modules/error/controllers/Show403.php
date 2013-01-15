@@ -36,6 +36,7 @@ final class Show403 extends Controller
         
         // Send response, and die
         Response::Send();
+        die;
     }
     
     public function ajax()
@@ -48,5 +49,6 @@ final class Show403 extends Controller
         Response::StatusCode(403);
         Response::Body( json_encode(array('message' => 'Forbidden')) );
         Response::Send();
+        die;
     }
 }

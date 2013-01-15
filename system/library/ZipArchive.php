@@ -5,7 +5,7 @@
  * @file        System/Library/ZipArchive.php
  * @copyright   2011-2012, Plexis Dev Team
  * @license     GNU GPL v3
- * @contains    Template
+ * @contains    ZipArchive
  */
 namespace Library;
 

@@ -119,7 +119,6 @@ class Plexis
         
         // Load our controller etc etc
         Router::HandleRequest();
-        $GLOBALS['controller'] = 'Frontpage';
         
         // Do we render the template?
         if(self::$renderTemplate)
@@ -138,7 +137,7 @@ class Plexis
     public static function Show404()
     {
         // Load the 404 Error module
-        $Module = Router::Route('error/404');
+        $Module = Router::Forge('error/404');
         if($Module == false)
             die('404');
         $Module->invoke();
@@ -157,7 +156,7 @@ class Plexis
     public static function Show403()
     {
         // Load the 403 Error module
-        $Module = Router::Route('error/403');
+        $Module = Router::Forge('error/403');
         if($Module == false)
             die('403');
         $Module->invoke();
@@ -178,7 +177,7 @@ class Plexis
     public static function ShowSiteOffline($message = null)
     {
         // Load the 403 Error module
-        $Module = Router::Route('error/offline');
+        $Module = Router::Forge('error/offline');
         if($Module == false)
             die('Site is currently unavailable.');
         $Module->invoke();

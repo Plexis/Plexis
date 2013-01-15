@@ -33,8 +33,9 @@ final class SiteOffline extends Controller
         $View->set('template_url', Template::GetThemeUrl());
         Response::Body($View);
         
-        // Send response. Plexis will kill the script automatically
+        // Send response, and Dir
         Response::Send();
+        die;
     }
     
     public function ajax()
@@ -47,5 +48,6 @@ final class SiteOffline extends Controller
         Response::StatusCode(503);
         Response::Body( json_encode(array('message' => 'Site Currently Offline')) );
         Response::Send();
+        die;
     }
 }

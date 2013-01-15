@@ -33,8 +33,9 @@ final class Show404 extends Controller
         $View->set('template_url', Template::GetThemeUrl());
         Response::Body($View);
         
-        // Send response. Plexis will kill the script automatically
+        // Send response, and Die
         Response::Send();
+        die;
     }
     
     public function ajax()
@@ -47,5 +48,6 @@ final class Show404 extends Controller
         Response::StatusCode(404);
         Response::Body( json_encode(array('message' => 'Page Not Found')) );
         Response::Send();
+        die;
     }
 }

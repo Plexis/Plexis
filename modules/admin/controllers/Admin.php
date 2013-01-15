@@ -3,6 +3,7 @@ namespace Admin;
 
 use Core\Controller;
 use Core\Database;
+use Library\Breadcrumb;
 use Library\Template;
 
 final class Admin extends Controller
@@ -42,6 +43,10 @@ final class Admin extends Controller
             'CMS_DB_VERSION' => REQ_DB_VER
         );
         
+        // Add dashboard breadcrumb
+        Breadcrumb::Append('Dashboard', SITE_URL . '/admin');
+        
+        // Load Dashboard view
         $View = $this->loadView("dashboard");
         $View->Set($data);
         Template::Add($View);

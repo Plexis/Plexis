@@ -71,7 +71,6 @@ class Route
      */
     public function match($route, &$data = array())
     {
-        $this->formatRoute($route);
         if(preg_match('#^'. $this->match .'$#i', $route))
         {
             $ajax = null;
@@ -133,20 +132,5 @@ class Route
     public function getReplacement()
     {
         return $this->replace;
-    }
-    
-    /**
-     * This method takes a route, and formats it correctly, removing empty
-     *   parts and excess space.
-     *
-     * @param string $route [Reference Variable] The string route to be formed.
-     *   This method will also correct the passed variable reference.
-     *
-     * @return void
-     */
-    protected function formatRoute(&$route)
-    {
-        // Make sure we have a module, controller, and action
-        $route = trim(preg_replace('~(/{2,})~', '', $route), '/');
     }
 }

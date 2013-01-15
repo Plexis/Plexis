@@ -1,43 +1,7 @@
-<!-- CMS Infotmation -->
-<div class="grid_6">
-    <div class="block-border">
-        <div class="block-header">
-            <h1>Cms Information</h1><span></span>
-        </div>
-        <div class="block-content">
-            <ul class="block-list">
-                <li>CMS Version: <strong>{CMS_VERSION}</strong></li>
-                <li>CMS Build: <strong>{CMS_BUILD}</strong></li>
-                <li>Database Version: <strong>{CMS_DB_VERSION}</strong></li>
-            </ul>
-        </div>
-        <div class="block-content dark-bg">
-            <p><div id="update">Checking for updates &nbsp;<img src="{TEMPLATE_URL}/img/icons/small/loading.gif"></div></p>
-        </div>
-    </div>
-</div>
 
-<!-- Server Information -->
-<div class="grid_6">
-    <div class="block-border">
-        <div class="block-header">
-            <h1>Server Information</h1><span></span>
-        </div>
-        <div class="block-content">
-            <ul class="block-list">
-                <li>PHP Version: <strong>{php_version}</strong></li>
-                <li>{driver} Version: <strong>{database_version}</strong></li>
-                <li>Mod Rewrite: <strong>{mod_rewrite}</strong></li>
-            </ul>
-        </div>
-        <div class="block-content dark-bg">
-            <p><a href="{SITE_URL}/admin/phpinfo">View PHP Info</a></p>
-        </div>
-    </div>
-</div>
 
 <!-- Control Panel -->
-<div class="grid_12">
+<div class="grid_8">
     <div class="block-border">
         <div class="block-header">
             <h1>Control Panel</h1><span></span>
@@ -160,6 +124,44 @@
                 </li>
             </ul>
             <div class="clear"></div>
+        </div>
+    </div>
+</div>
+
+<!-- CMS Infotmation -->
+<div class="grid_4">
+    <div class="block-border">
+        <div class="block-header">
+            <h1>Cms Information</h1><span></span>
+        </div>
+        <div class="block-content">
+            <ul class="block-list">
+                <li>CMS Version: <strong>{CMS_VERSION}</strong></li>
+                <li>CMS Build: <strong>{CMS_BUILD}</strong></li>
+                <li>Database Version: <strong>{CMS_DB_VERSION}</strong></li>
+            </ul>
+        </div>
+        <div class="block-content dark-bg">
+            <p><div id="update">Checking for updates &nbsp;<img src="{TEMPLATE_URL}/img/icons/small/loading.gif"></div></p>
+        </div>
+    </div>
+</div>
+
+<!-- Server Information -->
+<div class="grid_4">
+    <div class="block-border">
+        <div class="block-header">
+            <h1>Server Information</h1><span></span>
+        </div>
+        <div class="block-content">
+            <ul class="block-list">
+                <li>PHP Version: <strong>{php_version}</strong></li>
+                <li>{driver} Version: <strong>{database_version}</strong></li>
+                <li>Mod Rewrite: <strong>{mod_rewrite}</strong></li>
+            </ul>
+        </div>
+        <div class="block-content dark-bg">
+            <p><a href="{SITE_URL}/admin/phpinfo">View PHP Info</a></p>
         </div>
     </div>
 </div>

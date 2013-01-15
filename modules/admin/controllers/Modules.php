@@ -2,6 +2,8 @@
 namespace Admin;
 
 use Core\Controller;
+use Core\Response;
+use Library\Breadcrumb;
 use Library\Template;
 
 final class Modules extends Controller
@@ -30,6 +32,10 @@ final class Modules extends Controller
         // Add the module index script, and load view
         $this->addScript('module_index');
         $View = $this->loadView('module_index');
+        
+        // Add breadcrumb
+        Breadcrumb::Append('Modules', SITE_URL . '/admin/modules');
+        
         Template::Add($View);
     }
     
@@ -39,8 +45,15 @@ final class Modules extends Controller
 | ---------------------------------------------------------------
 |
 */
-    public function manage($moduleName)
+    public function manage($moduleName = null)
     {
-        Template::Add($moduleName);
+        // Make sure we have the module name!
+        if(empty($moduleName))
+            Response::Redirect('admin/modules', 0, 307);
+            
+        // Breadcrumbs
+        Breadcrumb::Append('Modules', SITE_URL . '/admin/modules');
+        Breadcrumb::Append('Manage', SITE_URL . '/admin/modules');
+        Breadcrumb::Append(ucfirst($moduleName), SITE_URL . '/admin/modules/'. $moduleName);
     }
 }

@@ -58,7 +58,7 @@ final class Modules_Ajax extends Controller
         foreach($found as $mod)
         {
             // Load the module, and determine if it is installed
-            $Module = new Module($mod);
+            $Module = Module::Get($mod);
             $Xml = $Module->getModuleXml();
             $isInstalled = (in_array($mod, $installed));
             
@@ -115,7 +115,7 @@ final class Modules_Ajax extends Controller
         
         // Init the module
         try {
-            $Module = new Module($post);
+            $Module = Module::Get($post);
         }
         catch( ModuleNotFoundException $e ) {
             $this->message = "Module does not exist.";
