@@ -137,10 +137,10 @@ class Plexis
     public static function Show404()
     {
         // Load the 404 Error module
-        $Module = Router::Forge('error/404');
-        if($Module == false)
+        $Module = Router::Forge('error/404', $data);
+        if($Module == false || empty($data))
             die('404');
-        $Module->invoke();
+        $Module->invoke($data['controller'], $data['action'], $data['params']);
         die;
     }
     
@@ -156,10 +156,10 @@ class Plexis
     public static function Show403()
     {
         // Load the 403 Error module
-        $Module = Router::Forge('error/403');
-        if($Module == false)
+        $Module = Router::Forge('error/403', $data);
+        if($Module == false || empty($data))
             die('403');
-        $Module->invoke();
+        $Module->invoke($data['controller'], $data['action'], $data['params']);
         die;
     }
     
@@ -177,10 +177,10 @@ class Plexis
     public static function ShowSiteOffline($message = null)
     {
         // Load the 403 Error module
-        $Module = Router::Forge('error/offline');
-        if($Module == false)
+        $Module = Router::Forge('error/offline', $data);
+        if($Module == false || empty($data))
             die('Site is currently unavailable.');
-        $Module->invoke();
+        $Module->invoke($data['controller'], $data['action'], $data['params']);
         die;
     }
     

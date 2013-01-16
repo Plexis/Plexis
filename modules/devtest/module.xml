@@ -8,4 +8,7 @@
         <copyright />
         <version>1.0.0</version>
     </info>
+    <config>
+        <hasAdmin>true</hasAdmin>
+    </config>
 </module>

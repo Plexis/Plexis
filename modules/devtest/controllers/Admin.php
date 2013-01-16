@@ -6,7 +6,10 @@
 */
 namespace Devtest;
 
-class AdminExtension
+use Core\Controller;
+use Library\Template;
+
+final class Admin extends Controller
 {
 
 /*
@@ -26,5 +29,15 @@ class AdminExtension
     public function uninstall()
     {
         return true;
+    }
+    
+/*
+| ---------------------------------------------------------------
+| Admin Page Methods (Not Required)
+| ---------------------------------------------------------------
+*/
+    public function index()
+    {
+        Template::Add('It Works!');
     }
 }

@@ -78,7 +78,7 @@ final class Modules_Ajax extends Controller
                     3 => ($isInstalled) 
                         ? '<center><img src="'. $url .'/img/icons/small/tick-circle.png" /></center>' 
                         : '<center><img src="'. $url .'/img/icons/small/cross-circle.png" /></center>',
-                    4 => ($isInstalled) 
+                    4 => ($isInstalled && $Module->hasAdmin()) 
                         ? '<center><a href="'. SITE_URL .'/admin/modules/manage/'. $mod .'" rel="tooltip" title="Manage Module">
                             <img src="'. $url .'/img/icons/small/settings.png" /></a></center>' 
                         : '',
@@ -225,8 +225,7 @@ final class Modules_Ajax extends Controller
             array(
                 'success' => $this->success,
                 'message' => $this->message,
-                'type' => $this->type,
-                'conflicts' => $this->conflicts
+                'type' => $this->type
             )
         );
         die;

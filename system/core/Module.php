@@ -169,6 +169,11 @@ class Module
         return $this->xml;
     }
     
+    public function hasAdmin()
+    {
+        return (isset($this->xml->config->hasAdmin) && $this->xml->config->hasAdmin == 'true');
+    }
+    
     /**
      * Installs the module and defines its routes with the router
      *

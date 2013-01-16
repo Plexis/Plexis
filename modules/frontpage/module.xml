@@ -12,7 +12,7 @@
         <copyright />
         <version>1.0.0</version>
     </info>
-    <routes>
-        <route module="frontpage" action="index" />
-    </routes>
+    <config>
+        <hasAdmin>false</hasAdmin>
+    </config>
 </module>

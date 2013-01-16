@@ -156,9 +156,13 @@ class Router
             }
         }
         
+        // Execute
+        $r = self::Execute($uri);
+        
         // Prevent future requests
         self::$RequestHandled = true;
-        return self::Execute($uri);
+        
+        return $r;
     }
     
     /**
@@ -200,6 +204,10 @@ class Router
         $GLOBALS['controller'] = $controller;
         $GLOBALS['action'] = $action;
         $GLOBALS['querystring'] = $data['params'];
+        
+        // Prevent admin controller access in modules!
+        if($controller == 'admin' && $Mod->getName() != 'admin')
+            self::Execute('error/403');
         
         // Fire the module off
         try {
