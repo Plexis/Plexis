@@ -169,6 +169,11 @@ class Module
         return $this->xml;
     }
     
+    /**
+     * Returns whetther the module supports admin integration
+     *
+     * @return bool Returns true if the module has admin pages, false otherwise
+     */
     public function hasAdmin()
     {
         return (isset($this->xml->config->hasAdmin) && $this->xml->config->hasAdmin == 'true');

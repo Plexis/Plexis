@@ -8,7 +8,6 @@
  * @contains    Router
  */
 namespace Core;
-
 use Core\Router\RouteCollection;
 use Core\Router\Route;
 
@@ -25,7 +24,7 @@ use Core\Router\Route;
  * @package     Core
  */
 class Router
-{   
+{
     /**
      * Have we routed the url yet?
      * @var bool
@@ -223,14 +222,15 @@ class Router
     
     /**
      * This method is similar to execute, but does not call on
-     * the module to preform any actions. Instead, the data require
-     * to correcltly invoke the module, as well as the Core\Module
+     * the module to preform any actions. Instead, the data required
+     * to correctly invoke the module, as well as the Core\Module
      * itself is returned.
      *
      * @param string $route The uri string to be routed.
      * @param string[] $data [Reference Variable] This variable will
      *   pass back the request data, such as the controller, action, 
-     *   and parameters to be used to invoke the module.
+     *   and parameters to be used to invoke the module. This variable
+     *   will be empty if the module could not be routed.
      * @param bool $isAjax Proccess the route in ajax mode?
      *   If the main request is ajax, then setting this to
      *   true will execute the route as a normal HTTP request.
@@ -266,7 +266,7 @@ class Router
      *   
      * @return bool Returns true if successfull, false otherwise.
      */
-    public static function AddRoutes( RouteCollection $routes ) 
+    public static function AddRoutes( RouteCollection $routes )
     {
         // Add routes to the collection
         self::$Routes->merge( $routes );

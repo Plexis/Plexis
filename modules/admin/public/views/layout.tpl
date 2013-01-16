@@ -44,8 +44,8 @@
     
     $Gravatar = new \Library\Gravatar();
     $Gravatar->setAvatarSize(60);
-    $Gravatar->setDefaultImage('{TEMPLATE_URL}/img/misc/avatar_small.png');
-    $Avatar = $Gravatar->get('wilson.steven10@yahoo.com');
+    // $Gravatar->setDefaultImage('{TEMPLATE_URL}/img/misc/avatar_small.png');
+    $Avatar = $Gravatar->get('{session.user.email}');
 ?>
 <!DOCTYPE html>
 <head>

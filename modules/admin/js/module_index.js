@@ -30,12 +30,20 @@ $().ready(function() {
         "oLanguage": {
           "sZeroRecords": "Plexis could not find any modules... By golly this is impossible D:"
         },
-        "iDisplayLength": 50
+        "iDisplayLength": 100,
+        "aoColumns": [
+            null,
+            null,
+            { "bSearchable": false },
+            { "bSearchable": false },
+            { "bSearchable": false },
+            { "bSearchable": false }
+        ]
     });
     
     // Hide useless data table stuff
     $(".dataTables_length").hide();
-    $(".dataTables_filter").hide();
+    //$(".dataTables_filter").hide();
     $(".dataTables_paginate").hide();
     $(".dataTables_info").hide();
     

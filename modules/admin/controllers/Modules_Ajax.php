@@ -8,6 +8,7 @@ use Core\Request;
 use Core\Router;
 use Core\IO\DirectoryInfo;
 use Core\Router\RouteCollection;
+use Library\DataTablesArray;
 
 final class Modules_Ajax extends Controller
 {
@@ -46,13 +47,8 @@ final class Modules_Ajax extends Controller
         foreach($ModuleList as $Dir)
             $found[] = $Dir->name();
         
-        // Initial output
-        $output = array(
-            "sEcho" => intval($_POST['sEcho']),
-            "iTotalRecords" => sizeof($found),
-            "iTotalDisplayRecords" => count($found),
-            "aaData" => array()
-        );
+        // Use the DataTablesArray object
+        $Datatables = new DataTablesArray('POST');
         
         // Load each module
         foreach($found as $mod)
@@ -64,34 +60,29 @@ final class Modules_Ajax extends Controller
             
             // blacklist certain modules
             if($mod == 'admin')
-            {
-                --$output['iTotalRecords'];
-                --$output['iTotalDisplayRecords'];
                 continue;
-            }
-            else
-            {
-                $output['aaData'][] = array(
-                    0 => (string) $Xml->info->name,
-                    1 => (string) $Xml->info->author,
-                    2 => (string) $Xml->info->version,
-                    3 => ($isInstalled) 
-                        ? '<center><img src="'. $url .'/img/icons/small/tick-circle.png" /></center>' 
-                        : '<center><img src="'. $url .'/img/icons/small/cross-circle.png" /></center>',
-                    4 => ($isInstalled && $Module->hasAdmin()) 
-                        ? '<center><a href="'. SITE_URL .'/admin/modules/manage/'. $mod .'" rel="tooltip" title="Manage Module">
-                            <img src="'. $url .'/img/icons/small/settings.png" /></a></center>' 
-                        : '',
-                    5 => ($isInstalled) 
-                        ? '<center><a class="un-install" name="'. $mod .'" href="#" rel="tooltip" title="Uninstall Module">
-                            <img src="'. $url .'/img/icons/small/remove.png" /></a></center>' 
-                        : '<center><a class="install" name="'. $mod .'" href="#" rel="tooltip" title="Install Module">
-                            <img src="'. $url .'/img/icons/small/add.png" /></a></center>'
-                );
-            }
+            
+            // Add module to the list
+            $Datatables->addRow(
+                (string) $Xml->info->name,
+                (string) $Xml->info->author,
+                (string) $Xml->info->version,
+                ($isInstalled) 
+                    ? '<center><img src="'. $url .'/img/icons/small/tick-circle.png" /></center>' 
+                    : '<center><img src="'. $url .'/img/icons/small/cross-circle.png" /></center>',
+                ($isInstalled && $Module->hasAdmin()) 
+                    ? '<center><a href="'. SITE_URL .'/admin/modules/manage/'. $mod .'" rel="tooltip" title="Manage Module">
+                        <img src="'. $url .'/img/icons/small/settings.png" /></a></center>' 
+                    : '',
+                ($isInstalled) 
+                    ? '<center><a class="un-install" name="'. $mod .'" href="#" rel="tooltip" title="Uninstall Module">
+                        <img src="'. $url .'/img/icons/small/remove.png" /></a></center>' 
+                    : '<center><a class="install" name="'. $mod .'" href="#" rel="tooltip" title="Install Module">
+                        <img src="'. $url .'/img/icons/small/add.png" /></a></center>'
+            );
         }
         
-        echo json_encode($output);
+        echo json_encode($Datatables->generate());
     }
     
 /*
@@ -117,7 +108,7 @@ final class Modules_Ajax extends Controller
         try {
             $Module = Module::Get($post);
         }
-        catch( ModuleNotFoundException $e ) {
+        catch( \ModuleNotFoundException $e ) {
             $this->message = "Module does not exist.";
             $quit = true;
         }
@@ -169,7 +160,7 @@ final class Modules_Ajax extends Controller
         try {
             $Module = new Module($post);
         }
-        catch( ModuleNotFoundException $e ) {
+        catch( \ModuleNotFoundException $e ) {
             $this->message = "Module does not exist.";
             $quit = true;
         }
