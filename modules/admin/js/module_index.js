@@ -13,14 +13,7 @@ $().ready(function() {
                 "url": sSource, 
                 "data": aoData, 
                 "success": function (result, status, jqXHR) {
-                    if(typeof result.php_error != "undefined" && result.php_error == true)
-                    {
-                        show_php_error(result.php_error_data);
-                    }
-                    else
-                    {
-                        fnCallback(result, status, jqXHR);
-                    }
+                    fnCallback(result, status, jqXHR);
                 },
                 "error": function(request, status, err) {
                     Plexis.HandleAjaxError(request, status, err);
