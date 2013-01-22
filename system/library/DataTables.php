@@ -74,7 +74,7 @@ class DataTables
     public function generate($aColumns, $sIndexColumn, $sTable, $cWhere, $DB) 
     {
         // Make sure we have the correct number of columns
-        $aColumnCount = count($aColumns)
+        $aColumnCount = count($aColumns);
         if($aColumnCount > $this->data['iColumns'])
             throw new \Exception('Not enough rows', 1);
         elseif($aColumnCount < $this->data['iColumns'])
