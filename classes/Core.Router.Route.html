@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>Plexis CMS » \Core\Router\RouteCollection</title>
+<title>Plexis CMS » \Core\Router\Route</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../template/css/template.css" rel="stylesheet" media="all">
@@ -50,11 +50,10 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_addRoute" title="addRoute :: Adds a route for a module, and URI segements"><span class="description">Adds a route for a module, and URI segements</span><pre>addRoute()</pre></a></li>
-<li class="method public "><a href="#method_getRoutes" title="getRoutes :: Returns a list of all defined routes in this stack."><span class="description">Returns a list of all defined routes in this stack.</span><pre>getRoutes()</pre></a></li>
-<li class="method public "><a href="#method_hasRoute" title="hasRoute :: Returns whether there is a match to the URI route supplied."><span class="description">Returns whether there is a match to the URI route supplied.</span><pre>hasRoute()</pre></a></li>
-<li class="method public "><a href="#method_merge" title="merge :: Merges another RouteCollections route with this collection."><span class="description">Merges another RouteCollections route with this collection.</span><pre>merge()</pre></a></li>
-<li class="method public "><a href="#method_removeRoute" title="removeRoute :: Removes the specified route from the list of routes."><span class="description">Removes the specified route from the list of routes.</span><pre>removeRoute()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct :: Class Constructor."><span class="description">Class Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_getMatch" title="getMatch :: Returns the regular expression for this route."><span class="description">Returns the regular expression for this route.</span><pre>getMatch()</pre></a></li>
+<li class="method public "><a href="#method_getReplacement" title="getReplacement :: Returns the replacments for this route."><span class="description">Returns the replacments for this route.</span><pre>getReplacement()</pre></a></li>
+<li class="method public "><a href="#method_match" title="match :: Tests the passed route against the routes regular expression for a match."><span class="description">Tests the passed route against the routes regular expression for a match.</span><pre>match()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -62,12 +61,16 @@
                     <ul></ul>
 </li>
 <li class="nav-header protected">» Protected
-                    <ul><li class="property protected "><a href="#property_routes" title="$routes :: A Multi-Demensional array of route information"><span class="description"></span><pre>$routes</pre></a></li></ul>
+                    <ul>
+<li class="property protected "><a href="#property_match" title="$match :: The regex match for this route."><span class="description"></span><pre>$match</pre></a></li>
+<li class="property protected "><a href="#property_replace" title="$replace :: The replacement for the match, in a route that successfulyy
+tests against the match"><span class="description"></span><pre>$replace</pre></a></li>
+</ul>
 </li>
 </ul>
 </div>
 <div class="span8">
-<a id="\Core\Router\RouteCollection"></a><ul class="breadcrumb">
+<a id="\Core\Router\Route"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
@@ -76,11 +79,11 @@
 <span class="divider">\</span><a href="../namespaces/Core.Router.html">Router</a>
 </li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/Core.Router.RouteCollection.html">RouteCollection</a>
+<span class="divider">\</span><a href="../classes/Core.Router.Route.html">Route</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">A container class to hold route information for the router.</p>
+<p class="short_description">A Route object, used to compare URI's for route matches</p>
 <div class="details">
 <div class="long_description"></div>
 <table class="table table-bordered">
@@ -99,78 +102,78 @@
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a id="method_addRoute"></a><div class="element clickable method public method_addRoute" data-toggle="collapse" data-target=".method_addRoute .collapse">
-<h2>Adds a route for a module, and URI segements</h2>
-<pre>addRoute(\Core\Router\Route $route) : void</pre>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Class Constructor.</h2>
+<pre>__construct(string $match, string | string[] $replace = false) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$route</h4>
-<code><a href="../classes/Core.Router.Route.html">\Core\Router\Route</a></code><p>The route object to add</p></div>
+<h4>$match</h4>
+<code>string</code><p>The regular expresion to test routes against</p></div>
+<div class="subelement argument">
+<h4>$replace<small><b>   [Default =  false]</b></small>
+</h4>
+<code>string</code><code>string[]</code><p>a replacement route, or an array or 2 routes,
+  the first being the replacement for a normal route, and the second
+  for ajax requests.</p></div>
 </div></div>
 </div>
-<a id="method_getRoutes"></a><div class="element clickable method public method_getRoutes" data-toggle="collapse" data-target=".method_getRoutes .collapse">
-<h2>Returns a list of all defined routes in this stack.</h2>
-<pre>getRoutes() : <a href="Core.Router.Route.html">\Core\Router\Route[]</a></pre>
+<a id="method_getMatch"></a><div class="element clickable method public method_getMatch" data-toggle="collapse" data-target=".method_getMatch .collapse">
+<h2>Returns the regular expression for this route.</h2>
+<pre>getMatch() : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
-<div class="subelement response"><code><a href="Core.Router.Route.html">\Core\Router\Route[]</a></code></div>
+<div class="subelement response"><code>string</code></div>
 </div></div>
 </div>
-<a id="method_hasRoute"></a><div class="element clickable method public method_hasRoute" data-toggle="collapse" data-target=".method_hasRoute .collapse">
-<h2>Returns whether there is a match to the URI route supplied.</h2>
-<pre>hasRoute(string $route, string[] $match = array()) : bool</pre>
+<a id="method_getReplacement"></a><div class="element clickable method public method_getReplacement" data-toggle="collapse" data-target=".method_getReplacement .collapse">
+<h2>Returns the replacments for this route.</h2>
+<pre>getReplacement() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_match"></a><div class="element clickable method public method_match" data-toggle="collapse" data-target=".method_match .collapse">
+<h2>Tests the passed route against the routes regular expression for a match.</h2>
+<pre>match(string $route, string[] $data = array()) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$route</h4>
-<code>string</code><p>The route string</p></div>
+<code>string</code><p>The URI route to test.</p></div>
 <div class="subelement argument">
-<h4>$match<small><b>   [Default =  array()]</b></small>
+<h4>$data<small><b>   [Default =  array()]</b></small>
 </h4>
-<code>string[]</code><p>[Reference Variable] Returns the controller,
-  action, and params if the route is a match.</p>
+<code>string[]</code><p>[Reference Variable] Returns the controller, action, and
+  params if the route is a match.</p>
 </div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>bool</code>Returns whether or not a match was found</div>
-</div></div>
-</div>
-<a id="method_merge"></a><div class="element clickable method public method_merge" data-toggle="collapse" data-target=".method_merge .collapse">
-<h2>Merges another RouteCollections route with this collection.</h2>
-<pre>merge(\Core\Router\RouteCollection $Routes) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$Routes</h4>
-<code><a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></code><p>The route collection to merge with</p></div>
-</div></div>
-</div>
-<a id="method_removeRoute"></a><div class="element clickable method public method_removeRoute" data-toggle="collapse" data-target=".method_removeRoute .collapse">
-<h2>Removes the specified route from the list of routes.</h2>
-<pre>removeRoute(string $route) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$route</h4>
-<code>string</code><p>The regular expression to remove</p></div>
+<code>bool</code>Returns true if the route is a match for the Route's regular expression,
+  false otherwise.</div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_routes"> </a><div class="element clickable property protected property_routes" data-toggle="collapse" data-target=".property_routes .collapse">
-<h2>A Multi-Demensional array of route information</h2>
-<pre>$routes : <a href="Core.Router.Route.html">\Core\Router\Route[]</a></pre>
+<a id="property_match"> </a><div class="element clickable property protected property_match" data-toggle="collapse" data-target=".property_match .collapse">
+<h2>The regex match for this route.</h2>
+<pre>$match : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_replace"> </a><div class="element clickable property protected property_replace" data-toggle="collapse" data-target=".property_replace .collapse">
+<h2>The replacement for the match, in a route that successfulyy
+tests against the match</h2>
+<pre>$replace : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

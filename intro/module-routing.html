@@ -57,10 +57,11 @@
                     Modules in plexis must follow a pretty strict directory structure in order to operate correctly.
                     Below is an example module with a full directory structure
                     <pre class="prettyprint">/ModuleName
+    /config/
+        routes.php
     /controllers/
-        AdminExtension.php
-        Ajax.php
-        ModuleName.php
+        Admin.php
+        $ModuleName$.php
     /models
     /helpers
     /views
@@ -70,21 +71,16 @@
                         Only the "controllers" folder and module.xml file are required for your module to work correctly, but models, helpers, and views
                         all must go in the correctly names directories.
                     </div></p>
-<h4>The Ajax Controller</h4>
+<h4>The Admin Controller</h4>
 <p>
-                    The Ajax controller is a special controller that handles all ajax requests for the module, regardless of the defined controller for the route.
-                </p>
-<h4>The AdminExtension Controller</h4>
-<p>
-                    The AdminExtension controller is only called by the admin control panel during installation, un-installation, and when the module 
+                    The Admin controller is only called by the admin control panel during installation, un-installation, and when the module 
                     is loaded in the admin panel. More information about this is documented in the "Creating your own Modules" section of this reference
                     guide.
                 </p>
 <h3>The module XML file</h3>
 <p>
                     Modules in plexis are required to contain a file names "<var>module.xml</var>". This xml provides some information about the module
-                    author, version and copyright information. The xml file also is used to define which routes your module will claim or override (See
-                    "Defining Routes For Your Module" below).
+                    author, version and copyright information.
                 </p>
 <h3>Module Url Mapping</h3>
 <p>
@@ -107,54 +103,27 @@
                     </div></p>
 <h3>Defining Routes For Your Module</h3>
 <p>
-                    Routes are defined in the module.xml file that is required with each module. The routes will be defined into the plexis database
-                    once the module is installed from the admin panel. In this example below, you will see how routes are defined
+                    Routes are defined in your "config/routes.php" file (optional). In this example below, you will see how routes are defined
                 </p>
-<pre class="prettyprint">&lt;module&gt;
-    &lt;routes&gt;
-        &lt;!--
-            @attribute module = The requested module from the url request (first part of the uri)
-            @attribute action = The requested action from the url request (second part of uri)
-        --&gt;
-        
-        &lt;!-- 
-            Example 1: Establish this module with the "account" module request, and "login" action
-            request. Defines which controller and method will handle this request
-        --&gt;
-        &lt;route module="account" action="login"&gt;
-            &lt;!-- Optional: defines which Controller in this module to load for this route --&gt;
-            &lt;controller&gt;Account&lt;/controller&gt;
-            
-            &lt;!-- Optional: defines which method to load in the Controller for this route --&gt;
-            &lt;method&gt;login&lt;/method&gt;
-        &lt;/route&gt;
-        
-        &lt;!-- 
-            Example 2: Establishes this module with route. Controller defaults to the module name,
-            and method defaults to the action name ("login" in this case)
-        --&gt;
-        &lt;route module="account" action="login" /&gt;
-        
-        &lt;!-- 
-            Example 3: Takes any and all actions (note the period "*" in the action attribute) under the "account" 
-            module request 
-        --&gt;
-        &lt;route module="account" action="*" /&gt;
-        
-        &lt;!-- 
-            Example 4: The final example is a more complicated one. By specifying wildcard controller and method
-            names for a route, you can use a 3 part route instead of a 2 part route. The following will proccess
-            the URI for 3 parts -&gt; module/controller/action instead of the default 2 -&gt; module/action.
-        --&gt;
-        &lt;route module="account" action="update"&gt;
-            &lt;!-- Call the controller name that is in the action URI segement (second URI). Defaults to Modulename. --&gt;
-            &lt;controller&gt;@action&lt;/controller&gt; &lt;!-- In this route, will be "Update" --&gt;
-            
-            &lt;!-- Call the method name that is in the first parameter URI (third URI). Defaults to "index"  --&gt;
-            &lt;method&gt;@param&lt;/method&gt;
-        &lt;/route&gt;
-    &lt;/routes&gt;
-&lt;/module&gt;</pre>
+<pre class="prettyprint">&lt;?php
+$routes = array(
+	'error/404' =&gt; array(
+        'error/Show404/index',
+        'error/Show404/ajax'
+    ),
+    'error/403' =&gt; array(
+        'error/Show403/index',
+        'error/Show403/ajax'
+    ),
+    'error/offline' =&gt; array(
+        'error/ShowOffline/index',
+        'error/ShowOffline/ajax'
+    ),
+);
+?&gt;</pre>
+<p>
+                    For each array item, the item can hold an array of "array(1 =&gt; Normal Request Route, 2 =&gt; Ajax request Route)", or a string "Normal And Ajax Rotue".
+                    <div class="alert alert-info"><strong>More To Come Later</strong></div></p>
 </div></div>
 <div class="row"><footer class="span12">
             Plexis CMS Copyrighted 2011 - 2012, Plexis Dev Team<br>

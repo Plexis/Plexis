@@ -59,11 +59,13 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="method public "><a href="#method_ClearContents" title="ClearContents :: Clears the current output buffer of the template"><span class="description">Clears the current output buffer of the template</span><pre>ClearContents()</pre></a></li>
 <li class="method public "><a href="#method_GetThemePath" title="GetThemePath :: Returns the current theme path"><span class="description">Returns the current theme path</span><pre>GetThemePath()</pre></a></li>
 <li class="method public "><a href="#method_GetThemeUrl" title="GetThemeUrl :: Returns the theme HTTP url to the root dir."><span class="description">Returns the theme HTTP url to the root dir.</span><pre>GetThemeUrl()</pre></a></li>
-<li class="method public "><a href="#method_LoadView" title="LoadView :: Loads a view file from the template's module view folder."><span class="description">Loads a view file from the template's module view folder.</span><pre>LoadView()</pre></a></li>
+<li class="method public "><a href="#method_LoadModuleView" title="LoadModuleView :: Loads a view file from the template's module view folder."><span class="description">Loads a view file from the template's module view folder.</span><pre>LoadModuleView()</pre></a></li>
+<li class="method public "><a href="#method_LoadPartial" title="LoadPartial :: Loads a partial view file from the template's partials folder."><span class="description">Loads a partial view file from the template's partials folder.</span><pre>LoadPartial()</pre></a></li>
 <li class="method public "><a href="#method_Message" title="Message :: Adds a global message to be parsed into the template"><span class="description">Adds a global message to be parsed into the template</span><pre>Message()</pre></a></li>
 <li class="method public "><a href="#method_PageTitle" title="PageTitle :: Sets the page title (After server title)"><span class="description">Sets the page title (After server title)</span><pre>PageTitle()</pre></a></li>
 <li class="method public "><a href="#method_Render" title="Render :: Renders the current body contents into the template layout"><span class="description">Renders the current body contents into the template layout</span><pre>Render()</pre></a></li>
 <li class="method public "><a href="#method_SetJsVar" title="SetJsVar :: Sets javascript variables to be added in the head tags"><span class="description">Sets javascript variables to be added in the head tags</span><pre>SetJsVar()</pre></a></li>
+<li class="method public "><a href="#method_SetLayout" title="SetLayout :: Sets the layout to be loaded for this request"><span class="description">Sets the layout to be loaded for this request</span><pre>SetLayout()</pre></a></li>
 <li class="method public "><a href="#method_SetTheme" title="SetTheme :: Sets the name of the theme to render, where the layout.tpl is located"><span class="description">Sets the name of the theme to render, where the layout.tpl is located</span><pre>SetTheme()</pre></a></li>
 <li class="method public "><a href="#method_SetThemePath" title="SetThemePath :: Sets the path to the theme folder"><span class="description">Sets the path to the theme folder</span><pre>SetThemePath()</pre></a></li>
 <li class="method public "><a href="#method_SetVar" title="SetVar :: Sets variables to be parsed in the layout"><span class="description">Sets variables to be parsed in the layout</span><pre>SetVar()</pre></a></li>
@@ -86,6 +88,7 @@ the final rendered template.</span><pre>Add()</pre></a></li>
 <li class="property protected "><a href="#property_buffer" title="$buffer :: The current body view contents"><span class="description"></span><pre>$buffer</pre></a></li>
 <li class="property protected "><a href="#property_headers" title="$headers :: An array of lines to be injected into the layout head tags"><span class="description"></span><pre>$headers</pre></a></li>
 <li class="property protected "><a href="#property_jsVars" title="$jsVars :: Javascript Variables to be added in the header"><span class="description"></span><pre>$jsVars</pre></a></li>
+<li class="property protected "><a href="#property_layoutName" title="$layoutName :: The layout name to be used"><span class="description"></span><pre>$layoutName</pre></a></li>
 <li class="property protected "><a href="#property_messages" title="$messages :: Array of template messages"><span class="description"></span><pre>$messages</pre></a></li>
 <li class="property protected "><a href="#property_pageTitle" title="$pageTitle :: The page title for the title tag (appended after server name)"><span class="description"></span><pre>$pageTitle</pre></a></li>
 <li class="property protected "><a href="#property_themeConfig" title="$themeConfig :: Theme xml config object"><span class="description"></span><pre>$themeConfig</pre></a></li>
@@ -153,7 +156,7 @@ the final rendered template.</h2>
 <a id="method_AddScriptSrc"></a><div class="element clickable method public method_AddScriptSrc" data-toggle="collapse" data-target=".method_AddScriptSrc .collapse">
 <h2>Appends the header adding a script tag</h2>
 <pre>AddScriptSrc(string $location, string $type = 'text/javascript') : void</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
@@ -224,26 +227,20 @@ the final rendered template.</h2>
 <code>string</code>The path from the root to the theme folder.</div>
 </div></div>
 </div>
-<a id="method_LoadView"></a><div class="element clickable method public method_LoadView" data-toggle="collapse" data-target=".method_LoadView .collapse">
+<a id="method_LoadModuleView"></a><div class="element clickable method public method_LoadModuleView" data-toggle="collapse" data-target=".method_LoadModuleView .collapse">
 <h2>Loads a view file from the template's module view folder.</h2>
-<pre>LoadView(string $module, string $name = false, bool $hasJs = false) : <a href="../classes/Library.View.html">\Library\View</a></pre>
+<pre>LoadModuleView(string $module, string $name, bool $hasJs = false) : <a href="../classes/Library.View.html">\Library\View</a></pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$module</h4>
-<code>string</code><p>The name of the module (where the view is located)
-  If the $name parameter is false, then this param becomes becomes the
-  partial view name, and a partial view is loaded rather then a full
-  module view.</p>
+<code>string</code><p>The name of the module (where the view is located)</p>
 </div>
 <div class="subelement argument">
-<h4>$name<small><b>   [Default =  false]</b></small>
-</h4>
-<code>string</code><p>The name of the view file (no extension). If set
-  to false, then the $module param becomes the view name, and a
-  template partial view is loaded instead.</p>
+<h4>$name</h4>
+<code>string</code><p>The name of the view file (no extension).</p>
 </div>
 <div class="subelement argument">
 <h4>$hasJs<small><b>   [Default =  false]</b></small>
@@ -254,8 +251,28 @@ the final rendered template.</h2>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
 <th><code><a href="../classes/Library.ViewNotFoundException.html">\Library\ViewNotFoundException</a></code></th>
-<td>if the template does not have the view
+<td>Thrown if the template does not have the view
   file for the specified module</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/Library.View.html">\Library\View</a></code></div>
+</div></div>
+</div>
+<a id="method_LoadPartial"></a><div class="element clickable method public method_LoadPartial" data-toggle="collapse" data-target=".method_LoadPartial .collapse">
+<h2>Loads a partial view file from the template's partials folder.</h2>
+<pre>LoadPartial(string $name) : <a href="../classes/Library.View.html">\Library\View</a></pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the partial view file (no extension).</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Library.ViewNotFoundException.html">\Library\ViewNotFoundException</a></code></th>
+<td>Thrown if the template does not have the partial view</td>
 </tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code><a href="../classes/Library.View.html">\Library\View</a></code></div>
@@ -326,6 +343,24 @@ browser.</p></div>
 <div class="subelement argument">
 <h4>$value</h4>
 <code>mixed</code><p>The value of the variable</p></div>
+</div></div>
+</div>
+<a id="method_SetLayout"></a><div class="element clickable method public method_SetLayout" data-toggle="collapse" data-target=".method_SetLayout .collapse">
+<h2>Sets the layout to be loaded for this request</h2>
+<pre>SetLayout(string $name) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the layout view file (no extension).</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Library.ViewNotFoundException.html">\Library\ViewNotFoundException</a></code></th>
+<td>Thrown if the template does not have the layout view</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_SetTheme"></a><div class="element clickable method public method_SetTheme" data-toggle="collapse" data-target=".method_SetTheme .collapse">
@@ -452,6 +487,12 @@ config file (theme.xml)</td>
 <a id="property_jsVars"> </a><div class="element clickable property protected property_jsVars" data-toggle="collapse" data-target=".property_jsVars .collapse">
 <h2>Javascript Variables to be added in the header</h2>
 <pre>$jsVars : mixed[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_layoutName"> </a><div class="element clickable property protected property_layoutName" data-toggle="collapse" data-target=".property_layoutName .collapse">
+<h2>The layout name to be used</h2>
+<pre>$layoutName : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

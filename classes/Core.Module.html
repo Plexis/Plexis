@@ -50,25 +50,16 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
+<li class="method public "><a href="#method_Get" title="Get :: Main method used to fetch and load modules."><span class="description">Main method used to fetch and load modules.</span><pre>Get()</pre></a></li>
 <li class="method public "><a href="#method___construct" title="__construct :: Module Constructor."><span class="description">Module Constructor.</span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_getActionName" title="getActionName :: Returns the current set action (method) to be called when the
-controller is to be dispatched"><span class="description">Returns the current set action (method) to be called when the
-controller is to be dispatched</span><pre>getActionName()</pre></a></li>
-<li class="method public "><a href="#method_getActionParams" title="getActionParams :: Returns an array of params to be passed to the controller's action
-method when dispatched."><span class="description">Returns an array of params to be passed to the controller's action
-method when dispatched.</span><pre>getActionParams()</pre></a></li>
-<li class="method public "><a href="#method_getControllerName" title="getControllerName :: Returns the current set module controller name"><span class="description">Returns the current set module controller name</span><pre>getControllerName()</pre></a></li>
 <li class="method public "><a href="#method_getModuleXml" title="getModuleXml :: Returns the data stored in the Modules XML file."><span class="description">Returns the data stored in the Modules XML file.</span><pre>getModuleXml()</pre></a></li>
 <li class="method public "><a href="#method_getName" title="getName :: Returns the modules name"><span class="description">Returns the modules name</span><pre>getName()</pre></a></li>
 <li class="method public "><a href="#method_getRootPath" title="getRootPath :: Returns the path to the modules root folder"><span class="description">Returns the path to the modules root folder</span><pre>getRootPath()</pre></a></li>
+<li class="method public "><a href="#method_hasAdmin" title="hasAdmin :: Returns whetther the module supports admin integration"><span class="description">Returns whetther the module supports admin integration</span><pre>hasAdmin()</pre></a></li>
 <li class="method public "><a href="#method_install" title="install :: Installs the module and defines its routes with the router"><span class="description">Installs the module and defines its routes with the router</span><pre>install()</pre></a></li>
-<li class="method public "><a href="#method_invoke" title="invoke :: This method executes the controller and action"><span class="description">This method executes the controller and action</span><pre>invoke()</pre></a></li>
-<li class="method public "><a href="#method_isCoreModule" title="isCoreModule :: Returns whehter the module is a Plexis Core Module"><span class="description">Returns whehter the module is a Plexis Core Module</span><pre>isCoreModule()</pre></a></li>
+<li class="method public "><a href="#method_invoke" title="invoke :: Invokes a controller and action within the module."><span class="description">Invokes a controller and action within the module.</span><pre>invoke()</pre></a></li>
 <li class="method public "><a href="#method_isInstalled" title="isInstalled :: Returns whether or not the module is installed in the plexis database."><span class="description">Returns whether or not the module is installed in the plexis database.</span><pre>isInstalled()</pre></a></li>
-<li class="method public "><a href="#method_setActionName" title="setActionName :: Sets the action name, overriding the action the router finds"><span class="description">Sets the action name, overriding the action the router finds</span><pre>setActionName()</pre></a></li>
-<li class="method public "><a href="#method_setActionParams" title="setActionParams :: Sets the actions' parameters, overriding the params the router finds"><span class="description">Sets the actions' parameters, overriding the params the router finds</span><pre>setActionParams()</pre></a></li>
-<li class="method public "><a href="#method_setControllerName" title="setControllerName :: Sets the controller name, overriding the controller the router finds"><span class="description">Sets the controller name, overriding the controller the router finds</span><pre>setControllerName()</pre></a></li>
-<li class="method public "><a href="#method_uninstall" title="uninstall :: Removes the modules routes, and declares the module as Uninstalled"><span class="description">Removes the modules routes, and declares the module as Uninstalled</span><pre>uninstall()</pre></a></li>
+<li class="method public "><a href="#method_uninstall" title="uninstall :: Removes the module from the database, declaring the module as Uninstalled"><span class="description">Removes the module from the database, declaring the module as Uninstalled</span><pre>uninstall()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -77,11 +68,9 @@ method when dispatched.</span><pre>getActionParams()</pre></a></li>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
-<li class="property protected "><a href="#property_action" title="$action :: The method to be called in the controller class"><span class="description"></span><pre>$action</pre></a></li>
-<li class="property protected "><a href="#property_controller" title="$controller :: The controller class name"><span class="description"></span><pre>$controller</pre></a></li>
-<li class="property protected "><a href="#property_isCoreModule" title="$isCoreModule :: Used to determine if the module is a Plexis core module"><span class="description"></span><pre>$isCoreModule</pre></a></li>
+<li class="property protected "><a href="#property_log" title="$log :: Holds the plexis Logger object"><span class="description"></span><pre>$log</pre></a></li>
+<li class="property protected "><a href="#property_modules" title="$modules :: An array of loaded modules"><span class="description"></span><pre>$modules</pre></a></li>
 <li class="property protected "><a href="#property_name" title="$name :: The module name"><span class="description"></span><pre>$name</pre></a></li>
-<li class="property protected "><a href="#property_params" title="$params :: Arrat of parameters to be passed to the action method"><span class="description"></span><pre>$params</pre></a></li>
 <li class="property protected "><a href="#property_rootPath" title="$rootPath :: The root path to the module"><span class="description"></span><pre>$rootPath</pre></a></li>
 <li class="property protected "><a href="#property_xml" title="$xml :: If the module.xml has been requested, its XMLObject is stored here."><span class="description"></span><pre>$xml</pre></a></li>
 </ul>
@@ -99,8 +88,8 @@ method when dispatched.</span><pre>getActionParams()</pre></a></li>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">The module class is used to hold information about, as well as execute its action
-methods upon request.</p>
+<p class="short_description">The module class is used to hold information about requested modules,
+ as well as execute its controller action methods upon request.</p>
 <div class="details">
 <div class="long_description"></div>
 <table class="table table-bordered">
@@ -115,61 +104,34 @@ methods upon request.</p>
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
-<h2>Module Constructor.</h2>
-<pre>__construct(string $path, string $controller = null, string $method = null, string[] $params = array()) </pre>
-<div class="labels"></div>
+<a id="method_Get"></a><div class="element clickable method public method_Get" data-toggle="collapse" data-target=".method_Get .collapse">
+<h2>Main method used to fetch and load modules.</h2>
+<pre>Get(string $name) : <a href="../classes/Core.Module.html">\Core\Module</a></pre>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This method acts
+like a factory, and stores all loaded modules statically.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$path</h4>
-<code>string</code><p>The root path to the module directory (can be a relative path from cms root)</p>
-</div>
-<div class="subelement argument">
-<h4>$controller<small><b>   [Default =  null]</b></small>
-</h4>
-<code>string</code><p>The controller name to dispatch</p></div>
-<div class="subelement argument">
-<h4>$method<small><b>   [Default =  null]</b></small>
-</h4>
-<code>string</code><p>The method name to dispatch in the controller.</p></div>
-<div class="subelement argument">
-<h4>$params<small><b>   [Default =  array()]</b></small>
-</h4>
-<code>string[]</code><p>The arguments to be passed to the method when dispatched.</p></div>
+<h4>$name</h4>
+<code>string</code><p>The name of the module folder</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/Core.Module.html">\Core\Module</a></code>Returns a module object</div>
 </div></div>
 </div>
-<a id="method_getActionName"></a><div class="element clickable method public method_getActionName" data-toggle="collapse" data-target=".method_getActionName .collapse">
-<h2>Returns the current set action (method) to be called when the
-controller is to be dispatched</h2>
-<pre>getActionName() : string</pre>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Module Constructor.</h2>
+<pre>__construct(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response"><code>string</code></div>
-</div></div>
-</div>
-<a id="method_getActionParams"></a><div class="element clickable method public method_getActionParams" data-toggle="collapse" data-target=".method_getActionParams .collapse">
-<h2>Returns an array of params to be passed to the controller's action
-method when dispatched.</h2>
-<pre>getActionParams() : string[]</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response"><code>string[]</code></div>
-</div></div>
-</div>
-<a id="method_getControllerName"></a><div class="element clickable method public method_getControllerName" data-toggle="collapse" data-target=".method_getControllerName .collapse">
-<h2>Returns the current set module controller name</h2>
-<pre>getControllerName() : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response"><code>string</code></div>
+<div class="long_description"><p>This method should never be called
+by another library or module, but rather called by the
+internal Module::Get method</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The name of the module folder</p></div>
 </div></div>
 </div>
 <a id="method_getModuleXml"></a><div class="element clickable method public method_getModuleXml" data-toggle="collapse" data-target=".method_getModuleXml .collapse">
@@ -206,25 +168,29 @@ method when dispatched.</h2>
   if the path isnt set</div>
 </div></div>
 </div>
-<a id="method_install"></a><div class="element clickable method public method_install" data-toggle="collapse" data-target=".method_install .collapse">
-<h2>Installs the module and defines its routes with the router</h2>
-<pre>install(bool $override = false) : bool</pre>
+<a id="method_hasAdmin"></a><div class="element clickable method public method_hasAdmin" data-toggle="collapse" data-target=".method_hasAdmin .collapse">
+<h2>Returns whetther the module supports admin integration</h2>
+<pre>hasAdmin() : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$override<small><b>   [Default =  false]</b></small>
-</h4>
-<code>bool</code><p>Remove conflicting routes from other modules?
-If false, and there is a routing conflict, an \Exception will be thrown.
-Otherwise, the old route will be removed, and the new inserted.</p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if the module has admin pages, false otherwise</div>
+</div></div>
 </div>
+<a id="method_install"></a><div class="element clickable method public method_install" data-toggle="collapse" data-target=".method_install .collapse">
+<h2>Installs the module and defines its routes with the router</h2>
+<pre>install() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
 <th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
-<td>Thrown if there is a routing conflict with another
-  module, and $override is set to false.</td>
+<td>Thrown if there is the install method in
+  the admin extension controller returns false. Also thrown if
+  if the install method itself throws an exception.</td>
 </tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -232,17 +198,26 @@ Otherwise, the old route will be removed, and the new inserted.</p>
 </div></div>
 </div>
 <a id="method_invoke"></a><div class="element clickable method public method_invoke" data-toggle="collapse" data-target=".method_invoke .collapse">
-<h2>This method executes the controller and action</h2>
-<pre>invoke() : object</pre>
+<h2>Invokes a controller and action within the module.</h2>
+<pre>invoke(string $controller, string $action, string[] $params = array()) : mixed</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$controller</h4>
+<code>string</code><p>The controller name to call. Case Sensative!</p>
+</div>
+<div class="subelement argument">
+<h4>$action</h4>
+<code>string</code><p>The controller method name to execute. Case IN-sensative.</p>
+</div>
+<div class="subelement argument">
+<h4>$params<small><b>   [Default =  array()]</b></small>
+</h4>
+<code>string[]</code><p>The parameters to pass to the controller method.</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered">
-<tr>
-<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
-<td>Thrown ifthe controller or action variables were never set, or empty.</td>
-</tr>
 <tr>
 <th><code><a href="../classes/ControllerNotFoundException.html">\ControllerNotFoundException</a></code></th>
 <td>when the controller file cant be found</td>
@@ -255,17 +230,7 @@ Otherwise, the old route will be removed, and the new inserted.</p>
 </table>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>object</code>Returns the module controller object</div>
-</div></div>
-</div>
-<a id="method_isCoreModule"></a><div class="element clickable method public method_isCoreModule" data-toggle="collapse" data-target=".method_isCoreModule .collapse">
-<h2>Returns whehter the module is a Plexis Core Module</h2>
-<pre>isCoreModule() : bool</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response"><code>bool</code></div>
+<code>mixed</code>Returns whatever the method returns, Most likely null.</div>
 </div></div>
 </div>
 <a id="method_isInstalled"></a><div class="element clickable method public method_isInstalled" data-toggle="collapse" data-target=".method_isInstalled .collapse">
@@ -279,51 +244,19 @@ Otherwise, the old route will be removed, and the new inserted.</p>
 <code>bool</code>Returns true if the module is installed, false otherwise.</div>
 </div></div>
 </div>
-<a id="method_setActionName"></a><div class="element clickable method public method_setActionName" data-toggle="collapse" data-target=".method_setActionName .collapse">
-<h2>Sets the action name, overriding the action the router finds</h2>
-<pre>setActionName(string $name) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$name</h4>
-<code>string</code><p>The name of the action to load</p></div>
-</div></div>
-</div>
-<a id="method_setActionParams"></a><div class="element clickable method public method_setActionParams" data-toggle="collapse" data-target=".method_setActionParams .collapse">
-<h2>Sets the actions' parameters, overriding the params the router finds</h2>
-<pre>setActionParams(string[] $params) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$params</h4>
-<code>string[]</code><ul>
-<li>An array of params to pass to the action</li>
-</ul>
-</div>
-</div></div>
-</div>
-<a id="method_setControllerName"></a><div class="element clickable method public method_setControllerName" data-toggle="collapse" data-target=".method_setControllerName .collapse">
-<h2>Sets the controller name, overriding the controller the router finds</h2>
-<pre>setControllerName(string $name) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$name</h4>
-<code>string</code><p>The name of the controller to load</p></div>
-</div></div>
-</div>
 <a id="method_uninstall"></a><div class="element clickable method public method_uninstall" data-toggle="collapse" data-target=".method_uninstall .collapse">
-<h2>Removes the modules routes, and declares the module as Uninstalled</h2>
+<h2>Removes the module from the database, declaring the module as Uninstalled</h2>
 <pre>uninstall() : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
+<td>Thrown if there is the uninstall method in
+  the admin extension controller returns false. Also thrown if
+  if the uninstall method itself throws an exception.</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>bool</code>Returns true if the module was uninstalled. May return
@@ -332,33 +265,21 @@ Otherwise, the old route will be removed, and the new inserted.</p>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_action"> </a><div class="element clickable property protected property_action" data-toggle="collapse" data-target=".property_action .collapse">
-<h2>The method to be called in the controller class</h2>
-<pre>$action : string</pre>
+<a id="property_log"> </a><div class="element clickable property protected property_log" data-toggle="collapse" data-target=".property_log .collapse">
+<h2>Holds the plexis Logger object</h2>
+<pre>$log : \Core\Logger</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property_controller"> </a><div class="element clickable property protected property_controller" data-toggle="collapse" data-target=".property_controller .collapse">
-<h2>The controller class name</h2>
-<pre>$controller : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="property_isCoreModule"> </a><div class="element clickable property protected property_isCoreModule" data-toggle="collapse" data-target=".property_isCoreModule .collapse">
-<h2>Used to determine if the module is a Plexis core module</h2>
-<pre>$isCoreModule : bool</pre>
+<a id="property_modules"> </a><div class="element clickable property protected property_modules" data-toggle="collapse" data-target=".property_modules .collapse">
+<h2>An array of loaded modules</h2>
+<pre>$modules : <a href="Core.Module.html">\Core\Module[]</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_name"> </a><div class="element clickable property protected property_name" data-toggle="collapse" data-target=".property_name .collapse">
 <h2>The module name</h2>
 <pre>$name : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="property_params"> </a><div class="element clickable property protected property_params" data-toggle="collapse" data-target=".property_params .collapse">
-<h2>Arrat of parameters to be passed to the action method</h2>
-<pre>$params : string[]</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

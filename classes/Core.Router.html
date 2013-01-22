@@ -51,21 +51,22 @@
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
 <li class="method public "><a href="#method_AddRoutes" title="AddRoutes :: Adds a list new route rules in the database for future route matching"><span class="description">Adds a list new route rules in the database for future route matching</span><pre>AddRoutes()</pre></a></li>
-<li class="method public "><a href="#method_FetchRoutes" title="FetchRoutes :: Returns an array of routes for a defined module"><span class="description">Returns an array of routes for a defined module</span><pre>FetchRoutes()</pre></a></li>
-<li class="method public "><a href="#method_GetConflictingRoutes" title="GetConflictingRoutes :: Returns an array of conflicting routes with a Route stack, and the
-current defined routes"><span class="description">Returns an array of conflicting routes with a Route stack, and the
-current defined routes</span><pre>GetConflictingRoutes()</pre></a></li>
-<li class="method public "><a href="#method_GetRequest" title="GetRequest :: Fetches the current request in a \Core\Module object"><span class="description">Fetches the current request in a \Core\Module object</span><pre>GetRequest()</pre></a></li>
+<li class="method public "><a href="#method_Execute" title="Execute :: This method analyzes a uri string, and executes the module
+tied to the route."><span class="description">This method analyzes a uri string, and executes the module
+tied to the route.</span><pre>Execute()</pre></a></li>
+<li class="method public "><a href="#method_FetchRoutes" title="FetchRoutes :: Returns the route collection containing all defined routes."><span class="description">Returns the route collection containing all defined routes.</span><pre>FetchRoutes()</pre></a></li>
+<li class="method public "><a href="#method_Forge" title="Forge :: This method is similar to execute, but does not call on
+the module to preform any actions."><span class="description">This method is similar to execute, but does not call on
+the module to preform any actions.</span><pre>Forge()</pre></a></li>
+<li class="method public "><a href="#method_HandleRequest" title="HandleRequest :: Executes the main request."><span class="description">Executes the main request.</span><pre>HandleRequest()</pre></a></li>
 <li class="method public "><a href="#method_Init" title="Init :: This method analyzes the current URL request, and loads the
 module in which claims the URL route."><span class="description">This method analyzes the current URL request, and loads the
 module in which claims the URL route.</span><pre>Init()</pre></a></li>
-<li class="method public "><a href="#method_MatchRoute" title="MatchRoute :: Checks a module and action for a matching route."><span class="description">Checks a module and action for a matching route.</span><pre>MatchRoute()</pre></a></li>
-<li class="method public "><a href="#method_RemoveModuleRoutes" title="RemoveModuleRoutes :: Removes all routes associated with a specified module."><span class="description">Removes all routes associated with a specified module.</span><pre>RemoveModuleRoutes()</pre></a></li>
 <li class="method public "><a href="#method_RemoveRoute" title="RemoveRoute :: Removes a defined route from the database"><span class="description">Removes a defined route from the database</span><pre>RemoveRoute()</pre></a></li>
-<li class="method public "><a href="#method_RouteString" title="RouteString :: This method analyzes a uri string, and returns a Module object
-of the routed request."><span class="description">This method analyzes a uri string, and returns a Module object
-of the routed request.</span><pre>RouteString()</pre></a></li>
 </ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="method protected "><a href="#method_LoadModule" title="LoadModule :: Checks a module and action for a matching route."><span class="description">Checks a module and action for a matching route.</span><pre>LoadModule()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties
@@ -74,8 +75,9 @@ of the routed request.</span><pre>RouteString()</pre></a></li>
 <li class="nav-header protected">» Protected
                     <ul>
 <li class="property protected "><a href="#property_DB" title="$DB :: The Plexis Database Object"><span class="description"></span><pre>$DB</pre></a></li>
-<li class="property protected "><a href="#property_RequestModule" title="$RequestModule :: The module request object"><span class="description"></span><pre>$RequestModule</pre></a></li>
-<li class="property protected "><a href="#property_RouteCollection" title="$RouteCollection :: The route stack of all defined routes"><span class="description"></span><pre>$RouteCollection</pre></a></li>
+<li class="property protected "><a href="#property_Log" title="$Log :: Holds the plexis Logger object"><span class="description"></span><pre>$Log</pre></a></li>
+<li class="property protected "><a href="#property_RequestHandled" title="$RequestHandled :: Specified whether the main request was handled"><span class="description"></span><pre>$RequestHandled</pre></a></li>
+<li class="property protected "><a href="#property_Routes" title="$Routes :: The route stack of all defined routes"><span class="description"></span><pre>$Routes</pre></a></li>
 <li class="property protected "><a href="#property_routed" title="$routed :: Have we routed the url yet?"><span class="description"></span><pre>$routed</pre></a></li>
 </ul>
 </li>
@@ -113,7 +115,7 @@ routes that are stored in the plexis database.</p></div>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method_AddRoutes"></a><div class="element clickable method public method_AddRoutes" data-toggle="collapse" data-target=".method_AddRoutes .collapse">
 <h2>Adds a list new route rules in the database for future route matching</h2>
-<pre>AddRoutes(\Core\Router\RouteCollection $routes, bool $remove = false) : bool</pre>
+<pre>AddRoutes(\Core\Router\RouteCollection $routes) : bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -121,63 +123,81 @@ routes that are stored in the plexis database.</p></div>
 <div class="subelement argument">
 <h4>$routes</h4>
 <code><a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></code><p>The route stack container</p></div>
-<div class="subelement argument">
-<h4>$remove<small><b>   [Default =  false]</b></small>
-</h4>
-<code>bool</code><p>Remove conflicting results? If false, and there is a
-  routing conflict, an \Exception will be thrown. Otherwise,
-  the old route will be removed, and the new inserted.</p>
-</div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>bool</code>Returns true if successfull, false otherwise.</div>
 </div></div>
 </div>
+<a id="method_Execute"></a><div class="element clickable method public method_Execute" data-toggle="collapse" data-target=".method_Execute .collapse">
+<h2>This method analyzes a uri string, and executes the module
+tied to the route.</h2>
+<pre>Execute(string $route, bool $isAjax = null) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>If the route cannot be parsed, a 404 error
+will be thrown</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$route</h4>
+<code>string</code><p>The uri string to be routed.</p></div>
+<div class="subelement argument">
+<h4>$isAjax<small><b>   [Default =  null]</b></small>
+</h4>
+<code>bool</code><p>Proccess the route in ajax mode?
+  If the main request is ajax, then setting this to
+  true will execute the route as a normal HTTP request.</p>
+</div>
+</div></div>
+</div>
 <a id="method_FetchRoutes"></a><div class="element clickable method public method_FetchRoutes" data-toggle="collapse" data-target=".method_FetchRoutes .collapse">
-<h2>Returns an array of routes for a defined module</h2>
-<pre>FetchRoutes(string $module) : array[]</pre>
+<h2>Returns the route collection containing all defined routes.</h2>
+<pre>FetchRoutes() : <a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$module</h4>
-<code>string</code><p>The requested module</p></div>
 <h3>Returns</h3>
-<div class="subelement response">
-<code>array[]</code>Returns a two dimensional array. foreach array
-  key, the index key is the first 2 parts of the URI routed, and the
-  the value is an array of ('controller' => controller, 'method' => method).
-  Returns an empty array if there are not routes for the defined module.</div>
+<div class="subelement response"><code><a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></code></div>
 </div></div>
 </div>
-<a id="method_GetConflictingRoutes"></a><div class="element clickable method public method_GetConflictingRoutes" data-toggle="collapse" data-target=".method_GetConflictingRoutes .collapse">
-<h2>Returns an array of conflicting routes with a Route stack, and the
-current defined routes</h2>
-<pre>GetConflictingRoutes(\Core\Router\RouteCollection $routes) : array[]</pre>
+<a id="method_Forge"></a><div class="element clickable method public method_Forge" data-toggle="collapse" data-target=".method_Forge .collapse">
+<h2>This method is similar to execute, but does not call on
+the module to preform any actions.</h2>
+<pre>Forge(string $route, string[] $data = array(), bool $isAjax = null) : <a href="../classes/Core.Module.html">\Core\Module</a> | bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>Instead, the data required
+to correctly invoke the module, as well as the Core\Module
+itself is returned.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$routes</h4>
-<code><a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></code><p>A routes stack to check for.</p></div>
+<h4>$route</h4>
+<code>string</code><p>The uri string to be routed.</p></div>
+<div class="subelement argument">
+<h4>$data<small><b>   [Default =  array()]</b></small>
+</h4>
+<code>string[]</code><p>[Reference Variable] This variable will
+  pass back the request data, such as the controller, action,
+  and parameters to be used to invoke the module. This variable
+  will be empty if the module could not be routed.</p>
+</div>
+<div class="subelement argument">
+<h4>$isAjax<small><b>   [Default =  null]</b></small>
+</h4>
+<code>bool</code><p>Proccess the route in ajax mode?
+  If the main request is ajax, then setting this to
+  true will execute the route as a normal HTTP request.</p>
+</div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>array[]</code>Returns a 2 dimensional array. Each index is an array of
-     array('module_uri' -> module uri, 'action_uri' -> action uri).</div>
+<code><a href="../classes/Core.Module.html">\Core\Module</a></code><code>bool</code>Returns false if the request leads to a 404,
+  otherwise the module object will be returned.</div>
 </div></div>
 </div>
-<a id="method_GetRequest"></a><div class="element clickable method public method_GetRequest" data-toggle="collapse" data-target=".method_GetRequest .collapse">
-<h2>Fetches the current request in a \Core\Module object</h2>
-<pre>GetRequest() : <a href="../classes/Core.Module.html">\Core\Module</a></pre>
+<a id="method_HandleRequest"></a><div class="element clickable method public method_HandleRequest" data-toggle="collapse" data-target=".method_HandleRequest .collapse">
+<h2>Executes the main request.</h2>
+<pre>HandleRequest() : void</pre>
 <div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code><a href="../classes/Core.Module.html">\Core\Module</a></code>Returns a Core\Module object of the current request</div>
-</div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_Init"></a><div class="element clickable method public method_Init" data-toggle="collapse" data-target=".method_Init .collapse">
 <h2>This method analyzes the current URL request, and loads the
@@ -187,78 +207,41 @@ module in which claims the URL route.</h2>
 <div class="row collapse"><div class="detail-description"><div class="long_description"><p>This method is called
 automatically, and will not do anything if called again.</p></div></div></div>
 </div>
-<a id="method_MatchRoute"></a><div class="element clickable method public method_MatchRoute" data-toggle="collapse" data-target=".method_MatchRoute .collapse">
-<h2>Checks a module and action for a matching route.</h2>
-<pre>MatchRoute(string $module, string $action, string[] $params = array()) : <a href="../classes/Core.Module.html">\Core\Module</a> | bool</pre>
+<a id="method_RemoveRoute"></a><div class="element clickable method public method_RemoveRoute" data-toggle="collapse" data-target=".method_RemoveRoute .collapse">
+<h2>Removes a defined route from the database</h2>
+<pre>RemoveRoute(string $key) : bool</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$module</h4>
-<code>string</code><p>The module URI segement</p></div>
+<h4>$key</h4>
+<code>string</code><p>The routes array key in routes.php</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true on success</div>
+</div></div>
+</div>
+<a id="method_LoadModule"></a><div class="element clickable method protected method_LoadModule" data-toggle="collapse" data-target=".method_LoadModule .collapse">
+<h2>Checks a module and action for a matching route.</h2>
+<pre>LoadModule(string $route, string[] $data) : <a href="../classes/Core.Module.html">\Core\Module</a> | bool</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$action</h4>
-<code>string</code><p>The action URI segement</p></div>
+<h4>$route</h4>
+<code>string</code><p>The route to map for a module</p></div>
 <div class="subelement argument">
-<h4>$params<small><b>   [Default =  array()]</b></small>
-</h4>
-<code>string[]</code><p>An array of the remaing URI parameters</p></div>
+<h4>$data</h4>
+<code>string[]</code><p>[Reference Variable] This variable will
+  pass back the request data, such as the controller, action,
+  and parameters to be used to invoke the module.</p>
+</div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/Core.Module.html">\Core\Module</a></code><code>bool</code>Returns false if there is no database route,
   or if the module matched does not exist.</div>
-</div></div>
-</div>
-<a id="method_RemoveModuleRoutes"></a><div class="element clickable method public method_RemoveModuleRoutes" data-toggle="collapse" data-target=".method_RemoveModuleRoutes .collapse">
-<h2>Removes all routes associated with a specified module.</h2>
-<pre>RemoveModuleRoutes(string $module) : bool</pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$module</h4>
-<code>string</code><p>The module name</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>bool</code>Returns true if any results were removed, or false
-  if there was no rows removed</div>
-</div></div>
-</div>
-<a id="method_RemoveRoute"></a><div class="element clickable method public method_RemoveRoute" data-toggle="collapse" data-target=".method_RemoveRoute .collapse">
-<h2>Removes a defined route from the database</h2>
-<pre>RemoveRoute(string $reqModule, string $reqAction) : bool</pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$reqModule</h4>
-<code>string</code><p>The module URI segement</p></div>
-<div class="subelement argument">
-<h4>$reqAction</h4>
-<code>string</code><p>The action URI segement</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>bool</code>Returns true if any results were removed, or false
-  if there was no rows removed</div>
-</div></div>
-</div>
-<a id="method_RouteString"></a><div class="element clickable method public method_RouteString" data-toggle="collapse" data-target=".method_RouteString .collapse">
-<h2>This method analyzes a uri string, and returns a Module object
-of the routed request.</h2>
-<pre>RouteString(string $uri) : <a href="../classes/Core.Module.html">\Core\Module</a> | bool</pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$uri</h4>
-<code>string</code><p>The uri string to be routed.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code><a href="../classes/Core.Module.html">\Core\Module</a></code><code>bool</code>Returns false if the request leads to a 404.</div>
 </div></div>
 </div>
 <h3>
@@ -269,15 +252,21 @@ of the routed request.</h2>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property_RequestModule"> </a><div class="element clickable property protected property_RequestModule" data-toggle="collapse" data-target=".property_RequestModule .collapse">
-<h2>The module request object</h2>
-<pre>$RequestModule : <a href="../classes/Core.Module.html">\Core\Module</a></pre>
+<a id="property_Log"> </a><div class="element clickable property protected property_Log" data-toggle="collapse" data-target=".property_Log .collapse">
+<h2>Holds the plexis Logger object</h2>
+<pre>$Log : \Core\Logger</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property_RouteCollection"> </a><div class="element clickable property protected property_RouteCollection" data-toggle="collapse" data-target=".property_RouteCollection .collapse">
+<a id="property_RequestHandled"> </a><div class="element clickable property protected property_RequestHandled" data-toggle="collapse" data-target=".property_RequestHandled .collapse">
+<h2>Specified whether the main request was handled</h2>
+<pre>$RequestHandled : <a href="../classes/Core.Module.html">\Core\Module</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_Routes"> </a><div class="element clickable property protected property_Routes" data-toggle="collapse" data-target=".property_Routes .collapse">
 <h2>The route stack of all defined routes</h2>
-<pre>$RouteCollection : <a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></pre>
+<pre>$Routes : <a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

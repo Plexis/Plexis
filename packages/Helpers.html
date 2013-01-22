@@ -52,6 +52,9 @@
 <li>
 <span class="empty-package"><i class="icon-folder-close"></i>Helpers</span><ul class="nav nav-list nav-packages">
 <li>
+<a href="../packages/Helpers.Ajax.html" title="Ajax"><i class="icon-folder-open"></i>Ajax</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li>
 <a href="../packages/Helpers.Html.html" title="Html"><i class="icon-folder-open"></i>Html</a><ul class="nav nav-list nav-packages"></ul>
 </li>
 <li>
@@ -69,6 +72,45 @@
 <a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/Helpers.html">Helpers</a></li>
 </li></ul>
 <div class="package-indent">
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Helpers.html">Helpers</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../packages/Helpers.Ajax.html">Ajax</a>
+</li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-function"></i> Functions</h3>
+<a id="function_dataTablesFormat"></a><div class="element clickable function  function_dataTablesFormat" data-toggle="collapse" data-target=".function_dataTablesFormat .collapse">
+<h2>Formats an array into a jQuery.datatables format</h2>
+<pre>dataTablesFormat(array $data, int $totalRecords = false, int $totalDisplayRecords = false) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array[]</code><p>An array of mixed array, containing the data
+  to format.</p></div>
+<div class="subelement argument">
+<h4>$totalRecords<small><b>   [Default =  false]</b></small>
+</h4>
+<code>int</code><p>Total records, before filtering (i.e. the
+  total number of records in the database)</p>
+</div>
+<div class="subelement argument">
+<h4>$totalDisplayRecords<small><b>   [Default =  false]</b></small>
+</h4>
+<code>int</code><p>Total records, after filtering
+  (i.e. the total number of records after filtering has been applied -
+  not just the number of records being returned in this result set)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the correctly formatted json_encoded array.</div>
+</div></div>
+</div>
+</div>
 <ul class="breadcrumb"><li>
 <a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li><a href="../packages/Helpers.html">Helpers</a></li>
 <li class="active">

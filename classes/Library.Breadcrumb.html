@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>Plexis CMS » \Core\Router\RouteCollection</title>
+<title>Plexis CMS » \Library\Breadcrumb</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../template/css/template.css" rel="stylesheet" media="all">
@@ -50,11 +50,16 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_addRoute" title="addRoute :: Adds a route for a module, and URI segements"><span class="description">Adds a route for a module, and URI segements</span><pre>addRoute()</pre></a></li>
-<li class="method public "><a href="#method_getRoutes" title="getRoutes :: Returns a list of all defined routes in this stack."><span class="description">Returns a list of all defined routes in this stack.</span><pre>getRoutes()</pre></a></li>
-<li class="method public "><a href="#method_hasRoute" title="hasRoute :: Returns whether there is a match to the URI route supplied."><span class="description">Returns whether there is a match to the URI route supplied.</span><pre>hasRoute()</pre></a></li>
-<li class="method public "><a href="#method_merge" title="merge :: Merges another RouteCollections route with this collection."><span class="description">Merges another RouteCollections route with this collection.</span><pre>merge()</pre></a></li>
-<li class="method public "><a href="#method_removeRoute" title="removeRoute :: Removes the specified route from the list of routes."><span class="description">Removes the specified route from the list of routes.</span><pre>removeRoute()</pre></a></li>
+<li class="method public "><a href="#method_Append" title="Append :: "><span class="description">Append()
+        </span><pre>Append()</pre></a></li>
+<li class="method public "><a href="#method_Generate" title="Generate :: "><span class="description">Generate()
+        </span><pre>Generate()</pre></a></li>
+<li class="method public "><a href="#method_GenerateListsOnly" title="GenerateListsOnly :: "><span class="description">GenerateListsOnly()
+        </span><pre>GenerateListsOnly()</pre></a></li>
+<li class="method public "><a href="#method_GenerateString" title="GenerateString :: "><span class="description">GenerateString()
+        </span><pre>GenerateString()</pre></a></li>
+<li class="method public "><a href="#method_getList" title="getList :: "><span class="description">getList()
+        </span><pre>getList()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -62,25 +67,22 @@
                     <ul></ul>
 </li>
 <li class="nav-header protected">» Protected
-                    <ul><li class="property protected "><a href="#property_routes" title="$routes :: A Multi-Demensional array of route information"><span class="description"></span><pre>$routes</pre></a></li></ul>
+                    <ul><li class="property protected "><a href="#property_breadcrumbs" title="$breadcrumbs :: "><span class="description"></span><pre>$breadcrumbs</pre></a></li></ul>
 </li>
 </ul>
 </div>
 <div class="span8">
-<a id="\Core\Router\RouteCollection"></a><ul class="breadcrumb">
+<a id="\Library\Breadcrumb"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
-<li><a href="../namespaces/Core.html">Core</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/Core.Router.html">Router</a>
-</li>
+<li><a href="../namespaces/Library.html">Library</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/Core.Router.RouteCollection.html">RouteCollection</a>
+<span class="divider">\</span><a href="../classes/Library.Breadcrumb.html">Breadcrumb</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">A container class to hold route information for the router.</p>
+<p class="short_description">A breadcrumb building class</p>
 <div class="details">
 <div class="long_description"></div>
 <table class="table table-bordered">
@@ -90,87 +92,78 @@
 </tr>
 <tr>
 <th>package</th>
-<td><a href="../packages/Core.Router.html">Core</a></td>
-</tr>
-<tr>
-<th>subpackage</th>
-<td>Router</td>
+<td><a href="../packages/Library.html">Library</a></td>
 </tr>
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a id="method_addRoute"></a><div class="element clickable method public method_addRoute" data-toggle="collapse" data-target=".method_addRoute .collapse">
-<h2>Adds a route for a module, and URI segements</h2>
-<pre>addRoute(\Core\Router\Route $route) : void</pre>
+<a id="method_Append"></a><div class="element clickable method public method_Append" data-toggle="collapse" data-target=".method_Append .collapse">
+<h2>Append()
+        </h2>
+<pre>Append($text, $href) </pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$text</h4></div>
+<div class="subelement argument"><h4>$href</h4></div>
+</div></div>
+</div>
+<a id="method_Generate"></a><div class="element clickable method public method_Generate" data-toggle="collapse" data-target=".method_Generate .collapse">
+<h2>Generate()
+        </h2>
+<pre>Generate($ulClass = 'breadcrumb', $liClass = null, $divider = "") </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$route</h4>
-<code><a href="../classes/Core.Router.Route.html">\Core\Router\Route</a></code><p>The route object to add</p></div>
+<div class="subelement argument"><h4>$ulClass<small><b>   [Default =  'breadcrumb']</b></small>
+</h4></div>
+<div class="subelement argument"><h4>$liClass<small><b>   [Default =  null]</b></small>
+</h4></div>
+<div class="subelement argument"><h4>$divider<small><b>   [Default =  ""]</b></small>
+</h4></div>
 </div></div>
 </div>
-<a id="method_getRoutes"></a><div class="element clickable method public method_getRoutes" data-toggle="collapse" data-target=".method_getRoutes .collapse">
-<h2>Returns a list of all defined routes in this stack.</h2>
-<pre>getRoutes() : <a href="Core.Router.Route.html">\Core\Router\Route[]</a></pre>
-<div class="labels"></div>
+<a id="method_GenerateListsOnly"></a><div class="element clickable method public method_GenerateListsOnly" data-toggle="collapse" data-target=".method_GenerateListsOnly .collapse">
+<h2>GenerateListsOnly()
+        </h2>
+<pre>GenerateListsOnly($cssClass = "breadcrum", $divider = "") </pre>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="Core.Router.Route.html">\Core\Router\Route[]</a></code></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$cssClass<small><b>   [Default =  "breadcrum"]</b></small>
+</h4></div>
+<div class="subelement argument"><h4>$divider<small><b>   [Default =  ""]</b></small>
+</h4></div>
 </div></div>
 </div>
-<a id="method_hasRoute"></a><div class="element clickable method public method_hasRoute" data-toggle="collapse" data-target=".method_hasRoute .collapse">
-<h2>Returns whether there is a match to the URI route supplied.</h2>
-<pre>hasRoute(string $route, string[] $match = array()) : bool</pre>
+<a id="method_GenerateString"></a><div class="element clickable method public method_GenerateString" data-toggle="collapse" data-target=".method_GenerateString .collapse">
+<h2>GenerateString()
+        </h2>
+<pre>GenerateString($tpl, $first_tpl = null) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$route</h4>
-<code>string</code><p>The route string</p></div>
-<div class="subelement argument">
-<h4>$match<small><b>   [Default =  array()]</b></small>
-</h4>
-<code>string[]</code><p>[Reference Variable] Returns the controller,
-  action, and params if the route is a match.</p>
-</div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>bool</code>Returns whether or not a match was found</div>
+<div class="subelement argument"><h4>$tpl</h4></div>
+<div class="subelement argument"><h4>$first_tpl<small><b>   [Default =  null]</b></small>
+</h4></div>
 </div></div>
 </div>
-<a id="method_merge"></a><div class="element clickable method public method_merge" data-toggle="collapse" data-target=".method_merge .collapse">
-<h2>Merges another RouteCollections route with this collection.</h2>
-<pre>merge(\Core\Router\RouteCollection $Routes) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$Routes</h4>
-<code><a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></code><p>The route collection to merge with</p></div>
-</div></div>
-</div>
-<a id="method_removeRoute"></a><div class="element clickable method public method_removeRoute" data-toggle="collapse" data-target=".method_removeRoute .collapse">
-<h2>Removes the specified route from the list of routes.</h2>
-<pre>removeRoute(string $route) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$route</h4>
-<code>string</code><p>The regular expression to remove</p></div>
-</div></div>
+<a id="method_getList"></a><div class="element clickable method public method_getList" data-toggle="collapse" data-target=".method_getList .collapse">
+<h2>getList()
+        </h2>
+<pre>getList() </pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_routes"> </a><div class="element clickable property protected property_routes" data-toggle="collapse" data-target=".property_routes .collapse">
-<h2>A Multi-Demensional array of route information</h2>
-<pre>$routes : <a href="Core.Router.Route.html">\Core\Router\Route[]</a></pre>
+<a id="property_breadcrumbs"> </a><div class="element clickable property protected property_breadcrumbs" data-toggle="collapse" data-target=".property_breadcrumbs .collapse">
+<h2></h2>
+<pre>$breadcrumbs </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>Plexis CMS » \Core\Router\RouteCollection</title>
+<title>Plexis CMS » \Library\DataTables</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../template/css/template.css" rel="stylesheet" media="all">
@@ -50,11 +50,11 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_addRoute" title="addRoute :: Adds a route for a module, and URI segements"><span class="description">Adds a route for a module, and URI segements</span><pre>addRoute()</pre></a></li>
-<li class="method public "><a href="#method_getRoutes" title="getRoutes :: Returns a list of all defined routes in this stack."><span class="description">Returns a list of all defined routes in this stack.</span><pre>getRoutes()</pre></a></li>
-<li class="method public "><a href="#method_hasRoute" title="hasRoute :: Returns whether there is a match to the URI route supplied."><span class="description">Returns whether there is a match to the URI route supplied.</span><pre>hasRoute()</pre></a></li>
-<li class="method public "><a href="#method_merge" title="merge :: Merges another RouteCollections route with this collection."><span class="description">Merges another RouteCollections route with this collection.</span><pre>merge()</pre></a></li>
-<li class="method public "><a href="#method_removeRoute" title="removeRoute :: Removes the specified route from the list of routes."><span class="description">Removes the specified route from the list of routes.</span><pre>removeRoute()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct :: Class Contructor."><span class="description">Class Contructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_generate" title="generate :: Generates all the data, based on the rows added, for datatables to read
+off of."><span class="description">Generates all the data, based on the rows added, for datatables to read
+off of.</span><pre>generate()</pre></a></li>
+<li class="method public "><a href="#method_setDataProp" title="setDataProp :: Sets the DataProp or array key of rows expected from DataTables."><span class="description">Sets the DataProp or array key of rows expected from DataTables.</span><pre>setDataProp()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -62,25 +62,25 @@
                     <ul></ul>
 </li>
 <li class="nav-header protected">» Protected
-                    <ul><li class="property protected "><a href="#property_routes" title="$routes :: A Multi-Demensional array of route information"><span class="description"></span><pre>$routes</pre></a></li></ul>
+                    <ul>
+<li class="property protected "><a href="#property_data" title="$data :: An array or $_POST or $_GET data for proccessing"><span class="description"></span><pre>$data</pre></a></li>
+<li class="property protected "><a href="#property_dataProp" title="$dataProp :: The dataprop to be returned."><span class="description"></span><pre>$dataProp</pre></a></li>
+</ul>
 </li>
 </ul>
 </div>
 <div class="span8">
-<a id="\Core\Router\RouteCollection"></a><ul class="breadcrumb">
+<a id="\Library\DataTables"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
-<li><a href="../namespaces/Core.html">Core</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/Core.Router.html">Router</a>
-</li>
+<li><a href="../namespaces/Library.html">Library</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/Core.Router.RouteCollection.html">RouteCollection</a>
+<span class="divider">\</span><a href="../classes/Library.DataTables.html">DataTables</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">A container class to hold route information for the router.</p>
+<p class="short_description">A jQuery Datatables server side record class for PDO database records</p>
 <div class="details">
 <div class="long_description"></div>
 <table class="table table-bordered">
@@ -90,89 +90,94 @@
 </tr>
 <tr>
 <th>package</th>
-<td><a href="../packages/Core.Router.html">Core</a></td>
-</tr>
-<tr>
-<th>subpackage</th>
-<td>Router</td>
+<td><a href="../packages/Library.html">Library</a></td>
 </tr>
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a id="method_addRoute"></a><div class="element clickable method public method_addRoute" data-toggle="collapse" data-target=".method_addRoute .collapse">
-<h2>Adds a route for a module, and URI segements</h2>
-<pre>addRoute(\Core\Router\Route $route) : void</pre>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Class Contructor.</h2>
+<pre>__construct(string $method = 'GET') </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$route</h4>
-<code><a href="../classes/Core.Router.Route.html">\Core\Router\Route</a></code><p>The route object to add</p></div>
-</div></div>
-</div>
-<a id="method_getRoutes"></a><div class="element clickable method public method_getRoutes" data-toggle="collapse" data-target=".method_getRoutes .collapse">
-<h2>Returns a list of all defined routes in this stack.</h2>
-<pre>getRoutes() : <a href="Core.Router.Route.html">\Core\Router\Route[]</a></pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="Core.Router.Route.html">\Core\Router\Route[]</a></code></div>
-</div></div>
-</div>
-<a id="method_hasRoute"></a><div class="element clickable method public method_hasRoute" data-toggle="collapse" data-target=".method_hasRoute .collapse">
-<h2>Returns whether there is a match to the URI route supplied.</h2>
-<pre>hasRoute(string $route, string[] $match = array()) : bool</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$route</h4>
-<code>string</code><p>The route string</p></div>
-<div class="subelement argument">
-<h4>$match<small><b>   [Default =  array()]</b></small>
+<h4>$method<small><b>   [Default =  'GET']</b></small>
 </h4>
-<code>string[]</code><p>[Reference Variable] Returns the controller,
-  action, and params if the route is a match.</p>
+<code>string</code><p>The method used by datatables (GET or POST)</p>
 </div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
+<td>Thrown if no datatabes request was made.</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_generate"></a><div class="element clickable method public method_generate" data-toggle="collapse" data-target=".method_generate .collapse">
+<h2>Generates all the data, based on the rows added, for datatables to read
+off of.</h2>
+<pre>generate(string[] $aColumns, string[] $sIndexColumn, string $sTable, string $cWhere, <a href="../classes/Database.Driver.html">\Database\Driver</a> $DB) : mixed[]</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>The data will still need to be encoded with json_encode()</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$aColumns</h4>
+<code>string[]</code><p>The array of DB columns to process</p></div>
+<div class="subelement argument">
+<h4>$sIndexColumn</h4>
+<code>string[]</code><p>The index column such as "id"</p>
+</div>
+<div class="subelement argument">
+<h4>$sTable</h4>
+<code>string</code><p>The table we are query'ing</p>
+</div>
+<div class="subelement argument">
+<h4>$cWhere</h4>
+<code>string</code><p>Additional WHERE statements</p></div>
+<div class="subelement argument">
+<h4>$DB</h4>
+<code><a href="../classes/Database.Driver.html">\Database\Driver</a></code><p>The PDO Database Object</p></div>
 <h3>Returns</h3>
-<div class="subelement response">
-<code>bool</code>Returns whether or not a match was found</div>
+<div class="subelement response"><code>mixed[]</code></div>
 </div></div>
 </div>
-<a id="method_merge"></a><div class="element clickable method public method_merge" data-toggle="collapse" data-target=".method_merge .collapse">
-<h2>Merges another RouteCollections route with this collection.</h2>
-<pre>merge(\Core\Router\RouteCollection $Routes) : void</pre>
+<a id="method_setDataProp"></a><div class="element clickable method public method_setDataProp" data-toggle="collapse" data-target=".method_setDataProp .collapse">
+<h2>Sets the DataProp or array key of rows expected from DataTables.</h2>
+<pre>setDataProp(string $prop) : void</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>see</th>
+<td><a href="">\Library\http://datatables.net/usage/options#sAjaxDataProp</a></td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$Routes</h4>
-<code><a href="../classes/Core.Router.RouteCollection.html">\Core\Router\RouteCollection</a></code><p>The route collection to merge with</p></div>
-</div></div>
-</div>
-<a id="method_removeRoute"></a><div class="element clickable method public method_removeRoute" data-toggle="collapse" data-target=".method_removeRoute .collapse">
-<h2>Removes the specified route from the list of routes.</h2>
-<pre>removeRoute(string $route) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$route</h4>
-<code>string</code><p>The regular expression to remove</p></div>
+<h4>$prop</h4>
+<code>string</code><p>The dataprop</p></div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_routes"> </a><div class="element clickable property protected property_routes" data-toggle="collapse" data-target=".property_routes .collapse">
-<h2>A Multi-Demensional array of route information</h2>
-<pre>$routes : <a href="Core.Router.Route.html">\Core\Router\Route[]</a></pre>
+<a id="property_data"> </a><div class="element clickable property protected property_data" data-toggle="collapse" data-target=".property_data .collapse">
+<h2>An array or $_POST or $_GET data for proccessing</h2>
+<pre>$data : mixed[]</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_dataProp"> </a><div class="element clickable property protected property_dataProp" data-toggle="collapse" data-target=".property_dataProp .collapse">
+<h2>The dataprop to be returned.</h2>
+<pre>$dataProp : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>see</th>
+<td><a href="">\Library\http://datatables.net/usage/options#sAjaxDataProp</a></td>
+</tr></table>
+</div></div>
 </div>
 </div>
 </div>
