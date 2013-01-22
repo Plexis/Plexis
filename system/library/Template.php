@@ -54,6 +54,12 @@ class Template
     protected static $themeConfig;
     
     /**
+     * The layout name to be used
+     * @var string
+     */
+    protected static $layoutName = 'default';
+    
+    /**
      * The page title for the title tag (appended after server name)
      * @var string
      */
@@ -129,42 +135,66 @@ class Template
      * Loads a view file from the template's module view folder.
      *
      * @param string $module The name of the module (where the view is located)
-     *   If the $name parameter is false, then this param becomes becomes the 
-     *   partial view name, and a partial view is loaded rather then a full
-     *   module view.
-     * @param string $name The name of the view file (no extension). If set
-     *   to false, then the $module param becomes the view name, and a
-     *   template partial view is loaded instead.
+     * @param string $name The name of the view file (no extension).
      * @param bool $hasJs A reference variable that returns whether or not the
      *   template's view had a javascript file for this view
      *
-     * @throws ViewNotFoundException if the template does not have the view
+     * @throws ViewNotFoundException Thrown if the template does not have the view
      *   file for the specified module
      *
      * @return \Library\View
      */
-    public static function LoadView($module, $name = false, &$hasJs = false)
+    public static function LoadModuleView($module, $name, &$hasJs = false)
     {
-        // Build path... Are we loading a partial or module view?
-        $path = (empty($name))
-            ? path(self::$themePath, self::$themeName, 'views', $module .'.tpl')
-            : path(self::$themePath, self::$themeName, 'views', strtolower($module), $name .'.tpl');
-         
+        // Build path
+        $module = strtolower($module);
+        $path = path(self::$themePath, self::$themeName, 'views', $module, $name .'.tpl');
+        
         // Get the JS file path
-        $viewjs = (empty($name))
-            ? path(self::$themePath, self::$themeName, 'js', 'views', $module .'.js')
-            : path(self::$themePath, self::$themeName, 'js', 'views', strtolower($module), $name .'.js');
+        $viewjs = path(self::$themePath, self::$themeName, 'js', 'views', $module, $name .'.js');
         
         // If the JS file exists in the template, include it!
         if(file_exists($viewjs))
         {
-            $url = self::$themeUrl . (!$name) ? "/js/views/{$module}.js" : "/js/views/{$module}/{$name}.js";
+            $url = self::$themeUrl . "/js/views/{$module}/{$name}.js";
             self::$headers[] = "<script type=\"text/javascript\" src=\"{$url}\"></script>";
             $hasJs = true;
         }
         
         // Try and load the view
         return new View($path);
+    }
+    
+    /**
+     * Loads a partial view file from the template's partials folder.
+     *
+     * @param string $name The name of the partial view file (no extension).
+     *
+     * @throws ViewNotFoundException Thrown if the template does not have the partial view
+     *
+     * @return \Library\View
+     */
+    public static function LoadPartial($name) 
+    {
+        // Build path
+        $path = path(self::$themePath, self::$themeName, 'views', 'partials', $name .'.tpl');
+        
+        // Try and load the view
+        return new View($path);
+    }
+    
+    /**
+     * Sets the layout to be loaded for this request
+     *
+     * @param string $name The name of the layout view file (no extension).
+     *
+     * @throws ViewNotFoundException Thrown if the template does not have the layout view
+     *
+     * @return void
+     */
+    public static function SetLayout($name)
+    {
+        self::$layoutName = $name;
     }
     
     /**
@@ -488,7 +518,7 @@ class Template
     {
         // Load the global_messages view
         try {
-            $View = new View( path(self::$themePath, self::$themeName, 'views', 'message.tpl') );
+            $View = new View( path(self::$themePath, self::$themeName, 'views', 'partials', 'message.tpl') );
         }
         catch( ViewNotFoundException $e ) {
             throw $e;
@@ -541,7 +571,7 @@ class Template
     protected static function RenderLayout()
     {
         // Get layout contents
-        $path = path(self::$themePath, self::$themeName, 'views', 'layout.tpl');
+        $path = path(self::$themePath, self::$themeName, 'views', 'layouts', self::$layoutName .'.tpl');
         $contents = file_get_contents( $path );
         
         // Parse plexis tags (temporary till i input a better method)
@@ -577,6 +607,9 @@ class Template
         $Layout->set('BASE_URL', Request::BaseUrl());
         $Layout->set('SITE_URL', SITE_URL);
         $Layout->set('TEMPLATE_URL', self::$themeUrl);
+        $Layout->set('CSS_DIR', self::$themeUrl .'/css');
+        $Layout->set('JS_DIR', self::$themeUrl .'/js');
+        $Layout->set('IMG_DIR', self::$themeUrl .'/img');
         $Layout->set('TEMPLATE_NAME', self::$themeConfig->info->name);
         $Layout->set('TEMPLATE_AUTHOR', self::$themeConfig->info->author);
         $Layout->set('TEMPLATE_CODED_BY', self::$themeConfig->info->coded_by);

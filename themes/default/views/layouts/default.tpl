@@ -8,14 +8,14 @@
     {Plexis::Head} 
     
     <!-- Include template CSS stylesheets -->
-    <link rel="icon" type="image/gif" href="{TEMPLATE_URL}/images/favicon.gif" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/core.css"/>
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/datatables.css"/>
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/jquery-ui-1.8.20.custom.css"/>
+    <link rel="icon" type="image/gif" href="{IMG_DIR}/favicon.gif" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/style.css"/>
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/core.css"/>
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/datatables.css"/>
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/jquery-ui-1.8.20.custom.css"/>
     
     <!-- Template JS -->
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.cycle.all.min.js"></script>
+    <script type="text/javascript" src="{JS_DIR}/jquery.cycle.all.min.js"></script>
 
     <script type="text/javascript">
     <!--
@@ -62,10 +62,10 @@
 	<h2 style="font-size:20px;margin-top:30px;">Please upgrade to a more modern browser. These are our recommendations:</h2>
 
 	<div style="margin-top:30px;">
-		<a href="http://www.google.com/chrome"><img src="{TEMPLATE_URL}/images/ie_splash/chrome.jpg" /></a>
-		<a href="http://www.mozilla.org/firefox/"><img src="{TEMPLATE_URL}/images/ie_splash/firefox.jpg" /></a>
-		<a href="http://www.apple.com/safari/"><img src="{TEMPLATE_URL}/images/ie_splash/safari.jpg" /></a>
-		<a href="http://www.opera.com/"><img src="{TEMPLATE_URL}/images/ie_splash/opera.jpg" /></a>
+		<a href="http://www.google.com/chrome"><img src="{IMG_DIR}/ie_splash/chrome.jpg" /></a>
+		<a href="http://www.mozilla.org/firefox/"><img src="{IMG_DIR}/ie_splash/firefox.jpg" /></a>
+		<a href="http://www.apple.com/safari/"><img src="{IMG_DIR}/ie_splash/safari.jpg" /></a>
+		<a href="http://www.opera.com/"><img src="{IMG_DIR}/ie_splash/opera.jpg" /></a>
 	</div>
 </div>
 <![endif]-->
@@ -76,7 +76,7 @@
         <!-- Header -->
         <header id="header">
             <div id="logo">
-                <a href="{SITE_URL}"><img src="{TEMPLATE_URL}/images/logo.png" alt="Plexis CMS" /></a>
+                <a href="{SITE_URL}"><img src="{IMG_DIR}/logo.png" alt="Plexis CMS" /></a>
             </div>
         </header>
 
@@ -197,14 +197,14 @@
                     <div class="right-box">
                         <h3>Realm Status</h3>
                         <div id="ajax_loading">
-                            <center><br /><img src='{TEMPLATE_URL}/images/loading.gif'></center>
+                            <center><br /><img src='{IMG_DIR}/loading.gif'></center>
                         </div>
                         <ul class="realm-status">
                             <!-- Ajax Realmlist Loop Box -->
                             <div id="ajax_realm">
                                 <li>
                                     <b>
-                                    <img src='{TEMPLATE_URL}/images/realm-@status-small.png'>
+                                    <img src='{IMG_DIR}/realm-@status-small.png'>
                                     <a href="{SITE_URL}/server/viewrealm/@id">@name</a>
                                     </b>
                                     <br />
@@ -225,7 +225,7 @@
                     <?php if($GLOBALS['controller'] == 'Frontpage'): ?>
                         <!-- Slide Show -->
                         <div id="slide">
-                            <div class="slide-image"><a href=""><img src="{TEMPLATE_URL}/images/slide-1.jpg" alt="" /></a><p>Plexis, A Professional WoW CMS!</p></div>
+                            <div class="slide-image"><a href=""><img src="{IMG_DIR}/slide-1.jpg" alt="" /></a><p>Plexis, A Professional WoW CMS!</p></div>
                         </div>
                         <!-- /Slide -->
                     <?php endif; ?>

@@ -44,7 +44,7 @@
     
     $Gravatar = new \Library\Gravatar();
     $Gravatar->setAvatarSize(60);
-    // $Gravatar->setDefaultImage('{TEMPLATE_URL}/img/misc/avatar_small.png');
+    // $Gravatar->setDefaultImage('{IMG_DIR}/misc/avatar_small.png');
     $Avatar = $Gravatar->get('{session.user.email}');
 ?>
 <!DOCTYPE html>
@@ -56,28 +56,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{TEMPLATE_URL}/img/icons/favicon.png" />
+    <link rel="icon" type="image/png" href="{IMG_DIR}/icons/favicon.png" />
     
     <!-- Load Stylesheets -->
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/jquery-ui.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/960.fluid.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/main.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/buttons.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/lists.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/typography.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/forms.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/tables.css" />
-    <link rel="stylesheet" type="text/css" href="{TEMPLATE_URL}/css/charts.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/style.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/960.fluid.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/main.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/buttons.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/lists.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/typography.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/forms.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/tables.css" />
+    <link rel="stylesheet" type="text/css" href="{CSS_DIR}/charts.css" />
     
     <!-- Load Javascripts -->
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/plugins.js"></script>
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/modernizr-2.0.6.min.js"></script>
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.uniform.min.js"></script>
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.form.js"></script>
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.tipsy.js"></script>
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="{TEMPLATE_URL}/js/template.js"></script>
+    <script type="text/javascript" src="{JS_DIR}/plugins.js"></script>
+    <script type="text/javascript" src="{JS_DIR}/modernizr-2.0.6.min.js"></script>
+    <script type="text/javascript" src="{JS_DIR}/jquery.uniform.min.js"></script>
+    <script type="text/javascript" src="{JS_DIR}/jquery.form.js"></script>
+    <script type="text/javascript" src="{JS_DIR}/jquery.tipsy.js"></script>
+    <script type="text/javascript" src="{JS_DIR}/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="{JS_DIR}/template.js"></script>
 </head>
 <body id="top">
 
@@ -89,7 +89,7 @@
             <header id="header">
 
                 <!-- Logo -->
-                <img src="{TEMPLATE_URL}/img/logo.png" alt="Plexis" class="logo">
+                <img src="{IMG_DIR}/logo.png" alt="Plexis" class="logo">
 
                 <!-- Update Panel -->
                 <div id="update_info" title="Update Information" style="display: none;">
@@ -152,15 +152,15 @@
                 <ul class="menu collapsible shadow-bottom">
                     <li>
                         <a href="{SITE_URL}/admin" <?php if($a == TRUE) echo 'class="current"';?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/dashboard.png">Dashboard</a>
+                        <img src="{IMG_DIR}/icons/small/dashboard.png">Dashboard</a>
                     </li>
                     <li>
                         <a href="{SITE_URL}/admin/users" <?php if($b == TRUE) echo 'class="current"'; ?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/user.png">Manage Users</a>
+                        <img src="{IMG_DIR}/icons/small/user.png">Manage Users</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" <?php if($c == TRUE) echo 'class="current"'; ?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/config.png">Configuration</a>
+                        <img src="{IMG_DIR}/icons/small/config.png">Configuration</a>
                         <ul class="sub">
                             <li><a href="{SITE_URL}/admin/settings">Site Settings</a></li>
                             <li><a href="{SITE_URL}/admin/registration">Registration Settings</a></li>
@@ -168,7 +168,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);" <?php if($d == TRUE) echo 'class="current"'; ?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/clipboard-list.png">Site Management</a>
+                        <img src="{IMG_DIR}/icons/small/clipboard-list.png">Site Management</a>
                         <ul class="sub">
                             <li><a href="{SITE_URL}/admin/news">News Posts</a></li>
                             <li><a href="{SITE_URL}/admin/groups">User Groups</a></li>
@@ -183,15 +183,15 @@
                     </li>
                     <li>
                         <a href="{SITE_URL}/admin/realms" <?php if($e == TRUE) echo 'class="current"'; ?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/chart.png">Realm Management</a>
+                        <img src="{IMG_DIR}/icons/small/chart.png">Realm Management</a>
                     </li>
                     <li>
                         <a href="{SITE_URL}/admin/characters" <?php if($f == TRUE) echo 'class="current"'; ?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/pencil.png">Character Editor</a>
+                        <img src="{IMG_DIR}/icons/small/pencil.png">Character Editor</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" <?php if($g == TRUE) echo 'class="current"'; ?>>
-                        <img src="{TEMPLATE_URL}/img/icons/small/system.png">System</a>
+                        <img src="{IMG_DIR}/icons/small/system.png">System</a>
                         <ul class="sub">
                             <li><a href="{SITE_URL}/admin/statistics">Site Statistics</a></li>
                             <li><a href="{SITE_URL}/admin/adminlogs">Admin Logs</a></li>

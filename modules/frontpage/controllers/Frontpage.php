@@ -25,7 +25,7 @@ final class Frontpage extends Controller
             $view->set('message', 'Module path: '. $this->modulePath .'<br />Module HTTP URI: '. $this->moduleUri);
             
             // Load a content box next, placing our module view as the contents of the box
-            $box = $this->loadTemplateView("contentbox");
+            $box = Template::LoadPartial("contentbox");
             $box->set('title', 'Test Title');
             $box->set('contents', $view->render());
             

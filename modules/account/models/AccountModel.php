@@ -1,4 +1,6 @@
 <?php
+namespace Account;
+
 // Bring some classes into scope so we dont have to specify namespaces throughout
 use Core\Request;
 use Library\Auth;

@@ -158,7 +158,7 @@ class Controller
         $View = false;
         $viewHasJs = false;
         try {
-            $View = Template::LoadView($this->moduleName, $name, $viewHasJs);
+            $View = Template::LoadModuleView($this->moduleName, $name, $viewHasJs);
         }
         catch( ViewNotFoundException $e ) {}
         
@@ -170,38 +170,6 @@ class Controller
             // Try and load the view, catch the exception
             $View = new View($path);
         }
-        
-        // Load view JS if there is one
-        if(!empty($jsFile) && !$viewHasJs)
-            Template::AddJsFile($this->moduleUri .'/js/'. $jsFile .'.js');
-        
-        return $View;
-    }
-    
-    /**
-     * Loads a template partial view, such as a content or news box
-     *
-     * This method loads a layout piece of the template, or rather a "partial". 
-     * An example of this, is a news box. The news box itself requires contents 
-     * to be set inside of it.
-     *
-     * @param string $name The partial view filename to load (no extension)
-     * @param string $jsFile The name of the views javascript file (located in the
-     *   modules JS folder). Leave null for no file, or to use the default template's view
-     *  js file.
-     *
-     * @return \Library\View|bool Returns false if the view file cannot be located,
-     *   a Library\View object otherwise
-     */
-    protected function loadTemplateView($name, $jsFile = null)
-    {
-        // See if the view file exists in the current template
-        $View = false;
-        $viewHasJs = false;
-        try {
-            $View = Template::LoadView($name, false, $viewHasJs);
-        }
-        catch( ViewNotFoundException $e ) {}
         
         // Load view JS if there is one
         if(!empty($jsFile) && !$viewHasJs)
@@ -312,14 +280,11 @@ class Controller
                 Template::ClearContents();
                 
                 // Get our login template contents
-                $View = Template::LoadView("login", null, $hasJsFile);
+                $View = Template::LoadPartial("login");
                 $View->Set('SITE_URL', Request::BaseUrl());
                 Template::Add($View);
+                Template::AddScriptSrc("modules/account/js/login.js");
                 
-                // Add login JS file if it doesnt exist in the template
-                if(!$hasJsFile)
-                    Template::AddJsFile("system/modules/account/js/login.js");
-                    
                 // Render the template, and die
                 Template::Render();
                 die;

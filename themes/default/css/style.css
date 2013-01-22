@@ -27,7 +27,7 @@
  * ================================================== */
  body 
 {
-	background:url(../images/background.jpg) #0D0D0D;
+	background:url(../img/background.jpg) #0D0D0D;
     background-repeat: no-repeat;
     background-attachment:fixed;
     background-position:top center; 
@@ -105,7 +105,7 @@ img
 }
 blockquote 
 {
-	background:url(../images/blockquote.gif) no-repeat top left;
+	background:url(../img/blockquote.gif) no-repeat top left;
 	padding:10px 0 0 40px;
 	font-style:italic;
 }
@@ -398,7 +398,7 @@ nav#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 }
 .right-box h3
 {
-	background:url(../images/title-short.png) no-repeat;
+	background:url(../img/title-short.png) no-repeat;
 	width:225px;
 	padding:8px 0 7px 33px;
 	font:12px Arial, Tahoma, Verdana;
@@ -474,7 +474,7 @@ nav#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 }
 .left-box h2 /*this is box's title*/ 
 {
-	background:url(../images/title-long.png) no-repeat;
+	background:url(../img/title-long.png) no-repeat;
 	width:600px;
 	padding:8px 0 7px 33px;
 	font:12px Arial, Tahoma, Verdana;
@@ -542,7 +542,7 @@ nav#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 	width:850px;
 	height:25px;
 	padding:15px 22px 7px 15px;
-	background:url(../images/footer.jpg) no-repeat #000;
+	background:url(../img/footer.jpg) no-repeat #000;
     margin-bottom: 30px !important;
     margin-left:1px;
     margin-right: -15px;
@@ -575,7 +575,7 @@ nav#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 	width:600px;
 	padding:11px 0 13px 15px;
 	position:absolute;
-	background:url(../images/slide-description.png) no-repeat;
+	background:url(../img/slide-description.png) no-repeat;
 	color:#fff;
 	margin-top:-39px;
 }
@@ -589,7 +589,7 @@ nav#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 {
 	display:block;
 	text-indent:-9999pt;
-	background:url(../images/slide-dots.png) no-repeat;
+	background:url(../img/slide-dots.png) no-repeat;
 	width:8px;
 	height:8px;
 	float:left;
@@ -597,7 +597,7 @@ nav#nav ul.navigation li ul.subnav ul.subnav-out li:hover a {
 }
 #slide-tabs a:hover, .activeSlide 
 {
-	background:url(../images/slide-dots.png) 0 -8px no-repeat !important;
+	background:url(../img/slide-dots.png) 0 -8px no-repeat !important;
 }
 
 /* ==================================================
