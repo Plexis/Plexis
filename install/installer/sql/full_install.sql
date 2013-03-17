@@ -106,6 +106,26 @@ CREATE TABLE `pcms_hits` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `pcms_menus`
+-- ----------------------------
+DROP TABLE IF EXISTS `pcms_menus`;
+CREATE TABLE `pcms_menus` (
+  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `menu_id` int(2) NOT NULL DEFAULT 0,
+  `label` varchar(20) NOT NULL,
+  `url` text DEFAULT NULL,
+  `img` varchar(52) DEFAULT NULL,
+  `class` varchar(20) DEFAULT NULL,
+  `parent` int(3) NOT NULL DEFAULT 0,
+  `position` int(3) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pcms_menus
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `pcms_modules`
 -- ----------------------------
 DROP TABLE IF EXISTS `pcms_modules`;
@@ -113,7 +133,7 @@ CREATE TABLE `pcms_modules` (
   `name` varchar(24) NOT NULL COMMENT 'Folder name of the module',
   `version` varchar(10) NOT NULL DEFAULT '1.0.0',
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Records of pcms_modules
 -- ----------------------------

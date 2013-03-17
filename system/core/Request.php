@@ -311,7 +311,7 @@ class Request
             {
                 self::$clientIp = $_SERVER['HTTP_FORWARDED'];
             }
-            elseif(isset($_SERVER['HTTP_VIA']) && isValidIp($_SERVER['HTTP_VIAD']))
+            elseif(isset($_SERVER['HTTP_VIA']) && isValidIp($_SERVER['HTTP_VIA']))
             {
                 self::$clientIp = $_SERVER['HTTP_VIA'];
             }

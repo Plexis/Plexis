@@ -10,10 +10,10 @@
 namespace Library;
 
 // Import core classes into scope
-use \Core\Benchmark;
-use \Core\Config;
-use \Core\Request;
-use \Core\Response;
+use Core\Benchmark;
+use Core\Config;
+use Core\Request;
+use Core\Response;
 
 /**
  * Template Engine for the CMS
@@ -110,10 +110,6 @@ class Template
         // Load contents and parse the layout file
         if($loadLayout)
         {
-            // First, load the template xml config file
-            if(empty(self::$themeConfig)) 
-                self::LoadThemeConfig();
-        
             // Load the layout, and parse it
             $contents = self::RenderLayout();
         }
@@ -213,7 +209,7 @@ class Template
     public static function Add($contents, $css = false, $js = false)
     {
         // Make sure out contents are valid
-        if(!is_string($contents) && !(is_object($contents) && ($contents instanceof View)))
+        if(!is_string($contents) && !($contents instanceof View))
             throw new InvalidPageContents('Page contents must be a string, or an object extending the "View" class');
         
         // Render view contents
@@ -517,26 +513,19 @@ class Template
     protected static function ParseGlobalMessages()
     {
         // Load the global_messages view
-        try {
-            $View = new View( path(self::$themePath, self::$themeName, 'views', 'partials', 'message.tpl') );
-        }
-        catch( ViewNotFoundException $e ) {
-            throw $e;
-        }
+        $View = new View( path(self::$themePath, self::$themeName, 'views', 'partials', 'message.tpl') );
+        $buffer = '';
         
         // Loop through and add each message to the buffer
-        $buffer = '';
         $size = sizeof(self::$messages);
-        foreach(self::$messages as $k => $m)
+        for($i = 0; $i < $size; $i++)
         {
-            $View->set('level', $m[0]);
-            $View->set('message', $m[1]);
+            $View->set('level', self::$messages[$i][0]);
+            $View->set('message', self::$messages[$i][1]);
             $buffer .= $View->render();
-            if($k+1 != $size) 
-                $buffer .= PHP_EOL;
         }
         
-        return $buffer;
+        return rtrim($buffer, PHP_EOL);
     }
     
     /**
@@ -610,10 +599,6 @@ class Template
         $Layout->set('CSS_DIR', self::$themeUrl .'/css');
         $Layout->set('JS_DIR', self::$themeUrl .'/js');
         $Layout->set('IMG_DIR', self::$themeUrl .'/img');
-        $Layout->set('TEMPLATE_NAME', self::$themeConfig->info->name);
-        $Layout->set('TEMPLATE_AUTHOR', self::$themeConfig->info->author);
-        $Layout->set('TEMPLATE_CODED_BY', self::$themeConfig->info->coded_by);
-        $Layout->set('TEMPLATE_COPYRIGHT', self::$themeConfig->info->copyright);
         $Layout->set('config', Config::FetchVars('Plexis'));
         
         // Return the rendered data

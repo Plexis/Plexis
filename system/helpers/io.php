@@ -43,7 +43,7 @@
             $part = trim($part);
             if($part == '.' || empty($part))
                 continue;
-            if($part == '..')
+            elseif($part == '..')
                 array_pop($parts);
             else
                 $parts[] = $part;
@@ -84,7 +84,7 @@
         {
             if($part == '.')
                 continue;
-            if($part == '..')
+            elseif($part == '..')
                 array_pop($absolutes);
             else
                 $absolutes[] = $part;

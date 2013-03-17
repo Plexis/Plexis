@@ -10,11 +10,11 @@
 namespace Core;
 
 // Bring some classes into scope
-use \Plexis;
-use \Library\Auth;
-use \Library\Template;
-use \Library\View;
-use \Library\ViewNotFoundException;
+use Plexis;
+use Library\Auth;
+use Library\Template;
+use Library\View;
+use Library\ViewNotFoundException;
 
 
 /**
@@ -92,20 +92,23 @@ class Controller
             
         // Load the file
         require $path;
+		
+		// Add Namespace to classname
+		$nsName = ucfirst($this->moduleName) ."\\". $name;
         
         // Init a reflection clas
         $class = false;
         try {
             if(!empty($params))
             {
-                $Reflection = new \ReflectionClass($name);
+                $Reflection = new \ReflectionClass($nsName);
                 if($Reflection->hasMethod('__construct'))
                     $class = $Reflection->newInstanceArgs($params);
                 else
-                    $class = new $name();
+                    $class = new $nsName();
             }
             else
-                $class = new $name();
+                $class = new $nsName();
         }
         catch(\ReflectionException $e) {}
         

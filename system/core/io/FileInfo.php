@@ -377,7 +377,7 @@ class FileInfo
     public function isWritable() 
     {
         // Attempt to open the file, and read contents
-        $handle = @fopen($this->filepath, 'w');
+        $handle = @fopen($this->filepath, 'a');
         if($handle === false) 
             return false;
         

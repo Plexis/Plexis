@@ -35,8 +35,12 @@ final class Devtest extends Controller
         //$this->module->install(true);
         // var_dump( $this->module->isInstalled() ); die;
         
-        var_dump( \Core\Router::Forge('error/403', $data) );
-        var_dump( $data ); die;
+        //var_dump( \Core\Router::Forge('error/403', $data) );
+        //var_dump( $data ); die;
+        
+        $menu = new \Library\MenuManager(0);
+        var_dump($menu->toHtml(array('class' => 'menu')));
+        die;
     }
     
     public function intsize()

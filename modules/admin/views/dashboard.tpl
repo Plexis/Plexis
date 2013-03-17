@@ -27,9 +27,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{SITE_URL}/admin/registration">
-                        <img src="{TEMPLATE_URL}/img/icons/reg-icon.png">
-                        Registration Keys & Settings
+                    <a href="{SITE_URL}/admin/menu">
+                        <img src="{TEMPLATE_URL}/img/icons/menu-icon.png">
+                        Navigation Menu Manager
                     </a>
                 </li>
                 <li>
@@ -39,15 +39,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{SITE_URL}/admin/realms">
-                        <img src="{TEMPLATE_URL}/img/icons/realm-icon.png">
-                        Realm Managment
-                    </a>
-                </li>
-                <li>
-                    <a href="{SITE_URL}/admin/characters">
-                        <img src="{TEMPLATE_URL}/img/icons/char-icon.png">
-                        Character <br />Editor
+                    <a href="{SITE_URL}/admin/registration">
+                        <img src="{TEMPLATE_URL}/img/icons/reg-icon.png">
+                        Registration Keys & Settings
                     </a>
                 </li>
                 <li>
@@ -60,6 +54,18 @@
                     <a href="{SITE_URL}/admin/plugins">
                         <img src="{TEMPLATE_URL}/img/icons/plugin-icon.png">
                         Plugin Managment
+                    </a>
+                </li>
+                <li>
+                    <a href="{SITE_URL}/admin/realms">
+                        <img src="{TEMPLATE_URL}/img/icons/realm-icon.png">
+                        Realm Managment
+                    </a>
+                </li>
+                <li>
+                    <a href="{SITE_URL}/admin/characters">
+                        <img src="{TEMPLATE_URL}/img/icons/char-icon.png">
+                        Character <br />Editor
                     </a>
                 </li>
                 <li>
@@ -87,15 +93,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{SITE_URL}/admin/support">
-                        <img src="{TEMPLATE_URL}/img/icons/faq-icon.png">
-                        Manage Site Support / FAQs
-                    </a>
-                </li>
-                <li>
                     <a href="{SITE_URL}/admin/templates">
                         <img src="{TEMPLATE_URL}/img/icons/theme-icon.png">
-                        Manage Templates
+                        Theme <br />Manager
                     </a>
                 </li>
                 <li>

@@ -9,12 +9,7 @@ use Library\Auth;
 use Library\Template;
 
 final class Logout extends Controller
-{
-    /**
-     * The account model ... model
-     */
-    protected $AccountModel;
-    
+{  
     /**
      * Page used to logout a user
      */
@@ -28,9 +23,9 @@ final class Logout extends Controller
         Auth::Logout();
         
         // Show a goodbye screen
-        $View = $this->loadPartial('contentbox');
-        $View->Set('title', 'Logout');
-        $View->Set('contents', $this->loadView('logout'));
+        $View = Template::LoadPartial('contentbox');
+        $View->set('title', 'Logout');
+        $View->set('contents', $this->loadView('logout'));
         Template::Add($View);
     }
 }
