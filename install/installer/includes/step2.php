@@ -76,7 +76,7 @@ else
 }
 
 // Database config writable
-if(is_writable('../system/config/database.config.php') == TRUE)
+if(is_writable('../system/config/database.php') == TRUE)
 {
     $database_config_writable = "<img src='installer/images/check.png' height='18px' width='18px' />";
 }
